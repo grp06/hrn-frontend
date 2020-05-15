@@ -99,7 +99,7 @@ const AdminControl = () => {
   }
 
   const completeRooms = () => {
-    fetch('https://dry-crag-92103.herokuapp.com/complete-rooms')
+    fetch('https://hrn-api.herokuapp.com/complete-rooms')
       .then((res) => {
         return res.json()
       })

@@ -22,7 +22,7 @@ const StartNextRound = ({ roundsData }) => {
       all.push(item.partner_x)
       return all
     }, [])
-    fetch('https://dry-crag-92103.herokuapp.com/create-room', {
+    fetch('https://hrn-api.herokuapp.com/create-room', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

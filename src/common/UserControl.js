@@ -7,7 +7,7 @@ import { MainVideo } from '../components'
 import { GameStateContext } from '../contexts/GameStateContext'
 import { getMyRoundById } from '../gql/queries'
 
-const endpoint = 'https://dry-crag-92103.herokuapp.com/'
+const endpoint = 'https://hrn-api.herokuapp.com/'
 const userId = parseInt(localStorage.getItem('userID'), 10)
 const UserControl = () => {
   const { currentRound, setPartnerX } = useContext(GameStateContext)
@@ -37,7 +37,7 @@ const UserControl = () => {
   const myPartner = userId === partner_x ? partner_y : partner_x
   // get my room URL
   console.log('partner_x = ', partner_x)
-  fetch(`https://dry-crag-92103.herokuapp.com/get-my-room/${partner_x}`)
+  fetch(`https://hrn-api.herokuapp.com/get-my-room/${partner_x}`)
     .then((apiData) => {
       return apiData.json()
     })

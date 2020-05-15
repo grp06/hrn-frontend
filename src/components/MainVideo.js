@@ -47,7 +47,7 @@ const MainVideo = () => {
   const myUserId = localStorage.getItem('userID')
 
   useEffect(() => {
-    fetch('https://dry-crag-92103.herokuapp.com/give-me-a-token', {
+    fetch('https://hrn-api.herokuapp.com/give-me-a-token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
