@@ -4,6 +4,7 @@ import { styled } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 
 import { GameStateContext } from '../contexts/GameStateContext'
+import endpointUrl from '../utils/endpointUrl'
 
 const { connect, createLocalTracks, createLocalVideoTrack } = require('twilio-video')
 
@@ -47,7 +48,9 @@ const MainVideo = () => {
   const myUserId = localStorage.getItem('userID')
 
   useEffect(() => {
-    fetch('https://hrn-api.herokuapp.com/give-me-a-token', {
+    const gimmeToken = `${endpointUrl}/give-me-a-token`
+    console.log('gimmeToken = ', gimmeToken)
+    fetch(gimmeToken, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

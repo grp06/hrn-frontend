@@ -12,6 +12,7 @@ import { OnlineUsers, StartNextRound } from '../components'
 import { GameStateContext } from '../contexts/GameStateContext'
 import { incrementRound, insertRound } from '../gql/mutations'
 import { findUsers, getAllRounds } from '../gql/queries'
+import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
 
 const useImperativeQuery = (query) => {
@@ -99,7 +100,7 @@ const AdminControl = () => {
   }
 
   const completeRooms = () => {
-    fetch('https://hrn-api.herokuapp.com/complete-rooms')
+    fetch(`${endpointUrl}/complete-rooms`)
       .then((res) => {
         return res.json()
       })

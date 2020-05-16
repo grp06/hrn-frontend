@@ -6,10 +6,11 @@ import Card from '@material-ui/core/Card'
 import { MainVideo } from '../components'
 import { GameStateContext } from '../contexts/GameStateContext'
 import { getMyRoundById } from '../gql/queries'
+import endpointUrl from '../utils/endpointUrl'
 
-const endpoint = 'https://hrn-api.herokuapp.com/'
-const userId = parseInt(localStorage.getItem('userID'), 10)
 const UserControl = () => {
+  const userId = parseInt(localStorage.getItem('userID'), 10)
+  console.log('userId = ', userId)
   const { currentRound, setPartnerX } = useContext(GameStateContext)
   const [getRoundInfo, { data, loading, error }] = useLazyQuery(getMyRoundById, {
     variables: {
@@ -27,7 +28,7 @@ const UserControl = () => {
   if (currentRound === 0) {
     return <div>Please wait for event to begin</div>
   }
-
+  console.log('error = ', error)
   if (error) return <div>error</div>
   if (!data || loading) return <div>loading</div>
   if (!data.rounds.length) return <div>waiting for round data</div>
@@ -37,7 +38,7 @@ const UserControl = () => {
   const myPartner = userId === partner_x ? partner_y : partner_x
   // get my room URL
   console.log('partner_x = ', partner_x)
-  fetch(`https://hrn-api.herokuapp.com/get-my-room/${partner_x}`)
+  fetch(`${endpointUrl}/get-my-room/${partner_x}`)
     .then((apiData) => {
       return apiData.json()
     })

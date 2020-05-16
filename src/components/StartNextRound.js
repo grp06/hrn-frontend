@@ -7,6 +7,7 @@ import { useMutation } from 'react-apollo'
 import { GameStateContext } from '../contexts/GameStateContext'
 import { incrementRound } from '../gql/mutations'
 import { findUsers, getAllRounds } from '../gql/queries'
+import endpointUrl from '../utils/endpointUrl'
 
 const StartNextRound = ({ roundsData }) => {
   const { currentRound } = useContext(GameStateContext)
@@ -22,7 +23,7 @@ const StartNextRound = ({ roundsData }) => {
       all.push(item.partner_x)
       return all
     }, [])
-    fetch('https://hrn-api.herokuapp.com/create-room', {
+    fetch(`${endpointUrl}/create-room`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
