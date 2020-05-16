@@ -10,7 +10,7 @@ import { useMutation } from 'react-apollo'
 
 import { OnlineUsers, StartNextRound } from '../components'
 import { GameStateContext } from '../contexts/GameStateContext'
-import { incrementRound, insertRound } from '../gql/mutations'
+import { incrementRound, insertRound, deleteRounds, resetGameState } from '../gql/mutations'
 import { findUsers, getAllRounds } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
@@ -47,8 +47,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '1em',
   },
   onlineUsers: {
-    width: 200,
+    width: '100%',
     height: '100vh',
+  },
+  btn: {
+    margin: '15px',
   },
 }))
 
@@ -58,6 +61,8 @@ const AdminControl = () => {
 
   const { currentRound, gameOver } = useContext(GameStateContext)
   const [insertRoundMutation] = useMutation(insertRound)
+  const [deleteRoundsMutation] = useMutation(deleteRounds)
+  const [resetGameStateMutation] = useMutation(resetGameState)
   const { loading, error, data } = useQuery(findUsers)
   const [pairingsCreated, setPairingsCreated] = useState(false)
   const callQuery = useImperativeQuery(getAllRounds)
@@ -111,30 +116,46 @@ const AdminControl = () => {
 
   return (
     <Card className={classes.onlineUsers}>
-      <CardContent className={classes.content}>
-        <>
-          {!pairingsCreated ? (
+      <>
+        {!pairingsCreated ? (
+          <div className={classes.btn}>
             <Button variant="outlined" onClick={createPairings}>
               Create Pairings
             </Button>
-          ) : (
-            <div>pairings created</div>
-          )}
+          </div>
+        ) : (
+          <div>pairings created</div>
+        )}
+        <div className={classes.btn}>
           <StartNextRound roundsData={roundsData} />
+        </div>
 
+        <div className={classes.btn}>
           <Button variant="outlined" onClick={completeRooms}>
             Complete Rooms
           </Button>
-          <div>
-            R0und:
-            {currentRound}
-          </div>
-          <div>{gameOver && <div>game over</div>}</div>
+        </div>
+        <div className={classes.btn}>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              resetGameStateMutation()
+              deleteRoundsMutation()
+            }}
+          >
+            Reset rounds/game
+          </Button>
+        </div>
 
-          <Typography>Online Users</Typography>
-          <OnlineUsers />
-        </>
-      </CardContent>
+        <div>
+          R0und:
+          {currentRound}
+        </div>
+        <div>{gameOver && <div>game over</div>}</div>
+
+        <Typography>Online Users</Typography>
+        <OnlineUsers />
+      </>
     </Card>
   )
 }
