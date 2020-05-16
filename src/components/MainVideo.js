@@ -69,15 +69,19 @@ const MainVideo = () => {
   }
   console.log('width = ', width)
   console.log('height = ', height)
-  createLocalTracks({
-    audio: false,
-    maxAudioBitrate: 16000, // For music remove this line
-    video: { height, frameRate: 24, width },
-  })
-    .then((localTracks) => {
+
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: true,
+      video: {
+        width: { min: 1024, ideal: 1280, max: 1920 },
+        height: { min: 576, ideal: 720, max: 1080 },
+      },
+    })
+    .then(function (mediaStream) {
       return connect(myToken, {
         name: partnerX,
-        tracks: localTracks,
+        tracks: mediaStream.getTracks(),
       })
     })
     .then((room) => {
@@ -91,6 +95,7 @@ const MainVideo = () => {
           const attachedElements = publication.track.detach()
           attachedElements.forEach((element) => element.remove())
         })
+        document.getElementById('remote-media-div').innerHTML = ''
       })
       // Log your Client's LocalParticipant in the Room
       const { localParticipant } = room
