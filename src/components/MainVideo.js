@@ -42,16 +42,15 @@ const useStyles = makeStyles((theme) => ({
 const MainVideo = () => {
   const classes = useStyles()
 
-  const { myToken, partnerX, userId, getToken, allRounds } = useGameContext()
+  const { token, partnerX, allRounds } = useGameContext()
 
   if (!allRounds) {
     return <div>nothing</div>
   }
-
-  // if (!myToken || !partnerX) {
-  //   return <div>no token yet :(</div>
-  // }
-
+  if (!token || !partnerX) {
+    return <div>no token yet :(</div>
+  }
+  console.log('render = ')
   navigator.mediaDevices
     .getUserMedia({
       audio: true,
@@ -61,14 +60,15 @@ const MainVideo = () => {
       },
     })
     .then(function (mediaStream) {
-      return connect(myToken, {
+      console.log('mediaStream = ', mediaStream)
+      return connect(token, {
         name: partnerX,
         tracks: mediaStream.getTracks(),
       })
     })
     .then((room) => {
       window.addEventListener('beforeunload', () => room.disconnect())
-
+      console.log('ROOMR === ', room)
       room.on('disconnected', (rum) => {
         // Detach the local media elements
         console.log('on disconnected')
@@ -77,7 +77,10 @@ const MainVideo = () => {
           const attachedElements = publication.track.detach()
           attachedElements.forEach((element) => element.remove())
         })
-        document.getElementById('remote-media-div').innerHTML = ''
+        const remote = document.getElementById('remote-media-div')
+        if (remote) {
+          remote.innerHTML = ''
+        }
       })
       // Log your Client's LocalParticipant in the Room
       const { localParticipant } = room
@@ -129,10 +132,10 @@ const MainVideo = () => {
           document.getElementById('remote-media-div').appendChild(track.attach())
         })
       })
-      createLocalVideoTrack({ height: 200, frameRate: 24, width: 200 }).then(function (track) {
-        const videoElement = track.attach()
-        document.getElementById('my-video').appendChild(videoElement)
-      })
+      // createLocalVideoTrack({ height: 200, frameRate: 24, width: 200 }).then(function (track) {
+      //   const videoElement = track.attach()
+      //   document.getElementById('my-video').appendChild(videoElement)
+      // })
     })
 
   return (

@@ -8,10 +8,8 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
 
-import { OnlineUsers } from '../components'
-
+import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
-
 import { incrementRound, deleteRounds, resetGameState, bulkInsertRounds } from '../gql/mutations'
 import { findUsers, getAllRounds } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
@@ -82,7 +80,7 @@ const AdminControl = () => {
 
   // if (!findUsersData.onlineUsers.length) return <p>no online users yet</p>
 
-  const createPairings = async () => {
+  const startEvent = async () => {
     if (currentRound === 0) {
       const variablesArr = []
       const userIds = findUsersData.users.reduce((all, item) => {
@@ -109,13 +107,13 @@ const AdminControl = () => {
         },
       })
       setAllRounds(res.data.insert_rounds.returning)
+      const {
+        data: {
+          update_gameState: { returning },
+        },
+      } = await incrementRoundMutation()
+      setCurrentRound(returning[0].currentRound)
     }
-    const {
-      data: {
-        update_gameState: { returning },
-      },
-    } = await incrementRoundMutation()
-    setCurrentRound(returning[0].currentRound)
   }
 
   const completeRooms = () => {
@@ -132,11 +130,13 @@ const AdminControl = () => {
     <Card className={classes.onlineUsers}>
       <>
         <div className={classes.btn}>
-          <Button variant="outlined" onClick={createPairings}>
-            {currentRound === 0 ? 'start event' : 'next round'}
+          <Button variant="outlined" onClick={startEvent}>
+            Start Event
           </Button>
         </div>
-
+        <div className={classes.btn}>
+          <StartNextRound />
+        </div>
         <div className={classes.btn}>
           <Button variant="outlined" onClick={completeRooms}>
             Complete Rooms

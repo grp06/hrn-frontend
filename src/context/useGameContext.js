@@ -15,30 +15,6 @@ const useGameContext = () => {
     dispatch((draft) => {})
   }
 
-  function getUserId() {
-    dispatch((draft) => {
-      draft.userId = parseInt(localStorage.getItem('userID'), 10)
-    })
-  }
-
-  function setToken() {
-    dispatch((draft) => {
-      const { partnerX, userId } = draft
-      fetch(`${endpointUrl}/give-me-a-token`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ partnerX, userId }),
-      })
-        .then((res) => res.json())
-        .then(({ token }) => {
-          console.log('my token -= ', token)
-          draft.token = token
-        })
-    })
-  }
-
   function deleteRounds() {
     dispatch((draft) => {})
   }
@@ -49,12 +25,11 @@ const useGameContext = () => {
     })
   }
 
-  function setCurrentUserData({ isAdmin, name }) {
+  function setCurrentUserData({ isAdmin, name, id }) {
     dispatch((draft) => {
       draft.isAdmin = isAdmin
-
+      draft.userId = id
       draft.name = name
-      console.log('namemeeee = ', name)
     })
   }
 
@@ -75,18 +50,29 @@ const useGameContext = () => {
       draft.allRounds = []
     })
   }
+  function setToken(token) {
+    dispatch((draft) => {
+      draft.token = token
+    })
+  }
+
+  function setPartnerX(partnerX) {
+    dispatch((draft) => {
+      draft.partnerX = partnerX
+    })
+  }
 
   return {
     ...state,
     startRound,
-    getUserId,
-    setToken,
     deleteRounds,
     setCurrentUserData,
     setUsers,
     setAllRounds,
     setCurrentRound,
     resetEvent,
+    setToken,
+    setPartnerX,
   }
 }
 

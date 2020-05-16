@@ -11,6 +11,7 @@ import { Mutation } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 
 import loginPhoto from '../assets/login.svg'
+import { useGameContext } from '../context/useGameContext'
 import { createUser } from '../gql/mutations'
 
 const useStyles = makeStyles(() => ({
@@ -45,10 +46,10 @@ const LoginForm = ({ history }) => {
 
   const [username, setUsername] = useState('')
 
-  const userId = localStorage.getItem('userID')
-  if (userId) {
+  if (localStorage.getItem('userID')) {
     return <Redirect to="/myevents" push />
   }
+
   return (
     <Card className={classes.cardContainer}>
       <CardMedia className={classes.cover} image={loginPhoto} title="Live from space album cover" />

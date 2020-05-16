@@ -1,10 +1,6 @@
 import React, { createContext, useState } from 'react'
 
-import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
-
-// import { getGameState } from './gql/subscriptions'
-// Create Context Object
 
 const defaultState = {
   currentRound: 0,

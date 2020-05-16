@@ -8,25 +8,26 @@ import { useGameContext } from '../context/useGameContext'
 import { findMyUser } from '../gql/queries'
 
 const MyEvents = () => {
+  const myUserId = localStorage.getItem('userID')
   const { userId, getUserId, isAdmin, setCurrentUserData } = useGameContext()
   const { loading, error, data } = useQuery(findMyUser, {
-    variables: { id: userId },
+    variables: { id: myUserId },
   })
 
   useEffect(() => {
-    getUserId()
-  }, [getUserId])
+    if (data && data.users) {
+      setCurrentUserData(data.users[0])
+    }
+  }, [data])
 
-  if (loading || error) return <p>Loading ...</p>
-  if (!userId) {
+  if (!myUserId) {
     return <Redirect to="/" push />
   }
 
+  if (loading || error) return <p>Loading ...</p>
+
   if (!data) return <div>no data</div>
 
-  setCurrentUserData(data.users[0])
-
-  console.log('isAdmin = ', isAdmin)
   if (isAdmin) {
     return <AdminControl />
   }
