@@ -7,7 +7,7 @@ import { Route, BrowserRouter as Router, Switch } from 'react-router-dom'
 import makeApolloClient from './apollo'
 import { LoginForm } from './common'
 import { Test, MyEvents } from './components'
-import { GameStateContextProvider } from './contexts/GameStateContext'
+import { GameProvider } from './context/provider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
 import theme from './ui/theme'
@@ -39,13 +39,13 @@ const App = () => {
           <Router>
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <Switch>
-              <Route exact path="/" component={LoginForm} />
-              <GameStateContextProvider>
+              <GameProvider>
+                <Route exact path="/" component={LoginForm} />
                 <Route exact path="/myevents" component={MyEvents} />
-              </GameStateContextProvider>
-              <Route exact path="/about" component={() => <div>About Us</div>} />
-              <Route exact path="/contact" component={() => <div>Contact Us</div>} />
-              <Route exact path="/test" component={Test} />
+                <Route exact path="/about" component={() => <div>About Us</div>} />
+                <Route exact path="/contact" component={() => <div>Contact Us</div>} />
+                <Route exact path="/test" component={Test} />
+              </GameProvider>
             </Switch>
           </Router>
         </ApolloProvider>

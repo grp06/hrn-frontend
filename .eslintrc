@@ -15,6 +15,9 @@
     "object-shorthand": "off",
     "class-methods-use-this": "off",
     "react/jsx-filename-extension": 0,
+    "no-param-reassign": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "camelcase": "off",
     "import/order": [
       "error",
       {

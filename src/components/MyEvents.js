@@ -4,26 +4,30 @@ import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 
 import { AdminControl, UserControl } from '../common'
+import { useGameContext } from '../context/useGameContext'
 import { findMyUser } from '../gql/queries'
 
 const MyEvents = () => {
-  const [existingUser, setExistingUser] = useState('')
+  const { userId, getUserId, isAdmin, setCurrentUserData } = useGameContext()
   const { loading, error, data } = useQuery(findMyUser, {
-    variables: { id: localStorage.getItem('userID') },
+    variables: { id: userId },
   })
 
   useEffect(() => {
-    setExistingUser(localStorage.getItem('userID'))
-  }, [])
+    getUserId()
+  }, [getUserId])
 
   if (loading || error) return <p>Loading ...</p>
-
-  if (!existingUser) {
+  if (!userId) {
     return <Redirect to="/" push />
   }
-  if (!data.users.length) return <p>clear localStoarge. so sorry</p>
 
-  if (data.users[0].isAdmin) {
+  if (!data) return <div>no data</div>
+
+  setCurrentUserData(data.users[0])
+
+  console.log('isAdmin = ', isAdmin)
+  if (isAdmin) {
     return <AdminControl />
   }
   return <UserControl />

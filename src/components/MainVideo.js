@@ -3,8 +3,7 @@ import React, { useEffect, useContext, useState } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 
-import { GameStateContext } from '../contexts/GameStateContext'
-import endpointUrl from '../utils/endpointUrl'
+import { useGameContext } from '../context/useGameContext'
 
 const { connect, createLocalTracks, createLocalVideoTrack } = require('twilio-video')
 
@@ -43,32 +42,15 @@ const useStyles = makeStyles((theme) => ({
 const MainVideo = () => {
   const classes = useStyles()
 
-  const { partnerX } = useContext(GameStateContext)
-  const [myToken, setToken] = useState(null)
-  const myUserId = localStorage.getItem('userID')
+  const { myToken, partnerX, userId, getToken, allRounds } = useGameContext()
 
-  useEffect(() => {
-    const gimmeToken = `${endpointUrl}/give-me-a-token`
-    console.log('gimmeToken = ', gimmeToken)
-    fetch(gimmeToken, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ partnerX, myUserId }),
-    })
-      .then((res) => res.json())
-      .then(({ token }) => {
-        setToken(token)
-      })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  if (!myToken || !partnerX) {
-    return <div>no token yet :(</div>
+  if (!allRounds) {
+    return <div>nothing</div>
   }
-  console.log('width = ', width)
-  console.log('height = ', height)
+
+  // if (!myToken || !partnerX) {
+  //   return <div>no token yet :(</div>
+  // }
 
   navigator.mediaDevices
     .getUserMedia({
