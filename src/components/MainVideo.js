@@ -42,9 +42,9 @@ const useStyles = makeStyles((theme) => ({
 const MainVideo = () => {
   const classes = useStyles()
 
-  const { token, partnerX, allRounds } = useGameContext()
+  const { token, partnerX, roundsData } = useGameContext()
 
-  if (!allRounds) {
+  if (!roundsData) {
     return <div>nothing</div>
   }
   if (!token || !partnerX) {
@@ -53,7 +53,7 @@ const MainVideo = () => {
   console.log('render = ')
   navigator.mediaDevices
     .getUserMedia({
-      audio: true,
+      audio: false,
       video: {
         width: { min: 1024, ideal: 1280, max: 1920 },
         height: { min: 576, ideal: 720, max: 1080 },

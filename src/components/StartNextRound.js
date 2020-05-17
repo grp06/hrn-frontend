@@ -6,7 +6,7 @@ import { useMutation } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
 import { incrementRound } from '../gql/mutations'
-import { findUsers, getAllRounds } from '../gql/queries'
+import { findUsers, getRoundsData } from '../gql/queries'
 import { listenToRoundsData, getGameState } from '../gql/subscriptions'
 import endpointUrl from '../utils/endpointUrl'
 

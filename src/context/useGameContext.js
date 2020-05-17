@@ -1,7 +1,5 @@
-/* eslint-disable import/prefer-default-export */
 import { useContext } from 'react'
 
-import endpointUrl from '../utils/endpointUrl'
 import { GameContext } from './provider'
 
 const useGameContext = () => {
@@ -9,14 +7,6 @@ const useGameContext = () => {
 
   if (dispatch === undefined) {
     throw new Error('Must have dispatch defined')
-  }
-
-  function startRound() {
-    dispatch((draft) => {})
-  }
-
-  function deleteRounds() {
-    dispatch((draft) => {})
   }
 
   function setUsers(users) {
@@ -27,27 +17,29 @@ const useGameContext = () => {
 
   function setCurrentUserData({ isAdmin, name, id }) {
     dispatch((draft) => {
+      debugger
       draft.isAdmin = isAdmin
       draft.userId = id
       draft.name = name
     })
   }
 
-  function setAllRounds(data) {
+  function setRoundsData(rounds) {
     dispatch((draft) => {
-      draft.allRounds = data
+      draft.roundsData = rounds
     })
   }
-  function setCurrentRound(round) {
+
+  function setCurrentRound(currentRound) {
     dispatch((draft) => {
-      draft.currentRound = round
+      draft.currentRound = currentRound
     })
   }
 
   function resetEvent() {
     dispatch((draft) => {
       draft.currentRound = 0
-      draft.allRounds = []
+      draft.roundsData = []
     })
   }
   function setToken(token) {
@@ -62,17 +54,22 @@ const useGameContext = () => {
     })
   }
 
+  function setUserId(userId) {
+    dispatch((draft) => {
+      draft.userId = userId
+    })
+  }
+
   return {
     ...state,
-    startRound,
-    deleteRounds,
     setCurrentUserData,
     setUsers,
-    setAllRounds,
-    setCurrentRound,
+    setRoundsData,
     resetEvent,
     setToken,
     setPartnerX,
+    setCurrentRound,
+    setUserId,
   }
 }
 

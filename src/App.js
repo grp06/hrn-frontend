@@ -15,7 +15,6 @@ import theme from './ui/theme'
 const App = () => {
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
-  const myUserId = localStorage.getItem('userID')
 
   async function createClient() {
     try {

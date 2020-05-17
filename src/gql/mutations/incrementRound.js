@@ -5,7 +5,6 @@ const incrementRound = gql`
     update_gameState(where: {}, _inc: { currentRound: 1 }) {
       returning {
         currentRound
-        gameOver
       }
     }
   }

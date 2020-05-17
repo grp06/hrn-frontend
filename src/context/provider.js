@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React from 'react'
 
 import { useImmer } from 'use-immer'
 
@@ -7,11 +7,7 @@ const defaultState = {
   roomId: '',
   userId: '',
   isAdmin: false,
-  allPairings: [],
   partnerX: '',
-  partnerY: null,
-  users: null,
-  currentUserData: null,
   name: '',
   pairingsVariables: null,
   myToken: '',

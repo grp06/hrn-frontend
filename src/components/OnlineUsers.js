@@ -9,7 +9,7 @@ const OnlineUsers = ({ client }) => {
   const [onlineIndicator, updateOnlineIndicator] = useState('')
 
   useEffect(() => {
-    const userId = parseInt(localStorage.getItem('userID'), 10)
+    const userId = parseInt(localStorage.getItem('userId'), 10)
     const interval = setInterval(() => {
       updateOnlineIndicator(async () => {
         const res = await client.mutate({

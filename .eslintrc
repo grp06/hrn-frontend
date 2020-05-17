@@ -18,6 +18,8 @@
     "no-param-reassign": "off",
     "react-hooks/exhaustive-deps": "off",
     "camelcase": "off",
+    "import/prefer-default-export": "off",
+    "react/prop-types": "off",
     "import/order": [
       "error",
       {

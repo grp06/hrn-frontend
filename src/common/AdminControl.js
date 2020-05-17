@@ -11,7 +11,7 @@ import { useMutation } from 'react-apollo'
 import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
 import { incrementRound, deleteRounds, resetGameState, bulkInsertRounds } from '../gql/mutations'
-import { findUsers, getAllRounds } from '../gql/queries'
+import { findUsers, getRoundsData } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
 
@@ -57,15 +57,14 @@ const AdminControl = () => {
   const classes = useStyles()
   const {
     currentRound,
-    gameOver,
     setUsers,
     userId,
-    setAllRounds,
+    setRoundsData,
     setCurrentRound,
     resetEvent,
   } = useGameContext()
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
-  const callQuery = useImperativeQuery(getAllRounds)
+  const callQuery = useImperativeQuery(getRoundsData)
 
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [incrementRoundMutation] = useMutation(incrementRound)
@@ -106,7 +105,7 @@ const AdminControl = () => {
           objects: variablesArr,
         },
       })
-      setAllRounds(res.data.insert_rounds.returning)
+
       const {
         data: {
           update_gameState: { returning },
@@ -159,7 +158,6 @@ const AdminControl = () => {
           R0und:
           {currentRound}
         </div>
-        <div>{gameOver && <div>game over</div>}</div>
 
         <Typography>Online Users</Typography>
         <OnlineUsers />
@@ -169,13 +167,3 @@ const AdminControl = () => {
 }
 
 export default AdminControl
-
-// <Query query={findUsers} variables={{ id: localStorage.getItem('userID') }}>
-//   {({ error, loading, data }) => {
-//     if (error || loading || !data) {
-//       return <div>nothing yet</div>
-//     }
-//     const { isAdmin } = data.users[0]
-
-//   }}
-// </Query>

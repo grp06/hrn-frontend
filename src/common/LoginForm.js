@@ -46,7 +46,7 @@ const LoginForm = ({ history }) => {
 
   const [username, setUsername] = useState('')
 
-  if (localStorage.getItem('userID')) {
+  if (localStorage.getItem('userId')) {
     return <Redirect to="/myevents" push />
   }
 
@@ -79,7 +79,7 @@ const LoginForm = ({ history }) => {
                         name: username,
                       },
                     })
-                    localStorage.setItem('userID', userdata.data.insert_users.returning[0].id)
+                    localStorage.setItem('userId', userdata.data.insert_users.returning[0].id)
                     history.push('/myevents')
                   } catch (error) {
                     console.log(error)

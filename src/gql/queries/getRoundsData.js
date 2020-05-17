@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const getAllRounds = gql`
-  query getAllRounds {
+const getRoundsData = gql`
+  query getRoundsData {
     rounds {
       id
       round_number
@@ -11,4 +11,4 @@ const getAllRounds = gql`
   }
 `
 
-export default getAllRounds
+export default getRoundsData
