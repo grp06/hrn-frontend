@@ -51,9 +51,9 @@ const useGameContext = () => {
     })
   }
 
-  function setCurrentUserData({ isAdmin, name, id }) {
+  function setCurrentUserData({ role, name, id }) {
     dispatch((draft) => {
-      draft.isAdmin = isAdmin
+      draft.role = role
       draft.userId = id
       draft.name = name
     })

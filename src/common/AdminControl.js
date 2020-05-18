@@ -10,7 +10,7 @@ import { useMutation } from 'react-apollo'
 
 import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
-import { incrementRound, deleteRounds, resetGameState, bulkInsertRounds } from '../gql/mutations'
+import { incrementRound, deleteRounds, bulkInsertRounds } from '../gql/mutations'
 import { findUsers, getRoundsData } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
@@ -68,7 +68,6 @@ const AdminControl = () => {
 
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [incrementRoundMutation] = useMutation(incrementRound)
-  const [resetGameStateMutation] = useMutation(resetGameState)
   const { loading, error, data: findUsersData } = useQuery(findUsers)
 
   // if (loading || error) return <p>Loading ...</p>
@@ -144,7 +143,6 @@ const AdminControl = () => {
           <Button
             variant="outlined"
             onClick={async () => {
-              await resetGameStateMutation()
               await deleteRoundsMutation()
               resetEvent()
             }}

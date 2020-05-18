@@ -5,8 +5,7 @@ const findMyUser = gql`
     users(where: { id: { _eq: $id } }) {
       id
       name
-      isInChat
-      isAdmin
+      role
     }
   }
 `

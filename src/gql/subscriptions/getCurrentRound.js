@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 const getCurrentRound = gql`
-  subscription getCurrentRound {
-    gameState {
-      currentRound
+  subscription getCurrentRound($eventId: Int!) {
+    events(where: { id: { _eq: $eventId } }) {
+      current_round
     }
   }
 `

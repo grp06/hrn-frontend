@@ -6,7 +6,7 @@ const defaultState = {
   currentRound: 0,
   roomId: '',
   userId: '',
-  isAdmin: false,
+  role: '',
   partnerX: '',
   name: '',
   pairingsVariables: null,

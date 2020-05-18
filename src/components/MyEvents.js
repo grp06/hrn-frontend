@@ -9,18 +9,26 @@ import { listenToRoundsData, getCurrentRound } from '../gql/subscriptions'
 import { useSetUserId, useFindUserById } from '../hooks'
 
 const MyEvents = () => {
-  const { isAdmin, userId, setCurrentUserData, setCurrentRound, setRoundsData } = useGameContext()
+  const { role, userId, setCurrentUserData, setCurrentRound, setRoundsData } = useGameContext()
 
   const { data: userData } = useQuery(findMyUser, {
     variables: { id: localStorage.getItem('userId') },
   })
 
-  const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRoundsData)
+  const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRoundsData, {
+    variables: {
+      eventId: 3,
+    },
+  })
   const {
     data: currentRoundData,
     loading: currentRoundLoading,
     error: currentRoundError,
-  } = useSubscription(getCurrentRound)
+  } = useSubscription(getCurrentRound, {
+    variables: {
+      eventId: 3,
+    },
+  })
 
   console.log(roundsData)
 
@@ -42,7 +50,7 @@ const MyEvents = () => {
   }
 
   // setLoading(false)
-  return <>{isAdmin ? <AdminControl /> : <UserControl />}</>
+  return <>{role ? <AdminControl /> : <UserControl />}</>
 }
 
 export default MyEvents
