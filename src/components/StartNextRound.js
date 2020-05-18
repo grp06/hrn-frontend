@@ -16,21 +16,29 @@ const StartNextRound = () => {
   const { currentRound } = useGameContext()
 
   const startRound = async () => {
-    const currentRoundObj = data.rounds.filter((round) => round.round_number === currentRound)
-    const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
-      all.push(item.partnerX_id)
-      return all
-    }, [])
-    console.log('allparnerx = ', allPartnerXs)
-    fetch(`${endpointUrl}/create-room`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(allPartnerXs),
-    }).then(() => {
-      incrementRoundMutation()
-    })
+    // maybe this should be round + 1
+    // because we only increment the round at the very end
+    const currentRoundObj = data.rounds.filter((round) => round.round_number === currentRound + 1)
+    debugger
+    if (currentRoundObj.length > 0) {
+      const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
+        all.push(item.partnerX_id)
+        return all
+      }, [])
+      console.log('allparnerx = ', allPartnerXs)
+      fetch(`${endpointUrl}/create-room`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(allPartnerXs),
+      }).then(() => {
+        incrementRoundMutation()
+      })
+    } else {
+      // we should do nothing here
+      // or set game to be over
+    }
   }
 
   return (

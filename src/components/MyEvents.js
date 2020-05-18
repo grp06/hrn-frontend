@@ -31,7 +31,6 @@ const MyEvents = () => {
 
   useEffect(() => {
     if (shouldDisplayShit) {
-      debugger
       setCurrentUserData(userData.users[0])
       setCurrentRound(currentRoundData.gameState[0].currentRound)
       // setRoundsData(roundsData.rounds)
