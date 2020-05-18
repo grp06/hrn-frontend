@@ -10,6 +10,7 @@ const defaultState = {
   partnerX: '',
   name: '',
   pairingsVariables: null,
+  roundsData: null,
   myToken: '',
 }
 

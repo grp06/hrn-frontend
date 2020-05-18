@@ -107,12 +107,7 @@ const AdminControl = () => {
         },
       })
 
-      const {
-        data: {
-          update_gameState: { returning },
-        },
-      } = await incrementRoundMutation()
-      setCurrentRound(returning[0].currentRound)
+      incrementRoundMutation()
     }
   }
 
