@@ -91,12 +91,11 @@ const AdminControl = () => {
       const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
       // subtracting 1 because admin wont be assigned
       const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
-
       pairingsArray.forEach((round, idx) => {
         round.forEach((pairing) => {
           variablesArr.push({
-            partner_x: pairing[0],
-            partner_y: pairing[1],
+            partnerX_id: pairing[0],
+            partnerY_id: pairing[1],
             round_number: idx + 1,
           })
         })

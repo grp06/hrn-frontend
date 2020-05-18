@@ -4,13 +4,13 @@ const getMyRoundById = gql`
   query getMyRoundById($round_number: Int!, $id: Int!) {
     rounds(
       where: {
-        _or: [{ partner_y: { _eq: $id } }, { partner_x: { _eq: $id } }]
+        _or: [{ partnerY_id: { _eq: $id } }, { partnerX_id: { _eq: $id } }]
         _and: { round_number: { _eq: $round_number } }
       }
     ) {
       id
-      partner_x
-      partner_y
+      partnerX_id
+      partnerY_id
       round_number
     }
   }

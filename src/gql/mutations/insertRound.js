@@ -1,9 +1,9 @@
 import gql from 'graphql-tag'
 
 const insertRound = gql`
-  mutation insertRound($partner_x: Int!, $partner_y: Int!, $round_number: Int!) {
+  mutation insertRound($partnerX_id: Int!, $partnerY_id: Int!, $round_number: Int!) {
     insert_rounds(
-      objects: { partner_x: $partner_x, partner_y: $partner_y, round_number: $round_number }
+      objects: { partnerX_id: $partnerX_id, partnerY_id: $partnerY_id, round_number: $round_number }
     ) {
       affected_rows
     }

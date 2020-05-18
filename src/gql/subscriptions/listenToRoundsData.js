@@ -1,14 +1,14 @@
 import gql from 'graphql-tag'
 
-const onUserUpdated = gql`
+const listenToRoundsData = gql`
   subscription listenToRoundsData {
     rounds {
       id
       round_number
-      partner_x
-      partner_y
+      partnerX_id
+      partnerY_id
     }
   }
 `
 
-export default onUserUpdated
+export default listenToRoundsData

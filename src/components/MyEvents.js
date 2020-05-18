@@ -11,7 +11,7 @@ import { useSetUserId, useFindUserById } from '../hooks'
 const MyEvents = () => {
   const { isAdmin, userId, setCurrentUserData, setCurrentRound, setRoundsData } = useGameContext()
 
-  const { data } = useQuery(findMyUser, {
+  const { data: userData } = useQuery(findMyUser, {
     variables: { id: localStorage.getItem('userId') },
   })
 
@@ -22,21 +22,21 @@ const MyEvents = () => {
     error: currentRoundError,
   } = useSubscription(getCurrentRound)
 
+  console.log(roundsData)
+
   const shouldDisplayShit =
-    data &&
-    data.users &&
-    currentRoundData &&
-    currentRoundData.gameState &&
-    roundsData &&
-    roundsData.rounds
+    userData && userData.users && currentRoundData && currentRoundData.gameState
+  // roundsData &&
+  // roundsData.rounds
+
   useEffect(() => {
     if (shouldDisplayShit) {
       debugger
-      setCurrentUserData(data.users[0])
+      setCurrentUserData(userData.users[0])
       setCurrentRound(currentRoundData.gameState[0].currentRound)
-      setRoundsData(roundsData.rounds)
+      // setRoundsData(roundsData.rounds)
     }
-  }, [data, currentRoundData, roundsData])
+  }, [userData, currentRoundData, roundsData])
 
   if (!userId) {
     return <div>no user id yet</div>

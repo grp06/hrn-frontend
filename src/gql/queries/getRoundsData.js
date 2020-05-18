@@ -5,8 +5,8 @@ const getRoundsData = gql`
     rounds {
       id
       round_number
-      partner_x
-      partner_y
+      partnerX_id
+      partnerY_id
     }
   }
 `

@@ -8,12 +8,12 @@ const useGetPartnerX = () => {
     const myRound = roundsData.find((round) => {
       const me =
         round.round_number === currentRound &&
-        (round.partner_x === parseInt(userId, 10) || round.partner_y === parseInt(userId, 10))
+        (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
 
       return me
     })
 
-    setPartnerX(myRound.partner_x)
+    setPartnerX(myRound.partnerX_id)
   }
   return null
 }

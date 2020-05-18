@@ -18,7 +18,7 @@ const StartNextRound = () => {
   const startRound = async () => {
     const currentRoundObj = data.rounds.filter((round) => round.round_number === currentRound)
     const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
-      all.push(item.partner_x)
+      all.push(item.partnerX_id)
       return all
     }, [])
     console.log('allparnerx = ', allPartnerXs)
