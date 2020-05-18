@@ -1,10 +1,10 @@
 import gql from 'graphql-tag'
 
 const incrementRound = gql`
-  mutation incrementRound {
-    update_gameState(where: {}, _inc: { currentRound: 1 }) {
+  mutation incrementRound($id: Int) {
+    update_events(_inc: { current_round: 1 }, where: { id: { _eq: $id } }) {
       returning {
-        currentRound
+        current_round
       }
     }
   }

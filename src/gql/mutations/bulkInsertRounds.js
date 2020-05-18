@@ -7,6 +7,10 @@ const bulkInsertRounds = gql`
         partnerX_id
         partnerY_id
         round_number
+        started_at
+        event_id
+        partnerX_thumb
+        partnerY_thumb
       }
     }
   }

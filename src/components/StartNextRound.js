@@ -19,7 +19,6 @@ const StartNextRound = () => {
     // maybe this should be round + 1
     // because we only increment the round at the very end
     const currentRoundObj = data.rounds.filter((round) => round.round_number === currentRound + 1)
-    debugger
     if (currentRoundObj.length > 0) {
       const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
         all.push(item.partnerX_id)
@@ -33,6 +32,7 @@ const StartNextRound = () => {
         },
         body: JSON.stringify(allPartnerXs),
       }).then(() => {
+        // PASS IN EVENT ID
         incrementRoundMutation()
       })
     } else {

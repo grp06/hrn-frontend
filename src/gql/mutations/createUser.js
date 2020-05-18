@@ -5,8 +5,8 @@ const createUser = gql`
     insert_users(objects: { name: $name }) {
       returning {
         id
-        isInChat
         name
+        role
       }
     }
   }
