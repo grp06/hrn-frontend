@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 
 import { useSubscription, useQuery } from '@apollo/react-hooks'
 
@@ -10,31 +10,26 @@ import { useSetUserId, useFindUserById } from '../hooks'
 
 const MyEvents = () => {
   const { isAdmin, userId, currentRound, setCurrentUserData } = useGameContext()
-  const { data: roundsData, loading, error } = useSubscription(listenToRoundsData)
 
   const { data } = useQuery(findMyUser, {
     variables: { id: localStorage.getItem('userId') },
   })
 
+  const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRoundsData)
+
   useEffect(() => {
-    console.log('useEffect')
-  }, [])
-
-  console.log('MyEvents -> data', roundsData)
-  console.log('MyEvents -> data', data)
-
-  if (data && data.users) {
-    setCurrentUserData(data.users[0])
-  }
+    debugger
+    if (data && data.users) {
+      setCurrentUserData(data.users[0])
+    }
+  }, [data])
 
   if (!userId) {
     return <div>no user id yet</div>
   }
 
-  if (isAdmin) {
-    return <AdminControl />
-  }
-  return <UserControl />
+  // setLoading(false)
+  return <>{isAdmin ? <AdminControl /> : <UserControl />}</>
 }
 
 export default MyEvents

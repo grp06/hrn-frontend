@@ -71,11 +71,12 @@ const AdminControl = () => {
   const [resetGameStateMutation] = useMutation(resetGameState)
   const { loading, error, data: findUsersData } = useQuery(findUsers)
 
-  if (loading || error) return <p>Loading ...</p>
-  if (!findUsersData) {
-    return <div>no user findUsersData yet</div>
-  }
-  setUsers(findUsersData.users)
+  // if (loading || error) return <p>Loading ...</p>
+  useEffect(() => {
+    if (findUsersData && findUsersData.users) {
+      setUsers(findUsersData.users)
+    }
+  }, [findUsersData])
 
   // if (!findUsersData.onlineUsers.length) return <p>no online users yet</p>
 
@@ -123,6 +124,10 @@ const AdminControl = () => {
       .then((completedRooms) => {
         console.log('completedRooms = ', completedRooms)
       })
+  }
+
+  if (!findUsersData) {
+    return <div>no user findUsersData yet</div>
   }
 
   return (

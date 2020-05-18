@@ -15,15 +15,6 @@ const useGameContext = () => {
     })
   }
 
-  function setCurrentUserData({ isAdmin, name, id }) {
-    dispatch((draft) => {
-      debugger
-      draft.isAdmin = isAdmin
-      draft.userId = id
-      draft.name = name
-    })
-  }
-
   function setRoundsData(rounds) {
     dispatch((draft) => {
       draft.roundsData = rounds
@@ -57,6 +48,14 @@ const useGameContext = () => {
   function setUserId(userId) {
     dispatch((draft) => {
       draft.userId = userId
+    })
+  }
+
+  function setCurrentUserData({ isAdmin, name, id }) {
+    dispatch((draft) => {
+      draft.isAdmin = isAdmin
+      draft.userId = id
+      draft.name = name
     })
   }
 
