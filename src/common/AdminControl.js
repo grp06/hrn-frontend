@@ -55,15 +55,7 @@ const useImperativeQuery = (query) => {
 }
 const AdminControl = () => {
   const classes = useStyles()
-  const {
-    currentRound,
-    setUsers,
-    userId,
-    setRoundsData,
-    setCurrentRound,
-    resetEvent,
-    roundsData,
-  } = useGameContext()
+  const { currentRound, setUsers, userId } = useGameContext()
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const callQuery = useImperativeQuery(getRoundsData)
 
@@ -98,7 +90,7 @@ const AdminControl = () => {
         })
       })
     })
-    const res = await bulkInsertRoundsMutation({
+    bulkInsertRoundsMutation({
       variables: {
         objects: variablesArr,
       },

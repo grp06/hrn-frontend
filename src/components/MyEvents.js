@@ -39,9 +39,9 @@ const MyEvents = () => {
 
   useEffect(() => {
     if (shouldDisplayShit) {
+      setRoundsData(roundsData)
       setCurrentUserData(userData.users[0])
       setCurrentRound(roundNumber.events[0].current_round)
-      setRoundsData(roundsData)
     }
   }, [userData, roundNumber, roundsData])
 

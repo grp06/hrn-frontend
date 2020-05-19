@@ -18,14 +18,17 @@ const UserControl = () => {
 
         return me
       })
-      console.log('setting partner x')
+      console.log('roundsData = ', roundsData)
+      console.log('currentRound = ', currentRound)
+      console.log('myRound = ', myRound)
+
       setPartnerX(myRound.partnerX_id)
     }
   }, [currentRound])
 
   useEffect(() => {
-    console.log('partnerX = ', partnerX)
     if (partnerX) {
+      console.log('partnerX = ', partnerX)
       fetch(`${endpointUrl}/api/token`, {
         method: 'POST',
         headers: {
