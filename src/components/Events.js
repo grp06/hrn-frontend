@@ -13,10 +13,11 @@ const Events = () => {
     variables: { id: localStorage.getItem('userId') },
   })
 
+  console.log(userData)
   const { data: eventsData, loading, error } = useQuery(getEvents)
 
   useEffect(() => {
-    if (userData) {
+    if (userData && userData.users.length) {
       setCurrentUserData(userData.users[0])
     }
   }, [userData])

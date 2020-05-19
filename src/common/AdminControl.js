@@ -53,14 +53,18 @@ const useImperativeQuery = (query) => {
 
   return imperativelyCallQuery
 }
-const AdminControl = () => {
+const AdminControl = ({ eventId }) => {
   const classes = useStyles()
   const { currentRound, setUsers, userId } = useGameContext()
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const callQuery = useImperativeQuery(getRoundsData)
 
   const [deleteRoundsMutation] = useMutation(deleteRounds)
-  const [setRoundToZeroMutation] = useMutation(setRoundToZero)
+  const [setRoundToZeroMutation] = useMutation(setRoundToZero, {
+    variables: {
+      id: eventId,
+    },
+  })
   const [incrementRoundMutation] = useMutation(incrementRound)
   const { loading, error, data: findUsersData } = useQuery(findUsers)
 
@@ -86,7 +90,7 @@ const AdminControl = () => {
           partnerX_id: pairing[0],
           partnerY_id: pairing[1],
           round_number: idx + 1,
-          event_id: 3,
+          event_id: eventId,
         })
       })
     })

@@ -46,7 +46,7 @@ const Event = ({ match }) => {
   }
 
   // setLoading(false)
-  return <>{role === 'host' ? <AdminControl /> : <UserControl />}</>
+  return <>{role === 'host' ? <AdminControl eventId={id} /> : <UserControl />}</>
 }
 
 export default Event
