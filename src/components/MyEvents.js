@@ -38,9 +38,10 @@ const MyEvents = () => {
   // roundsData.rounds
 
   useEffect(() => {
+    debugger
     if (shouldDisplayShit) {
-      setRoundsData(roundsData)
       setCurrentUserData(userData.users[0])
+      setRoundsData(roundsData)
       setCurrentRound(roundNumber.events[0].current_round)
     }
   }, [userData, roundNumber, roundsData])

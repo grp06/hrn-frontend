@@ -18,13 +18,15 @@ const makeApolloClient = async () => {
   })
 
   const authLink = setContext(async (req, { headers }) => {
-    const token = await getCurrentUserToken()
+    // add in real token KEVIN
+    const token = 123
 
     let authHeaders
     if (token) {
       console.log('theres a token = ', token)
       authHeaders = {
         authorization: `Bearer ${token}`,
+        'X-Hasura-Admin-Secret': 'hirightnow',
       }
     }
 
@@ -43,6 +45,7 @@ const makeApolloClient = async () => {
       return {
         headers: {
           authorization: `Bearer ${token}`,
+          'X-Hasura-Admin-Secret': 'hirightnow',
         },
       }
     }
