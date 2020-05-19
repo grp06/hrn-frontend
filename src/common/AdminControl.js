@@ -10,7 +10,7 @@ import { useMutation } from 'react-apollo'
 
 import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
-import { incrementRound, deleteRounds, bulkInsertRounds } from '../gql/mutations'
+import { incrementRound, deleteRounds, bulkInsertRounds, setRoundToZero } from '../gql/mutations'
 import { findUsers, getRoundsData } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
@@ -62,11 +62,13 @@ const AdminControl = () => {
     setRoundsData,
     setCurrentRound,
     resetEvent,
+    roundsData,
   } = useGameContext()
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const callQuery = useImperativeQuery(getRoundsData)
 
   const [deleteRoundsMutation] = useMutation(deleteRounds)
+  const [setRoundToZeroMutation] = useMutation(setRoundToZero)
   const [incrementRoundMutation] = useMutation(incrementRound)
   const { loading, error, data: findUsersData } = useQuery(findUsers)
 
@@ -80,37 +82,54 @@ const AdminControl = () => {
   // if (!findUsersData.onlineUsers.length) return <p>no online users yet</p>
 
   const startEvent = async () => {
-    if (currentRound === 0) {
-      const variablesArr = []
-      const userIds = findUsersData.users.reduce((all, item) => {
-        all.push(item.id)
-        return all
-      }, [])
+    const variablesArr = []
+    const userIds = findUsersData.users.reduce((all, item) => {
+      all.push(item.id)
+      return all
+    }, [])
 
-      const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
-      // subtracting 1 because admin wont be assigned
-      const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
-      pairingsArray.forEach((round, idx) => {
-        round.forEach((pairing) => {
-          variablesArr.push({
-            partnerX_id: pairing[0],
-            partnerY_id: pairing[1],
-            round_number: idx + 1,
-          })
+    const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
+    // subtracting 1 because admin wont be assigned
+    const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
+    pairingsArray.forEach((round, idx) => {
+      round.forEach((pairing) => {
+        variablesArr.push({
+          partnerX_id: pairing[0],
+          partnerY_id: pairing[1],
+          round_number: idx + 1,
+          event_id: 3,
         })
       })
-      const res = await bulkInsertRoundsMutation({
-        variables: {
-          objects: variablesArr,
+    })
+    const res = await bulkInsertRoundsMutation({
+      variables: {
+        objects: variablesArr,
+      },
+    }).then((roundsResponse) => {
+      const { returning: rounds } = roundsResponse.data.insert_rounds
+
+      const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
+
+      const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
+        all.push(item.partnerX_id)
+        return all
+      }, [])
+      debugger
+      fetch(`${endpointUrl}/api/rooms/create-rooms`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify(allPartnerXs),
+      }).then(() => {
+        // PASS IN EVENT ID
+        incrementRoundMutation()
       })
-      // PASS IN EVENT ID
-      incrementRoundMutation()
-    }
+    })
   }
 
   const completeRooms = () => {
-    fetch(`${endpointUrl}/complete-rooms`)
+    fetch(`${endpointUrl}/api/rooms/complete-rooms`)
       .then((res) => {
         return res.json()
       })
@@ -144,7 +163,7 @@ const AdminControl = () => {
             variant="outlined"
             onClick={async () => {
               await deleteRoundsMutation()
-              resetEvent()
+              await setRoundToZeroMutation()
             }}
           >
             Reset rounds/game

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const listenToRoundsData = gql`
-  subscription listenToRoundsData($eventId: Int!) {
+const listenToRounds = gql`
+  subscription listenToRounds($eventId: Int!) {
     rounds(where: { event_id: { _eq: $eventId } }) {
       id
       partnerX_id
@@ -14,4 +14,4 @@ const listenToRoundsData = gql`
   }
 `
 
-export default listenToRoundsData
+export default listenToRounds

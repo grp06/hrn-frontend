@@ -5,7 +5,7 @@ import { useSubscription, useQuery } from '@apollo/react-hooks'
 import { AdminControl, UserControl } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { findMyUser } from '../gql/queries'
-import { listenToRoundsData, getCurrentRound } from '../gql/subscriptions'
+import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 import { useSetUserId, useFindUserById } from '../hooks'
 
 const MyEvents = () => {
@@ -15,40 +15,42 @@ const MyEvents = () => {
     variables: { id: localStorage.getItem('userId') },
   })
 
-  const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRoundsData, {
+  const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRounds, {
     variables: {
       eventId: 3,
     },
   })
+
   const {
-    data: currentRoundData,
+    data: roundNumber,
     loading: currentRoundLoading,
     error: currentRoundError,
-  } = useSubscription(getCurrentRound, {
+  } = useSubscription(listenToRoundNumber, {
     variables: {
       eventId: 3,
     },
   })
 
-  console.log(roundsData)
+  console.log('roundNumber = ', roundNumber)
 
-  const shouldDisplayShit = userData && userData.users
+  const shouldDisplayShit = userData && userData.users && roundNumber && roundNumber.events
   // roundsData &&
   // roundsData.rounds
 
   useEffect(() => {
     if (shouldDisplayShit) {
       setCurrentUserData(userData.users[0])
-      // setRoundsData(roundsData.rounds)
+      setCurrentRound(roundNumber.events[0].current_round)
+      setRoundsData(roundsData)
     }
-  }, [userData, currentRoundData, roundsData])
+  }, [userData, roundNumber, roundsData])
 
   if (!userId) {
     return <div>no user id yet</div>
   }
 
   // setLoading(false)
-  return <>{role ? <AdminControl /> : <UserControl />}</>
+  return <>{role === 'host' ? <AdminControl /> : <UserControl />}</>
 }
 
 export default MyEvents

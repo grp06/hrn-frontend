@@ -27,12 +27,6 @@ const useGameContext = () => {
     })
   }
 
-  function resetEvent() {
-    dispatch((draft) => {
-      draft.currentRound = 0
-      draft.roundsData = []
-    })
-  }
   function setToken(token) {
     dispatch((draft) => {
       draft.token = token
@@ -64,7 +58,6 @@ const useGameContext = () => {
     setCurrentUserData,
     setUsers,
     setRoundsData,
-    resetEvent,
     setToken,
     setPartnerX,
     setCurrentRound,

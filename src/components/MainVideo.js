@@ -116,7 +116,8 @@ const MainVideo = () => {
         })
 
         participant.on('trackSubscribed', (track) => {
-          document.getElementById('remote-media-div').appendChild(track.attach())
+          const remoteMediaDiv = document.getElementById('remote-media-div')
+          remoteMediaDiv && remoteMediaDiv.appendChild(track.attach())
         })
       })
 

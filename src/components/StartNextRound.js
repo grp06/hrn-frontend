@@ -7,11 +7,11 @@ import { useMutation } from 'react-apollo'
 import { useGameContext } from '../context/useGameContext'
 import { incrementRound } from '../gql/mutations'
 import { findUsers, getRoundsData } from '../gql/queries'
-import { listenToRoundsData, getGameState } from '../gql/subscriptions'
+import { listenToRounds } from '../gql/subscriptions'
 import endpointUrl from '../utils/endpointUrl'
 
 const StartNextRound = () => {
-  const { loading, error, data } = useSubscription(listenToRoundsData)
+  const { loading, error, data } = useSubscription(listenToRounds)
   const [incrementRoundMutation] = useMutation(incrementRound)
   const { currentRound } = useGameContext()
 
@@ -25,7 +25,7 @@ const StartNextRound = () => {
         return all
       }, [])
       console.log('allparnerx = ', allPartnerXs)
-      fetch(`${endpointUrl}/create-room`, {
+      fetch(`${endpointUrl}/api/rooms/create-rooms`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
