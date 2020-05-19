@@ -10,7 +10,7 @@ const UserControl = () => {
   const { currentRound, userId, roundsData, setPartnerX, partnerX, setToken } = useGameContext()
 
   useEffect(() => {
-    if (roundsData && currentRound) {
+    if (roundsData && roundsData.rounds && roundsData.rounds.length && currentRound) {
       const myRound = roundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&
@@ -24,7 +24,7 @@ const UserControl = () => {
 
       setPartnerX(myRound.partnerX_id)
     }
-  }, [currentRound])
+  }, [currentRound, roundsData])
 
   useEffect(() => {
     if (partnerX) {
