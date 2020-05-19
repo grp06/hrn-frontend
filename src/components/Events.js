@@ -28,7 +28,7 @@ const Events = () => {
   return (
     <div>
       {eventsData.events.map(({ description, event_name, id, host_id }) => {
-        return <EventCard name={event_name} desc={description} id={id} hostId={host_id} />
+        return <EventCard key={id} name={event_name} desc={description} id={id} hostId={host_id} />
       })}
     </div>
   )

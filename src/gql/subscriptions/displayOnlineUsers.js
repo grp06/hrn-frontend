@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const displayOnlineUsers = gql`
-  subscription displayOnlineUsers($timeOneMinAgo: timestamptz) {
-    users(order_by: { name: asc }, where: { last_seen: { _gt: $timeOneMinAgo } }) {
+  subscription displayOnlineUsers {
+    users {
       name
       id
       last_seen

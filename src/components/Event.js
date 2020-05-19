@@ -1,19 +1,17 @@
-import React, { useEffect, Fragment } from 'react'
+import React, { useEffect } from 'react'
 
-import { useSubscription, useQuery } from '@apollo/react-hooks'
+import { useSubscription } from '@apollo/react-hooks'
 
 import { AdminControl, UserControl } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { findMyUser } from '../gql/queries'
 import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
-import { useSetUserId, useFindUserById } from '../hooks'
 
-const Event = () => {
+const Event = ({ match }) => {
+  const { id } = match.params
   const { role, userId, setCurrentRound, setRoundsData } = useGameContext()
-
   const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRounds, {
     variables: {
-      eventId: 3,
+      eventId: id,
     },
   })
 
@@ -23,13 +21,18 @@ const Event = () => {
     error: currentRoundError,
   } = useSubscription(listenToRoundNumber, {
     variables: {
-      eventId: 3,
+      eventId: id,
     },
   })
 
+  const shouldDisplayShit =
+    roundNumber &&
+    roundNumber.events &&
+    roundNumber.events.length &&
+    roundsData &&
+    roundsData.rounds
+  console.log('roundsData', roundsData)
   console.log('roundNumber = ', roundNumber)
-
-  const shouldDisplayShit = roundNumber && roundNumber.events && roundsData && roundsData.rounds
 
   useEffect(() => {
     if (shouldDisplayShit) {

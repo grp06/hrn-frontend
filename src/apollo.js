@@ -39,7 +39,7 @@ const makeApolloClient = async () => {
   const httpAuthLink = authLink.concat(httpLink)
 
   const connectionParams = async () => {
-    const token = await getCurrentUserToken()
+    const token = 123
 
     if (token) {
       return {
