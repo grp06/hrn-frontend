@@ -12,9 +12,8 @@ import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
 import { incrementRound, deleteRounds, bulkInsertRounds, setRoundToZero } from '../gql/mutations'
 import { findUsers, getRoundsData } from '../gql/queries'
-import endpointUrl from '../utils/endpointUrl'
+import { completeRooms, startRound } from '../helpers'
 import roundRobin from '../utils/roundRobin'
-import startRound from '../helpers/startRound'
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -110,16 +109,6 @@ const AdminControl = () => {
       })
       .then(() => {
         incrementRoundMutation()
-      })
-  }
-
-  const completeRooms = () => {
-    fetch(`${endpointUrl}/api/rooms/complete-rooms`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((completedRooms) => {
-        console.log('completedRooms = ', completedRooms)
       })
   }
 

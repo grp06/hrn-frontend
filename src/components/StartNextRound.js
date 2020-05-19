@@ -1,6 +1,5 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React from 'react'
 
-import { useQuery, useLazyQuery, useSubscription } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import { useMutation } from 'react-apollo'
 

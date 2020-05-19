@@ -2,7 +2,6 @@ import endpointUrl from '../utils/endpointUrl'
 
 const startRound = async (rounds, currentRound) => {
   const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
-  debugger
   if (currentRoundObj.length > 0) {
     const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
       all.push(item.partnerX_id)
