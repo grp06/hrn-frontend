@@ -6,7 +6,7 @@ import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-d
 
 import makeApolloClient from './apollo'
 import { LoginForm } from './common'
-import { Test, MyEvents } from './components'
+import { Test, MyEvents, Events } from './components'
 import { GameProvider } from './context/provider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -43,6 +43,7 @@ const App = () => {
               <GameProvider>
                 <Route render={() => <Redirect to={{ pathname: '/' }} />} />
                 <Route exact path="/" component={LoginForm} />
+                <Route exact path="/events" component={Events} />
                 <Route exact path="/myevents" component={MyEvents} />
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />

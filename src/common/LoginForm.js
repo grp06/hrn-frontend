@@ -80,7 +80,7 @@ const LoginForm = ({ history }) => {
                       },
                     })
                     localStorage.setItem('userId', userdata.data.insert_users.returning[0].id)
-                    history.push('/myevents')
+                    history.push('/events')
                   } catch (error) {
                     console.log(error)
                   }
