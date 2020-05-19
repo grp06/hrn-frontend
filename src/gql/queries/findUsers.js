@@ -5,7 +5,7 @@ const findUsers = gql`
     users {
       id
       name
-      isInChat
+      role
     }
   }
 `

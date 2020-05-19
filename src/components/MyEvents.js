@@ -32,15 +32,13 @@ const MyEvents = () => {
 
   console.log(roundsData)
 
-  const shouldDisplayShit =
-    userData && userData.users && currentRoundData && currentRoundData.gameState
+  const shouldDisplayShit = userData && userData.users
   // roundsData &&
   // roundsData.rounds
 
   useEffect(() => {
     if (shouldDisplayShit) {
       setCurrentUserData(userData.users[0])
-      setCurrentRound(currentRoundData.gameState[0].currentRound)
       // setRoundsData(roundsData.rounds)
     }
   }, [userData, currentRoundData, roundsData])

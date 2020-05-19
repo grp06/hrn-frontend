@@ -5,7 +5,6 @@ const updateLastSeenMutation = gql`
     update_users(where: { id: { _eq: $id } }, _set: { last_seen: $now }) {
       returning {
         id
-        isInChat
         last_seen
         name
       }

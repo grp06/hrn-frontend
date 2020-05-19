@@ -64,10 +64,6 @@ class Test extends Component {
                       Name:
                       {user.name}
                     </p>
-                    <p>
-                      isInChat:
-                      {user.isInChat ? 'is in chat' : 'is not in chat'}
-                    </p>
                   </div>
                 </div>
               )
