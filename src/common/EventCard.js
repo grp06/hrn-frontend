@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
@@ -13,6 +13,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import spustaWeed from '../assets/spustaWeed.jpg'
 
+import { Link } from 'react-router-dom'
+
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
     marginTop: '2em',
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 // Right now things are hard coded, but we will query the database and get the
 // information for the event
-const EventCard = () => {
+const EventCard = ({ name, desc, id, hostId }) => {
   const classes = useStyles()
 
   return (
@@ -46,18 +48,20 @@ const EventCard = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
-                  Get Smacked Off Your Ass
+                  {name}
                 </Typography>
                 <Typography variant="body1">April 20, 4:20 PM</Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  That plant looks kinda cute, but it would look better in my joint.
+                  {desc}
                 </Typography>
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary" variant="outlined">
-                Join Event
-              </Button>
+              <Link to={`/events/${id}`}>
+                <Button size="small" color="primary" variant="outlined">
+                  Join Event
+                </Button>
+              </Link>
               <Button size="small" color="secondary">
                 Cancel RSVP
               </Button>

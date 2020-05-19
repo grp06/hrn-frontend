@@ -8,12 +8,8 @@ import { findMyUser } from '../gql/queries'
 import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 import { useSetUserId, useFindUserById } from '../hooks'
 
-const MyEvents = () => {
-  const { role, userId, setCurrentUserData, setCurrentRound, setRoundsData } = useGameContext()
-
-  const { data: userData } = useQuery(findMyUser, {
-    variables: { id: localStorage.getItem('userId') },
-  })
+const Event = () => {
+  const { role, userId, setCurrentRound, setRoundsData } = useGameContext()
 
   const { data: roundsData, loading: roundLoading, error } = useSubscription(listenToRounds, {
     variables: {
@@ -33,18 +29,14 @@ const MyEvents = () => {
 
   console.log('roundNumber = ', roundNumber)
 
-  const shouldDisplayShit = userData && userData.users && roundNumber && roundNumber.events
-  // roundsData &&
-  // roundsData.rounds
+  const shouldDisplayShit = roundNumber && roundNumber.events && roundsData && roundsData.rounds
 
   useEffect(() => {
-    debugger
     if (shouldDisplayShit) {
-      setCurrentUserData(userData.users[0])
       setRoundsData(roundsData)
       setCurrentRound(roundNumber.events[0].current_round)
     }
-  }, [userData, roundNumber, roundsData])
+  }, [roundNumber, roundsData])
 
   if (!userId) {
     return <div>no user id yet</div>
@@ -54,4 +46,4 @@ const MyEvents = () => {
   return <>{role === 'host' ? <AdminControl /> : <UserControl />}</>
 }
 
-export default MyEvents
+export default Event
