@@ -6,43 +6,18 @@ import { useMutation } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
 import { incrementRound } from '../gql/mutations'
-import { findUsers, getRoundsData } from '../gql/queries'
-import { listenToRounds } from '../gql/subscriptions'
-import endpointUrl from '../utils/endpointUrl'
+import startRound from '../helpers/startRound'
 
 const StartNextRound = () => {
-  const { loading, error, data } = useSubscription(listenToRounds)
   const [incrementRoundMutation] = useMutation(incrementRound)
-  const { currentRound } = useGameContext()
+  const { currentRound, roundsData } = useGameContext()
 
-  const startRound = async () => {
-    // maybe this should be round + 1
-    // because we only increment the round at the very end
-    const currentRoundObj = data.rounds.filter((round) => round.round_number === currentRound + 1)
-    if (currentRoundObj.length > 0) {
-      const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
-        all.push(item.partnerX_id)
-        return all
-      }, [])
-      console.log('allparnerx = ', allPartnerXs)
-      fetch(`${endpointUrl}/api/rooms/create-rooms`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(allPartnerXs),
-      }).then(() => {
-        // PASS IN EVENT ID
-        incrementRoundMutation()
-      })
-    } else {
-      // we should do nothing here
-      // or set game to be over
-    }
+  const onClickHandler = () => {
+    startRound(roundsData.rounds, currentRound).then(incrementRoundMutation)
   }
 
   return (
-    <Button variant="outlined" onClick={startRound}>
+    <Button variant="outlined" onClick={() => onClickHandler()}>
       Start Next Round
     </Button>
   )

@@ -14,6 +14,7 @@ import { incrementRound, deleteRounds, bulkInsertRounds, setRoundToZero } from '
 import { findUsers, getRoundsData } from '../gql/queries'
 import endpointUrl from '../utils/endpointUrl'
 import roundRobin from '../utils/roundRobin'
+import startRound from '../helpers/startRound'
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -79,15 +80,12 @@ const AdminControl = () => {
     }
   }, [findUsersData])
 
-  // if (!findUsersData.onlineUsers.length) return <p>no online users yet</p>
-
   const startEvent = async () => {
     const variablesArr = []
     const userIds = findUsersData.users.reduce((all, item) => {
       all.push(item.id)
       return all
     }, [])
-
     const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
     // subtracting 1 because admin wont be assigned
     const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
@@ -105,27 +103,14 @@ const AdminControl = () => {
       variables: {
         objects: variablesArr,
       },
-    }).then((roundsResponse) => {
-      const { returning: rounds } = roundsResponse.data.insert_rounds
-
-      const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
-
-      const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
-        all.push(item.partnerX_id)
-        return all
-      }, [])
-      debugger
-      fetch(`${endpointUrl}/api/rooms/create-rooms`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(allPartnerXs),
-      }).then(() => {
-        // PASS IN EVENT ID
+    })
+      .then((roundsResponse) => {
+        const { returning: rounds } = roundsResponse.data.insert_rounds
+        startRound(rounds, currentRound)
+      })
+      .then(() => {
         incrementRoundMutation()
       })
-    })
   }
 
   const completeRooms = () => {
