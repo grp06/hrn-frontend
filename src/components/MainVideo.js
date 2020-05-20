@@ -77,15 +77,16 @@ const MainVideo = () => {
 
       // Log any Participants already connected to the Room
       room.participants.forEach((participant) => {
+        console.log('MainVideo -> participant', participant)
         console.log(`Participant "${participant.identity}" is connected to the Room`)
 
         // not in the code we copied from twilio
-        participant.tracks.forEach((publication) => {
-          if (publication.isSubscribed) {
-            const { track } = publication
-            document.getElementById('remote-media-div').appendChild(track.attach())
-          }
-        })
+        // participant.tracks.forEach((publication) => {
+        //   if (publication.isSubscribed) {
+        //     const { track } = publication
+        //     document.getElementById('remote-media-div').appendChild(track.attach())
+        //   }
+        // })
       })
 
       // Log new Participants as they connect to the Room
@@ -103,12 +104,14 @@ const MainVideo = () => {
 
         participant.tracks.forEach((publication) => {
           if (publication.isSubscribed) {
+            console.log('publication.isSubscribed')
             const { track } = publication
             document.getElementById('remote-media-div').appendChild(track.attach())
           }
         })
 
         participant.on('trackSubscribed', (track) => {
+          console.log('trackSubscribed')
           document.getElementById('remote-media-div').appendChild(track.attach())
         })
       })
@@ -119,6 +122,7 @@ const MainVideo = () => {
       })
 
       room.participants.forEach((participant) => {
+        console.log('participant = ', participant)
         participant.tracks.forEach((publication) => {
           if (publication.track) {
             document.getElementById('remote-media-div').appendChild(publication.track.attach())
