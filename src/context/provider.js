@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
+import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
 
 import { findMyUser } from '../gql/queries'
-import { Redirect } from 'react-router-dom'
 
 const GameContext = React.createContext()
 
@@ -23,17 +23,16 @@ const defaultState = {
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-
+  console.log('state.userId = ', state.userId)
   const { data: userData } = useQuery(findMyUser, {
     variables: { id: state.userId },
-    skip: !state.userId,
+    skip: !state.userId || !state.appLoading,
   })
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]
 
       dispatch((draft) => {
-        console.log('updating context from set role')
         draft.role = role
         draft.userId = id
         draft.name = name
@@ -56,7 +55,6 @@ const GameProvider = ({ children, location }) => {
       // Simulating when we have read users and make an API call
       setTimeout(() => {
         dispatch((draft) => {
-          console.log('updating context from set userId')
           draft.userId = myUserId
           // we dont necessarily know which api call will return first
           if (draft.role) {

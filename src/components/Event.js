@@ -7,7 +7,6 @@ import { useGameContext } from '../context/useGameContext'
 import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 
 const Event = ({ match }) => {
-  console.log('hi')
   const { id } = match.params
   const { role, setCurrentRound, setRoundsData, appLoading } = useGameContext()
   const { data: roundsData, loading: roundDataLoading, error: roundDataError } = useSubscription(
@@ -45,7 +44,6 @@ const Event = ({ match }) => {
   if (haveSubscriptionError) {
     return <div>Bad news. We have errors</div>
   }
-  console.log('are we getting here????')
   return <>{role === 'host' ? <AdminControl eventId={id} /> : <UserControl />}</>
 }
 
