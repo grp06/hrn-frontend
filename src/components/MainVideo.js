@@ -5,7 +5,12 @@ import { makeStyles } from '@material-ui/styles'
 
 import { useGameContext } from '../context/useGameContext'
 
-const { connect, createLocalTracks, createLocalVideoTrack } = require('twilio-video')
+const {
+  connect,
+  createLocalTracks,
+  createLocalVideoTrack,
+  createLocalAudioTrack,
+} = require('twilio-video')
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -57,6 +62,7 @@ const MainVideo = () => {
     video: { width: 640 },
   })
     .then((localTracks) => {
+      console.log('localTracks = ', localTracks)
       return connect(token, {
         name: partnerX,
         tracks: localTracks,
@@ -68,6 +74,17 @@ const MainVideo = () => {
       // Log your Client's LocalParticipant in the Room
       const { localParticipant } = room
       console.log(`Connected to the Room as LocalParticipant "${localParticipant.identity}"`)
+
+      // localParticipant.tracks.forEach((localTrackPublication) => {
+      //   debugger
+      //   if (localTrackPublication.isP)
+      // })
+
+      // localParticipant.publishTrack(localTrack).then((localTrackPublication) => {
+      //   console.log(
+      //     `Track ${localTrackPublication.name} was published with SID ${localTrackPublication.tracksid}`
+      //   )
+      // })
 
       // Log any Participants already connected to the Room
       room.participants.forEach((participant) => {
@@ -112,7 +129,10 @@ const MainVideo = () => {
 
       room.on('participantDisconnected', (participant) => {
         console.log(`Participant disconnected: ${participant.identity}`)
-        document.getElementById('remote-media-div').innerHTML = ''
+        const remoteDiv = document.getElementById('remote-media-div')
+        if (remoteDiv) {
+          remoteDiv.innerHTML = ''
+        }
       })
 
       room.participants.forEach((participant) => {
