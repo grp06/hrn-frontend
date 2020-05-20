@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import { Mutation } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 
+import { Loading } from '.'
 import loginPhoto from '../assets/login.svg'
 import { useGameContext } from '../context/useGameContext'
 import { createUser } from '../gql/mutations'
@@ -43,8 +44,13 @@ const useStyles = makeStyles(() => ({
 
 const LoginForm = ({ history }) => {
   const classes = useStyles()
+  const { appLoading, userId, redirect, setRedirect } = useGameContext()
 
   const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    setRedirect(false)
+  }, [redirect])
 
   if (localStorage.getItem('userId')) {
     return <Redirect to="/events" push />

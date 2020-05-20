@@ -39,29 +39,35 @@ const useGameContext = () => {
     })
   }
 
-  function setUserId(userId) {
+  function setRoom(room) {
     dispatch((draft) => {
-      draft.userId = userId
+      draft.room = room
     })
   }
 
-  function setCurrentUserData({ role, name, id }) {
+  function setLoading(loading) {
     dispatch((draft) => {
-      draft.role = role
-      draft.userId = id
-      draft.name = name
+      draft.loading = loading
+    })
+  }
+
+  function setRedirect(redirect) {
+    console.log('from setredirect')
+    dispatch((draft) => {
+      draft.redirect = redirect
     })
   }
 
   return {
     ...state,
-    setCurrentUserData,
     setUsers,
     setRoundsData,
     setToken,
     setPartnerX,
     setCurrentRound,
-    setUserId,
+    setRoom,
+    setLoading,
+    setRedirect,
   }
 }
 
