@@ -23,7 +23,6 @@ const defaultState = {
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  console.log('state.userId = ', state.userId)
   const { data: userData } = useQuery(findMyUser, {
     variables: { id: state.userId },
     skip: !state.userId || !state.appLoading,
@@ -52,11 +51,9 @@ const GameProvider = ({ children, location }) => {
           draft.appLoading = false
         })
       }
-      // Simulating when we have read users and make an API call
       setTimeout(() => {
         dispatch((draft) => {
           draft.userId = myUserId
-          // we dont necessarily know which api call will return first
           if (draft.role) {
             draft.appLoading = false
           }

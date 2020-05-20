@@ -70,13 +70,13 @@ const MainVideo = () => {
     .then((twilioRoom) => {
       window.addEventListener('beforeunload', () => twilioRoom.disconnect())
 
-      console.log('ROOMR === ', twilioRoom)
+      console.log('twilioRoom === ', twilioRoom)
 
       twilioRoom.on('disconnected', (rum) => {
         // Detach the local media elements
         console.log('on disconnected')
         rum.localParticipant.tracks.forEach((publication) => {
-          console.log('do we remove shit?')
+          console.log('publication ', publication)
           const attachedElements = publication.track.detach()
           attachedElements.forEach((element) => element.remove())
         })
@@ -106,11 +106,13 @@ const MainVideo = () => {
 
       // Log new Participants as they connect to the Room
       twilioRoom.on('participantConnected', (participant) => {
-        console.log(`onConnected --- ID "${participant.identity}" just connected`)
-        const videoDiv = document.getElementById('remote-media-div')
-        if (videoDiv && videoDiv.children.length) {
-          videoDiv.innerHTML = ''
-        }
+        console.log(
+          `participantConnected with --- ID "${participant.identity}" just connected ${participant}`
+        )
+        // const videoDiv = document.getElementById('remote-media-div')
+        // if (videoDiv && videoDiv.children.length) {
+        //   videoDiv.innerHTML = ''
+        // }
         participant.tracks.forEach((publication) => {
           if (publication.isSubscribed) {
             const { track } = publication
@@ -125,6 +127,7 @@ const MainVideo = () => {
       })
 
       twilioRoom.participants.forEach((participant) => {
+        console.log('twilioRoom.participants.forEach ')
         participant.tracks.forEach((publication) => {
           if (publication.track) {
             console.log('pulication.track = ', publication.track)
