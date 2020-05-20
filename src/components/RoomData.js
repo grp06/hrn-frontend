@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
     width: 300,
     position: 'fixed',
     top: 84,
-    right: 20,
+    left: 20,
     height: 600,
     padding: 10,
   },

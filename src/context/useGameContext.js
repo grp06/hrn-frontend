@@ -39,36 +39,27 @@ const useGameContext = () => {
     })
   }
 
-  function setUserId(userId) {
-    dispatch((draft) => {
-      draft.userId = userId
-    })
-  }
-
-  function setCurrentUserData({ role, name, id }) {
-    dispatch((draft) => {
-      draft.role = role
-      draft.userId = id
-      draft.name = name
-    })
-  }
-
   function setRoom(room) {
     dispatch((draft) => {
       draft.room = room
     })
   }
 
+  function setLoading(loading) {
+    dispatch((draft) => {
+      draft.loading = loading
+    })
+  }
+
   return {
     ...state,
-    setCurrentUserData,
     setUsers,
     setRoundsData,
     setToken,
     setPartnerX,
     setCurrentRound,
-    setUserId,
     setRoom,
+    setLoading,
   }
 }
 

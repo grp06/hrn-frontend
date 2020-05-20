@@ -41,7 +41,6 @@ const App = () => {
             <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <Switch>
               <GameProvider>
-                <Route render={() => <Redirect to={{ pathname: '/' }} />} />
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
                 <Route exact path="/events/:id" component={Event} />
@@ -59,3 +58,5 @@ const App = () => {
 
 export default App
 //            <Footer activeTab={activeTab} setActiveTab={setActiveTab} />
+// route to root when the go to a bad route
+// <Route render={() => <Redirect to={{ pathname: '/' }} />} />

@@ -1,29 +1,32 @@
 import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
+import { Redirect } from 'react-router-dom'
 
-import { EventCard } from '../common'
+import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { findMyUser, getEvents } from '../gql/queries'
+import { getEvents } from '../gql/queries'
 
 const Events = () => {
-  const { role, userId, setCurrentUserData, setCurrentRound, setRoundsData } = useGameContext()
+  const { appLoading } = useGameContext()
 
-  const { data: userData } = useQuery(findMyUser, {
-    variables: { id: localStorage.getItem('userId') },
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents, {
+    skip: appLoading,
   })
 
-  console.log(userData)
-  const { data: eventsData, loading, error } = useQuery(getEvents)
+  console.log('appLoading = ', appLoading)
 
-  useEffect(() => {
-    if (userData && userData.users.length) {
-      setCurrentUserData(userData.users[0])
-    }
-  }, [userData])
+  if (appLoading || eventsLoading) {
+    return <Loading />
+  }
 
-  if (loading || !eventsData) {
-    return null
+  if (!eventsData) {
+    return <div>no events data </div>
+  }
+
+  if (eventsData.events.length) {
+    const { id } = eventsData.events[0]
+    return <Redirect to={`/event/${id}`} push />
   }
 
   return (
