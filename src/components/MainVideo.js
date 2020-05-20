@@ -68,7 +68,6 @@ const MainVideo = () => {
       })
     })
     .then((twilioRoom) => {
-      setRoom(twilioRoom)
       window.addEventListener('beforeunload', () => twilioRoom.disconnect())
 
       console.log('ROOMR === ', twilioRoom)

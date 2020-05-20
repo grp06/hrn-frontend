@@ -6,8 +6,8 @@ import { AdminControl, UserControl, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 
-let renders = 0
 const Event = ({ match }) => {
+  console.log('hi')
   const { id } = match.params
   const { role, setCurrentRound, setRoundsData, appLoading } = useGameContext()
   const { data: roundsData, loading: roundDataLoading, error: roundDataError } = useSubscription(
@@ -27,7 +27,6 @@ const Event = ({ match }) => {
       },
     }
   )
-  console.log('role = ', role)
 
   const haveSubscriptionError = eventDataError || roundDataError
   const subscriptionsLoading = roundDataLoading || eventDataLoading
@@ -46,13 +45,7 @@ const Event = ({ match }) => {
   if (haveSubscriptionError) {
     return <div>Bad news. We have errors</div>
   }
-
-  renders += 1
-  // does it need to render so many times? Thought my loading logic took care of it...
-  console.log('renders = ', renders)
-  console.log('Event -> eventData', eventData)
-  console.log('Event -> roundsData', roundsData)
-
+  console.log('are we getting here????')
   return <>{role === 'host' ? <AdminControl eventId={id} /> : <UserControl />}</>
 }
 

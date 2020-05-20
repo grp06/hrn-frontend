@@ -10,11 +10,7 @@ import { getEvents } from '../gql/queries'
 const Events = () => {
   const { appLoading } = useGameContext()
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents, {
-    skip: appLoading,
-  })
-
-  console.log('appLoading = ', appLoading)
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
 
   if (appLoading || eventsLoading) {
     return <Loading />
@@ -26,6 +22,7 @@ const Events = () => {
 
   if (eventsData.events.length) {
     const { id } = eventsData.events[0]
+    console.log('redirect')
     return <Redirect to={`/event/${id}`} push />
   }
 

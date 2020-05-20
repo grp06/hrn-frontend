@@ -9,7 +9,6 @@ import endpointUrl from '../utils/endpointUrl'
 
 const UserControl = () => {
   const { currentRound, userId, roundsData, setPartnerX, partnerX, setToken } = useGameContext()
-  console.log('user')
   useEffect(() => {
     if (roundsData && roundsData.rounds && roundsData.rounds.length && currentRound) {
       const myRound = roundsData.rounds.find((round) => {
@@ -60,7 +59,6 @@ const UserControl = () => {
 
   return (
     <>
-      <RoomData />
       <MainVideo />
     </>
   )

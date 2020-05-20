@@ -31,6 +31,7 @@ const GameProvider = ({ children }) => {
       const { name, role, id } = userData.users[0]
 
       dispatch((draft) => {
+        console.log('updating context from set role')
         draft.role = role
         draft.userId = id
         draft.name = name
@@ -48,13 +49,14 @@ const GameProvider = ({ children }) => {
       // Simulating when we have read users and make an API call
       setTimeout(() => {
         dispatch((draft) => {
+          console.log('updating context from set userId')
           draft.userId = myUserId
           // we dont necessarily know which api call will return first
           if (draft.role) {
             draft.appLoading = false
           }
         })
-      }, 1000)
+      }, 500)
     }
   }, [])
 
