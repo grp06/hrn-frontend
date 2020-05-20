@@ -51,15 +51,17 @@ const MainVideo = () => {
     return <div>no token yet :(</div>
   }
 
-  createLocalTracks({
-    audio: false,
-    // video: {
-    //   width: { min: 1024, ideal: 1280, max: 1920 },
-    //   height: { min: 576, ideal: 720, max: 1080 },
-    // },
-    width: { max: 192 },
-    height: { max: 108 },
-  })
+  navigator.mediaDevices
+    .getUserMedia({
+      audio: false,
+      // video: {
+      //   width: { min: 1024, ideal: 1280, max: 1920 },
+      //   height: { min: 576, ideal: 720, max: 1080 },
+      // },
+      width: { max: 192 },
+      height: { max: 108 },
+      video: true,
+    })
     .then((localTracks) => {
       return connect(token, {
         name: partnerX,
