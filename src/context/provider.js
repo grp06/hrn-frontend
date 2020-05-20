@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 
 import { findMyUser } from '../gql/queries'
+import { Redirect } from 'react-router-dom'
 
 const GameContext = React.createContext()
 
@@ -18,8 +19,9 @@ const defaultState = {
   roundsData: null,
   myToken: '',
   appLoading: true,
+  redirect: null,
 }
-const GameProvider = ({ children }) => {
+const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
 
   const { data: userData } = useQuery(findMyUser, {
@@ -45,7 +47,12 @@ const GameProvider = ({ children }) => {
   useEffect(() => {
     if (!state.userId) {
       const myUserId = localStorage.getItem('userId')
-
+      if (!myUserId && state.redirect === null) {
+        return dispatch((draft) => {
+          draft.redirect = true
+          draft.appLoading = false
+        })
+      }
       // Simulating when we have read users and make an API call
       setTimeout(() => {
         dispatch((draft) => {
@@ -59,6 +66,10 @@ const GameProvider = ({ children }) => {
       }, 500)
     }
   }, [])
+
+  if (state.redirect && location.pathname !== '/') {
+    return <Redirect to="/" push />
+  }
 
   return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
 }

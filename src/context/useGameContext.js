@@ -51,6 +51,13 @@ const useGameContext = () => {
     })
   }
 
+  function setRedirect(redirect) {
+    console.log('from setredirect')
+    dispatch((draft) => {
+      draft.redirect = redirect
+    })
+  }
+
   return {
     ...state,
     setUsers,
@@ -60,6 +67,7 @@ const useGameContext = () => {
     setCurrentRound,
     setRoom,
     setLoading,
+    setRedirect,
   }
 }
 

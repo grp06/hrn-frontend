@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
@@ -44,9 +44,13 @@ const useStyles = makeStyles(() => ({
 
 const LoginForm = ({ history }) => {
   const classes = useStyles()
-  const { appLoading, userId } = useGameContext()
+  const { appLoading, userId, redirect, setRedirect } = useGameContext()
 
   const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    setRedirect(false)
+  }, [redirect])
 
   if (localStorage.getItem('userId')) {
     return <Redirect to="/events" push />

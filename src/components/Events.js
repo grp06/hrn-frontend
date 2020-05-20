@@ -23,7 +23,7 @@ const Events = () => {
   if (eventsData.events.length) {
     const { id } = eventsData.events[0]
     console.log('redirect')
-    return <Redirect to={`/event/${id}`} push />
+    return <Redirect to={`/events/${id}`} push />
   }
 
   return (
