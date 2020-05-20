@@ -51,21 +51,15 @@ const MainVideo = () => {
     return <div>no token yet :(</div>
   }
 
-  navigator.mediaDevices
-    .getUserMedia({
-      audio: false,
-      // video: {
-      //   width: { min: 1024, ideal: 1280, max: 1920 },
-      //   height: { min: 576, ideal: 720, max: 1080 },
-      // },
-      width: { max: 192 },
-      height: { max: 108 },
-      video: true,
-    })
-    .then(function (mediaStream) {
+  // Option 1
+  createLocalTracks({
+    audio: false,
+    video: { width: 640 },
+  })
+    .then((localTracks) => {
       return connect(token, {
         name: partnerX,
-        tracks: mediaStream.getTracks(),
+        tracks: localTracks,
       })
     })
     .then((room) => {
@@ -81,12 +75,12 @@ const MainVideo = () => {
         console.log(`Participant "${participant.identity}" is connected to the Room`)
 
         // not in the code we copied from twilio
-        // participant.tracks.forEach((publication) => {
-        //   if (publication.isSubscribed) {
-        //     const { track } = publication
-        //     document.getElementById('remote-media-div').appendChild(track.attach())
-        //   }
-        // })
+        participant.tracks.forEach((publication) => {
+          if (publication.isSubscribed) {
+            const { track } = publication
+            document.getElementById('remote-media-div').appendChild(track.attach())
+          }
+        })
       })
 
       // Log new Participants as they connect to the Room
