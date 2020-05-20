@@ -62,10 +62,10 @@ const MainVideo = () => {
       height: { max: 108 },
       video: true,
     })
-    .then((localTracks) => {
+    .then(function (mediaStream) {
       return connect(token, {
         name: partnerX,
-        tracks: localTracks,
+        tracks: mediaStream.getTracks(),
       })
     })
     .then((room) => {
