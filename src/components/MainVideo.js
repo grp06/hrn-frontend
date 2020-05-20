@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const MainVideo = () => {
   const classes = useStyles()
 
-  const { token, partnerX, roundsData, room, setRoom } = useGameContext()
+  const { token, partnerX, roundsData } = useGameContext()
 
   if (!roundsData) {
     return <div>nothing</div>
@@ -50,69 +50,47 @@ const MainVideo = () => {
   if (!token || !partnerX) {
     return <div>no token yet :(</div>
   }
-  navigator.mediaDevices
-    .getUserMedia({
-      audio: false,
-      // video: {
-      //   width: { min: 1024, ideal: 1280, max: 1920 },
-      //   height: { min: 576, ideal: 720, max: 1080 },
-      // },
-      width: { max: 192 },
-      height: { max: 108 },
-      video: true,
-    })
-    .then(function (mediaStream) {
+
+  createLocalTracks({
+    audio: false,
+    // video: {
+    //   width: { min: 1024, ideal: 1280, max: 1920 },
+    //   height: { min: 576, ideal: 720, max: 1080 },
+    // },
+    width: { max: 192 },
+    height: { max: 108 },
+  })
+    .then((localTracks) => {
       return connect(token, {
         name: partnerX,
-        tracks: mediaStream.getTracks(),
+        tracks: localTracks,
       })
     })
-    .then((twilioRoom) => {
-      window.addEventListener('beforeunload', () => twilioRoom.disconnect())
+    .then((room) => {
+      console.log(`Connected to Room: ${room.name}`)
 
-      console.log('twilioRoom === ', twilioRoom)
-
-      twilioRoom.on('disconnected', (rum) => {
-        // Detach the local media elements
-        console.log('on disconnected')
-        rum.localParticipant.tracks.forEach((publication) => {
-          console.log('publication ', publication)
-          const attachedElements = publication.track.detach()
-          attachedElements.forEach((element) => element.remove())
-        })
-        const remote = document.getElementById('remote-media-div')
-        if (remote) {
-          remote.innerHTML = ''
-        }
-      })
       // Log your Client's LocalParticipant in the Room
-      const { localParticipant } = twilioRoom
-      console.log('Connected to the Room my participant = ', localParticipant)
+      const { localParticipant } = room
+      console.log(`Connected to the Room as LocalParticipant "${localParticipant.identity}"`)
 
       // Log any Participants already connected to the Room
-      twilioRoom.participants.forEach((participant) => {
-        console.log(`ID "${participant.identity}" is already here`)
-      })
-
-      // Log Participants as they disconnect from the Room
-      twilioRoom.once('participantDisconnected', (participant) => {
-        console.log('your partner disconnected = ', participant)
-        participant.tracks.forEach((publication) => {
-          if (publication.track) {
-            document.getElementById('remote-media-div').innerHTML = ''
-          }
-        })
+      room.participants.forEach((participant) => {
+        console.log(`Participant "${participant.identity}" is connected to the Room`)
       })
 
       // Log new Participants as they connect to the Room
-      twilioRoom.on('participantConnected', (participant) => {
-        console.log(
-          `participantConnected with --- ID "${participant.identity}" just connected ${participant}`
-        )
-        // const videoDiv = document.getElementById('remote-media-div')
-        // if (videoDiv && videoDiv.children.length) {
-        //   videoDiv.innerHTML = ''
-        // }
+      room.once('participantConnected', (participant) => {
+        console.log(`Participant "${participant.identity}" has connected to the Room`)
+      })
+
+      // Log Participants as they disconnect from the Room
+      room.once('participantDisconnected', (participant) => {
+        console.log(`Participant "${participant.identity}" has disconnected from the Room`)
+      })
+
+      room.on('participantConnected', (participant) => {
+        console.log(`Participant "${participant.identity}" connected`)
+
         participant.tracks.forEach((publication) => {
           if (publication.isSubscribed) {
             const { track } = publication
@@ -121,29 +99,35 @@ const MainVideo = () => {
         })
 
         participant.on('trackSubscribed', (track) => {
-          const remoteMediaDiv = document.getElementById('remote-media-div')
-          remoteMediaDiv && remoteMediaDiv.appendChild(track.attach())
+          document.getElementById('remote-media-div').appendChild(track.attach())
         })
       })
 
-      twilioRoom.participants.forEach((participant) => {
-        console.log('twilioRoom.participants.forEach ')
+      room.on('participantDisconnected', (participant) => {
+        console.log(`Participant disconnected: ${participant.identity}`)
+      })
+
+      room.participants.forEach((participant) => {
         participant.tracks.forEach((publication) => {
           if (publication.track) {
-            console.log('pulication.track = ', publication.track)
             document.getElementById('remote-media-div').appendChild(publication.track.attach())
           }
         })
 
         participant.on('trackSubscribed', (track) => {
-          document.getElementById('remote-media-div') &&
-            document.getElementById('remote-media-div').appendChild(track.attach())
+          document.getElementById('remote-media-div').appendChild(track.attach())
         })
       })
-      // createLocalVideoTrack({ height: 200, frameRate: 24, width: 200 }).then(function (track) {
-      //   const videoElement = track.attach()
-      //   document.getElementById('my-video').appendChild(videoElement)
-      // })
+
+      room.on('disconnected', (room) => {
+        // Detach the local media elements
+        room.localParticipant.tracks.forEach((publication) => {
+          const attachedElements = publication.track.detach()
+          attachedElements.forEach((element) => element.remove())
+        })
+      })
+
+      window.addEventListener('beforeunload', () => room.disconnect())
     })
 
   return (
