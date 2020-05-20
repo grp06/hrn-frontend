@@ -53,6 +53,12 @@ const useGameContext = () => {
     })
   }
 
+  function setRoom(room) {
+    dispatch((draft) => {
+      draft.room = room
+    })
+  }
+
   return {
     ...state,
     setCurrentUserData,
@@ -62,6 +68,7 @@ const useGameContext = () => {
     setPartnerX,
     setCurrentRound,
     setUserId,
+    setRoom,
   }
 }
 

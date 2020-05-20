@@ -23,7 +23,6 @@ const makeApolloClient = async () => {
 
     let authHeaders
     if (token) {
-      console.log('theres a token = ', token)
       authHeaders = {
         authorization: `Bearer ${token}`,
         'X-Hasura-Admin-Secret': 'hirightnow',

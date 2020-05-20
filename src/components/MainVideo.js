@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const MainVideo = () => {
   const classes = useStyles()
 
-  const { token, partnerX, roundsData } = useGameContext()
+  const { token, partnerX, roundsData, room, setRoom } = useGameContext()
 
   if (!roundsData) {
     return <div>nothing</div>
@@ -50,7 +50,6 @@ const MainVideo = () => {
   if (!token || !partnerX) {
     return <div>no token yet :(</div>
   }
-  console.log('render = ')
   navigator.mediaDevices
     .getUserMedia({
       audio: false,
@@ -60,15 +59,17 @@ const MainVideo = () => {
       },
     })
     .then(function (mediaStream) {
-      console.log('mediaStream = ', mediaStream)
       return connect(token, {
         name: partnerX,
         tracks: mediaStream.getTracks(),
       })
     })
     .then((room) => {
+      setRoom(room)
       window.addEventListener('beforeunload', () => room.disconnect())
+
       console.log('ROOMR === ', room)
+
       room.on('disconnected', (rum) => {
         // Detach the local media elements
         console.log('on disconnected')
@@ -130,7 +131,8 @@ const MainVideo = () => {
         })
 
         participant.on('trackSubscribed', (track) => {
-          document.getElementById('remote-media-div').appendChild(track.attach())
+          document.getElementById('remote-media-div') &&
+            document.getElementById('remote-media-div').appendChild(track.attach())
         })
       })
       // createLocalVideoTrack({ height: 200, frameRate: 24, width: 200 }).then(function (track) {

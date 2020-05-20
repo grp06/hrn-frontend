@@ -30,7 +30,6 @@ const OnlineUsers = ({ client }) => {
   // }, [client])
 
   if (error) {
-    debugger
     return <div>{error.message}</div>
   }
 

@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 
 import { MainVideo } from '../components'
+import RoomData from '../components/RoomData'
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
@@ -38,6 +39,8 @@ const UserControl = () => {
       })
         .then((res) => res.json())
         .then(({ token }) => {
+          console.log('UserControl -> token', token)
+
           setToken(token)
           fetch(`${endpointUrl}/api/rooms/${partnerX}`)
             .then((apiData) => {
@@ -55,11 +58,16 @@ const UserControl = () => {
     return <Redirect to="/" push />
   }
 
-  if (currentRound === 0) {
-    return <div>waiting for event to start</div>
-  }
+  // if (currentRound === 0) {
+  //   return <div>waiting for event to start</div>
+  // }
 
-  return <MainVideo />
+  return (
+    <>
+      <RoomData />
+      <MainVideo />
+    </>
+  )
 }
 
 export default UserControl
