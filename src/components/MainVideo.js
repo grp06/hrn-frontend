@@ -78,6 +78,14 @@ const MainVideo = () => {
       // Log any Participants already connected to the Room
       room.participants.forEach((participant) => {
         console.log(`Participant "${participant.identity}" is connected to the Room`)
+
+        // not in the code we copied from twilio
+        participant.tracks.forEach((publication) => {
+          if (publication.isSubscribed) {
+            const { track } = publication
+            document.getElementById('remote-media-div').appendChild(track.attach())
+          }
+        })
       })
 
       // Log new Participants as they connect to the Room
@@ -107,6 +115,7 @@ const MainVideo = () => {
 
       room.on('participantDisconnected', (participant) => {
         console.log(`Participant disconnected: ${participant.identity}`)
+        document.getElementById('remote-media-div').innerHTML = ''
       })
 
       room.participants.forEach((participant) => {
