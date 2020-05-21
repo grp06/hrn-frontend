@@ -27,6 +27,7 @@ const UserControl = () => {
     if (partnerX) {
       fetch(`${endpointUrl}/api/token`, {
         method: 'POST',
+        mode: 'no-cors', // no-cors, *cors, same-origin
         headers: {
           'Content-Type': 'application/json',
         },
