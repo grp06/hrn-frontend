@@ -13,7 +13,6 @@ const defaultState = {
   roomId: '',
   userId: null,
   role: '',
-  partnerX: '',
   name: '',
   pairingsVariables: null,
   roundsData: null,

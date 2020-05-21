@@ -33,9 +33,9 @@ const useGameContext = () => {
     })
   }
 
-  function setPartnerX(partnerX) {
+  function setRoomId(roomId) {
     dispatch((draft) => {
-      draft.partnerX = partnerX
+      draft.roomId = roomId
     })
   }
 
@@ -52,7 +52,6 @@ const useGameContext = () => {
   }
 
   function setRedirect(redirect) {
-    console.log('from setredirect')
     dispatch((draft) => {
       draft.redirect = redirect
     })
@@ -63,7 +62,7 @@ const useGameContext = () => {
     setUsers,
     setRoundsData,
     setToken,
-    setPartnerX,
+    setRoomId,
     setCurrentRound,
     setRoom,
     setLoading,

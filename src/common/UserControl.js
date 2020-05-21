@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { Redirect } from 'react-router-dom'
-
 import { MainVideo } from '../components'
-import RoomData from '../components/RoomData'
+
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
 const UserControl = () => {
-  const { currentRound, userId, roundsData, setPartnerX, partnerX, setToken } = useGameContext()
+  const { currentRound, userId, roundsData, setRoomId, roomId, setToken } = useGameContext()
   useEffect(() => {
     if (roundsData && roundsData.rounds && roundsData.rounds.length && currentRound) {
       const myRound = roundsData.rounds.find((round) => {
@@ -18,25 +16,25 @@ const UserControl = () => {
 
         return me
       })
-
-      setPartnerX(myRound.partnerX_id)
+      console.log('myRound.id = ', myRound.id)
+      setRoomId(myRound.id)
     }
   }, [currentRound, roundsData])
 
   useEffect(() => {
-    if (partnerX) {
+    if (roomId) {
+      console.log('roomId = ', roomId)
       fetch(`${endpointUrl}/api/token`, {
         method: 'POST',
-        mode: 'no-cors', // no-cors, *cors, same-origin
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ partnerX, myUserId: userId }),
+        body: JSON.stringify({ roomId, myUserId: userId }),
       })
         .then((res) => res.json())
         .then(({ token }) => {
           setToken(token)
-          fetch(`${endpointUrl}/api/rooms/${partnerX}`)
+          fetch(`${endpointUrl}/api/rooms/${roomId}`)
             .then((apiData) => {
               return apiData.json()
             })
@@ -46,7 +44,7 @@ const UserControl = () => {
             .catch((err) => console.log('err = ', err))
         })
     }
-  }, [partnerX])
+  }, [roomId])
 
   if (currentRound === 0) {
     return <div>waiting for event to start</div>

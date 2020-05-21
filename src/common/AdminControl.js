@@ -94,7 +94,6 @@ const AdminControl = ({ eventId }) => {
         })
       })
     })
-    debugger
     bulkInsertRoundsMutation({
       variables: {
         objects: variablesArr,

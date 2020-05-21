@@ -42,16 +42,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 const MainVideo = () => {
   const classes = useStyles()
-  const { token, partnerX, roundsData } = useGameContext()
+  const { token, roomId, roundsData } = useGameContext()
   if (!roundsData) {
     return <div>nothing</div>
   }
-  if (!token || !partnerX) {
+  if (!token || !roomId) {
     return <div>no token yet :(</div>
   }
   // Connect to the Room with just video
   connect(token, {
-    name: partnerX,
+    name: roomId,
     audio: false,
   }).then(function (room) {
     // Add video after connecting to the Room
@@ -88,7 +88,10 @@ const MainVideo = () => {
       })
 
       remoteParticipant.on('trackSubscribed', (track) => {
-        document.getElementById('remote-media-div').appendChild(track.attach())
+        const remoteDiv = document.getElementById('remote-media-div')
+        if (remoteDiv) {
+          remoteDiv.appendChild(track.attach())
+        }
       })
     })
 
@@ -99,12 +102,18 @@ const MainVideo = () => {
 
       remoteParticipant.tracks.forEach((track) => {
         if (track.isSubscribed) {
-          document.getElementById('remote-media-div').appendChild(track.track.attach())
+          const remoteDiv = document.getElementById('remote-media-div')
+          if (remoteDiv) {
+            remoteDiv.appendChild(track.track.attach())
+          }
         }
       })
 
       remoteParticipant.on('trackSubscribed', (track) => {
-        document.getElementById('remote-media-div').appendChild(track.attach())
+        const remoteDiv = document.getElementById('remote-media-div')
+        if (remoteDiv) {
+          remoteDiv.appendChild(track.attach())
+        }
       })
     })
     // when the remote participant disconnects, remove their stuff?

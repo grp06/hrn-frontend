@@ -2,18 +2,19 @@ import endpointUrl from '../utils/endpointUrl'
 
 const startRound = async (rounds, currentRound) => {
   const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
+  console.log('startRound -> currentRoundObj', currentRoundObj)
   if (currentRoundObj.length > 0) {
-    const allPartnerXs = currentRoundObj.reduce((all, item, index) => {
-      all.push(item.partnerX_id)
+    const allRoomIds = currentRoundObj.reduce((all, item) => {
+      all.push(item.id)
       return all
     }, [])
-    console.log('allparnerx = ', allPartnerXs)
+    console.log('allRoomIds = ', allRoomIds)
     fetch(`${endpointUrl}/api/rooms/create-rooms`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(allPartnerXs),
+      body: JSON.stringify(allRoomIds),
     })
   } else {
     // we should do nothing here

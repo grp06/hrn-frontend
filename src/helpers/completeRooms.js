@@ -6,7 +6,7 @@ const completeRooms = () => {
       return res.json()
     })
     .then((completedRooms) => {
-      console.log('completedRooms = ', completedRooms)
+      console.log('completedRooms ==== ', completedRooms)
     })
 }
 
