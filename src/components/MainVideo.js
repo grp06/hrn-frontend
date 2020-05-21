@@ -54,26 +54,17 @@ const MainVideo = () => {
     name: partnerX,
     audio: false,
   }).then(function (room) {
-    console.log('room = ', room)
     // Add video after connecting to the Room
     createLocalVideoTrack().then(function (localTrack) {
-      console.log('localTrack', localTrack)
       room.localParticipant.publishTrack(localTrack)
     })
     // find participants already in room
     room.participants.forEach((remoteParticipant) => {
-      console.log('participant = ', remoteParticipant)
-      // participant.tracks.forEach((publication) => {
-      //   if (publication.isSubscribed) {
-      //     const { track } = publication
-      //     console.log('participants', track)
-      //     document.getElementById('remote-media-div').appendChild(track.attach())
-      //   }
-      // })
+      console.log('remoteParticipant = ', remoteParticipant)
       // check to see if they have any published tracks and append to remote media div
       remoteParticipant.tracks.forEach((tracks) => {
         if (tracks.track) {
-          console.log('track publication', tracks.track)
+          console.log('tracks.track', tracks.track)
           document.getElementById('remote-media-div').appendChild(tracks.track.attach())
         }
       })
@@ -81,7 +72,10 @@ const MainVideo = () => {
         console.log('trackSubscribed', track)
         if (track.kind === 'video') {
           const videoElement = track.attach()
-          document.getElementById('remote-media-div').appendChild(videoElement)
+          const remoteDiv = document.getElementById('remote-media-div')
+          if (remoteDiv) {
+            remoteDiv.appendChild(videoElement)
+          }
         }
       })
     })
@@ -93,7 +87,6 @@ const MainVideo = () => {
       // was connecting to the Room.
       remoteParticipant.on('trackPublished', (track) => {
         console.log(track)
-        // document.getElementById('remote-media-div').appendChild(track.attach())
         console.log('trackpublished', track)
       })
       // A remoteParticipant's RemoteTrack was subscribed to

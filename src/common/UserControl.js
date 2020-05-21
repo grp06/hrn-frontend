@@ -18,9 +18,6 @@ const UserControl = () => {
 
         return me
       })
-      console.log('roundsData = ', roundsData)
-      console.log('currentRound = ', currentRound)
-      console.log('myRound = ', myRound)
 
       setPartnerX(myRound.partnerX_id)
     }
@@ -28,7 +25,6 @@ const UserControl = () => {
 
   useEffect(() => {
     if (partnerX) {
-      console.log('partnerX = ', partnerX)
       fetch(`${endpointUrl}/api/token`, {
         method: 'POST',
         headers: {
@@ -38,8 +34,6 @@ const UserControl = () => {
       })
         .then((res) => res.json())
         .then(({ token }) => {
-          console.log('UserControl -> token', token)
-
           setToken(token)
           fetch(`${endpointUrl}/api/rooms/${partnerX}`)
             .then((apiData) => {
