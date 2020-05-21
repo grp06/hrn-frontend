@@ -1,20 +1,15 @@
 import React, { useEffect, useContext, useState } from 'react'
-
 import { styled } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
-
 import { useGameContext } from '../context/useGameContext'
-
 const {
   connect,
   createLocalTracks,
   createLocalVideoTrack,
   createLocalAudioTrack,
 } = require('twilio-video')
-
 const width = window.innerWidth
 const height = window.innerHeight
-
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     position: 'fixed',
@@ -43,130 +38,91 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
-
 const MainVideo = () => {
   const classes = useStyles()
-
   const { token, partnerX, roundsData } = useGameContext()
-
-  // Option 1
-  useEffect(() => {
-    if (token) {
-      createLocalTracks({
-        audio: false,
-        video: { width: 640 },
-      })
-        .then((localTracks) => {
-          console.log('localTracks = ', localTracks)
-          console.log(token)
-          return connect(token, {
-            video: true,
-            name: partnerX,
-            tracks: localTracks,
-          })
-        })
-        .then((room) => {
-          console.log(`Connected to Room: ${room.name}`)
-
-          // Log your Client's LocalParticipant in the Room
-          const { localParticipant } = room
-          console.log(`Connected to the Room as LocalParticipant "${localParticipant.identity}"`)
-
-          // localParticipant.tracks.forEach((localTrackPublication) => {
-          //   debugger
-          //   if (localTrackPublication.isP)
-          // })
-
-          // localParticipant.publishTrack(localTrack).then((localTrackPublication) => {
-          //   console.log(
-          //     `Track ${localTrackPublication.name} was published with SID ${localTrackPublication.tracksid}`
-          //   )
-          // })
-
-          // when participant connects, grab their published and subscribed tracks
-          // and append to remote-media-div
-
-          room.on('participantConnected', (participant) => {
-            console.log(`Participant "${participant.identity}" connected`)
-
-            participant.tracks.forEach((publication) => {
-              if (publication.isSubscribed) {
-                console.log('publication.isSubscribed')
-                const { track } = publication
-                document.getElementById('remote-media-div').appendChild(track.attach())
-              }
-            })
-
-            participant.on('trackSubscribed', (track) => {
-              console.log('trackSubscribed')
-              document.getElementById('remote-media-div').appendChild(track.attach())
-            })
-          })
-
-          // Log any Participants already connected to the Room
-          room.participants.forEach((participant) => {
-            console.log('MainVideo -> participant', participant)
-            console.log(`Participant "${participant.identity}" is connected to the Room`)
-
-            // not in the code we copied from twilio
-            participant.tracks.forEach((publication) => {
-              if (publication.isSubscribed) {
-                const { track } = publication
-                document.getElementById('remote-media-div').appendChild(track.attach())
-              }
-            })
-          })
-
-          // Log new Participants as they connect to the Room
-          room.once('participantConnected', (participant) => {
-            console.log(`Participant "${participant.identity}" has connected to the Room`)
-          })
-
-          // Log Participants as they disconnect from the Room
-          room.once('participantDisconnected', (participant) => {
-            console.log(`Participant "${participant.identity}" has disconnected from the Room`)
-          })
-
-          room.on('participantDisconnected', (participant) => {
-            console.log(`Participant disconnected: ${participant.identity}`)
-            const remoteDiv = document.getElementById('remote-media-div')
-            if (remoteDiv) {
-              remoteDiv.innerHTML = ''
-            }
-          })
-
-          room.participants.forEach((participant) => {
-            console.log('participant = ', participant)
-            participant.tracks.forEach((publication) => {
-              if (publication.track) {
-                document.getElementById('remote-media-div').appendChild(publication.track.attach())
-              }
-            })
-
-            participant.on('trackSubscribed', (track) => {
-              document.getElementById('remote-media-div').appendChild(track.attach())
-            })
-          })
-
-          room.on('disconnected', (room) => {
-            // Detach the local media elements
-            room.localParticipant.tracks.forEach((publication) => {
-              const attachedElements = publication.track.detach()
-              attachedElements.forEach((element) => element.remove())
-            })
-          })
-
-          window.addEventListener('beforeunload', () => room.disconnect())
-        })
-    }
-  }, [token])
-
   if (!roundsData) {
     return <div>nothing</div>
   }
   if (!token || !partnerX) {
     return <div>no token yet :(</div>
   }
+
+  // Connect to the Room with just video
+  connect(token, {
+    name: partnerX,
+    audio: false,
+  }).then(function (room) {
+    console.log('room = ', room)
+
+    // Add video after connecting to the Room
+    createLocalVideoTrack().then(function (localTrack) {
+      console.log('localTrack', localTrack)
+      room.localParticipant.publishTrack(localTrack)
+    })
+
+    // find participants already in room
+    room.participants.forEach((participant) => {
+      console.log('participant = ', participant)
+
+      // participant.tracks.forEach((publication) => {
+      //   if (publication.isSubscribed) {
+      //     const { track } = publication
+      //     console.log('participants', track)
+      //     document.getElementById('remote-media-div').appendChild(track.attach())
+      //   }
+      // })
+
+      // check to see if they have any published tracks and append to remote media div
+      participant.tracks.forEach((publication) => {
+        if (publication.track) {
+          console.log('track publication', publication.track)
+          document.getElementById('remote-media-div').appendChild(publication.track)
+        }
+      })
+
+      // RemoteTrack was published by the RemoteParticipant after connecting to the Room.
+      // This event is not emitted for RemoteTracks that were published while the RemoteParticipant
+      // was connecting to the Room.
+      participant.on('trackPublished', (track) => {
+        document.getElementById('remote-media-div').appendChild(track)
+        console.log('trackpublished', track)
+      })
+
+      // A remoteParticipant's RemoteTrack was subscribed to
+      participant.on('trackSubscribed', (track) => {
+        console.log('trackSubscribed', track)
+        document.getElementById('remote-media-div').appendChild(track.attach())
+      })
+      // we should have it when the participant unappends
+      participant.on('trackUnpublished', (track) => {
+        console.log('remote user has unpublished this track:', track)
+      })
+    })
+
+    // listening for a remote participant to join
+    room.on('participantConnected', function (participant) {
+      console.log(`${participant.identity} joined the Room`)
+    })
+
+    // when the remote participant disconnects, remove their stuff?
+    room.on('participantDisconnected', (participant) => {
+      const remoteDiv = document.getElementById('remote-media-div')
+      if (remoteDiv) {
+        remoteDiv.innerHTML = ''
+      }
+    })
+
+    // when you disconnect, stop our track and detach them
+    room.on('disconnected', function (rum, error) {
+      if (error) {
+        console.log('Unexpectedly disconnected:', error)
+      }
+      rum.localParticipant.tracks.forEach(function (track) {
+        track.unpublish()
+      })
+    })
+  })
 
   return (
     <div className={classes.videoWrapper}>
@@ -175,5 +131,4 @@ const MainVideo = () => {
     </div>
   )
 }
-
 export default MainVideo
