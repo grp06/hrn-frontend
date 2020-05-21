@@ -80,6 +80,7 @@ const MainVideo = () => {
         // by iterating over the Room's participants:
         room.participants.forEach((remoteParticipant) => {
           remoteParticipant.tracks.forEach((track) => {
+            console.log('attaching track = ', track)
             if (track.track) {
               document.getElementById('remote-media-div').appendChild(track.track.attach())
             }
@@ -108,6 +109,7 @@ const MainVideo = () => {
           })
 
           remoteParticipant.on('trackSubscribed', (track) => {
+            console.log('on participantConnected trackSubscribed ')
             const remoteDiv = document.getElementById('remote-media-div')
             if (remoteDiv) {
               remoteDiv.appendChild(track.attach())

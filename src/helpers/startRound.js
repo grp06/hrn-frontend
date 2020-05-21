@@ -9,7 +9,7 @@ const startRound = async (rounds, currentRound) => {
       return all
     }, [])
     console.log('allRoomIds = ', allRoomIds)
-    fetch(`${endpointUrl}/api/rooms/create-rooms`, {
+    fetch(`http://api.hirightnow.com/api/rooms/create-rooms`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
