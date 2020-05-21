@@ -62,8 +62,8 @@ const MainVideo = () => {
     })
 
     // find participants already in room
-    room.participants.forEach((participant) => {
-      console.log('participant = ', participant)
+    room.participants.forEach((remoteParticipant) => {
+      console.log('participant = ', remoteParticipant)
 
       // participant.tracks.forEach((publication) => {
       //   if (publication.isSubscribed) {
@@ -74,39 +74,44 @@ const MainVideo = () => {
       // })
 
       // check to see if they have any published tracks and append to remote media div
-      participant.tracks.forEach((publication) => {
-        if (publication.track) {
-          console.log('track publication', publication.track)
-          document.getElementById('remote-media-div').appendChild(publication.track)
+      remoteParticipant.tracks.forEach((tracks) => {
+        if (tracks.track) {
+          console.log('track publication', tracks.track)
+          document.getElementById('remote-media-div').appendChild(tracks.track.attach())
         }
       })
 
-      // RemoteTrack was published by the RemoteParticipant after connecting to the Room.
-      // This event is not emitted for RemoteTracks that were published while the RemoteParticipant
-      // was connecting to the Room.
-      participant.on('trackPublished', (track) => {
-        document.getElementById('remote-media-div').appendChild(track)
-        console.log('trackpublished', track)
-      })
-
-      // A remoteParticipant's RemoteTrack was subscribed to
-      participant.on('trackSubscribed', (track) => {
+      remoteParticipant.on('trackSubscribed', (track) => {
         console.log('trackSubscribed', track)
         document.getElementById('remote-media-div').appendChild(track.attach())
-      })
-      // we should have it when the participant unappends
-      participant.on('trackUnpublished', (track) => {
-        console.log('remote user has unpublished this track:', track)
       })
     })
 
     // listening for a remote participant to join
-    room.on('participantConnected', function (participant) {
-      console.log(`${participant.identity} joined the Room`)
+    room.on('participantConnected', function (remoteParticipant) {
+      console.log(`${remoteParticipant.identity} joined the Room`)
+      // RemoteTrack was published by the RemoteParticipant after connecting to the Room.
+      // This event is not emitted for RemoteTracks that were published while the RemoteParticipant
+      // was connecting to the Room.
+      remoteParticipant.on('trackPublished', (track) => {
+        console.log(track)
+        // document.getElementById('remote-media-div').appendChild(track.attach())
+        console.log('trackpublished', track)
+      })
+
+      // A remoteParticipant's RemoteTrack was subscribed to
+      remoteParticipant.on('trackSubscribed', (track) => {
+        console.log('trackSubscribed', track)
+        document.getElementById('remote-media-div').appendChild(track.attach())
+      })
+      // we should have it when the remoteParticipant unappends
+      remoteParticipant.on('trackUnpublished', (track) => {
+        console.log('remote user has unpublished this track:', track)
+      })
     })
 
     // when the remote participant disconnects, remove their stuff?
-    room.on('participantDisconnected', (participant) => {
+    room.on('participantDisconnected', (remoteParticipant) => {
       const remoteDiv = document.getElementById('remote-media-div')
       if (remoteDiv) {
         remoteDiv.innerHTML = ''
