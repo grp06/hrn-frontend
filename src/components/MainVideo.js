@@ -82,14 +82,20 @@ const MainVideo = () => {
           remoteParticipant.tracks.forEach((track) => {
             console.log('attaching track = ', track)
             if (track.track) {
-              document.getElementById('remote-media-div').appendChild(track.track.attach())
+              const attachedTrack = track.track.attach()
+              attachedTrack.muted = true
+              console.log('attachedTrack = ', attachedTrack)
+              document.getElementById('remote-media-div').appendChild(attachedTrack)
             }
           })
 
           remoteParticipant.on('trackSubscribed', (track) => {
             const remoteDiv = document.getElementById('remote-media-div')
             if (remoteDiv) {
-              remoteDiv.appendChild(track.attach())
+              const attachedTrack = track.attach()
+              attachedTrack.muted = true
+              console.log('attachedTrack = ', attachedTrack)
+              remoteDiv.appendChild(attachedTrack)
             }
           })
         })
@@ -103,7 +109,10 @@ const MainVideo = () => {
             if (track.isSubscribed) {
               const remoteDiv = document.getElementById('remote-media-div')
               if (remoteDiv) {
-                remoteDiv.appendChild(track.track.attach())
+                const attachedTrack = track.track.attach()
+                attachedTrack.muted = true
+                console.log('attachedTrack = ', attachedTrack)
+                remoteDiv.appendChild(attachedTrack)
               }
             }
           })
@@ -112,7 +121,10 @@ const MainVideo = () => {
             console.log('on participantConnected trackSubscribed ')
             const remoteDiv = document.getElementById('remote-media-div')
             if (remoteDiv) {
-              remoteDiv.appendChild(track.attach())
+              const attachedTrack = track.attach()
+              attachedTrack.muted = true
+              console.log('attachedTrack = ', attachedTrack)
+              remoteDiv.appendChild(attachedTrack)
             }
           })
         })
