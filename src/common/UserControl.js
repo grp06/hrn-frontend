@@ -85,6 +85,8 @@ const UserControl = () => {
                 if (track.track) {
                   const attachedTrack = track.track.attach()
                   attachedTrack.muted = true
+                  console.log('track.isStarted = ', track.isStarted)
+
                   console.log('attachedTrack = ', attachedTrack)
                   document.getElementById('remote-media-div').appendChild(attachedTrack)
                 }
@@ -96,6 +98,7 @@ const UserControl = () => {
                   attachedTrack.muted = true
                   console.log('attachedTrack = ', attachedTrack)
                   remoteDiv.appendChild(attachedTrack)
+                  console.log('track.isStarted = ', track.isStarted)
                 }
               })
             })
@@ -108,6 +111,7 @@ const UserControl = () => {
                 if (track.isSubscribed) {
                   const remoteDiv = document.getElementById('remote-media-div')
                   if (remoteDiv) {
+                    console.log('track.isStarted = ', track.track.isStarted)
                     const attachedTrack = track.track.attach()
                     attachedTrack.muted = true
                     console.log('attachedTrack = ', attachedTrack)
@@ -119,6 +123,8 @@ const UserControl = () => {
                 console.log('on participantConnected trackSubscribed ')
                 const remoteDiv = document.getElementById('remote-media-div')
                 if (remoteDiv) {
+                  console.log('track.isStarted = ', track.isStarted)
+
                   const attachedTrack = track.attach()
                   attachedTrack.muted = true
                   console.log('attachedTrack = ', attachedTrack)
@@ -145,7 +151,7 @@ const UserControl = () => {
                 console.log('Unexpectedly disconnected:', error)
               }
               rum.localParticipant.tracks.forEach(function (track) {
-                console.log('disconnected')
+                console.log('disconnected ', track)
                 track.unpublish()
               })
               const remoteDiv = document.getElementById('remote-media-div')

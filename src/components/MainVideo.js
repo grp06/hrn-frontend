@@ -56,25 +56,6 @@ const MainVideo = () => {
         createLocalVideoTrack().then(function (localTrack) {
           room.localParticipant.publishTrack(localTrack)
         })
-        // find participants already in room
-        // room.participants.forEach((remoteParticipant) => {
-        //   console.log('remoteParticipant = ', remoteParticipant)
-
-        //   // check to see if they have any published tracks and append to remote media div
-        //   remoteParticipant.tracks.forEach((tracks) => {
-        //     if (tracks.track) {
-        //       console.log('track publication', tracks.track)
-        //       document.getElementById('remote-media-div').appendChild(tracks.track.attach())
-        //     }
-        //   })
-        //   remoteParticipant.on('trackSubscribed', (track) => {
-        //     console.log('trackSubscribed', track)
-        //     if (track.kind === 'video') {
-        //       const videoElement = track.attach()
-        //       document.getElementById('remote-media-div').appendChild(videoElement)
-        //     }
-        //   })
-        // })
 
         // For RemoteParticipants that are already in the Room, we can attach their RemoteTracks
         // by iterating over the Room's participants:
