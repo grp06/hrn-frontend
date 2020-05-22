@@ -48,92 +48,100 @@ const MainVideo = () => {
   console.log('render')
   useEffect(() => {
     if (token) {
-      connect(token, {
-        name: roomId,
-        audio: false,
-      }).then(function (room) {
-        // Add video after connecting to the Room
-        createLocalVideoTrack().then(function (localTrack) {
-          room.localParticipant.publishTrack(localTrack)
+      navigator.mediaDevices
+        .getUserMedia({
+          audio: false,
+          video: true,
         })
-
-        // For RemoteParticipants that are already in the Room, we can attach their RemoteTracks
-        // by iterating over the Room's participants:
-        room.participants.forEach((remoteParticipant) => {
-          remoteParticipant.tracks.forEach((track) => {
-            console.log('attaching track = ', track)
-            if (track.track) {
-              const attachedTrack = track.track.attach()
-              attachedTrack.muted = true
-
-              console.log('attachedTrack = ', attachedTrack)
-              document.getElementById('remote-media-div').appendChild(attachedTrack)
-            }
-          })
-
-          remoteParticipant.on('trackSubscribed', (track) => {
-            const remoteDiv = document.getElementById('remote-media-div')
-            if (remoteDiv) {
-              const attachedTrack = track.attach()
-              attachedTrack.muted = true
-
-              console.log('attachedTrack = ', attachedTrack)
-              remoteDiv.appendChild(attachedTrack)
-            }
+        .then(function (mediaStream) {
+          return connect(token, {
+            name: roomId,
+            tracks: mediaStream.getTracks(),
           })
         })
+        .then(function (room) {
+          // Add video after connecting to the Room
+          createLocalVideoTrack().then(function (localTrack) {
+            room.localParticipant.publishTrack(localTrack)
+          })
 
-        // When Participants connect to or disconnect from a Room that you're connected to,
-        // you'll be notified via Participant connection events:
-        room.on('participantConnected', function (remoteParticipant) {
-          console.log(`Participant "${remoteParticipant.identity}" connected`)
+          // For RemoteParticipants that are already in the Room, we can attach their RemoteTracks
+          // by iterating over the Room's participants:
+          room.participants.forEach((remoteParticipant) => {
+            remoteParticipant.tracks.forEach((track) => {
+              console.log('attaching track = ', track)
+              if (track.track) {
+                const attachedTrack = track.track.attach()
+                attachedTrack.muted = true
 
-          remoteParticipant.tracks.forEach((track) => {
-            if (track.isSubscribed) {
+                console.log('attachedTrack = ', attachedTrack)
+                document.getElementById('remote-media-div').appendChild(attachedTrack)
+              }
+            })
+
+            remoteParticipant.on('trackSubscribed', (track) => {
               const remoteDiv = document.getElementById('remote-media-div')
               if (remoteDiv) {
-                const attachedTrack = track.track.attach()
+                const attachedTrack = track.attach()
                 attachedTrack.muted = true
 
                 console.log('attachedTrack = ', attachedTrack)
                 remoteDiv.appendChild(attachedTrack)
               }
-            }
+            })
           })
 
-          remoteParticipant.on('trackSubscribed', (track) => {
-            console.log('on participantConnected trackSubscribed ')
+          // When Participants connect to or disconnect from a Room that you're connected to,
+          // you'll be notified via Participant connection events:
+          room.on('participantConnected', function (remoteParticipant) {
+            console.log(`Participant "${remoteParticipant.identity}" connected`)
+
+            remoteParticipant.tracks.forEach((track) => {
+              if (track.isSubscribed) {
+                const remoteDiv = document.getElementById('remote-media-div')
+                if (remoteDiv) {
+                  const attachedTrack = track.track.attach()
+                  attachedTrack.muted = true
+
+                  console.log('attachedTrack = ', attachedTrack)
+                  remoteDiv.appendChild(attachedTrack)
+                }
+              }
+            })
+
+            remoteParticipant.on('trackSubscribed', (track) => {
+              console.log('on participantConnected trackSubscribed ')
+              const remoteDiv = document.getElementById('remote-media-div')
+              if (remoteDiv) {
+                const attachedTrack = track.attach()
+                attachedTrack.muted = true
+
+                console.log('attachedTrack = ', attachedTrack)
+                remoteDiv.appendChild(attachedTrack)
+              }
+            })
+          })
+          // when the remote participant disconnects, remove their stuff?
+          room.on('participantDisconnected', (remoteParticipant) => {
             const remoteDiv = document.getElementById('remote-media-div')
             if (remoteDiv) {
-              const attachedTrack = track.attach()
-              attachedTrack.muted = true
-
-              console.log('attachedTrack = ', attachedTrack)
-              remoteDiv.appendChild(attachedTrack)
+              remoteDiv.innerHTML = ''
+            }
+          })
+          // when you disconnect, stop our track and detach them
+          room.on('disconnected', function (rum, error) {
+            if (error) {
+              console.log('Unexpectedly disconnected:', error)
+            }
+            rum.localParticipant.tracks.forEach(function (track) {
+              track.unpublish()
+            })
+            const remoteDiv = document.getElementById('remote-media-div')
+            if (remoteDiv) {
+              remoteDiv.innerHTML = ''
             }
           })
         })
-        // when the remote participant disconnects, remove their stuff?
-        room.on('participantDisconnected', (remoteParticipant) => {
-          const remoteDiv = document.getElementById('remote-media-div')
-          if (remoteDiv) {
-            remoteDiv.innerHTML = ''
-          }
-        })
-        // when you disconnect, stop our track and detach them
-        room.on('disconnected', function (rum, error) {
-          if (error) {
-            console.log('Unexpectedly disconnected:', error)
-          }
-          rum.localParticipant.tracks.forEach(function (track) {
-            track.unpublish()
-          })
-          const remoteDiv = document.getElementById('remote-media-div')
-          if (remoteDiv) {
-            remoteDiv.innerHTML = ''
-          }
-        })
-      })
     }
   }, [token])
 
