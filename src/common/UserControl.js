@@ -128,17 +128,24 @@ const UserControl = () => {
             })
             // when the remote participant disconnects, remove their stuff?
             room.on('participantDisconnected', (remoteParticipant) => {
+              console.log('remoteParticipant = ', remoteParticipant)
               const remoteDiv = document.getElementById('remote-media-div')
               if (remoteDiv) {
                 remoteDiv.innerHTML = ''
               }
             })
             // when you disconnect, stop our track and detach them
+            window.addEventListener('beforeunload', () => {
+              console.log('disconnect!')
+              room.disconnect()
+            })
             room.on('disconnected', function (rum, error) {
+              console.log('I just disconnected = ', rum)
               if (error) {
                 console.log('Unexpectedly disconnected:', error)
               }
               rum.localParticipant.tracks.forEach(function (track) {
+                console.log('disconnected')
                 track.unpublish()
               })
               const remoteDiv = document.getElementById('remote-media-div')
