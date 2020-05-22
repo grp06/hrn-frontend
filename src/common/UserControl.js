@@ -35,14 +35,6 @@ const UserControl = () => {
         .then((res) => res.json())
         .then(({ token }) => {
           setToken(token)
-          fetch(`${endpointUrl}/api/rooms/${roomId}`)
-            .then((apiData) => {
-              return apiData.json()
-            })
-            .then((myRoomInfo) => {
-              console.log('myRoomInfo = ', myRoomInfo)
-            })
-            .catch((err) => console.log('err = ', err))
         })
     }
   }, [roomId])
@@ -57,6 +49,7 @@ const UserControl = () => {
   } else {
     render = <div>lobby</div>
   }
+  console.log('roomJoined = ', roomJoined)
   return render
 }
 

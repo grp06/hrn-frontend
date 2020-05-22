@@ -50,19 +50,22 @@ const MainVideo = () => {
   useEffect(() => {
     if (token) {
       const participantConnected = (participant) => {
+        console.log('participant = ', participant)
         setParticipants((prevParticipants) => [...prevParticipants, participant])
       }
 
       const participantDisconnected = (participant) => {
-        const remoteParticipants = document.getElementsByClassName('remote-participant')[0]
-        console.log('remoteParticipants = ', remoteParticipants)
         setParticipants((prevParticipants) => prevParticipants.filter((p) => p !== participant))
+        console.warn('clear out the guy who refreshed')
+        document.getElementsByClassName('remote-participants')[0].innerHTML = ''
       }
-      console.log('token = ')
       connect(token, {
         name: roomId,
       }).then((room) => {
+        console.log('MainVideo -> room', room)
         setRoom(room)
+        console.log('MainVideo -> room', room)
+        console.log('connected')
         room.on('participantConnected', participantConnected)
         room.on('participantDisconnected', participantDisconnected)
         room.participants.forEach(participantConnected)
@@ -70,6 +73,8 @@ const MainVideo = () => {
       })
 
       return () => {
+        console.log('disconnecting')
+
         setRoom((currentRoom) => {
           if (currentRoom && currentRoom.localParticipant.state === 'connected') {
             currentRoom.localParticipant.tracks.forEach(function (trackPublication) {
@@ -85,7 +90,7 @@ const MainVideo = () => {
   }, [roomId, token])
 
   const remoteParticipants = participants.map((participant) => {
-    console.log('participant = ', participant)
+    console.log('mapping over remote participants = ', participant)
     return <Participant key={participant.sid} participant={participant} />
   })
   return (
