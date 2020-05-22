@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { MainVideo } from '../components'
 
@@ -6,8 +6,7 @@ import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
 const UserControl = () => {
-  const { currentRound, userId, roundsData, setRoomId, roomId, setToken, token } = useGameContext()
-  const [roomJoined, setRoomJoined] = useState(false)
+  const { currentRound, userId, roundsData, setRoomId, roomId, setToken } = useGameContext()
   useEffect(() => {
     if (roundsData && roundsData.rounds && roundsData.rounds.length && currentRound) {
       const myRound = roundsData.rounds.find((round) => {
@@ -47,17 +46,15 @@ const UserControl = () => {
     }
   }, [roomId])
 
-  const joinRoom = () => {
-    setRoomJoined(true)
+  if (currentRound === 0) {
+    return <div>waiting for event to start</div>
   }
 
-  let render
-  if (token && currentRound !== 0) {
-    render = !roomJoined ? <button onClick={joinRoom}>Join room</button> : <MainVideo />
-  } else {
-    render = <div>lobby</div>
-  }
-  return render
+  return (
+    <>
+      <MainVideo />
+    </>
+  )
 }
 
 export default UserControl
