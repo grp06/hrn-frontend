@@ -45,6 +45,7 @@ const Participant = ({ participant }) => {
   useEffect(() => {
     const videoTrack = videoTracks[0]
     if (videoTrack) {
+      videoRef.current.mute = true
       videoTrack.attach(videoRef.current)
       return () => {
         videoTrack.detach()

@@ -54,6 +54,8 @@ const MainVideo = () => {
       }
 
       const participantDisconnected = (participant) => {
+        const remoteParticipants = document.getElementsByClassName('remote-participant')[0]
+        console.log('remoteParticipants = ', remoteParticipants)
         setParticipants((prevParticipants) => prevParticipants.filter((p) => p !== participant))
       }
       console.log('token = ')
@@ -64,6 +66,7 @@ const MainVideo = () => {
         room.on('participantConnected', participantConnected)
         room.on('participantDisconnected', participantDisconnected)
         room.participants.forEach(participantConnected)
+        console.log('MainVideo -> room.participants', room.participants)
       })
 
       return () => {
@@ -81,10 +84,10 @@ const MainVideo = () => {
     }
   }, [roomId, token])
 
-  const remoteParticipants = participants.map((participant) => (
-    <Participant key={participant.sid} participant={participant} />
-  ))
-  console.log('roomId = ', roomId)
+  const remoteParticipants = participants.map((participant) => {
+    console.log('participant = ', participant)
+    return <Participant key={participant.sid} participant={participant} />
+  })
   return (
     <div className="room">
       <h2>
