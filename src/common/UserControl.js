@@ -6,7 +6,7 @@ import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
 const UserControl = () => {
-  const { currentRound, userId, roundsData, setRoomId, roomId, setToken } = useGameContext()
+  const { currentRound, userId, roundsData, setRoomId, roomId, setToken, token } = useGameContext()
   useEffect(() => {
     if (roundsData && roundsData.rounds && roundsData.rounds.length && currentRound) {
       const myRound = roundsData.rounds.find((round) => {
@@ -46,15 +46,13 @@ const UserControl = () => {
     }
   }, [roomId])
 
-  if (currentRound === 0) {
-    return <div>waiting for event to start</div>
+  let render
+  if (token && currentRound !== 0) {
+    render = <MainVideo />
+  } else {
+    render = <div>lobby</div>
   }
-
-  return (
-    <>
-      <MainVideo />
-    </>
-  )
+  return render
 }
 
 export default UserControl
