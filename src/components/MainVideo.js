@@ -84,6 +84,7 @@ const MainVideo = () => {
             if (track.track) {
               const attachedTrack = track.track.attach()
               attachedTrack.muted = true
+
               console.log('attachedTrack = ', attachedTrack)
               document.getElementById('remote-media-div').appendChild(attachedTrack)
             }
@@ -94,6 +95,7 @@ const MainVideo = () => {
             if (remoteDiv) {
               const attachedTrack = track.attach()
               attachedTrack.muted = true
+
               console.log('attachedTrack = ', attachedTrack)
               remoteDiv.appendChild(attachedTrack)
             }
@@ -111,6 +113,7 @@ const MainVideo = () => {
               if (remoteDiv) {
                 const attachedTrack = track.track.attach()
                 attachedTrack.muted = true
+
                 console.log('attachedTrack = ', attachedTrack)
                 remoteDiv.appendChild(attachedTrack)
               }
@@ -123,6 +126,7 @@ const MainVideo = () => {
             if (remoteDiv) {
               const attachedTrack = track.attach()
               attachedTrack.muted = true
+
               console.log('attachedTrack = ', attachedTrack)
               remoteDiv.appendChild(attachedTrack)
             }
