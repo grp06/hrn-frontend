@@ -76,7 +76,7 @@ const UserControl = () => {
 
           const { localParticipant } = room
           function trackPublished(publication) {
-            console.log(`Published LocalTrack: ${publication.track}`)
+            console.log(`Published LocalTrack: = `, publication.track)
           }
 
           // Access the already published LocalTracks.
