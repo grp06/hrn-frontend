@@ -4,14 +4,14 @@ import Button from '@material-ui/core/Button'
 import { useMutation } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
-import { useStartRound, useDisconnectAndComplete } from '../hooks'
+import { useStartRound, useCompleteAndCreateRooms } from '../hooks'
 
 const StartNextRound = () => {
   const [isDisconnectedAndComplete, setDisconnectedAndComplete] = useState(null)
 
   const { currentRound, roundsData } = useGameContext()
   const { startRound } = useStartRound()
-  const { disconnectAndComplete } = useDisconnectAndComplete()
+  const { completeAndCreateRooms } = useCompleteAndCreateRooms()
 
   useEffect(() => {
     if (isDisconnectedAndComplete) {
@@ -24,7 +24,7 @@ const StartNextRound = () => {
   }
 
   const nextRound = async () => {
-    const res = await disconnectAndComplete()
+    const res = await completeAndCreateRooms()
     console.log('hi ', res)
 
     // startRound(roundsData.rounds) at the end

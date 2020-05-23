@@ -24,6 +24,8 @@ export default function useStartRounds() {
     console.log('allRoomIds = ', allRoomIds)
 
     await createRooms(allRoomIds)
+    console.log('create-rooms')
+
     incrementRoundMutation()
   }
 
