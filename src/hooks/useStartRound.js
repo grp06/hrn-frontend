@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useMutation } from 'react-apollo'
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
@@ -9,7 +9,7 @@ import { incrementRound } from '../gql/mutations'
 // then we want to create new rooms
 // then increment
 export default function useStartRounds() {
-  const { currentRound, roundsData } = useGameContext()
+  const { currentRound } = useGameContext()
   const [incrementRoundMutation] = useMutation(incrementRound)
 
   useEffect(() => {}, [])

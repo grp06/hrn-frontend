@@ -15,7 +15,7 @@ const StartNextRound = () => {
   }
 
   return (
-    <Button variant="outlined" onClick={startRound}>
+    <Button variant="outlined" onClick={() => startRound(roundsData.rounds)}>
       Start Next Round
     </Button>
   )
