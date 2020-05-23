@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react'
 import { styled } from '@material-ui/core/styles'
 import { makeStyles } from '@material-ui/styles'
 import { useGameContext } from '../context/useGameContext'
+import Participant from './Participant'
 
 const {
   connect,
@@ -40,12 +41,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }))
-const MainVideo = () => {
-  const classes = useStyles()
-  const { token, roomId, roundsData } = useGameContext()
 
-  // Connect to the Room with just video
-  console.log('render')
+const MainVideo = () => {
+  const [room, setRoom] = useState(null)
+  const [participants, setParticipants] = useState([])
+  const { token, roomId } = useGameContext()
+
   useEffect(() => {
     if (token) {
       navigator.mediaDevices
@@ -143,20 +144,29 @@ const MainVideo = () => {
           })
         })
     }
-  }, [token])
+  }, [roomId, token])
 
-  if (!roundsData) {
-    return <div>nothing</div>
-  }
-  if (!token || !roomId) {
-    return <div>no token yet :(</div>
-  }
-
+  const remoteParticipants = participants.map((participant) => {
+    console.log('mapping over remote participants = ', participant)
+    return <Participant key={participant.sid} participant={participant} />
+  })
   return (
-    <div className={classes.videoWrapper}>
-      <div id="my-video" className={classes.myVideo} />
-      <div id="remote-media-div" className={classes.mainVid} />
+    <div className="room">
+      <h2>
+        Room:
+        {roomId}
+      </h2>
+      <div className="local-participant">
+        {room ? (
+          <Participant key={room.localParticipant.sid} participant={room.localParticipant} />
+        ) : (
+          ''
+        )}
+      </div>
+      <h3>Remote Participants</h3>
+      <div className="remote-participants">{remoteParticipants}</div>
     </div>
   )
 }
+
 export default MainVideo
