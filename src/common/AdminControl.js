@@ -1,19 +1,17 @@
 import React, { useEffect, useContext, useState } from 'react'
 
-import { useQuery, useLazyQuery } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
 
 import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
-import { incrementRound, deleteRounds, bulkInsertRounds, setRoundToZero } from '../gql/mutations'
-import { findUsers, getRoundsData } from '../gql/queries'
-import { completeRooms, startRound } from '../helpers'
-import roundRobin from '../utils/roundRobin'
+import { deleteRounds, setRoundToZero } from '../gql/mutations'
+import { completeRooms } from '../helpers'
+
+import { useCreatePairings } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -44,81 +42,28 @@ const useStyles = makeStyles((theme) => ({
     margin: '15px',
   },
 }))
-const useImperativeQuery = (query) => {
-  const { refetch } = useQuery(query, { skip: true })
 
-  const imperativelyCallQuery = (variables) => {
-    return refetch(variables)
-  }
-
-  return imperativelyCallQuery
-}
-const AdminControl = ({ eventId }) => {
+const AdminControl = () => {
   const classes = useStyles()
-  const { currentRound, setUsers, userId } = useGameContext()
-  const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
-  const callQuery = useImperativeQuery(getRoundsData)
+  const { currentRound, eventId } = useGameContext()
 
+  const { createPairings } = useCreatePairings()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [setRoundToZeroMutation] = useMutation(setRoundToZero, {
     variables: {
       id: eventId,
     },
   })
-  const [incrementRoundMutation] = useMutation(incrementRound)
-  const { loading, error, data: findUsersData } = useQuery(findUsers)
-
-  // if (loading || error) return <p>Loading ...</p>
-  useEffect(() => {
-    if (findUsersData && findUsersData.users) {
-      setUsers(findUsersData.users)
-    }
-  }, [findUsersData])
-
-  const startEvent = async () => {
-    const variablesArr = []
-    const userIds = findUsersData.users.reduce((all, item) => {
-      all.push(item.id)
-      return all
-    }, [])
-    const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
-    // subtracting 1 because admin wont be assigned
-    const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
-    pairingsArray.forEach((round, idx) => {
-      round.forEach((pairing) => {
-        variablesArr.push({
-          partnerX_id: pairing[0],
-          partnerY_id: pairing[1],
-          round_number: idx + 1,
-          event_id: eventId,
-        })
-      })
-    })
-    bulkInsertRoundsMutation({
-      variables: {
-        objects: variablesArr,
-      },
-    })
-      .then((roundsResponse) => {
-        const { returning: rounds } = roundsResponse.data.insert_rounds
-        startRound(rounds, currentRound)
-      })
-      .then(() => {
-        incrementRoundMutation()
-      })
-  }
-
-  if (!findUsersData) {
-    return <div>no user findUsersData yet</div>
-  }
 
   return (
     <Card className={classes.onlineUsers}>
       <>
         <div className={classes.btn}>
-          <Button variant="outlined" onClick={startEvent}>
-            Start Event
-          </Button>
+          {currentRound === 0 && (
+            <Button variant="outlined" onClick={createPairings}>
+              Start Event
+            </Button>
+          )}
         </div>
         <div className={classes.btn}>
           <StartNextRound />

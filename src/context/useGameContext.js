@@ -33,6 +33,12 @@ const useGameContext = () => {
     })
   }
 
+  function setEventId(id) {
+    dispatch((draft) => {
+      draft.eventId = id
+    })
+  }
+
   function setRoomId(roomId) {
     dispatch((draft) => {
       draft.roomId = roomId
@@ -67,6 +73,7 @@ const useGameContext = () => {
     setRoom,
     setLoading,
     setRedirect,
+    setEventId,
   }
 }
 
