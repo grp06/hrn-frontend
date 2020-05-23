@@ -36,6 +36,8 @@ export default function useCreatePairings() {
       return all
     }, [])
     const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
+    console.log('createPairings -> userIdsWithoutAdmin', userIdsWithoutAdmin)
+
     // subtracting 1 because admin wont be assigned
     const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
     pairingsArray.forEach((round, idx) => {
