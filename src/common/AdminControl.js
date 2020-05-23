@@ -5,11 +5,11 @@ import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
+import endpointUrl from '../utils/endpointUrl'
 
 import { OnlineUsers, StartNextRound } from '../components'
 import { useGameContext } from '../context/useGameContext'
 import { deleteRounds, setRoundToZero } from '../gql/mutations'
-import { completeRooms } from '../helpers'
 
 import { useCreatePairings } from '../hooks'
 
@@ -68,17 +68,14 @@ const AdminControl = () => {
         <div className={classes.btn}>
           <StartNextRound />
         </div>
-        <div className={classes.btn}>
-          <Button variant="outlined" onClick={completeRooms}>
-            Complete Rooms
-          </Button>
-        </div>
+
         <div className={classes.btn}>
           <Button
             variant="outlined"
             onClick={async () => {
               await deleteRoundsMutation()
               await setRoundToZeroMutation()
+              await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
             }}
           >
             Reset rounds/game
