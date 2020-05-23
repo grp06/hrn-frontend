@@ -1,1 +1,2 @@
-export { default as startRound } from './startRound'
+export { default as participantConnected } from './participantConnected'
+export { default as getToken } from './getToken'

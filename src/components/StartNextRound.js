@@ -13,25 +13,12 @@ const StartNextRound = () => {
   const { startRound } = useStartRound()
   const { completeAndCreateRooms } = useCompleteAndCreateRooms()
 
-  useEffect(() => {
-    if (isDisconnectedAndComplete) {
-      startRound(roundsData)
-    }
-  }, [isDisconnectedAndComplete])
-
   if (currentRound === 0) {
     return null
   }
 
-  const nextRound = async () => {
-    const res = await completeAndCreateRooms()
-    console.log('hi ', res)
-
-    // startRound(roundsData.rounds) at the end
-  }
-
   return (
-    <Button variant="outlined" onClick={nextRound}>
+    <Button variant="outlined" onClick={completeAndCreateRooms}>
       Start Next Round
     </Button>
   )
