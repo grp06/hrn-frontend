@@ -19,6 +19,7 @@ const defaultState = {
   myToken: '',
   appLoading: true,
   redirect: null,
+  eventId: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })

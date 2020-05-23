@@ -8,7 +8,7 @@ import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 
 const Event = ({ match }) => {
   const { id } = match.params
-  const { role, setCurrentRound, setRoundsData, appLoading } = useGameContext()
+  const { role, setCurrentRound, setRoundsData, appLoading, setEventId } = useGameContext()
   const { data: roundsData, loading: roundDataLoading, error: roundDataError } = useSubscription(
     listenToRounds,
     {
@@ -26,6 +26,10 @@ const Event = ({ match }) => {
       },
     }
   )
+
+  useEffect(() => {
+    setEventId(id)
+  }, [])
 
   const haveSubscriptionError = eventDataError || roundDataError
   const subscriptionsLoading = roundDataLoading || eventDataLoading
