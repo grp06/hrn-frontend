@@ -53,6 +53,7 @@ const LoginForm = ({ history }) => {
   }, [redirect])
 
   if (localStorage.getItem('userId')) {
+    debugger
     return <Redirect to="/events" push />
   }
 
