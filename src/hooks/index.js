@@ -4,5 +4,3 @@ export { default as useCompleteAndCreateRooms } from './useCompleteAndCreateRoom
 export { default as useCreateRooms } from './useCreateRooms'
 export { default as useSetToken } from './useSetToken'
 export { default as useGetRoomId } from './useGetRoomId'
-export { default as useLocalVideoTrack } from './useLocalVideoTrack'
-export { default as useRoom } from './useRoom'

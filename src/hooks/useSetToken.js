@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useGetRoomId } from '.'
-import { useGameContext } from '../context/useGameContext'
 import { getToken } from '../helpers'
+import { useGameContext } from '../context/useGameContext'
 
 const useSetToken = () => {
   const { userId } = useGameContext()

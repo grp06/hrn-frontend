@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGameContext } from '../context/useGameContext'
 import { participantConnected } from '../helpers'
-import { useSetToken, useSetRoomId, useRoom } from '../hooks'
+import { useRoom, useGetRoomId, useSetToken } from '../hooks'
+
+const { createLocalVideoTrack, connect } = require('twilio-video')
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -40,10 +42,18 @@ const UserControl = () => {
   const classes = useStyles()
   const [eventStarted, setEventStarted] = useState(false)
   const [setupComplete, setSetupComplete] = useState(false)
-  const { room } = useRoom()
+  const { roomId } = useGetRoomId()
 
-  const joinRoom = () => {
+  const { token } = useSetToken()
+
+  const joinRoom = async () => {
     console.log('joining room ')
+    const localVideoTrack = await createLocalVideoTrack()
+    const room = await connect(token, {
+      name: roomId,
+      tracks: [localVideoTrack],
+    })
+    console.log('room = ', room)
     const { localParticipant } = room
     localParticipant.tracks.forEach((publication) => {})
 
@@ -71,10 +81,6 @@ const UserControl = () => {
         remoteDiv.innerHTML = ''
       }
     })
-  }
-
-  if (!room) {
-    return <div>waiting for round to start</div>
   }
 
   return (
