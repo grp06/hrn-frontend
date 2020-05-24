@@ -68,7 +68,7 @@ const UserControl = () => {
     if (!twilioReady) {
       return (
         <div className={classes.notReady}>
-          <h1>Connecting</h1>
+          <h1>Connecting...</h1>
         </div>
       )
     }

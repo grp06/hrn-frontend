@@ -47,6 +47,7 @@ const App = () => {
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />
                 <Route exact path="/test" component={Test} />
+                <Route render={() => <Redirect to={{ pathname: '/' }} />} />
               </GameProvider>
             </Switch>
           </Router>
@@ -59,4 +60,3 @@ const App = () => {
 export default App
 //            <Footer activeTab={activeTab} setActiveTab={setActiveTab} />
 // route to root when the go to a bad route
-// <Route render={() => <Redirect to={{ pathname: '/' }} />} />
