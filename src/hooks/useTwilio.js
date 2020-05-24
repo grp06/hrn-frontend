@@ -13,7 +13,6 @@ const useTwilio = () => {
         const localDiv = document.getElementById('local-video')
         if (localDiv) {
           const attachedTrack = publication.track.attach()
-          debugger
           localDiv.appendChild(attachedTrack)
         }
       })
