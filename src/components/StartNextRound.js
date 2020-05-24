@@ -9,8 +9,7 @@ import { useStartRound, useCompleteAndCreateRooms } from '../hooks'
 const StartNextRound = () => {
   const [isDisconnectedAndComplete, setDisconnectedAndComplete] = useState(null)
 
-  const { currentRound, roundsData } = useGameContext()
-  const { startRound } = useStartRound()
+  const { currentRound } = useGameContext()
   const { completeAndCreateRooms } = useCompleteAndCreateRooms()
 
   if (currentRound === 0) {

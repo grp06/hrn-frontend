@@ -21,9 +21,9 @@ const useTwilio = () => {
       room.on('participantConnected', participantConnected)
 
       room.on('participantDisconnected', (remoteParticipant) => {
-        const remoteDiv = document.getElementById('remote-media-div')
-        if (remoteDiv) {
-          remoteDiv.innerHTML = ''
+        const remoteVideo = document.getElementById('remote-video')
+        if (remoteVideo) {
+          remoteVideo.innerHTML = ''
         }
       })
 
@@ -36,10 +36,10 @@ const useTwilio = () => {
           track.unpublish()
         })
 
-        const remoteDiv = document.getElementById('remote-media-div')
-        if (remoteDiv) {
-          remoteDiv.innerHTML = ''
-        }
+        const localVideo = document.getElementById('local-video')
+        const remoteVideo = document.getElementById('remote-video')
+        remoteVideo.innerHTML = ''
+        localVideo.innerHTML = ''
       })
       setTwilioReady(true)
     }

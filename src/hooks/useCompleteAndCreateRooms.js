@@ -22,9 +22,9 @@ export default function useCompleteAndCreateRooms() {
   }, [roomsCompleted])
 
   const completeAndCreateRooms = async () => {
-    const res = await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
+    await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
     console.log('complete-rooms')
-    setRoomsCompleted(res)
+    setRoomsCompleted(true)
   }
 
   return { completeAndCreateRooms }

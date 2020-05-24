@@ -21,6 +21,14 @@ const useGameContext = () => {
     })
   }
 
+  function setGameData(roundsData, currentRound, eventId) {
+    dispatch((draft) => {
+      draft.roundsData = roundsData
+      draft.currentRound = currentRound
+      draft.eventId = eventId
+    })
+  }
+
   function setCurrentRound(currentRound) {
     dispatch((draft) => {
       draft.currentRound = currentRound
@@ -30,6 +38,12 @@ const useGameContext = () => {
   function setEventId(id) {
     dispatch((draft) => {
       draft.eventId = id
+    })
+  }
+
+  function setRoomId(roomId) {
+    dispatch((draft) => {
+      draft.roomId = roomId
     })
   }
 
@@ -53,6 +67,8 @@ const useGameContext = () => {
     setLoading,
     setRedirect,
     setEventId,
+    setRoomId,
+    setGameData,
   }
 }
 

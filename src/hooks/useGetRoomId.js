@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react'
 import { useGameContext } from '../context/useGameContext'
 
 const useGetRoomId = () => {
-  const { currentRound, roundsData, userId } = useGameContext()
+  const { currentRound, roundsData, userId, roomId, setRoomId } = useGameContext()
   const dataReady = roundsData && roundsData.rounds && roundsData.rounds.length && currentRound > 0
-  const [roomId, setRoomId] = useState(null)
 
   useEffect(() => {
     if (dataReady) {

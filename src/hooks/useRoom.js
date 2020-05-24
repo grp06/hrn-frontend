@@ -23,16 +23,17 @@ const useRoom = () => {
       }
       getRoom()
     }
-  }, [localVideoTrack])
+  }, [localVideoTrack, roomId])
 
   useEffect(() => {
     if (roomId && token) {
-      const getLocalTracks = async () => {
-        console.log('getting tracks')
+      console.log('roomId - ', roomId)
+      const createVideoTrack = async () => {
         const track = await createLocalVideoTrack()
+
         setLocalVideoTrack(track)
       }
-      getLocalTracks()
+      createVideoTrack()
     }
   }, [roomId, token])
 

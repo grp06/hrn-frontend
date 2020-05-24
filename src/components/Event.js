@@ -7,13 +7,13 @@ import { useGameContext } from '../context/useGameContext'
 import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 
 const Event = ({ match }) => {
-  const { id } = match.params
-  const { role, setCurrentRound, setRoundsData, appLoading, setEventId } = useGameContext()
+  const { id: eventId } = match.params
+  const { role, appLoading, setGameData, eventId: eventIsSetInContext } = useGameContext()
   const { data: roundsData, loading: roundDataLoading, error: roundDataError } = useSubscription(
     listenToRounds,
     {
       variables: {
-        eventId: id,
+        eventId: eventId,
       },
     }
   )
@@ -22,33 +22,30 @@ const Event = ({ match }) => {
     listenToRoundNumber,
     {
       variables: {
-        eventId: id,
+        eventId: eventId,
       },
     }
   )
 
-  useEffect(() => {
-    setEventId(id)
-  }, [])
-
   const haveSubscriptionError = eventDataError || roundDataError
   const subscriptionsLoading = roundDataLoading || eventDataLoading
+  const dataReady = roundsData && roundsData.rounds && eventData
 
   useEffect(() => {
-    if (!subscriptionsLoading && !haveSubscriptionError) {
-      setRoundsData(roundsData)
-      setCurrentRound(eventData.events[0].current_round)
+    if (!subscriptionsLoading && !haveSubscriptionError && dataReady) {
+      setGameData(roundsData, eventData.events[0].current_round, eventId)
     }
-  }, [eventData, roundsData])
+  }, [eventData, roundsData, subscriptionsLoading])
 
-  if (subscriptionsLoading || appLoading) {
+  if (subscriptionsLoading || appLoading || !eventIsSetInContext) {
     return <Loading />
   }
 
   if (haveSubscriptionError) {
     return <div>Bad news. We have errors</div>
   }
-  return <>{role === 'host' ? <AdminControl eventId={id} /> : <UserControl />}</>
+
+  return <>{role === 'host' ? <AdminControl /> : <UserControl />}</>
 }
 
 export default Event

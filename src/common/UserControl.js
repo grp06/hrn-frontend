@@ -79,7 +79,7 @@ const UserControl = () => {
       {notReady()}
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
-        <div id="remote-media-div" className={classes.mainVid} />
+        <div id="remote-video" className={classes.mainVid} />
       </div>
     </div>
   )
