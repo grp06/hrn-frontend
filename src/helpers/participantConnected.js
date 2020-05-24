@@ -3,15 +3,20 @@ const remoteTrackPublished = (publication, participant) => {
     const remoteDiv = document.getElementById('remote-media-div')
     if (remoteDiv) {
       const attachedTrack = publication.track.attach()
+      attachedTrack.muted = true
+      console.log('remoteTrackPublished -> about to attach', publication)
       remoteDiv.appendChild(attachedTrack)
     }
   }
   publication.on('subscribed', (track) => {
+    console.log('remoteTrackPublished subscribed -> track', track)
     const attachedTrack = track.attach()
+    attachedTrack.muted = true
     document.getElementById('remote-media-div').appendChild(attachedTrack)
   })
 
   publication.on('unsubscribed', (track) => {
+    console.log('remoteTrackPublished unsubscribed -> track', track)
     console.log('publication.on unsubscribed')
   })
 }
