@@ -10,13 +10,11 @@ const GameContext = React.createContext()
 
 const defaultState = {
   currentRound: 0,
-  roomId: '',
   userId: null,
   role: '',
   name: '',
   pairingsVariables: null,
   roundsData: null,
-  myToken: '',
   appLoading: true,
   redirect: null,
   eventId: null,

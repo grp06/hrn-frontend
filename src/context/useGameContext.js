@@ -27,27 +27,9 @@ const useGameContext = () => {
     })
   }
 
-  function setToken(token) {
-    dispatch((draft) => {
-      draft.token = token
-    })
-  }
-
   function setEventId(id) {
     dispatch((draft) => {
       draft.eventId = id
-    })
-  }
-
-  function setRoomId(roomId) {
-    dispatch((draft) => {
-      draft.roomId = roomId
-    })
-  }
-
-  function setRoom(room) {
-    dispatch((draft) => {
-      draft.room = room
     })
   }
 
@@ -67,10 +49,7 @@ const useGameContext = () => {
     ...state,
     setUsers,
     setRoundsData,
-    setToken,
-    setRoomId,
     setCurrentRound,
-    setRoom,
     setLoading,
     setRedirect,
     setEventId,

@@ -9,11 +9,13 @@ const useSetToken = () => {
   const { roomId } = useGetRoomId()
 
   useEffect(() => {
-    const grabToken = async () => {
-      const res = await getToken(roomId, userId).then((response) => response.json())
-      setToken(res.token)
+    if (roomId) {
+      const grabToken = async () => {
+        const res = await getToken(roomId, userId).then((response) => response.json())
+        setToken(res.token)
+      }
+      grabToken()
     }
-    grabToken()
   }, [roomId])
 
   return { token }

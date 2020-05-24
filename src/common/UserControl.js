@@ -11,7 +11,6 @@ const height = window.innerHeight
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     position: 'fixed',
-    marginTop: 200,
     width: '100%',
     height: 'calc(100vh - 64px)',
     top: '64px',
@@ -76,6 +75,10 @@ const UserControl = () => {
       })
     }
   }, [room])
+
+  if (!room) {
+    return <div>waiting for shit to start</div>
+  }
 
   return (
     <div>

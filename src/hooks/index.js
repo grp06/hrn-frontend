@@ -1,3 +1,4 @@
+// FIXME LIKE THIS: https://spin.atomicobject.com/2018/06/25/circular-dependencies-javascript/
 export { default as useStartRound } from './useStartRound'
 export { default as useCreatePairings } from './useCreatePairings'
 export { default as useCompleteAndCreateRooms } from './useCompleteAndCreateRooms'
