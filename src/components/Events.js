@@ -8,10 +8,13 @@ import { useGameContext } from '../context/useGameContext'
 import { getEvents } from '../gql/queries'
 
 const Events = () => {
-  const { appLoading } = useGameContext()
+  const { appLoading, userId } = useGameContext()
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
 
+  if (!userId) {
+    return <Redirect to="/" push />
+  }
   if (appLoading || eventsLoading) {
     return <Loading />
   }

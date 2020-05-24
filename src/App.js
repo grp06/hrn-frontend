@@ -47,7 +47,7 @@ const App = () => {
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />
                 <Route exact path="/test" component={Test} />
-                <Route component={() => <Redirect to={{ pathname: '/' }} />} />
+                <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
               </GameProvider>
             </Switch>
           </Router>
