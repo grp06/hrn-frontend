@@ -58,7 +58,7 @@ const UserControl = () => {
   const { twilioReady } = useTwilio()
   console.log('twilioReady = ', twilioReady)
   const notReady = () => {
-    if (!twilioReady && currentRound === 0) {
+    if (currentRound === 0) {
       return (
         <div className={classes.notReady}>
           <h1>Please wait for event to begin</h1>
