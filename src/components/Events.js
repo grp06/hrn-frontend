@@ -12,11 +12,12 @@ const Events = () => {
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
 
-  if (!userId) {
-    return <Redirect to="/" push />
-  }
   if (appLoading || eventsLoading) {
     return <Loading />
+  }
+
+  if (!userId) {
+    return <Redirect to="/" push />
   }
 
   if (!eventsData) {
