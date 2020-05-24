@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useGameContext } from '../context/useGameContext'
-import { participantConnected } from '../helpers'
-import { useRoom, useSetToken } from '../hooks'
-
-const { createLocalVideoTrack, connect } = require('twilio-video')
+import { useTwilio } from '../hooks'
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -27,63 +23,24 @@ const useStyles = makeStyles((theme) => ({
   },
   myVideo: {
     width: '200px',
-    height: '200px',
     position: 'absolute',
     top: '15px',
     right: '15px',
     '& video': {
       borderRadius: 15,
+      width: '300px',
     },
   },
 }))
 
 const UserControl = () => {
   const classes = useStyles()
-  const [eventStarted, setEventStarted] = useState(false)
-  const [setupComplete, setSetupComplete] = useState(false)
-  const { room } = useRoom()
-
-  useEffect(() => {
-    if (room) {
-      console.log('joining room ')
-      const { localParticipant } = room
-      localParticipant.tracks.forEach((publication) => {})
-
-      room.participants.forEach(participantConnected)
-      room.on('participantConnected', participantConnected)
-
-      room.on('participantDisconnected', (remoteParticipant) => {
-        const remoteDiv = document.getElementById('remote-media-div')
-        if (remoteDiv) {
-          remoteDiv.innerHTML = ''
-        }
-      })
-
-      window.addEventListener('beforeunload', () => {
-        room.disconnect()
-      })
-
-      room.on('disconnected', function (rum, error) {
-        rum.localParticipant.tracks.forEach(function (track) {
-          track.unpublish()
-        })
-
-        const remoteDiv = document.getElementById('remote-media-div')
-        if (remoteDiv) {
-          remoteDiv.innerHTML = ''
-        }
-      })
-    }
-  }, [room])
-
-  if (!room) {
-    return <div>waiting for shit to start</div>
-  }
+  const { twilioReady } = useTwilio()
 
   return (
     <div>
       <div className={classes.videoWrapper}>
-        <div id="my-video" className={classes.myVideo} />
+        <div id="local-video" className={classes.myVideo} />
         <div id="remote-media-div" className={classes.mainVid} />
       </div>
     </div>
