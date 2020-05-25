@@ -59,7 +59,7 @@ const AdminControl = () => {
     <Card className={classes.onlineUsers}>
       <>
         <div className={classes.btn}>
-          {currentRound === 0 && (
+          {currentRound < 4 && (
             <Button variant="outlined" onClick={createPairings}>
               Start Event
             </Button>
