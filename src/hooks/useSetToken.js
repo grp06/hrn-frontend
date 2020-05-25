@@ -9,13 +9,10 @@ const useSetToken = () => {
 
   useEffect(() => {
     if (token && roomId && !room) {
-      console.log('setMyRoom()')
       setMyRoom()
     }
   }, [token, roomId, room])
   const setMyToken = async () => {
-    console.log('TOKEN API CALL')
-
     const res = await getToken(roomId, userId).then((response) => response.json())
     setToken(res.token)
   }

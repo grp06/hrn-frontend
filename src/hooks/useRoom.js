@@ -9,7 +9,6 @@ const useRoom = () => {
 
   const setMyRoom = async () => {
     const localVideoTrack = await createLocalVideoTrack()
-    console.log('connect()')
     const myRoom = await connect(token, {
       name: roomId,
       tracks: [localVideoTrack],

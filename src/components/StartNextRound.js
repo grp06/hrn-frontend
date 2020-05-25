@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 import Button from '@material-ui/core/Button'
-import { useMutation } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
-import { useStartRound, useCompleteRooms } from '../hooks'
+import { useCompleteRooms } from '../hooks'
 
 const StartNextRound = () => {
-  const [isDisconnectedAndComplete, setDisconnectedAndComplete] = useState(null)
-
   const { currentRound } = useGameContext()
   const { completeRooms } = useCompleteRooms()
 

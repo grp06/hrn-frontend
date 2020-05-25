@@ -11,7 +11,6 @@ const useGetRoomId = () => {
   }
   const getRoomId = () => {
     if (canGetRoomId) {
-      console.log('currentRound = ', currentRound)
       const myRound = roundsData.rounds.find((round) => {
         const me =
           // dont know why I needed to add + 1 here?
@@ -21,7 +20,6 @@ const useGetRoomId = () => {
         return me
       })
 
-      console.log('myRound = ', myRound)
       // I think sometimes myRound is still undefined
       if (myRound) {
         setRoomId(myRound.id)

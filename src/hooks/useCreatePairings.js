@@ -6,6 +6,7 @@ import roundRobin from '../utils/roundRobin'
 import samyakAlgo from '../utils/samyakAlgo'
 import { findUsers } from '../gql/queries'
 import { useStartRound } from '.'
+import endpointUrl from '../utils/endpointUrl'
 
 // call API which will disconnect all users from their rooms
 // it should also complete the rooms afterwards
@@ -58,7 +59,7 @@ export default function useCreatePairings() {
   }
 
   const createPairings = async () => {
-    console.log('currentRound is', currentRound)
+    await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
     const variablesArr = []
     const userIds = findUsersData.users.reduce((all, item) => {
       all.push(item.id)
@@ -72,7 +73,6 @@ export default function useCreatePairings() {
     console.log('userIdsMap', userIdsMap)
     // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
     pairingsArray.forEach((pairing) => {
-      debugger
       variablesArr.push({
         partnerX_id: pairing[0],
         partnerY_id: pairing[1],

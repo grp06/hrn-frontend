@@ -60,7 +60,7 @@ const AdminControl = () => {
         <div className={classes.btn}>
           {currentRound < 4 && (
             <Button variant="outlined" onClick={createPairings}>
-              Start Event
+              {currentRound === 0 ? 'Start Event' : 'Next Round'}
             </Button>
           )}
         </div>

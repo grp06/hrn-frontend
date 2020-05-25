@@ -8,7 +8,6 @@ const useTwilio = () => {
 
   useEffect(() => {
     if (room && !twilioReady) {
-      console.log('inside room')
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         const localDiv = document.getElementById('local-video')

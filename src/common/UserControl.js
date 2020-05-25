@@ -52,7 +52,6 @@ const UserControl = () => {
   const { getRoomId } = useGetRoomId()
   // I might be "over-checking"
   if (roundsData && roundsData.rounds && roundsData.rounds.length && !roomId) {
-    console.log('getROomID')
     getRoomId()
   }
   const notReady = () => {
