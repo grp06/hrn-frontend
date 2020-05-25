@@ -51,12 +51,8 @@ const UserControl = () => {
   const classes = useStyles()
   const { currentRound } = useGameContext()
 
-  // still need to implement this
-  // if there's no room available, show "waiting for event to start"
-  // problem is - if you render that INSTEAD of local-video, we cant
-  // append local-video ...
   const { twilioReady } = useTwilio()
-  console.log('twilioReady = ', twilioReady)
+
   const notReady = () => {
     if (currentRound === 0) {
       return (

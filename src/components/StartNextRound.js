@@ -4,20 +4,20 @@ import Button from '@material-ui/core/Button'
 import { useMutation } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
-import { useStartRound, useCompleteAndCreateRooms } from '../hooks'
+import { useStartRound, useCompleteRooms } from '../hooks'
 
 const StartNextRound = () => {
   const [isDisconnectedAndComplete, setDisconnectedAndComplete] = useState(null)
 
   const { currentRound } = useGameContext()
-  const { completeAndCreateRooms } = useCompleteAndCreateRooms()
+  const { completeRooms } = useCompleteRooms()
 
   if (currentRound === 0) {
     return null
   }
 
   return (
-    <Button variant="outlined" onClick={completeAndCreateRooms}>
+    <Button variant="outlined" onClick={completeRooms}>
       Start Next Round
     </Button>
   )

@@ -5,7 +5,6 @@ import { participantConnected } from '../helpers'
 const useTwilio = () => {
   const { room } = useRoom()
   const [twilioReady, setTwilioReady] = useState(false)
-
   useEffect(() => {
     if (room) {
       const { localParticipant } = room
