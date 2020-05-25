@@ -13,6 +13,7 @@ const defaultState = {
   currentRound: 0,
   eventId: null,
   localVideoTrack: null,
+  myRound: null,
   name: '',
   roundsData: null,
   redirect: null,

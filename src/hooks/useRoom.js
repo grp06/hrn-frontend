@@ -1,14 +1,22 @@
-import { useEffect, useState } from 'react'
-import { useGetRoomId, useSetToken } from '.'
+import { useEffect } from 'react'
+import { useTwilio } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const { createLocalVideoTrack, connect } = require('twilio-video')
 
 const useRoom = () => {
-  const { roomId, setRoom, token } = useGameContext()
+  const { roomId, setRoom, token, room } = useGameContext()
+  const { startTwilio } = useTwilio()
+
+  useEffect(() => {
+    if (room) {
+      startTwilio()
+    }
+  }, [room])
 
   const setMyRoom = async () => {
     const localVideoTrack = await createLocalVideoTrack()
+    console.log('connect')
     const myRoom = await connect(token, {
       name: roomId,
       tracks: [localVideoTrack],

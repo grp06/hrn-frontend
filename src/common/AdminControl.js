@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
 import endpointUrl from '../utils/endpointUrl'
 
-import { OnlineUsers, StartNextRound } from '../components'
+import { OnlineUsers } from '../components'
 import { useGameContext } from '../context/useGameContext'
 import { deleteRounds, setRoundToZero } from '../gql/mutations'
 
@@ -63,9 +63,6 @@ const AdminControl = () => {
               {currentRound === 0 ? 'Start Event' : 'Next Round'}
             </Button>
           )}
-        </div>
-        <div className={classes.btn}>
-          <StartNextRound />
         </div>
 
         <div className={classes.btn}>

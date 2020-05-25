@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useTwilio, useGetRoomId } from '../hooks'
+import { useGetRoomId } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
 
 const width = window.innerWidth
@@ -47,13 +47,15 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, roundsData, roomId } = useGameContext()
-  const { twilioReady } = useTwilio()
+  const { currentRound, roundsData, roomId, twilioReady } = useGameContext()
   const { getRoomId } = useGetRoomId()
   // I might be "over-checking"
-  if (roundsData && roundsData.rounds && roundsData.rounds.length && !roomId) {
-    getRoomId()
-  }
+  useEffect(() => {
+    if (roundsData && roundsData.rounds && roundsData.rounds.length && !roomId) {
+      getRoomId()
+    }
+  }, [roundsData, roomId])
+
   const notReady = () => {
     if (currentRound === 0) {
       return (

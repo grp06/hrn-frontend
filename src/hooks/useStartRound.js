@@ -17,7 +17,7 @@ export default function useStartRounds() {
     }, [])
 
     await createRooms(allRoomIds)
-
+    console.log('should Increment rounds here')
     incrementRoundMutation()
   }
 

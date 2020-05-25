@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
-import { useRoom } from '.'
+import { useEffect } from 'react'
 import { participantConnected } from '../helpers'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
   const { room, twilioReady, setTwilioReady } = useGameContext()
 
-  useEffect(() => {
+  const startTwilio = () => {
     if (room && !twilioReady) {
+      console.log('starting twilio')
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         const localDiv = document.getElementById('local-video')
@@ -46,9 +46,9 @@ const useTwilio = () => {
       })
       setTwilioReady(true)
     }
-  }, [room])
+  }
 
-  return { twilioReady }
+  return { startTwilio }
 }
 
 export default useTwilio
