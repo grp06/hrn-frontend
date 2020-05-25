@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-apollo'
 import { useGameContext } from '../context/useGameContext'
 import { bulkInsertRounds } from '../gql/mutations'
 import roundRobin from '../utils/roundRobin'
+import samyakAlgo from '../utils/samyakAlgo'
 import { findUsers } from '../gql/queries'
 import { useStartRound } from '.'
 
@@ -39,17 +40,19 @@ export default function useCreatePairings() {
     console.log('createPairings -> userIdsWithoutAdmin', userIdsWithoutAdmin)
 
     // subtracting 1 because admin wont be assigned
-    const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
-    pairingsArray.forEach((round, idx) => {
-      round.forEach((pairing) => {
-        variablesArr.push({
-          partnerX_id: pairing[0],
-          partnerY_id: pairing[1],
-          round_number: idx + 1,
-          event_id: eventId,
-        })
-      })
-    })
+    const resultOfSamyaksAlgo = samyakAlgo(userIdsWithoutAdmin, {})
+    console.log(resultOfSamyaksAlgo)
+    // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
+    // pairingsArray.forEach((round, idx) => {
+    //   round.forEach((pairing) => {
+    //     variablesArr.push({
+    //       partnerX_id: pairing[0],
+    //       partnerY_id: pairing[1],
+    //       round_number: idx + 1,
+    //       event_id: eventId,
+    //     })
+    //   })
+    // })
 
     const insertedRounds = await bulkInsertRoundsMutation({
       variables: {
@@ -57,7 +60,7 @@ export default function useCreatePairings() {
       },
     })
 
-    setRoundsResponse(insertedRounds.data.insert_rounds)
+    // setRoundsResponse(insertedRounds.data.insert_rounds)
   }
 
   return { createPairings }
