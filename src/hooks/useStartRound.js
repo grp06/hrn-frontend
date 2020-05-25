@@ -10,6 +10,7 @@ export default function useStartRounds() {
   const { createRooms } = useCreateRooms()
 
   const startRound = async (rounds) => {
+    console.log('currentRound = ', currentRound)
     const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
     console.log('rounds = ', rounds)
     const allRoomIds = currentRoundObj.reduce((all, item) => {

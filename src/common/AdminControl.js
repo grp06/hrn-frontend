@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
 const AdminControl = () => {
   const classes = useStyles()
   const { currentRound, eventId } = useGameContext()
-
   const { createPairings } = useCreatePairings()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [setRoundToZeroMutation] = useMutation(setRoundToZero, {

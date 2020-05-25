@@ -9,15 +9,19 @@ import { findMyUser } from '../gql/queries'
 const GameContext = React.createContext()
 
 const defaultState = {
-  currentRound: 0,
-  userId: null,
-  role: '',
-  name: '',
-  pairingsVariables: null,
-  roundsData: null,
   appLoading: true,
-  redirect: null,
+  currentRound: 0,
   eventId: null,
+  localVideoTrack: null,
+  name: '',
+  roundsData: null,
+  redirect: null,
+  role: '',
+  roomId: null,
+  token: null,
+  twilioReady: false,
+  userId: null,
+  users: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })

@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useTwilio } from '../hooks'
+import { useTwilio, useGetRoomId } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
 
 const width = window.innerWidth
 const height = window.innerHeight
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
-    position: 'fixed',
-    width: '100%',
-    height: 'calc(100vh - 64px)',
-    top: '64px',
     background: '#111',
   },
   mainVid: {
@@ -19,16 +15,18 @@ const useStyles = makeStyles((theme) => ({
     '& video': {
       margin: '0 auto',
       width: '100%',
-      height: '100vh',
+      height: 'calc(100vh - 64px)',
     },
   },
   myVideo: {
     width: '300px',
     position: 'absolute',
-    top: '15px',
+    top: '79px',
     right: '15px',
+    zIndex: 99,
+
     '& video': {
-      borderRadius: 15,
+      borderRadius: 10,
       width: '300px',
     },
   },
@@ -49,10 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound } = useGameContext()
-
+  const { currentRound, roundsData, roomId } = useGameContext()
   const { twilioReady } = useTwilio()
-
+  const { getRoomId } = useGetRoomId()
+  // I might be "over-checking"
+  if (roundsData && roundsData.rounds && roundsData.rounds.length && !roomId) {
+    console.log('getROomID')
+    getRoomId()
+  }
   const notReady = () => {
     if (currentRound === 0) {
       return (

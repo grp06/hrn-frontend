@@ -1,24 +1,26 @@
-import { useEffect, useState } from 'react'
-import { useGetRoomId } from '.'
+import { useEffect, useState, useCallback } from 'react'
+import { useRoom } from '.'
 import { getToken } from '../helpers'
 import { useGameContext } from '../context/useGameContext'
 
 const useSetToken = () => {
-  const { userId } = useGameContext()
-  const [token, setToken] = useState(null)
-  const { roomId } = useGetRoomId()
+  const { userId, roomId, setToken, token, room } = useGameContext()
+  const { setMyRoom } = useRoom()
 
   useEffect(() => {
-    if (roomId) {
-      const grabToken = async () => {
-        const res = await getToken(roomId, userId).then((response) => response.json())
-        setToken(res.token)
-      }
-      grabToken()
+    if (token && roomId && !room) {
+      console.log('setMyRoom()')
+      setMyRoom()
     }
-  }, [roomId])
+  }, [token, roomId, room])
+  const setMyToken = async () => {
+    console.log('TOKEN API CALL')
 
-  return { token }
+    const res = await getToken(roomId, userId).then((response) => response.json())
+    setToken(res.token)
+  }
+
+  return { setMyToken }
 }
 
 export default useSetToken

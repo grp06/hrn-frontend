@@ -15,6 +15,24 @@ const useGameContext = () => {
     })
   }
 
+  function setToken(token) {
+    dispatch((draft) => {
+      draft.token = token
+    })
+  }
+
+  function setTwilioReady(twilioReady) {
+    dispatch((draft) => {
+      draft.twilioReady = twilioReady
+    })
+  }
+
+  function setLocalVideoTrack(localVideoTrack) {
+    dispatch((draft) => {
+      draft.localVideoTrack = localVideoTrack
+    })
+  }
+
   function setRoundsData(rounds) {
     dispatch((draft) => {
       draft.roundsData = rounds
@@ -26,12 +44,11 @@ const useGameContext = () => {
       draft.roundsData = roundsData
       draft.currentRound = currentRound
       draft.eventId = eventId
-    })
-  }
-
-  function setCurrentRound(currentRound) {
-    dispatch((draft) => {
-      draft.currentRound = currentRound
+      // reset all these guys between rounds
+      draft.roomId = null
+      draft.room = null
+      draft.token = null
+      draft.twilioReady = false
     })
   }
 
@@ -47,6 +64,12 @@ const useGameContext = () => {
     })
   }
 
+  function setRoom(room) {
+    dispatch((draft) => {
+      draft.room = room
+    })
+  }
+
   function setLoading(loading) {
     dispatch((draft) => {
       draft.loading = loading
@@ -59,16 +82,30 @@ const useGameContext = () => {
     })
   }
 
+  function resetUserState() {
+    dispatch((draft) => {
+      draft.token = null
+      draft.roomId = null
+      draft.localVideoTrack = null
+      draft.room = null
+      draft.twilioReady = false
+    })
+  }
+
   return {
     ...state,
     setUsers,
     setRoundsData,
-    setCurrentRound,
     setLoading,
     setRedirect,
     setEventId,
     setRoomId,
     setGameData,
+    setToken,
+    setTwilioReady,
+    setLocalVideoTrack,
+    setRoom,
+    resetUserState,
   }
 }
 

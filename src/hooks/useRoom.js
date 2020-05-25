@@ -5,38 +5,20 @@ import { useGameContext } from '../context/useGameContext'
 const { createLocalVideoTrack, connect } = require('twilio-video')
 
 const useRoom = () => {
-  const { userId } = useGameContext()
-  const [localVideoTrack, setLocalVideoTrack] = useState(null)
-  const { roomId } = useGetRoomId()
-  const { token } = useSetToken()
-  const [room, setRoom] = useState(null)
+  const { roomId, setRoom, token } = useGameContext()
 
-  useEffect(() => {
-    if (localVideoTrack && token && roomId) {
-      const getRoom = async () => {
-        const myRoom = await connect(token, {
-          name: roomId,
-          tracks: [localVideoTrack],
-          video: { height: 720, frameRate: 24, width: 1280 },
-        })
-        setRoom(myRoom)
-      }
-      getRoom()
-    }
-  }, [localVideoTrack, token, roomId])
+  const setMyRoom = async () => {
+    const localVideoTrack = await createLocalVideoTrack()
+    console.log('connect()')
+    const myRoom = await connect(token, {
+      name: roomId,
+      tracks: [localVideoTrack],
+      video: { height: 720, frameRate: 24, width: 1280 },
+    })
+    setRoom(myRoom)
+  }
 
-  useEffect(() => {
-    if (roomId) {
-      const getLocalTracks = async () => {
-        console.log('getting tracks')
-        const track = await createLocalVideoTrack()
-        setLocalVideoTrack(track)
-      }
-      getLocalTracks()
-    }
-  }, [roomId])
-
-  return { room }
+  return { setMyRoom }
 }
 
 export default useRoom

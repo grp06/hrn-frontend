@@ -8,7 +8,14 @@ import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
 
 const Event = ({ match }) => {
   const { id: eventId } = match.params
-  const { role, appLoading, setGameData, eventId: eventIsSetInContext } = useGameContext()
+  const {
+    role,
+    appLoading,
+    setGameData,
+    eventId: eventIsSetInContext,
+    currentRound,
+    resetUserState,
+  } = useGameContext()
   const { data: roundsData, loading: roundDataLoading, error: roundDataError } = useSubscription(
     listenToRounds,
     {
@@ -32,8 +39,14 @@ const Event = ({ match }) => {
   const dataReady = roundsData && roundsData.rounds && eventData
 
   useEffect(() => {
+    if (roundsData && roundsData.rounds.length === 0 && currentRound === 0) {
+      return resetUserState()
+    }
+  }, [roundsData, currentRound])
+
+  useEffect(() => {
     if (!subscriptionsLoading && !haveSubscriptionError && dataReady) {
-      setGameData(roundsData, eventData.events[0].current_round, eventId)
+      return setGameData(roundsData, eventData.events[0].current_round, eventId)
     }
   }, [eventData, roundsData, subscriptionsLoading])
 
