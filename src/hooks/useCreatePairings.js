@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-apollo'
 import { useGameContext } from '../context/useGameContext'
 import { bulkInsertRounds } from '../gql/mutations'
 import samyakAlgo from '../utils/samyakAlgo'
+import jorgeAlgo from '../utils/georgeAlgo'
 import { findUsers } from '../gql/queries'
 import { useStartRound } from '.'
 import endpointUrl from '../utils/endpointUrl'
@@ -68,9 +69,13 @@ export default function useCreatePairings() {
       }, [])
 
       const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
+      // if (userIdsWithoutAdmin % 2 !== 0) {
+      //   console.log('uneven array')
+      //   userIdsWithoutAdmin.push('999999')
+      // }
       const roundsMap = createRoundsMap(roundsData, userIdsWithoutAdmin)
       // subtracting 1 because admin wont be assigned
-      const { pairingsArray, userIdsMap } = samyakAlgo(userIdsWithoutAdmin, roundsMap)
+      const { pairingsArray, userIdsMap } = jorgeAlgo(userIdsWithoutAdmin, roundsMap)
 
       // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
       pairingsArray.forEach((pairing) => {
