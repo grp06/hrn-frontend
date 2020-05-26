@@ -68,6 +68,7 @@ const useGameContext = () => {
         draft.currentRound = currentRound
         draft.myRound = myRound
         draft.token = null
+        draft.waitingRoom = false
         draft.roomId = myRound ? myRound.id : null
         // reset all these guys between rounds
       })

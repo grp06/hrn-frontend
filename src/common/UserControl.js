@@ -64,14 +64,22 @@ const UserControl = () => {
   }, [roomId, room])
 
   const notReady = () => {
-    // turn into components
-    if (currentRound === 0) {
+    if (waitingRoom) {
       return (
         <div className={classes.notReady}>
-          <h1>{waitingRoom ? 'waiting room' : 'Please wait for event to begin'}</h1>
+          <h1>waiting room</h1>
         </div>
       )
     }
+
+    if (currentRound === 0) {
+      return (
+        <div className={classes.notReady}>
+          <h1>Please wait for event to begin</h1>
+        </div>
+      )
+    }
+
     if (!twilioReady) {
       return (
         <div className={classes.notReady}>
