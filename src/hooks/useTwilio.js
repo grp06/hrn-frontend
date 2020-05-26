@@ -3,7 +3,7 @@ import { participantConnected } from '../helpers'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const { room, twilioReady, setTwilioReady, setRoom, setWaitingRoom } = useGameContext()
+  const { room, twilioReady, setTwilioReady, setRoom } = useGameContext()
 
   const startTwilio = () => {
     if (room && !twilioReady) {
