@@ -36,7 +36,6 @@ const Event = ({ match }) => {
     },
   })
 
-  const subscriptionsLoading = roundDataLoading || eventLoading
   const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
   const hostId = eventData && eventData.events[0].host_id
 
@@ -45,15 +44,13 @@ const Event = ({ match }) => {
       return resetUserState()
     }
   }, [freshRoundsData, currentRound])
-
+  console.log('freshRoundsData = ', freshRoundsData)
   useEffect(() => {
-    if (!subscriptionsLoading && hasSubscriptionData) {
+    if (!roundDataLoading && hasSubscriptionData) {
       if (!eventIsSetInContext && eventId) {
         setEventId(eventId)
       }
-      // either we're advancing or we just reset
 
-      // if roundsData == null &&
       console.log('roundsData ', roundsData)
       console.log('freshRoundsData ', freshRoundsData)
       if (!roundsData || !roundsData.rounds.length) {
@@ -69,9 +66,9 @@ const Event = ({ match }) => {
         return setGameData(freshRoundsData, userId)
       }
     }
-  }, [freshRoundsData, subscriptionsLoading, hasSubscriptionData])
+  }, [freshRoundsData, roundDataLoading, hasSubscriptionData])
 
-  if (subscriptionsLoading || appLoading || !eventIsSetInContext) {
+  if (roundDataLoading || appLoading || !eventIsSetInContext) {
     return <Loading />
   }
 
