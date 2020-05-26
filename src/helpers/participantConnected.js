@@ -12,16 +12,7 @@ const remoteTrackPublished = (publication, participant) => {
     console.log('remoteTrackPublished subscribed -> track', track)
     const attachedTrack = track.attach()
     attachedTrack.muted = true
-    if (!track.isStarted) {
-      const button = document.createElement('button')
-      button.innerHTML = 'Having some trouble. Click to refresh'
-      button.addEventListener('click', () => {
-        window.location.reload()
-      })
-      document.getElementById('remote-video').appendChild(button)
-    } else {
-      document.getElementById('remote-video').appendChild(attachedTrack)
-    }
+    document.getElementById('remote-video').appendChild(attachedTrack)
   })
 
   publication.on('unsubscribed', (track) => {
