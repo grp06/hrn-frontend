@@ -60,34 +60,36 @@ export default function useCreatePairings() {
 
   const createPairings = async () => {
     await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
-    const variablesArr = []
-    const userIds = findUsersData.users.reduce((all, item) => {
-      all.push(item.id)
-      return all
-    }, [])
+    setTimeout(async () => {
+      const variablesArr = []
+      const userIds = findUsersData.users.reduce((all, item) => {
+        all.push(item.id)
+        return all
+      }, [])
 
-    const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
-    const roundsMap = createRoundsMap(roundsData, userIdsWithoutAdmin)
-    // subtracting 1 because admin wont be assigned
-    const { pairingsArray, userIdsMap } = samyakAlgo(userIdsWithoutAdmin, roundsMap)
+      const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
+      const roundsMap = createRoundsMap(roundsData, userIdsWithoutAdmin)
+      // subtracting 1 because admin wont be assigned
+      const { pairingsArray, userIdsMap } = samyakAlgo(userIdsWithoutAdmin, roundsMap)
 
-    // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
-    pairingsArray.forEach((pairing) => {
-      variablesArr.push({
-        partnerX_id: pairing[0],
-        partnerY_id: pairing[1],
-        round_number: currentRound + 1,
-        event_id: eventId,
+      // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
+      pairingsArray.forEach((pairing) => {
+        variablesArr.push({
+          partnerX_id: pairing[0],
+          partnerY_id: pairing[1],
+          round_number: currentRound + 1,
+          event_id: eventId,
+        })
       })
-    })
 
-    const insertedRounds = await bulkInsertRoundsMutation({
-      variables: {
-        objects: variablesArr,
-      },
-    })
+      const insertedRounds = await bulkInsertRoundsMutation({
+        variables: {
+          objects: variablesArr,
+        },
+      })
 
-    setRoundsResponse(insertedRounds.data.insert_rounds)
+      setRoundsResponse(insertedRounds.data.insert_rounds)
+    }, 3000)
   }
 
   return { createPairings }

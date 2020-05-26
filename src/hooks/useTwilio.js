@@ -3,7 +3,7 @@ import { participantConnected } from '../helpers'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const { room, twilioReady, setTwilioReady } = useGameContext()
+  const { room, twilioReady, setTwilioReady, setRoom, setWaitingRoom } = useGameContext()
 
   const startTwilio = () => {
     if (room && !twilioReady) {
@@ -33,7 +33,8 @@ const useTwilio = () => {
         room.disconnect()
       })
 
-      room.on('disconnected', function (rum, error) {
+      room.on('disconnected', function (rum) {
+        setRoom(null, true)
         console.log('disconnected')
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()

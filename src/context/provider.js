@@ -23,6 +23,7 @@ const defaultState = {
   twilioReady: false,
   userId: null,
   users: null,
+  waitingRoom: false,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })

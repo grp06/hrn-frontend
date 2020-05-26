@@ -47,15 +47,15 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady } = useGameContext()
+  const { currentRound, twilioReady, waitingRoom } = useGameContext()
   useGetRoomId()
-  // I might be "over-checking"
 
   const notReady = () => {
+    // turn into components
     if (currentRound === 0) {
       return (
         <div className={classes.notReady}>
-          <h1>Please wait for event to begin</h1>
+          <h1>{waitingRoom ? 'waiting room' : 'Please wait for event to begin'}</h1>
         </div>
       )
     }

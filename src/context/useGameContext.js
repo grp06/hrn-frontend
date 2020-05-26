@@ -78,9 +78,10 @@ const useGameContext = () => {
     })
   }
 
-  function setRoom(room) {
+  function setRoom(room, waitingRoom) {
     dispatch((draft) => {
       draft.room = room
+      draft.waitingRoom = waitingRoom
     })
   }
 
