@@ -53,9 +53,11 @@ const UserControl = () => {
 
   useEffect(() => {
     if (!mounted.current && roomId) {
+      debugger
       mounted.current = roomId
       setToken()
     } else if (roomId !== mounted.current) {
+      debugger
       mounted.current = roomId
       setToken()
     }
