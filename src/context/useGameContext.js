@@ -61,10 +61,12 @@ const useGameContext = () => {
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
+      console.log('myRound is', myRound)
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
         draft.myRound = myRound
+        draft.roomId = myRound ? myRound.id : null
         // reset all these guys between rounds
       })
     }

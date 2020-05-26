@@ -47,14 +47,9 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, roundsData, roomId, twilioReady } = useGameContext()
-  const { getRoomId } = useGetRoomId()
+  const { currentRound, twilioReady } = useGameContext()
+  useGetRoomId()
   // I might be "over-checking"
-  useEffect(() => {
-    if (roundsData && roundsData.rounds && roundsData.rounds.length && !roomId) {
-      getRoomId()
-    }
-  }, [roundsData, roomId])
 
   const notReady = () => {
     if (currentRound === 0) {

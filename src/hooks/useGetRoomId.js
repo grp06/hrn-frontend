@@ -3,7 +3,7 @@ import { useGameContext } from '../context/useGameContext'
 import { useSetToken } from '.'
 
 const useGetRoomId = () => {
-  const { myRound, setRoomId, roomId, room, token } = useGameContext()
+  const { roomId, room, token } = useGameContext()
   const { setMyToken } = useSetToken()
 
   useEffect(() => {
@@ -11,14 +11,6 @@ const useGetRoomId = () => {
       setMyToken()
     }
   }, [roomId, room, token])
-
-  const getRoomId = () => {
-    if (myRound) {
-      setRoomId(myRound.id)
-    }
-  }
-
-  return { getRoomId }
 }
 
 export default useGetRoomId
