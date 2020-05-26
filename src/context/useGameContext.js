@@ -51,6 +51,7 @@ const useGameContext = () => {
         draft.myRound = 0
         draft.roundsData = freshRoundsData
         draft.currentRound = freshRoundsData === null ? 1 : 0
+        draft.waitingRoom = false
       })
     } else {
       const currentRound =
@@ -61,7 +62,7 @@ const useGameContext = () => {
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
-      console.log('myRound is', myRound)
+
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound

@@ -10,6 +10,7 @@ const useTwilio = () => {
       console.log('starting twilio')
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
+        console.log('publication = ', publication)
         const localDiv = document.getElementById('local-video')
         if (localDiv && !localDiv.children.length) {
           const attachedTrack = publication.track.attach()
@@ -21,7 +22,7 @@ const useTwilio = () => {
       room.on('participantConnected', participantConnected)
 
       room.on('participantDisconnected', (remoteParticipant) => {
-        console.log('remote participant disconnected')
+        console.log('remote participant disconnected ', remoteParticipant)
 
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {

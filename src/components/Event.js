@@ -44,15 +44,12 @@ const Event = ({ match }) => {
       return resetUserState()
     }
   }, [freshRoundsData, currentRound])
-  console.log('freshRoundsData = ', freshRoundsData)
   useEffect(() => {
     if (!roundDataLoading && hasSubscriptionData) {
       if (!eventIsSetInContext && eventId) {
         setEventId(eventId)
       }
 
-      console.log('roundsData ', roundsData)
-      console.log('freshRoundsData ', freshRoundsData)
       if (!roundsData || !roundsData.rounds.length) {
         return setGameData(freshRoundsData, userId)
       }
