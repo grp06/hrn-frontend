@@ -79,12 +79,13 @@ const useGameContext = () => {
     })
   }
 
-  function setRoom(room, waitingRoom) {
+  function setRoom(room, waitingRoom, twilioReady) {
     console.log('room = ', room)
     console.log('waitingRoom = ', waitingRoom)
     dispatch((draft) => {
       draft.room = room
       draft.waitingRoom = waitingRoom
+      draft.twilioReady = twilioReady
     })
   }
 

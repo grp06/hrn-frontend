@@ -22,7 +22,7 @@ const useRoom = () => {
       tracks: [localVideoTrack],
       video: { height: 720, frameRate: 24, width: 1280 },
     })
-    setRoom(myRoom, false)
+    setRoom(myRoom, false, false)
   }
 
   return { setMyRoom }
