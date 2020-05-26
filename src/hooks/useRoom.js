@@ -23,8 +23,8 @@ const useRoom = () => {
       tracks: [localVideoTrack],
       video: { height: 720, frameRate: 24, width: 1280 },
     })
-    console.log('set waiting room false, twilio ready false')
-    setRoom(myRoom, false, false)
+    console.log('set room, twilioReady false')
+    setRoom(myRoom, false)
   }
 
   return { setMyRoom }

@@ -94,7 +94,7 @@ export default function useCreatePairings() {
       })
 
       setRoundsResponse(insertedRounds.data.insert_rounds)
-    }, 2000)
+    }, 1)
   }
 
   return { createPairings }

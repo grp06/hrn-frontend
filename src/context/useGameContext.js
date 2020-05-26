@@ -51,7 +51,6 @@ const useGameContext = () => {
         draft.myRound = 0
         draft.roundsData = freshRoundsData
         draft.currentRound = freshRoundsData === null ? 1 : 0
-        draft.waitingRoom = false
       })
     } else {
       const currentRound =
@@ -68,7 +67,6 @@ const useGameContext = () => {
         draft.currentRound = currentRound
         draft.myRound = myRound
         draft.token = null
-        draft.waitingRoom = false
         draft.roomId = myRound ? myRound.id : null
         // reset all these guys between rounds
       })
@@ -81,12 +79,11 @@ const useGameContext = () => {
     })
   }
 
-  function setRoom(room, waitingRoom, twilioReady) {
+  function setRoom(room, twilioReady) {
     console.log('room = ', room)
-    console.log('waitingRoom = ', waitingRoom)
+
     dispatch((draft) => {
       draft.room = room
-      draft.waitingRoom = waitingRoom
       draft.twilioReady = twilioReady
     })
   }
