@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGetRoomId } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
@@ -47,14 +47,19 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady, waitingRoom, roomId } = useGameContext()
+  const { currentRound, twilioReady, waitingRoom, roomId, room } = useGameContext()
   const { setToken } = useGetRoomId()
+  const mounted = useRef()
 
   useEffect(() => {
-    if (roomId) {
+    if (!mounted.current && roomId) {
+      mounted.current = roomId
+      setToken()
+    } else if (roomId !== mounted.current) {
+      mounted.current = roomId
       setToken()
     }
-  }, [roomId])
+  }, [roomId, room])
 
   const notReady = () => {
     // turn into components

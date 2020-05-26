@@ -4,14 +4,14 @@ import { getToken } from '../helpers'
 import { useGameContext } from '../context/useGameContext'
 
 const useSetToken = () => {
-  const { userId, roomId, setToken, token, room } = useGameContext()
+  const { userId, roomId, setToken, token } = useGameContext()
   const { setMyRoom } = useRoom()
 
   useEffect(() => {
-    if (token && roomId && !room) {
+    if (token) {
       setMyRoom()
     }
-  }, [token, roomId, room])
+  }, [token])
 
   const setMyToken = async () => {
     const res = await getToken(roomId, userId).then((response) => response.json())
