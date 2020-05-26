@@ -12,7 +12,7 @@ const remoteTrackPublished = (publication, participant) => {
     console.log('remoteTrackPublished subscribed -> track', track)
     const attachedTrack = track.attach()
     attachedTrack.muted = true
-    if (!track.dimensions.width || track.dimensions.width < 50) {
+    if (!track.isStarted) {
       const button = document.createElement('button')
       button.innerHTML = 'Having some trouble. Click to refresh'
       button.addEventListener('click', () => {
