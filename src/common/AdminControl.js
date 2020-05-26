@@ -58,11 +58,9 @@ const AdminControl = () => {
     <Card className={classes.onlineUsers}>
       <>
         <div className={classes.btn}>
-          {currentRound < 4 && (
-            <Button variant="outlined" onClick={createPairings}>
-              {currentRound === 0 ? 'Start Event' : 'Next Round'}
-            </Button>
-          )}
+          <Button variant="outlined" onClick={createPairings}>
+            {currentRound === 0 ? 'Start Event' : 'Next Round'}
+          </Button>
         </div>
 
         <div className={classes.btn}>
