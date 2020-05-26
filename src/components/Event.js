@@ -54,19 +54,22 @@ const Event = ({ match }) => {
       // either we're advancing or we just reset
 
       // if roundsData == null &&
-
-      if (!roundsData) {
-        return setGameData(freshRoundsData, userId, false)
+      console.log('roundsData ', roundsData)
+      console.log('freshRoundsData ', freshRoundsData)
+      if (!roundsData || !roundsData.rounds.length) {
+        return setGameData(freshRoundsData, userId)
       }
 
       const roundsDataLength = roundsData.rounds.length
       const freshRoundsDataLength = freshRoundsData.rounds.length
       const newRoundsData = freshRoundsDataLength > roundsDataLength
-      if (newRoundsData) {
-        return setGameData(freshRoundsData, userId, true)
+      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
+
+      if (newRoundsData || adminIsResettingGame) {
+        return setGameData(freshRoundsData, userId)
       }
     }
-  }, [freshRoundsData, subscriptionsLoading])
+  }, [freshRoundsData, subscriptionsLoading, hasSubscriptionData])
 
   if (subscriptionsLoading || appLoading || !eventIsSetInContext) {
     return <Loading />

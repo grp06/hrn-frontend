@@ -39,34 +39,35 @@ const useGameContext = () => {
     })
   }
 
-  function setGameData(roundsData, userId, shouldSetMyRound) {
-    let myRound
-    let currentRound
-    if (shouldSetMyRound) {
-      currentRound = roundsData.rounds[roundsData.rounds.length - 1].round_number
-
-      myRound = roundsData.rounds.find((round) => {
+  function setGameData(freshRoundsData, userId) {
+    console.log('freshRoundsData ', freshRoundsData)
+    // if you reset or you just press start for the first time
+    if (!freshRoundsData || !freshRoundsData.rounds.length) {
+      dispatch((draft) => {
+        draft.roomId = null
+        draft.room = null
+        draft.token = null
+        draft.twilioReady = false
+        draft.myRound = 0
+        draft.roundsData = freshRoundsData
+        draft.currentRound = freshRoundsData === null ? 1 : 0
+      })
+    } else {
+      const currentRound =
+        freshRoundsData.rounds[freshRoundsData.rounds.length - 1].round_number || 0
+      const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
-
         return me
       })
-    }
-
-    dispatch((draft) => {
-      if (myRound) {
-        draft.roundsData = roundsData
+      dispatch((draft) => {
+        draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
-      } else {
-      }
-      draft.myRound = myRound
-      // reset all these guys between rounds
-      draft.roomId = null
-      draft.room = null
-      draft.token = null
-      draft.twilioReady = false
-    })
+        draft.myRound = myRound
+        // reset all these guys between rounds
+      })
+    }
   }
 
   function setRoomId(roomId) {
