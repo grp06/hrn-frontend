@@ -47,8 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady, waitingRoom } = useGameContext()
-  useGetRoomId()
+  const { currentRound, twilioReady, waitingRoom, roomId } = useGameContext()
+  const { setToken } = useGetRoomId()
+
+  useEffect(() => {
+    if (roomId) {
+      setToken()
+    }
+  }, [roomId])
 
   const notReady = () => {
     // turn into components

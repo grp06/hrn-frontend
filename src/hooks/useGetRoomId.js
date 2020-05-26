@@ -6,11 +6,13 @@ const useGetRoomId = () => {
   const { roomId, room, token } = useGameContext()
   const { setMyToken } = useSetToken()
 
-  useEffect(() => {
+  const setToken = () => {
     if (roomId && !room && !token) {
       setMyToken()
     }
-  }, [roomId, room, token])
+  }
+
+  return { setToken }
 }
 
 export default useGetRoomId

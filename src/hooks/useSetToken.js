@@ -12,6 +12,7 @@ const useSetToken = () => {
       setMyRoom()
     }
   }, [token, roomId, room])
+
   const setMyToken = async () => {
     const res = await getToken(roomId, userId).then((response) => response.json())
     setToken(res.token)
