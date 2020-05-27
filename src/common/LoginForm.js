@@ -20,6 +20,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     maxWidth: 600,
     margin: '0 auto',
+    marginTop: 25,
+    padding: 25,
   },
   details: {
     display: 'flex',
@@ -44,7 +46,7 @@ const useStyles = makeStyles(() => ({
 
 const LoginForm = ({ history }) => {
   const classes = useStyles()
-  const { appLoading, userId, redirect, setRedirect } = useGameContext()
+  const { appLoading, userId, redirect, setRedirect, setUserId } = useGameContext()
 
   const [username, setUsername] = useState('')
 
@@ -85,8 +87,9 @@ const LoginForm = ({ history }) => {
                         name: username,
                       },
                     })
-                    localStorage.setItem('userId', userdata.data.insert_users.returning[0].id)
-                    history.push('/events')
+                    const uid = userdata.data.insert_users.returning[0].id
+                    localStorage.setItem('userId', uid)
+                    setUserId(uid)
                   } catch (error) {
                     console.log(error)
                   }

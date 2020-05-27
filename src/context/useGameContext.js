@@ -53,7 +53,7 @@ const useGameContext = () => {
         }
         return all
       }, 0)
-      debugger
+
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&
@@ -105,6 +105,12 @@ const useGameContext = () => {
     })
   }
 
+  function setUserId(userId) {
+    dispatch((draft) => {
+      draft.userId = userId
+    })
+  }
+
   function resetUserState() {
     dispatch((draft) => {
       draft.token = null
@@ -127,6 +133,7 @@ const useGameContext = () => {
     setTwilioReady,
     setRoom,
     resetUserState,
+    setUserId,
   }
 }
 

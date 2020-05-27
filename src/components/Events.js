@@ -28,7 +28,6 @@ const Events = () => {
     const { id } = eventsData.events[0]
     return <Redirect to={`/events/${id}`} push />
   }
-
   return (
     <div>
       {eventsData.events.map(({ description, event_name, id, host_id }) => {
