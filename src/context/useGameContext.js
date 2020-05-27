@@ -53,7 +53,7 @@ const useGameContext = () => {
         }
         return all
       }, 0)
-      debugger
+
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&

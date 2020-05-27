@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
@@ -10,6 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEvents } from '../gql/queries'
+import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -23,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const Events = () => {
   const classes = useStyles()
 
-  const { appLoading, userId } = useGameContext()
+  const { appLoading, userId, role } = useGameContext()
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
 
@@ -42,6 +43,7 @@ const Events = () => {
   return (
     <Container>
       <Grid container direction="column" alignItems="center">
+        {role === 'host' && <CreateEventButton />}
         <Grid item>
           <Typography variant="h4">Your Upcoming Events:</Typography>
         </Grid>
