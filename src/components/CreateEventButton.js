@@ -16,7 +16,7 @@ const CreateEventButton = () => {
   const classes = useStyles()
   return (
     <div className={classes.wrapper}>
-      <Link to="/events/new">
+      <Link to="/create-event">
         <Button size="small" color="primary" variant="outlined">
           Create Event
         </Button>

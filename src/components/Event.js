@@ -4,7 +4,7 @@ import { useSubscription, useQuery } from '@apollo/react-hooks'
 
 import { AdminControl, UserControl, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { listenToRounds, listenToRoundNumber } from '../gql/subscriptions'
+import { listenToRounds } from '../gql/subscriptions'
 import { getEvent } from '../gql/queries'
 
 const Event = ({ match }) => {
@@ -12,10 +12,8 @@ const Event = ({ match }) => {
   const {
     appLoading,
     setGameData,
-    eventId: eventIsSetInContext,
     currentRound,
     resetUserState,
-    setEventId,
     userId,
     roundsData,
   } = useGameContext()
@@ -44,12 +42,9 @@ const Event = ({ match }) => {
       return resetUserState()
     }
   }, [freshRoundsData, currentRound])
-  useEffect(() => {
-    if (!roundDataLoading && hasSubscriptionData) {
-      if (!eventIsSetInContext && eventId) {
-        setEventId(eventId)
-      }
 
+  useEffect(() => {
+    if (hasSubscriptionData) {
       if (!roundsData || !roundsData.rounds.length) {
         return setGameData(freshRoundsData, userId)
       }
@@ -63,9 +58,14 @@ const Event = ({ match }) => {
         return setGameData(freshRoundsData, userId)
       }
     }
-  }, [freshRoundsData, roundDataLoading, hasSubscriptionData])
+  }, [freshRoundsData, hasSubscriptionData])
 
-  if (roundDataLoading || appLoading || !eventIsSetInContext) {
+  if (roundDataError) {
+    console.log('roundDataError - ', roundDataError)
+    return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
+  }
+
+  if (hasSubscriptionData || appLoading) {
     return <Loading />
   }
 

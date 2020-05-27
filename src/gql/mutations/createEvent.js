@@ -15,7 +15,9 @@ const createEvent = gql`
         start_at: $start_at
       }
     ) {
-      affected_rows
+      returning {
+        id
+      }
     }
   }
 `

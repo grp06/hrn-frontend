@@ -44,8 +44,8 @@ const App = () => {
               <GameProvider>
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
+                <Route exact path="/create-event" component={EventForm} />
                 <Route exact path="/events/:id" component={Event} />
-                <Route exact path="/events/new" component={EventForm} />
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />
                 <Route exact path="/test" component={Test} />

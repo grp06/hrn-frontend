@@ -15,7 +15,6 @@ import spustaWeed from '../assets/spustaWeed.jpg'
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
     maxWidth: 500,
-    fontFamily: 'Muli',
   },
 }))
 
