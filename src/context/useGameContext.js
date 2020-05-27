@@ -53,15 +53,20 @@ const useGameContext = () => {
         draft.currentRound = freshRoundsData === null ? 1 : 0
       })
     } else {
-      const currentRound =
-        freshRoundsData.rounds[freshRoundsData.rounds.length - 1].round_number || 0
+      const currentRound = freshRoundsData.rounds.reduce((all, item) => {
+        if (item.round_number > all) {
+          return item.round_number
+        }
+        return all
+      }, 0)
+      debugger
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
-
+      console.log('currentRound = ', currentRound)
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
