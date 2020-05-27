@@ -44,7 +44,7 @@ const useStyles = makeStyles(() => ({
 
 const LoginForm = ({ history }) => {
   const classes = useStyles()
-  const { appLoading, userId, redirect, setRedirect } = useGameContext()
+  const { redirect, setRedirect } = useGameContext()
 
   const [username, setUsername] = useState('')
 
