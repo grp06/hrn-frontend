@@ -27,12 +27,6 @@ const useGameContext = () => {
     })
   }
 
-  function setLocalVideoTrack(localVideoTrack) {
-    dispatch((draft) => {
-      draft.localVideoTrack = localVideoTrack
-    })
-  }
-
   function setRoundsData(rounds) {
     dispatch((draft) => {
       draft.roundsData = rounds
@@ -115,7 +109,6 @@ const useGameContext = () => {
     dispatch((draft) => {
       draft.token = null
       draft.roomId = null
-      draft.localVideoTrack = null
       draft.room = null
       draft.twilioReady = false
     })
@@ -132,7 +125,6 @@ const useGameContext = () => {
     setGameData,
     setToken,
     setTwilioReady,
-    setLocalVideoTrack,
     setRoom,
     resetUserState,
   }
