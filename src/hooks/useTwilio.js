@@ -11,8 +11,9 @@ const useTwilio = () => {
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         console.log('publication = ', publication)
+        console.log('startTwilio -> publication.kind', publication.kind)
         const localDiv = document.getElementById('local-video')
-        if (localDiv && !localDiv.children.length) {
+        if (localDiv && !localDiv.children.length && publication.track.kind === 'video') {
           const attachedTrack = publication.track.attach()
           localDiv.appendChild(attachedTrack)
         }
