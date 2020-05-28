@@ -65,7 +65,7 @@ const Event = ({ match }) => {
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
-  if (hasSubscriptionData || appLoading) {
+  if (appLoading) {
     return <Loading />
   }
 
