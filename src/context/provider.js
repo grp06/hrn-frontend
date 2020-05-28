@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
 
-import { findMyUser, getEventsByUserId } from '../gql/queries'
+import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 
 const GameContext = React.createContext()
 
@@ -23,7 +23,7 @@ const defaultState = {
   userId: null,
   users: null,
   hasUpcomingEvent: false,
-  eventsData: null,
+  userEventsData: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -31,24 +31,38 @@ const GameProvider = ({ children, location }) => {
     variables: { id: state.userId },
     skip: !state.userId || !state.appLoading,
   })
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
+  const { data: userEventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
     {
       variables: {
         userId: state.userId,
       },
-      skip: !state.role,
+      skip: !state.role || state.role === 'host',
+    }
+  )
+
+  const { data: hostEventsData, loading: hostEventsLoading, error: hostEventsError } = useQuery(
+    getHostEvents,
+    {
+      variables: {
+        userId: state.userId,
+      },
+      skip: !state.role || state.role === 'user',
     }
   )
 
   useEffect(() => {
-    if (state.userId && eventsData) {
-      console.log('git it = ', eventsData)
+    if (state.role === 'user' && userEventsData) {
       dispatch((draft) => {
-        draft.eventsData = eventsData
+        draft.userEventsData = userEventsData
       })
     }
-  }, [state.userId, eventsData])
+    if (state.role === 'host' && hostEventsData) {
+      dispatch((draft) => {
+        draft.hostEventsData = hostEventsData
+      })
+    }
+  }, [hostEventsData, userEventsData, state.role])
 
   useEffect(() => {
     if (userData && userData.users.length) {

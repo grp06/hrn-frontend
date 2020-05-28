@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 const Events = () => {
   const classes = useStyles()
 
-  const { appLoading, userId, role, eventsData } = useGameContext()
+  const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
 
   if (appLoading) {
     return <Loading />
@@ -34,13 +34,29 @@ const Events = () => {
     return <Redirect to="/" push />
   }
 
-  if (!eventsData) {
+  if (!userEventsData && !hostEventsData) {
     return <div>no events data </div>
   }
-  // console.log('events = ', eventsData)
-  // const sortedEvents = eventsData.events.sort((a, b) => {
+  // console.log('events = ', userEventsData)
+  // const sortedEvents = userEventsData.events.sort((a, b) => {
   //   // write logic here to sort events by start time
   // })
+
+  // we could (and probably should) loop over hosts data and user's
+  // events data separately
+  const renderUserCards = () =>
+    role === 'user' &&
+    userEventsData.event_users.map((event) => {
+      return <EventCard key={event.id} event={event.event} />
+    })
+
+  const renderHostCards = () =>
+    role === 'host' &&
+    hostEventsData.events.map((event) => {
+      console.log('event = ', event)
+      return <EventCard key={event.id} event={event} />
+    })
+
   return (
     <Container>
       <Grid container direction="column" alignItems="center">
@@ -49,10 +65,8 @@ const Events = () => {
           <Typography variant="h4">Your Upcoming Events:</Typography>
         </Grid>
         <Grid item className={classes.eventsContainer}>
-          {eventsData.event_users.map((event) => {
-            console.log('event = ', event)
-            return <EventCard key={event.id} event={event.event} />
-          })}
+          {renderUserCards()}
+          {renderHostCards()}
         </Grid>
       </Grid>
     </Container>
