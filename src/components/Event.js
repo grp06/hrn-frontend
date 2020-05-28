@@ -7,6 +7,7 @@ import { EventForm, AdminControl, UserControl, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { listenToRounds } from '../gql/subscriptions'
 import { getEvent } from '../gql/queries'
+import { PreEvent } from '.'
 
 const Event = ({ match }) => {
   const { id: eventId } = match.params
@@ -18,7 +19,7 @@ const Event = ({ match }) => {
     userId,
     roundsData,
   } = useGameContext()
-
+  // decoding thing here
   const { data: eventData, loading: eventLoading, error: eventError } = useQuery(getEvent, {
     variables: {
       id: eventId,
@@ -77,7 +78,7 @@ const Event = ({ match }) => {
     if (diff >= 1800000) {
       console.log('show edit event form')
       // show editable event form
-      return <EventForm eventData={eventData} />
+      return <PreEvent eventData={eventData} />
     }
     if (diff < 1800000 && diff >= 0) {
       // display countdown and show online users

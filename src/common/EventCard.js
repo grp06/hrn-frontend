@@ -26,7 +26,9 @@ const EventCard = ({ event }) => {
   const history = useHistory()
 
   console.log('event =', event)
+  // ideally this happens in some /utils foler
   const format = 'dddd, MMMM Do @ h:mm a'
+  // const endocdedId = encode(id)
   return (
     <Card className={classes.cardContainer} onClick={() => history.push(`/events/${id}`)}>
       <CardActionArea>
