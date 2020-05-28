@@ -19,15 +19,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   myVideo: {
-    width: '300px',
+    width: '100px',
     position: 'absolute',
     top: '79px',
     right: '15px',
     zIndex: 99,
 
     '& video': {
-      borderRadius: 10,
-      width: '300px',
+      borderRadius: 4,
+      width: '100px',
     },
   },
   notReady: {
@@ -83,7 +83,7 @@ const UserControl = () => {
     if (!twilioReady) {
       return (
         <div className={classes.notReady}>
-          <h1>Connecting...</h1>
+          <h1>About to connect you to someone new</h1>
         </div>
       )
     }

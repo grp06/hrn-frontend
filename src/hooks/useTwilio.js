@@ -6,7 +6,7 @@ const useTwilio = () => {
   const { room, twilioReady, setTwilioReady, setRoom } = useGameContext()
 
   const startTwilio = () => {
-    if (room && !twilioReady) {
+    if (room && twilioReady) {
       console.log('starting twilio')
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
@@ -47,7 +47,6 @@ const useTwilio = () => {
           remoteVideo.innerHTML = ''
         }
       })
-      setTwilioReady(true)
     }
   }
 
