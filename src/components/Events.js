@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { getEvents } from '../gql/queries'
+import { getEventsByUserId } from '../gql/queries'
 import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -24,11 +24,9 @@ const useStyles = makeStyles((theme) => ({
 const Events = () => {
   const classes = useStyles()
 
-  const { appLoading, userId, role } = useGameContext()
+  const { appLoading, userId, role, eventsData } = useGameContext()
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
-
-  if (appLoading || eventsLoading) {
+  if (appLoading) {
     return <Loading />
   }
 
@@ -39,10 +37,10 @@ const Events = () => {
   if (!eventsData) {
     return <div>no events data </div>
   }
-
-  const sortedEvents = eventsData.events.sort((a, b) => {
-    // write logic here to sort events by start time
-  })
+  // console.log('events = ', eventsData)
+  // const sortedEvents = eventsData.events.sort((a, b) => {
+  //   // write logic here to sort events by start time
+  // })
   return (
     <Container>
       <Grid container direction="column" alignItems="center">
@@ -51,9 +49,10 @@ const Events = () => {
           <Typography variant="h4">Your Upcoming Events:</Typography>
         </Grid>
         <Grid item className={classes.eventsContainer}>
-          {eventsData.events.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
+          {eventsData.event_users.map((event) => {
+            console.log('event = ', event)
+            return <EventCard key={event.id} event={event.event} />
+          })}
         </Grid>
       </Grid>
     </Container>

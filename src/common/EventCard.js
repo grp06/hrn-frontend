@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EventCard = ({ event }) => {
   const { description, event_name, id, host_id, start_at } = event
+
   const classes = useStyles()
   const history = useHistory()
 

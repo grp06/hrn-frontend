@@ -4,7 +4,7 @@ import { useSubscription } from '@apollo/react-hooks'
 // import { withApollo } from 'react-apollo'
 
 import { useGameContext } from '../context/useGameContext'
-import { updateLastSeenMutation } from '../gql/mutations'
+import { updateLastSeen } from '../gql/mutations'
 import { displayOnlineUsers } from '../gql/subscriptions'
 
 const OnlineUsers = ({ client }) => {
@@ -16,7 +16,7 @@ const OnlineUsers = ({ client }) => {
   //   const interval = setInterval(() => {
   //     updateOnlineIndicator(() => {
   //       client.mutate({
-  //         mutation: updateLastSeenMutation,
+  //         mutation: updateLastSeen,
   //         variables: {
   //           now: new Date().toISOString(),
   //           id: userId,

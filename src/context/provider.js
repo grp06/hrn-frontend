@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
 
-import { findMyUser } from '../gql/queries'
+import { findMyUser, getEventsByUserId } from '../gql/queries'
 
 const GameContext = React.createContext()
 
@@ -22,6 +22,8 @@ const defaultState = {
   twilioReady: false,
   userId: null,
   users: null,
+  hasUpcomingEvent: false,
+  eventsData: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -29,6 +31,25 @@ const GameProvider = ({ children, location }) => {
     variables: { id: state.userId },
     skip: !state.userId || !state.appLoading,
   })
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
+    getEventsByUserId,
+    {
+      variables: {
+        userId: state.userId,
+      },
+      skip: !state.role,
+    }
+  )
+
+  useEffect(() => {
+    if (state.userId && eventsData) {
+      console.log('git it = ', eventsData)
+      dispatch((draft) => {
+        draft.eventsData = eventsData
+      })
+    }
+  }, [state.userId, eventsData])
+
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]

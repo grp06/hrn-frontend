@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { useSubscription, useQuery } from '@apollo/react-hooks'
 
-import { EventForm, AdminControl, UserControl, Loading } from '../common'
+import { AdminControl, UserControl, Loading } from '../common'
 
 import { useGameContext } from '../context/useGameContext'
 import { listenToRounds } from '../gql/subscriptions'
 import { getEvent } from '../gql/queries'
-import { PreEvent } from '.'
+import { PreEvent, EventSoon } from '.'
 
 const Event = ({ match }) => {
   const { id: eventId } = match.params
@@ -75,6 +75,7 @@ const Event = ({ match }) => {
     const startTime = new Date(eventData.events[0].start_at).getTime()
     const now = Date.now()
     const diff = startTime - now
+    console.log('diff = ', diff)
     if (diff >= 1800000) {
       console.log('show edit event form')
       // show editable event form
@@ -82,11 +83,10 @@ const Event = ({ match }) => {
     }
     if (diff < 1800000 && diff >= 0) {
       // display countdown and show online users
-      console.log('display countdown and online users')
-    } else {
-      console.log('start this event dawg!')
-      // event start time is passed, display "start" button
+      return <EventSoon />
     }
+    console.log('start this event dawg!')
+    // event start time is passed, display "start" button
   }
 
   return <>{hostId === userId && currentRound === 0 ? <AdminControl /> : <UserControl />}</>

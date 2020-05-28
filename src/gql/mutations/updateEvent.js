@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-const updateLastSeenMutation = gql`
+const updateLastSeen = gql`
   mutation updateEvent(
     $id: Int!
     $description: String
@@ -21,4 +21,4 @@ const updateLastSeenMutation = gql`
     }
   }
 `
-export default updateLastSeenMutation
+export default updateLastSeen
