@@ -4,9 +4,11 @@ const getEvents = gql`
   query getEvents {
     events {
       id
-      event_name
+      ended_at
       description
+      event_name
       host_id
+      start_at
     }
   }
 `

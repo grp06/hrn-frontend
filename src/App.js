@@ -5,8 +5,9 @@ import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
-import { LoginForm } from './common'
+import { LoginForm, EventForm } from './common'
 import { Test, Event, Events } from './components'
+
 import { GameProvider } from './context/provider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -43,6 +44,7 @@ const App = () => {
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
+                <Route exact path="/create-event" component={EventForm} />
                 <Route exact path="/events/:id" component={Event} />
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />

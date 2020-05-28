@@ -1,14 +1,30 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
+import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEvents } from '../gql/queries'
+import { CreateEventButton } from '.'
 
+const useStyles = makeStyles((theme) => ({
+  eventsContainer: {
+    marginTop: '2em',
+    marginBottom: '2em',
+  },
+  cardContainer: {
+    maxWidth: 500,
+  },
+}))
 const Events = () => {
-  const { appLoading, userId } = useGameContext()
+  const classes = useStyles()
+
+  const { appLoading, userId, role } = useGameContext()
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
 
@@ -24,16 +40,23 @@ const Events = () => {
     return <div>no events data </div>
   }
 
-  if (eventsData.events.length) {
-    const { id } = eventsData.events[0]
-    return <Redirect to={`/events/${id}`} push />
-  }
+  const sortedEvents = eventsData.events.sort((a, b) => {
+    // write logic here to sort events by start time
+  })
   return (
-    <div>
-      {eventsData.events.map(({ description, event_name, id, host_id }) => {
-        return <EventCard key={id} name={event_name} desc={description} id={id} hostId={host_id} />
-      })}
-    </div>
+    <Container>
+      <Grid container direction="column" alignItems="center">
+        {role === 'host' && <CreateEventButton />}
+        <Grid item>
+          <Typography variant="h4">Your Upcoming Events:</Typography>
+        </Grid>
+        <Grid item className={classes.eventsContainer}>
+          {eventsData.events.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+        </Grid>
+      </Grid>
+    </Container>
   )
 }
 
