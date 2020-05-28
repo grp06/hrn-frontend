@@ -13,14 +13,12 @@ const useRoom = () => {
     }
   }, [room])
   const setMyRoom = async () => {
-    const localTracks = await createLocalTracks({ video: true, audio: false })
-    console.log('localVideoTrack = ', localTracks)
-    console.log('connect')
+    const localTracks = await createLocalTracks({ video: true, audio: true })
+
     const myRoom = await connect(token, {
       name: roomId,
       tracks: localTracks,
     })
-    console.log('set room, twilioReady true')
     setRoom(myRoom, true)
   }
   return { setMyRoom }
