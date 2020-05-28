@@ -1,41 +1,98 @@
 import React, { useState } from 'react'
-import { useSubscription, useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+import { makeStyles } from '@material-ui/styles'
+import Card from '@material-ui/core/Card'
 import { EventForm } from '../common'
-import { getEventParticipants } from '../gql/queries'
+import { getEventUsers } from '../gql/queries'
+import { insertEventUser, deleteEventUser } from '../gql/mutations'
+import { useGameContext } from '../context/useGameContext'
 
-const PreEvent = ({ eventData, match }) => {
+const useStyles = makeStyles((theme) => ({
+  cardContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: 600,
+    margin: '0 auto',
+  },
+  margin: {
+    margin: '25px 0',
+  },
+}))
+
+const PreEvent = ({ eventData }) => {
+  const classes = useStyles()
+
   const { description, event_name, start_at } = eventData.events[0]
+  const { userId, role } = useGameContext()
 
-  console.log('PreEvent -> eventData.events[0].id', eventData.events[0].id)
   const [showEventForm, setShowEventForm] = useState()
-  const { data, loading, error } = useQuery(getEventParticipants, {
+  const { data, loading, error, refetch } = useQuery(getEventUsers, {
     variables: {
       eventId: eventData.events[0].id,
     },
   })
-  if (loading) {
-    return <div>loading stuff</div>
-  }
 
+  const [insertEventUserMutation] = useMutation(insertEventUser, {
+    variables: {
+      eventId: eventData.events[0].id,
+      userId,
+    },
+    skip: role === 'host',
+  })
+  const [deleteEventUserMutation] = useMutation(deleteEventUser, {
+    variables: {
+      eventId: eventData.events[0].id,
+      userId,
+    },
+    skip: role === 'host',
+  })
+
+  if (loading) {
+    return <div className={classes.margin}>loading stuff</div>
+  }
+  console.log('data = ', data)
+  const attendees = data.event_users
+  const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
   return (
-    <div>
-      <div>{description}</div>
-      <div>{event_name}</div>
-      <div>{start_at}</div>
+    <div className={classes.cardContainer}>
+      <div className={classes.margin}>
+        description:
+        {description}
+      </div>
+      <div className={classes.margin}>
+        event name:
+        {event_name}
+      </div>
+      <div className={classes.margin}>
+        starts at:
+        {start_at}
+      </div>
+
       <button type="button" onClick={() => setShowEventForm(!showEventForm)}>
         {showEventForm ? 'close edit event' : 'edit event'}
       </button>
-      {data.event_users.length > 0 && (
-        <div>
-          <b>list of event users</b>
-        </div>
-      )}
+      {data.event_users.length > 0 ? <b>list of event users</b> : <b>No attendees yet</b>}
       {data.event_users.map((user) => {
-        console.log('user ', user)
-        return <div>{user.user.name}</div>
+        return <div className={classes.margin}>{user.user.name}</div>
       })}
       <div style={{ display: showEventForm ? 'block' : 'none' }}>
         <EventForm eventData={eventData} />
+      </div>
+      <div>
+        <button
+          type="button"
+          onClick={async () => {
+            if (alreadyAttending) {
+              await deleteEventUserMutation()
+              refetch()
+            } else {
+              await insertEventUserMutation()
+              refetch()
+            }
+          }}
+        >
+          {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
+        </button>
       </div>
     </div>
   )

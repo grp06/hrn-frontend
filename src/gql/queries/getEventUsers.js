@@ -1,8 +1,9 @@
 import gql from 'graphql-tag'
 
-const getEventParticipants = gql`
-  query getEventParticipants($eventId: Int!) {
+const getEventUsers = gql`
+  query getEventUsers($eventId: Int!) {
     event_users(where: { event_id: { _eq: $eventId } }) {
+      event_id
       user {
         id
         last_seen
@@ -13,4 +14,4 @@ const getEventParticipants = gql`
   }
 `
 
-export default getEventParticipants
+export default getEventUsers
