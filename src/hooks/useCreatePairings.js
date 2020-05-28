@@ -68,14 +68,14 @@ export default function useCreatePairings() {
         return all
       }, [])
 
-      const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
+      // const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
       // if (userIdsWithoutAdmin % 2 !== 0) {
       //   console.log('uneven array')
       //   userIdsWithoutAdmin.push('999999')
       // }
-      const roundsMap = createRoundsMap(roundsData, userIdsWithoutAdmin)
+      const roundsMap = createRoundsMap(roundsData, userIds)
       // subtracting 1 because admin wont be assigned
-      const { pairingsArray, userIdsMap } = jorgeAlgo(userIdsWithoutAdmin, roundsMap)
+      const { pairingsArray, userIdsMap } = jorgeAlgo(userIds, roundsMap)
 
       // const pairingsArray = roundRobin(findUsersData.users.length - 1, userIdsWithoutAdmin)
       pairingsArray.forEach((pairing) => {

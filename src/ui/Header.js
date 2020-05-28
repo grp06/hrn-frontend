@@ -10,10 +10,17 @@ import {
   List,
   ListItem,
   ListItemText,
+  Grid,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
+import { useGameContext } from '../context/useGameContext'
+import endpointUrl from '../utils/endpointUrl'
+
+import { deleteRounds, setRoundToZero } from '../gql/mutations'
+import { useCreatePairings, useModalButton } from '../hooks'
 
 import logo from '../assets/logoWhite.svg'
 
@@ -50,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logoContainer: {
+    marginLeft: '10px',
     padding: 0,
     '&:hover': {
       backgroundColor: 'transparent',
@@ -61,11 +69,10 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     ...theme.typography.tab,
     minWidth: 10,
-    marginLeft: '25px',
   },
   button: {
     ...theme.typography.headerButton,
-    borderRadius: '50px',
+    borderRadius: '30px',
     marginLeft: '50px',
     marginRight: '25px',
     height: '45px',
@@ -90,15 +97,39 @@ const useStyles = makeStyles((theme) => ({
   drawerItemSelected: {
     opacity: 1,
   },
+  adminPanelContainer: {
+    width: '40%',
+    marginLeft: 'auto',
+  },
+  buttonSmall: {
+    fontSize: '0.8rem',
+    fontFamily: 'Muli',
+  },
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-
+  const { role, currentRound, users, eventId } = useGameContext()
+  const { createPairings } = useCreatePairings()
+  const [deleteRoundsMutation] = useMutation(deleteRounds)
+  const [setRoundToZeroMutation] = useMutation(setRoundToZero, {
+    variables: {
+      id: eventId,
+    },
+  })
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // eslint-disable-next-line no-shadow
+  const resetRoundsModal = useModalButton({
+    buttonText: 'Reset Game',
+    modalBodyText: 'This will close the game for all users.',
+    onAcceptFunction: async () => {
+      await deleteRoundsMutation()
+      await setRoundToZeroMutation()
+      await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
+    },
+  })
 
   const routes = [
     { name: 'Home', link: '/', activeIndex: 0 },
@@ -170,6 +201,53 @@ const Header = ({ activeTab, setActiveTab }) => {
     </>
   )
 
+  const adminNavPanel = () => {
+    console.log('admin Nav Panel rendering')
+    return (
+      <Grid
+        container
+        direction="row"
+        justify="space-around"
+        alignItems="center"
+        className={classes.adminPanelContainer}
+      >
+        <Grid item className={classes.tab}>
+          <p>Participants Online: {users.length}</p>
+        </Grid>
+        <Grid item className={classes.tab}>
+          <p>Curent Round: {currentRound}</p>
+        </Grid>
+        <Grid item>
+          <Button
+            className={classes.buttonSmall}
+            disableRipple
+            variant="contained"
+            color="secondary"
+            onClick={createPairings}
+          >
+            Next Round
+          </Button>
+        </Grid>
+        <Grid item>
+          {resetRoundsModal}
+          {/* <Button
+            className={classes.buttonSmall}
+            disableRipple
+            variant="outlined"
+            color="secondary"
+            onClick={async () => {
+              await deleteRoundsMutation()
+              await setRoundToZeroMutation()
+              await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
+            }}
+          >
+            Reset Event
+          </Button> */}
+        </Grid>
+      </Grid>
+    )
+  }
+
   return (
     <>
       <ElevationScroll>
@@ -184,7 +262,8 @@ const Header = ({ activeTab, setActiveTab }) => {
             >
               <img alt="company-logo" className={classes.logo} src={logo} />
             </Button>
-            {/* matches ? drawer : tabs */}
+            {role === 'host' && users && users.length && currentRound !== 0 && adminNavPanel()}
+            {/* {matches ? drawer : tabs} */}
           </Toolbar>
         </AppBar>
       </ElevationScroll>

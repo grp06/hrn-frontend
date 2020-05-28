@@ -5,12 +5,14 @@ const orchid = '#df97d1'
 const ghostWhite = '#f4f6fa'
 const sunray = '#edb868'
 const independence = '#3a405a'
+const mediumGreen = '#4eab6d'
 
 const theme = createMuiTheme({
   palette: {
     common: {
       rebeccaPurple,
       orchid,
+      mediumGreen,
     },
     primary: {
       main: rebeccaPurple,
@@ -18,20 +20,32 @@ const theme = createMuiTheme({
     secondary: {
       main: orchid,
     },
+    green: {
+      main: mediumGreen,
+    },
   },
   typography: {
     tab: {
       fontFamily: 'Muli',
       textTransform: 'none',
       fontWeight: '700',
-      fontSize: '1rem',
+      fontSize: '0.8rem',
       color: ghostWhite,
     },
     headerButton: {
       fontFamily: 'Muli',
-      fontSize: '1rem',
+      fontSize: '0.8rem',
       textTransform: 'none',
       color: ghostWhite,
+    },
+    h2: {
+      fontFamily: 'Muli',
+      fontSize: '1.5rem',
+      fontWeight: '700',
+    },
+    body: {
+      fontFamily: 'Muli',
+      fontSize: '1rem',
     },
   },
   overrides: {

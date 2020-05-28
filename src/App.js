@@ -38,9 +38,9 @@ const App = () => {
       <StylesProvider injectFirst>
         <ApolloProvider client={client}>
           <Router>
-            <Header activeTab={activeTab} setActiveTab={setActiveTab} />
             <Switch>
               <GameProvider>
+                <Header activeTab={activeTab} setActiveTab={setActiveTab} />
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
                 <Route exact path="/events/:id" component={Event} />

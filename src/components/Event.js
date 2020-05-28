@@ -69,7 +69,7 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
-  return <>{hostId === userId ? <AdminControl /> : <UserControl />}</>
+  return <>{hostId === userId && currentRound === 0 ? <AdminControl /> : <UserControl />}</>
 }
 
 export default Event
