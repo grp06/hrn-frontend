@@ -1,18 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import DateFnsUtils from '@date-io/date-fns'
 import { TextField, Button, Grid, Typography } from '@material-ui/core'
-import {
-  MuiPickersUtilsProvider,
-  DateTimePicker,
-  KeyboardDateTimePicker,
-} from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
-import { Redirect, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 
-import { createEvent } from '../gql/mutations'
+import { createEvent, updateEvent } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -33,16 +29,23 @@ const useStyles = makeStyles((theme) => ({
   dateTime: {
     width: '100%',
   },
+  eventUpdated: {
+    width: '100%',
+    margin: '0 auto',
+    fontSize: 18,
+    textAlign: 'center',
+    color: 'green',
+  },
 }))
 
-const EventForm = () => {
+const EventForm = ({ eventData }) => {
   const classes = useStyles()
   const { userId } = useGameContext()
   const history = useHistory()
-
   const [title, setTitle] = useState('My event title')
   const [description, setDescription] = useState('My description')
-  const [selectedDate, handleDateChange] = useState(new Date().toISOString())
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
+  const [eventUpdated, setEventUpdated] = useState(null)
   const [createEventMutation] = useMutation(createEvent, {
     variables: {
       description,
@@ -52,12 +55,37 @@ const EventForm = () => {
     },
   })
 
+  const [updateEventMutation] = useMutation(updateEvent, {
+    variables: {
+      description,
+      event_name: title,
+      start_at: selectedDate,
+      id: eventData ? eventData.events[0].id : '',
+    },
+  })
+
+  useEffect(() => {
+    if (eventData) {
+      const { description: eventDescription, event_name, start_at } = eventData.events[0]
+      setDescription(eventDescription)
+      setTitle(event_name)
+      setSelectedDate(start_at)
+    }
+  }, [eventData])
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const res = await createEventMutation()
-    console.log('res = ', res)
-    const { id } = res.data.insert_events.returning[0]
-    history.push(`/events/${id}`)
+    if (eventData) {
+      await updateEventMutation()
+      setEventUpdated(true)
+      setTimeout(() => {
+        setEventUpdated(false)
+      }, 5000)
+    } else {
+      const res = await createEventMutation()
+      const { id } = res.data.insert_events.returning[0]
+      history.push(`/events/${id}`)
+    }
   }
 
   const getRowNumber = () => {
@@ -73,7 +101,8 @@ const EventForm = () => {
           <Grid item container direction="column" alignItems="center">
             <Grid item>
               <Typography variant="h4" style={{ lineHeight: 1 }}>
-                Create Your Event
+                {eventData ? 'Edit ' : 'Create '}
+                Your Event
               </Typography>
             </Grid>
           </Grid>
@@ -107,7 +136,7 @@ const EventForm = () => {
                 variant="inline"
                 label="Date and time"
                 value={selectedDate}
-                onChange={handleDateChange}
+                onChange={setSelectedDate}
                 minutesStep={15}
                 className={classes.dateTime}
               />
@@ -115,10 +144,11 @@ const EventForm = () => {
           </Grid>
           <Grid item>
             <Button primary="true" type="submit" variant="outlined">
-              Submit
+              {eventData ? 'Update Event' : 'Create Event'}
             </Button>
           </Grid>
         </form>
+        {eventUpdated && <div className={classes.eventUpdated}>Event updated</div>}
       </Grid>
     </MuiPickersUtilsProvider>
   )

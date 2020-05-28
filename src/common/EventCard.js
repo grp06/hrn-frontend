@@ -1,16 +1,17 @@
 import React from 'react'
 
-import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardActionArea from '@material-ui/core/CardActionArea'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory, Link } from 'react-router-dom'
-
+import { useHistory } from 'react-router-dom'
+import moment from 'moment-timezone'
+import jstz from 'jstz'
 import spustaWeed from '../assets/spustaWeed.jpg'
+
+const timezone = jstz.determine()
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -20,11 +21,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EventCard = ({ event }) => {
-  const { description, event_name, id, host_id } = event
+  const { description, event_name, id, host_id, start_at } = event
   const classes = useStyles()
   const history = useHistory()
 
   console.log('event =', event)
+  const format = 'dddd, MMMM Do @ h:mm a'
   return (
     <Card className={classes.cardContainer} onClick={() => history.push(`/events/${id}`)}>
       <CardActionArea>
@@ -39,7 +41,9 @@ const EventCard = ({ event }) => {
           <Typography gutterBottom variant="h5" component="h2">
             {event_name}
           </Typography>
-          <Typography variant="body1">April 20, 4:20 PM</Typography>
+          <Typography variant="body1">
+            {moment(start_at).tz(timezone.name()).format(format)}
+          </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
             {description}
           </Typography>

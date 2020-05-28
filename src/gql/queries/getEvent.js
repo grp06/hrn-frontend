@@ -5,6 +5,10 @@ const getEvent = gql`
     events(where: { id: { _eq: $id } }) {
       id
       host_id
+      start_at
+      description
+      ended_at
+      event_name
     }
   }
 `

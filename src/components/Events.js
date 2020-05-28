@@ -40,6 +40,9 @@ const Events = () => {
     return <div>no events data </div>
   }
 
+  const sortedEvents = eventsData.events.sort((a, b) => {
+    // write logic here to sort events by start time
+  })
   return (
     <Container>
       <Grid container direction="column" alignItems="center">
