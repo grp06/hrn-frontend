@@ -12,7 +12,8 @@ const theme = createMuiTheme({
     common: {
       rebeccaPurple,
       orchid,
-      mediumGreen,
+      ghostWhite,
+      independence,
     },
     primary: {
       main: rebeccaPurple,
@@ -38,10 +39,20 @@ const theme = createMuiTheme({
       textTransform: 'none',
       color: ghostWhite,
     },
+    h1: {
+      fontFamily: 'Muli',
+      fontSize: '2.3rem',
+      fontWeight: '700',
+      color: ghostWhite,
+    },
     h2: {
       fontFamily: 'Muli',
       fontSize: '1.5rem',
       fontWeight: '700',
+    },
+    subtitle1: {
+      fontFamily: 'Muli',
+      color: ghostWhite,
     },
     body: {
       fontFamily: 'Muli',
@@ -63,6 +74,12 @@ const theme = createMuiTheme({
         '&:hover:not(disabled):not($focused):not($error):before': {
           borderBottom: `2px solid ${rebeccaPurple}`,
         },
+      },
+    },
+    MuiButton: {
+      containedSizeLarge: {
+        padding: '20px 20px',
+        fontSize: '1.2rem',
       },
     },
   },

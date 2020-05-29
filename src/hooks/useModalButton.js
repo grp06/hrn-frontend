@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
 
 function rand() {
   return Math.round(Math.random() * 20) - 10
@@ -53,8 +52,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const useModalButton = ({ buttonText, modalBodyText, onAcceptFunction }) => {
+const useModalButton = ({ button, modalBody, onAcceptFunction }) => {
   const classes = useStyles()
+  const { buttonText, buttonVariant, buttonColor, buttonSize } = button
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle)
   const [open, setOpen] = useState(false)
@@ -70,29 +70,33 @@ const useModalButton = ({ buttonText, modalBodyText, onAcceptFunction }) => {
   const body = (
     <div style={modalStyle} className={classes.paper}>
       <div className={classes.modalContentContainer}>
-        <h2 className={classes.modalTitle}>Are You Sure?</h2>
-        <p className={classes.modalDescription}>{modalBodyText}</p>
-        <div className={classes.buttonContainer}>
-          <Button variant="contained" color="primary" onClick={onAcceptFunction}>
-            Yes, I'm Sure
-          </Button>
-          <Button variant="outlined" color="default" onClick={handleClose}>
-            Woops, No Way!
-          </Button>
-        </div>
-
-        <useModalButton />
+        {modalBody}
+        {onAcceptFunction && (
+          <>
+            <Button variant="contained" color="primary" onClick={onAcceptFunction}>
+              Yes, I'm Sure
+            </Button>
+            <Button variant="outlined" color="default" onClick={handleClose}>
+              Woops, No Way!
+            </Button>
+          </>
+        )}
       </div>
+
+      <useModalFab />
     </div>
   )
 
   return (
     <div>
+      {/* <Fab color="secondary" aria-label="edit" onClick={handleOpen}>
+        <EditIcon />
+      </Fab> */}
       <Button
-        className={classes.buttonSmall}
         disableRipple
-        variant="outlined"
-        color="secondary"
+        size={buttonSize || 'small'}
+        variant={buttonVariant || 'contained'}
+        color={buttonColor || 'primary'}
         onClick={handleOpen}
       >
         {buttonText}

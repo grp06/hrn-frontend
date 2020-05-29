@@ -1,90 +1,124 @@
 import React, { useEffect, useContext, useState } from 'react'
 
+import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemAvatar from '@material-ui/core/ListItemAvatar'
+import ListItemText from '@material-ui/core/ListItemText'
+import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/styles'
-import { useMutation } from 'react-apollo'
-import endpointUrl from '../utils/endpointUrl'
-
-import { OnlineUsers } from '../components'
+import { useQuery, useMutation } from 'react-apollo'
+import { getEventUsers } from '../gql/queries'
 import { useGameContext } from '../context/useGameContext'
-import { deleteRounds, setRoundToZero } from '../gql/mutations'
-
-import { useCreatePairings } from '../hooks'
+import { useCreatePairings, useModalFab } from '../hooks'
+import moment from 'moment-timezone'
+import { EventForm, FloatCardWide, Loading } from './'
 
 const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    display: 'flex',
-    maxWidth: 600,
-    margin: '0 auto',
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '1em',
-  },
-  content: {
-    flex: '1 0 auto',
-  },
-  cover: {
-    width: 200,
-  },
-  input: {
-    marginBottom: '1em',
-    marginTop: '1em',
-  },
-  onlineUsers: {
+  topDashboard: {
     width: '100%',
-    height: '100vh',
+    paddingTop: '40px',
+    paddingBottom: '40px',
+    borderStyle: 'none none solid',
+    borderWidth: '1px',
+    borderColor: theme.palette.common.independence,
+    borderRadius: '4px 4px 0px 0px',
+    backgroundColor: theme.palette.common.ghostWhite,
   },
-  btn: {
-    margin: '15px',
+  categoryHeader: {
+    ...theme.typography.h2,
+    color: theme.palette.common.independence,
+  },
+  displayNumber: {
+    fontFamily: 'Muli',
+    color: theme.palette.common.orchid,
+    fontSize: '4.5rem',
   },
 }))
 
-const AdminControl = () => {
+const AdminControl = ({ eventData, within30minutes }) => {
   const classes = useStyles()
   const { currentRound, eventId } = useGameContext()
+  const [showEventForm, setShowEventForm] = useState()
   const { createPairings } = useCreatePairings()
-  const [deleteRoundsMutation] = useMutation(deleteRounds)
-  const [setRoundToZeroMutation] = useMutation(setRoundToZero, {
+  const { data, loading, error, refetch } = useQuery(getEventUsers, {
     variables: {
-      id: eventId,
+      eventId: eventData.events[0].id,
     },
   })
 
+  const editFormModal = useModalFab({
+    modalBody: <EventForm eventData={eventData} />,
+    button: {
+      buttonSize: 'large',
+      buttonText: '✏️ Edit Event',
+    },
+  })
+
+  const button = within30minutes ? (
+    <>
+      <Button size="large" variant="contained" color="primary" onClick={createPairings}>
+        Start Event 🥳
+      </Button>
+    </>
+  ) : (
+    editFormModal
+  )
+
+  if (loading) {
+    return <Loading />
+  }
+
+  const attendees = data.event_users
+  console.log(attendees)
+
+  const attendeesList = () => {
+    return (
+      <List dense>
+        {attendees.map(({ user }) => {
+          const formattedDate = user.last_seen.slice(0, 10)
+          const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
+          return (
+            <ListItem key={user.id}>
+              <ListItemAvatar>
+                <Avatar>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={user.name} secondary={`Last seen: ${lastSeen}`} />
+            </ListItem>
+          )
+        })}
+      </List>
+    )
+  }
+
   return (
-    <Card className={classes.onlineUsers}>
-      <>
-        <div className={classes.btn}>
-          <Button variant="outlined" onClick={createPairings}>
-            {currentRound === 0 ? 'Start Event' : 'Next Round'}
-          </Button>
-        </div>
-
-        <div className={classes.btn}>
-          <Button
-            variant="outlined"
-            onClick={async () => {
-              await deleteRoundsMutation()
-              await setRoundToZeroMutation()
-              await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
-            }}
-          >
-            Reset rounds/game
-          </Button>
-        </div>
-
-        <div>
-          R0und:
-          {currentRound}
-        </div>
-
-        <Typography>Online Users</Typography>
-        <OnlineUsers />
-      </>
-    </Card>
+    <FloatCardWide>
+      <Grid
+        item
+        container
+        justify="space-around"
+        alignItems="center"
+        // wrap="nowrap"
+        className={classes.topDashboard}
+      >
+        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
+          <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
+          <Typography className={classes.displayNumber}>{attendees.length}</Typography>
+        </Grid>
+        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
+          {button}
+        </Grid>
+      </Grid>
+      {attendeesList()}
+      <div style={{ display: showEventForm ? 'block' : 'none' }}>
+        <EventForm eventData={eventData} />
+      </div>
+    </FloatCardWide>
   )
 }
 

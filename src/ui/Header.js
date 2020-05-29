@@ -122,8 +122,12 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   // eslint-disable-next-line no-shadow
   const resetRoundsModal = useModalButton({
-    buttonText: 'Reset Game',
-    modalBodyText: 'This will close the game for all users.',
+    button: {
+      buttonText: 'Reset Games',
+      buttonVariant: 'outlined',
+      buttonColor: 'secondary',
+    },
+    modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await setRoundToZeroMutation()
