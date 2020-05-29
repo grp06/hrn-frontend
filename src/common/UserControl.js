@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady, waitingRoom, roomId, room } = useGameContext()
+  const { currentRound, twilioReady, roomId, room, eventData } = useGameContext()
   const { setToken } = useGetRoomId()
   const mounted = useRef()
 
@@ -64,14 +64,6 @@ const UserControl = () => {
   }, [roomId, room])
 
   const notReady = () => {
-    // if (waitingRoom) {
-    //   return (
-    //     <div className={classes.notReady}>
-    //       <h1>waiting room</h1>
-    //     </div>
-    //   )
-    // }
-
     if (currentRound === 0) {
       return (
         <div className={classes.notReady}>

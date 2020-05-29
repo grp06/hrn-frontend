@@ -53,7 +53,6 @@ const Events = () => {
   const renderHostCards = () =>
     role === 'host' &&
     hostEventsData.events.map((event) => {
-      console.log('event = ', event)
       return <EventCard key={event.id} event={event} />
     })
 

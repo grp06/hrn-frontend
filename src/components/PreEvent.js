@@ -50,7 +50,6 @@ const PreEvent = ({ eventData }) => {
   if (loading) {
     return <div className={classes.margin}>loading stuff</div>
   }
-  console.log('data = ', data)
   const attendees = data.event_users
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
   return (

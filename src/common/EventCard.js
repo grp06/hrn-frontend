@@ -26,7 +26,6 @@ const EventCard = ({ event }) => {
   const classes = useStyles()
   const history = useHistory()
 
-  console.log('event =', event)
   // ideally this happens in some /utils foler
   const format = 'dddd, MMMM Do @ h:mm a'
   // const endocdedId = encode(id)

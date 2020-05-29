@@ -63,30 +63,28 @@ const Event = ({ match }) => {
   }, [freshRoundsData, hasSubscriptionData])
 
   if (roundDataError) {
-    console.log('roundDataError - ', roundDataError)
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
-  if (appLoading) {
+  if (appLoading || roundDataLoading || eventLoading) {
     return <Loading />
   }
+  debugger
   // probably need to move this into useEffect
   if (eventData) {
     const startTime = new Date(eventData.events[0].start_at).getTime()
     const now = Date.now()
     const diff = startTime - now
-    console.log('diff = ', diff)
     if (diff >= 1800000) {
       console.log('show edit event form')
       // show editable event form
       return <PreEvent eventData={eventData} />
     }
-    if (diff < 1800000 && diff >= 0) {
+    if (diff < 1800000) {
+      console.log('render event soon')
       // display countdown and show online users
-      return <EventSoon />
+      return <EventSoon eventData={eventData} />
     }
-    console.log('start this event dawg!')
-    // event start time is passed, display "start" button
   }
 
   return <>{hostId === userId && currentRound === 0 ? <AdminControl /> : <UserControl />}</>

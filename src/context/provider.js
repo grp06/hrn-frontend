@@ -24,6 +24,7 @@ const defaultState = {
   users: null,
   hasUpcomingEvent: false,
   userEventsData: null,
+  hostEventsData: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -53,8 +54,17 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (state.role === 'user' && userEventsData) {
+      const startingSoon = userEventsData.event_users.find((event) => {
+        const { start_at } = event.event
+        const startTime = new Date(start_at).getTime()
+        const now = Date.now()
+        const diff = startTime - now
+        // event is upcoming or in progress
+        return diff < 1800000
+      })
       dispatch((draft) => {
         draft.userEventsData = userEventsData
+        draft.startingSoon = startingSoon
       })
     }
     if (state.role === 'host' && hostEventsData) {
