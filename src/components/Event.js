@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { useSubscription, useQuery } from '@apollo/react-hooks'
 
-import { EventForm, AdminControl, UserControl, Loading } from '../common'
 import { makeStyles } from '@material-ui/styles'
 import { Typography, Grid } from '@material-ui/core'
+import ScheduleIcon from '@material-ui/icons/Schedule'
+import { EventForm, AdminControl, UserControl, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { listenToRounds } from '../gql/subscriptions'
 import { getEvent } from '../gql/queries'
@@ -13,7 +14,6 @@ import bannerBackground3 from '../assets/purpleNetwork.jpg'
 import bannerBackground4 from '../assets/purpleCubes.jpg'
 import bannerBackground5 from '../assets/purpleOil.jpg'
 import formatDate from '../utils/formatDate'
-import ScheduleIcon from '@material-ui/icons/Schedule'
 import { PreEvent } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '45vh',
     paddingBottom: '80px',
-    backgroundImage: 'url(' + bannerBackground + ')',
+    backgroundImage: `url(${bannerBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     zIndex: '-2',
@@ -108,9 +108,25 @@ const Event = ({ match }) => {
     console.log('event is.. ', event)
     const startTime = new Date(event.start_at).getTime()
     const eventTime = formatDate(startTime)
-    console.log('start time', startTime)
     const now = Date.now()
-    const within30minutes = startTime - now <= 1800000
+    const diff = startTime - now
+    const timeState = () => {
+      let val
+      console.log('diff = ', diff)
+      switch (diff) {
+        case diff > 1800000:
+          val = 'future'
+          break
+        case diff < 0:
+          val = 'go time'
+          break
+        default:
+          val = 'within 30 mins'
+      }
+      console.log('val = ', val)
+      return val
+    }
+
     return (
       <>
         <Grid container direction="column" justify="flex-end" className={classes.eventBanner}>
@@ -125,9 +141,9 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
         {hostId === userId && currentRound === 0 ? (
-          <AdminControl within30minutes={within30minutes} eventData={eventData} />
+          <AdminControl timeState={timeState()} eventData={eventData} />
         ) : (
-          <UserControl within30minutes={within30minutes} />
+          <UserControl timeState={timeState()} />
         )}
       </>
     )

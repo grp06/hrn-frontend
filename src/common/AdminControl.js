@@ -10,12 +10,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/styles'
-import { useQuery, useMutation } from 'react-apollo'
+import { useQuery } from 'react-apollo'
+import moment from 'moment-timezone'
 import { getEventUsers } from '../gql/queries'
 import { useGameContext } from '../context/useGameContext'
 import { useCreatePairings, useModalFab } from '../hooks'
-import moment from 'moment-timezone'
-import { EventForm, FloatCardWide, Loading } from './'
+import { EventForm, FloatCardWide, Loading } from '.'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -37,9 +37,13 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.orchid,
     fontSize: '4.5rem',
   },
+  partyEmoji: {
+    marginLeft: 10,
+  },
 }))
 
-const AdminControl = ({ eventData, within30minutes }) => {
+const AdminControl = ({ eventData, timeState }) => {
+  console.log('AdminControl -> timeState', timeState)
   const classes = useStyles()
   const { currentRound, eventId } = useGameContext()
   const [showEventForm, setShowEventForm] = useState()
@@ -58,22 +62,34 @@ const AdminControl = ({ eventData, within30minutes }) => {
     },
   })
 
-  const button = within30minutes ? (
-    <>
-      <Button size="large" variant="contained" color="primary" onClick={createPairings}>
-        Start Event 🥳
-      </Button>
-    </>
-  ) : (
-    editFormModal
-  )
+  const renderButton = () => {
+    let element
+    switch (timeState) {
+      case 'future':
+        element = editFormModal
+        break
+      case 'go time':
+        element = (
+          <Button size="large" variant="contained" color="primary" onClick={createPairings}>
+            Start Event
+            <span className={classes.partyEmoji} role="img" aria-label="party emoji">
+              🥳
+            </span>
+          </Button>
+        )
+        break
+      default:
+        element = null
+    }
+    return element
+  }
 
   if (loading) {
     return <Loading />
   }
 
   const attendees = data.event_users
-  console.log(attendees)
+  console.log('attendees', attendees)
 
   const attendeesList = () => {
     return (
@@ -111,7 +127,7 @@ const AdminControl = ({ eventData, within30minutes }) => {
           <Typography className={classes.displayNumber}>{attendees.length}</Typography>
         </Grid>
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          {button}
+          {renderButton()}
         </Grid>
       </Grid>
       {attendeesList()}
