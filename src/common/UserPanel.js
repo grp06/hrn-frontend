@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { useHistory } from 'react-router-dom'
-import { useGetRoomId } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
 import { FloatCardWide, AttendeesList } from '.'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
@@ -38,9 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
-  const { roomId, room, userId, role, currentRound } = useGameContext()
-  const { setToken } = useGetRoomId()
-  const mounted = useRef()
+  const { userId, role, currentRound } = useGameContext()
   const history = useHistory()
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
@@ -59,20 +56,10 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   })
 
   useEffect(() => {
-    if (currentRound === 1) {
+    if (currentRound > 0) {
       history.push('/video-room')
     }
   }, [currentRound])
-
-  useEffect(() => {
-    if (!mounted.current && roomId) {
-      mounted.current = roomId
-      setToken()
-    } else if (roomId !== mounted.current) {
-      mounted.current = roomId
-      setToken()
-    }
-  }, [roomId, room])
 
   const attendees = eventData.events[0].event_users
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)

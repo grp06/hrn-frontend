@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGameContext } from '../context/useGameContext'
+import { useGetRoomId } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -45,6 +46,21 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = () => {
   const classes = useStyles()
   const { twilioReady } = useGameContext()
+  const ref = useRef()
+  const { setToken } = useGetRoomId()
+  const { roomId, room } = useGameContext()
+
+  useEffect(() => {
+    if (!ref.current && roomId) {
+      console.log('UserPanel -> roomId 1', roomId)
+      ref.current = roomId
+      setToken()
+    } else if (roomId !== ref.current) {
+      console.log('UserPanel -> roomId 2', roomId)
+      ref.current = roomId
+      setToken()
+    }
+  }, [roomId, room])
 
   return (
     <div>
