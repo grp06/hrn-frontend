@@ -139,6 +139,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   ]
 
   useEffect(() => {
+    // THE FUCK IS THIS?
     ;[...routes].forEach((route) => {
       switch (window.location.pathname) {
         case `${route.link}`:
