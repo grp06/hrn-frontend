@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
 
-import { findMyUser } from '../gql/queries'
+import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 
 const GameContext = React.createContext()
 
@@ -22,6 +22,9 @@ const defaultState = {
   twilioReady: false,
   userId: null,
   users: null,
+  hasUpcomingEvent: false,
+  userEventsData: null,
+  hostEventsData: null,
 }
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -29,6 +32,48 @@ const GameProvider = ({ children, location }) => {
     variables: { id: state.userId },
     skip: !state.userId || !state.appLoading,
   })
+  const { data: userEventsData, loading: eventsLoading, error: eventsError } = useQuery(
+    getEventsByUserId,
+    {
+      variables: {
+        userId: state.userId,
+      },
+      skip: !state.role || state.role === 'host',
+    }
+  )
+
+  const { data: hostEventsData, loading: hostEventsLoading, error: hostEventsError } = useQuery(
+    getHostEvents,
+    {
+      variables: {
+        userId: state.userId,
+      },
+      skip: !state.role || state.role === 'user',
+    }
+  )
+
+  useEffect(() => {
+    if (state.role === 'user' && userEventsData) {
+      const startingSoon = userEventsData.event_users.find((event) => {
+        const { start_at } = event.event
+        const startTime = new Date(start_at).getTime()
+        const now = Date.now()
+        const diff = startTime - now
+        // event is upcoming or in progress
+        return diff < 1800000
+      })
+      dispatch((draft) => {
+        draft.userEventsData = userEventsData
+        draft.startingSoon = startingSoon
+      })
+    }
+    if (state.role === 'host' && hostEventsData) {
+      dispatch((draft) => {
+        draft.hostEventsData = hostEventsData
+      })
+    }
+  }, [hostEventsData, userEventsData, state.role])
+
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]

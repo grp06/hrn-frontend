@@ -10,7 +10,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import bannerBackground5 from '../assets/purpleOil.jpg'
-import { getEvents } from '../gql/queries'
 import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '45vh',
     paddingBottom: '80px',
-    backgroundImage: 'url(' + bannerBackground5 + ')',
+    backgroundImage: `url(${bannerBackground5})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     zIndex: '-2',
@@ -50,11 +49,9 @@ const useStyles = makeStyles((theme) => ({
 const Events = () => {
   const classes = useStyles()
 
-  const { appLoading, userId, role } = useGameContext()
+  const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
-
-  if (appLoading || eventsLoading) {
+  if (appLoading) {
     return <Loading />
   }
 
@@ -62,13 +59,28 @@ const Events = () => {
     return <Redirect to="/" push />
   }
 
-  if (!eventsData) {
+  if (!userEventsData && !hostEventsData) {
     return <div>no events data </div>
   }
+  // console.log('events = ', userEventsData)
+  // const sortedEvents = userEventsData.events.sort((a, b) => {
+  //   // write logic here to sort events by start time
+  // })
 
-  const sortedEvents = eventsData.events.sort((a, b) => {
-    // write logic here to sort events by start time
-  })
+  // we could (and probably should) loop over hosts data and user's
+  // events data separately
+  const renderUserCards = () =>
+    role === 'user' &&
+    userEventsData.event_users.map((event) => {
+      return <EventCard key={event.id} event={event.event} />
+    })
+
+  const renderHostCards = () =>
+    role === 'host' &&
+    hostEventsData.events.map((event) => {
+      return <EventCard key={event.id} event={event} />
+    })
+
   return (
     <>
       <Grid
@@ -86,9 +98,8 @@ const Events = () => {
         </Grid>
       </Grid>
       {role === 'host' && <CreateEventButton />}
-      {eventsData.events.map((event) => (
-        <EventCard key={event.id} event={event} />
-      ))}
+      {renderUserCards()}
+      {renderHostCards()}
     </>
   )
 }

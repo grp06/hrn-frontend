@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { useSubscription, useQuery } from '@apollo/react-hooks'
 
@@ -10,11 +10,9 @@ import { useGameContext } from '../context/useGameContext'
 import { listenToRounds } from '../gql/subscriptions'
 import { getEvent } from '../gql/queries'
 import bannerBackground from '../assets/eventBannerMountain.png'
-import bannerBackground3 from '../assets/purpleNetwork.jpg'
-import bannerBackground4 from '../assets/purpleCubes.jpg'
-import bannerBackground5 from '../assets/purpleOil.jpg'
+
 import formatDate from '../utils/formatDate'
-import { PreEvent } from '.'
+import { PreEvent, EventSoon } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventBanner: {
@@ -98,9 +96,10 @@ const Event = ({ match }) => {
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
-  if (appLoading) {
+  if (appLoading || roundDataLoading || eventLoading) {
     return <Loading />
   }
+  debugger
   // probably need to move this into useEffect
   if (eventData) {
     const event = eventData.events[0]
@@ -123,6 +122,16 @@ const Event = ({ match }) => {
       }
       return val
     }
+
+    // if (diff >= 1800000) {
+    //   console.log('show edit event form')
+    //   // show editable event form
+    //   return <PreEvent eventData={eventData} />
+    // }
+    // if (diff < 1800000) {
+    //   console.log('render event soon')
+    //   // display countdown and show online users
+    //   return <EventSoon eventData={eventData} />
 
     return (
       <>

@@ -1,11 +1,13 @@
 import gql from 'graphql-tag'
 
 const displayOnlineUsers = gql`
-  subscription displayOnlineUsers {
-    users {
-      name
-      id
-      last_seen
+  subscription displayOnlineUsers($event_id: Int!) {
+    event_users(where: { event_id: { _eq: $event_id } }) {
+      user {
+        id
+        last_seen
+        name
+      }
     }
   }
 `

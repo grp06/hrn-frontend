@@ -63,14 +63,6 @@ const UserControl = ({ timeState }) => {
   }, [roomId, room])
 
   const notReady = () => {
-    // if (waitingRoom) {
-    //   return (
-    //     <div className={classes.notReady}>
-    //       <h1>waiting room</h1>
-    //     </div>
-    //   )
-    // }
-
     if (currentRound === 0) {
       return (
         <div className={classes.notReady}>
