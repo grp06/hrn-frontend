@@ -1,11 +1,9 @@
 import React from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
@@ -59,9 +57,6 @@ const Events = () => {
     return <Redirect to="/" push />
   }
 
-  if (!userEventsData && !hostEventsData) {
-    return <div>no events data </div>
-  }
   // console.log('events = ', userEventsData)
   // const sortedEvents = userEventsData.events.sort((a, b) => {
   //   // write logic here to sort events by start time
@@ -81,6 +76,9 @@ const Events = () => {
       return <EventCard key={event.id} event={event} />
     })
 
+  if (!userEventsData && !hostEventsData) {
+    return <div>no events to display. Please create an event. </div>
+  }
   return (
     <>
       <Grid

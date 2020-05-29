@@ -26,6 +26,7 @@ const defaultState = {
   userEventsData: null,
   hostEventsData: null,
 }
+
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { data: userData } = useQuery(findMyUser, {

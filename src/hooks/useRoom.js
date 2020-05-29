@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { useTwilio } from '.'
 import { useGameContext } from '../context/useGameContext'
+
 const { createLocalTracks, connect } = require('twilio-video')
+
 const useRoom = () => {
   const { roomId, setRoom, token, room } = useGameContext()
   const { startTwilio } = useTwilio()
@@ -11,7 +13,7 @@ const useRoom = () => {
     }
   }, [room])
   const setMyRoom = async () => {
-    const localTracks = await createLocalTracks({ video: true, audio: true })
+    const localTracks = await createLocalTracks({ video: true, audio: false })
     console.log('localVideoTrack = ', localTracks)
     console.log('connect')
     const myRoom = await connect(token, {

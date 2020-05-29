@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
-import { deleteRounds, setRoundToZero } from '../gql/mutations'
+import { deleteRounds } from '../gql/mutations'
 import { useCreatePairings, useModalButton } from '../hooks'
 
 import logo from '../assets/logoWhite.svg'
@@ -110,14 +110,10 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, users, eventId } = useGameContext()
+  const { role, currentRound, users } = useGameContext()
   const { createPairings } = useCreatePairings()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
-  const [setRoundToZeroMutation] = useMutation(setRoundToZero, {
-    variables: {
-      id: eventId,
-    },
-  })
+
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // eslint-disable-next-line no-shadow
@@ -130,7 +126,6 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-      await setRoundToZeroMutation()
       await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
     },
   })
@@ -216,10 +211,16 @@ const Header = ({ activeTab, setActiveTab }) => {
         className={classes.adminPanelContainer}
       >
         <Grid item className={classes.tab}>
-          <p>Participants Online: {users.length}</p>
+          <p>
+            Participants Online:
+            {users.length}
+          </p>
         </Grid>
         <Grid item className={classes.tab}>
-          <p>Curent Round: {currentRound}</p>
+          <p>
+            Curent Round:
+            {currentRound}
+          </p>
         </Grid>
         <Grid item>
           <Button

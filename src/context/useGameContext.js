@@ -44,7 +44,7 @@ const useGameContext = () => {
         draft.twilioReady = false
         draft.myRound = 0
         draft.roundsData = freshRoundsData
-        draft.currentRound = freshRoundsData === null ? 1 : 0
+        draft.currentRound = freshRoundsData.length ? 1 : 0
       })
     } else {
       const currentRound = freshRoundsData.rounds.reduce((all, item) => {
@@ -53,7 +53,7 @@ const useGameContext = () => {
         }
         return all
       }, 0)
-
+      console.log('setting current round ==== ', currentRound)
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&

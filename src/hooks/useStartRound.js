@@ -1,13 +1,11 @@
-import { useEffect } from 'react'
-import { useMutation } from 'react-apollo'
+import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
-import { incrementRound } from '../gql/mutations'
 import { useCreateRooms } from '.'
 
 export default function useStartRounds() {
   const { currentRound } = useGameContext()
-  const [incrementRoundMutation] = useMutation(incrementRound)
   const { createRooms } = useCreateRooms()
+  const history = useHistory()
 
   const startRound = async (rounds) => {
     const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
@@ -17,8 +15,7 @@ export default function useStartRounds() {
     }, [])
 
     await createRooms(allRoomIds)
-    console.log('should Increment rounds here')
-    incrementRoundMutation()
+    history.push('/video-room')
   }
 
   return { startRound }

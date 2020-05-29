@@ -6,7 +6,7 @@ import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-d
 
 import makeApolloClient from './apollo'
 import { LoginForm, EventForm } from './common'
-import { Test, Event, Events } from './components'
+import { Test, Event, Events, VideoRoom } from './components'
 
 import { GameProvider } from './context/provider'
 import Footer from './ui/Footer'
@@ -44,6 +44,7 @@ const App = () => {
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
+                <Route exact path="/video-room" component={VideoRoom} />
                 <Route exact path="/create-event" component={EventForm} />
                 <Route exact path="/events/:id" component={Event} />
                 <Route exact path="/about" component={() => <div>About Us</div>} />

@@ -5,14 +5,13 @@ import { useSubscription, useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
-import { EventForm, AdminControl, UserControl, Loading } from '../common'
+import { EventForm, AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { listenToRounds } from '../gql/subscriptions'
-import { getEvent } from '../gql/queries'
+import { getEventById } from '../gql/queries'
 import bannerBackground from '../assets/eventBannerMountain.png'
 
 import formatDate from '../utils/formatDate'
-import { PreEvent, EventSoon } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventBanner: {
@@ -40,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Event = ({ match }) => {
   const { id: eventId } = match.params
+  console.log('eventId = ', eventId)
   const classes = useStyles()
   const {
     appLoading,
@@ -50,11 +50,14 @@ const Event = ({ match }) => {
     roundsData,
   } = useGameContext()
   // decoding thing here
-  const { data: eventData, loading: eventLoading, error: eventError } = useQuery(getEvent, {
-    variables: {
-      id: eventId,
-    },
-  })
+  const { data: eventData, loading: eventLoading, error: eventError, refetch } = useQuery(
+    getEventById,
+    {
+      variables: {
+        event_id: eventId,
+      },
+    }
+  )
 
   const {
     data: freshRoundsData,
@@ -62,7 +65,7 @@ const Event = ({ match }) => {
     error: roundDataError,
   } = useSubscription(listenToRounds, {
     variables: {
-      eventId: eventId,
+      event_id: eventId,
     },
   })
 
@@ -99,28 +102,22 @@ const Event = ({ match }) => {
   if (appLoading || roundDataLoading || eventLoading) {
     return <Loading />
   }
-  debugger
+
   // probably need to move this into useEffect
   if (eventData) {
     const event = eventData.events[0]
-    console.log('event is.. ', event)
     const startTime = new Date(event.start_at).getTime()
     const eventTime = formatDate(startTime)
     const now = Date.now()
     const diff = startTime - now
     const timeState = () => {
-      let val
-      switch (diff) {
-        case diff > 1800000:
-          val = 'future'
-          break
-        case diff < 0:
-          val = 'go time'
-          break
-        default:
-          val = 'within 30 mins'
+      if (diff > 1800000) {
+        return 'future'
       }
-      return val
+      if (diff < 0) {
+        return 'go time'
+      }
+      return 'within 30 mins'
     }
 
     // if (diff >= 1800000) {
@@ -147,9 +144,9 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
         {hostId === userId && currentRound === 0 ? (
-          <AdminControl timeState={timeState()} eventData={eventData} />
+          <AdminPanel timeState={timeState()} eventData={eventData} />
         ) : (
-          <UserControl timeState={timeState()} />
+          <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />
         )}
       </>
     )

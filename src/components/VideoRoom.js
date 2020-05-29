@@ -1,10 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useGetRoomId } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
 
-const width = window.innerWidth
-const height = window.innerHeight
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     background: '#111',
@@ -45,32 +42,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserControl = ({ timeState }) => {
-  console.log('time state')
+const VideoRoom = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady, roomId, room } = useGameContext()
-  const { setToken } = useGetRoomId()
-  const mounted = useRef()
-
-  useEffect(() => {
-    if (!mounted.current && roomId) {
-      mounted.current = roomId
-      setToken()
-    } else if (roomId !== mounted.current) {
-      mounted.current = roomId
-      setToken()
-    }
-  }, [roomId, room])
+  const { twilioReady } = useGameContext()
 
   const notReady = () => {
-    if (currentRound === 0) {
-      return (
-        <div className={classes.notReady}>
-          <h1>Please wait for event to begin</h1>
-        </div>
-      )
-    }
-
     if (!twilioReady) {
       return (
         <div className={classes.notReady}>
@@ -90,4 +66,5 @@ const UserControl = ({ timeState }) => {
     </div>
   )
 }
-export default UserControl
+
+export default VideoRoom

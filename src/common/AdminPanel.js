@@ -1,21 +1,11 @@
-import React, { useEffect, useContext, useState } from 'react'
+import React from 'react'
 
-import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
-import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/styles'
-import { useQuery } from 'react-apollo'
-import moment from 'moment-timezone'
-import { getEventUsers } from '../gql/queries'
-import { useGameContext } from '../context/useGameContext'
 import { useCreatePairings, useModalFab } from '../hooks'
-import { EventForm, FloatCardWide, Loading } from '.'
+import { EventForm, FloatCardWide, AttendeesList } from '.'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -45,14 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const AdminControl = ({ eventData, timeState }) => {
   console.log('AdminControl -> timeState', timeState)
   const classes = useStyles()
-  const { currentRound, eventId } = useGameContext()
-  const [showEventForm, setShowEventForm] = useState()
   const { createPairings } = useCreatePairings()
-  const { data, loading, error, refetch } = useQuery(getEventUsers, {
-    variables: {
-      eventId: eventData.events[0].id,
-    },
-  })
 
   const editFormModal = useModalFab({
     modalBody: <EventForm eventData={eventData} />,
@@ -61,7 +44,8 @@ const AdminControl = ({ eventData, timeState }) => {
       buttonText: '✏️ Edit Event',
     },
   })
-
+  const attendees = eventData.events[0].event_users
+  const eventId = eventData.events[0].id
   const renderButton = () => {
     let element
     switch (timeState) {
@@ -70,7 +54,12 @@ const AdminControl = ({ eventData, timeState }) => {
         break
       case 'go time':
         element = (
-          <Button size="large" variant="contained" color="primary" onClick={createPairings}>
+          <Button
+            size="large"
+            variant="contained"
+            color="primary"
+            onClick={() => createPairings(attendees, eventId)}
+          >
             Start Event
             <span className={classes.partyEmoji} role="img" aria-label="party emoji">
               🥳
@@ -79,37 +68,16 @@ const AdminControl = ({ eventData, timeState }) => {
         )
         break
       default:
-        element = null
+        element = (
+          <Button size="large" variant="disabled" color="primary">
+            Start Event
+            <span className={classes.partyEmoji} role="img" aria-label="party emoji">
+              🥳
+            </span>
+          </Button>
+        )
     }
     return element
-  }
-
-  if (loading) {
-    return <Loading />
-  }
-
-  const attendees = data.event_users
-  console.log('attendees', attendees)
-
-  const attendeesList = () => {
-    return (
-      <List dense>
-        {attendees.map(({ user }) => {
-          const formattedDate = user.last_seen.slice(0, 10)
-          const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
-          return (
-            <ListItem key={user.id}>
-              <ListItemAvatar>
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={user.name} secondary={`Last seen: ${lastSeen}`} />
-            </ListItem>
-          )
-        })}
-      </List>
-    )
   }
 
   return (
@@ -130,10 +98,7 @@ const AdminControl = ({ eventData, timeState }) => {
           {renderButton()}
         </Grid>
       </Grid>
-      {attendeesList()}
-      <div style={{ display: showEventForm ? 'block' : 'none' }}>
-        <EventForm eventData={eventData} />
-      </div>
+      <AttendeesList attendees={attendees} />
     </FloatCardWide>
   )
 }

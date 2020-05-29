@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const listenToRounds = gql`
-  subscription listenToRounds($eventId: Int!) {
-    rounds(where: { event_id: { _eq: $eventId } }) {
+  subscription listenToRounds($event_id: Int!) {
+    rounds(where: { event_id: { _eq: $event_id } }) {
       id
       partnerX_id
       partnerX_thumb

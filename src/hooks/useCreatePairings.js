@@ -13,7 +13,7 @@ import endpointUrl from '../utils/endpointUrl'
 // then we want to create new rooms
 // then increment
 export default function useCreatePairings() {
-  const { setUsers, userId, eventId, roundsData, currentRound } = useGameContext()
+  const { setUsers, userId, roundsData, currentRound } = useGameContext()
   const { loading, error, data: findUsersData } = useQuery(findUsers)
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const { startRound } = useStartRound()
@@ -24,13 +24,6 @@ export default function useCreatePairings() {
       setUsers(findUsersData.users)
     }
   }, [findUsersData])
-
-  useEffect(() => {
-    if (roundsResponse) {
-      console.log('shoudl start round ', roundsResponse.returning)
-      startRound(roundsResponse.returning)
-    }
-  }, [roundsResponse])
 
   const createRoundsMap = (roundData, users) => {
     if (!roundsData || roundData.rounds.length === 0) {
@@ -59,15 +52,16 @@ export default function useCreatePairings() {
     return roundsMapObject
   }
 
-  const createPairings = async () => {
+  const createPairings = async (attendees, eventId) => {
     await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
     setTimeout(async () => {
       const variablesArr = []
-      const userIds = findUsersData.users.reduce((all, item) => {
-        all.push(item.id)
+
+      const userIds = attendees.reduce((all, item) => {
+        all.push(item.user.id)
         return all
       }, [])
-
+      userIds.push(userId)
       // const userIdsWithoutAdmin = userIds.filter((id) => id !== userId)
       // if (userIdsWithoutAdmin % 2 !== 0) {
       //   console.log('uneven array')
@@ -93,8 +87,8 @@ export default function useCreatePairings() {
         },
       })
 
-      setRoundsResponse(insertedRounds.data.insert_rounds)
-    }, 1)
+      startRound(insertedRounds.data.insert_rounds.returning)
+    }, 1000)
   }
 
   return { createPairings }

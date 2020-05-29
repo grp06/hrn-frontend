@@ -83,7 +83,7 @@ const useModalButton = ({ button, modalBody, onAcceptFunction }) => {
         )}
       </div>
 
-      <useModalFab />
+      <useModalButton />
     </div>
   )
 
