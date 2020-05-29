@@ -15,7 +15,6 @@ export default function useStartRounds() {
     }, [])
 
     await createRooms(allRoomIds)
-    history.push('/video-room')
   }
 
   return { startRound }

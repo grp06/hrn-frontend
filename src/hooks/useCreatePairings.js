@@ -8,16 +8,11 @@ import { findUsers } from '../gql/queries'
 import { useStartRound } from '.'
 import endpointUrl from '../utils/endpointUrl'
 
-// call API which will disconnect all users from their rooms
-// it should also complete the rooms afterwards
-// then we want to create new rooms
-// then increment
 export default function useCreatePairings() {
   const { setUsers, userId, roundsData, currentRound } = useGameContext()
   const { loading, error, data: findUsersData } = useQuery(findUsers)
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const { startRound } = useStartRound()
-  const [roundsResponse, setRoundsResponse] = useState(null)
 
   useEffect(() => {
     if (findUsersData && findUsersData.users) {

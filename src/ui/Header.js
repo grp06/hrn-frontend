@@ -110,7 +110,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, users } = useGameContext()
+  const { role, currentRound, users, attendees, eventId } = useGameContext()
   const { createPairings } = useCreatePairings()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
 
@@ -199,9 +199,8 @@ const Header = ({ activeTab, setActiveTab }) => {
       </IconButton>
     </>
   )
-
+  console.log('currentRound = ', currentRound)
   const adminNavPanel = () => {
-    console.log('admin Nav Panel rendering')
     return (
       <Grid
         container
@@ -228,7 +227,7 @@ const Header = ({ activeTab, setActiveTab }) => {
             disableRipple
             variant="contained"
             color="secondary"
-            onClick={createPairings}
+            onClick={() => createPairings(attendees, eventId)}
           >
             Next Round
           </Button>

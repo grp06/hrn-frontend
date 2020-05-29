@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import { useHistory } from 'react-router-dom'
 import { useCreatePairings, useModalFab } from '../hooks'
 import { EventForm, FloatCardWide, AttendeesList } from '.'
+import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -36,6 +38,8 @@ const AdminControl = ({ eventData, timeState }) => {
   console.log('AdminControl -> timeState', timeState)
   const classes = useStyles()
   const { createPairings } = useCreatePairings()
+  const { currentRound, setAttendees, setEventId } = useGameContext()
+  const history = useHistory()
 
   const editFormModal = useModalFab({
     modalBody: <EventForm eventData={eventData} />,
@@ -46,6 +50,20 @@ const AdminControl = ({ eventData, timeState }) => {
   })
   const attendees = eventData.events[0].event_users
   const eventId = eventData.events[0].id
+
+  useEffect(() => {
+    if (attendees) {
+      setAttendees(attendees)
+      setEventId(eventId)
+    }
+  }, [attendees])
+
+  useEffect(() => {
+    if (currentRound > 0) {
+      history.push('/video-room')
+    }
+  }, [currentRound])
+
   const renderButton = () => {
     let element
     switch (timeState) {

@@ -7,7 +7,7 @@ const useGetRoomId = () => {
   const { setMyToken } = useSetToken()
 
   const setToken = () => {
-    if (roomId && !room && !token) {
+    if (roomId && !room) {
       setMyToken()
     }
   }

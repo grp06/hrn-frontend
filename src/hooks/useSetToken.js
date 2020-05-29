@@ -9,14 +9,12 @@ const useSetToken = () => {
 
   useEffect(() => {
     if (token) {
-      debugger
       setMyRoom()
     }
   }, [token])
 
   const setMyToken = async () => {
     const res = await getToken(roomId, userId).then((response) => response.json())
-    debugger
     setToken(res.token)
   }
 

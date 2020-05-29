@@ -9,6 +9,12 @@ const useGameContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
+  function setAttendees(attendees) {
+    dispatch((draft) => {
+      draft.attendees = attendees
+    })
+  }
+
   function setUsers(users) {
     dispatch((draft) => {
       draft.users = users
@@ -60,7 +66,7 @@ const useGameContext = () => {
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
-      console.log('currentRound = ', currentRound)
+      console.log('myRound = ', myRound)
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
@@ -134,6 +140,7 @@ const useGameContext = () => {
     setRoom,
     resetUserState,
     setUserId,
+    setAttendees,
   }
 }
 

@@ -45,19 +45,13 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { twilioReady } = useGameContext()
+  const { twilioReady, room, roomId } = useGameContext()
   const ref = useRef()
   const { setToken } = useGetRoomId()
-  const { roomId, room } = useGameContext()
 
   useEffect(() => {
-    if (!ref.current && roomId) {
-      console.log('UserPanel -> roomId 1', roomId)
-      ref.current = roomId
-      setToken()
-    } else if (roomId !== ref.current) {
-      console.log('UserPanel -> roomId 2', roomId)
-      ref.current = roomId
+    debugger
+    if (!room && roomId) {
       setToken()
     }
   }, [roomId, room])

@@ -25,6 +25,7 @@ const defaultState = {
   hasUpcomingEvent: false,
   userEventsData: null,
   hostEventsData: null,
+  attendees: null,
 }
 
 const GameProvider = ({ children, location }) => {

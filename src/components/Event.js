@@ -50,7 +50,7 @@ const Event = ({ match }) => {
     roundsData,
   } = useGameContext()
   // decoding thing here
-  const { data: eventData, loading: eventLoading, error: eventError, refetch } = useQuery(
+  const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
     getEventById,
     {
       variables: {
@@ -71,6 +71,12 @@ const Event = ({ match }) => {
 
   const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
   const hostId = eventData && eventData.events[0].host_id
+
+  // useEffect(() => {
+  //   if (!eventDataLoading && !eventError) {
+
+  //   }
+  // }, [eventData])
 
   useEffect(() => {
     if (freshRoundsData && freshRoundsData.rounds.length === 0 && currentRound === 0) {
@@ -100,7 +106,7 @@ const Event = ({ match }) => {
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
-  if (appLoading || roundDataLoading || eventLoading) {
+  if (appLoading || roundDataLoading) {
     return <Loading />
   }
 
