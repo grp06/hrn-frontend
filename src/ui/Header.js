@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     width: '35px',
   },
   drawer: {
-    backgroundColor: theme.palette.common.rebeccaPurple,
+    backgroundColor: theme.palette.common.ghostWhite,
   },
   drawerItem: {
     ...theme.typography.tab,

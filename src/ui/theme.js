@@ -57,6 +57,7 @@ const theme = createMuiTheme({
     body: {
       fontFamily: 'Muli',
       fontSize: '1rem',
+      color: independence,
     },
   },
   overrides: {
@@ -80,6 +81,12 @@ const theme = createMuiTheme({
       containedSizeLarge: {
         padding: '20px 20px',
         fontSize: '1.2rem',
+      },
+    },
+    MuiFab: {
+      extended: {
+        borderRadius: '4px',
+        color: ghostWhite,
       },
     },
   },

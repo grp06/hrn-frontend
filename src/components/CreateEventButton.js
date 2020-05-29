@@ -1,5 +1,7 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
+import Fab from '@material-ui/core/Fab'
+import AddIcon from '@material-ui/icons/Add'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link } from 'react-router-dom'
 
@@ -10,6 +12,12 @@ const useStyles = makeStyles((theme) => ({
     '& a': {
       textDecoration: 'none',
     },
+    position: 'fixed',
+    left: 'auto',
+    top: 'auto',
+    right: '3%',
+    bottom: '3%',
+    zIndex: '999',
   },
 }))
 const CreateEventButton = () => {
@@ -17,9 +25,9 @@ const CreateEventButton = () => {
   return (
     <div className={classes.wrapper}>
       <Link to="/create-event">
-        <Button size="small" color="primary" variant="outlined">
-          Create Event
-        </Button>
+        <Fab variant="extended" color="primary" size="large">
+          Host An Event 🚀
+        </Fab>
       </Link>
     </div>
   )
