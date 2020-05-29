@@ -95,7 +95,6 @@ const Event = ({ match }) => {
   }, [freshRoundsData, hasSubscriptionData])
 
   if (roundDataError) {
-    console.log('roundDataError - ', roundDataError)
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
@@ -112,7 +111,6 @@ const Event = ({ match }) => {
     const diff = startTime - now
     const timeState = () => {
       let val
-      console.log('diff = ', diff)
       switch (diff) {
         case diff > 1800000:
           val = 'future'
@@ -123,7 +121,6 @@ const Event = ({ match }) => {
         default:
           val = 'within 30 mins'
       }
-      console.log('val = ', val)
       return val
     }
 

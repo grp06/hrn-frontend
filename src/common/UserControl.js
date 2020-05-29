@@ -45,19 +45,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserControl = () => {
+const UserControl = ({ timeState }) => {
+  console.log('time state')
   const classes = useStyles()
-  const { currentRound, twilioReady, waitingRoom, roomId, room } = useGameContext()
+  const { currentRound, twilioReady, roomId, room } = useGameContext()
   const { setToken } = useGetRoomId()
   const mounted = useRef()
 
   useEffect(() => {
     if (!mounted.current && roomId) {
       mounted.current = roomId
-      console.log('setting mounted.current for the first time')
       setToken()
     } else if (roomId !== mounted.current) {
-      console.log('replacing mounted.current')
       mounted.current = roomId
       setToken()
     }
