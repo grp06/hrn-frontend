@@ -20,8 +20,7 @@ const useRoom = () => {
       name: roomId,
       tracks: localTracks,
     })
-    console.log('set room, twilioReady false')
-    setRoom(myRoom, false)
+    setRoom(myRoom, true)
   }
   return { setMyRoom }
 }

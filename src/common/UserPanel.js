@@ -57,6 +57,13 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     },
     skip: role === 'host',
   })
+
+  useEffect(() => {
+    if (currentRound === 1) {
+      history.push('/video-room')
+    }
+  }, [currentRound])
+
   useEffect(() => {
     if (!mounted.current && roomId) {
       mounted.current = roomId
@@ -98,10 +105,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         element = <div>coutndown and rsvp?</div>
     }
     return element
-  }
-
-  if (currentRound === 1) {
-    history.push('/video-room')
   }
 
   return (

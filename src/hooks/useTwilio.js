@@ -6,8 +6,7 @@ const useTwilio = () => {
   const { room, twilioReady, setTwilioReady, setRoom } = useGameContext()
 
   const startTwilio = () => {
-    if (room && !twilioReady) {
-      console.log('starting twilio')
+    if (room && twilioReady) {
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         console.log('publication = ', publication)

@@ -81,6 +81,7 @@ const Event = ({ match }) => {
   useEffect(() => {
     if (hasSubscriptionData) {
       if (!roundsData || !roundsData.rounds.length) {
+        console.log('Event -> roundsData', roundsData)
         return setGameData(freshRoundsData, userId)
       }
 

@@ -46,19 +46,8 @@ const VideoRoom = () => {
   const classes = useStyles()
   const { twilioReady } = useGameContext()
 
-  const notReady = () => {
-    if (!twilioReady) {
-      return (
-        <div className={classes.notReady}>
-          <h1>Connecting...</h1>
-        </div>
-      )
-    }
-    return null
-  }
   return (
     <div>
-      {notReady()}
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
