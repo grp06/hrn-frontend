@@ -26,11 +26,12 @@ const defaultState = {
   userEventsData: null,
   hostEventsData: null,
   attendees: null,
+  connecting: null,
 }
 
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { data: userData } = useQuery(findMyUser, {
+  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(findMyUser, {
     variables: { id: state.userId },
     skip: !state.userId || !state.appLoading,
   })
@@ -67,11 +68,14 @@ const GameProvider = ({ children, location }) => {
       dispatch((draft) => {
         draft.userEventsData = userEventsData
         draft.startingSoon = startingSoon
+        draft.appLoading = false
       })
     }
+
     if (state.role === 'host' && hostEventsData) {
       dispatch((draft) => {
         draft.hostEventsData = hostEventsData
+        draft.appLoading = false
       })
     }
   }, [hostEventsData, userEventsData, state.role])
@@ -85,7 +89,7 @@ const GameProvider = ({ children, location }) => {
         draft.userId = id
         draft.name = name
         if (draft.userId) {
-          draft.appLoading = false
+          console.log('userId', draft.userId)
         }
       })
     }
@@ -104,6 +108,7 @@ const GameProvider = ({ children, location }) => {
         dispatch((draft) => {
           draft.userId = myUserId
           if (draft.role) {
+            console.log('role', draft.role)
             draft.appLoading = false
           }
         })

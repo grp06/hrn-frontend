@@ -10,37 +10,42 @@ const useGameContext = () => {
   }
 
   function setAttendees(attendees) {
+    console.log('setAttendees -> attendees', attendees)
     dispatch((draft) => {
       draft.attendees = attendees
     })
   }
 
   function setUsers(users) {
+    console.log('setUsers -> users', users)
     dispatch((draft) => {
       draft.users = users
     })
   }
 
   function setToken(token) {
+    console.log('setToken -> token')
     dispatch((draft) => {
       draft.token = token
     })
   }
 
   function setTwilioReady(twilioReady) {
+    console.log('setTwilioReady -> twilioReady', twilioReady)
     dispatch((draft) => {
       draft.twilioReady = twilioReady
     })
   }
 
   function setRoundsData(rounds) {
+    console.log('setRoundsData -> rounds', rounds)
     dispatch((draft) => {
       draft.roundsData = rounds
     })
   }
 
   function setGameData(freshRoundsData, userId) {
-    console.log('freshRoundsData ', freshRoundsData)
+    console.log('setGameData -> freshRoundsData', freshRoundsData)
     // if you reset or you just press start for the first time
     if (!freshRoundsData || !freshRoundsData.rounds.length) {
       dispatch((draft) => {
@@ -59,14 +64,13 @@ const useGameContext = () => {
         }
         return all
       }, 0)
-      console.log('setting current round ==== ', currentRound)
+
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
           round.round_number === currentRound &&
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
-      console.log('myRound = ', myRound)
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
@@ -79,14 +83,14 @@ const useGameContext = () => {
   }
 
   function setRoomId(roomId) {
+    console.log('setRoomId -> roomId', roomId)
     dispatch((draft) => {
       draft.roomId = roomId
     })
   }
 
   function setRoom(room, twilioReady) {
-    console.log('room = ', room)
-
+    console.log('setRoom -> room', room)
     dispatch((draft) => {
       draft.room = room
       draft.twilioReady = twilioReady
@@ -94,26 +98,45 @@ const useGameContext = () => {
   }
 
   function setLoading(loading) {
+    console.log('setLoading -> loading', loading)
     dispatch((draft) => {
       draft.loading = loading
     })
   }
 
   function setRedirect(redirect) {
+    console.log('setRedirect -> redirect', redirect)
     dispatch((draft) => {
       draft.redirect = redirect
     })
   }
 
   function setEventId(eventId) {
+    console.log('setEventId -> eventId', eventId)
     dispatch((draft) => {
       draft.eventId = eventId
     })
   }
 
   function setUserId(userId) {
+    console.log('setUserId -> userId', userId)
     dispatch((draft) => {
       draft.userId = userId
+    })
+  }
+
+  // only used once - in useCreatePairings
+  function setCurrentRound(currentRound) {
+    console.log('setCurrentRound -> currentRound', currentRound)
+    dispatch((draft) => {
+      draft.currentRound = currentRound
+    })
+  }
+
+  function setConnecting(connecting) {
+    console.log('setConnecting -> connecting', connecting)
+    dispatch((draft) => {
+      draft.connecting = connecting
     })
   }
 
@@ -141,6 +164,8 @@ const useGameContext = () => {
     resetUserState,
     setUserId,
     setAttendees,
+    setCurrentRound,
+    setConnecting,
   }
 }
 

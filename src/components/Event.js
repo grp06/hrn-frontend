@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Event = ({ match }) => {
   const { id: eventId } = match.params
-  console.log('eventId = ', eventId)
   const classes = useStyles()
   const {
     appLoading,
@@ -72,12 +71,6 @@ const Event = ({ match }) => {
   const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
   const hostId = eventData && eventData.events[0].host_id
 
-  // useEffect(() => {
-  //   if (!eventDataLoading && !eventError) {
-
-  //   }
-  // }, [eventData])
-
   useEffect(() => {
     if (freshRoundsData && freshRoundsData.rounds.length === 0 && currentRound === 0) {
       return resetUserState()
@@ -86,8 +79,8 @@ const Event = ({ match }) => {
 
   useEffect(() => {
     if (hasSubscriptionData) {
+      console.warn('Event -> roundsData', roundsData)
       if (!roundsData || !roundsData.rounds.length) {
-        console.log('Event -> roundsData', roundsData)
         return setGameData(freshRoundsData, userId)
       }
 
@@ -106,7 +99,7 @@ const Event = ({ match }) => {
     return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
   }
 
-  if (appLoading || roundDataLoading) {
+  if (appLoading || roundDataLoading || eventDataLoading) {
     return <Loading />
   }
 
@@ -127,16 +120,6 @@ const Event = ({ match }) => {
       return 'within 30 mins'
     }
 
-    // if (diff >= 1800000) {
-    //   console.log('show edit event form')
-    //   // show editable event form
-    //   return <PreEvent eventData={eventData} />
-    // }
-    // if (diff < 1800000) {
-    //   console.log('render event soon')
-    //   // display countdown and show online users
-    //   return <EventSoon eventData={eventData} />
-
     return (
       <>
         <Grid container direction="column" justify="flex-end" className={classes.eventBanner}>
@@ -150,7 +133,7 @@ const Event = ({ match }) => {
             </Grid>
           </Grid>
         </Grid>
-        {hostId === userId && currentRound === 0 ? (
+        {hostId === userId ? (
           <AdminPanel timeState={timeState()} eventData={eventData} />
         ) : (
           <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />

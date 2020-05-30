@@ -9,16 +9,26 @@ import { useStartRound } from '.'
 import endpointUrl from '../utils/endpointUrl'
 
 export default function useCreatePairings() {
-  const { setUsers, userId, roundsData, currentRound } = useGameContext()
-  const { loading, error, data: findUsersData } = useQuery(findUsers)
+  const {
+    setUsers,
+    userId,
+    roundsData,
+    currentRound,
+    appLoading,
+    users,
+    setCurrentRound,
+  } = useGameContext()
+  const { loading, error, data: findUsersData } = useQuery(findUsers, {
+    skip: appLoading,
+  })
   const [bulkInsertRoundsMutation] = useMutation(bulkInsertRounds)
   const { startRound } = useStartRound()
-
+  const timeoutDuration = currentRound === 0 ? 0 : 1
   useEffect(() => {
-    if (findUsersData && findUsersData.users) {
+    if (findUsersData && findUsersData.users && !users) {
       setUsers(findUsersData.users)
     }
-  }, [findUsersData])
+  }, [findUsersData, users])
 
   const createRoundsMap = (roundData, users) => {
     if (!roundsData || roundData.rounds.length === 0) {
@@ -83,7 +93,7 @@ export default function useCreatePairings() {
       })
 
       startRound(insertedRounds.data.insert_rounds.returning)
-    }, 1000)
+    }, timeoutDuration)
   }
 
   return { createPairings }

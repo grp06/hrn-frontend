@@ -20,7 +20,6 @@ const useRoom = () => {
       name: roomId,
       tracks: localTracks,
     })
-    debugger
     setRoom(myRoom, true)
   }
   return { setMyRoom }

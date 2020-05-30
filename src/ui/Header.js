@@ -200,7 +200,7 @@ const Header = ({ activeTab, setActiveTab }) => {
       </IconButton>
     </>
   )
-  console.log('currentRound = ', currentRound)
+
   const adminNavPanel = () => {
     return (
       <Grid

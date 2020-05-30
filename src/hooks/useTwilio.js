@@ -1,10 +1,9 @@
-import { useEffect } from 'react'
-import { participantConnected } from '../helpers'
+import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const { room, twilioReady, setTwilioReady, setRoom } = useGameContext()
-
+  const { room, twilioReady, setTwilioReady, setRoom, setConnecting } = useGameContext()
+  const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
     if (room && twilioReady) {
       const { localParticipant } = room
@@ -46,6 +45,7 @@ const useTwilio = () => {
         }
       })
       setTwilioReady(true)
+      setConnecting(true)
     }
   }
 

@@ -16,20 +16,18 @@ const initialUserIdsMap = (userIds) => {
   }, {})
 }
 
-//main class, just to store stuff
+// main class, just to store stuff
 function GeorgeAlgo(userIds, prevAssignments) {
-  const firstRun = !prevAssignments ? true : false
+  const firstRun = !prevAssignments
 
   const userIdsMap = firstRun
     ? initialUserIdsMap(userIds)
     : grabExistingData(userIds, prevAssignments)
 
-  console.log('userIdMap = ', userIdsMap)
   const copyOfUserIds = userIds.slice()
-  var half_length = Math.ceil(userIds.length / 2)
-  var t1 = userIds.splice(0, half_length)
-  var t2 = userIds.slice(0, half_length)
-  console.log('about to add to the map = ', userIdsMap)
+  const half_length = Math.ceil(userIds.length / 2)
+  const t1 = userIds.splice(0, half_length)
+  const t2 = userIds.slice(0, half_length)
 
   // imagine people sitting around a table, and rotating
   // person 1 NEVER moves
@@ -78,9 +76,9 @@ function GeorgeAlgo(userIds, prevAssignments) {
         numAssignmentsMade++
       }
     }
-    console.log('pairingsArray', pairingsArray)
-    //if everyone hasn't been assigned
-    //rotate people around again, try again
+
+    // if everyone hasn't been assigned
+    // rotate people around again, try again
     if (numAssignmentsMade < t2.length && !allAssignmentsMade) {
       makeAssignments()
     }
@@ -119,4 +117,3 @@ export default GeorgeAlgo
 // //load all userId's
 // const userIds = ['1', '2', '3', '4', '5', '6', '7', 'null']
 // execMain = new Main(userIds)
-// console.log(execMain.init())

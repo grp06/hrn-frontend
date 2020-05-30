@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const AdminControl = ({ eventData, timeState }) => {
-  console.log('AdminControl -> timeState', timeState)
   const classes = useStyles()
   const { createPairings } = useCreatePairings()
   const { currentRound, setAttendees, setEventId } = useGameContext()

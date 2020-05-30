@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGameContext } from '../context/useGameContext'
 import { useGetRoomId } from '../hooks'
+import { Connecting } from '.'
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -46,11 +47,9 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = () => {
   const classes = useStyles()
   const { twilioReady, room, roomId } = useGameContext()
-  const ref = useRef()
   const { setToken } = useGetRoomId()
 
   useEffect(() => {
-    debugger
     if (!room && roomId) {
       setToken()
     }
@@ -58,6 +57,7 @@ const VideoRoom = () => {
 
   return (
     <div>
+      <Connecting />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
