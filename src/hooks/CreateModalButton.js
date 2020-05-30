@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const useModalButton = ({ button, modalBody, onAcceptFunction }) => {
+const CreateModalButton = ({ button, modalBody, onAcceptFunction }) => {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize } = button
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -83,7 +83,7 @@ const useModalButton = ({ button, modalBody, onAcceptFunction }) => {
         )}
       </div>
 
-      <useModalButton />
+      {/* <CreateModalButton {...props} /> */}
     </div>
   )
 
@@ -113,4 +113,4 @@ const useModalButton = ({ button, modalBody, onAcceptFunction }) => {
   )
 }
 
-export default useModalButton
+export default CreateModalButton

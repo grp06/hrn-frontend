@@ -59,6 +59,11 @@ const theme = createMuiTheme({
       fontSize: '1rem',
       color: independence,
     },
+    modalBody: {
+      fontFamily: 'Muli',
+      fontSize: '1.3rem',
+      color: independence,
+    },
   },
   overrides: {
     MuiInputLabel: {

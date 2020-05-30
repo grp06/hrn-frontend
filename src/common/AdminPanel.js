@@ -5,8 +5,8 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useCreatePairings, useModalFab } from '../hooks'
-import { EventForm, FloatCardWide, AttendeesList } from '.'
+import { useCreatePairings } from '../hooks'
+import { EventForm, FloatCardWide, AttendeesList, TransitionModal } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,7 @@ const AdminControl = ({ eventData, timeState }) => {
   const { currentRound, setAttendees, setEventId } = useGameContext()
   const history = useHistory()
 
-  const editFormModal = useModalFab({
+  const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
     button: {
       buttonSize: 'large',
