@@ -8,7 +8,6 @@ export { default as useGetRoomId } from './useGetRoomId'
 export { default as useRoom } from './useRoom'
 // FIXME LIKE THIS: https://spin.atomicobject.com/2018/06/25/circular-dependencies-javascript/
 export { default as useTwilio } from './useTwilio'
-export { default as useModalButton } from './useModalButton'
-export { default as useModalFab } from './useModalButton'
+export { default as CreateModalButton } from './CreateModalButton'
 export { default as useParticipantConnected } from './useParticipantConnected'
 export { default as useRemoteTrackPublished } from './useRemoteTrackPublished'

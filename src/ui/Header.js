@@ -16,11 +16,13 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
 import { deleteRounds } from '../gql/mutations'
-import { useCreatePairings, useModalButton } from '../hooks'
+import { useCreatePairings } from '../hooks'
+import { TransitionModal } from '../common'
 
 import logo from '../assets/logoWhite.svg'
 
@@ -109,15 +111,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
+  const history = useHistory()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, users, attendees, eventId } = useGameContext()
+  const { role, currentRound, users, attendees, eventId, setCurrentRound } = useGameContext()
   const { createPairings } = useCreatePairings()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
 
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // eslint-disable-next-line no-shadow
-  const resetRoundsModal = useModalButton({
+  const resetRoundsModal = TransitionModal({
     button: {
       buttonText: 'Reset Games',
       buttonVariant: 'outlined',
@@ -127,6 +130,8 @@ const Header = ({ activeTab, setActiveTab }) => {
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
+      setCurrentRound(0)
+      history.push(`/events/${eventId}`)
     },
   })
 
@@ -233,22 +238,7 @@ const Header = ({ activeTab, setActiveTab }) => {
             Next Round
           </Button>
         </Grid>
-        <Grid item>
-          {resetRoundsModal}
-          {/* <Button
-            className={classes.buttonSmall}
-            disableRipple
-            variant="outlined"
-            color="secondary"
-            onClick={async () => {
-              await deleteRoundsMutation()
-              await setRoundToZeroMutation()
-              await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
-            }}
-          >
-            Reset Event
-          </Button> */}
-        </Grid>
+        <Grid item>{resetRoundsModal}</Grid>
       </Grid>
     )
   }
