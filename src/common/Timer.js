@@ -14,6 +14,10 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Muli',
     color: theme.palette.common.independence,
   },
+  subtitle: {
+    ...theme.typography.body,
+    fontWeight: '700',
+  },
 }))
 
 const Timer = ({ eventStartTime, subtitle }) => {
@@ -47,7 +51,7 @@ const Timer = ({ eventStartTime, subtitle }) => {
       alignItems="center"
       className={classes.container}
     >
-      <Typography>{subtitle}</Typography>
+      <Typography className={classes.subtitle}>{subtitle}</Typography>
       <div className={classes.time}>{`${minutesToDisplay} : ${secondsToDisplay}`}</div>
     </Grid>
   ) : null
