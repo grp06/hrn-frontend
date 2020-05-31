@@ -227,18 +227,19 @@ const Header = ({ activeTab, setActiveTab }) => {
             {currentRound}
           </p>
         </Grid>
+        <Grid item>{resetRoundsModal}</Grid>
         <Grid item>
           <Button
-            className={classes.buttonSmall}
+            // className={classes.buttonSmall}
             disableRipple
+            size="medium"
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={() => createPairings(attendees, eventId)}
           >
             Next Round
           </Button>
         </Grid>
-        <Grid item>{resetRoundsModal}</Grid>
       </Grid>
     )
   }

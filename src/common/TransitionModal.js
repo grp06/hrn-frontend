@@ -54,7 +54,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction }) {
     <div>
       <Button
         disableRipple
-        size={buttonSize || 'small'}
+        size={buttonSize || 'medium'}
         variant={buttonVariant || 'contained'}
         color={buttonColor || 'primary'}
         onClick={handleOpen}
