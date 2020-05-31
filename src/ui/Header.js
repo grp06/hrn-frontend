@@ -26,17 +26,17 @@ import { TransitionModal } from '../common'
 
 import logo from '../assets/logoWhite.svg'
 
-function ElevationScroll(props) {
-  const { children } = props
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  })
+// function ElevationScroll(props) {
+//   const { children } = props
+//   const trigger = useScrollTrigger({
+//     disableHysteresis: true,
+//     threshold: 0,
+//   })
 
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  })
-}
+//   return React.cloneElement(children, {
+//     elevation: trigger ? 4 : 0,
+//   })
+// }
 
 const useStyles = makeStyles((theme) => ({
   toolbarMargin: {
@@ -245,23 +245,23 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <ElevationScroll>
-        <AppBar position="fixed">
-          <Toolbar disableGutters>
-            <Button
-              component={Link}
-              to="/"
-              className={classes.logoContainer}
-              onClick={() => setActiveTab(0)}
-              disableRipple
-            >
-              <img alt="company-logo" className={classes.logo} src={logo} />
-            </Button>
-            {role === 'host' && users && users.length && currentRound !== 0 && adminNavPanel()}
-            {/* {matches ? drawer : tabs} */}
-          </Toolbar>
-        </AppBar>
-      </ElevationScroll>
+      {/* <ElevationScroll> */}
+      <AppBar position="fixed">
+        <Toolbar disableGutters>
+          <Button
+            component={Link}
+            to="/"
+            className={classes.logoContainer}
+            onClick={() => setActiveTab(0)}
+            disableRipple
+          >
+            <img alt="company-logo" className={classes.logo} src={logo} />
+          </Button>
+          {role === 'host' && users && users.length && currentRound !== 0 && adminNavPanel()}
+          {/* {matches ? drawer : tabs} */}
+        </Toolbar>
+      </AppBar>
+      {/* </ElevationScroll> */}
       <div className={classes.toolbarMargin} />
     </>
   )

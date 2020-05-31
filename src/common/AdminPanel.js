@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: '1px',
     borderColor: theme.palette.common.greyBorder,
     borderRadius: '4px 4px 0px 0px',
-    backgroundColor: theme.palette.common.black8dp,
+    backgroundColor: theme.palette.common.greyHighlight,
     // backgroundColor: '#3a3b3c',
   },
   categoryHeader: {

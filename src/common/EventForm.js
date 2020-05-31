@@ -14,10 +14,7 @@ const useStyles = makeStyles((theme) => ({
   formContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  subheading: {
-    color: theme.palette.common.rebeccaPurple,
-    textAlign: 'center',
+    width: '40vw',
   },
   inputContainer: {
     marginTop: '2em',
@@ -96,7 +93,7 @@ const EventForm = ({ eventData }) => {
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid item container direction="column" md={6} sm={10} className={classes.formContainer}>
+      <Grid item container direction="column" className={classes.formContainer}>
         <form onSubmit={handleSubmit}>
           <Grid item container direction="column" alignItems="center">
             <Grid item>
@@ -142,8 +139,8 @@ const EventForm = ({ eventData }) => {
               />
             </Grid>
           </Grid>
-          <Grid item>
-            <Button primary="true" type="submit" variant="outlined">
+          <Grid container justify="center" alignItems="center">
+            <Button color="primary" type="submit" variant="contained">
               {eventData ? 'Update Event' : 'Create Event'}
             </Button>
           </Grid>

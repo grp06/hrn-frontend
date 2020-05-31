@@ -4,9 +4,9 @@ const rebeccaPurple = '#6638aa'
 const orchid = '#df97d1'
 const materialPink = '#ffb6ec'
 const ghostWhite = '#f4f6fa'
-const ghostWhite5 = '#E2E8F2'
-const ghostWhite10 = '#D1D9EA'
-const ghostWhite15 = '#BFCBE2'
+const ghostWhiteSub = '#E2E8F2'
+const ghostWhiteBody = '#D1D9EA'
+const ghostWhiteDark = '#BFCBE2'
 const sunray = '#edb868'
 const independence = '#3a405a'
 const mediumGreen = '#4eab6d'
@@ -15,11 +15,11 @@ const black = '#191919'
 const greyBorder = '#3e4042'
 const greyCard = '#242526'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
+const greyHighlight = '#2d2d2d'
+const greyButton = '#323232'
 const black1dp = '#1c1c1c'
 const black3dp = '#232323'
 const black6dp = '#2c2c2c'
-const black8dp = '#2d2d2d'
-const black12dp = '#323232'
 
 const theme = createMuiTheme({
   palette: {
@@ -27,14 +27,15 @@ const theme = createMuiTheme({
       rebeccaPurple,
       orchid,
       ghostWhite,
-      ghostWhite10,
-      ghostWhite15,
+      ghostWhiteBody,
+      ghostWhiteDark,
       independence,
       materialPink,
       greyCard,
       greyBorder,
       greyBoxShadow,
-      black8dp,
+      greyHighlight,
+      greyButton,
     },
     primary: {
       main: rebeccaPurple,
@@ -86,21 +87,32 @@ const theme = createMuiTheme({
     body1: {
       fontFamily: 'Muli',
       fontSize: '1rem',
-      color: ghostWhite10,
+      color: ghostWhiteBody,
     },
     modalBody: {
       fontFamily: 'Muli',
       fontSize: '1.3rem',
-      color: independence,
+      color: ghostWhite,
     },
     p: {
       color: white,
     },
   },
   overrides: {
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: 'transparent',
+      },
+    },
+    // this is for the boxshadow on the navbar
+    MuiPaper: {
+      elevation4: {
+        boxShadow: 'none',
+      },
+    },
     MuiInputLabel: {
       root: {
-        color: rebeccaPurple,
+        color: orchid,
         fontSize: '1rem',
       },
     },
@@ -112,6 +124,11 @@ const theme = createMuiTheme({
         '&:hover:not(disabled):not($focused):not($error):before': {
           borderBottom: `2px solid ${rebeccaPurple}`,
         },
+      },
+    },
+    MuiInputBase: {
+      input: {
+        color: ghostWhiteBody,
       },
     },
     MuiButton: {
@@ -128,10 +145,10 @@ const theme = createMuiTheme({
     },
     MuiListItemText: {
       primary: {
-        color: ghostWhite5,
+        color: ghostWhiteSub,
       },
       secondary: {
-        color: ghostWhite15,
+        color: ghostWhiteDark,
       },
     },
   },
