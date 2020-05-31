@@ -41,7 +41,6 @@ const App = () => {
           <Router>
             <Switch>
               <GameProvider>
-                <Header activeTab={activeTab} setActiveTab={setActiveTab} />
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
                 <Route exact path="/video-room" component={VideoRoom} />
@@ -51,6 +50,7 @@ const App = () => {
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />
                 <Route exact path="/test" component={Test} />
                 <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
+                <Header activeTab={activeTab} setActiveTab={setActiveTab} />
               </GameProvider>
             </Switch>
           </Router>

@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     padding: '20px',
   },
   icon: {
-    color: theme.palette.common.independence,
+    color: theme.palette.common.ghostWhiteBody,
     marginTop: '4px',
     marginBottom: '4px',
   },

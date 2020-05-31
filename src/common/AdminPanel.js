@@ -16,13 +16,14 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '40px',
     borderStyle: 'none none solid',
     borderWidth: '1px',
-    borderColor: theme.palette.common.independence,
+    borderColor: theme.palette.common.greyBorder,
     borderRadius: '4px 4px 0px 0px',
-    backgroundColor: theme.palette.common.ghostWhite,
+    backgroundColor: theme.palette.common.greyHighlight,
+    // backgroundColor: '#3a3b3c',
   },
   categoryHeader: {
     ...theme.typography.h2,
-    color: theme.palette.common.independence,
+    color: theme.palette.common.ghostWhite,
   },
   displayNumber: {
     fontFamily: 'Muli',

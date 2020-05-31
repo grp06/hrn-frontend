@@ -7,17 +7,20 @@ import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
+import { FloatCardMedium } from './'
 
 import { createEvent, updateEvent } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    marginTop: '100px',
+  },
   formContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  subheading: {
-    color: theme.palette.common.rebeccaPurple,
-    textAlign: 'center',
+    paddingTop: '40px',
+    paddingBottom: '40px',
+    width: '40vw',
   },
   inputContainer: {
     marginTop: '2em',
@@ -42,8 +45,8 @@ const EventForm = ({ eventData }) => {
   const classes = useStyles()
   const { userId } = useGameContext()
   const history = useHistory()
-  const [title, setTitle] = useState('My event title')
-  const [description, setDescription] = useState('My description')
+  const [title, setTitle] = useState('My Awesome Event 🔥')
+  const [description, setDescription] = useState("Let's get people hyped!")
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
   const [createEventMutation] = useMutation(createEvent, {
@@ -95,62 +98,66 @@ const EventForm = ({ eventData }) => {
   }
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid item container direction="column" md={6} sm={10} className={classes.formContainer}>
-        <form onSubmit={handleSubmit}>
-          <Grid item container direction="column" alignItems="center">
-            <Grid item>
-              <Typography variant="h4" style={{ lineHeight: 1 }}>
-                {eventData ? 'Edit ' : 'Create '}
-                Your Event
-              </Typography>
-            </Grid>
+    <div className={classes.wrapper}>
+      <FloatCardMedium>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid item container direction="column" className={classes.formContainer}>
+            <form onSubmit={handleSubmit}>
+              <Grid item container direction="column" alignItems="center">
+                <Grid item>
+                  <Typography variant="h4" style={{ lineHeight: 1 }}>
+                    {eventData ? 'Edit ' : 'Create '}
+                    Your Event
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item container direction="column" className={classes.inputContainer}>
+                <Grid item>
+                  <TextField
+                    id="title"
+                    label="Title"
+                    required
+                    fullWidth
+                    className={classes.input}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="desc"
+                    label="Description"
+                    required
+                    fullWidth
+                    multiline
+                    rows={getRowNumber()}
+                    className={classes.input}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <DateTimePicker
+                    variant="inline"
+                    label="Date and time"
+                    value={selectedDate}
+                    onChange={setSelectedDate}
+                    minutesStep={15}
+                    className={classes.dateTime}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container justify="center" alignItems="center">
+                <Button color="primary" type="submit" variant="contained">
+                  {eventData ? 'Update Event' : 'Create Event'}
+                </Button>
+              </Grid>
+            </form>
+            {eventUpdated && <div className={classes.eventUpdated}>Event updated</div>}
           </Grid>
-          <Grid item container direction="column" className={classes.inputContainer}>
-            <Grid item>
-              <TextField
-                id="title"
-                label="Title"
-                required
-                fullWidth
-                className={classes.input}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                id="desc"
-                label="Description"
-                required
-                fullWidth
-                multiline
-                rows={getRowNumber()}
-                className={classes.input}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Grid>
-            <Grid item>
-              <DateTimePicker
-                variant="inline"
-                label="Date and time"
-                value={selectedDate}
-                onChange={setSelectedDate}
-                minutesStep={15}
-                className={classes.dateTime}
-              />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Button primary="true" type="submit" variant="outlined">
-              {eventData ? 'Update Event' : 'Create Event'}
-            </Button>
-          </Grid>
-        </form>
-        {eventUpdated && <div className={classes.eventUpdated}>Event updated</div>}
-      </Grid>
-    </MuiPickersUtilsProvider>
+        </MuiPickersUtilsProvider>
+      </FloatCardMedium>
+    </div>
   )
 }
 

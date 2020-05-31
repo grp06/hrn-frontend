@@ -14,14 +14,21 @@ import bannerBackground from '../assets/eventBannerMountain.png'
 import formatDate from '../utils/formatDate'
 
 const useStyles = makeStyles((theme) => ({
+  bannerGradient: {
+    background: ' rgb(25,25,25)',
+    background:
+      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+    width: '100%',
+    height: '100%',
+  },
   eventBanner: {
     width: '100%',
     height: '45vh',
-    paddingBottom: '80px',
     backgroundImage: `url(${bannerBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
-    zIndex: '-2',
+    zIndex: '-3',
+    marginBottom: '80px',
   },
   eventBannerContentContainer: {
     marginLeft: '30px',
@@ -122,17 +129,19 @@ const Event = ({ match }) => {
 
     return (
       <>
-        <Grid container direction="column" justify="flex-end" className={classes.eventBanner}>
-          <Grid item container direction="column" className={classes.eventBannerContentContainer}>
-            <Typography className={classes.eventTitle}>{event.event_name}</Typography>
-            <Grid item container direction="row" alignItems="center">
-              <ScheduleIcon className={classes.scheduleIcon} />
-              <Typography className={classes.subtitle} variant="subtitle1">
-                {eventTime}
-              </Typography>
+        <div className={classes.eventBanner}>
+          <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
+            <Grid item container direction="column" className={classes.eventBannerContentContainer}>
+              <Typography className={classes.eventTitle}>{event.event_name}</Typography>
+              <Grid item container direction="row" alignItems="center">
+                <ScheduleIcon className={classes.scheduleIcon} />
+                <Typography className={classes.subtitle} variant="subtitle1">
+                  {eventTime}
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </div>
         {hostId === userId ? (
           <AdminPanel timeState={timeState()} eventData={eventData} />
         ) : (

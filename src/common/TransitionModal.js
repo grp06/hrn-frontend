@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
   },
   paper: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
-    boxShadow: '0 0 20px 0 rgba(56, 61, 59, 0.3)',
+    boxShadow: theme.palette.common.greyBoxShadow,
     // padding: theme.spacing(2, 4, 3),
     width: 'auto',
     minWidth: '20vw',
@@ -30,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     width: '100%',
+  },
+  cancelButton: {
+    backgroundColor: theme.palette.common.greyButton,
+    color: theme.palette.common.ghostWhite,
   },
 }))
 
@@ -50,7 +54,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction }) {
     <div>
       <Button
         disableRipple
-        size={buttonSize || 'small'}
+        size={buttonSize || 'medium'}
         variant={buttonVariant || 'contained'}
         color={buttonColor || 'primary'}
         onClick={handleOpen}
@@ -99,7 +103,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction }) {
                 >
                   Yes, I'm Sure
                 </Button>
-                <Button variant="outlined" color="default" onClick={handleClose}>
+                <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
                   Woops, No Way!
                 </Button>
               </Grid>
