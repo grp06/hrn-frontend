@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useCreatePairings } from '../hooks'
-import { EventForm, FloatCardWide, AttendeesList, TransitionModal } from '.'
+import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -47,8 +47,9 @@ const AdminControl = ({ eventData, timeState }) => {
       buttonText: '✏️ Edit Event',
     },
   })
-  const attendees = eventData.events[0].event_users
-  const eventId = eventData.events[0].id
+  const { event_users: attendees, id: eventId, start_at: eventStartTime } = eventData.events[0]
+  // const attendees = eventData.events[0].event_users
+  // const eventId = eventData.events[0].id
 
   useEffect(() => {
     if (attendees) {
@@ -86,12 +87,15 @@ const AdminControl = ({ eventData, timeState }) => {
         break
       default:
         element = (
-          <Button size="large" variant="disabled" color="primary">
-            Start Event
-            <span className={classes.partyEmoji} role="img" aria-label="party emoji">
-              🥳
-            </span>
-          </Button>
+          <>
+            <Button size="large" variant="contained" disabled color="primary">
+              Start Event
+              <span className={classes.partyEmoji} role="img" aria-label="party emoji">
+                🥳
+              </span>
+            </Button>
+            <Timer eventStartTime={eventStartTime} subtitle={'Event Starts In:'} />
+          </>
         )
     }
     return element
