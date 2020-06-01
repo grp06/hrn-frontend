@@ -77,6 +77,7 @@ const GameProvider = ({ children, location }) => {
     if (state.token && state.roomId) {
       const setupRoom = async () => {
         const localTracks = await createLocalTracks({ video: true, audio: false })
+        console.log('connecting to room ', state.roomId)
 
         const myRoom = await connect(state.token, {
           name: state.roomId,
@@ -92,10 +93,13 @@ const GameProvider = ({ children, location }) => {
   }, [state.token, state.roomId])
 
   useEffect(() => {
+    debugger
+
     if (
       (!state.room && state.roomId) ||
       (state.room && parseInt(state.room.name, 10) !== state.roomId)
     ) {
+      debugger
       const getTwilioToken = async () => {
         const token = await getToken(state.roomId, state.userId).then((response) => response.json())
         dispatch((draft) => {
