@@ -16,13 +16,6 @@ const useGameContext = () => {
     })
   }
 
-  function setToken(token) {
-    console.log('setToken -> token')
-    dispatch((draft) => {
-      draft.token = token
-    })
-  }
-
   function setTwilioReady(twilioReady) {
     console.log('setTwilioReady -> twilioReady', twilioReady)
     dispatch((draft) => {
@@ -94,7 +87,6 @@ const useGameContext = () => {
     setLoading,
     setRedirect,
     setEventId,
-    setToken,
     setTwilioReady,
     setRoom,
     setUserId,

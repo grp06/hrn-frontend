@@ -33,8 +33,8 @@ const useTwilio = () => {
       })
 
       room.on('disconnected', function (rum) {
+        console.log('disconnected... setting room to null, twilioReady to false')
         setRoom(null, false)
-        console.log('disconnected')
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
         })

@@ -52,13 +52,6 @@ const AdminControl = ({ eventData, timeState }) => {
   // const eventId = eventData.events[0].id
 
   useEffect(() => {
-    if (attendees) {
-      setAttendees(attendees)
-      setEventId(eventId)
-    }
-  }, [attendees])
-
-  useEffect(() => {
     if (currentRound > 0) {
       history.push('/video-room')
     }

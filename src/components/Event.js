@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 
@@ -9,6 +9,7 @@ import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEventById } from '../gql/queries'
 import bannerBackground from '../assets/eventBannerMountain.png'
+import { useHistory } from 'react-router-dom'
 
 import formatDate from '../utils/formatDate'
 
@@ -44,11 +45,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
-  console.log('RENDER ')
-
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { appLoading, userId } = useGameContext()
+  const { appLoading, userId, currentRound, setAttendees, setEventId } = useGameContext()
+  const history = useHistory()
+
   // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
     getEventById,
@@ -58,6 +59,20 @@ const Event = ({ match }) => {
       },
     }
   )
+
+  useEffect(() => {
+    if (!eventDataLoading && eventData.events) {
+      const { event_users: attendees } = eventData.events[0]
+      setAttendees(attendees)
+      setEventId(eventId)
+    }
+  }, [eventData])
+
+  useEffect(() => {
+    if (currentRound > 0) {
+      history.push('/video-room')
+    }
+  }, [currentRound])
 
   const hostId = eventData && eventData.events[0].host_id
 

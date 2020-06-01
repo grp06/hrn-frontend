@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useGameContext } from '../context/useGameContext'
-import { useGetRoomId } from '../hooks'
+
 import { Connecting } from '.'
+import { useTwilio } from '../hooks'
+import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -46,17 +47,14 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { twilioReady, room, roomId } = useGameContext()
-  const { setToken } = useGetRoomId()
+  const { room } = useGameContext()
+  const { startTwilio } = useTwilio()
 
   useEffect(() => {
-    if (!room && roomId) {
-      console.log('VideoRoom -> room', room)
-      console.log('VideoRoom -> roomId', roomId)
-
-      setToken()
+    if (room) {
+      startTwilio()
     }
-  }, [roomId, room])
+  }, [room])
 
   return (
     <div>

@@ -3,8 +3,11 @@ import React, { useEffect } from 'react'
 import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
-import { findUsers, findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
+import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
+import { getToken } from '../helpers'
+
+const { createLocalTracks, connect } = require('twilio-video')
 
 const GameContext = React.createContext()
 
@@ -64,15 +67,47 @@ const GameProvider = ({ children, location }) => {
     variables: {
       event_id: state.eventId,
     },
+    skip: !state.eventId,
   })
-
-  const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
 
   const apiCallsDone =
     !userDataLoading && !userEventsLoading && !hostEventsLoading && !freshRoundsDataLoading
 
   useEffect(() => {
-    if (apiCallsDone) {
+    if (state.token && state.roomId) {
+      const setupRoom = async () => {
+        const localTracks = await createLocalTracks({ video: true, audio: false })
+
+        const myRoom = await connect(state.token, {
+          name: state.roomId,
+          tracks: localTracks,
+        })
+        dispatch((draft) => {
+          draft.room = myRoom
+          draft.twilioReady = true
+        })
+      }
+      setupRoom()
+    }
+  }, [state.token, state.roomId])
+
+  useEffect(() => {
+    if (
+      (!state.room && state.roomId) ||
+      (state.room && parseInt(state.room.name, 10) !== state.roomId)
+    ) {
+      const getTwilioToken = async () => {
+        const token = await getToken(state.roomId, state.userId).then((response) => response.json())
+        dispatch((draft) => {
+          draft.token = token.token
+        })
+      }
+      getTwilioToken()
+    }
+  }, [state.roomId, state.room])
+
+  useEffect(() => {
+    if (apiCallsDone && state.appLoading) {
       dispatch((draft) => {
         draft.appLoading = false
       })
@@ -80,7 +115,49 @@ const GameProvider = ({ children, location }) => {
   }, [apiCallsDone])
 
   useEffect(() => {
-    if (hasSubscriptionData) {
+    if (!freshRoundsDataLoading && freshRoundsData && freshRoundsData.rounds) {
+      const currentRound = freshRoundsData.rounds.reduce((all, item) => {
+        if (item.round_number > all) {
+          return item.round_number
+        }
+        return all
+      }, 0)
+
+      const myRound = freshRoundsData.rounds.find((round) => {
+        const me =
+          round.round_number === currentRound &&
+          (round.partnerX_id === parseInt(state.userId, 10) ||
+            round.partnerY_id === parseInt(state.userId, 10))
+        return me
+      })
+
+      if (!state.roundsData && freshRoundsData.rounds) {
+        // page just reloaded, set data
+        return dispatch((draft) => {
+          draft.roundsData = freshRoundsData
+          draft.currentRound = currentRound
+          draft.myRound = myRound
+          draft.token = null
+          draft.roomId = myRound ? myRound.id : null
+        })
+      }
+
+      const roundsDataLength = state.roundsData.rounds.length
+      const freshRoundsDataLength = freshRoundsData.rounds.length
+      const newRoundsData = freshRoundsDataLength > roundsDataLength
+      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
+
+      if (newRoundsData || adminIsResettingGame) {
+        // round changed
+        return dispatch((draft) => {
+          draft.roundsData = freshRoundsData
+          draft.currentRound = currentRound
+          draft.myRound = myRound
+          draft.token = null
+          draft.roomId = myRound ? myRound.id : null
+        })
+      }
+
       // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
         return dispatch((draft) => {
@@ -93,47 +170,20 @@ const GameProvider = ({ children, location }) => {
           draft.currentRound = freshRoundsData.length ? 1 : 0
         })
       }
-
-      const roundsDataLength = state.roundsData.rounds.length
-      const freshRoundsDataLength = freshRoundsData.rounds.length
-      const newRoundsData = freshRoundsDataLength > roundsDataLength
-      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
-
-      if (newRoundsData || adminIsResettingGame) {
-        const currentRound = freshRoundsData.rounds.reduce((all, item) => {
-          if (item.round_number > all) {
-            return item.round_number
-          }
-          return all
-        }, 0)
-
-        const myRound = freshRoundsData.rounds.find((round) => {
-          const me =
-            round.round_number === currentRound &&
-            (round.partnerX_id === parseInt(state.userId, 10) ||
-              round.partnerY_id === parseInt(state.userId, 10))
-          return me
-        })
-        // round changed
-        return dispatch((draft) => {
-          draft.roundsData = freshRoundsData
-          draft.currentRound = currentRound
-          draft.myRound = myRound
-          draft.token = null
-          draft.roomId = myRound ? myRound.id : null
-        })
-      }
     }
-  }, [freshRoundsData, hasSubscriptionData])
+  }, [freshRoundsData, freshRoundsDataLoading])
 
   useEffect(() => {
     if (freshRoundsData && freshRoundsData.rounds.length === 0 && state.currentRound === 0) {
-      // admin pressed reset
+      // admin pressed reset or the event hasnt started
       dispatch((draft) => {
         draft.token = null
         draft.roomId = null
         draft.room = null
         draft.twilioReady = false
+        draft.attendees = null
+        draft.hostEventsData = null
+        draft.userEventsData = null
       })
     }
   }, [freshRoundsData, state.currentRound])
