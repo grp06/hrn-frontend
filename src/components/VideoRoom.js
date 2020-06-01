@@ -51,6 +51,9 @@ const VideoRoom = () => {
 
   useEffect(() => {
     if (!room && roomId) {
+      console.log('VideoRoom -> room', room)
+      console.log('VideoRoom -> roomId', roomId)
+
       setToken()
     }
   }, [roomId, room])

@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
 import { findUsers, findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
+import { listenToRounds } from '../gql/subscriptions'
 
 const GameContext = React.createContext()
 
@@ -20,7 +21,6 @@ const defaultState = {
   token: null,
   twilioReady: false,
   userId: null,
-  users: null,
   hasUpcomingEvent: false,
   userEventsData: null,
   hostEventsData: null,
@@ -30,17 +30,19 @@ const defaultState = {
 
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+
   const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(findMyUser, {
     variables: { id: state.userId },
-    skip: !state.userId || !state.appLoading,
+    skip: !state.userId,
   })
+
   const { data: userEventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
     {
       variables: {
         userId: state.userId,
       },
-      skip: !state.role || state.role === 'host',
+      skip: !state.userId || state.role === 'host',
     }
   )
 
@@ -50,23 +52,83 @@ const GameProvider = ({ children, location }) => {
       variables: {
         userId: state.userId,
       },
-      skip: !state.role || state.role === 'user',
+      skip: !state.userId || state.role === 'user',
     }
   )
 
-  const { loading, error, data: findUsersData } = useQuery(findUsers, {
-    skip: state.appLoading,
+  const {
+    data: freshRoundsData,
+    loading: roundDataLoading,
+    error: roundDataError,
+  } = useSubscription(listenToRounds, {
+    variables: {
+      event_id: state.eventId,
+    },
   })
 
-  useEffect(() => {
-    if (findUsersData && findUsersData.users && !state.users) {
-      console.log('setting users = ', findUsersData.users)
+  const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
 
+  useEffect(() => {
+    if (hasSubscriptionData) {
+      console.log('Event -> freshRoundsData', freshRoundsData)
+
+      if (!state.roundsData || !state.roundsData.rounds.length) {
+        return dispatch((draft) => {
+          draft.roomId = null
+          draft.room = null
+          draft.token = null
+          draft.twilioReady = false
+          draft.myRound = 0
+          draft.roundsData = freshRoundsData
+          draft.currentRound = freshRoundsData.length ? 1 : 0
+        })
+      }
+
+      const roundsDataLength = state.roundsData.rounds.length
+      const freshRoundsDataLength = freshRoundsData.rounds.length
+      const newRoundsData = freshRoundsDataLength > roundsDataLength
+      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
+
+      if (newRoundsData || adminIsResettingGame) {
+        const currentRound = freshRoundsData.rounds.reduce((all, item) => {
+          if (item.round_number > all) {
+            return item.round_number
+          }
+          return all
+        }, 0)
+        console.log('setGameData -> freshRoundsData', freshRoundsData)
+
+        const myRound = freshRoundsData.rounds.find((round) => {
+          const me =
+            round.round_number === currentRound &&
+            (round.partnerX_id === parseInt(state.userId, 10) ||
+              round.partnerY_id === parseInt(state.userId, 10))
+          return me
+        })
+
+        return dispatch((draft) => {
+          draft.roundsData = freshRoundsData
+          draft.currentRound = currentRound
+          draft.myRound = myRound
+          draft.token = null
+          draft.roomId = myRound ? myRound.id : null
+
+          // reset all these guys between rounds
+        })
+      }
+    }
+  }, [freshRoundsData, hasSubscriptionData])
+
+  useEffect(() => {
+    if (freshRoundsData && freshRoundsData.rounds.length === 0 && state.currentRound === 0) {
       dispatch((draft) => {
-        draft.users = findUsersData.users
+        draft.token = null
+        draft.roomId = null
+        draft.room = null
+        draft.twilioReady = false
       })
     }
-  }, [findUsersData, state.users])
+  }, [freshRoundsData, state.currentRound])
 
   useEffect(() => {
     if (state.role === 'user' && userEventsData) {
@@ -117,15 +179,9 @@ const GameProvider = ({ children, location }) => {
           draft.appLoading = false
         })
       }
-      setTimeout(() => {
-        dispatch((draft) => {
-          draft.userId = myUserId
-          if (draft.role) {
-            console.log('role', draft.role)
-            draft.appLoading = false
-          }
-        })
-      }, 500)
+      dispatch((draft) => {
+        draft.userId = myUserId
+      })
     }
   }, [])
 

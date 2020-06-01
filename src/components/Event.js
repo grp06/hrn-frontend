@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useSubscription, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 
 import { makeStyles } from '@material-ui/styles'
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
-import { EventForm, AdminPanel, UserPanel, Loading } from '../common'
+import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { listenToRounds } from '../gql/subscriptions'
 import { getEventById } from '../gql/queries'
 import bannerBackground from '../assets/eventBannerMountain.png'
 
@@ -45,17 +44,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
+  console.log('RENDER ')
+
   const { id: eventId } = match.params
   const classes = useStyles()
-  const {
-    appLoading,
-    setGameData,
-    currentRound,
-    resetUserState,
-    userId,
-    roundsData,
-    roomId,
-  } = useGameContext()
+  const { appLoading, userId } = useGameContext()
   // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
     getEventById,
@@ -66,51 +59,9 @@ const Event = ({ match }) => {
     }
   )
 
-  const {
-    data: freshRoundsData,
-    loading: roundDataLoading,
-    error: roundDataError,
-  } = useSubscription(listenToRounds, {
-    variables: {
-      event_id: eventId,
-    },
-  })
-
-  console.log('the freshestttt rounds data = ', freshRoundsData)
-
-  const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
   const hostId = eventData && eventData.events[0].host_id
 
-  useEffect(() => {
-    if (freshRoundsData && freshRoundsData.rounds.length === 0 && currentRound === 0) {
-      return resetUserState()
-    }
-  }, [freshRoundsData, currentRound])
-
-  useEffect(() => {
-    if (hasSubscriptionData) {
-      console.log('Event -> freshRoundsData', freshRoundsData)
-
-      if (!roundsData || !roundsData.rounds.length) {
-        return setGameData(freshRoundsData, userId)
-      }
-
-      const roundsDataLength = roundsData.rounds.length
-      const freshRoundsDataLength = freshRoundsData.rounds.length
-      const newRoundsData = freshRoundsDataLength > roundsDataLength
-      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
-
-      if (newRoundsData || adminIsResettingGame) {
-        return setGameData(freshRoundsData, userId)
-      }
-    }
-  }, [freshRoundsData, hasSubscriptionData])
-
-  if (roundDataError) {
-    return <div>Looks like we hit a hiccup. Please refresh your browser.</div>
-  }
-
-  if (appLoading || roundDataLoading || eventDataLoading) {
+  if (appLoading || eventDataLoading) {
     return <Loading />
   }
 

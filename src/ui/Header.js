@@ -112,7 +112,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, users, eventId, setCurrentRound } = useGameContext()
+  const { role, currentRound, eventId, setCurrentRound } = useGameContext()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
 
   const [openDrawer, setOpenDrawer] = useState(false)
@@ -214,10 +214,7 @@ const Header = ({ activeTab, setActiveTab }) => {
         className={classes.adminPanelContainer}
       >
         <Grid item className={classes.tab}>
-          <p>
-            Participants Online:
-            {users.length}
-          </p>
+          <p>Participants Online: fixme</p>
         </Grid>
         <Grid item className={classes.tab}>
           <p>
@@ -244,7 +241,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {role === 'host' && users && users.length && currentRound !== 0 && adminNavPanel()}
+          {role === 'host' && currentRound !== 0 && adminNavPanel()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>
