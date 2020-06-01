@@ -10,7 +10,6 @@ import Typography from '@material-ui/core/Typography'
 import { Mutation } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 
-import { Loading } from '.'
 import loginPhoto from '../assets/login.svg'
 import { useGameContext } from '../context/useGameContext'
 import { createUser } from '../gql/mutations'
@@ -46,7 +45,7 @@ const useStyles = makeStyles(() => ({
 
 const LoginForm = ({ history }) => {
   const classes = useStyles()
-  const { appLoading, userId, redirect, setRedirect, setUserId } = useGameContext()
+  const { redirect, setRedirect, setUserId } = useGameContext()
 
   const [username, setUsername] = useState('')
 

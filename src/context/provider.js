@@ -36,7 +36,7 @@ const GameProvider = ({ children, location }) => {
     skip: !state.userId,
   })
 
-  const { data: userEventsData, loading: eventsLoading, error: eventsError } = useQuery(
+  const { data: userEventsData, loading: userEventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
     {
       variables: {
@@ -58,7 +58,7 @@ const GameProvider = ({ children, location }) => {
 
   const {
     data: freshRoundsData,
-    loading: roundDataLoading,
+    loading: freshRoundsDataLoading,
     error: roundDataError,
   } = useSubscription(listenToRounds, {
     variables: {
@@ -68,10 +68,20 @@ const GameProvider = ({ children, location }) => {
 
   const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
 
+  const apiCallsDone =
+    !userDataLoading && !userEventsLoading && !hostEventsLoading && !freshRoundsDataLoading
+
+  useEffect(() => {
+    if (apiCallsDone) {
+      dispatch((draft) => {
+        draft.appLoading = false
+      })
+    }
+  }, [apiCallsDone])
+
   useEffect(() => {
     if (hasSubscriptionData) {
-      console.log('Event -> freshRoundsData', freshRoundsData)
-
+      // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
         return dispatch((draft) => {
           draft.roomId = null
@@ -96,7 +106,6 @@ const GameProvider = ({ children, location }) => {
           }
           return all
         }, 0)
-        console.log('setGameData -> freshRoundsData', freshRoundsData)
 
         const myRound = freshRoundsData.rounds.find((round) => {
           const me =
@@ -105,15 +114,13 @@ const GameProvider = ({ children, location }) => {
               round.partnerY_id === parseInt(state.userId, 10))
           return me
         })
-
+        // round changed
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
           draft.token = null
           draft.roomId = myRound ? myRound.id : null
-
-          // reset all these guys between rounds
         })
       }
     }
@@ -121,6 +128,7 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (freshRoundsData && freshRoundsData.rounds.length === 0 && state.currentRound === 0) {
+      // admin pressed reset
       dispatch((draft) => {
         draft.token = null
         draft.roomId = null
@@ -132,6 +140,7 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (state.role === 'user' && userEventsData) {
+      // when do we use this? Something for online users?
       const startingSoon = userEventsData.event_users.find((event) => {
         const { start_at } = event.event
         const startTime = new Date(start_at).getTime()
@@ -143,14 +152,12 @@ const GameProvider = ({ children, location }) => {
       dispatch((draft) => {
         draft.userEventsData = userEventsData
         draft.startingSoon = startingSoon
-        draft.appLoading = false
       })
     }
 
     if (state.role === 'host' && hostEventsData) {
       dispatch((draft) => {
         draft.hostEventsData = hostEventsData
-        draft.appLoading = false
       })
     }
   }, [hostEventsData, userEventsData, state.role])
@@ -163,9 +170,6 @@ const GameProvider = ({ children, location }) => {
         draft.role = role
         draft.userId = id
         draft.name = name
-        if (draft.userId) {
-          console.log('userId', draft.userId)
-        }
       })
     }
   }, [userData])
