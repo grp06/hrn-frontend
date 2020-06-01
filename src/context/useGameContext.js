@@ -45,7 +45,6 @@ const useGameContext = () => {
   }
 
   function setGameData(freshRoundsData, userId) {
-    console.log('setGameData -> freshRoundsData', freshRoundsData)
     // if you reset or you just press start for the first time
     if (!freshRoundsData || !freshRoundsData.rounds.length) {
       dispatch((draft) => {
@@ -64,6 +63,7 @@ const useGameContext = () => {
         }
         return all
       }, 0)
+      console.log('setGameData -> freshRoundsData', freshRoundsData)
 
       const myRound = freshRoundsData.rounds.find((round) => {
         const me =
@@ -71,22 +71,17 @@ const useGameContext = () => {
           (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
         return me
       })
+
       dispatch((draft) => {
         draft.roundsData = freshRoundsData
         draft.currentRound = currentRound
         draft.myRound = myRound
         draft.token = null
         draft.roomId = myRound ? myRound.id : null
+
         // reset all these guys between rounds
       })
     }
-  }
-
-  function setRoomId(roomId) {
-    console.log('setRoomId -> roomId', roomId)
-    dispatch((draft) => {
-      draft.roomId = roomId
-    })
   }
 
   function setRoom(room, twilioReady) {
@@ -125,7 +120,7 @@ const useGameContext = () => {
     })
   }
 
-  // only used once - in useCreatePairings
+  // only used once - in Header.js
   function setCurrentRound(currentRound) {
     console.log('setCurrentRound -> currentRound', currentRound)
     dispatch((draft) => {
@@ -156,7 +151,6 @@ const useGameContext = () => {
     setLoading,
     setRedirect,
     setEventId,
-    setRoomId,
     setGameData,
     setToken,
     setTwilioReady,

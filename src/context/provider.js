@@ -3,8 +3,7 @@ import React, { useEffect } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
-
-import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
+import { findUsers, findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 
 const GameContext = React.createContext()
 
@@ -54,6 +53,20 @@ const GameProvider = ({ children, location }) => {
       skip: !state.role || state.role === 'user',
     }
   )
+
+  const { loading, error, data: findUsersData } = useQuery(findUsers, {
+    skip: state.appLoading,
+  })
+
+  useEffect(() => {
+    if (findUsersData && findUsersData.users && !state.users) {
+      console.log('setting users = ', findUsersData.users)
+
+      dispatch((draft) => {
+        draft.users = findUsersData.users
+      })
+    }
+  }, [findUsersData, state.users])
 
   useEffect(() => {
     if (state.role === 'user' && userEventsData) {

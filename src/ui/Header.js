@@ -15,13 +15,12 @@ import {
 import MenuIcon from '@material-ui/icons/Menu'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
-import { Link } from 'react-router-dom'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+
 import { useGameContext } from '../context/useGameContext'
 import endpointUrl from '../utils/endpointUrl'
 
 import { deleteRounds } from '../gql/mutations'
-import { useCreatePairings } from '../hooks'
 import { TransitionModal } from '../common'
 
 import logo from '../assets/logoWhite.svg'
@@ -113,8 +112,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, users, attendees, eventId, setCurrentRound } = useGameContext()
-  const { createPairings } = useCreatePairings()
+  const { role, currentRound, users, eventId, setCurrentRound } = useGameContext()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
 
   const [openDrawer, setOpenDrawer] = useState(false)
@@ -129,7 +127,7 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-      await fetch(`${endpointUrl}/api/rooms/complete-rooms`)
+      await fetch(`${endpointUrl}/api/rooms/reset-event`)
       setCurrentRound(0)
       history.push(`/events/${eventId}`)
     },
@@ -228,18 +226,6 @@ const Header = ({ activeTab, setActiveTab }) => {
           </p>
         </Grid>
         <Grid item>{resetRoundsModal}</Grid>
-        <Grid item>
-          <Button
-            // className={classes.buttonSmall}
-            disableRipple
-            size="medium"
-            variant="contained"
-            color="primary"
-            onClick={() => createPairings(attendees, eventId)}
-          >
-            Next Round
-          </Button>
-        </Grid>
       </Grid>
     )
   }

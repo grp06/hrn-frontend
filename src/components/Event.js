@@ -54,6 +54,7 @@ const Event = ({ match }) => {
     resetUserState,
     userId,
     roundsData,
+    roomId,
   } = useGameContext()
   // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
@@ -75,6 +76,8 @@ const Event = ({ match }) => {
     },
   })
 
+  console.log('the freshestttt rounds data = ', freshRoundsData)
+
   const hasSubscriptionData = freshRoundsData && freshRoundsData.rounds
   const hostId = eventData && eventData.events[0].host_id
 
@@ -86,7 +89,8 @@ const Event = ({ match }) => {
 
   useEffect(() => {
     if (hasSubscriptionData) {
-      console.warn('Event -> roundsData', roundsData)
+      console.log('Event -> freshRoundsData', freshRoundsData)
+
       if (!roundsData || !roundsData.rounds.length) {
         return setGameData(freshRoundsData, userId)
       }

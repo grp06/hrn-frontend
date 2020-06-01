@@ -5,9 +5,9 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useCreatePairings } from '../hooks'
 import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
 import { useGameContext } from '../context/useGameContext'
+import { startEvent } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -37,8 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminControl = ({ eventData, timeState }) => {
   const classes = useStyles()
-  const { createPairings } = useCreatePairings()
-  const { currentRound, setAttendees, setEventId } = useGameContext()
+  const { currentRound, setAttendees, setEventId, userId } = useGameContext()
   const history = useHistory()
 
   const editFormModal = TransitionModal({
@@ -77,7 +76,7 @@ const AdminControl = ({ eventData, timeState }) => {
             size="large"
             variant="contained"
             color="primary"
-            onClick={() => createPairings(attendees, eventId)}
+            onClick={() => startEvent(eventId, userId)}
           >
             Start Event
             <span className={classes.partyEmoji} role="img" aria-label="party emoji">
@@ -95,7 +94,7 @@ const AdminControl = ({ eventData, timeState }) => {
                 🥳
               </span>
             </Button>
-            <Timer eventStartTime={eventStartTime} subtitle={'Event Starts In:'} />
+            <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
           </>
         )
     }
