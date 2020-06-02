@@ -93,13 +93,10 @@ const GameProvider = ({ children, location }) => {
   }, [state.token, state.roomId])
 
   useEffect(() => {
-    debugger
-
     if (
       (!state.room && state.roomId) ||
       (state.room && parseInt(state.room.name, 10) !== state.roomId)
     ) {
-      debugger
       const getTwilioToken = async () => {
         const token = await getToken(state.roomId, state.userId).then((response) => response.json())
         dispatch((draft) => {
