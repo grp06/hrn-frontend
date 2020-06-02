@@ -1,4 +1,5 @@
 import { useHistory } from 'react-router-dom'
+
 import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
 
@@ -7,15 +8,17 @@ const useTwilio = () => {
     room,
     twilioReady,
     setTwilioReady,
-    setRoom,
     setConnecting,
     currentRound,
+    setWaitingRoom,
   } = useGameContext()
   const history = useHistory()
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
     if (room && twilioReady) {
+      setWaitingRoom(false)
+
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         console.log('publication = ', publication)
@@ -44,6 +47,7 @@ const useTwilio = () => {
 
       room.on('disconnected', function (rum) {
         console.log('disconnected... setting room to null, twilioReady to false')
+        setWaitingRoom(true)
         // hardcoding this for our test
         if (currentRound === 3) {
           history.push('/event-complete')

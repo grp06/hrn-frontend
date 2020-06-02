@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
+
 import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +20,10 @@ const useStyles = makeStyles((theme) => ({
 
 const Connecting = () => {
   const classes = useStyles()
-  const { twilioReady, connecting } = useGameContext()
+  const { twilioReady, connecting, waitingRoom } = useGameContext()
+  if (waitingRoom) {
+    return <div className={classes.connecting}>Waiting between rounds...</div>
+  }
   if (twilioReady && !connecting) {
     return null
   }
