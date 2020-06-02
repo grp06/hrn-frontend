@@ -4,10 +4,12 @@ import { Redirect } from 'react-router-dom'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import bannerBackground5 from '../assets/purpleOil.jpg'
+import { useHistory, useLocation } from 'react-router-dom'
 import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Events = () => {
   const classes = useStyles()
+  const history = useHistory()
 
   const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
 
@@ -82,8 +85,13 @@ const Events = () => {
       return <EventCard key={event.id} event={event} />
     })
 
-  if (!userEventsData && !hostEventsData) {
-    return <div>no events to display. Please create an event. </div>
+  if (!userEventsData && !hostEventsData && role === 'host') {
+    return (
+      <>
+        <div>no events to display. Please create an event. </div>
+        <CreateEventButton />
+      </>
+    )
   }
   return (
     <>
@@ -106,6 +114,13 @@ const Events = () => {
       {role === 'host' && <CreateEventButton />}
       {renderUserCards()}
       {renderHostCards()}
+      <Button
+        onClick={() => {
+          history.push('/sign-up')
+        }}
+      >
+        Sign Up
+      </Button>
     </>
   )
 }

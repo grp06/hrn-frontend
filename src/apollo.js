@@ -14,7 +14,8 @@ async function getCurrentUserToken() {
 
 const makeApolloClient = async () => {
   const httpLink = new HttpLink({
-    uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
+    uri: 'http://localhost:8080/v1/graphql',
+    // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
   })
 
   const authLink = setContext(async (req, { headers }) => {
@@ -51,7 +52,8 @@ const makeApolloClient = async () => {
   }
 
   const wsLink = new WebSocketLink({
-    uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
+    uri: 'wss://localhost:8080/v1/graphql',
+    // uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
     options: {
       reconnect: true,
       connectionParams,
