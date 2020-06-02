@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
   time: {
     fontSize: '2rem',
     fontFamily: 'Muli',
-    color: theme.palette.common.independence,
+    color: theme.palette.common.orchid,
   },
   subtitle: {
     ...theme.typography.body,

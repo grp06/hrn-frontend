@@ -38,10 +38,10 @@ import logo from '../assets/logoWhite.svg'
 // }
 
 const useStyles = makeStyles((theme) => ({
-  toolbarMargin: {
-    ...theme.mixins.toolbar,
-    // marginBottom: '2em',
-  },
+  // toolbarMargin: {
+  //   ...theme.mixins.toolbar,
+  //   // marginBottom: '2em',
+  // },
   [theme.breakpoints.down('md')]: {
     marginBottom: '1em',
   },
@@ -246,7 +246,7 @@ const Header = ({ activeTab, setActiveTab }) => {
         </Toolbar>
       </AppBar>
       {/* </ElevationScroll> */}
-      <div className={classes.toolbarMargin} />
+      {/* <div className={classes.toolbarMargin} /> */}
     </>
   )
 }
