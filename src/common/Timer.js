@@ -40,10 +40,15 @@ const Timer = ({ eventStartTime, subtitle }) => {
     if (seconds === 0) {
       setIsTimerActive(false)
     }
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+    }
   }, [seconds])
 
-  return isTimerActive ? (
+  const displayTime =
+    seconds && seconds >= 0 ? `${minutesToDisplay} : ${secondsToDisplay}` : '-- : --'
+
+  return (
     <Grid
       container
       direction="column"
@@ -52,9 +57,9 @@ const Timer = ({ eventStartTime, subtitle }) => {
       className={classes.container}
     >
       <Typography className={classes.subtitle}>{subtitle}</Typography>
-      <div className={classes.time}>{`${minutesToDisplay} : ${secondsToDisplay}`}</div>
+      <div className={classes.time}>{displayTime}</div>
     </Grid>
-  ) : null
+  )
 }
 
 export default Timer

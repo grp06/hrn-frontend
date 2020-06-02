@@ -60,14 +60,25 @@ const VideoRoom = () => {
   const classes = useStyles()
   const { room, myRound } = useGameContext()
   const { startTwilio } = useTwilio()
+  const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
 
   useEffect(() => {
     if (room) {
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + 30)
+      console.log('use effect video room')
+      console.log('timer Time Input ****', timerTimeInput)
       setTimerTimeInput(eventEndTime)
+
+      setShowTimer(true)
       startTwilio()
+    }
+    return () => {
+      console.log('VideoRoom Cleanup ******')
+      // document.getElementById('timer-container').innerHTML()
+      // setShowTimer(false)
+      // setTimerTimeInput(moment())
     }
   }, [room])
 
@@ -77,15 +88,15 @@ const VideoRoom = () => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {timerTimeInput ? (
+        {showTimer ? (
           <Grid
             container
             justify="center"
             alignItems="center"
-            id="timer"
+            id="timer-container"
             className={classes.timerContainer}
           >
-            <Timer eventStartTime={timerTimeInput} subtitle="Next Person In:" />
+            <Timer eventStartTime={timerTimeInput} subtitle="New Person In:" />
           </Grid>
         ) : null}
       </div>
