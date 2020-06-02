@@ -57,8 +57,7 @@ const Events = () => {
   const history = useHistory()
 
   const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
-
-  if (appLoading) {
+  if (appLoading || !role) {
     return <Loading />
   }
 
@@ -66,24 +65,27 @@ const Events = () => {
     return <Redirect to="/" push />
   }
 
-  // console.log('events = ', userEventsData)
   // const sortedEvents = userEventsData.events.sort((a, b) => {
   //   // write logic here to sort events by start time
   // })
+  const renderUserCards = () => {
+    if (role === 'user') {
+      if (!userEventsData) {
+        return <div>No data</div>
+      }
+      return userEventsData.event_users.map((event) => {
+        return <EventCard key={event.id} event={event.event} />
+      })
+    }
+  }
 
-  // we could (and probably should) loop over hosts data and user's
-  // events data separately
-  const renderUserCards = () =>
-    role === 'user' &&
-    userEventsData.event_users.map((event) => {
-      return <EventCard key={event.id} event={event.event} />
-    })
-
-  const renderHostCards = () =>
+  const renderHostCards = () => {
     role === 'host' &&
-    hostEventsData.events.map((event) => {
-      return <EventCard key={event.id} event={event} />
-    })
+      hostEventsData &&
+      hostEventsData.events.map((event) => {
+        return <EventCard key={event.id} event={event} />
+      })
+  }
 
   if (!userEventsData && !hostEventsData && role === 'host') {
     return (
@@ -93,6 +95,7 @@ const Events = () => {
       </>
     )
   }
+
   return (
     <>
       <div className={classes.pageBanner}>

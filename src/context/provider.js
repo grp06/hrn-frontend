@@ -45,7 +45,7 @@ const GameProvider = ({ children, location }) => {
       variables: {
         userId: state.userId,
       },
-      skip: !state.userId || state.role === 'host',
+      skip: !state.userId || !state.role || state.role === 'host',
     }
   )
 
@@ -227,6 +227,7 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (!state.userId) {
+      debugger
       const myUserId = localStorage.getItem('userId')
       if (!myUserId && state.redirect === null) {
         return dispatch((draft) => {
@@ -240,9 +241,9 @@ const GameProvider = ({ children, location }) => {
     }
   }, [])
 
-  if (state.redirect && location.pathname !== '/') {
-    return <Redirect to="/" push />
-  }
+  // if (state.redirect && location.pathname !== '/') {
+  //   return <Redirect to="/" push />
+  // }
 
   return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
 }

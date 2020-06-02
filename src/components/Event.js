@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
+import { useHistory } from 'react-router-dom'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEventById } from '../gql/queries'
 import bannerBackground from '../assets/eventBannerMountain.png'
-import { useHistory } from 'react-router-dom'
 
 import formatDate from '../utils/formatDate'
 
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { appLoading, userId, currentRound, setAttendees, setEventId } = useGameContext()
+  const { appLoading, userId, currentRound, setAttendees, setEventId, role } = useGameContext()
   const history = useHistory()
 
   // decoding thing here
@@ -63,6 +63,9 @@ const Event = ({ match }) => {
   useEffect(() => {
     if (!eventDataLoading && eventData.events) {
       const { event_users: attendees } = eventData.events[0]
+      if (!eventData.events[0]) {
+        return history.push('/events')
+      }
       setAttendees(attendees)
       setEventId(eventId)
     }
@@ -74,54 +77,56 @@ const Event = ({ match }) => {
     }
   }, [currentRound])
 
-  const hostId = eventData && eventData.events[0].host_id
-
-  if (appLoading || eventDataLoading) {
+  if (appLoading || eventDataLoading || !role) {
     return <Loading />
   }
 
-  // probably need to move this into useEffect
-  if (eventData) {
-    const event = eventData.events[0]
-    const startTime = new Date(event.start_at).getTime()
-    const eventTime = formatDate(startTime)
-    const now = Date.now()
-    const diff = startTime - now
-    const timeState = () => {
-      if (diff > 1800000) {
-        return 'future'
-      }
-      if (diff < 0) {
-        return 'go time'
-      }
-      return 'within 30 mins'
-    }
-
-    return (
-      <>
-        <div className={classes.eventBanner}>
-          <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
-            <Grid item container direction="column" className={classes.eventBannerContentContainer}>
-              <Typography className={classes.eventTitle}>{event.event_name}</Typography>
-              <Grid item container direction="row" alignItems="center">
-                <ScheduleIcon className={classes.scheduleIcon} />
-                <Typography className={classes.subtitle} variant="subtitle1">
-                  {eventTime}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-        </div>
-        {hostId === userId ? (
-          <AdminPanel timeState={timeState()} eventData={eventData} />
-        ) : (
-          <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />
-        )}
-      </>
-    )
+  if (!eventData) {
+    return null
   }
 
-  return <></>
+  // probably need to move this into useEffect
+
+  const event = eventData.events[0]
+  // if a user navigates to an eventId that doesn't exist, push them to /events
+
+  const startTime = new Date(event.start_at).getTime()
+  const eventTime = formatDate(startTime)
+  const now = Date.now()
+  const diff = startTime - now
+  const timeState = () => {
+    if (diff > 1800000) {
+      return 'future'
+    }
+    if (diff < 0) {
+      return 'go time'
+    }
+    return 'within 30 mins'
+  }
+  const hostId = eventData && eventData.events[0].host_id
+
+  return (
+    <>
+      <div className={classes.eventBanner}>
+        <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
+          <Grid item container direction="column" className={classes.eventBannerContentContainer}>
+            <Typography className={classes.eventTitle}>{event.event_name}</Typography>
+            <Grid item container direction="row" alignItems="center">
+              <ScheduleIcon className={classes.scheduleIcon} />
+              <Typography className={classes.subtitle} variant="subtitle1">
+                {eventTime}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+      </div>
+      {hostId === userId ? (
+        <AdminPanel timeState={timeState()} eventData={eventData} />
+      ) : (
+        <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />
+      )}
+    </>
+  )
 }
 
 export default Event
