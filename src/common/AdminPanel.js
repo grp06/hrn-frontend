@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+
 import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
 import { useGameContext } from '../context/useGameContext'
 import { startEvent } from '../helpers'
@@ -51,11 +52,12 @@ const AdminControl = ({ eventData, timeState }) => {
   // const attendees = eventData.events[0].event_users
   // const eventId = eventData.events[0].id
 
-  useEffect(() => {
-    if (currentRound > 0) {
-      history.push('/video-room')
-    }
-  }, [currentRound])
+  // already doing this on event.js
+  // useEffect(() => {
+  //   if (currentRound > 0) {
+  //     history.push('/video-room')
+  //   }
+  // }, [currentRound])
 
   const renderButton = () => {
     let element

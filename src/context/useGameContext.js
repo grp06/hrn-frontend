@@ -22,6 +22,11 @@ const useGameContext = () => {
       draft.twilioReady = twilioReady
     })
   }
+  function setWaitingRoom(waitingRoom) {
+    dispatch((draft) => {
+      draft.waitingRoom = waitingRoom
+    })
+  }
 
   function setRoundsData(rounds) {
     console.log('setRoundsData -> rounds', rounds)
@@ -93,6 +98,7 @@ const useGameContext = () => {
     setAttendees,
     setCurrentRound,
     setConnecting,
+    setWaitingRoom,
   }
 }
 

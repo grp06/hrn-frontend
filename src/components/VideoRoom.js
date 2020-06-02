@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
+
 import { makeStyles } from '@material-ui/styles'
+import { useHistory } from 'react-router-dom'
 
 import { Connecting } from '.'
-import { useTwilio } from '../hooks'
 import { useGameContext } from '../context/useGameContext'
+import { useTwilio } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -47,14 +49,21 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { room } = useGameContext()
+  const { room, currentRound } = useGameContext()
   const { startTwilio } = useTwilio()
+  const history = useHistory()
 
   useEffect(() => {
     if (room) {
       startTwilio()
     }
   }, [room])
+
+  useEffect(() => {
+    if (currentRound === 0) {
+      history.push('/events')
+    }
+  }, [currentRound])
 
   return (
     <div>
