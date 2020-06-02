@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 
 import { makeStyles } from '@material-ui/styles'
@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
-import { FloatCardWide, AttendeesList } from '.'
+import { FloatCardWide, AttendeesList, Timer } from '.'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const { userId, role, currentRound } = useGameContext()
-  const history = useHistory()
+  const [waitingForAdmin, setWaitingForAdmin] = useState()
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
@@ -56,12 +56,12 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   })
 
   useEffect(() => {
-    if (currentRound > 0) {
-      history.push('/video-room')
+    if (timeState === 'go time' && role === 'user') {
+      setWaitingForAdmin(true)
     }
   }, [currentRound])
+  const { event_users: attendees, start_at: eventStartTime } = eventData.events[0]
 
-  const attendees = eventData.events[0].event_users
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
 
   const renderButton = () => {
@@ -90,9 +90,56 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         element = null
         break
       default:
-        element = <div>coutndown and rsvp?</div>
+        element = (
+          <>
+            <Button
+              variant="contained"
+              size="large"
+              onClick={async () => {
+                if (alreadyAttending) {
+                  await deleteEventUserMutation()
+                  refetch()
+                } else {
+                  await insertEventUserMutation()
+                  refetch()
+                }
+              }}
+            >
+              {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
+            </Button>
+            <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
+          </>
+        )
     }
     return element
+  }
+
+  if (waitingForAdmin) {
+    return (
+      <FloatCardWide>
+        <Grid
+          item
+          container
+          justify="space-around"
+          alignItems="center"
+          className={classes.topDashboard}
+        >
+          <Grid
+            container
+            item
+            md={6}
+            xs={12}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            <Typography className={classes.categoryHeader}>
+              Waiting for host to start event
+            </Typography>
+          </Grid>
+        </Grid>
+      </FloatCardWide>
+    )
   }
 
   return (

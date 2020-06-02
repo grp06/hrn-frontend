@@ -45,7 +45,7 @@ const GameProvider = ({ children, location }) => {
       variables: {
         userId: state.userId,
       },
-      skip: !state.userId || state.role === 'host',
+      skip: !state.userId || !state.role || state.role === 'host',
     }
   )
 

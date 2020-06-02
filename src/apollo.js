@@ -14,7 +14,8 @@ async function getCurrentUserToken() {
 
 const makeApolloClient = async () => {
   const httpLink = new HttpLink({
-    uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
+    // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
+    uri: 'http://localhost:8080/v1/graphql',
   })
 
   const authLink = setContext(async (req, { headers }) => {
@@ -25,7 +26,7 @@ const makeApolloClient = async () => {
     if (token) {
       authHeaders = {
         authorization: `Bearer ${token}`,
-        'X-Hasura-Admin-Secret': 'hirightnow',
+        'X-Hasura-Admin-Secret': 'balibali',
       }
     }
 
@@ -44,14 +45,15 @@ const makeApolloClient = async () => {
       return {
         headers: {
           authorization: `Bearer ${token}`,
-          'X-Hasura-Admin-Secret': 'hirightnow',
+          'X-Hasura-Admin-Secret': 'balibali',
         },
       }
     }
   }
 
   const wsLink = new WebSocketLink({
-    uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
+    // uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
+    uri: 'ws://localhost:8080/v1/graphql',
     options: {
       reconnect: true,
       connectionParams,

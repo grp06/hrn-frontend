@@ -7,7 +7,7 @@ import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
-import { FloatCardMedium } from './'
+import { FloatCardMedium } from '.'
 
 import { createEvent, updateEvent } from '../gql/mutations'
 

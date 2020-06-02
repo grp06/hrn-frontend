@@ -51,7 +51,6 @@ const App = () => {
                 <Route exact path="/event-complete" component={GameOver} />
 
                 <Route exact path="/test" component={Test} />
-                <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
               </GameProvider>
             </Switch>

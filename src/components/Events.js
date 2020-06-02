@@ -54,7 +54,6 @@ const Events = () => {
   const classes = useStyles()
 
   const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
-
   if (appLoading) {
     return <Loading />
   }
@@ -63,13 +62,10 @@ const Events = () => {
     return <Redirect to="/" push />
   }
 
-  // console.log('events = ', userEventsData)
   // const sortedEvents = userEventsData.events.sort((a, b) => {
   //   // write logic here to sort events by start time
   // })
 
-  // we could (and probably should) loop over hosts data and user's
-  // events data separately
   const renderUserCards = () =>
     role === 'user' &&
     userEventsData.event_users.map((event) => {
@@ -85,6 +81,7 @@ const Events = () => {
   if (!userEventsData && !hostEventsData) {
     return <div>no events to display. Please create an event. </div>
   }
+
   return (
     <>
       <div className={classes.pageBanner}>
