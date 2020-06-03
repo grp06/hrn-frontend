@@ -34,6 +34,7 @@ const App = () => {
     return null
   }
 
+  // the last route is for naughty urls
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider injectFirst>
@@ -51,6 +52,7 @@ const App = () => {
                 <Route exact path="/event-complete" component={GameOver} />
                 <Route exact path="/sign-up" component={SignUp} />
                 <Route exact path="/test" component={Test} />
+                <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
               </GameProvider>
             </Switch>

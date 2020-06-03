@@ -8,7 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { useHistory, Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
@@ -42,9 +42,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SignUpForm = ({ location }) => {
+const SignUpForm = () => {
   const classes = useStyles()
-  const history = useHistory()
   const { redirect, setRedirect, setUserId, userId } = useGameContext()
 
   const [username, setUsername] = useState('')
@@ -55,6 +54,11 @@ const SignUpForm = ({ location }) => {
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
+
+  // check to see if a user is already logged in, if so redirect
+  if (localStorage.getItem('userId')) {
+    return <Redirect to="/events" />
+  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
@@ -79,12 +83,11 @@ const SignUpForm = ({ location }) => {
 
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
-
     if (eventIdInLocalStorage) {
-      return history.push(`/events/${eventIdInLocalStorage}`)
+      return <Redirect to={`/events/${eventIdInLocalStorage}`} />
     }
 
-    return history.push('/events')
+    return <Redirect to="/events" />
   }
 
   return (
