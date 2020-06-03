@@ -24,7 +24,6 @@ const makeApolloClient = async () => {
     // taking out this block breaks it
     let authHeaders
     if (token) {
-      console.log('authLink -> token', token)
       authHeaders = {
         authorization: `Bearer ${token}`,
         'X-Hasura-Admin-Secret': 'balibali',
@@ -43,7 +42,6 @@ const makeApolloClient = async () => {
     const token = 123
     // taking out this block doesn't affect anything
     if (token) {
-      console.log('connectionParams -> token', token)
       return {
         headers: {
           authorization: `Bearer ${token}`,

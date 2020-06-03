@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
-import { useMutation, useSubscription } from '@apollo/react-hooks'
-import { displayOnlineUsers } from '../gql/subscriptions'
 
-import { updateLastSeen } from '../gql/mutations'
+import { useMutation, useSubscription } from '@apollo/react-hooks'
+
 import { useGameContext } from '../context/useGameContext'
+import { updateLastSeen } from '../gql/mutations'
+import { displayOnlineUsers } from '../gql/subscriptions'
 
 const EventSoon = ({ eventData }) => {
   const { description, event_name, start_at, id } = eventData.events[0]
@@ -13,14 +14,12 @@ const EventSoon = ({ eventData }) => {
     variables: {
       event_id: id,
     },
-    skip: role === 'user',
   })
   const [updateLaseSeenMutation] = useMutation(updateLastSeen, {
     variables: {
       now: new Date().toISOString(),
       id: userId,
     },
-    skip: role === 'host',
   })
 
   useEffect(() => {
