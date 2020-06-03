@@ -25,6 +25,12 @@ const useGameContext = () => {
   function setWaitingRoom(waitingRoom) {
     dispatch((draft) => {
       draft.waitingRoom = waitingRoom
+      if (waitingRoom) {
+        draft.token = null
+        draft.roomId = null
+        draft.room = null
+        draft.twilioReady = false
+      }
     })
   }
 

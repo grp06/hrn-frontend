@@ -17,7 +17,7 @@ const useTwilio = () => {
   const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
     if (room && twilioReady) {
-      setWaitingRoom(false)
+      setWaitingRoom(null)
 
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {

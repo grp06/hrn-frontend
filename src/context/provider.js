@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
+
 import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
@@ -29,6 +30,7 @@ const defaultState = {
   hostEventsData: null,
   attendees: null,
   connecting: null,
+  waitingRoom: null,
 }
 
 const GameProvider = ({ children, location }) => {
@@ -134,12 +136,14 @@ const GameProvider = ({ children, location }) => {
 
       if (!state.roundsData && freshRoundsData.rounds) {
         // page just reloaded, set data
+        console.log('reload or navigate')
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
           draft.token = null
-          draft.roomId = myRound ? myRound.id : null
+          draft.roomId = myRound && !myRound.ended_at ? myRound.id : null
+          draft.waitingRoom = myRound ? myRound.ended_at : null
         })
       }
 
@@ -150,6 +154,8 @@ const GameProvider = ({ children, location }) => {
 
       if (newRoundsData || adminIsResettingGame) {
         // round changed
+        console.log('round auto updated')
+
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
@@ -161,6 +167,7 @@ const GameProvider = ({ children, location }) => {
 
       // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
+        console.log('round got reset')
         return dispatch((draft) => {
           draft.roomId = null
           draft.room = null

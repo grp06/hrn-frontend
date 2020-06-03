@@ -22,11 +22,8 @@ const Connecting = () => {
   const classes = useStyles()
   const { twilioReady, connecting, waitingRoom } = useGameContext()
   if (waitingRoom) {
-    return <div className={classes.connecting}>Waiting between rounds...</div>
+    return <div className={classes.connecting}>Waiting between...</div>
   }
-  if (twilioReady && !connecting) {
-    return null
-  }
-  return <div className={classes.connecting}>Connecting you to someone awesome...</div>
+  return null
 }
 export default Connecting
