@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import Radio from '@material-ui/core/Radio'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import { FloatCardMedium } from './'
-import { endpointUrl } from '../utils'
-import { useHistory, useLocation } from 'react-router-dom'
 
-import loginPhoto from '../assets/login.svg'
+import { useHistory, Link } from 'react-router-dom'
+
 import { useGameContext } from '../context/useGameContext'
-import { createUser } from '../gql/mutations'
+import { endpointUrl } from '../utils'
+import { FloatCardMedium } from './'
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: '100px',
   },
@@ -34,27 +33,33 @@ const useStyles = makeStyles(() => ({
   input: {
     marginBottom: '1em',
   },
+  linkRedirectToLogin: {
+    color: theme.palette.common.rebeccaPurple,
+    textDecoration: 'none',
+    marginTop: '20px',
+    '&:hover': {
+      color: theme.palette.common.orchid,
+    },
+  },
 }))
 
 const SignUpForm = ({ location }) => {
   const classes = useStyles()
   const history = useHistory()
-  const locationHook = useLocation()
-  const { redirect, setRedirect, setUserId } = useGameContext()
+  const { redirect, setRedirect, setUserId, userId } = useGameContext()
 
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('user')
 
-  console.log('history', history)
-  console.log('history location', history.location)
-  console.log('location ->', location)
-  console.log('location Hook ->', locationHook)
-
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
+
+  if (userId) {
+    return history.push('/events')
+  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
@@ -148,10 +153,13 @@ const SignUpForm = ({ location }) => {
                 </RadioGroup>
               </Grid>
             </Grid>
-            <Grid container justify="center" alignItems="center">
+            <Grid container direction="column" justify="center" alignItems="center">
               <Button color="primary" type="submit" variant="contained">
                 Signup
               </Button>
+              <Link className={classes.linkRedirectToLogin} to="/">
+                Already have an account?
+              </Link>
             </Grid>
           </form>
         </Grid>

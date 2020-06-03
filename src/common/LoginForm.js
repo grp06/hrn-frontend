@@ -1,45 +1,41 @@
 import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
-import Card from '@material-ui/core/Card'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
+import Grid from '@material-ui/core/Grid'
+import { FloatCardMedium } from './'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Mutation } from 'react-apollo'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
+import { endpointUrl } from '../utils'
 
-import loginPhoto from '../assets/login.svg'
 import { useGameContext } from '../context/useGameContext'
-import { createUser } from '../gql/mutations'
 
-const useStyles = makeStyles(() => ({
-  cardContainer: {
-    display: 'flex',
-    maxWidth: 600,
-    margin: '0 auto',
-    marginTop: 25,
-    padding: 25,
+const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    marginTop: '100px',
   },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '1em',
+  formContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingTop: '40px',
+    paddingBottom: '40px',
+    width: '40vw',
   },
-  content: {
-    flex: '1 0 auto',
-  },
-  cover: {
-    width: 200,
+  inputContainer: {
+    marginTop: '2em',
+    marginBottom: '2em',
   },
   input: {
     marginBottom: '1em',
-    marginTop: '1em',
   },
-  onlineUsers: {
-    width: 200,
-    height: '100vh',
+  linkRedirectToSignUp: {
+    color: theme.palette.common.rebeccaPurple,
+    textDecoration: 'none',
+    marginTop: '20px',
+    '&:hover': {
+      color: theme.palette.common.orchid,
+    },
   },
 }))
 
@@ -47,60 +43,90 @@ const LoginForm = ({ history }) => {
   const classes = useStyles()
   const { redirect, setRedirect, setUserId } = useGameContext()
 
-  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
 
+  debugger
   if (localStorage.getItem('userId')) {
     return <Redirect to="/events" push />
   }
 
+  const handleFormSubmit = async (event) => {
+    event.preventDefault()
+    const loginResponse = await fetch(`${endpointUrl}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        return data
+      })
+
+    const { role, id, token } = loginResponse
+    localStorage.setItem('token', token)
+    localStorage.setItem('userId', id)
+    setUserId(id)
+
+    return history.push('/events')
+  }
+
   return (
-    <Card className={classes.cardContainer}>
-      <CardMedia className={classes.cover} image={loginPhoto} title="Live from space album cover" />
-      <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            Create a username:
-          </Typography>
-          <TextField
-            id="username"
-            placeholder="Johnny Appleseed"
-            required
-            fullWidth
-            className={classes.input}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <Mutation mutation={createUser}>
-            {(createUserMutation, { data }) => (
-              <Button
-                secondary="true"
-                variant="contained"
-                onClick={async () => {
-                  try {
-                    const userdata = await createUserMutation({
-                      variables: {
-                        name: username,
-                      },
-                    })
-                    const uid = userdata.data.insert_users.returning[0].id
-                    localStorage.setItem('userId', uid)
-                    setUserId(uid)
-                  } catch (error) {
-                    console.log(error)
-                  }
-                }}
-              >
-                Submit
+    <div className={classes.wrapper}>
+      <FloatCardMedium>
+        <Grid item container direction="column" className={classes.formContainer}>
+          <form onSubmit={handleFormSubmit}>
+            <Grid item container direction="column" alignItems="center">
+              <Grid item>
+                <Typography variant="h4" style={{ lineHeight: 1 }}>
+                  Welcome Back! 🙌
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item container direction="column" className={classes.inputContainer}>
+              <Grid item>
+                <TextField
+                  id="email"
+                  label="Email"
+                  required
+                  fullWidth
+                  className={classes.input}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="password"
+                  label="Password"
+                  required
+                  fullWidth
+                  className={classes.input}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+            <Grid container direction="column" justify="center" alignItems="center">
+              <Button color="primary" type="submit" variant="contained">
+                Log In
               </Button>
-            )}
-          </Mutation>
-        </CardContent>
-      </div>
-    </Card>
+              <Link className={classes.linkRedirectToSignUp} to="/">
+                Don't have an account?
+              </Link>
+            </Grid>
+          </form>
+        </Grid>
+      </FloatCardMedium>
+    </div>
   )
 }
 
