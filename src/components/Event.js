@@ -113,6 +113,8 @@ const Event = ({ match }) => {
   }
 
   const hostId = eventData && eventData.events[0].host_id
+  console.log('hostId', hostId)
+  console.log('userID', userId)
 
   return (
     <>
@@ -129,7 +131,7 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
       </div>
-      {hostId === userId ? (
+      {parseInt(hostId, 10) === parseInt(userId, 10) ? (
         <AdminPanel timeState={timeState()} eventData={eventData} />
       ) : (
         <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />

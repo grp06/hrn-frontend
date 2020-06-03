@@ -64,6 +64,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   const { event_users: attendees, start_at: eventStartTime } = eventData.events[0]
 
+  console.log('ya bishhhh', eventData.events[0])
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
 
   const handleSignUpClick = () => {
