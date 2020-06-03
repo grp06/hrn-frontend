@@ -7,26 +7,20 @@ import { RetryLink } from 'apollo-link-retry'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
-async function getCurrentUserToken() {
-  const token = await localStorage.getItem('token')
-  return token
-}
-
 const makeApolloClient = async () => {
+  const token = localStorage.getItem('token')
+
+  // SET THIS UP TO WORK LOCALLY AND FOR DEPLOYMENT TO STAGING AND PROD
   const httpLink = new HttpLink({
     // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
     uri: 'http://localhost:8080/v1/graphql',
   })
 
   const authLink = setContext(async (req, { headers }) => {
-    // add in real token KEVIN
-    const token = 123
-    // taking out this block breaks it
     let authHeaders
     if (token) {
       authHeaders = {
         authorization: `Bearer ${token}`,
-        'X-Hasura-Admin-Secret': 'balibali',
       }
     }
 
@@ -39,13 +33,10 @@ const makeApolloClient = async () => {
   const httpAuthLink = authLink.concat(httpLink)
 
   const connectionParams = async () => {
-    const token = 123
-    // taking out this block doesn't affect anything
     if (token) {
       return {
         headers: {
           authorization: `Bearer ${token}`,
-          'X-Hasura-Admin-Secret': 'baliabali',
         },
       }
     }
