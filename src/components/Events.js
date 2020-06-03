@@ -56,7 +56,7 @@ const Events = () => {
   const history = useHistory()
 
   const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
-  if (appLoading || !role) {
+  if (appLoading) {
     return <Loading />
   }
 

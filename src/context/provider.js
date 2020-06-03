@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { useImmer } from 'use-immer'
+
 import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
@@ -227,7 +228,6 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (!state.userId) {
-      debugger
       const myUserId = localStorage.getItem('userId')
       if (!myUserId && state.redirect === null) {
         return dispatch((draft) => {
