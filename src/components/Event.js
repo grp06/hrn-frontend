@@ -54,7 +54,7 @@ const Event = ({ match }) => {
     getEventById,
     {
       variables: {
-        event_id: eventId,
+        event_id: id,
       },
     }
   )
@@ -70,6 +70,8 @@ const Event = ({ match }) => {
       const { event_users: attendees } = eventData.events[0]
 
       if (!eventData.events[0]) {
+        console.log('redirect')
+
         return history.push('/events')
       }
 

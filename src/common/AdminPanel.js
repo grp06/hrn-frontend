@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const AdminControl = ({ eventData, timeState }) => {
+const AdminPanel = ({ eventData, timeState }) => {
   const classes = useStyles()
   const { userId } = useGameContext()
 
@@ -108,4 +108,4 @@ const AdminControl = ({ eventData, timeState }) => {
   )
 }
 
-export default AdminControl
+export default AdminPanel
