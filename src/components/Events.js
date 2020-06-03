@@ -1,16 +1,15 @@
 import React from 'react'
 
-import { Redirect } from 'react-router-dom'
-
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { Redirect, useHistory, useLocation } from 'react-router-dom'
+
+import { CreateEventButton } from '.'
+import bannerBackground5 from '../assets/purpleOil.jpg'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import bannerBackground5 from '../assets/purpleOil.jpg'
-import { useHistory, useLocation } from 'react-router-dom'
-import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -80,11 +79,13 @@ const Events = () => {
   }
 
   const renderHostCards = () => {
-    role === 'host' &&
+    return (
+      role === 'host' &&
       hostEventsData &&
       hostEventsData.events.map((event) => {
         return <EventCard key={event.id} event={event} />
       })
+    )
   }
 
   if (!userEventsData && !hostEventsData && role === 'host') {
