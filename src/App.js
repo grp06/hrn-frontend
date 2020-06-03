@@ -39,8 +39,8 @@ const App = () => {
       <StylesProvider injectFirst>
         <ApolloProvider client={client}>
           <Router>
-            <Switch>
-              <GameProvider>
+            <GameProvider>
+              <Switch>
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
                 <Route exact path="/video-room" component={VideoRoom} />
@@ -51,9 +51,9 @@ const App = () => {
                 <Route exact path="/event-complete" component={GameOver} />
                 <Route exact path="/sign-up" component={SignUp} />
                 <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
-                <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-              </GameProvider>
-            </Switch>
+              </Switch>
+              <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+            </GameProvider>
           </Router>
         </ApolloProvider>
       </StylesProvider>
