@@ -21,9 +21,10 @@ const makeApolloClient = async () => {
   const authLink = setContext(async (req, { headers }) => {
     // add in real token KEVIN
     const token = 123
-
+    // taking out this block breaks it
     let authHeaders
     if (token) {
+      console.log('authLink -> token', token)
       authHeaders = {
         authorization: `Bearer ${token}`,
         'X-Hasura-Admin-Secret': 'balibali',
@@ -40,12 +41,13 @@ const makeApolloClient = async () => {
 
   const connectionParams = async () => {
     const token = 123
-
+    // taking out this block doesn't affect anything
     if (token) {
+      console.log('connectionParams -> token', token)
       return {
         headers: {
           authorization: `Bearer ${token}`,
-          'X-Hasura-Admin-Secret': 'balibali',
+          'X-Hasura-Admin-Secret': 'baliabali',
         },
       }
     }
@@ -62,10 +64,7 @@ const makeApolloClient = async () => {
 
   const retryLink = new RetryLink()
 
-  // using the ability to split links, you can send data to each link
-  // depending on what kind of operation is being sent
   const link = split(
-    // split based on operation type
     ({ query }) => {
       const { kind, operation } = getMainDefinition(query)
       return kind === 'OperationDefinition' && operation === 'subscription'
