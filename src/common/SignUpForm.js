@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
-import { FloatCardMedium } from './'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, Link } from 'react-router-dom'
-import { endpointUrl } from '../utils'
+
+import { useHistory, Link } from 'react-router-dom'
 
 import { useGameContext } from '../context/useGameContext'
+import { endpointUrl } from '../utils'
+import { FloatCardMedium } from './'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginBottom: '1em',
   },
-  linkRedirectToSignUp: {
+  linkRedirectToLogin: {
     color: theme.palette.common.rebeccaPurple,
     textDecoration: 'none',
     marginTop: '20px',
@@ -39,42 +43,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const LoginForm = ({ history }) => {
+const SignUpForm = ({ location }) => {
   const classes = useStyles()
-  const { redirect, setRedirect, setUserId } = useGameContext()
+  const history = useHistory()
+  const { redirect, setRedirect, setUserId, userId } = useGameContext()
 
+  const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState('user')
 
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
 
-  debugger
-  if (localStorage.getItem('userId')) {
-    return <Redirect to="/events" push />
+  if (userId) {
+    return history.push('/events')
   }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const loginResponse = await fetch(`${endpointUrl}/api/auth/login`, {
+    const signUpResponse = await fetch(`${endpointUrl}/api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ name: username, email, password, role }),
     })
       .then((response) => response.json())
       .then((data) => {
         return data
       })
 
-    const { role, id, token } = loginResponse
-    localStorage.setItem('token', token)
+    const { token, id } = signUpResponse
     localStorage.setItem('userId', id)
+    localStorage.setItem('token', token)
     setUserId(id)
+
+    //check to see if we were redirected here by an event
+    const eventIdInLocalStorage = localStorage.getItem('eventId')
+
+    if (eventIdInLocalStorage) {
+      return history.push(`/events/${eventIdInLocalStorage}`)
+    }
 
     return history.push('/events')
   }
@@ -87,11 +100,22 @@ const LoginForm = ({ history }) => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Welcome Back! 🙌
+                  Glad to have you join us! 🙌
                 </Typography>
               </Grid>
             </Grid>
             <Grid item container direction="column" className={classes.inputContainer}>
+              <Grid item>
+                <TextField
+                  id="username"
+                  label="Username"
+                  required
+                  fullWidth
+                  className={classes.input}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+              </Grid>
               <Grid item>
                 <TextField
                   id="email"
@@ -114,13 +138,27 @@ const LoginForm = ({ history }) => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
+              <Grid container item direction="row" justify="center" alignItems="center">
+                <RadioGroup
+                  aria-label="gender"
+                  name="gender1"
+                  value={role}
+                  onChange={(e) => {
+                    console.log(e.target.value)
+                    setRole(e.target.value)
+                  }}
+                >
+                  <FormControlLabel value="user" control={<Radio />} label="User" />
+                  <FormControlLabel value="host" control={<Radio />} label="Host" />
+                </RadioGroup>
+              </Grid>
             </Grid>
             <Grid container direction="column" justify="center" alignItems="center">
               <Button color="primary" type="submit" variant="contained">
-                Log In
+                Signup
               </Button>
-              <Link className={classes.linkRedirectToSignUp} to="/">
-                Don't have an account?
+              <Link className={classes.linkRedirectToLogin} to="/">
+                Already have an account?
               </Link>
             </Grid>
           </form>
@@ -130,4 +168,4 @@ const LoginForm = ({ history }) => {
   )
 }
 
-export default LoginForm
+export default SignUpForm

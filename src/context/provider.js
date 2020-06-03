@@ -236,9 +236,9 @@ const GameProvider = ({ children, location }) => {
     }
   }, [])
 
-  if (state.redirect && location.pathname !== '/') {
-    return <Redirect to="/" push />
-  }
+  // if (state.redirect && location.pathname !== '/') {
+  //   return <Redirect to="/" push />
+  // }
 
   return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
 }

@@ -1,14 +1,15 @@
 import React from 'react'
 
-import { Redirect } from 'react-router-dom'
-
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { Redirect, useHistory, useLocation } from 'react-router-dom'
+
+import { CreateEventButton } from '.'
+import bannerBackground5 from '../assets/purpleOil.jpg'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import bannerBackground5 from '../assets/purpleOil.jpg'
-import { CreateEventButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -52,6 +53,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Events = () => {
   const classes = useStyles()
+  const history = useHistory()
 
   const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
   if (appLoading) {
@@ -65,21 +67,34 @@ const Events = () => {
   // const sortedEvents = userEventsData.events.sort((a, b) => {
   //   // write logic here to sort events by start time
   // })
+  const renderUserCards = () => {
+    if (role === 'user') {
+      if (!userEventsData) {
+        return <div>No data</div>
+      }
+      return userEventsData.event_users.map((event) => {
+        return <EventCard key={event.id} event={event.event} />
+      })
+    }
+  }
 
-  const renderUserCards = () =>
-    role === 'user' &&
-    userEventsData.event_users.map((event) => {
-      return <EventCard key={event.id} event={event.event} />
-    })
+  const renderHostCards = () => {
+    return (
+      role === 'host' &&
+      hostEventsData &&
+      hostEventsData.events.map((event) => {
+        return <EventCard key={event.id} event={event} />
+      })
+    )
+  }
 
-  const renderHostCards = () =>
-    role === 'host' &&
-    hostEventsData.events.map((event) => {
-      return <EventCard key={event.id} event={event} />
-    })
-
-  if (!userEventsData && !hostEventsData) {
-    return <div>no events to display. Please create an event. </div>
+  if (!userEventsData && !hostEventsData && role === 'host') {
+    return (
+      <>
+        <div>no events to display. Please create an event. </div>
+        <CreateEventButton />
+      </>
+    )
   }
 
   return (
@@ -103,6 +118,13 @@ const Events = () => {
       {role === 'host' && <CreateEventButton />}
       {renderUserCards()}
       {renderHostCards()}
+      <Button
+        onClick={() => {
+          history.push('/sign-up')
+        }}
+      >
+        Sign Up
+      </Button>
     </>
   )
 }

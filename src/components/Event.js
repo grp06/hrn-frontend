@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
-
-import { makeStyles } from '@material-ui/styles'
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
+import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+
+import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEventById } from '../gql/queries'
-import bannerBackground from '../assets/eventBannerMountain.png'
-
 import formatDate from '../utils/formatDate'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +48,7 @@ const Event = ({ match }) => {
   const classes = useStyles()
   const { appLoading, userId, currentRound, setAttendees, setEventId, role } = useGameContext()
   const history = useHistory()
+  setEventId(eventId)
 
   // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
@@ -63,11 +63,12 @@ const Event = ({ match }) => {
   useEffect(() => {
     if (!eventDataLoading && eventData.events) {
       const { event_users: attendees } = eventData.events[0]
+
       if (!eventData.events[0]) {
         return history.push('/events')
       }
+
       setAttendees(attendees)
-      setEventId(eventId)
     }
   }, [eventData])
 
@@ -77,7 +78,7 @@ const Event = ({ match }) => {
     }
   }, [currentRound])
 
-  if (appLoading || eventDataLoading || !role) {
+  if (appLoading || eventDataLoading) {
     return <Loading />
   }
 
@@ -104,7 +105,6 @@ const Event = ({ match }) => {
     return 'within 30 mins'
   }
   const hostId = eventData && eventData.events[0].host_id
-
   return (
     <>
       <div className={classes.eventBanner}>

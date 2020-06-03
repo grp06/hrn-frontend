@@ -37,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
+  const history = useHistory()
   const { userId, role, currentRound } = useGameContext()
   const [waitingForAdmin, setWaitingForAdmin] = useState()
 
@@ -64,11 +65,26 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
 
+  const handleSignUpClick = () => {
+    localStorage.setItem('eventId', eventData.events[0].id)
+    console.log('handle Sign Up Click')
+    history.push('/sign-up')
+  }
+
   const renderButton = () => {
     let element
     switch (timeState) {
       case 'future':
-        element = (
+        element = !localStorage.getItem('token') ? (
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            onClick={() => handleSignUpClick()}
+          >
+            Sign Up
+          </Button>
+        ) : (
           <Button
             variant="contained"
             size="large"
