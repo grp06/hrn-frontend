@@ -44,11 +44,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
-  const { id: eventId } = match.params
+  const { id } = match.params
   const classes = useStyles()
-  const { appLoading, userId, currentRound, setAttendees, setEventId, role } = useGameContext()
+  const { appLoading, userId, currentRound, setAttendees, setEventId, eventId } = useGameContext()
   const history = useHistory()
-  setEventId(eventId)
 
   // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
@@ -59,6 +58,12 @@ const Event = ({ match }) => {
       },
     }
   )
+
+  useEffect(() => {
+    if (!eventId) {
+      setEventId(parseInt(id, 10))
+    }
+  }, [])
 
   useEffect(() => {
     if (!eventDataLoading && eventData.events) {
@@ -89,12 +94,12 @@ const Event = ({ match }) => {
   // probably need to move this into useEffect
 
   const event = eventData.events[0]
-  // if a user navigates to an eventId that doesn't exist, push them to /events
 
   const startTime = new Date(event.start_at).getTime()
   const eventTime = formatDate(startTime)
   const now = Date.now()
   const diff = startTime - now
+
   const timeState = () => {
     if (diff > 1800000) {
       return 'future'
@@ -104,7 +109,9 @@ const Event = ({ match }) => {
     }
     return 'within 30 mins'
   }
+
   const hostId = eventData && eventData.events[0].host_id
+
   return (
     <>
       <div className={classes.eventBanner}>
