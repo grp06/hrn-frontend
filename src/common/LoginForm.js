@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { FloatCardMedium } from './'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Redirect, Link } from 'react-router-dom'
-import { endpointUrl } from '../utils'
 
+import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
+import { endpointUrl } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -50,7 +50,6 @@ const LoginForm = ({ history }) => {
     setRedirect(false)
   }, [redirect])
 
-  debugger
   if (localStorage.getItem('userId')) {
     return <Redirect to="/events" push />
   }
@@ -119,7 +118,7 @@ const LoginForm = ({ history }) => {
               <Button color="primary" type="submit" variant="contained">
                 Log In
               </Button>
-              <Link className={classes.linkRedirectToSignUp} to="/">
+              <Link className={classes.linkRedirectToSignUp} to="/sign-up">
                 Don't have an account?
               </Link>
             </Grid>

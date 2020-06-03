@@ -8,12 +8,11 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-
 import { useHistory, Link } from 'react-router-dom'
 
+import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
 import { endpointUrl } from '../utils'
-import { FloatCardMedium } from './'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -57,10 +56,6 @@ const SignUpForm = ({ location }) => {
     setRedirect(false)
   }, [redirect])
 
-  if (userId) {
-    return history.push('/events')
-  }
-
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     const signUpResponse = await fetch(`${endpointUrl}/api/signup`, {
@@ -82,7 +77,7 @@ const SignUpForm = ({ location }) => {
     localStorage.setItem('token', token)
     setUserId(id)
 
-    //check to see if we were redirected here by an event
+    // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
 
     if (eventIdInLocalStorage) {

@@ -1,9 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
+import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
 
 import { WaitingRoom } from '.'
+import { Timer } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { useTwilio } from '../hooks'
 
@@ -32,6 +35,15 @@ const useStyles = makeStyles((theme) => ({
       width: '300px',
     },
   },
+  timerContainer: {
+    position: 'fixed',
+    left: 0,
+    top: 'auto',
+    right: 'auto',
+    bottom: 0,
+    width: '200px',
+    height: '150px',
+  },
   notReady: {
     position: 'fixed',
     width: '100%',
@@ -49,13 +61,28 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { room, currentRound } = useGameContext()
+  const { room, myRound, currentRound } = useGameContext()
   const { startTwilio } = useTwilio()
+  const [showTimer, setShowTimer] = useState(false)
+  const [timerTimeInput, setTimerTimeInput] = useState('')
   const history = useHistory()
 
   useEffect(() => {
     if (room) {
+      const eventEndTimeSeconds = moment(myRound.started_at).seconds()
+      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + 10)
+      console.log('use effect video room')
+      console.log('timer Time Input ****', timerTimeInput)
+      setTimerTimeInput(eventEndTime)
+
+      setShowTimer(true)
       startTwilio()
+    }
+    return () => {
+      console.log('VideoRoom Cleanup ******')
+      // document.getElementById('timer-container').innerHTML()
+      // setShowTimer(false)
+      // setTimerTimeInput(moment())
     }
   }, [room])
 
@@ -71,6 +98,17 @@ const VideoRoom = () => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
+        {showTimer ? (
+          <Grid
+            container
+            justify="center"
+            alignItems="center"
+            id="timer-container"
+            className={classes.timerContainer}
+          >
+            <Timer eventStartTime={timerTimeInput} subtitle="New Person In:" />
+          </Grid>
+        ) : null}
       </div>
     </div>
   )

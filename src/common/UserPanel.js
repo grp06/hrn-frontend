@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
 
-import { makeStyles } from '@material-ui/styles'
+import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+
 import { FloatCardWide, AttendeesList, Timer } from '.'
+import { useGameContext } from '../context/useGameContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -61,6 +62,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
       setWaitingForAdmin(true)
     }
   }, [currentRound])
+
   const { event_users: attendees, start_at: eventStartTime } = eventData.events[0]
 
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
