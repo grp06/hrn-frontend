@@ -17,6 +17,7 @@
     "apollo-boost": "^0.4.7",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.14",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "apollo-link-retry": "^2.2.16",
@@ -39,7 +40,6 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "roundrobin": "^1.0.3",
     "styled-components": "^5.1.0",
     "subscriptions-transport-ws": "^0.9.16",
     "twilio-video": "^2.4.0",
@@ -50,9 +50,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "estlint",
-    "predeploy": "npm run build",
-    "deploy": "now --prod ./build"
+    "lint": "estlint"
   },
   "eslintConfig": {
     "extends": "react-app"

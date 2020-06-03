@@ -39,19 +39,18 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { userId, role, currentRound } = useGameContext()
+  const { userId, role, currentRound, eventId } = useGameContext()
   const [waitingForAdmin, setWaitingForAdmin] = useState()
-
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
-      eventId: eventData.events[0].id,
+      eventId,
       userId,
     },
     skip: role === 'host',
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
-      eventId: eventData.events[0].id,
+      eventId,
       userId,
     },
     skip: role === 'host',
@@ -68,7 +67,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
 
   const handleSignUpClick = () => {
-    localStorage.setItem('eventId', eventData.events[0].id)
+    localStorage.setItem('eventId', eventId)
     console.log('handle Sign Up Click')
     history.push('/sign-up')
   }
