@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
+import Snackbar from '@material-ui/core/Snackbar'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import MuiAlert from '@material-ui/lab/Alert'
 import { Redirect, Link } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
 import { endpointUrl } from '../utils'
+
+const Alert = (props) => {
+  return <MuiAlert elevation={1} variant="filled" {...props} />
+}
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -45,14 +51,24 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false)
 
-  useEffect(() => {
-    setRedirect(false)
-  }, [redirect])
+  // useEffect(() => {
+  //   setRedirect(false)
+  // }, [redirect])
 
+  const userIdInLocalStorage = localStorage.getItem('userId')
   // check to see if a user is already logged in, if so redirect
-  if (localStorage.getItem('userId')) {
+  if (userIdInLocalStorage && userIdInLocalStorage !== undefined) {
     return <Redirect to="/events" />
+  }
+
+  const handleErrorSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setErrorSnackbarOpen(false)
   }
 
   const handleFormSubmit = async (event) => {
@@ -71,6 +87,14 @@ const LoginForm = () => {
         return data
       })
 
+    // check to see if we have token, if not then theres an error
+    // I tried try and catch, but it doesn't seem that we are throwing
+    // an error from the backend
+    if (!loginResponse.token) {
+      console.log('theres been an error')
+      setErrorSnackbarOpen(true)
+      return
+    }
     const { role, id, token } = loginResponse
     localStorage.setItem('token', token)
     localStorage.setItem('userId', id)
@@ -108,6 +132,7 @@ const LoginForm = () => {
                 <TextField
                   id="password"
                   label="Password"
+                  type="password"
                   required
                   fullWidth
                   className={classes.input}
@@ -123,6 +148,16 @@ const LoginForm = () => {
               <Link className={classes.linkRedirectToSignUp} to="/sign-up">
                 Don't have an account?
               </Link>
+              <Snackbar
+                open={errorSnackbarOpen}
+                autoHideDuration={6000}
+                onClose={handleErrorSnackbarClose}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              >
+                <Alert onClose={handleErrorSnackbarClose} severity="error">
+                  Incorrect password or email
+                </Alert>
+              </Snackbar>
             </Grid>
           </form>
         </Grid>
