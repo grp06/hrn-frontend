@@ -4,19 +4,12 @@ import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const {
-    room,
-    twilioReady,
-    setTwilioReady,
-    setConnecting,
-    currentRound,
-    setWaitingRoom,
-  } = useGameContext()
+  const { room, currentRound, setWaitingRoom } = useGameContext()
   const history = useHistory()
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
-    if (room && twilioReady) {
+    if (room) {
       setWaitingRoom(null)
 
       const { localParticipant } = room
@@ -46,7 +39,6 @@ const useTwilio = () => {
       })
 
       room.on('disconnected', function (rum) {
-        console.log('disconnected... setting room to null, twilioReady to false')
         setWaitingRoom(true)
         // hardcoding this for our test
         if (currentRound === 3) {
@@ -61,8 +53,6 @@ const useTwilio = () => {
           remoteVideo.innerHTML = ''
         }
       })
-      setTwilioReady(true)
-      setConnecting(true)
     }
   }
 

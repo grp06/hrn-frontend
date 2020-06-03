@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
-  connecting: {
+  waitingRoom: {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
@@ -18,12 +18,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Connecting = () => {
+const WaitingRoom = () => {
   const classes = useStyles()
-  const { twilioReady, connecting, waitingRoom } = useGameContext()
+  const { waitingRoom } = useGameContext()
   if (waitingRoom) {
-    return <div className={classes.connecting}>Waiting between...</div>
+    return <div className={classes.waitingRoom}>Waiting between...</div>
   }
   return null
 }
-export default Connecting
+export default WaitingRoom

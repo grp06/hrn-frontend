@@ -16,12 +16,6 @@ const useGameContext = () => {
     })
   }
 
-  function setTwilioReady(twilioReady) {
-    console.log('setTwilioReady -> twilioReady', twilioReady)
-    dispatch((draft) => {
-      draft.twilioReady = twilioReady
-    })
-  }
   function setWaitingRoom(waitingRoom) {
     dispatch((draft) => {
       draft.waitingRoom = waitingRoom
@@ -29,7 +23,6 @@ const useGameContext = () => {
         draft.token = null
         draft.roomId = null
         draft.room = null
-        draft.twilioReady = false
       }
     })
   }
@@ -41,11 +34,10 @@ const useGameContext = () => {
     })
   }
 
-  function setRoom(room, twilioReady) {
+  function setRoom(room) {
     console.log('setRoom -> room', room)
     dispatch((draft) => {
       draft.room = room
-      draft.twilioReady = twilioReady
     })
   }
 
@@ -85,25 +77,16 @@ const useGameContext = () => {
     })
   }
 
-  function setConnecting(connecting) {
-    console.log('setConnecting -> connecting', connecting)
-    dispatch((draft) => {
-      draft.connecting = connecting
-    })
-  }
-
   return {
     ...state,
     setRoundsData,
     setLoading,
     setRedirect,
     setEventId,
-    setTwilioReady,
     setRoom,
     setUserId,
     setAttendees,
     setCurrentRound,
-    setConnecting,
     setWaitingRoom,
   }
 }

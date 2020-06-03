@@ -1,8 +1,6 @@
 import { useGameContext } from '../context/useGameContext'
 
 const useRemoteTrackPublished = () => {
-  const { setConnecting } = useGameContext()
-
   const remoteTrackPublished = (publication) => {
     if (publication.isSubscribed) {
       console.log('publication.isSubscribed ', publication.isSubscribed)
@@ -22,7 +20,6 @@ const useRemoteTrackPublished = () => {
         attachedTrack.muted = true
       }
       document.getElementById('remote-video').appendChild(attachedTrack)
-      setConnecting(false)
     })
 
     publication.on('unsubscribed', (track) => {

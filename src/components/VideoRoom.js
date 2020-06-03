@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import { Connecting } from '.'
+import { WaitingRoom } from '.'
 import { useGameContext } from '../context/useGameContext'
 import { useTwilio } from '../hooks'
 
@@ -67,7 +67,7 @@ const VideoRoom = () => {
 
   return (
     <div>
-      <Connecting />
+      <WaitingRoom />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />

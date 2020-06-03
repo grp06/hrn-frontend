@@ -23,13 +23,11 @@ const defaultState = {
   role: '',
   roomId: null,
   token: null,
-  twilioReady: false,
   userId: null,
   hasUpcomingEvent: false,
   userEventsData: null,
   hostEventsData: null,
   attendees: null,
-  connecting: null,
   waitingRoom: null,
 }
 
@@ -76,29 +74,24 @@ const GameProvider = ({ children, location }) => {
     !userDataLoading && !userEventsLoading && !hostEventsLoading && !freshRoundsDataLoading
 
   useEffect(() => {
-    if (state.token && state.roomId) {
+    if (state.token) {
       const setupRoom = async () => {
         const localTracks = await createLocalTracks({ video: true, audio: false })
         console.log('connecting to room ', state.roomId)
-
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
         })
         dispatch((draft) => {
           draft.room = myRoom
-          draft.twilioReady = true
         })
       }
       setupRoom()
     }
-  }, [state.token, state.roomId])
+  }, [state.token])
 
   useEffect(() => {
-    if (
-      (!state.room && state.roomId) ||
-      (state.room && parseInt(state.room.name, 10) !== state.roomId)
-    ) {
+    if (!state.room && state.roomId) {
       const getTwilioToken = async () => {
         const token = await getToken(state.roomId, state.userId).then((response) => response.json())
         dispatch((draft) => {
@@ -141,7 +134,6 @@ const GameProvider = ({ children, location }) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
-          draft.token = null
           draft.roomId = myRound && !myRound.ended_at ? myRound.id : null
           draft.waitingRoom = myRound ? myRound.ended_at : null
         })
@@ -155,24 +147,22 @@ const GameProvider = ({ children, location }) => {
       if (newRoundsData || adminIsResettingGame) {
         // round changed
         console.log('round auto updated')
-
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
-          draft.token = null
           draft.roomId = myRound ? myRound.id : null
         })
       }
 
       // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
-        console.log('round got reset')
+        console.log('event got reset')
+
         return dispatch((draft) => {
           draft.roomId = null
           draft.room = null
           draft.token = null
-          draft.twilioReady = false
           draft.myRound = 0
           draft.roundsData = freshRoundsData
           draft.currentRound = freshRoundsData.length ? 1 : 0
@@ -188,7 +178,6 @@ const GameProvider = ({ children, location }) => {
         draft.token = null
         draft.roomId = null
         draft.room = null
-        draft.twilioReady = false
         draft.attendees = null
         draft.hostEventsData = null
         draft.userEventsData = null
