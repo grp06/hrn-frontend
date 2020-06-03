@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const LoginForm = ({ history }) => {
+const LoginForm = () => {
   const classes = useStyles()
   const { redirect, setRedirect, setUserId } = useGameContext()
 
@@ -50,8 +50,9 @@ const LoginForm = ({ history }) => {
     setRedirect(false)
   }, [redirect])
 
+  // check to see if a user is already logged in, if so redirect
   if (localStorage.getItem('userId')) {
-    return <Redirect to="/events" push />
+    return <Redirect to="/events" />
   }
 
   const handleFormSubmit = async (event) => {
@@ -75,7 +76,8 @@ const LoginForm = ({ history }) => {
     localStorage.setItem('userId', id)
     setUserId(id)
 
-    return history.push('/events')
+    return <Redirect to="/events" />
+    // return history.push('/events')
   }
 
   return (

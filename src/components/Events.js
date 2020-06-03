@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, useHistory, useLocation } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 
 import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
@@ -61,12 +61,9 @@ const Events = () => {
   }
 
   if (!userId) {
-    return <Redirect to="/" push />
+    return <Redirect to="/" />
   }
 
-  // const sortedEvents = userEventsData.events.sort((a, b) => {
-  //   // write logic here to sort events by start time
-  // })
   const renderUserCards = () => {
     if (role === 'user') {
       if (!userEventsData) {
@@ -130,15 +127,3 @@ const Events = () => {
 }
 
 export default Events
-
-// <Grid container direction="column" alignItems="center">
-
-//           <Grid item>
-//             <Typography variant="h4">Your Upcoming Events:</Typography>
-//           </Grid>
-//           <Grid item className={classes.eventsContainer}>
-//             {eventsData.events.map((event) => (
-//               <EventCard key={event.id} event={event} />
-//             ))}
-//           </Grid>
-//         </Grid>

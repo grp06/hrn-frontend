@@ -5,7 +5,7 @@ import { TextField, Button, Grid, Typography } from '@material-ui/core'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Redirect } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import { FloatCardMedium } from '.'
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EventForm = ({ eventData }) => {
   const classes = useStyles()
-  const { userId } = useGameContext()
+  const { userId, role } = useGameContext()
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
@@ -75,6 +75,15 @@ const EventForm = ({ eventData }) => {
       setSelectedDate(start_at)
     }
   }, [eventData])
+
+  // REDIRECTS
+  if (userId && role !== 'host') {
+    return <Redirect to="/events" />
+  }
+
+  if (!userId) {
+    return <Redirect to="/" />
+  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
