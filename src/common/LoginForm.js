@@ -98,6 +98,7 @@ const LoginForm = () => {
     const { role, id, token } = loginResponse
     localStorage.setItem('token', token)
     localStorage.setItem('userId', id)
+    localStorage.setItem('role', role)
     setUserId(id)
 
     return <Redirect to="/events" />
