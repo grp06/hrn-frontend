@@ -56,10 +56,6 @@ const SignUpForm = ({ location }) => {
     setRedirect(false)
   }, [redirect])
 
-  // if (localStorage.getItem('userId')) {
-  //   return <Redirect to="/events" push />
-  // }
-
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     const signUpResponse = await fetch(`${endpointUrl}/api/signup`, {
@@ -81,7 +77,14 @@ const SignUpForm = ({ location }) => {
     localStorage.setItem('token', token)
     setUserId(id)
 
-    history.push('/events')
+    //check to see if we were redirected here by an event
+    const eventIdInLocalStorage = localStorage.getItem('eventId')
+
+    if (eventIdInLocalStorage) {
+      return history.push(`/events/${eventIdInLocalStorage}`)
+    }
+
+    return history.push('/events')
   }
 
   return (

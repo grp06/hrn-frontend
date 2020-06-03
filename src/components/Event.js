@@ -105,7 +105,6 @@ const Event = ({ match }) => {
     return 'within 30 mins'
   }
   const hostId = eventData && eventData.events[0].host_id
-  debugger
   return (
     <>
       <div className={classes.eventBanner}>
