@@ -3,6 +3,7 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
 import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
@@ -25,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.h2,
     color: theme.palette.common.ghostWhite,
   },
+  sectionHeader: {
+    ...theme.typography.h3,
+    color: theme.palette.common.ghostWhite,
+  },
   displayNumber: {
     fontFamily: 'Muli',
     color: theme.palette.common.orchid,
@@ -32,6 +37,12 @@ const useStyles = makeStyles((theme) => ({
   },
   partyEmoji: {
     marginLeft: 10,
+  },
+  cardBodyContainer: {
+    padding: '50px',
+  },
+  descriptionContainer: {
+    marginBottom: '25px',
   },
 }))
 
@@ -46,7 +57,12 @@ const AdminPanel = ({ eventData, timeState }) => {
       buttonText: '✏️ Edit Event',
     },
   })
-  const { event_users: attendees, id: eventId, start_at: eventStartTime } = eventData.events[0]
+  const {
+    event_users: attendees,
+    id: eventId,
+    start_at: eventStartTime,
+    description: eventDescription,
+  } = eventData.events[0]
 
   const renderButton = () => {
     let element
@@ -103,7 +119,20 @@ const AdminPanel = ({ eventData, timeState }) => {
           {renderButton()}
         </Grid>
       </Grid>
-      <AttendeesList attendees={attendees} />
+      <Grid
+        container
+        item
+        direction="column"
+        justify="space-around"
+        className={classes.cardBodyContainer}
+      >
+        <Grid container item direction="column" className={classes.descriptionContainer}>
+          <Typography className={classes.sectionHeader}>Description</Typography>
+          <Typography variant="body1">{eventDescription}</Typography>
+        </Grid>
+        <Divider light variant="middle" />
+        <AttendeesList attendees={attendees} />
+      </Grid>
     </FloatCardWide>
   )
 }

@@ -20,12 +20,11 @@ const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
 
 const useStyles = makeStyles((theme) => ({
   eventContainer: {
-    height: '275px',
     width: '100%',
   },
   eventImage: {
-    width: '35%',
-    height: '100%',
+    width: '100%',
+    height: '275px',
     borderRadius: '4px 0px 0px 4px',
     backgroundImage: `url(${eventImage4})`,
     backgroundPosition: '0% 50%',
@@ -33,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
   },
   eventContentContainer: {
-    width: '65%',
-    height: '100%',
+    width: '100%',
+    height: '275px',
     padding: '20px',
   },
   icon: {
@@ -61,15 +60,18 @@ const EventCard = ({ event }) => {
       <Grid
         container
         justify="flex-start"
+        wrap
         className={classes.eventContainer}
         onClick={() => history.push(`/events/${id}`)}
       >
-        <Grid item className={classes.eventImage}>
+        <Grid item lg={4} md={12} className={classes.eventImage}>
           <div />
         </Grid>
         <Grid
           container
           item
+          lg={8}
+          md={12}
           direction="column"
           justify="space-between"
           alignItems="flex-start"
