@@ -26,6 +26,7 @@
     "closest": "^0.0.1",
     "dagre": "^0.8.5",
     "date-fns": "^2.13.0",
+    "env-cmd": "^10.1.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "jstz": "^2.1.1",
@@ -50,7 +51,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "estlint"
+    "lint": "estlint",
+    "build:staging": "env-cmd -f .env.staging npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

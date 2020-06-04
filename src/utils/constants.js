@@ -1,6 +1,6 @@
 const constants = {
-  lastSeenDuration: 3000,
-  roundLength: 30,
+  lastSeenDuration: 10000,
+  roundLength: 10,
 }
 
 export default constants

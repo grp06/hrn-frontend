@@ -12,7 +12,6 @@ import { Link, Redirect } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
-import { endpointUrl } from '../utils'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -62,7 +61,7 @@ const SignUpForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const signUpResponse = await fetch(`${endpointUrl}/api/signup`, {
+    const signUpResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

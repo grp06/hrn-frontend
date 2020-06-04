@@ -11,7 +11,6 @@ import { Redirect, Link } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
-import { endpointUrl } from '../utils'
 
 const Alert = (props) => {
   return <MuiAlert elevation={1} variant="filled" {...props} />
@@ -73,7 +72,7 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const loginResponse = await fetch(`${endpointUrl}/api/auth/login`, {
+    const loginResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

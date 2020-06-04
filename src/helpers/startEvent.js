@@ -1,7 +1,5 @@
-import endpointUrl from '../utils/endpointUrl'
-
 export default function startEvent(eventId, adminId) {
-  fetch(`${endpointUrl}/api/rooms/start-event/${eventId}`, {
+  fetch(`${process.env.REACT_APP_API_URL}/api/rooms/start-event/${eventId}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
