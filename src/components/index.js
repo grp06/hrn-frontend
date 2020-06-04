@@ -1,5 +1,4 @@
 export { default as Events } from './Events'
-export { default as OnlineUsers } from './OnlineUsers'
 export { default as Event } from './Event'
 export { default as CreateEventButton } from './CreateEventButton'
 export { default as VideoRoom } from './VideoRoom'

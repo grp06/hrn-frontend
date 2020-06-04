@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
-import moment from 'moment-timezone'
+import React, { useState, useEffect } from 'react'
+
 import { useSubscription } from '@apollo/react-hooks'
 
 import List from '@material-ui/core/List'
@@ -17,7 +17,6 @@ const { lastSeenDuration } = constants
 const AttendeesList = () => {
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { eventId } = useGameContext()
-  const onlineUsersRef = useRef([])
 
   const {
     data: onlineUsersData,
@@ -40,11 +39,11 @@ const AttendeesList = () => {
         const diff = Date.now() - lastSeen
         // server time and local computer could be a bit off?
         // this could actually be an issue..
-        return diff < lastSeenDuration + 5
+        // a single source of truth for online users would be preferable :(
+        return diff < lastSeenDuration + 10000
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {
-        onlineUsersRef.current = freshOnlineUsers
         setOldOnlineUsers(freshOnlineUsers)
       }
     }

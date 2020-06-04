@@ -1,5 +1,5 @@
 const constants = {
-  lastSeenDuration: 10000,
+  lastSeenDuration: 3000,
 }
 
 export default constants

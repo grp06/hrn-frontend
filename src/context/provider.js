@@ -31,6 +31,7 @@ const defaultState = {
   eventsData: null,
   attendees: null,
   waitingRoom: null,
+  room: null,
 }
 
 const GameProvider = ({ children, location }) => {
@@ -101,7 +102,9 @@ const GameProvider = ({ children, location }) => {
   }, [state.token])
 
   useEffect(() => {
-    if (!state.room && state.roomId) {
+    const { myRound } = state
+    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+    if (!state.room && state.roomId && hasPartner) {
       const getTwilioToken = async () => {
         const token = await getToken(state.roomId, state.userId).then((response) => response.json())
         dispatch((draft) => {

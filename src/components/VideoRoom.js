@@ -9,6 +9,9 @@ import { WaitingRoom } from '.'
 import { Timer } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { useTwilio } from '../hooks'
+import { constants } from '../utils'
+
+const { roundLength } = constants
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -72,7 +75,7 @@ const VideoRoom = () => {
     if (room) {
       console.log('hitting the use effect')
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
-      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + 10)
+      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
       console.log('use effect video room')
       console.log('timer Time Input ****', timerTimeInput)
       setTimerTimeInput(eventEndTime)
