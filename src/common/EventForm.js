@@ -9,7 +9,7 @@ import { useHistory, Redirect } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import { FloatCardMedium } from '.'
 
-import { createEvent, updateEvent } from '../gql/mutations'
+import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -58,6 +58,8 @@ const EventForm = ({ eventData }) => {
     },
   })
 
+  const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
+
   const [updateEventMutation] = useMutation(updateEvent, {
     variables: {
       description,
@@ -96,6 +98,12 @@ const EventForm = ({ eventData }) => {
     } else {
       const res = await createEventMutation()
       const { id } = res.data.insert_events.returning[0]
+      await insertEventUserMutation({
+        variables: {
+          eventId: id,
+          userId,
+        },
+      })
       history.push(`/events/${id}`)
     }
   }
