@@ -8,7 +8,7 @@ import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Link, Redirect } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useGameContext } from '../context/useGameContext'
@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUpForm = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { redirect, setRedirect, setUserId, userId } = useGameContext()
 
   const [name, setName] = useState('')
@@ -82,8 +83,9 @@ const SignUpForm = () => {
 
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
+    debugger
     if (eventIdInLocalStorage) {
-      return <Redirect to={`/events/${eventIdInLocalStorage}`} />
+      history.push(`/events/${eventIdInLocalStorage}`)
     }
 
     return <Redirect to="/events" />
@@ -105,7 +107,7 @@ const SignUpForm = () => {
               <Grid item>
                 <TextField
                   id="name"
-                  label="name"
+                  label="Name"
                   required
                   fullWidth
                   className={classes.input}

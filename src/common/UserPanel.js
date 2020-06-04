@@ -74,7 +74,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>
-      Sign Up
+      Sign Up 🚀
     </Button>
   )
 
