@@ -103,7 +103,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           {renderButton()}
         </Grid>
       </Grid>
-      {/* <AttendeesList attendees={attendees} /> */}
+      <AttendeesList />
     </FloatCardWide>
   )
 }

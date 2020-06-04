@@ -9,7 +9,7 @@ const getEventById = gql`
       description
       ended_at
       event_name
-      event_users(where: { event_id: { _eq: $event_id } }) {
+      event_users {
         user {
           id
           name

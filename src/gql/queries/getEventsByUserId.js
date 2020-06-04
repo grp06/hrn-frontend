@@ -1,11 +1,13 @@
 import gql from 'graphql-tag'
 
 const getEventsByUserId = gql`
-  query getEventsByUserId($userId: Int!) {
+  query getEventUsersByUserId($userId: Int!) {
     event_users(where: { user_id: { _eq: $userId } }) {
       event {
-        description
+        start_at
         ended_at
+        id
+        description
         event_name
         host_id
         id
