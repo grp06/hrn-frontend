@@ -41,6 +41,9 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   const history = useHistory()
   const { userId, role, currentRound, eventId } = useGameContext()
   const [waitingForAdmin, setWaitingForAdmin] = useState()
+  const { event_users, start_at: eventStartTime } = eventData.events[0]
+
+  const alreadyAttending = event_users.find((user) => user.user.id === userId)
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       eventId,
@@ -57,83 +60,57 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   })
 
   useEffect(() => {
-    if (timeState === 'go time' && role === 'user') {
+    if (timeState === 'go time' && role === 'user' && alreadyAttending) {
       setWaitingForAdmin(true)
     }
   }, [timeState, role])
-
-  const { event_users, start_at: eventStartTime } = eventData.events[0]
-
-  const alreadyAttending = event_users.find((user) => user.user.id === userId)
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
     history.push('/sign-up')
   }
 
-  // probably dont need to allow/encourage people cancel rsvp right before the event
-  // just hide the button within 30 mins of event
+  const token = localStorage.getItem('token')
+
+  const renderSignupButton = () => (
+    <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>
+      Sign Up
+    </Button>
+  )
+
+  const renderRsvpButton = () => (
+    <Button
+      variant="contained"
+      size="large"
+      onClick={async () => {
+        if (alreadyAttending) {
+          await deleteEventUserMutation()
+          refetch()
+        } else {
+          await insertEventUserMutation()
+          refetch()
+        }
+      }}
+    >
+      {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
+    </Button>
+  )
+
   const renderButton = () => {
     let element
     switch (timeState) {
       case 'future':
-        element = !localStorage.getItem('token') ? (
-          <Button
-            size="large"
-            color="primary"
-            variant="contained"
-            onClick={() => handleSignUpClick()}
-          >
-            Sign Up
-          </Button>
-        ) : (
-          <Button
-            variant="contained"
-            size="large"
-            onClick={async () => {
-              if (alreadyAttending) {
-                await deleteEventUserMutation()
-                refetch()
-              } else {
-                await insertEventUserMutation()
-                refetch()
-              }
-            }}
-          >
-            {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
-          </Button>
-        )
+        element = !token ? renderSignupButton() : renderRsvpButton()
         break
       case 'go time':
-        element = null
+        element = !alreadyAttending ? renderRsvpButton() : null
         break
       default:
-        element = !localStorage.getItem('token') ? (
-          <Button
-            size="large"
-            color="primary"
-            variant="contained"
-            onClick={() => handleSignUpClick()}
-          >
-            Sign Up
-          </Button>
+        element = !token ? (
+          renderSignupButton()
         ) : (
           <>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={async () => {
-                if (alreadyAttending) {
-                  await deleteEventUserMutation()
-                  refetch()
-                } else {
-                  await insertEventUserMutation()
-                  refetch()
-                }
-              }}
-            >
-              {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
-            </Button>
+            {renderRsvpButton()}
             <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
           </>
         )
@@ -141,8 +118,8 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     return element
   }
 
-  if (waitingForAdmin) {
-    return (
+  const renderWaitingForAdmin = () =>
+    waitingForAdmin && (
       <FloatCardWide>
         <Grid
           item
@@ -167,27 +144,45 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         </Grid>
       </FloatCardWide>
     )
-  }
 
   return (
-    <FloatCardWide>
-      <Grid
-        item
-        container
-        justify="space-around"
-        alignItems="center"
-        // wrap="nowrap"
-        className={classes.topDashboard}
-      >
-        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-          <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+    <>
+      <FloatCardWide>
+        <Grid
+          item
+          container
+          justify="space-around"
+          alignItems="center"
+          // wrap="nowrap"
+          className={classes.topDashboard}
+        >
+          <Grid
+            container
+            item
+            md={6}
+            xs={12}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
+            <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+          </Grid>
+          <Grid
+            container
+            item
+            md={6}
+            xs={12}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            {renderButton()}
+          </Grid>
         </Grid>
-        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          {renderButton()}
-        </Grid>
-      </Grid>
-    </FloatCardWide>
+      </FloatCardWide>
+      {renderWaitingForAdmin()}
+    </>
   )
 }
 export default UserPanel

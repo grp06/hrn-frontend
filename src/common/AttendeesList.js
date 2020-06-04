@@ -33,11 +33,14 @@ const AttendeesList = () => {
   useEffect(() => {
     if (!onlineUsersLoading && onlineUsersData.event_users.length) {
       const allUsers = onlineUsersData.event_users
+      // users who've submitted a mutation within the last 10 seconds
       const freshOnlineUsers = allUsers.filter((user) => {
-        const { name, last_seen } = user.user
+        const { last_seen } = user.user
         const lastSeen = new Date(last_seen).getTime()
         const diff = Date.now() - lastSeen
-        return diff < lastSeenDuration
+        // server time and local computer could be a bit off?
+        // this could actually be an issue..
+        return diff < lastSeenDuration + 5
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {
