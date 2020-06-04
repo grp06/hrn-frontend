@@ -71,6 +71,13 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1.5rem',
       fontWeight: '700',
+      marginBottom: '10px',
+    },
+    h3: {
+      fontFamily: 'Muli',
+      fontSize: '1.3rem',
+      fontWeight: '500',
+      marginBottom: '7px',
     },
     h4: {
       color: ghostWhite,
@@ -83,11 +90,13 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1rem',
       color: ghostWhite,
+      fontWeight: '300',
     },
     body1: {
       fontFamily: 'Muli',
       fontSize: '1rem',
       color: ghostWhiteBody,
+      fontWeight: '300',
     },
     modalBody: {
       fontFamily: 'Muli',
