@@ -83,11 +83,9 @@ const VideoRoom = () => {
       setShowTimer(true)
       startTwilio()
     }
+
     return () => {
       console.log('VideoRoom Cleanup ******')
-      // document.getElementById('timer-container').innerHTML()
-      // setShowTimer(false)
-      // setTimerTimeInput(moment())
     }
   }, [room])
 

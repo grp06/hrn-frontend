@@ -32,6 +32,7 @@ const defaultState = {
   attendees: null,
   waitingRoom: null,
   room: null,
+  didPartnerDisconnect: false,
 }
 
 const GameProvider = ({ children, location }) => {

@@ -29,9 +29,20 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const WaitingRoom = () => {
+  console.log('calling waiting Room')
   const classes = useStyles()
-  const { waitingRoom, myRound } = useGameContext()
+  const { waitingRoom, myRound, didPartnerDisconnect } = useGameContext()
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+  if (didPartnerDisconnect && hasPartner) {
+    return (
+      <div className={classes.waitingRoom}>
+        <span className={classes.largeText}>
+          Sorry to break the bad news to you, but your partner disconnected ... something to do with
+          squirrels chewing their router 🤷‍♀️. Stay put and we will connect you with someone soon!
+        </span>
+      </div>
+    )
+  }
   if (!hasPartner) {
     return (
       <div className={classes.waitingRoom}>
@@ -48,7 +59,9 @@ const WaitingRoom = () => {
   if (waitingRoom) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.largeText}>Hope you had a great chat!</span>
+        <span className={classes.largeText}>
+          Hope you had a great chat! Finding another awesome person for you to connect with
+        </span>
         <div className={classes.dancingMan}>
           <span>🕺</span>
         </div>
