@@ -7,6 +7,9 @@ import { findMyUser, getEventsByUserId } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
+import { constants } from '../utils'
+
+const { lastSeenDuration } = constants
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -70,10 +73,10 @@ const GameProvider = ({ children, location }) => {
   const apiCallsDone = !userDataLoading && !eventsLoading && !freshRoundsDataLoading
 
   useEffect(() => {
-    if (state.role === 'user' && state.hasUpcomingEvent) {
+    if (state.hasUpcomingEvent) {
       const interval = setInterval(() => {
         updateLastSeenMutation()
-      }, 3000)
+      }, lastSeenDuration)
       return () => {
         clearInterval(interval)
       }

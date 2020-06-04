@@ -58,7 +58,7 @@ const AdminPanel = ({ eventData, timeState }) => {
     },
   })
   const {
-    event_users: attendees,
+    event_users,
     id: eventId,
     start_at: eventStartTime,
     description: eventDescription,
@@ -113,7 +113,7 @@ const AdminPanel = ({ eventData, timeState }) => {
       >
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
           <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-          <Typography className={classes.displayNumber}>{attendees.length}</Typography>
+          <Typography className={classes.displayNumber}>{event_users.length}</Typography>
         </Grid>
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
           {renderButton()}

@@ -46,7 +46,15 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id } = match.params
   const classes = useStyles()
-  const { appLoading, userId, currentRound, setAttendees, setEventId, eventId } = useGameContext()
+  const {
+    appLoading,
+    userId,
+    currentRound,
+    setAttendees,
+    setEventId,
+    eventId,
+    attendees,
+  } = useGameContext()
   const history = useHistory()
 
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
@@ -65,15 +73,15 @@ const Event = ({ match }) => {
   }, [eventId, id, setEventId])
 
   useEffect(() => {
-    if (!eventDataLoading && eventData.events) {
-      const { event_users: attendees } = eventData.events[0]
+    if (!eventDataLoading && eventData.events && !attendees) {
+      const { event_users } = eventData.events[0]
 
       if (!eventData.events[0]) {
         return history.push('/events')
       }
-      setAttendees(attendees)
+      setAttendees(event_users)
     }
-  }, [eventData, eventDataLoading, history, setAttendees])
+  }, [eventData, eventDataLoading, history, setAttendees, attendees])
 
   useEffect(() => {
     if (currentRound > 0) {
@@ -107,6 +115,10 @@ const Event = ({ match }) => {
   }
 
   const hostId = eventData && eventData.events[0].host_id
+
+  if (eventError) {
+    return <div>Sorry, we encountered an error. Refresh?</div>
+  }
 
   return (
     <>

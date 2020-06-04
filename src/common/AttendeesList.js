@@ -10,6 +10,9 @@ import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
 import { displayOnlineUsers } from '../gql/subscriptions'
 import { useGameContext } from '../context/useGameContext'
+import { constants } from '../utils'
+
+const { lastSeenDuration } = constants
 
 const AttendeesList = () => {
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
@@ -34,7 +37,7 @@ const AttendeesList = () => {
         const { name, last_seen } = user.user
         const lastSeen = new Date(last_seen).getTime()
         const diff = Date.now() - lastSeen
-        return diff < 3000
+        return diff < lastSeenDuration
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {

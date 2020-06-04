@@ -62,9 +62,9 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     }
   }, [timeState, role])
 
-  const { event_users: attendees, start_at: eventStartTime } = eventData.events[0]
+  const { event_users, start_at: eventStartTime } = eventData.events[0]
 
-  const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
+  const alreadyAttending = event_users.find((user) => user.user.id === userId)
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
@@ -181,7 +181,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
       >
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
           <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-          <Typography className={classes.displayNumber}>{attendees.length}</Typography>
+          <Typography className={classes.displayNumber}>{event_users.length}</Typography>
         </Grid>
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
           {renderButton()}
