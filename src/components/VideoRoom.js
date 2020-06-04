@@ -65,10 +65,12 @@ const VideoRoom = () => {
   const { startTwilio } = useTwilio()
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
+
   const history = useHistory()
 
   useEffect(() => {
     if (room) {
+      console.log('hitting the use effect')
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + 10)
       console.log('use effect video room')
@@ -106,7 +108,13 @@ const VideoRoom = () => {
             id="timer-container"
             className={classes.timerContainer}
           >
-            <Timer eventStartTime={timerTimeInput} subtitle="New Person In:" />
+            <Timer
+              eventStartTime={timerTimeInput}
+              subtitle="New Person In:"
+              onRoundComplete={() => {
+                setShowTimer(false)
+              }}
+            />
           </Grid>
         ) : null}
       </div>
