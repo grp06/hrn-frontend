@@ -77,6 +77,13 @@ const useGameContext = () => {
     })
   }
 
+  function setDidPartnerDisconnect(partnerDisconnect) {
+    console.log('setDidPartnerDisconnect -> didPartnerDisconnect')
+    dispatch((draft) => {
+      draft.didPartnerDisconnect = partnerDisconnect
+    })
+  }
+
   return {
     ...state,
     setRoundsData,
@@ -88,6 +95,7 @@ const useGameContext = () => {
     setAttendees,
     setCurrentRound,
     setWaitingRoom,
+    setDidPartnerDisconnect,
   }
 }
 

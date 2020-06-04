@@ -4,7 +4,7 @@ import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const { room, currentRound, setWaitingRoom } = useGameContext()
+  const { room, currentRound, setWaitingRoom, setDidPartnerDisconnect } = useGameContext()
   const history = useHistory()
 
   const { participantConnected } = useParticipantConnected()
@@ -27,7 +27,7 @@ const useTwilio = () => {
 
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('remote participant disconnected ', remoteParticipant)
-
+        setDidPartnerDisconnect(true)
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
           remoteVideo.innerHTML = ''
@@ -35,10 +35,14 @@ const useTwilio = () => {
       })
 
       window.addEventListener('beforeunload', () => {
+        // just some cleanup on partnerDisconnect
+        setDidPartnerDisconnect(false)
         room.disconnect()
       })
 
       room.on('disconnected', function (rum) {
+        // just some cleanup on partnerDisconnect
+        setDidPartnerDisconnect(false)
         setWaitingRoom(true)
         // hardcoding this for our test
         if (currentRound === 3) {
