@@ -66,7 +66,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   }, [timeState, role])
 
   const handleSignUpClick = () => {
-    debugger
     localStorage.setItem('eventId', eventId)
     history.push('/sign-up')
   }
