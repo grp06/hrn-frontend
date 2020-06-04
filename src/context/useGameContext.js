@@ -9,131 +9,93 @@ const useGameContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
-  function setUsers(users) {
+  function setAttendees(attendees) {
+    console.log('setAttendees -> attendees', attendees)
     dispatch((draft) => {
-      draft.users = users
+      draft.attendees = attendees
     })
   }
 
-  function setToken(token) {
+  function setWaitingRoom(waitingRoom) {
     dispatch((draft) => {
-      draft.token = token
-    })
-  }
-
-  function setTwilioReady(twilioReady) {
-    dispatch((draft) => {
-      draft.twilioReady = twilioReady
+      draft.waitingRoom = waitingRoom
+      if (waitingRoom) {
+        draft.token = null
+        draft.roomId = null
+        draft.room = null
+      }
     })
   }
 
   function setRoundsData(rounds) {
+    console.log('setRoundsData -> rounds', rounds)
     dispatch((draft) => {
       draft.roundsData = rounds
     })
   }
 
-  function setGameData(freshRoundsData, userId) {
-    console.log('freshRoundsData ', freshRoundsData)
-    // if you reset or you just press start for the first time
-    if (!freshRoundsData || !freshRoundsData.rounds.length) {
-      dispatch((draft) => {
-        draft.roomId = null
-        draft.room = null
-        draft.token = null
-        draft.twilioReady = false
-        draft.myRound = 0
-        draft.roundsData = freshRoundsData
-        draft.currentRound = freshRoundsData === null ? 1 : 0
-      })
-    } else {
-      const currentRound = freshRoundsData.rounds.reduce((all, item) => {
-        if (item.round_number > all) {
-          return item.round_number
-        }
-        return all
-      }, 0)
-
-      const myRound = freshRoundsData.rounds.find((round) => {
-        const me =
-          round.round_number === currentRound &&
-          (round.partnerX_id === parseInt(userId, 10) || round.partnerY_id === parseInt(userId, 10))
-        return me
-      })
-      console.log('currentRound = ', currentRound)
-      dispatch((draft) => {
-        draft.roundsData = freshRoundsData
-        draft.currentRound = currentRound
-        draft.myRound = myRound
-        draft.token = null
-        draft.roomId = myRound ? myRound.id : null
-        // reset all these guys between rounds
-      })
-    }
-  }
-
-  function setRoomId(roomId) {
-    dispatch((draft) => {
-      draft.roomId = roomId
-    })
-  }
-
-  function setRoom(room, twilioReady) {
-    console.log('room = ', room)
-
+  function setRoom(room) {
+    console.log('setRoom -> room', room)
     dispatch((draft) => {
       draft.room = room
-      draft.twilioReady = twilioReady
     })
   }
 
   function setLoading(loading) {
+    console.log('setLoading -> loading', loading)
     dispatch((draft) => {
       draft.loading = loading
     })
   }
 
   function setRedirect(redirect) {
+    console.log('setRedirect -> redirect', redirect)
     dispatch((draft) => {
       draft.redirect = redirect
     })
   }
 
   function setEventId(eventId) {
+    console.log('setEventId -> eventId', eventId)
     dispatch((draft) => {
       draft.eventId = eventId
     })
   }
 
   function setUserId(userId) {
+    console.log('setUserId -> userId', userId)
     dispatch((draft) => {
       draft.userId = userId
     })
   }
 
-  function resetUserState() {
+  // only used once - in Header.js
+  function setCurrentRound(currentRound) {
+    console.log('setCurrentRound -> currentRound', currentRound)
     dispatch((draft) => {
-      draft.token = null
-      draft.roomId = null
-      draft.room = null
-      draft.twilioReady = false
+      draft.currentRound = currentRound
+    })
+  }
+
+  function setDidPartnerDisconnect(partnerDisconnect) {
+    console.log('setDidPartnerDisconnect -> didPartnerDisconnect')
+    dispatch((draft) => {
+      draft.didPartnerDisconnect = partnerDisconnect
     })
   }
 
   return {
     ...state,
-    setUsers,
     setRoundsData,
     setLoading,
     setRedirect,
     setEventId,
-    setRoomId,
-    setGameData,
-    setToken,
-    setTwilioReady,
     setRoom,
-    resetUserState,
     setUserId,
+    setAttendees,
+    setCurrentRound,
+    setWaitingRoom,
+    setDidPartnerDisconnect,
   }
 }
 

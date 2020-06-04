@@ -5,8 +5,8 @@ import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
-import { LoginForm } from './common'
-import { Test, Event, Events } from './components'
+import { LoginForm, EventForm } from './common'
+import { Event, Events, VideoRoom, GameOver, SignUp } from './components'
 import { GameProvider } from './context/provider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -33,23 +33,27 @@ const App = () => {
     return null
   }
 
+  // the last route is for naughty urls
   return (
     <ThemeProvider theme={theme}>
       <StylesProvider injectFirst>
         <ApolloProvider client={client}>
           <Router>
-            <Header activeTab={activeTab} setActiveTab={setActiveTab} />
-            <Switch>
-              <GameProvider>
+            <GameProvider>
+              <Switch>
                 <Route exact path="/" component={LoginForm} />
                 <Route exact path="/events" component={Events} />
+                <Route exact path="/video-room" component={VideoRoom} />
+                <Route exact path="/create-event" component={EventForm} />
                 <Route exact path="/events/:id" component={Event} />
                 <Route exact path="/about" component={() => <div>About Us</div>} />
                 <Route exact path="/contact" component={() => <div>Contact Us</div>} />
-                <Route exact path="/test" component={Test} />
+                <Route exact path="/event-complete" component={GameOver} />
+                <Route exact path="/sign-up" component={SignUp} />
                 <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
-              </GameProvider>
-            </Switch>
+              </Switch>
+              <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+            </GameProvider>
           </Router>
         </ApolloProvider>
       </StylesProvider>

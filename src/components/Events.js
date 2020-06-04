@@ -1,39 +1,100 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
-import { Redirect } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import { makeStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
+import { Redirect, useHistory } from 'react-router-dom'
 
+import { CreateEventButton } from '.'
+import bannerBackground5 from '../assets/purpleOil.jpg'
 import { EventCard, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
-import { getEvents } from '../gql/queries'
 
+const useStyles = makeStyles((theme) => ({
+  eventsContainer: {
+    marginTop: '2em',
+    marginBottom: '2em',
+  },
+  cardContainer: {
+    maxWidth: 500,
+  },
+  bannerGradient: {
+    background: ' rgb(25,25,25)',
+    background:
+      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+    width: '100%',
+    height: '100%',
+  },
+  pageBanner: {
+    width: '100%',
+    height: '45vh',
+    backgroundImage: `url(${bannerBackground5})`,
+    backgroundPosition: '50% 50%',
+    backgroundSize: 'cover',
+    marginBottom: '40px',
+  },
+  pageBannerContentContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '50%',
+    textAlign: 'center',
+  },
+  pageHeader: {
+    ...theme.typography.h1,
+    fontSize: '3rem',
+  },
+  scheduleIcon: {
+    color: theme.palette.common.ghostWhite,
+  },
+  subtitle: {
+    fontSize: '1.2rem',
+  },
+}))
 const Events = () => {
-  const { appLoading, userId } = useGameContext()
+  const classes = useStyles()
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(getEvents)
-
-  if (appLoading || eventsLoading) {
+  const { appLoading, userId, role, eventsData } = useGameContext()
+  if (appLoading) {
     return <Loading />
   }
 
   if (!userId) {
-    return <Redirect to="/" push />
+    return <Redirect to="/" />
   }
 
   if (!eventsData) {
-    return <div>no events data </div>
+    return (
+      <>
+        <div>No events yet!</div>
+        {role === 'host' && <CreateEventButton />}
+      </>
+    )
   }
 
-  if (eventsData.events.length) {
-    const { id } = eventsData.events[0]
-    return <Redirect to={`/events/${id}`} push />
-  }
   return (
-    <div>
-      {eventsData.events.map(({ description, event_name, id, host_id }) => {
-        return <EventCard key={id} name={event_name} desc={description} id={id} hostId={host_id} />
+    <>
+      <div className={classes.pageBanner}>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="center"
+          className={classes.bannerGradient}
+        >
+          <Grid item container direction="column" className={classes.pageBannerContentContainer}>
+            <Typography className={classes.pageHeader}>Find a community for you</Typography>
+            <Typography className={classes.subtitle} variant="subtitle1">
+              Scroll through our events and start video-chatting with awesome people.
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
+      {role === 'host' && <CreateEventButton />}
+      {eventsData.event_users.map(({ event }) => {
+        return <EventCard key={event.id} event={event} />
       })}
-    </div>
+    </>
   )
 }
 

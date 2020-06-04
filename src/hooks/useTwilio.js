@@ -1,13 +1,17 @@
-import { useEffect } from 'react'
-import { participantConnected } from '../helpers'
+import { useHistory } from 'react-router-dom'
+
+import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
 
 const useTwilio = () => {
-  const { room, twilioReady, setTwilioReady, setRoom } = useGameContext()
+  const { room, currentRound, setWaitingRoom, setDidPartnerDisconnect } = useGameContext()
+  const history = useHistory()
 
+  const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
-    if (room && twilioReady) {
-      console.log('starting twilio')
+    if (room) {
+      setWaitingRoom(null)
+
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
         console.log('publication = ', publication)
@@ -24,7 +28,7 @@ const useTwilio = () => {
 
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('remote participant disconnected ', remoteParticipant)
-
+        setDidPartnerDisconnect(true)
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
           remoteVideo.innerHTML = ''
@@ -32,12 +36,19 @@ const useTwilio = () => {
       })
 
       window.addEventListener('beforeunload', () => {
+        // just some cleanup on partnerDisconnect
+        setDidPartnerDisconnect(false)
         room.disconnect()
       })
 
       room.on('disconnected', function (rum) {
-        setRoom(null, false)
-        console.log('disconnected')
+        // just some cleanup on partnerDisconnect
+        setDidPartnerDisconnect(false)
+        setWaitingRoom(true)
+        // hardcoding this for our test
+        if (currentRound === 3) {
+          history.push('/event-complete')
+        }
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
         })

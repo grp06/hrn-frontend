@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
-import { Redirect } from 'react-router-dom'
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 
-import { findMyUser } from '../gql/queries'
+import { findMyUser, getEventsByUserId } from '../gql/queries'
+import { listenToRounds } from '../gql/subscriptions'
+import { getToken } from '../helpers'
+import { updateLastSeen } from '../gql/mutations'
+import { constants } from '../utils'
+
+const { lastSeenDuration } = constants
+
+const { createLocalTracks, connect } = require('twilio-video')
 
 const GameContext = React.createContext()
 
@@ -19,16 +26,198 @@ const defaultState = {
   role: '',
   roomId: null,
   token: null,
-  twilioReady: false,
   userId: null,
-  users: null,
+  hasUpcomingEvent: false,
+  eventsData: null,
+  attendees: null,
+  waitingRoom: null,
+  room: null,
+  didPartnerDisconnect: false,
 }
+
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { data: userData } = useQuery(findMyUser, {
+
+  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(findMyUser, {
     variables: { id: state.userId },
-    skip: !state.userId || !state.appLoading,
+    skip: !state.userId,
   })
+
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
+    getEventsByUserId,
+    {
+      variables: {
+        userId: state.userId,
+      },
+      skip: !state.userId || !state.role,
+    }
+  )
+
+  const {
+    data: freshRoundsData,
+    loading: freshRoundsDataLoading,
+    error: roundDataError,
+  } = useSubscription(listenToRounds, {
+    variables: {
+      event_id: state.eventId,
+    },
+    skip: !state.eventId,
+  })
+
+  const [updateLastSeenMutation] = useMutation(updateLastSeen, {
+    variables: {
+      now: new Date().toISOString(),
+      id: state.userId,
+    },
+    skip: !state.hasUpcomingEvent,
+  })
+
+  const apiCallsDone = !userDataLoading && !eventsLoading && !freshRoundsDataLoading
+
+  useEffect(() => {
+    if (state.hasUpcomingEvent) {
+      const interval = setInterval(() => {
+        updateLastSeenMutation()
+      }, lastSeenDuration)
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [state.hasUpcomingEvent, state.role])
+
+  useEffect(() => {
+    if (state.token) {
+      const setupRoom = async () => {
+        const localTracks = await createLocalTracks({ video: true, audio: false })
+        console.log('connecting to room ', state.roomId)
+        const myRoom = await connect(state.token, {
+          name: state.roomId,
+          tracks: localTracks,
+        })
+        dispatch((draft) => {
+          draft.room = myRoom
+        })
+      }
+      setupRoom()
+    }
+  }, [state.token])
+
+  useEffect(() => {
+    const { myRound } = state
+    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+    if (!state.room && state.roomId && hasPartner) {
+      const getTwilioToken = async () => {
+        const token = await getToken(state.roomId, state.userId).then((response) => response.json())
+        dispatch((draft) => {
+          draft.token = token.token
+        })
+      }
+      getTwilioToken()
+    }
+  }, [state.roomId, state.room])
+
+  useEffect(() => {
+    if (apiCallsDone && state.appLoading) {
+      dispatch((draft) => {
+        draft.appLoading = false
+      })
+    }
+  }, [apiCallsDone])
+
+  useEffect(() => {
+    if (!freshRoundsDataLoading && freshRoundsData && freshRoundsData.rounds) {
+      const currentRound = freshRoundsData.rounds.reduce((all, item) => {
+        if (item.round_number > all) {
+          return item.round_number
+        }
+        return all
+      }, 0)
+
+      const myRound = freshRoundsData.rounds.find((round) => {
+        const me =
+          round.round_number === currentRound &&
+          (round.partnerX_id === parseInt(state.userId, 10) ||
+            round.partnerY_id === parseInt(state.userId, 10))
+        return me
+      })
+
+      if (!state.roundsData && freshRoundsData.rounds) {
+        // page just reloaded, set data
+        console.log('reload or navigate')
+        return dispatch((draft) => {
+          draft.roundsData = freshRoundsData
+          draft.currentRound = currentRound
+          draft.myRound = myRound
+          draft.roomId = myRound && !myRound.ended_at ? myRound.id : null
+          draft.waitingRoom = myRound ? myRound.ended_at : null
+        })
+      }
+
+      const roundsDataLength = state.roundsData.rounds.length
+      const freshRoundsDataLength = freshRoundsData.rounds.length
+      const newRoundsData = freshRoundsDataLength > roundsDataLength
+      const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
+
+      if (newRoundsData || adminIsResettingGame) {
+        // round changed
+        console.log('round auto updated')
+        return dispatch((draft) => {
+          draft.roundsData = freshRoundsData
+          draft.currentRound = currentRound
+          draft.myRound = myRound
+          draft.roomId = myRound ? myRound.id : null
+        })
+      }
+
+      // if you reset or you just press start for the first time
+      if (!state.roundsData || !state.roundsData.rounds.length) {
+        console.log('event got reset')
+
+        return dispatch((draft) => {
+          draft.roomId = null
+          draft.room = null
+          draft.token = null
+          draft.myRound = 0
+          draft.roundsData = freshRoundsData
+          draft.currentRound = freshRoundsData.length ? 1 : 0
+        })
+      }
+    }
+  }, [freshRoundsData, freshRoundsDataLoading])
+
+  useEffect(() => {
+    if (freshRoundsData && freshRoundsData.rounds.length === 0 && state.currentRound === 0) {
+      // admin pressed reset or the event hasnt started
+      dispatch((draft) => {
+        draft.token = null
+        draft.roomId = null
+        draft.room = null
+        draft.attendees = null
+        draft.eventsData = null
+      })
+    }
+  }, [freshRoundsData, state.currentRound])
+
+  useEffect(() => {
+    if (eventsData) {
+      // when do we use this? Something for online users?
+      const hasUpcomingEvent = eventsData.event_users.find((event) => {
+        const { start_at, ended_at } = event.event
+        const startTime = new Date(start_at).getTime()
+        const now = Date.now()
+        const diff = startTime - now
+
+        // event is upcoming or in progress
+        return diff < 1800000 && !ended_at
+      })
+
+      dispatch((draft) => {
+        draft.eventsData = eventsData
+        draft.hasUpcomingEvent = hasUpcomingEvent
+      })
+    }
+  }, [eventsData, state.role])
+
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]
@@ -37,9 +226,6 @@ const GameProvider = ({ children, location }) => {
         draft.role = role
         draft.userId = id
         draft.name = name
-        if (draft.userId) {
-          draft.appLoading = false
-        }
       })
     }
   }, [userData])
@@ -53,20 +239,15 @@ const GameProvider = ({ children, location }) => {
           draft.appLoading = false
         })
       }
-      setTimeout(() => {
-        dispatch((draft) => {
-          draft.userId = myUserId
-          if (draft.role) {
-            draft.appLoading = false
-          }
-        })
-      }, 500)
+      dispatch((draft) => {
+        draft.userId = myUserId
+      })
     }
   }, [])
 
-  if (state.redirect && location.pathname !== '/') {
-    return <Redirect to="/" push />
-  }
+  // if (state.redirect && location.pathname !== '/') {
+  //   return <Redirect to="/" push />
+  // }
 
   return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
 }

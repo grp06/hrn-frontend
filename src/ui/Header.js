@@ -10,30 +10,37 @@ import {
   List,
   ListItem,
   ListItemText,
+  Grid,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
+import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+
+import { useGameContext } from '../context/useGameContext'
+
+import { deleteRounds } from '../gql/mutations'
+import { TransitionModal } from '../common'
 
 import logo from '../assets/logoWhite.svg'
 
-function ElevationScroll(props) {
-  const { children } = props
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  })
+// function ElevationScroll(props) {
+//   const { children } = props
+//   const trigger = useScrollTrigger({
+//     disableHysteresis: true,
+//     threshold: 0,
+//   })
 
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  })
-}
+//   return React.cloneElement(children, {
+//     elevation: trigger ? 4 : 0,
+//   })
+// }
 
 const useStyles = makeStyles((theme) => ({
-  toolbarMargin: {
-    ...theme.mixins.toolbar,
-    // marginBottom: '2em',
-  },
+  // toolbarMargin: {
+  //   ...theme.mixins.toolbar,
+  //   // marginBottom: '2em',
+  // },
   [theme.breakpoints.down('md')]: {
     marginBottom: '1em',
   },
@@ -50,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   logoContainer: {
+    marginLeft: '10px',
     padding: 0,
     '&:hover': {
       backgroundColor: 'transparent',
@@ -61,11 +69,10 @@ const useStyles = makeStyles((theme) => ({
   tab: {
     ...theme.typography.tab,
     minWidth: 10,
-    marginLeft: '25px',
   },
   button: {
     ...theme.typography.headerButton,
-    borderRadius: '50px',
+    borderRadius: '30px',
     marginLeft: '50px',
     marginRight: '25px',
     height: '45px',
@@ -81,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     width: '35px',
   },
   drawer: {
-    backgroundColor: theme.palette.common.rebeccaPurple,
+    backgroundColor: theme.palette.common.ghostWhite,
   },
   drawerItem: {
     ...theme.typography.tab,
@@ -90,15 +97,40 @@ const useStyles = makeStyles((theme) => ({
   drawerItemSelected: {
     opacity: 1,
   },
+  adminPanelContainer: {
+    width: '40%',
+    marginLeft: 'auto',
+  },
+  buttonSmall: {
+    fontSize: '0.8rem',
+    fontFamily: 'Muli',
+  },
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
+  const history = useHistory()
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
+  const { role, currentRound, eventId, setCurrentRound } = useGameContext()
+  const [deleteRoundsMutation] = useMutation(deleteRounds)
 
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // eslint-disable-next-line no-shadow
+  const resetRoundsModal = TransitionModal({
+    button: {
+      buttonText: 'Reset Games',
+      buttonVariant: 'outlined',
+      buttonColor: 'secondary',
+    },
+    modalBody: 'This will close the game for all users.',
+    onAcceptFunction: async () => {
+      await deleteRoundsMutation()
+      await fetch(`${process.env.REACT_APP_API_URL}/api/rooms/reset-event`)
+      setCurrentRound(0)
+      history.push(`/events/${eventId}`)
+    },
+  })
 
   const routes = [
     { name: 'Home', link: '/', activeIndex: 0 },
@@ -109,6 +141,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   ]
 
   useEffect(() => {
+    // THE FUCK IS THIS?
     ;[...routes].forEach((route) => {
       switch (window.location.pathname) {
         case `${route.link}`:
@@ -170,25 +203,49 @@ const Header = ({ activeTab, setActiveTab }) => {
     </>
   )
 
+  const adminNavPanel = () => {
+    return (
+      <Grid
+        container
+        direction="row"
+        justify="space-around"
+        alignItems="center"
+        className={classes.adminPanelContainer}
+      >
+        <Grid item className={classes.tab}>
+          <p>Participants Online: fixme</p>
+        </Grid>
+        <Grid item className={classes.tab}>
+          <p>
+            Curent Round:
+            {currentRound}
+          </p>
+        </Grid>
+        <Grid item>{resetRoundsModal}</Grid>
+      </Grid>
+    )
+  }
+
   return (
     <>
-      <ElevationScroll>
-        <AppBar position="fixed">
-          <Toolbar disableGutters>
-            <Button
-              component={Link}
-              to="/"
-              className={classes.logoContainer}
-              onClick={() => setActiveTab(0)}
-              disableRipple
-            >
-              <img alt="company-logo" className={classes.logo} src={logo} />
-            </Button>
-            {/* matches ? drawer : tabs */}
-          </Toolbar>
-        </AppBar>
-      </ElevationScroll>
-      <div className={classes.toolbarMargin} />
+      {/* <ElevationScroll> */}
+      <AppBar position="fixed">
+        <Toolbar disableGutters>
+          <Button
+            component={Link}
+            to="/"
+            className={classes.logoContainer}
+            onClick={() => setActiveTab(0)}
+            disableRipple
+          >
+            <img alt="company-logo" className={classes.logo} src={logo} />
+          </Button>
+          {role === 'host' && currentRound !== 0 && adminNavPanel()}
+          {/* {matches ? drawer : tabs} */}
+        </Toolbar>
+      </AppBar>
+      {/* </ElevationScroll> */}
+      {/* <div className={classes.toolbarMargin} /> */}
     </>
   )
 }

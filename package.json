@@ -8,6 +8,7 @@
     "@emotion/core": "^10.0.28",
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.55",
     "@material-ui/pickers": "^3.2.10",
     "@projectstorm/react-diagrams": "^6.0.1-beta.7",
     "@testing-library/jest-dom": "^4.2.4",
@@ -16,6 +17,7 @@
     "apollo-boost": "^0.4.7",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
+    "apollo-link": "^1.2.14",
     "apollo-link-context": "^1.0.20",
     "apollo-link-http": "^1.5.17",
     "apollo-link-retry": "^2.2.16",
@@ -24,10 +26,14 @@
     "closest": "^0.0.1",
     "dagre": "^0.8.5",
     "date-fns": "^2.13.0",
+    "env-cmd": "^10.1.0",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
+    "jstz": "^2.1.1",
     "lodash": "^4.17.15",
     "mathjs": "^7.0.0",
+    "moment": "^2.26.0",
+    "moment-timezone": "^0.5.31",
     "pathfinding": "^0.4.18",
     "paths-js": "^0.4.10",
     "react": "^16.13.1",
@@ -35,7 +41,6 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
-    "roundrobin": "^1.0.3",
     "styled-components": "^5.1.0",
     "subscriptions-transport-ws": "^0.9.16",
     "twilio-video": "^2.4.0",
@@ -47,8 +52,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "estlint",
-    "predeploy": "npm run build",
-    "deploy": "now --prod ./build"
+    "build:staging": "env-cmd -f .env.staging npm run build"
   },
   "eslintConfig": {
     "extends": "react-app"

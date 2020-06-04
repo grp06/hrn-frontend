@@ -1,22 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import DateFnsUtils from '@date-io/date-fns'
 import { TextField, Button, Grid, Typography } from '@material-ui/core'
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
+import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
+import { useHistory, Redirect } from 'react-router-dom'
+import { useGameContext } from '../context/useGameContext'
+import { FloatCardMedium } from '.'
+
+import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    marginTop: '100px',
+  },
   formContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  subheading: {
-    color: theme.palette.common.rebeccaPurple,
-    textAlign: 'center',
+    paddingTop: '40px',
+    paddingBottom: '40px',
+    width: '40vw',
   },
   inputContainer: {
     marginTop: '2em',
@@ -25,100 +29,152 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginBottom: '1em',
   },
+  dateTime: {
+    width: '100%',
+  },
+  eventUpdated: {
+    width: '100%',
+    margin: '0 auto',
+    fontSize: 18,
+    textAlign: 'center',
+    color: 'green',
+  },
 }))
 
-const EventForm = () => {
+const EventForm = ({ eventData }) => {
   const classes = useStyles()
+  const { userId, role } = useGameContext()
+  const history = useHistory()
+  const [title, setTitle] = useState('My Awesome Event 🔥')
+  const [description, setDescription] = useState("Let's get people hyped!")
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
+  const [eventUpdated, setEventUpdated] = useState(null)
+  const [createEventMutation] = useMutation(createEvent, {
+    variables: {
+      description,
+      event_name: title,
+      start_at: selectedDate,
+      host_id: userId,
+    },
+  })
 
-  const [title, setTitle] = useState('')
-  const [desc, setDesc] = useState('')
-  const [date, setDate] = useState(Date.now())
-  const [eventTime, setEventTime] = useState(new Date())
+  const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
 
-  const handleFormSubmit = (event) => {
-    setTitle('')
-    setDesc('')
-    setDate(Date.now())
-    setEventTime(new Date())
+  const [updateEventMutation] = useMutation(updateEvent, {
+    variables: {
+      description,
+      event_name: title,
+      start_at: selectedDate,
+      id: eventData ? eventData.events[0].id : '',
+    },
+  })
+
+  useEffect(() => {
+    if (eventData) {
+      const { description: eventDescription, event_name, start_at } = eventData.events[0]
+      setDescription(eventDescription)
+      setTitle(event_name)
+      setSelectedDate(start_at)
+    }
+  }, [eventData])
+
+  // REDIRECTS
+  if (userId && role !== 'host') {
+    return <Redirect to="/events" />
+  }
+
+  if (!userId) {
+    return <Redirect to="/" />
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    if (eventData) {
+      await updateEventMutation()
+      setEventUpdated(true)
+      setTimeout(() => {
+        setEventUpdated(false)
+      }, 5000)
+    } else {
+      const res = await createEventMutation()
+      const { id } = res.data.insert_events.returning[0]
+      await insertEventUserMutation({
+        variables: {
+          eventId: id,
+          userId,
+        },
+      })
+      history.push(`/events/${id}`)
+    }
+  }
+
+  const getRowNumber = () => {
+    const charsPerLine = 65
+    const numRows = Math.ceil(description.length / charsPerLine)
+    return numRows === 0 ? 1 : numRows
   }
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <Grid container direction="column" md={4} sm={8} className={classes.formContainer}>
-        <form onSubmit={handleFormSubmit}>
-          <Grid item container direction="column" alignItems="center">
-            <Grid item>
-              <Typography variant="h4" style={{ lineHeight: 1 }}>
-                Create Your Event
-              </Typography>
-              <Typography variant="body1" className={classes.subheading}>
-                Some subheading
-              </Typography>
-            </Grid>
+    <div className={classes.wrapper}>
+      <FloatCardMedium>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Grid item container direction="column" className={classes.formContainer}>
+            <form onSubmit={handleSubmit}>
+              <Grid item container direction="column" alignItems="center">
+                <Grid item>
+                  <Typography variant="h4" style={{ lineHeight: 1 }}>
+                    {eventData ? 'Edit ' : 'Create '}
+                    Your Event
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid item container direction="column" className={classes.inputContainer}>
+                <Grid item>
+                  <TextField
+                    id="title"
+                    label="Title"
+                    required
+                    fullWidth
+                    className={classes.input}
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="desc"
+                    label="Description"
+                    required
+                    fullWidth
+                    multiline
+                    rows={getRowNumber()}
+                    className={classes.input}
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <DateTimePicker
+                    variant="inline"
+                    label="Date and time"
+                    value={selectedDate}
+                    onChange={setSelectedDate}
+                    minutesStep={15}
+                    className={classes.dateTime}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container justify="center" alignItems="center">
+                <Button color="primary" type="submit" variant="contained">
+                  {eventData ? 'Update Event' : 'Create Event'}
+                </Button>
+              </Grid>
+            </form>
+            {eventUpdated && <div className={classes.eventUpdated}>Event updated</div>}
           </Grid>
-          <Grid item container direction="column" className={classes.inputContainer}>
-            <Grid item>
-              <TextField
-                id="title"
-                label="Title"
-                required
-                fullWidth
-                className={classes.input}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                id="desc"
-                label="Description"
-                required
-                fullWidth
-                multiline
-                rows={3}
-                className={classes.input}
-                value={desc}
-                onChange={(e) => setDesc(e.target.value)}
-              />
-            </Grid>
-            <Grid item>
-              <KeyboardDatePicker
-                margin="normal"
-                id="date"
-                label="Event Date"
-                format="MM/dd/yyyy"
-                fullWidth
-                value={date}
-                onChange={(selectedDate) => setDate(selectedDate)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-              />
-            </Grid>
-            <Grid item>
-              <KeyboardTimePicker
-                margin="normal"
-                id="time"
-                label="Event Time"
-                fullWidth
-                placeholder="08:00 AM"
-                mask="__:__ _M"
-                value={eventTime}
-                onChange={(selectedTime) => setEventTime(selectedTime)}
-                KeyboardButtonProps={{
-                  'aria-label': 'change time',
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Button primary type="submit" variant="outlined">
-              Submit
-            </Button>
-          </Grid>
-        </form>
-      </Grid>
-    </MuiPickersUtilsProvider>
+        </MuiPickersUtilsProvider>
+      </FloatCardMedium>
+    </div>
   )
 }
 

@@ -1,8 +1,6 @@
-import endpointUrl from '../utils/endpointUrl'
-
 export default function useCreateRooms() {
   const createRooms = async (allRoomIds) => {
-    fetch(`${endpointUrl}/api/rooms/create-rooms`, {
+    fetch(`${process.env.REACT_APP_API_URL}/api/rooms/create-rooms`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

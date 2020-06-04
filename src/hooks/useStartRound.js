@@ -1,12 +1,8 @@
-import { useEffect } from 'react'
-import { useMutation } from 'react-apollo'
-import { useGameContext } from '../context/useGameContext'
-import { incrementRound } from '../gql/mutations'
 import { useCreateRooms } from '.'
+import { useGameContext } from '../context/useGameContext'
 
 export default function useStartRounds() {
   const { currentRound } = useGameContext()
-  const [incrementRoundMutation] = useMutation(incrementRound)
   const { createRooms } = useCreateRooms()
 
   const startRound = async (rounds) => {
@@ -17,8 +13,6 @@ export default function useStartRounds() {
     }, [])
 
     await createRooms(allRoomIds)
-    console.log('should Increment rounds here')
-    incrementRoundMutation()
   }
 
   return { startRound }

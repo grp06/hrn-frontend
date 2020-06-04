@@ -7,25 +7,21 @@ import { RetryLink } from 'apollo-link-retry'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 
-async function getCurrentUserToken() {
-  const token = await localStorage.getItem('token')
-  return token
-}
-
 const makeApolloClient = async () => {
+  const token = localStorage.getItem('token')
+  console.log('process.env = ', process.env)
+
+  // SET THIS UP TO WORK LOCALLY AND FOR DEPLOYMENT TO STAGING AND PROD
   const httpLink = new HttpLink({
-    uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
+    // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
+    uri: process.env.REACT_APP_HASURA,
   })
 
   const authLink = setContext(async (req, { headers }) => {
-    // add in real token KEVIN
-    const token = 123
-
     let authHeaders
     if (token) {
       authHeaders = {
         authorization: `Bearer ${token}`,
-        'X-Hasura-Admin-Secret': 'hirightnow',
       }
     }
 
@@ -38,20 +34,18 @@ const makeApolloClient = async () => {
   const httpAuthLink = authLink.concat(httpLink)
 
   const connectionParams = async () => {
-    const token = 123
-
     if (token) {
       return {
         headers: {
           authorization: `Bearer ${token}`,
-          'X-Hasura-Admin-Secret': 'hirightnow',
         },
       }
     }
   }
 
   const wsLink = new WebSocketLink({
-    uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
+    // uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
+    uri: process.env.REACT_APP_HASURA_WS,
     options: {
       reconnect: true,
       connectionParams,
@@ -60,10 +54,7 @@ const makeApolloClient = async () => {
 
   const retryLink = new RetryLink()
 
-  // using the ability to split links, you can send data to each link
-  // depending on what kind of operation is being sent
   const link = split(
-    // split based on operation type
     ({ query }) => {
       const { kind, operation } = getMainDefinition(query)
       return kind === 'OperationDefinition' && operation === 'subscription'
