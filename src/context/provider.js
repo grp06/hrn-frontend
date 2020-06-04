@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useSubscription } from '@apollo/react-hooks'
-import { Redirect } from 'react-router-dom'
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 
 import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
+import { updateLastSeen } from '../gql/mutations'
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -70,8 +70,26 @@ const GameProvider = ({ children, location }) => {
     skip: !state.eventId,
   })
 
+  const [updateLastSeenMutation] = useMutation(updateLastSeen, {
+    variables: {
+      now: new Date().toISOString(),
+      id: state.userId,
+    },
+    skip: !state.hasUpcomingEvent,
+  })
   const apiCallsDone =
     !userDataLoading && !userEventsLoading && !hostEventsLoading && !freshRoundsDataLoading
+
+  useEffect(() => {
+    if (state.role === 'user' && state.hasUpcomingEvent) {
+      const interval = setInterval(() => {
+        updateLastSeenMutation()
+      }, 3000)
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  }, [state.hasUpcomingEvent, state.role])
 
   useEffect(() => {
     if (state.token) {
@@ -188,17 +206,19 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.role === 'user' && userEventsData) {
       // when do we use this? Something for online users?
-      const startingSoon = userEventsData.event_users.find((event) => {
-        const { start_at } = event.event
+      const hasUpcomingEvent = userEventsData.event_users.find((event) => {
+        const { start_at, ended_at } = event.event
         const startTime = new Date(start_at).getTime()
         const now = Date.now()
         const diff = startTime - now
+
         // event is upcoming or in progress
-        return diff < 1800000
+        return diff < 1800000 && !ended_at
       })
+
       dispatch((draft) => {
         draft.userEventsData = userEventsData
-        draft.startingSoon = startingSoon
+        draft.hasUpcomingEvent = hasUpcomingEvent
       })
     }
 

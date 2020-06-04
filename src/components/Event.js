@@ -70,11 +70,8 @@ const Event = ({ match }) => {
       const { event_users: attendees } = eventData.events[0]
 
       if (!eventData.events[0]) {
-        console.log('redirect')
-
         return history.push('/events')
       }
-
       setAttendees(attendees)
     }
   }, [eventData])
@@ -113,8 +110,6 @@ const Event = ({ match }) => {
   }
 
   const hostId = eventData && eventData.events[0].host_id
-  console.log('hostId', hostId)
-  console.log('userID', userId)
 
   return (
     <>

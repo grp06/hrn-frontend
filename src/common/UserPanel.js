@@ -60,19 +60,19 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     if (timeState === 'go time' && role === 'user') {
       setWaitingForAdmin(true)
     }
-  }, [currentRound])
+  }, [timeState, role])
 
   const { event_users: attendees, start_at: eventStartTime } = eventData.events[0]
 
-  console.log('ya bishhhh', eventData.events[0])
   const alreadyAttending = attendees.find((attendee) => attendee.user.id === userId)
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
-    console.log('handle Sign Up Click')
     history.push('/sign-up')
   }
 
+  // probably dont need to allow/encourage people cancel rsvp right before the event
+  // just hide the button within 30 mins of event
   const renderButton = () => {
     let element
     switch (timeState) {
@@ -108,7 +108,16 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         element = null
         break
       default:
-        element = (
+        element = !localStorage.getItem('token') ? (
+          <Button
+            size="large"
+            color="primary"
+            variant="contained"
+            onClick={() => handleSignUpClick()}
+          >
+            Sign Up
+          </Button>
+        ) : (
           <>
             <Button
               variant="contained"
@@ -178,7 +187,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           {renderButton()}
         </Grid>
       </Grid>
-      <AttendeesList attendees={attendees} />
     </FloatCardWide>
   )
 }
