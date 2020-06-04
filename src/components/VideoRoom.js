@@ -15,27 +15,26 @@ const { roundLength } = constants
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
-    background: '#111',
+    background: theme.palette.common.blackBody,
   },
   mainVid: {
     width: '100%',
     display: 'flex',
     '& video': {
-      margin: '0 auto',
       width: '100%',
-      height: 'calc(100vh - 64px)',
+      height: 'calc(100vh)',
     },
   },
   myVideo: {
-    width: '300px',
+    width: '150px',
     position: 'absolute',
     top: '79px',
     right: '15px',
     zIndex: 99,
 
     '& video': {
-      borderRadius: 10,
-      width: '300px',
+      borderRadius: 4,
+      width: '150px',
     },
   },
   timerContainer: {
@@ -79,15 +78,8 @@ const VideoRoom = () => {
       console.log('use effect video room')
       console.log('timer Time Input ****', timerTimeInput)
       setTimerTimeInput(eventEndTime)
-
       setShowTimer(true)
       startTwilio()
-    }
-    return () => {
-      console.log('VideoRoom Cleanup ******')
-      // document.getElementById('timer-container').innerHTML()
-      // setShowTimer(false)
-      // setTimerTimeInput(moment())
     }
   }, [room])
 

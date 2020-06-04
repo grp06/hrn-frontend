@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     marginLeft: '5px',
     color: theme.palette.common.orchid,
+    fontWeight: '500',
   },
 }))
 
@@ -88,12 +89,12 @@ const EventCard = ({ event }) => {
               {eventTime}
             </Typography>
           </Grid>
-          <Grid item container direction="row" alignItems="center">
+          {/* <Grid item container direction="row" alignItems="center">
             <PeopleIcon className={classes.icon} />
             <Typography className={classes.subtitle} variant="subtitle1">
               3 people attending
             </Typography>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
     </FloatCardWide>

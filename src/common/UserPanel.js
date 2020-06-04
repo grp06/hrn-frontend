@@ -82,6 +82,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     <Button
       variant="contained"
       size="large"
+      color="primary"
       onClick={async () => {
         if (alreadyAttending) {
           await deleteEventUserMutation()
@@ -92,7 +93,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         }
       }}
     >
-      {alreadyAttending ? 'Cancel RSVP' : 'Join Event'}
+      {alreadyAttending ? 'Cancel RSVP 😔' : 'Join Event 🎊'}
     </Button>
   )
 
@@ -103,7 +104,18 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         element = !token ? renderSignupButton() : renderRsvpButton()
         break
       case 'go time':
-        element = !alreadyAttending ? renderRsvpButton() : null
+        // if theres no token then we renderSignUp
+        if (!token) {
+          element = renderSignupButton()
+        }
+        // if theres a token and we're not signed up
+        if (token && !alreadyAttending) {
+          element = renderRsvpButton()
+        }
+        // if theres a token and we are signed up
+        if (token && alreadyAttending) {
+          element = null
+        }
         break
       default:
         element = !token ? (

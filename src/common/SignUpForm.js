@@ -45,7 +45,7 @@ const SignUpForm = () => {
   const classes = useStyles()
   const { redirect, setRedirect, setUserId, userId } = useGameContext()
 
-  const [username, setUsername] = useState('')
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [role, setRole] = useState('user')
@@ -68,7 +68,7 @@ const SignUpForm = () => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ name: username, email, password, role }),
+      body: JSON.stringify({ name, email, password, role }),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -104,13 +104,13 @@ const SignUpForm = () => {
             <Grid item container direction="column" className={classes.inputContainer}>
               <Grid item>
                 <TextField
-                  id="username"
-                  label="Username"
+                  id="name"
+                  label="name"
                   required
                   fullWidth
                   className={classes.input}
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                 />
               </Grid>
               <Grid item>
@@ -128,6 +128,7 @@ const SignUpForm = () => {
                 <TextField
                   id="password"
                   label="Password"
+                  type="password"
                   required
                   fullWidth
                   className={classes.input}
@@ -141,12 +142,12 @@ const SignUpForm = () => {
                   name="gender1"
                   value={role}
                   onChange={(e) => {
-                    console.log(e.target.value)
+                    // console.log(e.target.value)
                     setRole(e.target.value)
                   }}
                 >
                   <FormControlLabel value="user" control={<Radio />} label="User" />
-                  <FormControlLabel value="host" control={<Radio />} label="Host" />
+                  {/* <FormControlLabel value="host" control={<Radio />} label="Host" /> */}
                 </RadioGroup>
               </Grid>
             </Grid>
