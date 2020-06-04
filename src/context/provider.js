@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 
-import { findMyUser, getEventsByUserId, getHostEvents } from '../gql/queries'
+import { findMyUser, getEventsByUserId } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
@@ -25,8 +25,7 @@ const defaultState = {
   token: null,
   userId: null,
   hasUpcomingEvent: false,
-  userEventsData: null,
-  hostEventsData: null,
+  eventsData: null,
   attendees: null,
   waitingRoom: null,
 }
@@ -39,23 +38,13 @@ const GameProvider = ({ children, location }) => {
     skip: !state.userId,
   })
 
-  const { data: userEventsData, loading: userEventsLoading, error: eventsError } = useQuery(
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
     {
       variables: {
         userId: state.userId,
       },
-      skip: !state.userId || !state.role || state.role === 'host',
-    }
-  )
-
-  const { data: hostEventsData, loading: hostEventsLoading, error: hostEventsError } = useQuery(
-    getHostEvents,
-    {
-      variables: {
-        userId: state.userId,
-      },
-      skip: !state.userId || state.role === 'user',
+      skip: !state.userId || !state.role,
     }
   )
 
@@ -77,8 +66,8 @@ const GameProvider = ({ children, location }) => {
     },
     skip: !state.hasUpcomingEvent,
   })
-  const apiCallsDone =
-    !userDataLoading && !userEventsLoading && !hostEventsLoading && !freshRoundsDataLoading
+
+  const apiCallsDone = !userDataLoading && !eventsLoading && !freshRoundsDataLoading
 
   useEffect(() => {
     if (state.role === 'user' && state.hasUpcomingEvent) {
@@ -197,16 +186,15 @@ const GameProvider = ({ children, location }) => {
         draft.roomId = null
         draft.room = null
         draft.attendees = null
-        draft.hostEventsData = null
-        draft.userEventsData = null
+        draft.eventsData = null
       })
     }
   }, [freshRoundsData, state.currentRound])
 
   useEffect(() => {
-    if (state.role === 'user' && userEventsData) {
+    if (eventsData) {
       // when do we use this? Something for online users?
-      const hasUpcomingEvent = userEventsData.event_users.find((event) => {
+      const hasUpcomingEvent = eventsData.event_users.find((event) => {
         const { start_at, ended_at } = event.event
         const startTime = new Date(start_at).getTime()
         const now = Date.now()
@@ -217,17 +205,11 @@ const GameProvider = ({ children, location }) => {
       })
 
       dispatch((draft) => {
-        draft.userEventsData = userEventsData
+        draft.eventsData = eventsData
         draft.hasUpcomingEvent = hasUpcomingEvent
       })
     }
-
-    if (state.role === 'host' && hostEventsData) {
-      dispatch((draft) => {
-        draft.hostEventsData = hostEventsData
-      })
-    }
-  }, [hostEventsData, userEventsData, state.role])
+  }, [eventsData, state.role])
 
   useEffect(() => {
     if (userData && userData.users.length) {

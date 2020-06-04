@@ -53,9 +53,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Events = () => {
   const classes = useStyles()
-  const history = useHistory()
 
-  const { appLoading, userId, role, userEventsData, hostEventsData } = useGameContext()
+  const { appLoading, userId, role, eventsData } = useGameContext()
   if (appLoading) {
     return <Loading />
   }
@@ -64,32 +63,11 @@ const Events = () => {
     return <Redirect to="/" />
   }
 
-  const renderUserCards = () => {
-    if (role === 'user') {
-      if (!userEventsData) {
-        return <div>No data</div>
-      }
-      return userEventsData.event_users.map((event) => {
-        return <EventCard key={event.id} event={event.event} />
-      })
-    }
-  }
-
-  const renderHostCards = () => {
-    return (
-      role === 'host' &&
-      hostEventsData &&
-      hostEventsData.events.map((event) => {
-        return <EventCard key={event.id} event={event} />
-      })
-    )
-  }
-
-  if (!userEventsData && !hostEventsData && role === 'host') {
+  if (!eventsData) {
     return (
       <>
-        <div>no events to display. Please create an event. </div>
-        <CreateEventButton />
+        <div>No events yet!</div>
+        {role === 'host' && <CreateEventButton />}
       </>
     )
   }
@@ -113,15 +91,9 @@ const Events = () => {
         </Grid>
       </div>
       {role === 'host' && <CreateEventButton />}
-      {renderUserCards()}
-      {renderHostCards()}
-      <Button
-        onClick={() => {
-          history.push('/sign-up')
-        }}
-      >
-        Sign Up
-      </Button>
+      {eventsData.event_users.map(({ event }) => {
+        return <EventCard key={event.id} event={event} />
+      })}
     </>
   )
 }

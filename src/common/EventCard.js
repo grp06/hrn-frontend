@@ -16,7 +16,7 @@ import eventImage5 from '../assets/personSalon.png'
 import { FloatCardWide } from '.'
 
 const eventImages = [eventImage1, eventImage2, eventImage3, eventImage4, eventImage5]
-const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
+// const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
 
 const useStyles = makeStyles((theme) => ({
   eventContainer: {
@@ -48,19 +48,18 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const EventCard = ({ event }) => {
-  const { description, event_name, id, host_id, start_at } = event
+  const { description, event_name, id, start_at } = event
 
   const classes = useStyles()
   const history = useHistory()
 
   const eventTime = formatDate(start_at)
-  // const endocdedId = encode(id)
   return (
     <FloatCardWide>
       <Grid
         container
         justify="flex-start"
-        wrap
+        wrap="wrap"
         className={classes.eventContainer}
         onClick={() => history.push(`/events/${id}`)}
       >

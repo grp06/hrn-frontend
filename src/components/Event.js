@@ -49,7 +49,6 @@ const Event = ({ match }) => {
   const { appLoading, userId, currentRound, setAttendees, setEventId, eventId } = useGameContext()
   const history = useHistory()
 
-  // decoding thing here
   const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
     getEventById,
     {
@@ -63,7 +62,7 @@ const Event = ({ match }) => {
     if (!eventId) {
       setEventId(parseInt(id, 10))
     }
-  }, [])
+  }, [eventId, id, setEventId])
 
   useEffect(() => {
     if (!eventDataLoading && eventData.events) {
@@ -74,13 +73,13 @@ const Event = ({ match }) => {
       }
       setAttendees(attendees)
     }
-  }, [eventData])
+  }, [eventData, eventDataLoading, history, setAttendees])
 
   useEffect(() => {
     if (currentRound > 0) {
       history.push('/video-room')
     }
-  }, [currentRound])
+  }, [currentRound, history])
 
   if (appLoading || eventDataLoading) {
     return <Loading />
@@ -89,8 +88,6 @@ const Event = ({ match }) => {
   if (!eventData) {
     return null
   }
-
-  // probably need to move this into useEffect
 
   const event = eventData.events[0]
 
