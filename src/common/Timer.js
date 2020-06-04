@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Timer = ({ eventStartTime, subtitle }) => {
+const Timer = ({ eventStartTime, subtitle, onRoundComplete }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -38,9 +38,15 @@ const Timer = ({ eventStartTime, subtitle }) => {
     }, 1000)
 
     if (seconds === 0) {
+      console.log('seconds is 0 IF')
       setIsTimerActive(false)
+      if (onRoundComplete) {
+        onRoundComplete()
+      }
     }
+
     return () => {
+      console.log('timer is unmounting')
       clearInterval(interval)
     }
   }, [seconds])
@@ -48,7 +54,7 @@ const Timer = ({ eventStartTime, subtitle }) => {
   const displayTime =
     seconds && seconds >= 0 ? `${minutesToDisplay} : ${secondsToDisplay}` : '-- : --'
 
-  return (
+  return isTimerActive ? (
     <Grid
       container
       direction="column"
@@ -59,7 +65,7 @@ const Timer = ({ eventStartTime, subtitle }) => {
       <Typography className={classes.subtitle}>{subtitle}</Typography>
       <div className={classes.time}>{displayTime}</div>
     </Grid>
-  )
+  ) : null
 }
 
 export default Timer
