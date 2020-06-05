@@ -11,7 +11,6 @@ const makeApolloClient = async () => {
   const token = localStorage.getItem('token')
   console.log('process.env = ', process.env)
 
-  // SET THIS UP TO WORK LOCALLY AND FOR DEPLOYMENT TO STAGING AND PROD
   const httpLink = new HttpLink({
     // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
     uri: process.env.REACT_APP_HASURA,
