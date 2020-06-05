@@ -55,6 +55,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Events = () => {
+  console.log('events')
+
   const classes = useStyles()
 
   const { appLoading, userId, role } = useGameContext()
@@ -68,14 +70,6 @@ const Events = () => {
       skip: !userId,
     }
   )
-
-  useEffect(() => {
-    console.log('rendering Eventssss')
-  }, [])
-
-  useEffect(() => {
-    console.log('ya boy events data useffect is called')
-  }, [eventsData])
 
   if (appLoading || eventsLoading) {
     return <Loading />

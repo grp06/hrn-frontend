@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-
+import Typography from '@material-ui/core/Typography'
 import { useGameContext } from '../context/useGameContext'
+import { ThumbsUp } from '../common'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -14,42 +15,44 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  largeText: {
-    fontFamily: 'Muli',
-    fontSize: 24,
-    color: 'white',
-    width: '50%',
-    textAlign: 'center',
-    lineHeight: '2rem',
+  messageText: {
+    ...theme.typography.waitingRoomHeading,
   },
   dancingMan: {
-    fontSize: 50,
-    marginTop: 50,
+    fontSize: '50px',
   },
 }))
 
 const WaitingRoom = () => {
-  console.log('calling waiting Room')
   const classes = useStyles()
-  const { waitingRoom, myRound, didPartnerDisconnect } = useGameContext()
+  const { waitingRoom, myRound, didPartnerDisconnect, userId } = useGameContext()
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+
   if (didPartnerDisconnect && hasPartner) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.largeText}>
+        <Typography className={classes.messageText}>
           Sorry to break the bad news to you, but your partner disconnected ... something to do with
-          squirrels chewing their router 🤷‍♀️. Stay put and we will connect you with someone soon!
-        </span>
+          squirrels chewing their router 🤷‍♀️.
+        </Typography>
+        <Typography className={classes.messageText}>
+          Stay put and we will connect you with someone soon!
+        </Typography>
       </div>
     )
   }
   if (!hasPartner) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.largeText}>
-          Sometimes it happens that we have an odd number of people. You&apos;ve been chosen to sit
-          out this round. Get a drink of water. Stretch. Do a little dance.
-        </span>
+        <Typography className={classes.messageText}>
+          Sometimes it happens that we have an odd number of people.
+        </Typography>
+        <Typography className={classes.messageText}>
+          You&apos;ve been chosen to sit out this round.
+        </Typography>
+        <Typography className={classes.messageText}>
+          Get a drink of water. Stretch. Do a little dance.
+        </Typography>
         <div className={classes.dancingMan}>
           <span>🕺</span>
         </div>
@@ -59,12 +62,7 @@ const WaitingRoom = () => {
   if (waitingRoom) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.largeText}>
-          Hope you had a great chat! Finding another awesome person for you to connect with
-        </span>
-        <div className={classes.dancingMan}>
-          <span>🕺</span>
-        </div>
+        <ThumbsUp myRound={myRound} userId={userId} />
       </div>
     )
   }
