@@ -76,7 +76,7 @@ const AdminPanel = ({ eventData, timeState }) => {
             size="large"
             variant="contained"
             color="primary"
-            onClick={() => startEvent(eventId, userId)}
+            onClick={() => startEvent(eventId)}
           >
             Start Event
             <span className={classes.partyEmoji} role="img" aria-label="party emoji">

@@ -16,6 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { Link, useHistory } from 'react-router-dom'
+import { startEvent } from '../helpers'
 
 import { useGameContext } from '../context/useGameContext'
 
@@ -126,7 +127,7 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-      await fetch(`${process.env.REACT_APP_API_URL}/api/rooms/reset-event`)
+      await startEvent(null, true)
       setCurrentRound(0)
       history.replace(`/events/${eventId}`)
     },

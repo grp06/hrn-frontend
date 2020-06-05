@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
+import { Redirect } from 'react-router-dom'
 
 import { findMyUser, getEventsByUserId } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
@@ -88,8 +89,7 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.token) {
       const setupRoom = async () => {
-        const localTracks = await createLocalTracks({ video: true, audio: false })
-        console.log('connecting to room ', state.roomId)
+        const localTracks = await createLocalTracks({ video: true, audio: true })
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
@@ -159,6 +159,7 @@ const GameProvider = ({ children, location }) => {
       const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
 
       if (newRoundsData || adminIsResettingGame) {
+        console.log('adminIsResettingGame', adminIsResettingGame)
         // round changed
         console.log('round auto updated')
         return dispatch((draft) => {
@@ -166,6 +167,9 @@ const GameProvider = ({ children, location }) => {
           draft.currentRound = currentRound
           draft.myRound = myRound
           draft.roomId = myRound ? myRound.id : null
+          if (adminIsResettingGame) {
+            draft.waitingRoom = false
+          }
         })
       }
 
@@ -244,10 +248,12 @@ const GameProvider = ({ children, location }) => {
       })
     }
   }, [])
-
-  // if (state.redirect && location.pathname !== '/') {
-  //   return <Redirect to="/" push />
-  // }
+  console.log('state.room = ', state.room)
+  console.log('state.currentRound = ', state.currentRound)
+  console.log('window.location', window.location)
+  if (state.room && state.currentRound > 0 && window.location.pathname !== '/video-room') {
+    return <Redirect to="/video-room" push />
+  }
 
   return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
 }
