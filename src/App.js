@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
-import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Switch, Redirect, withRouter } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
 import { LoginForm, EventForm } from './common'
@@ -41,15 +41,13 @@ const App = () => {
           <Router>
             <GameProvider>
               <Switch>
-                <Route exact path="/" component={LoginForm} />
-                <Route exact path="/events" component={Events} />
-                <Route exact path="/video-room" component={VideoRoom} />
-                <Route exact path="/create-event" component={EventForm} />
-                <Route exact path="/events/:id" component={Event} />
-                <Route exact path="/about" component={() => <div>About Us</div>} />
-                <Route exact path="/contact" component={() => <div>Contact Us</div>} />
-                <Route exact path="/event-complete" component={GameOver} />
-                <Route exact path="/sign-up" component={SignUp} />
+                <Route exact path="/" component={withRouter(LoginForm)} />
+                <Route exact path="/events" component={withRouter(Events)} />
+                <Route exact path="/video-room" component={withRouter(VideoRoom)} />
+                <Route exact path="/create-event" component={withRouter(EventForm)} />
+                <Route exact path="/events/:id" component={withRouter(Event)} />
+                <Route exact path="/event-complete" component={withRouter(GameOver)} />
+                <Route exact path="/sign-up" component={withRouter(SignUp)} />
                 <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
               </Switch>
               <Header activeTab={activeTab} setActiveTab={setActiveTab} />

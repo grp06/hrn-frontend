@@ -85,7 +85,7 @@ const SignUpForm = () => {
     const eventIdInLocalStorage = localStorage.getItem('eventId')
     debugger
     if (eventIdInLocalStorage) {
-      history.push(`/events/${eventIdInLocalStorage}`)
+      history.replace(`/events/${eventIdInLocalStorage}`)
     }
 
     return <Redirect to="/events" />
