@@ -107,6 +107,16 @@ const theme = createMuiTheme({
     p: {
       color: white,
     },
+    waitingRoomHeading: {
+      fontFamily: 'Muli',
+      fontSize: '1.8rem',
+      color: ghostWhiteSub,
+      marginBottom: '25px',
+      width: '100%',
+      lineHeight: '2.3rem',
+      fontWeight: '500',
+      textAlign: 'center',
+    },
   },
   overrides: {
     MuiAppBar: {

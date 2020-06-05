@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-
+import Typography from '@material-ui/core/Typography'
 import { useGameContext } from '../context/useGameContext'
 import { ThumbsUp } from '../common'
 
@@ -16,16 +16,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   messageText: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-    width: '50%',
-    lineHeight: '1.4rem',
-    fontWeight: '500',
-    textAlign: 'center',
+    ...theme.typography.waitingRoomHeading,
   },
   dancingMan: {
-    fontSize: 50,
-    marginTop: 50,
+    fontSize: '50px',
   },
 }))
 
@@ -37,20 +31,28 @@ const WaitingRoom = () => {
   if (didPartnerDisconnect && hasPartner) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.messageText}>
+        <Typography className={classes.messageText}>
           Sorry to break the bad news to you, but your partner disconnected ... something to do with
-          squirrels chewing their router 🤷‍♀️. Stay put and we will connect you with someone soon!
-        </span>
+          squirrels chewing their router 🤷‍♀️.
+        </Typography>
+        <Typography className={classes.messageText}>
+          Stay put and we will connect you with someone soon!
+        </Typography>
       </div>
     )
   }
   if (!hasPartner) {
     return (
       <div className={classes.waitingRoom}>
-        <span className={classes.messageText}>
-          Sometimes it happens that we have an odd number of people. You&apos;ve been chosen to sit
-          out this round. Get a drink of water. Stretch. Do a little dance.
-        </span>
+        <Typography className={classes.messageText}>
+          Sometimes it happens that we have an odd number of people.
+        </Typography>
+        <Typography className={classes.messageText}>
+          You&apos;ve been chosen to sit out this round.
+        </Typography>
+        <Typography className={classes.messageText}>
+          Get a drink of water. Stretch. Do a little dance.
+        </Typography>
         <div className={classes.dancingMan}>
           <span>🕺</span>
         </div>
