@@ -15,6 +15,7 @@ const makeApolloClient = async () => {
   const httpLink = new HttpLink({
     // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
     uri: process.env.REACT_APP_HASURA,
+    // uri: 'http://localhost:8080/v1/graphql',
   })
 
   const authLink = setContext(async (req, { headers }) => {
@@ -46,6 +47,7 @@ const makeApolloClient = async () => {
   const wsLink = new WebSocketLink({
     // uri: 'wss://hi-right-now.herokuapp.com/v1/graphql',
     uri: process.env.REACT_APP_HASURA_WS,
+    // uri: 'ws://localhost:8080/v1/graphql',
     options: {
       reconnect: true,
       connectionParams,

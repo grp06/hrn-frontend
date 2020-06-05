@@ -128,7 +128,8 @@ const Header = ({ activeTab, setActiveTab }) => {
       await deleteRoundsMutation()
       await fetch(`${process.env.REACT_APP_API_URL}/api/rooms/reset-event`)
       setCurrentRound(0)
-      history.push(`/events/${eventId}`)
+      debugger
+      history.replace(`/events/${eventId}`)
     },
   })
 

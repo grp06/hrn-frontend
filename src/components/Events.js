@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { Redirect, useHistory } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
+import { getEventsByUserId } from '../gql/queries'
 
 import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
@@ -51,11 +53,31 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1.2rem',
   },
 }))
+
 const Events = () => {
   const classes = useStyles()
 
-  const { appLoading, userId, role, eventsData } = useGameContext()
-  if (appLoading) {
+  const { appLoading, userId, role } = useGameContext()
+
+  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
+    getEventsByUserId,
+    {
+      variables: {
+        userId: userId,
+      },
+      skip: !userId,
+    }
+  )
+
+  useEffect(() => {
+    console.log('rendering Eventssss')
+  }, [])
+
+  useEffect(() => {
+    console.log('ya boy events data useffect is called')
+  }, [eventsData])
+
+  if (appLoading || eventsLoading) {
     return <Loading />
   }
 
