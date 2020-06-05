@@ -11,7 +11,7 @@ const sunray = '#edb868'
 const independence = '#3a405a'
 const mediumGreen = '#4eab6d'
 const white = '#fff'
-const black = '#191919'
+const bodyBlack = '#191919'
 const greyBorder = '#3e4042'
 const greyCard = '#242526'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
@@ -31,6 +31,7 @@ const theme = createMuiTheme({
       ghostWhiteDark,
       independence,
       materialPink,
+      bodyBlack,
       greyCard,
       greyBorder,
       greyBoxShadow,

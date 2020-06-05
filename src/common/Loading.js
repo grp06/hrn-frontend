@@ -1,6 +1,7 @@
 import React from 'react'
-
+import Lottie from 'react-lottie'
 import { makeStyles } from '@material-ui/core/styles'
+import * as animationData from '../assets/orchidLoadingCircle.json'
 
 import loading from '../assets/loading.gif'
 
@@ -12,12 +13,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: animationData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice',
+  },
+}
+
 const Loading = () => {
   const classes = useStyles()
-
   return (
     <div className={classes.loadingWrapper}>
-      <img src={loading} alt="loading gif" />
+      <Lottie options={defaultOptions} height={400} width={400} />
     </div>
   )
 }

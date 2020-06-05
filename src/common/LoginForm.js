@@ -111,7 +111,7 @@ const LoginForm = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Welcome Back! 🙌
+                  Welcome 👋
                 </Typography>
               </Grid>
             </Grid>
