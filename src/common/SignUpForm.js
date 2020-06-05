@@ -83,7 +83,6 @@ const SignUpForm = () => {
 
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
-    debugger
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
     }
