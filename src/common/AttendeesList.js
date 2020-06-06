@@ -40,7 +40,7 @@ const AttendeesList = () => {
         // server time and local computer could be a bit off?
         // this could actually be an issue..
         // a single source of truth for online users would be preferable :(
-        return diff < lastSeenDuration + 10000
+        return diff < lastSeenDuration + 60000
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {
