@@ -207,7 +207,6 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (eventsData) {
-      // when do we use this? Something for online users?
       const hasUpcomingEvent = eventsData.event_users.find((event) => {
         const { start_at, ended_at } = event.event
         const startTime = new Date(start_at).getTime()
@@ -217,6 +216,7 @@ const GameProvider = ({ children, location }) => {
         // event is upcoming or in progress
         return diff < 1800000 && !ended_at
       })
+      console.log('hasUpcomingEvent', hasUpcomingEvent)
 
       dispatch((draft) => {
         draft.eventsData = eventsData
