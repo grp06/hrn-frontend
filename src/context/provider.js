@@ -92,7 +92,7 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.token) {
       const setupRoom = async () => {
-        const localTracks = await createLocalTracks({ video: true, audio: false })
+        const localTracks = await createLocalTracks({ video: true, audio: true })
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
