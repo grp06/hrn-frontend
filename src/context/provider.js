@@ -251,9 +251,7 @@ const GameProvider = ({ children, location }) => {
       })
     }
   }, [])
-  console.log('state.room = ', state.room)
-  console.log('state.currentRound = ', state.currentRound)
-  console.log('window.location', window.location)
+
   if (state.room && state.currentRound > 0 && window.location.pathname !== '/video-room') {
     return <Redirect to="/video-room" push />
   }
