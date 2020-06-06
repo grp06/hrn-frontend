@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
 const Events = () => {
   const classes = useStyles()
   const { appLoading, userId, role } = useGameContext()
+  console.log('process.env.REACT_APP_NUM_ROUNDS = ', process.env.REACT_APP_NUM_ROUNDS)
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,

@@ -45,7 +45,7 @@ const useTwilio = () => {
         setDidPartnerDisconnect(false)
         setWaitingRoom(true)
         // hardcoding this for our test
-        if (currentRound === 3) {
+        if (currentRound === process.env.REACT_APP_NUM_ROUNDS) {
           history.push('/event-complete')
         }
         rum.localParticipant.tracks.forEach(function (track) {
