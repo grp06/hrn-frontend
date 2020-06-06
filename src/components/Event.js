@@ -6,7 +6,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import bannerBackground from '../assets/eventBannerMountain.png'
+import bannerBackground from '../assets/ethan-banner.jpg'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEventById } from '../gql/queries'
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   eventBanner: {
     width: '100%',
-    height: '45vh',
+    height: '55vh',
     backgroundImage: `url(${bannerBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
@@ -65,6 +65,9 @@ const Event = ({ match }) => {
       },
     }
   )
+
+  // used as a safety check for when we get thumbs up data
+  localStorage.setItem('eventId', id)
 
   useEffect(() => {
     if (!eventId) {

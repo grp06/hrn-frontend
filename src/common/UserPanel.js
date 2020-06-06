@@ -89,6 +89,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           refetch()
         } else {
           await insertEventUserMutation()
+          window.location.reload()
           refetch()
         }
       }}

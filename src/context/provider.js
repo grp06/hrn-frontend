@@ -4,7 +4,7 @@ import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { Redirect } from 'react-router-dom'
 
-import { findMyUser, getEventsByUserId } from '../gql/queries'
+import { findUserById, getEventsByUserId } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
@@ -39,10 +39,13 @@ const defaultState = {
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
 
-  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(findMyUser, {
-    variables: { id: state.userId },
-    skip: !state.userId,
-  })
+  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
+    findUserById,
+    {
+      variables: { id: state.userId },
+      skip: !state.userId,
+    }
+  )
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
@@ -89,7 +92,7 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.token) {
       const setupRoom = async () => {
-        const localTracks = await createLocalTracks({ video: true, audio: true })
+        const localTracks = await createLocalTracks({ video: true, audio: false })
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
@@ -204,7 +207,6 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (eventsData) {
-      // when do we use this? Something for online users?
       const hasUpcomingEvent = eventsData.event_users.find((event) => {
         const { start_at, ended_at } = event.event
         const startTime = new Date(start_at).getTime()
@@ -214,6 +216,7 @@ const GameProvider = ({ children, location }) => {
         // event is upcoming or in progress
         return diff < 1800000 && !ended_at
       })
+      console.log('hasUpcomingEvent', hasUpcomingEvent)
 
       dispatch((draft) => {
         draft.eventsData = eventsData
@@ -248,9 +251,7 @@ const GameProvider = ({ children, location }) => {
       })
     }
   }, [])
-  console.log('state.room = ', state.room)
-  console.log('state.currentRound = ', state.currentRound)
-  console.log('window.location', window.location)
+
   if (state.room && state.currentRound > 0 && window.location.pathname !== '/video-room') {
     return <Redirect to="/video-room" push />
   }

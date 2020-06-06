@@ -41,13 +41,13 @@ const App = () => {
           <Router>
             <GameProvider>
               <Switch>
-                <Route exact path="/" component={withRouter(LoginForm)} />
-                <Route exact path="/events" component={withRouter(Events)} />
-                <Route exact path="/video-room" component={withRouter(VideoRoom)} />
-                <Route exact path="/create-event" component={withRouter(EventForm)} />
-                <Route exact path="/events/:id" component={withRouter(Event)} />
-                <Route exact path="/event-complete" component={withRouter(GameOver)} />
-                <Route exact path="/sign-up" component={withRouter(SignUp)} />
+                <Route exact path="/" component={LoginForm} />
+                <Route exact path="/events" component={Events} />
+                <Route exact path="/video-room" component={VideoRoom} />
+                <Route exact path="/create-event" component={EventForm} />
+                <Route exact path="/events/:id" component={Event} />
+                <Route exact path="/event-complete" component={GameOver} />
+                <Route exact path="/sign-up" component={SignUp} />
                 <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
               </Switch>
               <Header activeTab={activeTab} setActiveTab={setActiveTab} />

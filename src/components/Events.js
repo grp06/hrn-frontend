@@ -55,10 +55,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Events = () => {
-  console.log('events')
-
   const classes = useStyles()
-
   const { appLoading, userId, role } = useGameContext()
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
