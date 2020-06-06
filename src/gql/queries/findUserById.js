@@ -1,13 +1,14 @@
 import gql from 'graphql-tag'
 
-const findMyUser = gql`
-  query findMyUser($id: Int) {
+const findUserById = gql`
+  query findUserById($id: Int) {
     users(where: { id: { _eq: $id } }) {
       id
       name
       role
+      email
     }
   }
 `
 
-export default findMyUser
+export default findUserById

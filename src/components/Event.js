@@ -66,6 +66,9 @@ const Event = ({ match }) => {
     }
   )
 
+  // used as a safety check for when we get thumbs up data
+  localStorage.setItem('eventId', id)
+
   useEffect(() => {
     if (!eventId) {
       setEventId(parseInt(id, 10))
