@@ -66,6 +66,7 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '2.3rem',
       fontWeight: '700',
+      lineHeight: '2.9rem',
       color: ghostWhite,
     },
     h2: {

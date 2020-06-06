@@ -4,7 +4,7 @@ import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { Redirect } from 'react-router-dom'
 
-import { findMyUser, getEventsByUserId } from '../gql/queries'
+import { findUserById, getEventsByUserId } from '../gql/queries'
 import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
@@ -39,10 +39,13 @@ const defaultState = {
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
 
-  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(findMyUser, {
-    variables: { id: state.userId },
-    skip: !state.userId,
-  })
+  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
+    findUserById,
+    {
+      variables: { id: state.userId },
+      skip: !state.userId,
+    }
+  )
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
