@@ -54,7 +54,6 @@ const Event = ({ match }) => {
     setEventId,
     eventId,
     attendees,
-    eventsData: allEventsOfThisUser,
   } = useGameContext()
   const history = useHistory()
 
@@ -83,6 +82,7 @@ const Event = ({ match }) => {
       }
 
       const { event_users, ended_at } = eventData.events[0]
+
       if (ended_at) {
         return history.push('/event-complete')
       }
@@ -105,11 +105,9 @@ const Event = ({ match }) => {
     return <div>Sorry, we encountered an error. Refresh?</div>
   }
 
-  const currentEvent = allEventsOfThisUser.event_users.find((event) => event.event.id == id)
-  const { event_name, host_id: hostId } = currentEvent.event
-
   const event = eventData.events[0]
 
+  const { event_name, host_id } = event
   const startTime = new Date(event.start_at).getTime()
   const now = Date.now()
   const diff = startTime - now
@@ -139,7 +137,7 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
       </div>
-      {parseInt(hostId, 10) === parseInt(userId, 10) ? (
+      {parseInt(host_id, 10) === parseInt(userId, 10) ? (
         <AdminPanel timeState={timeState()} eventData={eventData} />
       ) : (
         <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />

@@ -78,8 +78,12 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (state.hasUpcomingEvent) {
-      const interval = setInterval(() => {
-        updateLastSeenMutation()
+      const interval = setInterval(async () => {
+        try {
+          await updateLastSeenMutation()
+        } catch (error) {
+          console.log('error = ', error)
+        }
       }, lastSeenDuration)
       return () => {
         clearInterval(interval)
@@ -156,6 +160,7 @@ const GameProvider = ({ children, location }) => {
         // round changed
 
         // in the future we can probably remove this unnecessarily safe check
+
         const currentEvent =
           state.eventsData &&
           state.eventsData.event_users.length &&
