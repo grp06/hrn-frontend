@@ -96,7 +96,7 @@ const GameProvider = ({ children, location }) => {
       const setupRoom = async () => {
         const localTracks = await createLocalTracks({
           video: true,
-          audio: false,
+          audio: true,
         })
         const myRoom = await connect(state.token, {
           name: state.roomId,
