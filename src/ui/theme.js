@@ -176,6 +176,30 @@ const theme = createMuiTheme({
       bottom: 'none',
       top: '20px',
     },
+    MuiPaper: {
+      root: {
+        backgroundColor: 'transparent',
+      },
+    },
+    MuiStepLabel: {
+      label: {
+        fontSize: '1.2rem',
+        fontWeight: '400',
+        color: ghostWhite,
+        '&.MuiStepLabel-active': {
+          color: ghostWhite,
+        },
+        '&.MuiStepLabel-completed ': {
+          color: ghostWhite,
+        },
+      },
+    },
+    MuiStepIcon: {
+      root: {
+        width: '25px',
+        height: '25px',
+      },
+    },
   },
 })
 
