@@ -214,9 +214,6 @@ const Header = ({ activeTab, setActiveTab }) => {
         className={classes.adminPanelContainer}
       >
         <Grid item className={classes.tab}>
-          <p>Participants Online: fixme</p>
-        </Grid>
-        <Grid item className={classes.tab}>
           <p>
             Curent Round:
             {currentRound}

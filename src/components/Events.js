@@ -87,7 +87,7 @@ const Events = () => {
   if (!userId) {
     return <Redirect to="/" />
   }
-  console.log('eventsData', eventsData)
+
   const renderNullDataText = () => {
     if (!eventsData || !eventsData.event_users.length) {
       return (

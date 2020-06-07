@@ -72,10 +72,8 @@ const VideoRoom = () => {
 
   useEffect(() => {
     if (room) {
-      console.log('hitting the use effect')
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
-      console.log('use effect video room')
       console.log('timer Time Input ****', timerTimeInput)
       setTimerTimeInput(eventEndTime)
       setShowTimer(true)
@@ -105,7 +103,6 @@ const VideoRoom = () => {
           >
             <Timer
               eventStartTime={timerTimeInput}
-              subtitle="New Person In:"
               onRoundComplete={() => {
                 setShowTimer(false)
               }}

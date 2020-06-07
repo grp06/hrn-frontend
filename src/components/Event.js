@@ -80,6 +80,7 @@ const Event = ({ match }) => {
       if (!eventData.events.length) {
         return history.push('/events')
       }
+      console.log('Event -> eventData', eventData)
 
       const { event_users, ended_at } = eventData.events[0]
 

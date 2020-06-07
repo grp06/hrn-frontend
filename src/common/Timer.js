@@ -14,13 +14,9 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Muli',
     color: theme.palette.common.orchid,
   },
-  subtitle: {
-    ...theme.typography.body,
-    fontWeight: '700',
-  },
 }))
 
-const Timer = ({ eventStartTime, subtitle, onRoundComplete }) => {
+const Timer = ({ eventStartTime, onRoundComplete }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -64,7 +60,6 @@ const Timer = ({ eventStartTime, subtitle, onRoundComplete }) => {
       alignItems="center"
       className={classes.container}
     >
-      <Typography className={classes.subtitle}>{subtitle}</Typography>
       <div className={classes.time}>{displayTime}</div>
     </Grid>
   ) : null
