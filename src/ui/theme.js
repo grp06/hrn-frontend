@@ -127,6 +127,9 @@ const theme = createMuiTheme({
     },
     // this is for the boxshadow on the navbar
     MuiPaper: {
+      root: {
+        backgroundColor: 'transparent',
+      },
       elevation4: {
         boxShadow: 'none',
       },
@@ -175,11 +178,6 @@ const theme = createMuiTheme({
     MuiSnackbar: {
       bottom: 'none',
       top: '20px',
-    },
-    MuiPaper: {
-      root: {
-        backgroundColor: 'transparent',
-      },
     },
     MuiStepLabel: {
       label: {
