@@ -85,13 +85,22 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
       color="primary"
       onClick={async () => {
         if (alreadyAttending) {
-          await deleteEventUserMutation()
-          refetch()
+          try {
+            await deleteEventUserMutation()
+            console.log('hi?')
+          } catch (error) {
+            console.log('error = ', error)
+          }
         } else {
-          await insertEventUserMutation()
+          try {
+            await insertEventUserMutation()
+          } catch (error) {
+            console.log('error = ', error)
+          }
           window.location.reload()
-          refetch()
+          // refetch()
         }
+        window.location.reload()
       }}
     >
       {alreadyAttending ? 'Cancel RSVP 😔' : 'RSVP for Event 🎊'}
