@@ -127,6 +127,9 @@ const theme = createMuiTheme({
     },
     // this is for the boxshadow on the navbar
     MuiPaper: {
+      root: {
+        backgroundColor: 'transparent',
+      },
       elevation4: {
         boxShadow: 'none',
       },
@@ -175,6 +178,25 @@ const theme = createMuiTheme({
     MuiSnackbar: {
       bottom: 'none',
       top: '20px',
+    },
+    MuiStepLabel: {
+      label: {
+        fontSize: '1.2rem',
+        fontWeight: '400',
+        color: ghostWhite,
+        '&.MuiStepLabel-active': {
+          color: ghostWhite,
+        },
+        '&.MuiStepLabel-completed ': {
+          color: ghostWhite,
+        },
+      },
+    },
+    MuiStepIcon: {
+      root: {
+        width: '25px',
+        height: '25px',
+      },
     },
   },
 })
