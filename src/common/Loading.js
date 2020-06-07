@@ -1,33 +1,33 @@
 import React from 'react'
-import Lottie from 'react-lottie'
 import { makeStyles } from '@material-ui/core/styles'
-import * as animationData from '../assets/orchidLoadingCircle.json'
-
-import loading from '../assets/loading.gif'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Backdrop from '@material-ui/core/Backdrop'
 
 const useStyles = makeStyles((theme) => ({
   loadingWrapper: {
     width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
+    height: '100vh',
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+  },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
   },
 }))
-
-const defaultOptions = {
-  loop: true,
-  autoplay: true,
-  animationData: animationData,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice',
-  },
-}
 
 const Loading = () => {
   const classes = useStyles()
   return (
-    <div className={classes.loadingWrapper}>
-      <Lottie options={defaultOptions} height={400} width={400} />
-    </div>
+    <Backdrop className={classes.backdrop} open={true}>
+      <div className={classes.root}>
+        <LinearProgress />
+      </div>
+    </Backdrop>
   )
 }
 export default Loading

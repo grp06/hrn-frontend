@@ -130,6 +130,9 @@ const theme = createMuiTheme({
       root: {
         backgroundColor: 'transparent',
       },
+      rounded: {
+        backgroundColor: '#fff',
+      },
       elevation4: {
         boxShadow: 'none',
       },

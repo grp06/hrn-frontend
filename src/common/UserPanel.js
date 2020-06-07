@@ -169,6 +169,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   return (
     <>
+      {renderWaitingForAdmin()}
       <FloatCardWide>
         <Grid
           item
@@ -204,7 +205,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         </Grid>
         <HiRightNowBreakdown />
       </FloatCardWide>
-      {renderWaitingForAdmin()}
     </>
   )
 }
