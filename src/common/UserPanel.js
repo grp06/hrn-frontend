@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import { FloatCardWide, AttendeesList, Timer } from '.'
+import { FloatCardWide, AttendeesList, Timer, HiRightNowBreakdown } from '.'
 import { useGameContext } from '../context/useGameContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
@@ -85,20 +85,29 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
       color="primary"
       onClick={async () => {
         if (alreadyAttending) {
-          await deleteEventUserMutation()
-          refetch()
+          try {
+            await deleteEventUserMutation()
+            console.log('hi?')
+          } catch (error) {
+            console.log('error = ', error)
+          }
         } else {
-          await insertEventUserMutation()
+          try {
+            await insertEventUserMutation()
+          } catch (error) {
+            console.log('error = ', error)
+          }
           window.location.reload()
-          refetch()
+          // refetch()
         }
+        window.location.reload()
       }}
     >
-      {alreadyAttending ? 'Cancel RSVP 😔' : 'Join Event 🎊'}
+      {alreadyAttending ? 'Cancel RSVP 😔' : 'RSVP for Event 🎊'}
     </Button>
   )
 
-  const renderButton = () => {
+  const renderCTAButton = () => {
     let element
     switch (timeState) {
       case 'future':
@@ -190,9 +199,10 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             justify="center"
             alignItems="center"
           >
-            {renderButton()}
+            {renderCTAButton()}
           </Grid>
         </Grid>
+        <HiRightNowBreakdown />
       </FloatCardWide>
       {renderWaitingForAdmin()}
     </>

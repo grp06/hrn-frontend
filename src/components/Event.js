@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { Typography, Grid } from '@material-ui/core'
@@ -77,22 +77,23 @@ const Event = ({ match }) => {
 
   useEffect(() => {
     if (!eventDataLoading && eventData.events && !attendees) {
-      const { event_users } = eventData.events[0]
-
-      if (!eventData.events[0]) {
+      if (!eventData.events.length) {
         return history.push('/events')
+      }
+
+      const { event_users, ended_at } = eventData.events[0]
+
+      if (ended_at) {
+        return history.push('/event-complete')
+      }
+      if (currentRound > 0) {
+        history.push('/video-room')
       }
       setAttendees(event_users)
     }
-  }, [eventData, eventDataLoading, history, setAttendees, attendees])
+  }, [eventData, eventDataLoading, history, setAttendees, attendees, currentRound])
 
-  useEffect(() => {
-    if (currentRound > 0) {
-      history.push('/video-room')
-    }
-  }, [currentRound, history])
-
-  if (appLoading || eventDataLoading) {
+  if (appLoading || eventDataLoading || !eventData.events.length) {
     return <Loading />
   }
 
@@ -100,10 +101,14 @@ const Event = ({ match }) => {
     return null
   }
 
+  if (eventError) {
+    return <div>Sorry, we encountered an error. Refresh?</div>
+  }
+
   const event = eventData.events[0]
 
+  const { event_name, host_id } = event
   const startTime = new Date(event.start_at).getTime()
-  const eventTime = formatDate(startTime)
   const now = Date.now()
   const diff = startTime - now
 
@@ -117,28 +122,22 @@ const Event = ({ match }) => {
     return 'within 30 mins'
   }
 
-  const hostId = eventData && eventData.events[0].host_id
-
-  if (eventError) {
-    return <div>Sorry, we encountered an error. Refresh?</div>
-  }
-
   return (
     <>
       <div className={classes.eventBanner}>
         <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
           <Grid item container direction="column" className={classes.eventBannerContentContainer}>
-            <Typography className={classes.eventTitle}>{event.event_name}</Typography>
+            <Typography className={classes.eventTitle}>{event_name}</Typography>
             <Grid item container direction="row" alignItems="center">
               <ScheduleIcon className={classes.scheduleIcon} />
               <Typography className={classes.subtitle} variant="subtitle1">
-                {eventTime}
+                {formatDate(startTime)}
               </Typography>
             </Grid>
           </Grid>
         </Grid>
       </div>
-      {parseInt(hostId, 10) === parseInt(userId, 10) ? (
+      {parseInt(host_id, 10) === parseInt(userId, 10) ? (
         <AdminPanel timeState={timeState()} eventData={eventData} />
       ) : (
         <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />
