@@ -6,7 +6,7 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import bannerBackground from '../assets/ethan-banner.jpg'
+import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useGameContext } from '../context/useGameContext'
 import { getEventById } from '../gql/queries'
