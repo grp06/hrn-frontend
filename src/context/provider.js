@@ -136,7 +136,6 @@ const GameProvider = ({ children, location }) => {
 
       if (!state.roundsData && freshRoundsData.rounds) {
         // page just reloaded, set data
-        console.log('reload or navigate')
 
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
@@ -154,15 +153,18 @@ const GameProvider = ({ children, location }) => {
       const adminIsResettingGame = freshRoundsDataLength < roundsDataLength
 
       if (newRoundsData || adminIsResettingGame) {
-        console.log('adminIsResettingGame', adminIsResettingGame)
         // round changed
-        console.log('round auto updated')
+
+        const currentEvent = state.eventsData.event_users.find(
+          (event) => state.eventId === event.event.id
+        )
+        const { ended_at } = currentEvent.event
 
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
-          draft.roomId = myRound ? myRound.id : null
+          draft.roomId = myRound && !ended_at ? myRound.id : null
           draft.appLoading = false
           if (adminIsResettingGame) {
             draft.waitingRoom = false
@@ -172,7 +174,8 @@ const GameProvider = ({ children, location }) => {
 
       // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
-        console.log('event got reset')
+        const eventComplete = state.eventsData.event_users
+
         return dispatch((draft) => {
           draft.roomId = null
           draft.room = null
@@ -209,7 +212,6 @@ const GameProvider = ({ children, location }) => {
         // event is upcoming or in progress
         return diff < 1800000 && !ended_at
       })
-      console.log('hasUpcomingEvent', hasUpcomingEvent)
 
       dispatch((draft) => {
         draft.eventsData = eventsData

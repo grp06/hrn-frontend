@@ -81,17 +81,17 @@ const Event = ({ match }) => {
       if (!eventData.events.length) {
         return history.push('/events')
       }
-      const { event_users } = eventData.events[0]
 
+      const { event_users, ended_at } = eventData.events[0]
+      if (ended_at) {
+        return history.push('/event-complete')
+      }
+      if (currentRound > 0) {
+        history.push('/video-room')
+      }
       setAttendees(event_users)
     }
-  }, [eventData, eventDataLoading, history, setAttendees, attendees])
-
-  useEffect(() => {
-    if (currentRound > 0) {
-      history.push('/video-room')
-    }
-  }, [currentRound, history])
+  }, [eventData, eventDataLoading, history, setAttendees, attendees, currentRound])
 
   if (appLoading || eventDataLoading || !eventData.events.length) {
     return <Loading />
