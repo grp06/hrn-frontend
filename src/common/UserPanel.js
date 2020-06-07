@@ -179,18 +179,20 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           // wrap="nowrap"
           className={classes.topDashboard}
         >
-          <Grid
-            container
-            item
-            md={6}
-            xs={12}
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-            <Typography className={classes.displayNumber}>{event_users.length}</Typography>
-          </Grid>
+          {event_users.length > 10 && (
+            <Grid
+              container
+              item
+              md={6}
+              xs={12}
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
+              <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+            </Grid>
+          )}
           <Grid
             container
             item
