@@ -47,7 +47,7 @@ const GameProvider = ({ children, location }) => {
     }
   )
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
+  const { data: eventsData, loading: eventsDataLoading, error: eventsError } = useQuery(
     getEventsByUserId,
     {
       variables: {
@@ -65,7 +65,7 @@ const GameProvider = ({ children, location }) => {
     variables: {
       event_id: state.eventId,
     },
-    skip: !state.eventId,
+    skip: !state.eventId && !state.eventsData,
   })
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
@@ -75,8 +75,6 @@ const GameProvider = ({ children, location }) => {
     },
     skip: !state.hasUpcomingEvent,
   })
-
-  const apiCallsDone = !userDataLoading && !eventsLoading && !freshRoundsDataLoading
 
   useEffect(() => {
     if (state.hasUpcomingEvent) {
@@ -120,14 +118,6 @@ const GameProvider = ({ children, location }) => {
   }, [state.roomId, state.room])
 
   useEffect(() => {
-    if (apiCallsDone && state.appLoading) {
-      dispatch((draft) => {
-        draft.appLoading = false
-      })
-    }
-  }, [apiCallsDone])
-
-  useEffect(() => {
     if (!freshRoundsDataLoading && freshRoundsData && freshRoundsData.rounds) {
       const currentRound = freshRoundsData.rounds.reduce((all, item) => {
         if (item.round_number > all) {
@@ -147,12 +137,14 @@ const GameProvider = ({ children, location }) => {
       if (!state.roundsData && freshRoundsData.rounds) {
         // page just reloaded, set data
         console.log('reload or navigate')
+
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
           draft.roomId = myRound && !myRound.ended_at ? myRound.id : null
           draft.waitingRoom = myRound ? myRound.ended_at : null
+          draft.appLoading = false
         })
       }
 
@@ -165,11 +157,13 @@ const GameProvider = ({ children, location }) => {
         console.log('adminIsResettingGame', adminIsResettingGame)
         // round changed
         console.log('round auto updated')
+
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
           draft.currentRound = currentRound
           draft.myRound = myRound
           draft.roomId = myRound ? myRound.id : null
+          draft.appLoading = false
           if (adminIsResettingGame) {
             draft.waitingRoom = false
           }
@@ -179,7 +173,6 @@ const GameProvider = ({ children, location }) => {
       // if you reset or you just press start for the first time
       if (!state.roundsData || !state.roundsData.rounds.length) {
         console.log('event got reset')
-
         return dispatch((draft) => {
           draft.roomId = null
           draft.room = null
@@ -187,6 +180,7 @@ const GameProvider = ({ children, location }) => {
           draft.myRound = 0
           draft.roundsData = freshRoundsData
           draft.currentRound = freshRoundsData.length ? 1 : 0
+          draft.appLoading = false
         })
       }
     }
@@ -194,13 +188,12 @@ const GameProvider = ({ children, location }) => {
 
   useEffect(() => {
     if (freshRoundsData && freshRoundsData.rounds.length === 0 && state.currentRound === 0) {
-      // admin pressed reset or the event hasnt started
+      // !!! examine if we actaully need this???
       dispatch((draft) => {
         draft.token = null
         draft.roomId = null
         draft.room = null
         draft.attendees = null
-        draft.eventsData = null
       })
     }
   }, [freshRoundsData, state.currentRound])
