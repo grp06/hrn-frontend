@@ -131,7 +131,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           <Typography variant="body1">{eventDescription}</Typography>
         </Grid>
         <Divider light variant="middle" />
-        <AttendeesList />
+        {timeState !== 'future' && <AttendeesList />}
       </Grid>
     </FloatCardWide>
   )
