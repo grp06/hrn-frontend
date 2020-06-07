@@ -44,7 +44,7 @@ function getStepContent(step) {
     case 1:
       return 'Once the event starts, you will be put into a private videochat with one other event attendee. You two will have 5 minutes to chat about whatever you like. After 5 minutes, you will be paired with someone else after a short stretching intermission.'
     case 2:
-      return `After each round you get to anonymously elect to share your email with the person you just chatted with. If theres a mutual interest, you each will get the others contact information at the end of the event.`
+      return `After each round you elect to share your email with the person you just chatted with. If theres a mutual interest, you each will get the others contact information at the end of the event.`
     default:
       return 'Unknown step'
   }
