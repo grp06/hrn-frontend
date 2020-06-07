@@ -10,7 +10,7 @@ import { getEventsByUserId } from '../gql/queries'
 
 import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
-import { EventCard, Loading } from '../common'
+import { EventCard, Loading, FloatCardWide } from '../common'
 import { useGameContext } from '../context/useGameContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -52,6 +52,18 @@ const useStyles = makeStyles((theme) => ({
   subtitle: {
     fontSize: '1.2rem',
   },
+  nullDataContainer: {
+    padding: '50px',
+  },
+  nullDataHeader: {
+    ...theme.typography.h1,
+    marginBottom: '30px',
+    textAlign: 'center',
+  },
+  nullDataSub: {
+    ...theme.typography.h2,
+    textAlign: 'center',
+  },
 }))
 
 const Events = () => {
@@ -75,14 +87,32 @@ const Events = () => {
   if (!userId) {
     return <Redirect to="/" />
   }
-
-  if (!eventsData) {
-    return (
-      <>
-        <div>No events yet!</div>
-        {role === 'host' && <CreateEventButton />}
-      </>
-    )
+  console.log('eventsData', eventsData)
+  const renderNullDataText = () => {
+    if (!eventsData || !eventsData.event_users.length) {
+      return (
+        <>
+          <FloatCardWide>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.nullDataContainer}
+            >
+              <Typography className={classes.nullDataHeader}>
+                Sorry, we are currently only hosting invite-only events
+              </Typography>
+              <Typography className={classes.nullDataSub}>
+                But no worries! If you know someone who is hosting an event they can give you the
+                shareable link!
+              </Typography>
+            </Grid>
+          </FloatCardWide>
+          {role === 'host' && <CreateEventButton />}
+        </>
+      )
+    }
   }
 
   return (
@@ -103,6 +133,7 @@ const Events = () => {
           </Grid>
         </Grid>
       </div>
+      {renderNullDataText()}
       {role === 'host' && <CreateEventButton />}
       {eventsData.event_users.map(({ event }) => {
         return <EventCard key={event.id} event={event} />
