@@ -155,9 +155,11 @@ const GameProvider = ({ children, location }) => {
       if (newRoundsData || adminIsResettingGame) {
         // round changed
 
-        const currentEvent = state.eventsData.event_users.find(
-          (event) => state.eventId === event.event.id
-        )
+        // in the future we can probably remove this unnecessarily safe check
+        const currentEvent =
+          state.eventsData &&
+          state.eventsData.event_users.length &&
+          state.eventsData.event_users.find((event) => state.eventId === event.event.id)
         const { ended_at } = currentEvent.event
 
         return dispatch((draft) => {
