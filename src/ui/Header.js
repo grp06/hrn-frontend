@@ -225,7 +225,7 @@ const Header = ({ activeTab, setActiveTab }) => {
             {currentRound}
           </p>
         </Grid>
-        {process.env.NODE_ENV === 'development' && <Grid item>{resetRoundsModal}</Grid>}
+        <Grid item>{resetRoundsModal}</Grid>
       </Grid>
     )
   }
