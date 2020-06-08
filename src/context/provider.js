@@ -96,7 +96,7 @@ const GameProvider = ({ children, location }) => {
       const setupRoom = async () => {
         const localTracks = await createLocalTracks({
           video: true,
-          audio: true,
+          audio: false,
         })
         const myRoom = await connect(state.token, {
           name: state.roomId,
@@ -177,6 +177,8 @@ const GameProvider = ({ children, location }) => {
           draft.roomId = myRound && !ended_at ? myRound.id : null
           draft.appLoading = false
           if (adminIsResettingGame) {
+            console.log('GameProvider -> adminIsResettingGame', adminIsResettingGame)
+
             draft.waitingRoom = false
           }
         })
@@ -233,7 +235,6 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]
-
       dispatch((draft) => {
         draft.role = role
         draft.userId = id

@@ -85,7 +85,6 @@ const LoginForm = () => {
       .then((data) => {
         return data
       })
-
     // check to see if we have token, if not then theres an error
     // I tried try and catch, but it doesn't seem that we are throwing
     // an error from the backend

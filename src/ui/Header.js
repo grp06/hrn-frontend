@@ -20,7 +20,7 @@ import { startEvent } from '../helpers'
 
 import { useGameContext } from '../context/useGameContext'
 
-import { deleteRounds } from '../gql/mutations'
+import { deleteRounds, resetEvent } from '../gql/mutations'
 import { TransitionModal } from '../common'
 
 import logo from '../assets/logoWhite.svg'
@@ -114,6 +114,11 @@ const Header = ({ activeTab, setActiveTab }) => {
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
   const { role, currentRound, eventId, setCurrentRound } = useGameContext()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
+  const [resetEventMutation] = useMutation(resetEvent, {
+    variables: {
+      id: eventId,
+    },
+  })
 
   const [openDrawer, setOpenDrawer] = useState(false)
 
@@ -127,6 +132,7 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
+      await resetEventMutation(eventId)
       await startEvent(null, true)
       setCurrentRound(0)
       history.replace(`/events/${eventId}`)

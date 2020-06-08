@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
+import { useHistory, Redirect } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading } from '../common'
@@ -67,8 +68,9 @@ const useStyles = makeStyles((theme) => ({
 
 const GameOver = () => {
   const classes = useStyles()
-  const { eventId, userId } = useGameContext()
+  const { eventId, userId, hasUpcomingEvent, roundsData } = useGameContext()
   const localStorageEventId = localStorage.getItem('eventId')
+  const history = useHistory()
 
   const {
     data: mutualThumbsData,
@@ -81,6 +83,17 @@ const GameOver = () => {
       user_id: userId,
     },
   })
+
+  // doesnt work yet
+  // useEffect(() => {
+  //   if (roundsData && hasUpcomingEvent) {
+  //     if (!roundsData.rounds.length) {
+  //       console.log('admin pressed reset - redirecting to events')
+
+  //       history.push(`/events`)
+  //     }
+  //   }
+  // }, [hasUpcomingEvent, roundsData])
 
   if (mutualThumbsLoading) {
     return <Loading />
