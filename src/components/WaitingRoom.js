@@ -25,7 +25,13 @@ const useStyles = makeStyles((theme) => ({
 
 const WaitingRoom = () => {
   const classes = useStyles()
-  const { waitingRoom, myRound, didPartnerDisconnect, userId } = useGameContext()
+  const {
+    waitingRoom,
+    myRound,
+    didPartnerDisconnect,
+    userId,
+    partnerNeverConnected,
+  } = useGameContext()
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
 
   if (didPartnerDisconnect && hasPartner) {
@@ -56,6 +62,18 @@ const WaitingRoom = () => {
         <div className={classes.dancingMan}>
           <span>🕺</span>
         </div>
+      </div>
+    )
+  }
+  if (partnerNeverConnected) {
+    return (
+      <div className={classes.waitingRoom}>
+        <Typography className={classes.messageText}>
+          It seems that your partner is having some camera issues.
+        </Typography>
+        <Typography className={classes.messageText}>
+          Unfortunately you two will have to sit out this round. Sorry for disappointing 😔
+        </Typography>
       </div>
     )
   }
