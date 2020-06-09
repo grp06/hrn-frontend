@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -9,6 +9,7 @@ import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
+import { GUMErrorModal } from '../common'
 
 const { lastSeenDuration } = constants
 
@@ -38,6 +39,8 @@ const defaultState = {
 
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
+  const [GUMError, setGUMError] = useState('')
 
   const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
     findUserById,
@@ -94,10 +97,18 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.token) {
       const setupRoom = async () => {
-        const localTracks = await createLocalTracks({
-          video: true,
-          audio: true,
-        })
+        let localTracks
+        try {
+          localTracks = await createLocalTracks({
+            video: true,
+            audio: true,
+          })
+        } catch (err) {
+          console.log(err.name)
+          setGUMError(err.name)
+          return setIsGUMErrorModalActive(true)
+        }
+
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
@@ -253,6 +264,7 @@ const GameProvider = ({ children, location }) => {
       }
       dispatch((draft) => {
         draft.userId = myUserId
+        draft.appLoading = false
       })
     }
   }, [])
@@ -261,7 +273,21 @@ const GameProvider = ({ children, location }) => {
     return <Redirect to="/video-room" push />
   }
 
-  return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
+  return (
+    <GameContext.Provider value={[state, dispatch]}>
+      {
+        <div>
+          {children}
+          {isGUMErrorModalActive ? (
+            <GUMErrorModal
+              onComplete={() => setIsGUMErrorModalActive(false)}
+              errorName={GUMError}
+            />
+          ) : null}
+        </div>
+      }
+    </GameContext.Provider>
+  )
 }
 
 export { GameProvider, GameContext }
