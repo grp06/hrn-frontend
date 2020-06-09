@@ -15,7 +15,7 @@ const useGameContext = () => {
     })
   }
 
-  function setWaitingRoom(waitingRoom) {
+  function setWaitingRoom(waitingRoom, partnerNeverConnected) {
     dispatch((draft) => {
       draft.waitingRoom = waitingRoom
       if (waitingRoom) {
@@ -75,6 +75,13 @@ const useGameContext = () => {
     })
   }
 
+  function setPartnerNeverConnected(partnerConnected) {
+    console.log('setPartnerNeverConnected -> partnerNeverConnected')
+    dispatch((draft) => {
+      draft.partnerNeverConnected = partnerConnected
+    })
+  }
+
   return {
     ...state,
     setRoundsData,
@@ -87,6 +94,7 @@ const useGameContext = () => {
     setCurrentRound,
     setWaitingRoom,
     setDidPartnerDisconnect,
+    setPartnerNeverConnected,
   }
 }
 

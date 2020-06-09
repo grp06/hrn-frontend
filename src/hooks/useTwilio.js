@@ -2,15 +2,36 @@ import { useHistory } from 'react-router-dom'
 
 import { useParticipantConnected } from '.'
 import { useGameContext } from '../context/useGameContext'
+import { constants } from '../utils'
 
 const useTwilio = () => {
-  const { room, currentRound, setWaitingRoom, setDidPartnerDisconnect } = useGameContext()
+  const {
+    room,
+    currentRound,
+    setWaitingRoom,
+    setDidPartnerDisconnect,
+    setPartnerNeverConnected,
+  } = useGameContext()
   const history = useHistory()
+  const { partnerCameraIssueTimeout } = constants
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = () => {
     if (room) {
       setWaitingRoom(null)
+      setPartnerNeverConnected(false)
+
+      // check to see if your partner joins within 30 seconds. If not, we assume
+      // that they are having trouble connecting (camera permission issues)
+      setTimeout(() => {
+        console.log('setTimeout useTwilio')
+        console.log('room ->', room)
+        console.log('room participants length ->', room.participants.size)
+        if (!room.participants.size) {
+          setPartnerNeverConnected(true)
+          setWaitingRoom(true)
+        }
+      }, partnerCameraIssueTimeout)
 
       const { localParticipant } = room
       localParticipant.tracks.forEach((publication) => {
