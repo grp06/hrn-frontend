@@ -1,7 +1,7 @@
 const constants = {
   lastSeenDuration: 5000,
   roundLength: 300,
-  partnerCameraIssueTimeout: 10000,
+  partnerCameraIssueTimeout: 25000,
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',
   chromeCameraPermissionHowTo:
