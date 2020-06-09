@@ -24,9 +24,6 @@ const useTwilio = () => {
       // check to see if your partner joins within 30 seconds. If not, we assume
       // that they are having trouble connecting (camera permission issues)
       setTimeout(() => {
-        console.log('setTimeout useTwilio')
-        console.log('room ->', room)
-        console.log('room participants length ->', room.participants.size)
         if (!room.participants.size) {
           setPartnerNeverConnected(true)
           setWaitingRoom(true)
@@ -45,7 +42,12 @@ const useTwilio = () => {
       })
 
       room.participants.forEach(participantConnected)
-      room.on('participantConnected', participantConnected)
+
+      room.on('participantConnected', (remoteParticipant) => {
+        setPartnerNeverConnected(false)
+        setWaitingRoom(null)
+        participantConnected(remoteParticipant)
+      })
 
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('remote participant disconnected ', remoteParticipant)
