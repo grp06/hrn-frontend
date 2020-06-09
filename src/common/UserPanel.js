@@ -39,18 +39,11 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { userId, role, currentRound, eventId, hasUpcomingEvent, myRound } = useGameContext()
+  const { userId, role, currentRound, eventId } = useGameContext()
   const [waitingForAdmin, setWaitingForAdmin] = useState()
   const { event_users, start_at: eventStartTime } = eventData.events[0]
 
   const alreadyAttending = event_users.find((user) => user.user.id === userId)
-  // likely grossly overchecking -- just dont wanna break shit
-  const eventInProgress =
-    hasUpcomingEvent &&
-    hasUpcomingEvent.event &&
-    hasUpcomingEvent.event.current_round > 0 &&
-    !hasUpcomingEvent.event.ended_at &&
-    !myRound
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       eventId,
@@ -166,7 +159,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             alignItems="center"
           >
             <Typography className={classes.categoryHeader}>
-              {!eventInProgress ? 'Waiting for host to start event' : 'Waiting for next round.'}
+              Waiting for host to start event
             </Typography>
           </Grid>
         </Grid>
