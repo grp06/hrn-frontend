@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSubscription } from '@apollo/react-hooks'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import { useHistory } from 'react-router-dom'
 import { useGameContext } from '../context/useGameContext'
 import { ThumbsUp } from '../common'
+import { listenToEvent } from '../gql/subscriptions'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -25,8 +28,27 @@ const useStyles = makeStyles((theme) => ({
 
 const WaitingRoom = () => {
   const classes = useStyles()
-  const { waitingRoom, myRound, didPartnerDisconnect, userId } = useGameContext()
+  const { waitingRoom, myRound, didPartnerDisconnect, userId, eventId } = useGameContext()
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+  const history = useHistory()
+  const {
+    data: freshEventData,
+    loading: freshEventDataLoading,
+    error: freshEventError,
+  } = useSubscription(listenToEvent, {
+    variables: {
+      id: eventId,
+    },
+  })
+
+  useEffect(() => {
+    if (!freshEventDataLoading && freshEventData && !hasPartner) {
+      const eventOver = freshEventData.events[0].ended_at
+      if (eventOver) {
+        history.push('/event-complete')
+      }
+    }
+  }, [freshEventData, freshEventDataLoading])
 
   if (didPartnerDisconnect && hasPartner) {
     return (
@@ -48,7 +70,8 @@ const WaitingRoom = () => {
           Sometimes it happens that we have an odd number of people.
         </Typography>
         <Typography className={classes.messageText}>
-          You&apos;ve been chosen to sit out this round.
+          You&apos;ve been chosen to sit out this round. You'll be paired with someone new in 5
+          minutes.
         </Typography>
         <Typography className={classes.messageText}>
           Get a drink of water. Stretch. Do a little dance.

@@ -84,22 +84,11 @@ const GameOver = () => {
     },
   })
 
-  // doesnt work yet
-  // useEffect(() => {
-  //   if (roundsData && hasUpcomingEvent) {
-  //     if (!roundsData.rounds.length) {
-  //       console.log('admin pressed reset - redirecting to events')
-
-  //       history.push(`/events`)
-  //     }
-  //   }
-  // }, [hasUpcomingEvent, roundsData])
-
   if (mutualThumbsLoading) {
     return <Loading />
   }
 
-  // returns [ { id: ___, email: ___ }, {....} ]
+  // returns [ { id: ___, email: ___ }, {....} ] -- dope typescript bro
   const partnerDetails = mutualThumbsData.rounds.map((round) => {
     const idsAndEmails = Object.values(round)
     return idsAndEmails.filter((person) => person.id !== userId)

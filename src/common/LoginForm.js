@@ -89,7 +89,6 @@ const LoginForm = () => {
     // I tried try and catch, but it doesn't seem that we are throwing
     // an error from the backend
     if (!loginResponse.token) {
-      console.log('theres been an error')
       setErrorSnackbarOpen(true)
       return
     }

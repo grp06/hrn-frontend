@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -9,6 +9,7 @@ import { listenToRounds } from '../gql/subscriptions'
 import { getToken } from '../helpers'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
+import { GUMErrorModal } from '../common'
 
 const { lastSeenDuration } = constants
 
@@ -38,6 +39,8 @@ const defaultState = {
 
 const GameProvider = ({ children, location }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
+  const [GUMError, setGUMError] = useState('')
 
   const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
     findUserById,
@@ -82,7 +85,8 @@ const GameProvider = ({ children, location }) => {
         try {
           await updateLastSeenMutation()
         } catch (error) {
-          console.log('error = ', error)
+          // sometimes theres an error here. Reloading "fixes" it  :|
+          window.location.reload()
         }
       }, lastSeenDuration)
       return () => {
@@ -94,10 +98,18 @@ const GameProvider = ({ children, location }) => {
   useEffect(() => {
     if (state.token) {
       const setupRoom = async () => {
-        const localTracks = await createLocalTracks({
-          video: true,
-          audio: false,
-        })
+        let localTracks
+        try {
+          localTracks = await createLocalTracks({
+            video: true,
+            audio: false,
+          })
+        } catch (err) {
+          console.log(err.name)
+          setGUMError(err.name)
+          return setIsGUMErrorModalActive(true)
+        }
+
         const myRoom = await connect(state.token, {
           name: state.roomId,
           tracks: localTracks,
@@ -254,15 +266,40 @@ const GameProvider = ({ children, location }) => {
       }
       dispatch((draft) => {
         draft.userId = myUserId
+        draft.appLoading = false
       })
     }
   }, [])
 
-  if (state.room && state.currentRound > 0 && window.location.pathname !== '/video-room') {
+  const userHasNoPartner = Boolean(
+    state.myRound && (!state.myRound.partnerY_id || !state.myRound.partnerX_id)
+  )
+  const hasOngoingRound = Boolean(state.room)
+
+  if (
+    window.location.pathname.indexOf('video-room') === -1 &&
+    state.currentRound > 0 &&
+    state.currentRound !== parseInt(process.env.REACT_APP_NUM_ROUNDS, 10) &&
+    (userHasNoPartner || hasOngoingRound)
+  ) {
+    console.log(
+      'GameProvider -> process.env.REACT_APP_NUM_ROUNDS',
+      process.env.REACT_APP_NUM_ROUNDS
+    )
+
     return <Redirect to="/video-room" push />
   }
 
-  return <GameContext.Provider value={[state, dispatch]}>{children}</GameContext.Provider>
+  return (
+    <GameContext.Provider value={[state, dispatch]}>
+      <div>
+        {children}
+        {isGUMErrorModalActive ? (
+          <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+        ) : null}
+      </div>
+    </GameContext.Provider>
+  )
 }
 
 export { GameProvider, GameContext }
