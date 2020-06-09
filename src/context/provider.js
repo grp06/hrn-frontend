@@ -154,6 +154,8 @@ const GameProvider = ({ children, location }) => {
         return me
       })
 
+      console.log('state.roundsData = ', state.roundsData)
+      console.log('state.freshRoundsData = ', freshRoundsData)
       if (!state.roundsData && freshRoundsData.rounds) {
         // page just reloaded, set data
 
@@ -182,6 +184,7 @@ const GameProvider = ({ children, location }) => {
           state.eventsData.event_users.length &&
           state.eventsData.event_users.find((event) => state.eventId === event.event.id)
         const { ended_at } = currentEvent.event
+        console.log('roundsData = ', freshRoundsData)
 
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData

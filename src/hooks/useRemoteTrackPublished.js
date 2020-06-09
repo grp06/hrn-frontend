@@ -22,7 +22,6 @@ const useRemoteTrackPublished = () => {
       }
       document.getElementById('remote-video').appendChild(attachedTrack)
       setDidPartnerDisconnect(false)
-      setWaitingRoom(false)
     })
 
     publication.on('unsubscribed', (track) => {

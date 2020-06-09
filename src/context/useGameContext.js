@@ -16,6 +16,7 @@ const useGameContext = () => {
   }
 
   function setWaitingRoom(waitingRoom, partnerNeverConnected) {
+    console.log('setWaitingRoom -> waitingRoom', waitingRoom)
     dispatch((draft) => {
       draft.waitingRoom = waitingRoom
       if (waitingRoom) {
