@@ -85,7 +85,8 @@ const GameProvider = ({ children, location }) => {
         try {
           await updateLastSeenMutation()
         } catch (error) {
-          console.log('error = ', error)
+          // sometimes theres an error here. Reloading "fixes" it  :|
+          window.location.reload()
         }
       }, lastSeenDuration)
       return () => {
@@ -270,7 +271,22 @@ const GameProvider = ({ children, location }) => {
     }
   }, [])
 
-  if (state.room && state.currentRound > 0 && window.location.pathname !== '/video-room') {
+  const userHasNoPartner = Boolean(
+    state.myRound && (!state.myRound.partnerY_id || !state.myRound.partnerX_id)
+  )
+  const hasOngoingRound = Boolean(state.room)
+
+  if (
+    window.location.pathname.indexOf('video-room') === -1 &&
+    state.currentRound > 0 &&
+    state.currentRound !== parseInt(process.env.REACT_APP_NUM_ROUNDS, 10) &&
+    (userHasNoPartner || hasOngoingRound)
+  ) {
+    console.log(
+      'GameProvider -> process.env.REACT_APP_NUM_ROUNDS',
+      process.env.REACT_APP_NUM_ROUNDS
+    )
+
     return <Redirect to="/video-room" push />
   }
 

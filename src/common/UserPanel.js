@@ -87,7 +87,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
         if (alreadyAttending) {
           try {
             await deleteEventUserMutation()
-            console.log('hi?')
           } catch (error) {
             console.log('error = ', error)
           }

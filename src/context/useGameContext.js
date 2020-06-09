@@ -10,7 +10,6 @@ const useGameContext = () => {
   }
 
   function setAttendees(attendees) {
-    console.log('setAttendees -> attendees', attendees)
     dispatch((draft) => {
       draft.attendees = attendees
     })
@@ -28,42 +27,36 @@ const useGameContext = () => {
   }
 
   function setRoundsData(rounds) {
-    console.log('setRoundsData -> rounds', rounds)
     dispatch((draft) => {
       draft.roundsData = rounds
     })
   }
 
   function setRoom(room) {
-    console.log('setRoom -> room', room)
     dispatch((draft) => {
       draft.room = room
     })
   }
 
   function setLoading(loading) {
-    console.log('setLoading -> loading', loading)
     dispatch((draft) => {
       draft.loading = loading
     })
   }
 
   function setRedirect(redirect) {
-    console.log('setRedirect -> redirect', redirect)
     dispatch((draft) => {
       draft.redirect = redirect
     })
   }
 
   function setEventId(eventId) {
-    console.log('setEventId -> eventId', eventId)
     dispatch((draft) => {
       draft.eventId = eventId
     })
   }
 
   function setUserId(userId) {
-    console.log('setUserId -> userId', userId)
     dispatch((draft) => {
       draft.userId = userId
     })
@@ -71,14 +64,12 @@ const useGameContext = () => {
 
   // only used once - in Header.js
   function setCurrentRound(currentRound) {
-    console.log('setCurrentRound -> currentRound', currentRound)
     dispatch((draft) => {
       draft.currentRound = currentRound
     })
   }
 
   function setDidPartnerDisconnect(partnerDisconnect) {
-    console.log('setDidPartnerDisconnect -> didPartnerDisconnect')
     dispatch((draft) => {
       draft.didPartnerDisconnect = partnerDisconnect
     })

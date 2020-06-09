@@ -9,6 +9,7 @@ const getHostEvents = gql`
       event_name
       host_id
       start_at
+      current_round
     }
   }
 `
