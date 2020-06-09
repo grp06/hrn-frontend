@@ -80,10 +80,8 @@ const Event = ({ match }) => {
       if (!eventData.events.length) {
         return history.push('/events')
       }
-      console.log('Event -> eventData', eventData)
 
       const { event_users, ended_at } = eventData.events[0]
-      console.log('Event -> eventData.events[0]', eventData.events[0])
 
       if (ended_at) {
         return history.push('/event-complete')

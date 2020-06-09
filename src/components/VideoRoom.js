@@ -74,7 +74,7 @@ const VideoRoom = () => {
     if (room) {
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
-      console.log('timer Time Input ****', timerTimeInput)
+
       setTimerTimeInput(eventEndTime)
       setShowTimer(true)
       startTwilio()
