@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-const insertRound = gql`
+const resetEvent = gql`
   mutation resetEvent($id: Int!) {
     update_events(where: { id: { _eq: $id } }, _set: { ended_at: null, current_round: 0 }) {
       returning {
@@ -15,4 +15,4 @@ const insertRound = gql`
     }
   }
 `
-export default insertRound
+export default resetEvent
