@@ -3,7 +3,6 @@ import { useContext } from 'react'
 import { AppContext } from './AppProvider'
 
 const useAppContext = () => {
-  console.log('AppContext', AppContext)
   const [state, dispatch] = useContext(AppContext)
 
   if (dispatch === undefined) {

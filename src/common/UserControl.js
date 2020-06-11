@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGetRoomId } from '../hooks'
 import { useAppContext } from '../context/useAppContext'
-import { useEventContext } from '../context/useEventContext'
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -49,9 +48,8 @@ const useStyles = makeStyles((theme) => ({
 const UserControl = () => {
   const classes = useStyles()
 
-  const { user } = useAppContext()
+  const { user, event } = useAppContext()
   const { userId } = user
-  const { event } = useEventContext()
   const { event_id, currentRound } = event
 
   // const { twilioReady, waitingRoom, roomId, room } = useAppContext()

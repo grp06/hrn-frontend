@@ -18,7 +18,6 @@ import { makeStyles } from '@material-ui/styles'
 import { Link, useHistory } from 'react-router-dom'
 import { startEvent } from '../helpers'
 
-import { useEventContext } from '../context/useEventContext'
 import { useAppContext } from '../context/useAppContext'
 
 import { deleteRounds, resetEvent } from '../gql/mutations'
@@ -113,38 +112,37 @@ const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
 
-  const { user, setCurrentRound } = useAppContext()
+  const { user, event } = useAppContext()
   const { role } = user
-  const { event } = useEventContext()
-  const { event_id, current_round } = event
+  // const { event_id, current_round } = event
 
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
   // const { role, current_round, event_id, setCurrentRound } = useGameContext()
-  const [deleteRoundsMutation] = useMutation(deleteRounds)
-  const [resetEventMutation] = useMutation(resetEvent, {
-    variables: {
-      id: event_id,
-    },
-  })
+  // const [deleteRoundsMutation] = useMutation(deleteRounds)
+  // const [resetEventMutation] = useMutation(resetEvent, {
+  //   variables: {
+  //     id: event_id,
+  //   },
+  // })
 
   const [openDrawer, setOpenDrawer] = useState(false)
 
   // eslint-disable-next-line no-shadow
-  const resetRoundsModal = TransitionModal({
-    button: {
-      buttonText: 'Reset Games',
-      buttonVariant: 'outlined',
-      buttonColor: 'secondary',
-    },
-    modalBody: 'This will close the game for all users.',
-    onAcceptFunction: async () => {
-      await deleteRoundsMutation()
-      await resetEventMutation(event_id)
-      await startEvent(null, true)
-      setCurrentRound(0)
-      history.replace(`/events/${event_id}`)
-    },
-  })
+  // const resetRoundsModal = TransitionModal({
+  //   button: {
+  //     buttonText: 'Reset Games',
+  //     buttonVariant: 'outlined',
+  //     buttonColor: 'secondary',
+  //   },
+  //   modalBody: 'This will close the game for all users.',
+  //   onAcceptFunction: async () => {
+  //     await deleteRoundsMutation()
+  //     await resetEventMutation(event_id)
+  //     await startEvent(null, true)
+  //     // setCurrentRound(0)
+  //     history.replace(`/events/${event_id}`)
+  //   },
+  // })
 
   const routes = [
     { name: 'Home', link: '/', activeIndex: 0 },
@@ -217,25 +215,25 @@ const Header = ({ activeTab, setActiveTab }) => {
     </>
   )
 
-  const adminNavPanel = () => {
-    return (
-      <Grid
-        container
-        direction="row"
-        justify="space-around"
-        alignItems="center"
-        className={classes.adminPanelContainer}
-      >
-        <Grid item className={classes.tab}>
-          <p>
-            Curent Round:
-            {current_round}
-          </p>
-        </Grid>
-        <Grid item>{resetRoundsModal}</Grid>
-      </Grid>
-    )
-  }
+  // const adminNavPanel = () => {
+  //   return (
+  //     <Grid
+  //       container
+  //       direction="row"
+  //       justify="space-around"
+  //       alignItems="center"
+  //       className={classes.adminPanelContainer}
+  //     >
+  //       <Grid item className={classes.tab}>
+  //         <p>
+  //           Curent Round:
+  //           {current_round}
+  //         </p>
+  //       </Grid>
+  //       <Grid item>{resetRoundsModal}</Grid>
+  //     </Grid>
+  //   )
+  // }
 
   return (
     <>
@@ -251,7 +249,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {role === 'host' && current_round !== 0 && adminNavPanel()}
+          {/* {role === 'host' && current_round !== 0 && adminNavPanel()} */}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>

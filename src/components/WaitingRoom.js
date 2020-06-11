@@ -5,7 +5,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
-import { useEventContext } from '../context/useEventContext'
 import { ThumbsUp } from '../common'
 import { listenToEvent } from '../gql/subscriptions'
 
@@ -31,13 +30,13 @@ const WaitingRoom = () => {
   const classes = useStyles()
   const {
     user,
+    event,
     myRound,
     didPartnerDisconnect,
     partnerNeverConnected,
     waitingRoom,
   } = useAppContext()
   const { userId } = user
-  const { event } = useEventContext()
   const { event_id } = event
 
   // const {

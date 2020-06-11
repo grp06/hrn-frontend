@@ -1,8 +1,9 @@
 import { useCreateRooms } from '.'
-import { useEventContext } from '../context/useEventContext'
+import { useAppContext } from '../context/useAppContext'
 
 export default function useStartRounds() {
-  const { current_round } = useEventContext()
+  const { event } = useAppContext()
+  const { current_round } = event
   const { createRooms } = useCreateRooms()
 
   const startRound = async (rounds) => {

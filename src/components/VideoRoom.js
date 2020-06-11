@@ -10,7 +10,6 @@ import { getMyRoundById } from '../gql/queries'
 import { WaitingRoom } from '.'
 import { Timer } from '../common'
 import { useAppContext } from '../context/useAppContext'
-import { useEventContext } from '../context/useEventContext'
 import { useTwilio } from '../hooks'
 import { constants } from '../utils'
 
@@ -66,8 +65,7 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { app, user } = useAppContext()
-  const { event } = useEventContext()
+  const { app, user, event } = useAppContext()
   const { userId } = user
   const { id: eventId, current_round } = event
   const { startTwilio } = useTwilio()

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 
 import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
+import { useHistory, Redirect } from 'react-router-dom'
 
 import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
@@ -26,6 +27,12 @@ const defaultState = {
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  // if we are on a route that has '/events' in it, then we can peel off the id
+  // and use it to make our subscription to the event
+  const pathnameArray =
+    window.location.pathname.indexOf('/event') > -1 ? window.location.pathname.split('/') : null
+  const eventId = pathnameArray ? pathnameArray[2] : null
+  const history = useHistory()
   const { userId } = state.user
 
   const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
@@ -44,13 +51,15 @@ const AppProvider = ({ children }) => {
     skip: !userId,
   })
 
+  // listen to the Event only if we have an eventId from match
+  // this means we have to be on a route with an id
   const { data: eventData, loading: eventDataLoading, error: eventDataError } = useSubscription(
     listenToEvent,
     {
       variables: {
-        event_id: event_id,
+        event_id: eventId,
       },
-      skip: !state.eventId && !state.eventsData,
+      skip: !eventId,
     }
   )
 
@@ -58,11 +67,12 @@ const AppProvider = ({ children }) => {
     if (eventData && eventData.events.length) {
       return dispatch((draft) => {
         draft.event = eventData.events[0]
+        draft.app.appLoading = false
       })
     }
     // if theres no data that means we are probably on an event that
     // doesn't exist. Push user back to /events
-    return history.push('/events')
+    // return history.push('/events')
   }, [eventData])
 
   // Setting lastSeen Mutation
@@ -82,14 +92,14 @@ const AppProvider = ({ children }) => {
     }
   }, [userId])
 
-  // Setting the user state in provider after findUserById Query is made
+  // Setting the user state in context after findUserById Query is made
   useEffect(() => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]
-      dispatch((draft) => {
-        draft.role = role
-        draft.userId = id
-        draft.name = name
+      return dispatch((draft) => {
+        draft.user.role = role
+        draft.user.userId = id
+        draft.user.name = name
       })
     }
   }, [userData])
@@ -99,15 +109,14 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (!userId) {
       const myUserId = localStorage.getItem('userId')
-      if (!myUserId && state.redirect === null) {
+      if (!myUserId && !state.app.redirect) {
         return dispatch((draft) => {
-          draft.redirect = true
-          draft.appLoading = false
+          draft.app.redirect = true
+          draft.app.appLoading = false
         })
       }
-      dispatch((draft) => {
-        draft.userId = myUserId
-        draft.appLoading = false
+      return dispatch((draft) => {
+        draft.user.userId = myUserId
       })
     }
   }, [])

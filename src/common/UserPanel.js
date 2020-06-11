@@ -10,7 +10,6 @@ import { useHistory } from 'react-router-dom'
 import { FloatCardWide, AttendeesList, Timer, HiRightNowBreakdown } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
-import { useEventContext } from '../context/useEventContext'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -38,27 +37,26 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserPanel = ({ timeState, eventData, refetch }) => {
+  console.log('eventData ->', eventData)
   const classes = useStyles()
   const history = useHistory()
   const { user } = useAppContext()
   const { userId, role } = user
-  const { event } = useEventContext()
-  const { event_id, current_round } = event
+  const { id: eventId, current_round, event_users, start_at: eventStartTime } = eventData
 
   const [waitingForAdmin, setWaitingForAdmin] = useState()
-  const { event_users, start_at: eventStartTime } = eventData.events[0]
 
   const alreadyAttending = event_users.find((user) => user.user.id === userId)
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
-      event_id,
+      eventId,
       userId,
     },
     skip: role === 'host',
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
-      event_id,
+      eventId,
       userId,
     },
     skip: role === 'host',
@@ -71,7 +69,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   }, [timeState, role])
 
   const handleSignUpClick = () => {
-    localStorage.setItem('event_id', event_id)
+    localStorage.setItem('eventId', eventId)
     history.push('/sign-up')
   }
 

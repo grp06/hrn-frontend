@@ -7,7 +7,6 @@ import { makeStyles } from '@material-ui/styles'
 import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useAppContext } from '../context/useAppContext'
-import { useEventContext } from '../context/useEventContext'
 import formatDate from '../utils/formatDate'
 
 const useStyles = makeStyles((theme) => ({
@@ -44,11 +43,9 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id } = match.params
   const classes = useStyles()
-  const { app, user } = useAppContext()
-  const { event } = useEventContext()
+  const { app, user, event } = useAppContext()
   const { appLoading } = app
   const { userId } = user
-  const { host_id, start_at, event_name } = event
 
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', id)
@@ -75,6 +72,7 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
+  const { host_id, start_at, event_name } = event
   const startTime = new Date(start_at).getTime()
   const now = Date.now()
   const diff = startTime - now

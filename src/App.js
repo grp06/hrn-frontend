@@ -8,7 +8,6 @@ import makeApolloClient from './apollo'
 import { LoginForm, EventForm, ErrorBoundary } from './common'
 import { Event, Events, VideoRoom, GameOver, SignUp } from './components'
 import { AppProvider } from './context/AppProvider'
-import { EventProvider } from './context/EventProvider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
 import theme from './ui/theme'
@@ -46,7 +45,7 @@ const App = () => {
                   <Route exact path="/" component={LoginForm} />
                   <Route exact path="/sign-up" component={SignUp} />
                   <Route exact path="/create-event" component={EventForm} />
-                  <Route exact path="/events" component={Events} />å{' '}
+                  <Route exact path="/events" component={Events} />
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />
                   <Route exact path="/events/:id/event-complete" component={GameOver} />
