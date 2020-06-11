@@ -9,7 +9,6 @@ import { getMainDefinition } from 'apollo-utilities'
 
 const makeApolloClient = async () => {
   const token = localStorage.getItem('token')
-  console.log('process.env ', process.env)
 
   const httpLink = new HttpLink({
     // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
