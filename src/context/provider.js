@@ -103,7 +103,7 @@ const GameProvider = ({ children, location }) => {
         try {
           localTracks = await createLocalTracks({
             video: true,
-            audio: true,
+            audio: false,
           })
         } catch (err) {
           console.log(err.name)
