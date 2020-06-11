@@ -9,14 +9,12 @@ import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
 import { displayOnlineUsers } from '../gql/subscriptions'
-import { useGameContext } from '../context/useGameContext'
 import { constants } from '../utils'
 
 const { lastSeenDuration } = constants
 
-const AttendeesList = () => {
+const AttendeesList = ({ eventId }) => {
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
-  const { eventId } = useGameContext()
 
   const {
     data: onlineUsersData,

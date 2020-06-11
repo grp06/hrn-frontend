@@ -4,10 +4,13 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
+import { useQuery } from '@apollo/react-hooks'
+import { getMyRoundById } from '../gql/queries'
 
 import { WaitingRoom } from '.'
 import { Timer } from '../common'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context/useEventContext'
 import { useTwilio } from '../hooks'
 import { constants } from '../utils'
 
@@ -63,12 +66,42 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRoom = () => {
   const classes = useStyles()
-  const { room, myRound, currentRound } = useGameContext()
+  const { app, user } = useAppContext()
+  const { event } = useEventContext()
+  const { userId } = user
+  const { id: eventId, current_round } = event
   const { startTwilio } = useTwilio()
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
 
   const history = useHistory()
+
+  const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
+    getMyRoundById,
+    {
+      variables: {
+        round_number: current_round,
+        user_id: userId,
+      },
+      skip: !userId,
+    }
+  )
+
+  const myRound = myRoundData.rounds[0]
+
+  useEffect(() => {
+    const { myRound } = state
+    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+    if (!state.room && state.roomId && hasPartner) {
+      const getTwilioToken = async () => {
+        const token = await getToken(state.roomId, state.userId).then((response) => response.json())
+        dispatch((draft) => {
+          draft.token = token.token
+        })
+      }
+      getTwilioToken()
+    }
+  }, [state.roomId, state.room, myRoundData])
 
   useEffect(() => {
     if (room) {
@@ -82,10 +115,10 @@ const VideoRoom = () => {
   }, [room])
 
   useEffect(() => {
-    if (currentRound === 0) {
+    if (current_round === 0) {
       history.push('/events')
     }
-  }, [currentRound])
+  }, [current_round])
 
   return (
     <div>

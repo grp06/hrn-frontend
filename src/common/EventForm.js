@@ -6,7 +6,7 @@ import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory, Redirect } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { FloatCardMedium } from '.'
 
 import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EventForm = ({ eventData }) => {
   const classes = useStyles()
-  const { userId, role } = useGameContext()
+  const { userId, role } = useAppContext()
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
@@ -65,13 +65,13 @@ const EventForm = ({ eventData }) => {
       description,
       event_name: title,
       start_at: selectedDate,
-      id: eventData ? eventData.events[0].id : '',
+      id: eventData.id,
     },
   })
 
   useEffect(() => {
     if (eventData) {
-      const { description: eventDescription, event_name, start_at } = eventData.events[0]
+      const { description: eventDescription, event_name, start_at } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
