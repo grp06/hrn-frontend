@@ -103,10 +103,9 @@ const GameProvider = ({ children, location }) => {
         try {
           localTracks = await createLocalTracks({
             video: true,
-            audio: false,
+            audio: true,
           })
         } catch (err) {
-          console.log(err.name)
           setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
@@ -154,8 +153,6 @@ const GameProvider = ({ children, location }) => {
         return me
       })
 
-      console.log('state.roundsData = ', state.roundsData)
-      console.log('state.freshRoundsData = ', freshRoundsData)
       if (!state.roundsData && freshRoundsData.rounds) {
         // page just reloaded, set data
 
@@ -184,7 +181,6 @@ const GameProvider = ({ children, location }) => {
           state.eventsData.event_users.length &&
           state.eventsData.event_users.find((event) => state.eventId === event.event.id)
         const { ended_at } = currentEvent.event
-        console.log('roundsData = ', freshRoundsData)
 
         return dispatch((draft) => {
           draft.roundsData = freshRoundsData
@@ -193,8 +189,6 @@ const GameProvider = ({ children, location }) => {
           draft.roomId = myRound && !ended_at ? myRound.id : null
           draft.appLoading = false
           if (adminIsResettingGame) {
-            console.log('GameProvider -> adminIsResettingGame', adminIsResettingGame)
-
             draft.waitingRoom = false
           }
         })
@@ -286,11 +280,6 @@ const GameProvider = ({ children, location }) => {
     state.currentRound !== parseInt(process.env.REACT_APP_NUM_ROUNDS, 10) &&
     (userHasNoPartner || hasOngoingRound)
   ) {
-    console.log(
-      'GameProvider -> process.env.REACT_APP_NUM_ROUNDS',
-      process.env.REACT_APP_NUM_ROUNDS
-    )
-
     return <Redirect to="/video-room" push />
   }
 
