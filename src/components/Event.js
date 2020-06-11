@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
 
+import { useHistory } from 'react-router-dom'
 import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useAppContext } from '../context/useAppContext'
@@ -41,14 +42,15 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
-  const { id } = match.params
+  const history = useHistory()
+  const { id: eventId } = match.params
   const classes = useStyles()
   const { app, user, event } = useAppContext()
   const { appLoading } = app
   const { userId } = user
 
   // used as a safety check for when we get thumbs up data
-  localStorage.setItem('eventId', id)
+  localStorage.setItem('eventId', eventId)
 
   // useEffect(() => {
   //   if (!eventDataLoading && eventData.events && !event_users) {
@@ -68,7 +70,15 @@ const Event = ({ match }) => {
   //   }
   // }, [event, history, event_users, currentRound])
 
-  if (appLoading) {
+  useEffect(() => {
+    if (event && event.status === 'room-in-progress') {
+      console.log('pushing to video room')
+
+      return history.push(`/events/${eventId}/video-room`)
+    }
+  }, [event])
+
+  if (appLoading || !event) {
     return <Loading />
   }
 

@@ -27,10 +27,10 @@ const defaultState = {
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  const shouldFetchEvent = window.location.pathname.indexOf('/events/') > -1
   // if we are on a route that has '/events' in it, then we can peel off the id
   // and use it to make our subscription to the event
-  const pathnameArray =
-    window.location.pathname.indexOf('/event') > -1 ? window.location.pathname.split('/') : null
+  const pathnameArray = shouldFetchEvent ? window.location.pathname.split('/') : null
   const eventId = pathnameArray ? pathnameArray[2] : null
   const history = useHistory()
   const { userId } = state.user
@@ -64,14 +64,18 @@ const AppProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (eventData && eventData.events.length) {
-      return dispatch((draft) => {
-        draft.event = eventData.events[0]
-        draft.app.appLoading = false
-      })
+    if (shouldFetchEvent) {
+      if (eventData && eventData.events.length) {
+        return dispatch((draft) => {
+          draft.event = eventData.events[0]
+          draft.app.appLoading = false
+        })
+      }
     }
+
     // if theres no data that means we are probably on an event that
     // doesn't exist. Push user back to /events
+    // / - George: It could also be that the person just has 0 events
     // return history.push('/events')
   }, [eventData])
 
@@ -100,6 +104,9 @@ const AppProvider = ({ children }) => {
         draft.user.role = role
         draft.user.userId = id
         draft.user.name = name
+        if (!shouldFetchEvent) {
+          draft.app.appLoading = false
+        }
       })
     }
   }, [userData])
@@ -109,11 +116,11 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (!userId) {
       const myUserId = localStorage.getItem('userId')
-      if (!myUserId && !state.app.redirect) {
-        return dispatch((draft) => {
-          draft.app.redirect = true
+      if (!myUserId) {
+        dispatch((draft) => {
           draft.app.appLoading = false
         })
+        history.push('/')
       }
       return dispatch((draft) => {
         draft.user.userId = myUserId

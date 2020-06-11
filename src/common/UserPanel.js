@@ -37,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserPanel = ({ timeState, eventData, refetch }) => {
-  console.log('eventData ->', eventData)
   const classes = useStyles()
   const history = useHistory()
   const { user } = useAppContext()

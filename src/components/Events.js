@@ -136,9 +136,10 @@ const Events = () => {
       </div>
       {renderNullDataText()}
       {role === 'host' && <CreateEventButton />}
-      {eventsData.event_users.map(({ event }) => {
-        return <EventCard key={event.id} event={event} />
-      })}
+      {eventsData &&
+        eventsData.event_users.map(({ event }) => {
+          return <EventCard key={event.id} event={event} />
+        })}
     </>
   )
 }

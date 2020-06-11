@@ -10,6 +10,7 @@ const listenToEvent = gql`
       event_name
       host_id
       start_at
+      status
       event_users {
         user {
           email

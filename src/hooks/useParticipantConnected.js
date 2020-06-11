@@ -4,6 +4,8 @@ const useParticipantConnected = () => {
   const { remoteTrackPublished } = useRemoteTrackPublished()
 
   const participantConnected = (participant) => {
+    console.log('participantConnected -> participant', participant)
+
     participant.tracks.forEach((publication) => {
       console.log('useParticipantConnected -> publication', publication)
 
