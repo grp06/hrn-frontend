@@ -130,7 +130,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           <Typography variant="body1">{eventDescription}</Typography>
         </Grid>
         <Divider light variant="middle" />
-        {timeState !== 'future' && <AttendeesList eventId={event_id} />}
+        {timeState !== 'future' && <AttendeesList eventId={eventId} />}
       </Grid>
     </FloatCardWide>
   )

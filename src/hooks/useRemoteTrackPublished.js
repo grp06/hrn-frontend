@@ -1,7 +1,7 @@
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 const useRemoteTrackPublished = () => {
-  const { setDidPartnerDisconnect, setWaitingRoom } = useGameContext()
+  const { setDidPartnerDisconnect, setWaitingRoom } = useAppContext()
   const remoteTrackPublished = (publication) => {
     if (publication.isSubscribed) {
       console.log('publication.isSubscribed ', publication.isSubscribed)

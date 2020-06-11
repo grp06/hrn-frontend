@@ -8,8 +8,9 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import { FloatCardWide, AttendeesList, Timer, HiRightNowBreakdown } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
+import { useEventContext } from '../context/useEventContext'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -39,21 +40,25 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { userId, role, currentRound, eventId } = useGameContext()
+  const { user } = useAppContext()
+  const { userId, role } = user
+  const { event } = useEventContext()
+  const { event_id, current_round } = event
+
   const [waitingForAdmin, setWaitingForAdmin] = useState()
   const { event_users, start_at: eventStartTime } = eventData.events[0]
 
   const alreadyAttending = event_users.find((user) => user.user.id === userId)
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
-      eventId,
+      event_id,
       userId,
     },
     skip: role === 'host',
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
-      eventId,
+      event_id,
       userId,
     },
     skip: role === 'host',
@@ -66,7 +71,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   }, [timeState, role])
 
   const handleSignUpClick = () => {
-    localStorage.setItem('eventId', eventId)
+    localStorage.setItem('event_id', event_id)
     history.push('/sign-up')
   }
 

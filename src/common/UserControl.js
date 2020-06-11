@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useGetRoomId } from '../hooks'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context/useEventContext'
 
 const width = window.innerWidth
 const height = window.innerHeight
@@ -47,7 +48,14 @@ const useStyles = makeStyles((theme) => ({
 
 const UserControl = () => {
   const classes = useStyles()
-  const { currentRound, twilioReady, waitingRoom, roomId, room } = useGameContext()
+
+  const { user } = useAppContext()
+  const { userId } = user
+  const { event } = useEventContext()
+  const { event_id, currentRound } = event
+
+  // const { twilioReady, waitingRoom, roomId, room } = useAppContext()
+
   const { setToken } = useGetRoomId()
   const mounted = useRef()
 
@@ -72,7 +80,7 @@ const UserControl = () => {
     //   )
     // }
 
-    if (currentRound === 0) {
+    if (current_round === 0) {
       return (
         <div className={classes.notReady}>
           <h1>Please wait for event to begin</h1>

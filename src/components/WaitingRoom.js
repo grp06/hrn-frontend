@@ -4,7 +4,8 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context/useEventContext'
 import { ThumbsUp } from '../common'
 import { listenToEvent } from '../gql/subscriptions'
 
@@ -29,13 +30,25 @@ const useStyles = makeStyles((theme) => ({
 const WaitingRoom = () => {
   const classes = useStyles()
   const {
-    waitingRoom,
+    user,
     myRound,
     didPartnerDisconnect,
-    userId,
-    eventId,
     partnerNeverConnected,
-  } = useGameContext()
+    waitingRoom,
+  } = useAppContext()
+  const { userId } = user
+  const { event } = useEventContext()
+  const { event_id } = event
+
+  // const {
+  //   waitingRoom,
+  //   myRound,
+  //   didPartnerDisconnect,
+  //   userId,
+  //   event_id,
+  //   partnerNeverConnected,
+  // } = useGameContext()
+
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
   const history = useHistory()
   const {
@@ -44,7 +57,7 @@ const WaitingRoom = () => {
     error: freshEventError,
   } = useSubscription(listenToEvent, {
     variables: {
-      id: eventId,
+      id: event_id,
     },
   })
 

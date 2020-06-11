@@ -11,7 +11,7 @@ import Typography from '@material-ui/core/Typography'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { redirect, setRedirect, setUserId, userId } = useGameContext()
+  const { redirect, setRedirect, setUserId, userId } = useAppContext()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useMutation } from '@apollo/react-hooks'
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 
 import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
+import { listenToEvent } from '../gql/subscriptions'
 
 const { lastSeenDuration } = constants
 
@@ -21,6 +22,7 @@ const defaultState = {
     redirect: null,
     appLoading: true,
   },
+  event: null,
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -41,6 +43,27 @@ const AppProvider = ({ children }) => {
     },
     skip: !userId,
   })
+
+  const { data: eventData, loading: eventDataLoading, error: eventDataError } = useSubscription(
+    listenToEvent,
+    {
+      variables: {
+        event_id: event_id,
+      },
+      skip: !state.eventId && !state.eventsData,
+    }
+  )
+
+  useEffect(() => {
+    if (eventData && eventData.events.length) {
+      return dispatch((draft) => {
+        draft.event = eventData.events[0]
+      })
+    }
+    // if theres no data that means we are probably on an event that
+    // doesn't exist. Push user back to /events
+    return history.push('/events')
+  }, [eventData])
 
   // Setting lastSeen Mutation
   useEffect(() => {
@@ -92,4 +115,4 @@ const AppProvider = ({ children }) => {
   return <AppContext.Provider value={[state, dispatch]}>{children}</AppContext.Provider>
 }
 
-export { AppProvider }
+export { AppProvider, AppContext }

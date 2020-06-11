@@ -89,30 +89,30 @@ const VideoRoom = () => {
 
   const myRound = myRoundData.rounds[0]
 
-  useEffect(() => {
-    const { myRound } = state
-    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (!state.room && state.roomId && hasPartner) {
-      const getTwilioToken = async () => {
-        const token = await getToken(state.roomId, state.userId).then((response) => response.json())
-        dispatch((draft) => {
-          draft.token = token.token
-        })
-      }
-      getTwilioToken()
-    }
-  }, [state.roomId, state.room, myRoundData])
+  // useEffect(() => {
+  //   const { myRound } = state
+  //   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+  //   if (!state.room && state.roomId && hasPartner) {
+  //     const getTwilioToken = async () => {
+  //       const token = await getToken(state.roomId, state.userId).then((response) => response.json())
+  //       dispatch((draft) => {
+  //         draft.token = token.token
+  //       })
+  //     }
+  //     getTwilioToken()
+  //   }
+  // }, [state.roomId, state.room, myRoundData])
 
-  useEffect(() => {
-    if (room) {
-      const eventEndTimeSeconds = moment(myRound.started_at).seconds()
-      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
+  // useEffect(() => {
+  //   if (room) {
+  //     const eventEndTimeSeconds = moment(myRound.started_at).seconds()
+  //     const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
 
-      setTimerTimeInput(eventEndTime)
-      setShowTimer(true)
-      startTwilio()
-    }
-  }, [room])
+  //     setTimerTimeInput(eventEndTime)
+  //     setShowTimer(true)
+  //     startTwilio()
+  //   }
+  // }, [room])
 
   useEffect(() => {
     if (current_round === 0) {

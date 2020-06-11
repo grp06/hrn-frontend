@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 
 import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
-import { listenToEvent } from '../gql/subscriptions'
 import { useHistory } from 'react-router-dom'
+import { listenToEvent } from '../gql/subscriptions'
 
 const EventContext = React.createContext()
 
@@ -11,7 +11,8 @@ const defaultState = {
   event: null,
 }
 
-const EventProvider = ({ children, match }) => {
+const EventProvider = (props) => {
+  debugger
   const [state, dispatch] = useImmer({ ...defaultState })
   const { id: event_id } = match.params
   const history = useHistory()
@@ -40,4 +41,4 @@ const EventProvider = ({ children, match }) => {
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }
 
-export { EventProvider }
+export { EventProvider, EventContext }

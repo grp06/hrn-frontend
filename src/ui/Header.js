@@ -18,7 +18,8 @@ import { makeStyles } from '@material-ui/styles'
 import { Link, useHistory } from 'react-router-dom'
 import { startEvent } from '../helpers'
 
-import { useGameContext } from '../context/useGameContext'
+import { useEventContext } from '../context/useEventContext'
+import { useAppContext } from '../context/useAppContext'
 
 import { deleteRounds, resetEvent } from '../gql/mutations'
 import { TransitionModal } from '../common'
@@ -111,12 +112,18 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
+
+  const { user, setCurrentRound } = useAppContext()
+  const { role } = user
+  const { event } = useEventContext()
+  const { event_id, current_round } = event
+
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const { role, currentRound, eventId, setCurrentRound } = useGameContext()
+  // const { role, current_round, event_id, setCurrentRound } = useGameContext()
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [resetEventMutation] = useMutation(resetEvent, {
     variables: {
-      id: eventId,
+      id: event_id,
     },
   })
 
@@ -132,10 +139,10 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-      await resetEventMutation(eventId)
+      await resetEventMutation(event_id)
       await startEvent(null, true)
       setCurrentRound(0)
-      history.replace(`/events/${eventId}`)
+      history.replace(`/events/${event_id}`)
     },
   })
 
@@ -222,7 +229,7 @@ const Header = ({ activeTab, setActiveTab }) => {
         <Grid item className={classes.tab}>
           <p>
             Curent Round:
-            {currentRound}
+            {current_round}
           </p>
         </Grid>
         <Grid item>{resetRoundsModal}</Grid>
@@ -244,7 +251,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {role === 'host' && currentRound !== 0 && adminNavPanel()}
+          {role === 'host' && current_round !== 0 && adminNavPanel()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>

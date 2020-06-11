@@ -1,17 +1,23 @@
 import { useHistory } from 'react-router-dom'
 
 import { useParticipantConnected } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useEventContext } from '../context/useEventContext'
+import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
 const useTwilio = () => {
+  const { user } = useAppContext()
   const {
     room,
     currentRound,
     setWaitingRoom,
     setDidPartnerDisconnect,
     setPartnerNeverConnected,
-  } = useGameContext()
+  } = user
+  const { userId } = user
+  const { event } = useEventContext()
+  const { event_id, current_round } = event
+
   const history = useHistory()
   const { partnerCameraIssueTimeout } = constants
 

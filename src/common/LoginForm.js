@@ -10,7 +10,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 import { Redirect, Link } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 const Alert = (props) => {
   return <MuiAlert elevation={1} variant="filled" {...props} />
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
   const classes = useStyles()
-  const { redirect, setRedirect, setUserId } = useGameContext()
+  const { redirect, setRedirect, setUserId } = useAppContext()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

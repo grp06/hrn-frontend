@@ -46,11 +46,9 @@ const App = () => {
                   <Route exact path="/" component={LoginForm} />
                   <Route exact path="/sign-up" component={SignUp} />
                   <Route exact path="/create-event" component={EventForm} />
-                  <Route exact path="/events" component={Events} />
-                  <EventProvider>
-                    <Route exact path="/events/:id" component={Event} />
-                    <Route exact path="/events/:id/video-room" component={VideoRoom} />
-                  </EventProvider>
+                  <Route exact path="/events" component={Events} />å{' '}
+                  <Route exact path="/events/:id" component={Event} />
+                  <Route exact path="/events/:id/video-room" component={VideoRoom} />
                   <Route exact path="/events/:id/event-complete" component={GameOver} />
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
