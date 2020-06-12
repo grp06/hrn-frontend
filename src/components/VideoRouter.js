@@ -7,20 +7,10 @@ import { ThumbsUp } from '../common'
 import { listenToEvent } from '../gql/subscriptions'
 import { PartnerDisconnected, PartnerCameraIssue, SittingOut } from '../common/waitingRoomScreens'
 
-const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    background: '#111',
-    height: '100vh',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-}))
+const useStyles = makeStyles((theme) => ({}))
+let elementToRender
 
 const VideoRouter = ({ myRound }) => {
-  console.log(myRound)
   const classes = useStyles()
   const { user, event } = useAppContext()
   const { userId } = user
@@ -28,7 +18,6 @@ const VideoRouter = ({ myRound }) => {
   const history = useHistory()
   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
 
-  let elementToRender
   const renderToUser = () => {
     console.log('eventStatus from VideoRouter =', status)
     switch (status) {
@@ -37,8 +26,7 @@ const VideoRouter = ({ myRound }) => {
         return null
       case 'in-between-rounds':
         console.log('in-between-rounds was rendered')
-        return <div style={{ color: 'white' }}>ThumbsUp</div>
-      // return <ThumbsUp myRound={myRound} userId={userId} />
+        return <ThumbsUp myRound={myRound} userId={userId} />
       case 'room-in-progress':
         // waiting for partner. This only shows before the first round
         if (!myRound && current_round < 1) {
@@ -49,7 +37,7 @@ const VideoRouter = ({ myRound }) => {
         //   return <PartnerDisconnected />
         // }
         if (!hasPartner) {
-          console.log('room-in-progress was rendered')
+          console.log('Sitting out was rendered')
           return <SittingOut />
         }
         // if (partnerNeverConnected) {
@@ -60,6 +48,7 @@ const VideoRouter = ({ myRound }) => {
         return history.push(`/events/${id}/event-complete`)
 
       default:
+        console.log('hitting default case')
         return null
     }
   }
@@ -67,7 +56,6 @@ const VideoRouter = ({ myRound }) => {
     elementToRender = renderToUser()
   }, [status])
 
-  console.log('elementToRender ->', elementToRender)
-  return <div className={classes.wrapper}>{elementToRender}</div>
+  return <div>{elementToRender}</div>
 }
 export default VideoRouter

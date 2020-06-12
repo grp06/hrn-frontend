@@ -117,14 +117,14 @@ const VideoRoom = ({ match }) => {
   // to get twilio token
   useEffect(() => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner) {
+    if (hasPartner && event && event.status !== 'in-between-rounds') {
       const getTwilioToken = async () => {
         const res = await getToken(myRound.roomId, userId).then((response) => response.json())
         setToken(res.token)
       }
       getTwilioToken()
     }
-  }, [myRound])
+  }, [myRound, event])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your room
@@ -169,20 +169,6 @@ const VideoRoom = ({ match }) => {
       startTwilio()
     }
   }, [room])
-
-  // useEffect(() => {
-  //   const { myRound } = state
-  //   const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-  //   if (!state.room && state.roomId && hasPartner) {
-  //     const getTwilioToken = async () => {
-  //       const token = await getToken(state.roomId, state.userId).then((response) => response.json())
-  //       dispatch((draft) => {
-  //         draft.token = token.token
-  //       })
-  //     }
-  //     getTwilioToken()
-  //   }
-  // }, [state.roomId, state.room, myRoundData])
 
   if (appLoading || !event || myRoundDataLoading) {
     return <Loading />
