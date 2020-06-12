@@ -73,7 +73,7 @@ const VideoRoom = ({ match }) => {
   const { userId } = user
   const { appLoading } = app
 
-  const { startTwilio, twilioStarted, partnerNeverConnected } = useTwilio()
+  const { startTwilio, twilioStarted, partnerNeverConnected, partnerDisconnected } = useTwilio()
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
   const [myRound, setMyRound] = useState(null)
@@ -167,7 +167,13 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      {myRound && <VideoRouter myRound={myRound} partnerNeverConnected={partnerNeverConnected} />}
+      {myRound && (
+        <VideoRouter
+          myRound={myRound}
+          partnerNeverConnected={partnerNeverConnected}
+          partnerDisconnected={partnerDisconnected}
+        />
+      )}
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />

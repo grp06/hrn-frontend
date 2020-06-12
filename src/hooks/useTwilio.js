@@ -19,6 +19,7 @@ const useTwilio = () => {
   const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
   const [partnerNeverConnected, setPartnerNeverConnected] = useState(false)
+  const [partnerDisconnected, setPartnerDisconnected] = useState(false)
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = (room) => {
@@ -53,13 +54,13 @@ const useTwilio = () => {
       room.on('participantConnected', (remoteParticipant) => {
         console.log('startTwilio -> remoteParticipant', remoteParticipant)
         setPartnerNeverConnected(false)
-        // setVideoRouter(null)
+        setPartnerDisconnected(false)
         participantConnected(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('remote participant disconnected ', remoteParticipant)
-        // setDidPartnerDisconnect(true)
+        setPartnerDisconnected(true)
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
           remoteVideo.innerHTML = ''
@@ -74,7 +75,7 @@ const useTwilio = () => {
         console.log('disconnect called')
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
-        // setDidPartnerDisconnect(false)
+        setPartnerDisconnected(false)
 
         if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
           history.push('/event-complete')
@@ -91,7 +92,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio, twilioStarted, partnerNeverConnected }
+  return { startTwilio, twilioStarted, partnerNeverConnected, partnerDisconnected }
 }
 
 export default useTwilio
