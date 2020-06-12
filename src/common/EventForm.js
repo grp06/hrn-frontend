@@ -41,8 +41,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventForm = ({ eventData }) => {
+const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
+
   const { user } = useAppContext()
   const { userId, role } = user
   const history = useHistory()
@@ -60,14 +61,7 @@ const EventForm = ({ eventData }) => {
   })
 
   const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
-  const [updateEventMutation] = useMutation(updateEvent, {
-    variables: {
-      description,
-      event_name: title,
-      start_at: selectedDate,
-      // id: eventData.id,
-    },
-  })
+  const [updateEventMutation] = useMutation(updateEvent)
 
   useEffect(() => {
     if (eventData) {
@@ -90,7 +84,14 @@ const EventForm = ({ eventData }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (eventData) {
-      await updateEventMutation()
+      await updateEventMutation({
+        variables: {
+          description,
+          event_name: title,
+          start_at: selectedDate,
+          id: eventData.id,
+        },
+      })
       setEventUpdated(true)
       setTimeout(() => {
         setEventUpdated(false)
