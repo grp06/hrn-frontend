@@ -43,7 +43,8 @@ const useStyles = makeStyles((theme) => ({
 
 const EventForm = ({ eventData }) => {
   const classes = useStyles()
-  const { userId, role } = useAppContext()
+  const { user } = useAppContext()
+  const { userId, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
@@ -59,13 +60,12 @@ const EventForm = ({ eventData }) => {
   })
 
   const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
-
   const [updateEventMutation] = useMutation(updateEvent, {
     variables: {
       description,
       event_name: title,
       start_at: selectedDate,
-      id: eventData.id,
+      // id: eventData.id,
     },
   })
 

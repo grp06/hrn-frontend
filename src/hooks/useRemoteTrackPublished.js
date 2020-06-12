@@ -21,7 +21,7 @@ const useRemoteTrackPublished = () => {
         attachedTrack.muted = true
       }
       document.getElementById('remote-video').appendChild(attachedTrack)
-      setDidPartnerDisconnect(false)
+      // setDidPartnerDisconnect(false)
     })
 
     publication.on('unsubscribed', (track) => {

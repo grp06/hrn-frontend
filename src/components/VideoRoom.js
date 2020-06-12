@@ -8,6 +8,7 @@ import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
 import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
+import { constants } from '../utils'
 
 import { WaitingRoom } from '.'
 
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+  const { roundLength } = constants
   const { app, user, event } = useAppContext()
   const { userId } = user
   const { appLoading } = app
@@ -93,22 +95,39 @@ const VideoRoom = ({ match }) => {
     }
   )
 
+  // Redirect back to /event/id if the event has not started
   useEffect(() => {
     if (event) {
       const { status } = event
-
       if (status === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
     }
   }, [event])
 
+  // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
-    if (room) {
-      startTwilio(room)
+    if (!myRoundDataLoading && myRoundData) {
+      setMyRound(myRoundData.rounds[0])
     }
-  }, [room])
+  }, [myRoundDataLoading])
 
+  // After getting myRound from the query above, we get the twilio token
+  // RoomId (which is the id of your round) and your userId are needed
+  // to get twilio token
+  useEffect(() => {
+    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+    if (hasPartner) {
+      const getTwilioToken = async () => {
+        const res = await getToken(myRound.roomId, userId).then((response) => response.json())
+        setToken(res.token)
+      }
+      getTwilioToken()
+    }
+  }, [myRound])
+
+  // After getting your token you get the permissions and create localTracks
+  // You also get your room
   useEffect(() => {
     if (token) {
       const setupRoom = async () => {
@@ -122,35 +141,34 @@ const VideoRoom = ({ match }) => {
           setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
-
         const myRoom = await connect(token, {
           name: myRound.id,
           tracks: localTracks,
         })
-
         setRoom(myRoom)
       }
       setupRoom()
     }
   }, [token])
 
+  // After getting a room and token (not a dependency since you need token to get room)
+  //  we call startTwilio
   useEffect(() => {
-    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner) {
-      const getTwilioToken = async () => {
-        const res = await getToken(myRound.roomId, userId).then((response) => response.json())
-
-        setToken(res.token)
-      }
-      getTwilioToken()
+    if (room) {
+      startTwilio(room)
     }
-  }, [myRound])
+  }, [room])
 
+  // After getting a room, we set the timer
   useEffect(() => {
-    if (!myRoundDataLoading && myRoundData) {
-      setMyRound(myRoundData.rounds[0])
+    if (room) {
+      const eventEndTimeSeconds = moment(myRound.started_at).seconds()
+      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
+      setTimerTimeInput(eventEndTime)
+      setShowTimer(true)
+      startTwilio()
     }
-  }, [myRoundDataLoading])
+  }, [room])
 
   // useEffect(() => {
   //   const { myRound } = state
@@ -165,17 +183,6 @@ const VideoRoom = ({ match }) => {
   //     getTwilioToken()
   //   }
   // }, [state.roomId, state.room, myRoundData])
-
-  // useEffect(() => {
-  //   if (room) {
-  //     const eventEndTimeSeconds = moment(myRound.started_at).seconds()
-  //     const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
-
-  //     setTimerTimeInput(eventEndTime)
-  //     setShowTimer(true)
-  //     startTwilio()
-  //   }
-  // }, [room])
 
   // useEffect(() => {
   //   if (current_round === 0) {
