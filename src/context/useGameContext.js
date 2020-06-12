@@ -15,8 +15,8 @@
 //     })
 //   }
 
-//   function setWaitingRoom(waitingRoom, partnerNeverConnected) {
-//     console.log('setWaitingRoom -> waitingRoom', waitingRoom)
+//   function setVideoRouter(waitingRoom, partnerNeverConnected) {
+//     console.log('setVideoRouter -> waitingRoom', waitingRoom)
 //     dispatch((draft) => {
 //       draft.waitingRoom = waitingRoom
 //       if (waitingRoom) {
@@ -93,7 +93,7 @@
 //     setUserId,
 //     setAttendees,
 //     setCurrentRound,
-//     setWaitingRoom,
+//     setVideoRouter,
 //     setDidPartnerDisconnect,
 //     setPartnerNeverConnected,
 //   }

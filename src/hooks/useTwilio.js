@@ -9,7 +9,7 @@ const useTwilio = () => {
   // const {
   //   room,
   //   currentRound,
-  //   setWaitingRoom,
+  //   setVideoRouter,
   //   setDidPartnerDisconnect,
   //   setPartnerNeverConnected,
   // } = user
@@ -20,7 +20,7 @@ const useTwilio = () => {
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = (room) => {
-    // setWaitingRoom(null)
+    // setVideoRouter(null)
     // setPartnerNeverConnected(false)
 
     // check to see if your partner joins within 30 seconds. If not, we assume
@@ -28,7 +28,7 @@ const useTwilio = () => {
     // setTimeout(() => {
     //   if (!room.participants.size) {
     //     setPartnerNeverConnected(true)
-    //     setWaitingRoom(true)
+    //     setVideoRouter(true)
     //   }
     // }, partnerCameraIssueTimeout)
     if (room) {
@@ -49,7 +49,7 @@ const useTwilio = () => {
       room.on('participantConnected', (remoteParticipant) => {
         console.log('startTwilio -> remoteParticipant', remoteParticipant)
         // setPartnerNeverConnected(false)
-        // setWaitingRoom(null)
+        // setVideoRouter(null)
         participantConnected(remoteParticipant)
       })
 
@@ -71,7 +71,7 @@ const useTwilio = () => {
       room.on('disconnected', function (rum) {
         // just some cleanup on partnerDisconnect
         // setDidPartnerDisconnect(false)
-        // setWaitingRoom(true)
+        // setVideoRouter(true)
         console.log('process.env.REACT_APP_NUM_ROUNDS = ', process.env.REACT_APP_NUM_ROUNDS)
 
         if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {

@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ThumbsUp = ({ myRound, userId }) => {
+  console.log('Your boy thumbs up getting called')
   const classes = useStyles()
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [showSnackbar, setShowSnackbar] = useState(false)

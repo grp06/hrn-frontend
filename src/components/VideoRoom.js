@@ -10,7 +10,7 @@ import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
 import { constants } from '../utils'
 
-import { WaitingRoom } from '.'
+import { VideoRouter } from '.'
 
 import { useAppContext } from '../context/useAppContext'
 import { useTwilio } from '../hooks'
@@ -184,19 +184,13 @@ const VideoRoom = ({ match }) => {
   //   }
   // }, [state.roomId, state.room, myRoundData])
 
-  // useEffect(() => {
-  //   if (current_round === 0) {
-  //     history.push('/events')
-  //   }
-  // }, [current_round])
-
   if (appLoading || !event || myRoundDataLoading) {
     return <Loading />
   }
 
   return (
     <div>
-      {/* <WaitingRoom /> */}
+      <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />

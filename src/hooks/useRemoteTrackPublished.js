@@ -1,7 +1,7 @@
 import { useAppContext } from '../context/useAppContext'
 
 const useRemoteTrackPublished = () => {
-  const { setDidPartnerDisconnect, setWaitingRoom } = useAppContext()
+  const { setDidPartnerDisconnect, setVideoRouter } = useAppContext()
   const remoteTrackPublished = (publication) => {
     if (publication.isSubscribed) {
       console.log('publication.isSubscribed ', publication.isSubscribed)

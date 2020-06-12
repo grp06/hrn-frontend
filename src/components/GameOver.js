@@ -77,9 +77,8 @@ const useStyles = makeStyles((theme) => ({
 const GameOver = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user, event } = useAppContext()
+  const { user } = useAppContext()
   const { userId } = user
-  const { event_id } = event
 
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
