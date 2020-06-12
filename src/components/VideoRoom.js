@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
@@ -73,7 +73,7 @@ const VideoRoom = ({ match }) => {
   const { userId } = user
   const { appLoading } = app
 
-  const { startTwilio } = useTwilio()
+  const { startTwilio, twilioStarted, partnerNeverConnected } = useTwilio()
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
   const [myRound, setMyRound] = useState(null)
@@ -81,9 +81,8 @@ const VideoRoom = ({ match }) => {
   const [room, setRoom] = useState(null)
   const [GUMError, setGUMError] = useState('')
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
-
   const history = useHistory()
-
+  const mounted = useRef()
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
     {
@@ -117,7 +116,7 @@ const VideoRoom = ({ match }) => {
   // to get twilio token
   useEffect(() => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner && event && event.status !== 'in-between-rounds') {
+    if (hasPartner && event && event.status !== 'in-between-rounds' && !twilioStarted) {
       const getTwilioToken = async () => {
         const res = await getToken(myRound.roomId, userId).then((response) => response.json())
         setToken(res.token)
@@ -151,14 +150,6 @@ const VideoRoom = ({ match }) => {
     }
   }, [token])
 
-  // After getting a room and token (not a dependency since you need token to get room)
-  //  we call startTwilio
-  useEffect(() => {
-    if (room) {
-      startTwilio(room)
-    }
-  }, [room])
-
   // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
@@ -166,7 +157,7 @@ const VideoRoom = ({ match }) => {
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
       setTimerTimeInput(eventEndTime)
       setShowTimer(true)
-      startTwilio()
+      startTwilio(room)
     }
   }, [room])
 
@@ -176,7 +167,7 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      <VideoRouter myRound={myRound} />
+      {myRound && <VideoRouter myRound={myRound} partnerNeverConnected={partnerNeverConnected} />}
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />

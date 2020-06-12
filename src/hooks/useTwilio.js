@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { useParticipantConnected } from '.'
@@ -9,7 +10,6 @@ const useTwilio = () => {
   // const {
   //   room,
   //   currentRound,
-  //   setVideoRouter,
   //   setDidPartnerDisconnect,
   //   setPartnerNeverConnected,
   // } = user
@@ -17,20 +17,24 @@ const useTwilio = () => {
 
   const history = useHistory()
   const { partnerCameraIssueTimeout } = constants
+  const [twilioStarted, setTwilioStarted] = useState(null)
+  const [partnerNeverConnected, setPartnerNeverConnected] = useState(false)
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = (room) => {
-    // setVideoRouter(null)
-    // setPartnerNeverConnected(false)
+    setTwilioStarted(true)
+    setPartnerNeverConnected(false)
 
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
-    // setTimeout(() => {
-    //   if (!room.participants.size) {
-    //     setPartnerNeverConnected(true)
-    //     setVideoRouter(true)
-    //   }
-    // }, partnerCameraIssueTimeout)
+    setTimeout(() => {
+      if (!room.participants.size) {
+        console.log('setting partner never connected')
+
+        setPartnerNeverConnected(true)
+      }
+    }, partnerCameraIssueTimeout)
+
     if (room) {
       const { current_round } = event
       const { localParticipant } = room
@@ -48,7 +52,7 @@ const useTwilio = () => {
 
       room.on('participantConnected', (remoteParticipant) => {
         console.log('startTwilio -> remoteParticipant', remoteParticipant)
-        // setPartnerNeverConnected(false)
+        setPartnerNeverConnected(false)
         // setVideoRouter(null)
         participantConnected(remoteParticipant)
       })
@@ -63,16 +67,14 @@ const useTwilio = () => {
       })
 
       window.addEventListener('beforeunload', () => {
-        // just some cleanup on partnerDisconnect
-        // setDidPartnerDisconnect(false)
         room.disconnect()
       })
 
       room.on('disconnected', function (rum) {
-        // just some cleanup on partnerDisconnect
+        console.log('disconnect called')
+        setTwilioStarted(false)
+        setPartnerNeverConnected(false)
         // setDidPartnerDisconnect(false)
-        // setVideoRouter(true)
-        console.log('process.env.REACT_APP_NUM_ROUNDS = ', process.env.REACT_APP_NUM_ROUNDS)
 
         if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
           history.push('/event-complete')
@@ -89,7 +91,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio }
+  return { startTwilio, twilioStarted, partnerNeverConnected }
 }
 
 export default useTwilio
