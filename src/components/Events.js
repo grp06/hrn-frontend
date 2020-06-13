@@ -81,6 +81,10 @@ const Events = () => {
     }
   )
 
+  if (!userId) {
+    return <Redirect to="/" />
+  }
+
   if (appLoading || eventsLoading) {
     return <Loading />
   }

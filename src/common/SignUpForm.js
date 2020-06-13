@@ -49,8 +49,7 @@ const SignUpForm = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [role, setRole] = useState('user')
-
+  const [error, setError] = useState(null)
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
@@ -62,19 +61,26 @@ const SignUpForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const signUpResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-      },
-      body: JSON.stringify({ name, email, password, role }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        return data
+    setError(false)
+
+    let signUpResponse
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
+        body: JSON.stringify({ name, email, password, role: 'user' }),
       })
+      signUpResponse = await res.json()
+      if (signUpResponse.error) {
+        throw signUpResponse.error
+      }
+    } catch (err) {
+      return setError(err)
+    }
 
     const { token, id } = signUpResponse
     localStorage.setItem('userId', id)
@@ -82,9 +88,12 @@ const SignUpForm = () => {
 
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
+
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
+      window.location.reload()
     }
+
     setUserId(id)
   }
 
@@ -135,21 +144,13 @@ const SignUpForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-              <Grid container item direction="row" justify="center" alignItems="center">
-                <RadioGroup
-                  aria-label="gender"
-                  name="gender1"
-                  value={role}
-                  onChange={(e) => {
-                    // console.log(e.target.value)
-                    setRole(e.target.value)
-                  }}
-                >
-                  <FormControlLabel value="user" control={<Radio />} label="User" />
-                  {/* <FormControlLabel value="host" control={<Radio />} label="Host" /> */}
-                </RadioGroup>
+              <Grid>
+                <Typography variant="body1" style={{ textAlign: 'center' }}>
+                  {error || ''}
+                </Typography>
               </Grid>
             </Grid>
+
             <Grid container direction="column" justify="center" alignItems="center">
               <Button color="primary" type="submit" variant="contained">
                 Signup

@@ -114,7 +114,6 @@ const AppProvider = ({ children }) => {
         dispatch((draft) => {
           draft.app.appLoading = false
         })
-        history.push('/')
       }
       return dispatch((draft) => {
         draft.user.userId = parseInt(localStorageUserId, 10)

@@ -57,15 +57,12 @@ const Event = ({ match }) => {
   //     if (!eventData.events.length) {
   //       return history.push('/events')
   //     }
-
   //     const { event_users, ended_at } = eventData.events[0]
 
   //     if (ended_at) {
   //       return history.push('/event-complete')
   //     }
-  //     if (currentRound > 0) {
-  //       history.push('/video-room')
-  //     }
+
   //     // setAttendees(event_users)
   //   }
   // }, [event, history, event_users, currentRound])

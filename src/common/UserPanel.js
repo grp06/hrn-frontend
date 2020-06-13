@@ -46,12 +46,13 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   const [waitingForAdmin, setWaitingForAdmin] = useState()
 
   const alreadyAttending = event_users.find((user) => user.user.id === userId)
+
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       eventId,
       userId,
     },
-    skip: role === 'host',
+    skip: role === 'host' || !userId || !eventId,
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
@@ -98,8 +99,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           } catch (error) {
             console.log('error = ', error)
           }
-          window.location.reload()
-          // refetch()
         }
         window.location.reload()
       }}
