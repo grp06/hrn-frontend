@@ -106,6 +106,7 @@ const EventForm = ({ eventData, match }) => {
         },
       })
       history.push(`/events/${id}`)
+      window.location.reload()
     }
   }
 
