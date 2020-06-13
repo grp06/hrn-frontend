@@ -5,7 +5,13 @@ import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
 import { ThumbsUp } from '../common'
 import { listenToEvent } from '../gql/subscriptions'
-import { PartnerDisconnected, PartnerCameraIssue, SittingOut } from '../common/waitingRoomScreens'
+import {
+  PartnerDisconnected,
+  PartnerCameraIssue,
+  SittingOut,
+  UserJoinedDuringRound,
+  ConnectingToSomeone,
+} from '../common/waitingRoomScreens'
 import { useTwilio } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({}))
@@ -19,23 +25,20 @@ const VideoRouter = ({ myRound, partnerNeverConnected, partnerDisconnected }) =>
   const history = useHistory()
 
   const displayVideoMessage = () => {
-    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-
+    const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
     switch (status) {
       case 'not-started':
-        return null
+        return <ConnectingToSomeone />
       case 'in-between-rounds':
-        return <ThumbsUp myRound={myRound} userId={userId} />
+        return hasPartner ? <ThumbsUp myRound={myRound} userId={userId} /> : <ConnectingToSomeone />
       case 'room-in-progress':
-        // waiting for partner. This only shows before the first round
-        if (current_round < 1) {
-          return <div>Connecting you to someone...</div>
+        if (!myRound && current_round > 0) {
+          return <UserJoinedDuringRound />
         }
         if (partnerDisconnected && hasPartner) {
           return <PartnerDisconnected />
         }
-
-        if (!hasPartner) {
+        if (myRound && !hasPartner) {
           return <SittingOut />
         }
         if (partnerNeverConnected) {
@@ -51,7 +54,7 @@ const VideoRouter = ({ myRound, partnerNeverConnected, partnerDisconnected }) =>
   }
   useEffect(() => {
     elementToRender = displayVideoMessage()
-  }, [status, partnerNeverConnected, partnerDisconnected])
+  }, [status, partnerNeverConnected, partnerDisconnected, myRound])
 
   return <div>{elementToRender}</div>
 }

@@ -167,13 +167,11 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      {myRound && (
-        <VideoRouter
-          myRound={myRound}
-          partnerNeverConnected={partnerNeverConnected}
-          partnerDisconnected={partnerDisconnected}
-        />
-      )}
+      <VideoRouter
+        myRound={myRound}
+        partnerNeverConnected={partnerNeverConnected}
+        partnerDisconnected={partnerDisconnected}
+      />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
