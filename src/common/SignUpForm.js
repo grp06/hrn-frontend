@@ -79,15 +79,13 @@ const SignUpForm = () => {
     const { token, id } = signUpResponse
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
-    setUserId(id)
 
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
     }
-
-    return <Redirect to="/events" />
+    setUserId(id)
   }
 
   return (

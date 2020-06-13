@@ -11,18 +11,13 @@ const useAppContext = () => {
 
   function setRedirect(redirect) {
     dispatch((draft) => {
-      draft.redirect = redirect
+      draft.app.redirect = redirect
     })
   }
 
   function setUserId(userId) {
     dispatch((draft) => {
-      draft.userId = userId
-    })
-  }
-  function setCurrentRound(userId) {
-    dispatch((draft) => {
-      draft.userId = userId
+      draft.user.userId = userId
     })
   }
 
@@ -30,7 +25,6 @@ const useAppContext = () => {
     ...state,
     setRedirect,
     setUserId,
-    setCurrentRound,
   }
 }
 

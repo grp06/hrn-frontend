@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import MuiAlert from '@material-ui/lab/Alert'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useAppContext } from '../context/useAppContext'
@@ -46,15 +46,11 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
   const classes = useStyles()
-  const { redirect, setRedirect, setUserId } = useAppContext()
+  const { setUserId } = useAppContext()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false)
-
-  // useEffect(() => {
-  //   setRedirect(false)
-  // }, [redirect])
 
   const userIdInLocalStorage = localStorage.getItem('userId')
   // check to see if a user is already logged in, if so redirect
@@ -92,13 +88,12 @@ const LoginForm = () => {
       setErrorSnackbarOpen(true)
       return
     }
-    const { role, id, token } = loginResponse
+    const { id, token } = loginResponse
     localStorage.setItem('token', token)
-    localStorage.setItem('userId', id)
-    setUserId(id)
 
-    return <Redirect to="/events" />
-    // return history.push('/events')
+    localStorage.setItem('userId', id)
+
+    setUserId(id)
   }
 
   return (

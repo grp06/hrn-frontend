@@ -27,10 +27,11 @@ const defaultState = {
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const shouldFetchEvent = window.location.pathname.indexOf('/events/') > -1
-  // if we are on a route that has '/events' in it, then we can peel off the id
+
+  const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
+  // if we are on a route that has '/events/id' in it, then we can peel off the id
   // and use it to make our subscription to the event
-  const pathnameArray = shouldFetchEvent ? window.location.pathname.split('/') : null
+  const pathnameArray = eventIdInUrl ? window.location.pathname.split('/') : null
   const eventId = pathnameArray ? pathnameArray[2] : null
   const history = useHistory()
   const { userId } = state.user
@@ -64,19 +65,12 @@ const AppProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (shouldFetchEvent) {
-      if (eventData && eventData.events.length) {
-        return dispatch((draft) => {
-          draft.event = eventData.events[0]
-          draft.app.appLoading = false
-        })
-      }
+    if (eventIdInUrl && eventData && eventData.events.length) {
+      return dispatch((draft) => {
+        draft.event = eventData.events[0]
+        draft.app.appLoading = false
+      })
     }
-
-    // if theres no data that means we are probably on an event that
-    // doesn't exist. Push user back to /events
-    // / - George: It could also be that the person just has 0 events
-    // return history.push('/events')
   }, [eventData])
 
   // Setting lastSeen Mutation
@@ -104,29 +98,29 @@ const AppProvider = ({ children }) => {
         draft.user.role = role
         draft.user.userId = id
         draft.user.name = name
-        if (!shouldFetchEvent) {
+        if (!eventIdInUrl) {
           draft.app.appLoading = false
         }
       })
     }
-  }, [userData])
+  }, [userData, userId])
 
   // when user comes to page see if they have id in local storage
   // if not redirect back to login page
   useEffect(() => {
     if (!userId) {
-      const myUserId = localStorage.getItem('userId')
-      if (!myUserId) {
+      const localStorageUserId = localStorage.getItem('userId')
+      if (!localStorageUserId) {
         dispatch((draft) => {
           draft.app.appLoading = false
         })
         history.push('/')
       }
       return dispatch((draft) => {
-        draft.user.userId = myUserId
+        draft.user.userId = parseInt(localStorageUserId, 10)
       })
     }
-  }, [])
+  }, [userId])
 
   return <AppContext.Provider value={[state, dispatch]}>{children}</AppContext.Provider>
 }
