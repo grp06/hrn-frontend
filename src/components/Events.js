@@ -85,10 +85,6 @@ const Events = () => {
     return <Loading />
   }
 
-  if (!userId) {
-    return <Redirect to="/" />
-  }
-
   const renderNullDataText = () => {
     if (!eventsData || !eventsData.event_users.length) {
       return (
