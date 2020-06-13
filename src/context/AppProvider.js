@@ -66,16 +66,18 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (eventIdInUrl) {
+      if (eventData && !eventData.events.length) {
+        dispatch((draft) => {
+          draft.app.appLoading = false
+        })
+        return history.push('/events')
+      }
       if (eventData && eventData.events.length) {
         return dispatch((draft) => {
           draft.event = eventData.events[0]
           draft.app.appLoading = false
         })
       }
-      dispatch((draft) => {
-        draft.app.appLoading = false
-      })
-      history.push('/events')
     }
   }, [eventData])
 
