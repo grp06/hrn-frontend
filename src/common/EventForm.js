@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import DateFnsUtils from '@date-io/date-fns'
 import { TextField, Button, Grid, Typography } from '@material-ui/core'
@@ -51,6 +51,7 @@ const EventForm = ({ eventData, match }) => {
   const [description, setDescription] = useState("Let's get people hyped!")
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
+  const initialEventData = useRef()
   const [createEventMutation] = useMutation(createEvent, {
     variables: {
       description,
@@ -64,7 +65,8 @@ const EventForm = ({ eventData, match }) => {
   const [updateEventMutation] = useMutation(updateEvent)
 
   useEffect(() => {
-    if (eventData) {
+    if (eventData && !initialEventData.current) {
+      initialEventData.current = eventData
       const { description: eventDescription, event_name, start_at } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
