@@ -98,11 +98,14 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (event) {
       const { status } = event
+      if (!userId) {
+        history.push('/')
+      }
       if (status === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
     }
-  }, [event])
+  }, [event, userId])
 
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
@@ -161,7 +164,7 @@ const VideoRoom = ({ match }) => {
     }
   }, [room])
 
-  if (appLoading || !event || myRoundDataLoading) {
+  if (appLoading || !event || !myRound) {
     return <Loading />
   }
 

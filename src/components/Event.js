@@ -74,7 +74,7 @@ const Event = ({ match }) => {
   }, [eventId])
 
   useEffect(() => {
-    if (event && event.status === 'room-in-progress') {
+    if (event && event.status === 'room-in-progress' && userId) {
       return history.push(`/events/${eventId}/video-room`)
     }
   }, [event])
