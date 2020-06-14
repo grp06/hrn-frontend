@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
+import { TRexGame } from '..'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
 
 const UserJoinedDuringRound = () => {
   const classes = useStyles()
+
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
