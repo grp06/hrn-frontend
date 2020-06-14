@@ -37,7 +37,7 @@ const UserJoinedDuringRound = () => {
         But don't worry! We've penciled you in and you'll join the next round in a few minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        In the meantime, press 'up' on your keyboard for a surprise 😉.
+        In the meantime, press 'up' on your keyboard to kill some time 😉.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />

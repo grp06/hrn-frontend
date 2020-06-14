@@ -29,19 +29,19 @@ const SittingOut = () => {
   const classes = useStyles()
   return (
     <div className={classes.waitingRoom}>
+      <Typography className={classes.messageText}>You are the chosen one 👑 !</Typography>
       <Typography className={classes.messageText}>
-        Sometimes it happens that we have an odd number of people.
+        Sometimes we have an odd number of people and need someone to sit out.
       </Typography>
       <Typography className={classes.messageText}>
-        You&apos;ve been chosen to sit out this round. You'll be paired with someone new in 5
-        minutes.
+        But no worries, you'll be paired with someone new in 5 minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        Get a drink of water. Stretch. Do a little dance.
+        Get a drink of water. Stretch. Do a little dance 🕺.
       </Typography>
-      <div className={classes.dancingMan}>
-        <span>🕺</span>
-      </div>
+      <Typography className={classes.messageText}>
+        Or press 'up' on your keyboard to kill some time.
+      </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
       </div>
