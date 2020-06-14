@@ -23,7 +23,7 @@ const defaultState = {
     redirect: null,
     appLoading: true,
   },
-  event: null,
+  event: {},
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -32,7 +32,7 @@ const AppProvider = ({ children }) => {
   // if we are on a route that has '/events/id' in it, then we can peel off the id
   // and use it to make our subscription to the event
   const pathnameArray = eventIdInUrl ? window.location.pathname.split('/') : null
-  const eventId = pathnameArray ? pathnameArray[2] : null
+  const eventId = pathnameArray ? parseInt(pathnameArray[2], 10) : null
   const history = useHistory()
   const { userId } = state.user
 
@@ -65,14 +65,15 @@ const AppProvider = ({ children }) => {
   )
 
   useEffect(() => {
-    if (eventIdInUrl) {
-      if (eventData && !eventData.events.length) {
+    if (eventIdInUrl && eventData) {
+      if (!eventData.events.length) {
         dispatch((draft) => {
           draft.app.appLoading = false
         })
         return history.push('/events')
       }
-      if (eventData && eventData.events.length) {
+
+      if (eventData.events.length) {
         return dispatch((draft) => {
           draft.event = eventData.events[0]
           draft.app.appLoading = false

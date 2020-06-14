@@ -21,10 +21,19 @@ const useAppContext = () => {
     })
   }
 
+  function setEventId(eventId) {
+    dispatch((draft) => {
+      console.log('draft = ', draft)
+
+      draft.event.eventId = eventId
+    })
+  }
+
   return {
     ...state,
     setRedirect,
     setUserId,
+    setEventId,
   }
 }
 

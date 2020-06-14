@@ -45,7 +45,7 @@ const Event = ({ match }) => {
   const history = useHistory()
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { app, user, event } = useAppContext()
+  const { app, user, event, setEventId } = useAppContext()
   const { appLoading } = app
   const { userId } = user
 
@@ -68,14 +68,18 @@ const Event = ({ match }) => {
   // }, [event, history, event_users, currentRound])
 
   useEffect(() => {
-    if (event && event.status === 'room-in-progress') {
-      console.log('pushing to video room')
+    if (!Object.keys(event).length && eventId) {
+      setEventId(parseInt(eventId, 10))
+    }
+  }, [eventId])
 
+  useEffect(() => {
+    if (event && event.status === 'room-in-progress') {
       return history.push(`/events/${eventId}/video-room`)
     }
   }, [event])
 
-  if (appLoading || !event) {
+  if (appLoading || Object.keys(event).length < 2) {
     return <Loading />
   }
 
@@ -93,7 +97,6 @@ const Event = ({ match }) => {
     }
     return 'within 30 mins'
   }
-
   return (
     <>
       <div className={classes.eventBanner}>
