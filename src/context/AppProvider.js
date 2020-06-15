@@ -8,6 +8,7 @@ import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
+import { useAppContext } from './useAppContext'
 
 const { lastSeenDuration } = constants
 
@@ -31,7 +32,7 @@ const defaultState = {
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-
+  const { event } = state
   const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
   // if we are on a route that has '/events/id' in it, then we can peel off the id
   // and use it to make our subscription to the event
@@ -70,15 +71,25 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (eventIdInUrl && eventData) {
+      // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
+          console.log('no event data, set app loading false')
+
           draft.app.appLoading = false
         })
         return history.push('/events')
       }
 
-      if (eventData.events.length) {
+      // cases to set event data
+      // no event data
+      // new event data is different from existing
+      const existingData = JSON.stringify(event)
+      const incomingData = JSON.stringify(eventData.events[0])
+
+      if (existingData !== incomingData) {
         return dispatch((draft) => {
+          console.log('we got some event data, bitch!')
           draft.event = eventData.events[0]
           draft.app.appLoading = false
         })
@@ -108,10 +119,14 @@ const AppProvider = ({ children }) => {
     if (userData && userData.users.length) {
       const { name, role, id } = userData.users[0]
       return dispatch((draft) => {
+        console.log('setting up user data')
+
         draft.user.role = role
         draft.user.userId = id
         draft.user.name = name
         if (!eventIdInUrl) {
+          console.log('id not in url, set loading false')
+
           draft.app.appLoading = false
         }
       })
@@ -125,10 +140,14 @@ const AppProvider = ({ children }) => {
       const localStorageUserId = localStorage.getItem('userId')
       if (!localStorageUserId) {
         dispatch((draft) => {
+          console.log('no local user, set loading false')
+
           draft.app.appLoading = false
         })
       }
       return dispatch((draft) => {
+        console.log('got userId from localStorage - setting it here')
+
         draft.user.userId = parseInt(localStorageUserId, 10)
       })
     }

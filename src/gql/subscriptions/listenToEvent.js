@@ -14,7 +14,6 @@ const listenToEvent = gql`
       event_users {
         user {
           email
-          last_seen
           name
           id
         }

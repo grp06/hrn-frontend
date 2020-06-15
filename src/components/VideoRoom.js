@@ -126,7 +126,7 @@ const VideoRoom = ({ match }) => {
         setLateArrival(false)
       }
     }
-  }, [myRoundDataLoading, myRoundData])
+  }, [myRoundDataLoading, myRoundData, event.status])
 
   // After getting myRound from the query above, we get the twilio token
   // RoomId (which is the id of your round) and your userId are needed
