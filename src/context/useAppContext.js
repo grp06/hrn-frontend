@@ -23,9 +23,31 @@ const useAppContext = () => {
 
   function setEventId(eventId) {
     dispatch((draft) => {
-      console.log('draft = ', draft)
-
       draft.event.eventId = eventId
+    })
+  }
+
+  function setPartnerDisconnected(partnerDisconnected) {
+    dispatch((draft) => {
+      draft.twilio.partnerDisconnected = partnerDisconnected
+    })
+  }
+
+  function setPartnerNeverConnected(partnerNeverConnected) {
+    dispatch((draft) => {
+      draft.twilio.partnerNeverConnected = partnerNeverConnected
+    })
+  }
+
+  function setLateArrival(lateArrival) {
+    dispatch((draft) => {
+      draft.twilio.lateArrival = lateArrival
+    })
+  }
+
+  function setMyRound(myRound) {
+    dispatch((draft) => {
+      draft.user.myRound = myRound
     })
   }
 
@@ -34,6 +56,10 @@ const useAppContext = () => {
     setRedirect,
     setUserId,
     setEventId,
+    setPartnerDisconnected,
+    setPartnerNeverConnected,
+    setLateArrival,
+    setMyRound,
   }
 }
 

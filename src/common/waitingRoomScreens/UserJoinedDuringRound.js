@@ -31,13 +31,14 @@ const UserJoinedDuringRound = () => {
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        Awh shucks, you just missed throwing your name into the hat for this round 🧢.
+        Awh shucks, we just missed throwing your name into the hat for this round 🧢.
       </Typography>
       <Typography className={classes.messageText}>
-        But don't worry! We've penciled you in and you'll join the next round in a few minutes.
+        But don&apos;t worry! We&apos;ve penciled you in and you&apos;ll join the next round in a
+        few minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        In the meantime, press 'up' on your keyboard for a surprise 😉.
+        In the meantime, press space bar for a surprise 😉
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />

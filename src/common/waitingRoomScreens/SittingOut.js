@@ -30,18 +30,13 @@ const SittingOut = () => {
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        Sometimes it happens that we have an odd number of people.
+        Sometimes there are an odd number of people. You&apos;ve been chosen to sit out this round.
       </Typography>
       <Typography className={classes.messageText}>
-        You&apos;ve been chosen to sit out this round. You'll be paired with someone new in 5
-        minutes.
+        You&apos;ll be paired with someone new within 5 minutes. In the meantime, press space bar
+        for a surprise 😉
       </Typography>
-      <Typography className={classes.messageText}>
-        Get a drink of water. Stretch. Do a little dance.
-      </Typography>
-      <div className={classes.dancingMan}>
-        <span>🕺</span>
-      </div>
+
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
       </div>

@@ -4,24 +4,17 @@ const useParticipantConnected = () => {
   const { remoteTrackPublished } = useRemoteTrackPublished()
 
   const participantConnected = (participant) => {
-    console.log('participantConnected -> participant', participant)
-
     participant.tracks.forEach((publication) => {
-      console.log('useParticipantConnected -> publication', publication)
-
       remoteTrackPublished(publication, participant)
     })
 
     participant.on('trackPublished', (publication) => {
-      console.log('useParticipantConnected -> publication', publication)
+      console.log('onTrackPublished')
+
       remoteTrackPublished(publication, participant)
     })
 
-    participant.on('trackUnpublished', (publication) => {
-      console.log(
-        `RemoteParticipant ${participant.identity} unpublished a RemoteTrack: ${publication}`
-      )
-    })
+    participant.on('trackUnpublished', (publication) => {})
   }
   return { participantConnected }
 }

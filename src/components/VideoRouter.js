@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
 import { ThumbsUp } from '../common'
-import { listenToEvent } from '../gql/subscriptions'
 import {
   PartnerDisconnected,
   PartnerCameraIssue,
@@ -12,36 +10,39 @@ import {
   UserJoinedDuringRound,
   ConnectingToSomeone,
 } from '../common/waitingRoomScreens'
-import { useTwilio } from '../hooks'
 
-const useStyles = makeStyles((theme) => ({}))
-let elementToRender
-
-const VideoRouter = ({ myRound, partnerNeverConnected, partnerDisconnected }) => {
-  const classes = useStyles()
-  const { user, event } = useAppContext()
+const VideoRouter = ({ myRound }) => {
+  const { user, event, twilio } = useAppContext()
   const { userId } = user
-  const { status, current_round, id } = event
-  const history = useHistory()
+  const { partnerDisconnected, partnerNeverConnected, lateArrival } = twilio
+  const { status, id } = event
 
+  const history = useHistory()
   const displayVideoMessage = () => {
     const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
+
     switch (status) {
       case 'not-started':
         return <ConnectingToSomeone />
       case 'in-between-rounds':
-        return hasPartner ? <ThumbsUp myRound={myRound} userId={userId} /> : <ConnectingToSomeone />
+        return <ThumbsUp myRound={myRound} userId={userId} />
       case 'room-in-progress':
-        if (!myRound && current_round > 0) {
+        if (lateArrival) {
+          console.log('joined late')
+
           return <UserJoinedDuringRound />
         }
         if (partnerDisconnected && hasPartner) {
+          console.log('partner disconnected')
+
           return <PartnerDisconnected />
         }
         if (myRound && !hasPartner) {
+          console.log('sitting out')
           return <SittingOut />
         }
         if (partnerNeverConnected) {
+          console.log('partner never connected')
           return <PartnerCameraIssue />
         }
         return null
@@ -52,10 +53,7 @@ const VideoRouter = ({ myRound, partnerNeverConnected, partnerDisconnected }) =>
         return null
     }
   }
-  useEffect(() => {
-    elementToRender = displayVideoMessage()
-  }, [status, partnerNeverConnected, partnerDisconnected, myRound])
 
-  return <div>{elementToRender}</div>
+  return <div>{displayVideoMessage()}</div>
 }
 export default VideoRouter

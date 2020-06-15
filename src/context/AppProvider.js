@@ -18,12 +18,17 @@ const defaultState = {
     name: '',
     userId: null,
     role: '',
+    myRound: null,
   },
   app: {
     redirect: null,
     appLoading: true,
   },
   event: {},
+  twilio: {
+    partnerDisconnected: false,
+    lateArrival: false,
+  },
 }
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })

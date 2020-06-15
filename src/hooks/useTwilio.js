@@ -6,20 +6,10 @@ import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
 const useTwilio = () => {
-  const { user, event } = useAppContext()
-  // const {
-  //   room,
-  //   currentRound,
-  //   setDidPartnerDisconnect,
-  //   setPartnerNeverConnected,
-  // } = user
-  const { userId } = user
-
+  const { event, setPartnerDisconnected, setPartnerNeverConnected, setMyRound } = useAppContext()
   const history = useHistory()
   const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
-  const [partnerNeverConnected, setPartnerNeverConnected] = useState(false)
-  const [partnerDisconnected, setPartnerDisconnected] = useState(false)
 
   const { participantConnected } = useParticipantConnected()
   const startTwilio = (room) => {
@@ -30,8 +20,6 @@ const useTwilio = () => {
     // that they are having trouble connecting (camera permission issues)
     setTimeout(() => {
       if (!room.participants.size) {
-        console.log('setting partner never connected')
-
         setPartnerNeverConnected(true)
       }
     }, partnerCameraIssueTimeout)
@@ -49,17 +37,17 @@ const useTwilio = () => {
       })
 
       room.participants.forEach(participantConnected)
-      console.log('startTwilio -> room.participants', room.participants)
 
       room.on('participantConnected', (remoteParticipant) => {
-        console.log('startTwilio -> remoteParticipant', remoteParticipant)
+        console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         participantConnected(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
-        console.log('remote participant disconnected ', remoteParticipant)
+        console.log('participantDisconnected', remoteParticipant)
+
         setPartnerDisconnected(true)
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
@@ -72,13 +60,12 @@ const useTwilio = () => {
       })
 
       room.on('disconnected', function (rum) {
-        console.log('disconnect called')
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
-
+        setMyRound(null)
         if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
-          history.push('/event-complete')
+          history.push(`/events/${event.id}/event-complete`)
         }
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
@@ -92,7 +79,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio, twilioStarted, partnerNeverConnected, partnerDisconnected }
+  return { startTwilio, twilioStarted }
 }
 
 export default useTwilio

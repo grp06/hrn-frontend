@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
-import { useQuery, useSubscription } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
 import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
@@ -69,34 +69,33 @@ const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { roundLength } = constants
-  const { app, user, event } = useAppContext()
-  const { userId } = user
+  const { app, user, event, setLateArrival, setMyRound } = useAppContext()
+  const { userId, myRound } = user
   const { appLoading } = app
-
-  const { startTwilio, twilioStarted, partnerNeverConnected, partnerDisconnected } = useTwilio()
+  const { startTwilio, twilioStarted } = useTwilio()
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
-  const [myRound, setMyRound] = useState(null)
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
   const [GUMError, setGUMError] = useState('')
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
   const history = useHistory()
-  const mounted = useRef()
+  const eventSet = Object.keys(event).length > 1
+
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
     {
       variables: {
-        round_number: event && event.current_round,
+        round_number: event.current_round,
         user_id: userId,
       },
-      skip: !userId || !event,
+      skip: !userId || !eventSet,
     }
   )
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
-    if (event) {
+    if (eventSet) {
       const { status } = event
       if (!userId) {
         history.push('/')
@@ -110,18 +109,23 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundDataLoading && myRoundData) {
-      setMyRound(myRoundData.rounds[0])
+      if (!myRoundData.rounds.length) {
+        setLateArrival(true)
+      } else {
+        setMyRound(myRoundData.rounds[0])
+        setLateArrival(false)
+      }
     }
-  }, [myRoundDataLoading])
+  }, [myRoundDataLoading, myRoundData])
 
   // After getting myRound from the query above, we get the twilio token
   // RoomId (which is the id of your round) and your userId are needed
   // to get twilio token
   useEffect(() => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner && event && event.status !== 'in-between-rounds' && !twilioStarted) {
+    if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
       const getTwilioToken = async () => {
-        const res = await getToken(myRound.roomId, userId).then((response) => response.json())
+        const res = await getToken(myRound.id, userId).then((response) => response.json())
         setToken(res.token)
       }
       getTwilioToken()
@@ -143,10 +147,12 @@ const VideoRoom = ({ match }) => {
           setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
+
         const myRoom = await connect(token, {
           name: myRound.id,
           tracks: localTracks,
         })
+
         setRoom(myRoom)
       }
       setupRoom()
@@ -164,17 +170,13 @@ const VideoRoom = ({ match }) => {
     }
   }, [room])
 
-  if (appLoading || !event || !myRound) {
+  if (appLoading || !eventSet) {
     return <Loading />
   }
 
   return (
     <div>
-      <VideoRouter
-        myRound={myRound}
-        partnerNeverConnected={partnerNeverConnected}
-        partnerDisconnected={partnerDisconnected}
-      />
+      <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />

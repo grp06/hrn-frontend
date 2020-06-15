@@ -121,7 +121,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [resetEventMutation] = useMutation(resetEvent, {
     variables: {
-      id: event && event.id,
+      id: event.id,
     },
   })
 
@@ -143,16 +143,15 @@ const Header = ({ activeTab, setActiveTab }) => {
   // eslint-disable-next-line no-shadow
   const resetRoundsModal = TransitionModal({
     button: {
-      buttonText: 'Reset Games',
+      buttonText: 'Reset Event',
       buttonVariant: 'outlined',
       buttonColor: 'secondary',
     },
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-      console.log('event = ,', event)
 
-      await resetEventMutation(event && event.id)
+      await resetEventMutation(event.id)
       await startEvent(null, true)
       // setCurrentRound(0)
       // history.replace(`/events/${event_id}`)

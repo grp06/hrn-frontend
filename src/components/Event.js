@@ -48,24 +48,10 @@ const Event = ({ match }) => {
   const { app, user, event, setEventId } = useAppContext()
   const { appLoading } = app
   const { userId } = user
+  const eventSet = Object.keys(event).length > 1
 
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', eventId)
-
-  // useEffect(() => {
-  //   if (!eventDataLoading && eventData.events && !event_users) {
-  //     if (!eventData.events.length) {
-  //       return history.push('/events')
-  //     }
-  //     const { event_users, ended_at } = eventData.events[0]
-
-  //     if (ended_at) {
-  //       return history.push('/event-complete')
-  //     }
-
-  //     // setAttendees(event_users)
-  //   }
-  // }, [event, history, event_users, currentRound])
 
   useEffect(() => {
     if (!Object.keys(event).length && eventId) {
@@ -74,8 +60,11 @@ const Event = ({ match }) => {
   }, [eventId])
 
   useEffect(() => {
-    if (event && event.status === 'room-in-progress' && userId) {
-      return history.push(`/events/${eventId}/video-room`)
+    if (eventSet && event.status === 'room-in-progress' && userId) {
+      const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
+      if (isEventParticipant) {
+        return history.push(`/events/${eventId}/video-room`)
+      }
     }
   }, [event])
 

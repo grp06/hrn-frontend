@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { useMutation } from 'react-apollo'
+import React, { useState, useEffect } from 'react'
+import { useMutation, useQuery } from 'react-apollo'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Snackbar from '@material-ui/core/Snackbar'
@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography'
 import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/core/styles'
 import { setPartnerXThumb, setPartnerYThumb } from '../gql/mutations'
+import { getMyRoundById } from '../gql/queries'
+import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -32,24 +34,47 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ThumbsUp = ({ myRound, userId }) => {
-  console.log('Your boy thumbs up getting called')
   const classes = useStyles()
+  const { event } = useAppContext()
+
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [showSnackbar, setShowSnackbar] = useState(false)
+  const eventSet = Object.keys(event).length > 1
+  const [roundForThumbs, setRoundForThumbs] = useState(null)
+  const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
+    getMyRoundById,
+    {
+      variables: {
+        round_number: event.current_round,
+        user_id: userId,
+      },
+      skip: !userId || !eventSet,
+    }
+  )
 
   const [setPartnerXThumbMutation] = useMutation(setPartnerXThumb, {
     variables: {
-      round_id: myRound.id,
+      round_id: roundForThumbs && roundForThumbs.id,
       partnerX_id: userId,
     },
+    skip: !roundForThumbs,
   })
 
   const [setPartnerYThumbMutation] = useMutation(setPartnerYThumb, {
     variables: {
-      round_id: myRound.id,
+      round_id: roundForThumbs && roundForThumbs.id,
       partnerY_id: userId,
     },
+    skip: !roundForThumbs,
   })
+
+  useEffect(() => {
+    if (!myRoundDataLoading && myRoundData) {
+      console.log('ThumbsUp -> myRoundData', myRoundData)
+
+      setRoundForThumbs(myRoundData.rounds[0])
+    }
+  }, [myRoundDataLoading, myRoundData])
 
   const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
 
