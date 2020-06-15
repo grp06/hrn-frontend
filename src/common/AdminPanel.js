@@ -7,7 +7,7 @@ import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
 import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { startEvent } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -48,7 +48,6 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminPanel = ({ eventData, timeState }) => {
   const classes = useStyles()
-  const { userId } = useGameContext()
 
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
@@ -62,7 +61,7 @@ const AdminPanel = ({ eventData, timeState }) => {
     id: eventId,
     start_at: eventStartTime,
     description: eventDescription,
-  } = eventData.events[0]
+  } = eventData
 
   const renderButton = () => {
     let element
@@ -131,7 +130,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           <Typography variant="body1">{eventDescription}</Typography>
         </Grid>
         <Divider light variant="middle" />
-        {timeState !== 'future' && <AttendeesList />}
+        <AttendeesList eventId={eventId} timeState={timeState} />
       </Grid>
     </FloatCardWide>
   )

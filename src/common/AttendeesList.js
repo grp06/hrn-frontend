@@ -9,15 +9,14 @@ import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
 import { displayOnlineUsers } from '../gql/subscriptions'
-import { useGameContext } from '../context/useGameContext'
 import { constants } from '../utils'
+import { useAppContext } from '../context/useAppContext'
 
 const { lastSeenDuration } = constants
 
-const AttendeesList = () => {
+const AttendeesList = ({ eventId, timeState }) => {
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
-  const { eventId } = useGameContext()
-
+  const { event } = useAppContext()
   const {
     data: onlineUsersData,
     loading: onlineUsersLoading,
@@ -30,7 +29,13 @@ const AttendeesList = () => {
   })
 
   useEffect(() => {
-    if (!onlineUsersLoading && onlineUsersData.event_users.length) {
+    if (event) {
+      setOldOnlineUsers(event.event_users)
+    }
+  }, [event])
+
+  useEffect(() => {
+    if (!onlineUsersLoading && onlineUsersData.event_users.length && !timeState !== 'future') {
       const allUsers = onlineUsersData.event_users
       // users who've submitted a mutation within the last 10 seconds
       const freshOnlineUsers = allUsers.filter((user) => {
@@ -47,7 +52,7 @@ const AttendeesList = () => {
         setOldOnlineUsers(freshOnlineUsers)
       }
     }
-  }, [onlineUsersData])
+  }, [onlineUsersData, timeState])
 
   return (
     <List dense>

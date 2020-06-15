@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
 
+import { useHistory } from 'react-router-dom'
 import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
-import { useGameContext } from '../context/useGameContext'
-import { getEventById } from '../gql/queries'
+import { useAppContext } from '../context/useAppContext'
 import formatDate from '../utils/formatDate'
 
 const useStyles = makeStyles((theme) => ({
@@ -44,71 +42,38 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
-  const { id } = match.params
-  const classes = useStyles()
-  const {
-    appLoading,
-    userId,
-    currentRound,
-    setAttendees,
-    setEventId,
-    eventId,
-    attendees,
-  } = useGameContext()
   const history = useHistory()
-
-  const { data: eventData, loading: eventDataLoading, error: eventError, refetch } = useQuery(
-    getEventById,
-    {
-      variables: {
-        event_id: id,
-      },
-    }
-  )
+  const { id: eventId } = match.params
+  const classes = useStyles()
+  const { app, user, event, setEventId } = useAppContext()
+  const { appLoading } = app
+  const { userId } = user
+  const eventSet = Object.keys(event).length > 1
 
   // used as a safety check for when we get thumbs up data
-  localStorage.setItem('eventId', id)
+  localStorage.setItem('eventId', eventId)
 
   useEffect(() => {
-    if (!eventId) {
-      setEventId(parseInt(id, 10))
+    if (!Object.keys(event).length && eventId) {
+      setEventId(parseInt(eventId, 10))
     }
-  }, [eventId, id, setEventId])
+  }, [eventId])
 
   useEffect(() => {
-    if (!eventDataLoading && eventData.events && !attendees) {
-      if (!eventData.events.length) {
-        return history.push('/events')
+    if (eventSet && event.status === 'room-in-progress' && userId) {
+      const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
+      if (isEventParticipant) {
+        return history.push(`/events/${eventId}/video-room`)
       }
-
-      const { event_users, ended_at } = eventData.events[0]
-
-      if (ended_at) {
-        return history.push('/event-complete')
-      }
-      if (currentRound > 0) {
-        history.push('/video-room')
-      }
-      setAttendees(event_users)
     }
-  }, [eventData, eventDataLoading, history, setAttendees, attendees, currentRound])
+  }, [event])
 
-  if (appLoading || eventDataLoading || !eventData.events.length) {
+  if (appLoading || Object.keys(event).length < 2) {
     return <Loading />
   }
 
-  if (!eventData) {
-    return null
-  }
-
-  if (eventError) {
-    return <div>Sorry, we encountered an error. Refresh?</div>
-  }
-
-  const event = eventData.events[0]
-
-  const { event_name, host_id } = event
-  const startTime = new Date(event.start_at).getTime()
+  const { host_id, start_at, event_name } = event
+  const startTime = new Date(start_at).getTime()
   const now = Date.now()
   const diff = startTime - now
 
@@ -121,7 +86,6 @@ const Event = ({ match }) => {
     }
     return 'within 30 mins'
   }
-
   return (
     <>
       <div className={classes.eventBanner}>
@@ -138,9 +102,10 @@ const Event = ({ match }) => {
         </Grid>
       </div>
       {parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={eventData} />
+        <AdminPanel timeState={timeState()} eventData={event} />
       ) : (
-        <UserPanel timeState={timeState()} eventData={eventData} refetch={refetch} />
+        <UserPanel timeState={timeState()} eventData={event} />
+        // <UserPanel timeState={timeState()} eventData={event} refetch={refetch} />
       )}
     </>
   )

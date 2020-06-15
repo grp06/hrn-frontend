@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
-
-import { WaitingRoom } from '.'
-import { Timer } from '../common'
-import { useGameContext } from '../context/useGameContext'
-import { useTwilio } from '../hooks'
+import { useQuery } from '@apollo/react-hooks'
+import { getMyRoundById } from '../gql/queries'
+import { Loading, Timer, GUMErrorModal } from '../common'
+import { getToken } from '../helpers'
 import { constants } from '../utils'
 
-const { roundLength } = constants
+import { VideoRouter } from '.'
+
+import { useAppContext } from '../context/useAppContext'
+import { useTwilio } from '../hooks'
+
+const { createLocalTracks, connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -61,35 +65,149 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoom = () => {
+const VideoRoom = ({ match }) => {
+  const { id: eventId } = match.params
   const classes = useStyles()
-  const { room, myRound, currentRound } = useGameContext()
-  const { startTwilio } = useTwilio()
+
+  const { roundLength } = constants
+
+  const { app, user, event, setLateArrival } = useAppContext()
+  const { userId } = user
+  const { appLoading } = app
+
+  const { startTwilio, twilioStarted } = useTwilio()
+
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
+  const [token, setToken] = useState(null)
+  const [myRound, setMyRound] = useState(null)
+  const [room, setRoom] = useState(null)
+  const [GUMError, setGUMError] = useState('')
+  const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
 
   const history = useHistory()
+  const eventSet = Object.keys(event).length > 1
+  const eventStatus = useRef()
 
+  const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
+    getMyRoundById,
+    {
+      variables: {
+        round_number: event.current_round,
+        user_id: userId,
+      },
+      skip: !userId || !eventSet,
+    }
+  )
+
+  // Redirect back to /event/id if the event has not started
+  useEffect(() => {
+    if (eventSet) {
+      const { status } = event
+
+      if (!userId) {
+        history.push('/')
+      }
+      if (status === 'not-started') {
+        return history.push(`/events/${eventId}`)
+      }
+    }
+  }, [event, userId])
+
+  // After the getMyRoundById, if there is a response, setMyRound
+  useEffect(() => {
+    if (!myRoundDataLoading && myRoundData) {
+      if (!myRoundData.rounds.length) {
+        setLateArrival(true)
+      } else {
+        console.log('setting round data')
+
+        setMyRound(myRoundData.rounds[0])
+        setLateArrival(false)
+      }
+    }
+  }, [myRoundDataLoading, myRoundData])
+
+  // After getting myRound from the query above, we get the twilio token
+  // RoomId (which is the id of your round) and your userId are needed
+  // to get twilio token
+  useEffect(() => {
+    const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
+    if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
+      const getTwilioToken = async () => {
+        const res = await getToken(myRound.id, userId).then((response) => response.json())
+        console.warn('setting token to something long')
+
+        setToken(res.token)
+      }
+      getTwilioToken()
+    }
+  }, [myRound])
+
+  // After getting your token you get the permissions and create localTracks
+  // You also get your room
+  useEffect(() => {
+    if (token) {
+      const setupRoom = async () => {
+        let localTracks
+        try {
+          localTracks = await createLocalTracks({
+            video: true,
+            audio: false,
+          })
+        } catch (err) {
+          setGUMError(err.name)
+          return setIsGUMErrorModalActive(true)
+        }
+
+        const myRoom = await connect(token, {
+          name: myRound.id,
+          tracks: localTracks,
+        })
+        console.warn('setting room to ID = ', myRound.id)
+
+        setRoom(myRoom)
+      }
+      setupRoom()
+    }
+  }, [token])
+
+  // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
-
       setTimerTimeInput(eventEndTime)
       setShowTimer(true)
-      startTwilio()
+      console.warn('starting twilio')
+
+      startTwilio(room)
     }
   }, [room])
 
-  useEffect(() => {
-    if (currentRound === 0) {
-      history.push('/events')
-    }
-  }, [currentRound])
+  if (appLoading || !eventSet) {
+    return <Loading />
+  }
+  const { status: latestStatus } = event
+  console.log('status', latestStatus)
+  console.log('eventStatus.current = ', eventStatus.current)
 
-  return (
+  if (latestStatus !== eventStatus.current) {
+    if (latestStatus === 'room-in-progress' && eventStatus.current === 'in-between-rounds') {
+      console.warn('setting token, room, round to null')
+
+      setToken(null)
+      setRoom(null)
+      eventStatus.current = latestStatus
+      return null
+    }
+    eventStatus.current = latestStatus
+  }
+  console.log('myRound - ', myRound)
+
+  return eventStatus.current === latestStatus ? (
     <div>
-      <WaitingRoom />
+      <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
@@ -111,7 +229,7 @@ const VideoRoom = () => {
         ) : null}
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default VideoRoom

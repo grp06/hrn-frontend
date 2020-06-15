@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const listenToEvent = gql`
-  subscription listenToEvent($id: Int!) {
-    events(where: { id: { _eq: $id } }) {
+  subscription listenToEvent($event_id: Int!) {
+    events(where: { id: { _eq: $event_id } }) {
       id
       current_round
       description
@@ -10,6 +10,15 @@ const listenToEvent = gql`
       event_name
       host_id
       start_at
+      status
+      event_users {
+        user {
+          email
+          last_seen
+          name
+          id
+        }
+      }
     }
   }
 `

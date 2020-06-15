@@ -12,7 +12,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
 import { useHistory, Redirect } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading } from '../common'
 
@@ -74,9 +74,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const GameOver = () => {
+const GameOver = ({ match }) => {
+  const { id: eventId } = match.params
   const classes = useStyles()
-  const { eventId, userId, hasUpcomingEvent, roundsData } = useGameContext()
+  const { user } = useAppContext()
+  const { userId } = user
+
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
 

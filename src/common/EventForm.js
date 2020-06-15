@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import DateFnsUtils from '@date-io/date-fns'
 import { TextField, Button, Grid, Typography } from '@material-ui/core'
@@ -6,7 +6,7 @@ import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory, Redirect } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { FloatCardMedium } from '.'
 
 import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
@@ -41,14 +41,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventForm = ({ eventData }) => {
+const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
-  const { userId, role } = useGameContext()
+
+  const { user } = useAppContext()
+  const { userId, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
+  const initialEventData = useRef()
   const [createEventMutation] = useMutation(createEvent, {
     variables: {
       description,
@@ -59,19 +62,12 @@ const EventForm = ({ eventData }) => {
   })
 
   const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
-
-  const [updateEventMutation] = useMutation(updateEvent, {
-    variables: {
-      description,
-      event_name: title,
-      start_at: selectedDate,
-      id: eventData ? eventData.events[0].id : '',
-    },
-  })
+  const [updateEventMutation] = useMutation(updateEvent)
 
   useEffect(() => {
-    if (eventData) {
-      const { description: eventDescription, event_name, start_at } = eventData.events[0]
+    if (eventData && !initialEventData.current) {
+      initialEventData.current = eventData
+      const { description: eventDescription, event_name, start_at } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
@@ -90,7 +86,14 @@ const EventForm = ({ eventData }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (eventData) {
-      await updateEventMutation()
+      await updateEventMutation({
+        variables: {
+          description,
+          event_name: title,
+          start_at: selectedDate,
+          id: eventData.id,
+        },
+      })
       setEventUpdated(true)
       setTimeout(() => {
         setEventUpdated(false)

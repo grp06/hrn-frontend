@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import { FloatCardWide, AttendeesList, Timer, HiRightNowBreakdown } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,17 +39,20 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { userId, role, currentRound, eventId } = useGameContext()
+  const { user } = useAppContext()
+  const { userId, role } = user
+  const { id: eventId, current_round, event_users, start_at: eventStartTime } = eventData
+
   const [waitingForAdmin, setWaitingForAdmin] = useState()
-  const { event_users, start_at: eventStartTime } = eventData.events[0]
 
   const alreadyAttending = event_users.find((user) => user.user.id === userId)
+
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       eventId,
       userId,
     },
-    skip: role === 'host',
+    skip: role === 'host' || !userId || !eventId,
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
@@ -96,8 +99,6 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           } catch (error) {
             console.log('error = ', error)
           }
-          window.location.reload()
-          // refetch()
         }
         window.location.reload()
       }}
@@ -110,24 +111,13 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     let element
     switch (timeState) {
       case 'future':
-        element = !token ? renderSignupButton() : renderRsvpButton()
+        element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       case 'go time':
-        // if theres no token then we renderSignUp
-        if (!token) {
-          element = renderSignupButton()
-        }
-        // if theres a token and we're not signed up
-        if (token && !alreadyAttending) {
-          element = renderRsvpButton()
-        }
-        // if theres a token and we are signed up
-        if (token && alreadyAttending) {
-          element = null
-        }
+        element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       default:
-        element = !token ? (
+        element = !userId ? (
           renderSignupButton()
         ) : (
           <>
