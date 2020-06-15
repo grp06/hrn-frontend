@@ -152,6 +152,8 @@ const VideoRoom = ({ match }) => {
           name: myRound.id,
           tracks: localTracks,
         })
+        console.log('setupRoom -> myRoom', myRoom)
+        console.log('myROund.id = ', myRound)
 
         setRoom(myRoom)
       }
@@ -162,6 +164,8 @@ const VideoRoom = ({ match }) => {
   // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
+      console.log('myRound = ', myRound)
+
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
       setTimerTimeInput(eventEndTime)

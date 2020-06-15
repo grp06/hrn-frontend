@@ -33,14 +33,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ThumbsUp = ({ myRound, userId }) => {
+const ThumbsUp = ({ userId }) => {
   const classes = useStyles()
   const { event } = useAppContext()
 
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [showSnackbar, setShowSnackbar] = useState(false)
   const eventSet = Object.keys(event).length > 1
-  const [roundForThumbs, setRoundForThumbs] = useState(null)
+  const [myRound, setMyRoundData] = useState(null)
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
     {
@@ -54,25 +54,25 @@ const ThumbsUp = ({ myRound, userId }) => {
 
   const [setPartnerXThumbMutation] = useMutation(setPartnerXThumb, {
     variables: {
-      round_id: roundForThumbs && roundForThumbs.id,
+      round_id: myRound && myRound.id,
       partnerX_id: userId,
     },
-    skip: !roundForThumbs,
+    skip: !myRound,
   })
 
   const [setPartnerYThumbMutation] = useMutation(setPartnerYThumb, {
     variables: {
-      round_id: roundForThumbs && roundForThumbs.id,
+      round_id: myRound && myRound.id,
       partnerY_id: userId,
     },
-    skip: !roundForThumbs,
+    skip: !myRound,
   })
 
   useEffect(() => {
     if (!myRoundDataLoading && myRoundData) {
       console.log('ThumbsUp -> myRoundData', myRoundData)
 
-      setRoundForThumbs(myRoundData.rounds[0])
+      setMyRoundData(myRoundData.rounds[0])
     }
   }, [myRoundDataLoading, myRoundData])
 
