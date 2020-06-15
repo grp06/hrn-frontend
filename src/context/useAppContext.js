@@ -45,12 +45,6 @@ const useAppContext = () => {
     })
   }
 
-  function setMyRound(myRound) {
-    dispatch((draft) => {
-      draft.user.myRound = myRound
-    })
-  }
-
   return {
     ...state,
     setRedirect,
@@ -59,7 +53,6 @@ const useAppContext = () => {
     setPartnerDisconnected,
     setPartnerNeverConnected,
     setLateArrival,
-    setMyRound,
   }
 }
 

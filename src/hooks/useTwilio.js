@@ -6,7 +6,7 @@ import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
 const useTwilio = () => {
-  const { event, setPartnerDisconnected, setPartnerNeverConnected, setMyRound } = useAppContext()
+  const { event, setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
   const history = useHistory()
   const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
@@ -63,7 +63,6 @@ const useTwilio = () => {
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
-        setMyRound(null)
         if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
           history.push(`/events/${event.id}/event-complete`)
         }

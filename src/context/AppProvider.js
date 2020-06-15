@@ -18,7 +18,6 @@ const defaultState = {
     name: '',
     userId: null,
     role: '',
-    myRound: null,
   },
   app: {
     redirect: null,

@@ -111,24 +111,13 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     let element
     switch (timeState) {
       case 'future':
-        element = !token ? renderSignupButton() : renderRsvpButton()
+        element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       case 'go time':
-        // if theres no token then we renderSignUp
-        if (!token) {
-          element = renderSignupButton()
-        }
-        // if theres a token and we're not signed up
-        if (token && !alreadyAttending) {
-          element = renderRsvpButton()
-        }
-        // if theres a token and we are signed up
-        if (token && alreadyAttending) {
-          element = null
-        }
+        element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       default:
-        element = !token ? (
+        element = !userId ? (
           renderSignupButton()
         ) : (
           <>

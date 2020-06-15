@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
@@ -68,19 +68,26 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+
   const { roundLength } = constants
-  const { app, user, event, setLateArrival, setMyRound } = useAppContext()
-  const { userId, myRound } = user
+
+  const { app, user, event, setLateArrival } = useAppContext()
+  const { userId } = user
   const { appLoading } = app
+
   const { startTwilio, twilioStarted } = useTwilio()
+
   const [showTimer, setShowTimer] = useState(false)
   const [timerTimeInput, setTimerTimeInput] = useState('')
   const [token, setToken] = useState(null)
+  const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
   const [GUMError, setGUMError] = useState('')
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
+
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
+  const eventStatus = useRef()
 
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
@@ -97,6 +104,7 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (eventSet) {
       const { status } = event
+
       if (!userId) {
         history.push('/')
       }
@@ -112,6 +120,8 @@ const VideoRoom = ({ match }) => {
       if (!myRoundData.rounds.length) {
         setLateArrival(true)
       } else {
+        console.log('setting round data')
+
         setMyRound(myRoundData.rounds[0])
         setLateArrival(false)
       }
@@ -126,11 +136,13 @@ const VideoRoom = ({ match }) => {
     if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
       const getTwilioToken = async () => {
         const res = await getToken(myRound.id, userId).then((response) => response.json())
+        console.warn('setting token to something long')
+
         setToken(res.token)
       }
       getTwilioToken()
     }
-  }, [myRound, event])
+  }, [myRound])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your room
@@ -152,8 +164,7 @@ const VideoRoom = ({ match }) => {
           name: myRound.id,
           tracks: localTracks,
         })
-        console.log('setupRoom -> myRoom', myRoom)
-        console.log('myROund.id = ', myRound)
+        console.warn('setting room to ID = ', myRound.id)
 
         setRoom(myRoom)
       }
@@ -164,12 +175,12 @@ const VideoRoom = ({ match }) => {
   // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
-      console.log('myRound = ', myRound)
-
       const eventEndTimeSeconds = moment(myRound.started_at).seconds()
       const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
       setTimerTimeInput(eventEndTime)
       setShowTimer(true)
+      console.warn('starting twilio')
+
       startTwilio(room)
     }
   }, [room])
@@ -177,8 +188,25 @@ const VideoRoom = ({ match }) => {
   if (appLoading || !eventSet) {
     return <Loading />
   }
+  const { status: latestStatus } = event
+  console.log('status', latestStatus)
+  console.log('eventStatus.current = ', eventStatus.current)
 
-  return (
+  if (latestStatus !== eventStatus.current) {
+    if (latestStatus === 'room-in-progress' && eventStatus.current === 'in-between-rounds') {
+      console.warn('setting token, room, round to null')
+
+      setToken(null)
+      setRoom(null)
+      setMyRound(null)
+      eventStatus.current = latestStatus
+      return null
+    }
+    eventStatus.current = latestStatus
+  }
+  console.log('myRound - ', myRound)
+
+  return eventStatus.current === latestStatus ? (
     <div>
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
@@ -202,7 +230,7 @@ const VideoRoom = ({ match }) => {
         ) : null}
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default VideoRoom
