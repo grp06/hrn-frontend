@@ -198,7 +198,6 @@ const VideoRoom = ({ match }) => {
 
       setToken(null)
       setRoom(null)
-      setMyRound(null)
       eventStatus.current = latestStatus
       return null
     }
