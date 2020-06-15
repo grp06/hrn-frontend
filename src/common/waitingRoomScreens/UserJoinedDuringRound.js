@@ -38,7 +38,7 @@ const UserJoinedDuringRound = () => {
         few minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        In the meantime, press space bar for a surprise 😉
+        In the meantime, press 'up' on your keyboard to kill some time 😉.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
