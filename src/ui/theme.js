@@ -17,7 +17,7 @@ const greyCard = '#242526'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
-const black1dp = '#1c1c1c'
+const greyButtonHover = '#1c1c1c'
 const black3dp = '#232323'
 const black6dp = '#2c2c2c'
 
@@ -37,6 +37,7 @@ const theme = createMuiTheme({
       greyBoxShadow,
       greyHighlight,
       greyButton,
+      greyButtonHover,
     },
     primary: {
       main: rebeccaPurple,

@@ -34,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
   cancelButton: {
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
   },
 }))
 

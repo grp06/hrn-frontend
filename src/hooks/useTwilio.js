@@ -63,9 +63,9 @@ const useTwilio = () => {
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
-        if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
-          history.push(`/events/${event.id}/event-complete`)
-        }
+        // if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+        //   history.push(`/events/${event.id}/event-complete`)
+        // }
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
         })
