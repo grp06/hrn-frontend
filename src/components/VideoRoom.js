@@ -96,7 +96,7 @@ const VideoRoom = ({ match }) => {
         round_number: event.current_round,
         user_id: userId,
       },
-      skip: !userId || !eventSet,
+      skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
     }
   )
 
@@ -117,16 +117,16 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundDataLoading && myRoundData) {
+      // if you're on this page and you don't have roundData --- youre late!
       if (!myRoundData.rounds.length) {
         setLateArrival(true)
       } else {
         console.log('setting round data')
-
         setMyRound(myRoundData.rounds[0])
         setLateArrival(false)
       }
     }
-  }, [myRoundDataLoading, myRoundData, event.status])
+  }, [myRoundDataLoading, myRoundData])
 
   // After getting myRound from the query above, we get the twilio token
   // RoomId (which is the id of your round) and your userId are needed
