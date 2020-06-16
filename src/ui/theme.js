@@ -26,6 +26,7 @@ const theme = createMuiTheme({
     common: {
       rebeccaPurple,
       orchid,
+      sunray,
       ghostWhite,
       ghostWhiteBody,
       ghostWhiteDark,

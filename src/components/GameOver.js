@@ -36,14 +36,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     textAlign: 'center',
   },
-  zoomLink: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
-    textAlign: 'center',
-    '& a': {
-      color: theme.palette.common.ghostWhite,
-    },
-  },
   sectionHeader: {
     ...theme.typography.h3,
     color: theme.palette.common.ghostWhite,
@@ -71,6 +63,11 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
+  },
+  zoomLink: {
+    ...theme.typography.h3,
+    color: theme.palette.common.sunray,
+    textDecoration: 'none',
   },
 }))
 
@@ -159,9 +156,12 @@ const GameOver = ({ match }) => {
             </Grid>
           </Grid>
           <Typography className={classes.zoomLink}>
-            Join everyone on you've met on Zoom right now! <br />
-            <a href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09">
-              https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09
+            <a
+              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+              target="_blank"
+              className={classes.zoomLink}
+            >
+              Join everyone that you've met on Zoom right now!
             </a>
           </Typography>
         </FloatCardMedium>
@@ -169,9 +169,12 @@ const GameOver = ({ match }) => {
         <div className={classes.textContainer}>
           <Typography className={classes.categoryHeader}>Thanks for joining the event!</Typography>
           <Typography className={classes.zoomLink}>
-            Join everyone on Zoom right now! <br />
-            <a href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09">
-              https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09
+            <a
+              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+              target="_blank"
+              className={classes.zoomLink}
+            >
+              Join everyone that you've met on Zoom right now!
             </a>
           </Typography>
         </div>
