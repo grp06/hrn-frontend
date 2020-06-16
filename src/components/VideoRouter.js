@@ -29,12 +29,10 @@ const VideoRouter = ({ myRound }) => {
       case 'room-in-progress':
         if (lateArrival) {
           console.log('joined late')
-
           return <UserJoinedDuringRound />
         }
         if (partnerDisconnected && hasPartner) {
           console.log('partner disconnected')
-
           return <PartnerDisconnected />
         }
         if (myRound && !hasPartner) {
@@ -48,7 +46,6 @@ const VideoRouter = ({ myRound }) => {
         return null
       case 'complete':
         return <ThumbsUp userId={userId} myRound={myRound} />
-
       default:
         return null
     }

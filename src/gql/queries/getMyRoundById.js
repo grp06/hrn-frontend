@@ -12,6 +12,7 @@ const getMyRoundById = gql`
       partnerX_id
       partnerY_id
       round_number
+      started_at
     }
   }
 `
