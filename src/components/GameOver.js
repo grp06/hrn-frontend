@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -11,7 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
-import { useHistory, Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
 import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading } from '../common'
@@ -85,7 +85,7 @@ const GameOver = ({ match }) => {
     loading: mutualThumbsLoading,
     error: mutualThumbsError,
     refetch,
-  } = useQuery(getMyMutualThumbsData, {
+  } = useSubscription(getMyMutualThumbsData, {
     variables: {
       event_id: eventId || localStorageEventId,
       user_id: userId,
