@@ -25,7 +25,7 @@ const VideoRouter = ({ myRound }) => {
       case 'not-started':
         return <ConnectingToSomeone />
       case 'in-between-rounds':
-        return <ThumbsUp userId={userId} myRound={myRound} />
+        return hasPartner ? <ThumbsUp userId={userId} myRound={myRound} /> : <ConnectingToSomeone />
       case 'room-in-progress':
         if (lateArrival) {
           console.log('joined late')
