@@ -211,9 +211,11 @@ const VideoRoom = ({ match }) => {
 
   const showPartnersName = () => {
     let userIsPartnerX = false
-    if (!myRound || event.status !== 'room-in-progress') {
+    const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
+    if (!myRound || event.status !== 'room-in-progress' || !hasPartner) {
       return null
     }
+
     if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
       userIsPartnerX = true
     }

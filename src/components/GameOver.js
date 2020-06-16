@@ -67,7 +67,11 @@ const useStyles = makeStyles((theme) => ({
   zoomLink: {
     ...theme.typography.h3,
     color: theme.palette.common.sunray,
-    textDecoration: 'none',
+    width: '60%',
+    textAlign: 'center',
+    margin: '0 auto',
+    textDecoration: 'underline',
+    marginBottom: '25',
   },
 }))
 
@@ -161,7 +165,7 @@ const GameOver = ({ match }) => {
               target="_blank"
               className={classes.zoomLink}
             >
-              Join everyone that you've met on Zoom right now!
+              Click to join everyone from the event on a Zoom call!
             </a>
           </Typography>
         </FloatCardMedium>
@@ -174,7 +178,7 @@ const GameOver = ({ match }) => {
               target="_blank"
               className={classes.zoomLink}
             >
-              Join everyone that you've met on Zoom right now!
+              Click to join everyone from the event on a Zoom call!
             </a>
           </Typography>
         </div>
