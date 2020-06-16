@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
@@ -49,6 +50,20 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     width: '200px',
     height: '150px',
+  },
+  partnerNameContainer: {
+    position: 'fixed',
+    left: 'auto',
+    top: 'auto',
+    right: 'auto',
+    bottom: '0%',
+    width: '100vw',
+    height: '150px',
+  },
+  partnerName: {
+    fontFamily: 'Muli',
+    fontSize: '2rem',
+    color: theme.palette.common.ghostWhite,
   },
   notReady: {
     position: 'fixed',
@@ -193,8 +208,27 @@ const VideoRoom = ({ match }) => {
   if (appLoading || !eventSet) {
     return <Loading />
   }
-  const { status: latestStatus } = event
 
+  const showPartnersName = () => {
+    let userIsPartnerX = false
+    if (!myRound || event.status !== 'room-in-progress') {
+      return null
+    }
+    if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
+      userIsPartnerX = true
+    }
+    return (
+      <Grid container justify="center" alignItems="center" className={classes.partnerNameContainer}>
+        <Typography className={classes.partnerName}>
+          {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
+        </Typography>
+      </Grid>
+    )
+  }
+
+  // If you are switching from room-in-progress to in-between-rounds
+  // then we want to clear your room and token
+  const { status: latestStatus } = event
   if (latestStatus !== eventStatus.current) {
     if (latestStatus === 'room-in-progress' && eventStatus.current === 'in-between-rounds') {
       console.warn('setting token, room, round to null')
@@ -228,6 +262,7 @@ const VideoRoom = ({ match }) => {
             />
           </Grid>
         ) : null}
+        {showPartnersName()}
       </div>
     </div>
   ) : null
