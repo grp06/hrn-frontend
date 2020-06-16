@@ -112,9 +112,10 @@ const VideoRoom = ({ match }) => {
         return history.push(`/events/${eventId}`)
       }
       // this is only here to redirect someone if they navigate to video-room when event complete
-      if (status === 'complete') {
-        return history.push(`/events/${eventId}/event-complete`)
-      }
+      // MAX: they should navigate to video route if the event is complete. Do this check in Event.js
+      // if (status === 'complete') {
+      //   return history.push(`/events/${eventId}/event-complete`)
+      // }
     }
   }, [event, userId])
 
@@ -178,9 +179,9 @@ const VideoRoom = ({ match }) => {
   // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
-      const eventEndTimeSeconds = moment(myRound.started_at).seconds()
-      const eventEndTime = moment(myRound.started_at).seconds(eventEndTimeSeconds + roundLength)
-      setTimerTimeInput(eventEndTime)
+      const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
+      const roundEndTime = moment(myRound.started_at).seconds(roundStartedAtInSeconds + roundLength)
+      setTimerTimeInput(roundEndTime)
       setShowTimer(true)
       console.warn('starting twilio')
 
