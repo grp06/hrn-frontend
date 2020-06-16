@@ -11,7 +11,7 @@ const listenToEvent = gql`
       host_id
       start_at
       status
-      event_users {
+      event_users(order_by: { user: { name: asc } }) {
         user {
           email
           name

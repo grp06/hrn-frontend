@@ -111,6 +111,10 @@ const VideoRoom = ({ match }) => {
       if (status === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
+      // this is only here to redirect someone if they navigate to video-room when event complete
+      if (status === 'complete') {
+        return history.push(`/events/${eventId}/event-complete`)
+      }
     }
   }, [event, userId])
 
@@ -121,7 +125,6 @@ const VideoRoom = ({ match }) => {
       if (!myRoundData.rounds.length) {
         setLateArrival(true)
       } else {
-        console.log('setting round data')
         setMyRound(myRoundData.rounds[0])
         setLateArrival(false)
       }
@@ -189,13 +192,10 @@ const VideoRoom = ({ match }) => {
     return <Loading />
   }
   const { status: latestStatus } = event
-  console.log('status', latestStatus)
-  console.log('eventStatus.current = ', eventStatus.current)
 
   if (latestStatus !== eventStatus.current) {
     if (latestStatus === 'room-in-progress' && eventStatus.current === 'in-between-rounds') {
       console.warn('setting token, room, round to null')
-
       setToken(null)
       setRoom(null)
       eventStatus.current = latestStatus
@@ -203,7 +203,6 @@ const VideoRoom = ({ match }) => {
     }
     eventStatus.current = latestStatus
   }
-  console.log('myRound - ', myRound)
 
   return eventStatus.current === latestStatus ? (
     <div>
