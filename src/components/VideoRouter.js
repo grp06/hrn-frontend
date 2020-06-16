@@ -47,7 +47,7 @@ const VideoRouter = ({ myRound }) => {
         }
         return null
       case 'complete':
-        return history.push(`/events/${id}/event-complete`)
+        return <ThumbsUp userId={userId} myRound={myRound} />
 
       default:
         return null

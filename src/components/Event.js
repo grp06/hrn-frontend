@@ -66,6 +66,12 @@ const Event = ({ match }) => {
         return history.push(`/events/${eventId}/video-room`)
       }
     }
+    if (eventSet && event.status === 'complete' && userId) {
+      const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
+      if (isEventParticipant) {
+        return history.push(`/events/${eventId}/event-complete`)
+      }
+    }
   }, [event])
 
   if (appLoading || Object.keys(event).length < 2) {
