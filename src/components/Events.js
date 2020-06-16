@@ -1,17 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, useHistory } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getEventsByUserId } from '../gql/queries'
 
 import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
 import { EventCard, Loading, FloatCardWide } from '../common'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -68,7 +67,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Events = () => {
   const classes = useStyles()
-  const { appLoading, userId, role } = useGameContext()
+  const { app, user } = useAppContext()
+  const { appLoading } = app
+  const { userId, role, name } = user
 
   const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
     getEventsByUserId,
@@ -80,12 +81,12 @@ const Events = () => {
     }
   )
 
-  if (appLoading || eventsLoading) {
-    return <Loading />
-  }
-
   if (!userId) {
     return <Redirect to="/" />
+  }
+
+  if (appLoading || eventsLoading) {
+    return <Loading />
   }
 
   const renderNullDataText = () => {
@@ -135,9 +136,10 @@ const Events = () => {
       </div>
       {renderNullDataText()}
       {role === 'host' && <CreateEventButton />}
-      {eventsData.event_users.map(({ event }) => {
-        return <EventCard key={event.id} event={event} />
-      })}
+      {eventsData &&
+        eventsData.event_users.map(({ event }) => {
+          return <EventCard key={event.id} event={event} />
+        })}
     </>
   )
 }

@@ -1,4 +1,6 @@
 import React, { useState } from 'react'
+import { useAppContext } from '../context/useAppContext'
+import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -9,13 +11,32 @@ import { makeStyles } from '@material-ui/core/styles'
 import { setPartnerXThumb, setPartnerYThumb } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  waitingRoom: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    background: '#111',
+    height: '100vh',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
   thumbsUpContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '70%',
   },
+  buttonContainer: {
+    width: '35%',
+  },
   messageText: {
     ...theme.typography.waitingRoomHeading,
+  },
+  noThanksButton: {
+    backgroundColor: theme.palette.common.greyButton,
+    color: theme.palette.common.ghostWhite,
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
   },
   emoji: {
     fontSize: '50px',
@@ -24,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ThumbsUp = ({ myRound, userId }) => {
   const classes = useStyles()
+  const history = useHistory()
+  const { event } = useAppContext()
+  const { current_round } = event
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [showSnackbar, setShowSnackbar] = useState(false)
 
@@ -60,43 +84,72 @@ const ThumbsUp = ({ myRound, userId }) => {
     }
     setShowThumbUpButton(false)
     setShowSnackbar(true)
+    if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+      history.push(`/events/${event.id}/event-complete`)
+    }
+  }
+
+  const handlePassOnThumbingClick = () => {
+    setShowThumbUpButton(false)
+    if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+      history.push(`/events/${event.id}/event-complete`)
+    }
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      className={classes.thumbsUpContainer}
-    >
-      {showThumbUpButton ? (
-        <>
-          <Typography className={classes.messageText}>Hope you had a great chat!</Typography>
-          <Typography className={classes.messageText}>
-            Let us know if you vibed with your partner so we can connect you two after the event!
-          </Typography>
-          <Button variant="contained" color="primary" onClick={handleThumbUpClick}>
-            Connect us 👍
-          </Button>
-        </>
-      ) : (
-        <>
-          <Typography className={classes.messageText}>Thanks for the feedback!</Typography>
-          <Typography className={classes.messageText}>
-            Connecting you to a new friend soon!
-          </Typography>
-          <div className={classes.emoji}>
-            <span>🥳</span>
-          </div>
-          <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-            <Alert onClose={handleSnackbarClose} severity="success">
-              Carrier pigeon sent 🕊
-            </Alert>
-          </Snackbar>
-        </>
-      )}
-    </Grid>
+    <div className={classes.waitingRoom}>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        className={classes.thumbsUpContainer}
+      >
+        {showThumbUpButton ? (
+          <>
+            <Typography className={classes.messageText}>Hope you had a great chat!</Typography>
+            <Typography className={classes.messageText}>
+              Let us know if you vibed with your partner so we can connect you two after the event!
+            </Typography>
+            <Grid
+              container
+              item
+              direction="row"
+              justify="space-around"
+              alignItems="center"
+              className={classes.buttonContainer}
+            >
+              <Button variant="contained" color="primary" onClick={handleThumbUpClick}>
+                Connect Us 👍
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.noThanksButton}
+                onClick={handlePassOnThumbingClick}
+              >
+                No Thanks 😇
+              </Button>
+            </Grid>
+          </>
+        ) : (
+          <>
+            <Typography className={classes.messageText}>Awesome!</Typography>
+            <Typography className={classes.messageText}>
+              Connecting you to a new friend soon!
+            </Typography>
+            <div className={classes.emoji}>
+              <span>🥳</span>
+            </div>
+            <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+              <Alert onClose={handleSnackbarClose} severity="success">
+                Carrier pigeon sent 🕊
+              </Alert>
+            </Snackbar>
+          </>
+        )}
+      </Grid>
+    </div>
   )
 }
 

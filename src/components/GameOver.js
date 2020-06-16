@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useQuery } from '@apollo/react-hooks'
+import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -11,8 +11,8 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import PersonIcon from '@material-ui/icons/Person'
 import Avatar from '@material-ui/core/Avatar'
-import { useHistory, Redirect } from 'react-router-dom'
-import { useGameContext } from '../context/useGameContext'
+import { useHistory } from 'react-router-dom'
+import { useAppContext } from '../context/useAppContext'
 import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading } from '../common'
 
@@ -35,14 +35,6 @@ const useStyles = makeStyles((theme) => ({
     ...theme.typography.h1,
     color: theme.palette.common.ghostWhite,
     textAlign: 'center',
-  },
-  zoomLink: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
-    textAlign: 'center',
-    '& a': {
-      color: theme.palette.common.ghostWhite,
-    },
   },
   sectionHeader: {
     ...theme.typography.h3,
@@ -72,11 +64,23 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
   },
+  zoomLink: {
+    ...theme.typography.h3,
+    color: theme.palette.common.sunray,
+    width: '60%',
+    textAlign: 'center',
+    margin: '0 auto',
+    textDecoration: 'underline',
+    marginBottom: '25',
+  },
 }))
 
-const GameOver = () => {
+const GameOver = ({ match }) => {
+  const { id: eventId } = match.params
   const classes = useStyles()
-  const { eventId, userId, hasUpcomingEvent, roundsData } = useGameContext()
+  const { user } = useAppContext()
+  const { userId } = user
+
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
 
@@ -85,7 +89,7 @@ const GameOver = () => {
     loading: mutualThumbsLoading,
     error: mutualThumbsError,
     refetch,
-  } = useQuery(getMyMutualThumbsData, {
+  } = useSubscription(getMyMutualThumbsData, {
     variables: {
       event_id: eventId || localStorageEventId,
       user_id: userId,
@@ -156,9 +160,12 @@ const GameOver = () => {
             </Grid>
           </Grid>
           <Typography className={classes.zoomLink}>
-            Join everyone on you've met on Zoom right now! <br />
-            <a href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09">
-              https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09
+            <a
+              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+              target="_blank"
+              className={classes.zoomLink}
+            >
+              Click to join everyone from the event on a Zoom call!
             </a>
           </Typography>
         </FloatCardMedium>
@@ -166,9 +173,12 @@ const GameOver = () => {
         <div className={classes.textContainer}>
           <Typography className={classes.categoryHeader}>Thanks for joining the event!</Typography>
           <Typography className={classes.zoomLink}>
-            Join everyone on Zoom right now! <br />
-            <a href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09">
-              https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09
+            <a
+              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+              target="_blank"
+              className={classes.zoomLink}
+            >
+              Click to join everyone from the event on a Zoom call!
             </a>
           </Typography>
         </div>

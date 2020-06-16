@@ -1,39 +1,34 @@
+import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 
 import { useParticipantConnected } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
 const useTwilio = () => {
-  const {
-    room,
-    currentRound,
-    setWaitingRoom,
-    setDidPartnerDisconnect,
-    setPartnerNeverConnected,
-  } = useGameContext()
+  const { event, setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
   const history = useHistory()
   const { partnerCameraIssueTimeout } = constants
+  const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()
-  const startTwilio = () => {
+  const startTwilio = (room) => {
+    setTwilioStarted(true)
+    setPartnerNeverConnected(false)
+
+    // check to see if your partner joins within 30 seconds. If not, we assume
+    // that they are having trouble connecting (camera permission issues)
+    setTimeout(() => {
+      if (!room.participants.size) {
+        setPartnerNeverConnected(true)
+      }
+    }, partnerCameraIssueTimeout)
+
     if (room) {
-      setWaitingRoom(null)
-      setPartnerNeverConnected(false)
-
-      // check to see if your partner joins within 30 seconds. If not, we assume
-      // that they are having trouble connecting (camera permission issues)
-      setTimeout(() => {
-        if (!room.participants.size) {
-          setPartnerNeverConnected(true)
-          setWaitingRoom(true)
-        }
-      }, partnerCameraIssueTimeout)
-
+      const { current_round } = event
       const { localParticipant } = room
+
       localParticipant.tracks.forEach((publication) => {
-        console.log('publication = ', publication)
-        console.log('startTwilio -> publication.kind', publication.kind)
         const localDiv = document.getElementById('local-video')
         if (localDiv && !localDiv.children.length && publication.track.kind === 'video') {
           const attachedTrack = publication.track.attach()
@@ -44,14 +39,16 @@ const useTwilio = () => {
       room.participants.forEach(participantConnected)
 
       room.on('participantConnected', (remoteParticipant) => {
+        console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
-        setWaitingRoom(null)
+        setPartnerDisconnected(false)
         participantConnected(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
-        console.log('remote participant disconnected ', remoteParticipant)
-        setDidPartnerDisconnect(true)
+        console.log('participantDisconnected', remoteParticipant)
+
+        setPartnerDisconnected(true)
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
           remoteVideo.innerHTML = ''
@@ -59,20 +56,16 @@ const useTwilio = () => {
       })
 
       window.addEventListener('beforeunload', () => {
-        // just some cleanup on partnerDisconnect
-        setDidPartnerDisconnect(false)
         room.disconnect()
       })
 
       room.on('disconnected', function (rum) {
-        // just some cleanup on partnerDisconnect
-        setDidPartnerDisconnect(false)
-        setWaitingRoom(true)
-        console.log('process.env.REACT_APP_NUM_ROUNDS = ', process.env.REACT_APP_NUM_ROUNDS)
-
-        if (parseInt(currentRound, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
-          history.push('/event-complete')
-        }
+        setTwilioStarted(false)
+        setPartnerNeverConnected(false)
+        setPartnerDisconnected(false)
+        // if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+        //   history.push(`/events/${event.id}/event-complete`)
+        // }
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
         })
@@ -85,7 +78,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio }
+  return { startTwilio, twilioStarted }
 }
 
 export default useTwilio

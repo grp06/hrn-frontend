@@ -1,10 +1,9 @@
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 const useRemoteTrackPublished = () => {
-  const { setDidPartnerDisconnect, setWaitingRoom } = useGameContext()
+  const { setDidPartnerDisconnect, setVideoRouter } = useAppContext()
   const remoteTrackPublished = (publication) => {
     if (publication.isSubscribed) {
-      console.log('publication.isSubscribed ', publication.isSubscribed)
       const remoteDiv = document.getElementById('remote-video')
       if (remoteDiv) {
         const attachedTrack = publication.track.attach()
@@ -15,18 +14,16 @@ const useRemoteTrackPublished = () => {
       }
     }
     publication.on('subscribed', (track) => {
-      console.log('subscribed -> track', track)
+      console.log('onSubscribed')
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {
         attachedTrack.muted = true
       }
       document.getElementById('remote-video').appendChild(attachedTrack)
-      setDidPartnerDisconnect(false)
+      // setDidPartnerDisconnect(false)
     })
 
-    publication.on('unsubscribed', (track) => {
-      console.log('publication.on unsubscribed ', track)
-    })
+    publication.on('unsubscribed', (track) => {})
   }
   return { remoteTrackPublished }
 }

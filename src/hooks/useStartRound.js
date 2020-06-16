@@ -1,12 +1,13 @@
 import { useCreateRooms } from '.'
-import { useGameContext } from '../context/useGameContext'
+import { useAppContext } from '../context/useAppContext'
 
 export default function useStartRounds() {
-  const { currentRound } = useGameContext()
+  const { event } = useAppContext()
+  const { current_round } = event
   const { createRooms } = useCreateRooms()
 
   const startRound = async (rounds) => {
-    const currentRoundObj = rounds.filter((round) => round.round_number === currentRound + 1)
+    const currentRoundObj = rounds.filter((round) => round.round_number === current_round + 1)
     const allRoomIds = currentRoundObj.reduce((all, item) => {
       all.push(item.id)
       return all

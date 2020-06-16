@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 const getMyMutualThumbsData = gql`
-  query getMyMutualThumbsData($event_id: Int!, $user_id: Int!) {
+  subscription getMyMutualThumbsData($event_id: Int!, $user_id: Int!) {
     rounds(
       where: {
         _or: [{ partnerY_id: { _eq: $user_id } }, { partnerX_id: { _eq: $user_id } }]
