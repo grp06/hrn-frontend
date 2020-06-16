@@ -173,7 +173,7 @@ const VideoRoom = ({ match }) => {
         try {
           localTracks = await createLocalTracks({
             video: true,
-            audio: false,
+            audio: true,
           })
         } catch (err) {
           setGUMError(err.name)

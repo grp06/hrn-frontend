@@ -36,7 +36,6 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
     }, 1000)
 
     if (seconds === 0) {
-      console.log('seconds is 0 IF')
       setIsTimerActive(false)
       if (onRoundComplete) {
         onRoundComplete()
