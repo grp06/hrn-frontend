@@ -113,6 +113,7 @@ const VideoRoom = ({ match }) => {
       }
       // this is only here to redirect someone if they navigate to video-room when event complete
       // MAX: they should navigate to video route if the event is complete. Do this check in Event.js
+
       // if (status === 'complete') {
       //   return history.push(`/events/${eventId}/event-complete`)
       // }
