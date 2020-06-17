@@ -74,6 +74,7 @@ const SignUpForm = () => {
         },
         body: JSON.stringify({ name, email, password, role: 'user' }),
       })
+      // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
       if (signUpResponse.error) {
         throw signUpResponse.error

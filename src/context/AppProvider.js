@@ -30,6 +30,7 @@ const defaultState = {
     lateArrival: false,
   },
 }
+
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { event } = state

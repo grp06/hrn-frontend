@@ -111,6 +111,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
+  const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
 
   const { user, event, app } = useAppContext()
   const { role } = user
@@ -218,11 +219,10 @@ const Header = ({ activeTab, setActiveTab }) => {
     </>
   )
 
-  const adminNavPanel = () => {
-    const { event_id, current_round } = event
-    return (
-      role === 'host' &&
-      current_round !== 0 && (
+  const renderAdminHeader = () => {
+    const { status, current_round } = event
+    if (role === 'host' && status !== 'not-started') {
+      return (
         <Grid
           container
           direction="row"
@@ -230,16 +230,18 @@ const Header = ({ activeTab, setActiveTab }) => {
           alignItems="center"
           className={classes.adminPanelContainer}
         >
-          <Grid item className={classes.tab}>
-            <p>
-              Curent Round:
-              {current_round}
-            </p>
-          </Grid>
-          <Grid item>{resetRoundsModal}</Grid>
+          <>
+            <Grid item className={classes.tab}>
+              <p>
+                Curent Round:
+                {current_round || 'Pre Event'}
+              </p>
+            </Grid>
+            <Grid item>{resetRoundsModal}</Grid>
+          </>
         </Grid>
       )
-    )
+    }
   }
 
   return (
@@ -256,7 +258,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {event && adminNavPanel()}
+          {eventIdInUrl && renderAdminHeader()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>

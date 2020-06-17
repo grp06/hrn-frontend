@@ -4,7 +4,7 @@ const getToken = async (roomId, userId) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ roomId, myUserId: userId }),
+    body: JSON.stringify({ roomId, userId }),
   })
 }
 
