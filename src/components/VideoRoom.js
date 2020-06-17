@@ -244,6 +244,9 @@ const VideoRoom = ({ match }) => {
 
   return eventStatus.current === latestStatus ? (
     <div>
+      {isGUMErrorModalActive && (
+        <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+      )}
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />
