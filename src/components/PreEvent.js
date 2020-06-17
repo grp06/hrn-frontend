@@ -45,7 +45,7 @@ const PreEvent = ({ match }) => {
     // can we make it so we don't need this check? like - not render without a userId?
     if (userId) {
       const setupToken = async () => {
-        const res = await getToken(`pre-event-${eventId}`, userId).then((response) =>
+        const res = await getToken(`${eventId}-pre-event`, userId).then((response) =>
           response.json()
         )
         setToken(res.token)
@@ -74,7 +74,6 @@ const PreEvent = ({ match }) => {
         }
 
         const myRoom = await connect(token, {
-          name: `pre-event-${eventId}`,
           tracks: role === 'host' ? localTracks : [],
         })
 

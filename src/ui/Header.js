@@ -99,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
   },
   adminPanelContainer: {
-    width: '40%',
     marginLeft: 'auto',
   },
   buttonSmall: {
@@ -153,7 +152,7 @@ const Header = ({ activeTab, setActiveTab }) => {
       await deleteRoundsMutation()
 
       await resetEventMutation(event.id)
-      await startEvent(null, true)
+      await startEvent(event.id, true)
       // setCurrentRound(0)
       // history.replace(`/events/${event_id}`)
     },
@@ -220,7 +219,8 @@ const Header = ({ activeTab, setActiveTab }) => {
   )
 
   const renderAdminHeader = () => {
-    const { status, current_round } = event
+    const { status, current_round, id: eventId } = event
+
     if (role === 'host' && status !== 'not-started') {
       return (
         <Grid
@@ -231,13 +231,26 @@ const Header = ({ activeTab, setActiveTab }) => {
           className={classes.adminPanelContainer}
         >
           <>
+            <Grid item>{resetRoundsModal}</Grid>
             <Grid item className={classes.tab}>
               <p>
                 Curent Round:
                 {current_round || 'Pre Event'}
               </p>
             </Grid>
-            <Grid item>{resetRoundsModal}</Grid>
+            <Grid>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                onClick={() => startEvent(eventId)}
+              >
+                Start Event
+                <span className={classes.partyEmoji} role="img" aria-label="party emoji">
+                  🥳
+                </span>
+              </Button>
+            </Grid>
           </>
         </Grid>
       )
