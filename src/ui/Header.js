@@ -34,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '0.75em',
   },
   logo: {
-    height: '4em',
+    height: '3em',
     [theme.breakpoints.down('md')]: {
       height: '3em',
     },
     [theme.breakpoints.down('xs')]: {
-      height: '2em',
+      height: '1.5em',
     },
   },
   logoContainer: {
@@ -92,7 +92,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Muli',
   },
   howdyText: {
-    fontSize: '1.2rem',
+    fontSize: '1rem',
     color: theme.palette.common.sunray,
   },
   logoutButton: {
@@ -240,10 +240,10 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   const navContent = (
     <Grid container justify="flex-end" alignItems="center">
-      <Typography className={classes.howdyText}>Howdy, {usersName}</Typography>
+      <Typography className={classes.howdyText}>Howdy, {usersName}! 🤠</Typography>
       <Button
         color="secondary"
-        variant="contained"
+        variant="outlined"
         onClick={handleLogout}
         className={classes.logoutButton}
       >
@@ -254,7 +254,7 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <AppBar position="fixed">
+      <AppBar position="fixed" dense>
         <Toolbar disableGutters>
           <Button
             component={Link}
