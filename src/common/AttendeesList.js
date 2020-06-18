@@ -2,19 +2,29 @@ import React, { useState, useEffect } from 'react'
 
 import { useSubscription } from '@apollo/react-hooks'
 
+import Avatar from '@material-ui/core/Avatar'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
-import Avatar from '@material-ui/core/Avatar'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/styles'
 import { displayOnlineUsers } from '../gql/subscriptions'
 import { constants } from '../utils'
 import { useAppContext } from '../context/useAppContext'
 
 const { lastSeenDuration } = constants
 
+const useStyles = makeStyles((theme) => ({
+  sectionHeader: {
+    ...theme.typography.h3,
+    color: theme.palette.common.ghostWhite,
+  },
+}))
+
 const AttendeesList = ({ eventId, timeState }) => {
+  const classes = useStyles()
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { event } = useAppContext()
   const {
@@ -55,22 +65,25 @@ const AttendeesList = ({ eventId, timeState }) => {
   }, [onlineUsersData, timeState])
 
   return (
-    <List dense>
-      {oldOnlineUsers.map(({ user }) => {
-        // const formattedDate = user.last_seen.slice(0, 10)
-        // const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
-        return (
-          <ListItem key={user.id}>
-            <ListItemAvatar>
-              <Avatar>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText primary={user.name} />
-          </ListItem>
-        )
-      })}
-    </List>
+    <>
+      <Typography className={classes.sectionHeader}>Online Attendees</Typography>
+      <List dense>
+        {oldOnlineUsers.map(({ user }) => {
+          // const formattedDate = user.last_seen.slice(0, 10)
+          // const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
+          return (
+            <ListItem key={user.id}>
+              <ListItemAvatar>
+                <Avatar>
+                  <PersonIcon />
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText primary={user.name} />
+            </ListItem>
+          )
+        })}
+      </List>
+    </>
   )
 }
 
