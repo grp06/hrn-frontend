@@ -215,10 +215,11 @@ const Header = ({ activeTab, setActiveTab }) => {
   )
 
   const adminNavPanel = () => {
-    const { event_id, current_round } = event
+    const { event_id, current_round, host_id } = event
     return (
       role === 'host' &&
-      current_round !== 0 && (
+      current_round !== 0 &&
+      host_id === userId && (
         <Grid
           container
           direction="row"
@@ -254,7 +255,7 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   return (
     <>
-      <AppBar position="fixed" dense>
+      <AppBar position="fixed">
         <Toolbar disableGutters>
           <Button
             component={Link}
@@ -265,7 +266,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {userId && navContent}
+          {usersName && navContent}
           {event && adminNavPanel()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
