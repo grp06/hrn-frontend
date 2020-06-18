@@ -184,7 +184,6 @@ const VideoRoom = ({ match }) => {
           name: myRound.id,
           tracks: localTracks,
         })
-        console.warn('setting room to ID = ', myRound.id)
 
         setRoom(myRoom)
       }
