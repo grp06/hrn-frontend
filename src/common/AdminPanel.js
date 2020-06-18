@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
-import { EventForm, FloatCardWide, AttendeesList, TransitionModal, Timer } from '.'
+import { EventForm, FloatCardWide, AttendeesList, ListOfRSVPs, TransitionModal, Timer } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { startEvent } from '../helpers'
 
@@ -130,7 +130,11 @@ const AdminPanel = ({ eventData, timeState }) => {
           <Typography variant="body1">{eventDescription}</Typography>
         </Grid>
         <Divider light variant="middle" />
-        <AttendeesList eventId={eventId} timeState={timeState} />
+        {timeState === 'future' ? (
+          <ListOfRSVPs />
+        ) : (
+          <AttendeesList eventId={eventId} timeState={timeState} />
+        )}
       </Grid>
     </FloatCardWide>
   )

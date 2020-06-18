@@ -15,7 +15,7 @@ import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '100px',
+    marginTop: '200px',
   },
   formContainer: {
     marginLeft: 'auto',

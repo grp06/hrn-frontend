@@ -9,6 +9,16 @@ const useAppContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
+  function resetUser() {
+    dispatch((draft) => {
+      draft.user = {
+        name: '',
+        userId: null,
+        role: '',
+      }
+    })
+  }
+
   function setRedirect(redirect) {
     dispatch((draft) => {
       draft.app.redirect = redirect
@@ -47,6 +57,7 @@ const useAppContext = () => {
 
   return {
     ...state,
+    resetUser,
     setRedirect,
     setUserId,
     setEventId,

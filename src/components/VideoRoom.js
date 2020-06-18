@@ -184,7 +184,6 @@ const VideoRoom = ({ match }) => {
           name: myRound.id,
           tracks: localTracks,
         })
-        console.warn('setting room to ID = ', myRound.id)
 
         setRoom(myRoom)
       }
@@ -244,6 +243,9 @@ const VideoRoom = ({ match }) => {
 
   return eventStatus.current === latestStatus ? (
     <div>
+      {isGUMErrorModalActive && (
+        <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+      )}
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={classes.myVideo} />

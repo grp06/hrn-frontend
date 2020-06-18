@@ -46,9 +46,6 @@ const theme = createMuiTheme({
     secondary: {
       main: orchid,
     },
-    green: {
-      main: mediumGreen,
-    },
   },
   typography: {
     tab: {
@@ -124,7 +121,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiAppBar: {
       colorPrimary: {
-        backgroundColor: 'transparent',
+        backgroundColor: greyCard,
       },
     },
     // this is for the boxshadow on the navbar

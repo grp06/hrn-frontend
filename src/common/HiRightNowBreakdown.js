@@ -5,6 +5,8 @@ import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 import StepContent from '@material-ui/core/StepContent'
 import Button from '@material-ui/core/Button'
+import Paper from '@material-ui/core/Paper'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
   resetContainer: {
     padding: theme.spacing(3),
+    width: '100%',
+    textAlign: 'center',
   },
   stepLabel: {
     color: theme.palette.common.ghostWhite,
@@ -58,14 +62,15 @@ const HiRightNowBreakdown = () => {
   const steps = getSteps()
 
   const handleNext = () => {
-    if (activeStep + 1 >= steps.length) {
-      return setActiveStep(0)
-    }
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
   }
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
+  }
+
+  const handleReset = () => {
+    setActiveStep(0)
   }
 
   return (
@@ -91,7 +96,7 @@ const HiRightNowBreakdown = () => {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? `I'm Excited ` : 'Next'}
+                    {activeStep === steps.length - 1 ? `Okay, got it!` : 'Next'}
                   </Button>
                 </div>
               </div>
@@ -99,6 +104,16 @@ const HiRightNowBreakdown = () => {
           </Step>
         ))}
       </Stepper>
+      {activeStep === steps.length && (
+        <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
+          <Typography>
+            You're all set! Sit tight and wait a couple of minutes for the event to start!
+          </Typography>
+          <Button onClick={handleReset} className={classes.backResetButton}>
+            Reset Steps
+          </Button>
+        </Grid>
+      )}
     </div>
   )
 }
