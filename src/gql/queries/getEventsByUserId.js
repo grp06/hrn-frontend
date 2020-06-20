@@ -13,6 +13,12 @@ const getEventsByUserId = gql`
         id
         current_round
         start_at
+        event_users {
+          user {
+            id
+            name
+          }
+        }
       }
     }
   }

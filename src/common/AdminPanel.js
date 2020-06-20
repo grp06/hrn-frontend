@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
-import { EventForm, FloatCardWide, AttendeesList, ListOfRSVPs, TransitionModal, Timer } from '.'
+import { EventForm, FloatCardLarge, AttendeesList, ListOfRSVPs, TransitionModal, Timer } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { startEvent } from '../helpers'
 
@@ -101,7 +101,7 @@ const AdminPanel = ({ eventData, timeState }) => {
   }
 
   return (
-    <FloatCardWide>
+    <FloatCardLarge>
       <Grid
         item
         container
@@ -136,7 +136,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           <AttendeesList eventId={eventId} timeState={timeState} />
         )}
       </Grid>
-    </FloatCardWide>
+    </FloatCardLarge>
   )
 }
 

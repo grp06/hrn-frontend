@@ -20,7 +20,7 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const FloatCardWide = ({ children }) => {
+const FloatCardLarge = ({ children }) => {
   const classes = createStyles()
   return (
     <Grid container direction="column" className={classes.cardContainer}>
@@ -29,4 +29,4 @@ const FloatCardWide = ({ children }) => {
   )
 }
 
-export default FloatCardWide
+export default FloatCardLarge

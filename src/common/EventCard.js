@@ -13,7 +13,7 @@ import eventImage3 from '../assets/personClimbing.jpg'
 import eventImage4 from '../assets/personPhone.jpg'
 import eventImage5 from '../assets/personSalon.png'
 
-import { FloatCardWide } from '.'
+import { FloatCardLarge } from '.'
 
 const eventImages = [eventImage1, eventImage2, eventImage3, eventImage4, eventImage5]
 // const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
@@ -56,7 +56,7 @@ const EventCard = ({ event }) => {
 
   const eventTime = formatDate(start_at)
   return (
-    <FloatCardWide>
+    <FloatCardLarge>
       <Grid
         container
         justify="flex-start"
@@ -97,7 +97,7 @@ const EventCard = ({ event }) => {
           </Grid> */}
         </Grid>
       </Grid>
-    </FloatCardWide>
+    </FloatCardLarge>
   )
 }
 
