@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useAppContext } from '../context/useAppContext'
 import Avatar from '@material-ui/core/Avatar'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -10,6 +9,7 @@ import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 
 import { makeStyles } from '@material-ui/styles'
+import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   sectionHeader: {
@@ -25,7 +25,7 @@ const ListOfRSVPs = () => {
 
   return (
     <>
-      <Typography className={classes.sectionHeader}>People who RSVPed</Typography>
+      <Typography className={classes.sectionHeader}>People who've signed up</Typography>
       {event_users && event_users.length ? (
         <List dense>
           {event_users.map(({ user }) => {

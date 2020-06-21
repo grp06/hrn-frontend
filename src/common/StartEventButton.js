@@ -28,7 +28,7 @@ const StartEventButton = ({ eventId, within30Mins, eventStartTime, status }) => 
   // if we get here, it's GO TIME!
   return (
     <Button size="large" variant="contained" color="primary" onClick={() => startPreEvent(eventId)}>
-      Start Pre-Event
+      Start pre-event speech
       <span className={classes.partyEmoji} role="img" aria-label="party emoji">
         🥳
       </span>

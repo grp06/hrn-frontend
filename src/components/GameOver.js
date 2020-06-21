@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
@@ -78,11 +78,12 @@ const useStyles = makeStyles((theme) => ({
 const GameOver = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user } = useAppContext()
+  const { user, event } = useAppContext()
   const { userId } = user
 
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
+  const eventSet = Object.keys(event).length > 1
 
   const {
     data: mutualThumbsData,
@@ -96,11 +97,17 @@ const GameOver = ({ match }) => {
     },
   })
 
+  useEffect(() => {
+    if (eventSet && event.status === 'not-started') {
+      history.push(`/events/${eventId}`)
+    }
+  }, [event])
+
   if (mutualThumbsLoading) {
     return <Loading />
   }
 
-  // returns [ { id: ___, email: ___ }, {....} ] -- dope typescript bro
+  // returns [ { id: ___, email: ___ }, {....} ]
   const partnerDetails = mutualThumbsData.rounds.map((round) => {
     const idsAndEmails = Object.values(round)
     return idsAndEmails.filter((person) => person.id !== userId)
@@ -159,31 +166,23 @@ const GameOver = ({ match }) => {
               <List>{renderList()}</List>
             </Grid>
           </Grid>
-          <Typography className={classes.zoomLink}>
-            <a
-              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
-              target="_blank"
-              className={classes.zoomLink}
-            >
-              Click to join everyone from the event on a Zoom call!
-            </a>
-          </Typography>
         </FloatCardMedium>
       ) : (
         <div className={classes.textContainer}>
           <Typography className={classes.categoryHeader}>Thanks for joining the event!</Typography>
-          <Typography className={classes.zoomLink}>
-            <a
-              href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
-              target="_blank"
-              className={classes.zoomLink}
-            >
-              Click to join everyone from the event on a Zoom call!
-            </a>
-          </Typography>
         </div>
       )}
     </div>
   )
 }
 export default GameOver
+
+// <Typography className={classes.zoomLink}>
+//   <a
+//     href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+//     target="_blank"
+//     className={classes.zoomLink}
+//   >
+//     Click to join everyone from the event on a Zoom call!
+//   </a>
+// </Typography>
