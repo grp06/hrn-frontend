@@ -126,12 +126,12 @@ const VideoRoom = ({ match }) => {
       if (status === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
-      // this is only here to redirect someone if they navigate to video-room when event complete
-      // MAX: they should navigate to video route if the event is complete. Do this check in Event.js
 
-      // if (status === 'complete') {
-      //   return history.push(`/events/${eventId}/event-complete`)
-      // }
+      // we will hit this when the user is on the Thumbing screen, then new assignments are made
+      // and there are no new pairings left, and we end the event
+      if (status === 'complete') {
+        return history.push(`/events/${eventId}/event-complete`)
+      }
     }
   }, [event, userId])
 

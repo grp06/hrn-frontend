@@ -140,7 +140,7 @@ const Header = ({ activeTab, setActiveTab }) => {
       buttonVariant: 'outlined',
       buttonColor: 'secondary',
     },
-    modalBody: 'This will close the game for all users.',
+    modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await resetEventMutation(event.id)
@@ -241,6 +241,7 @@ const Header = ({ activeTab, setActiveTab }) => {
                 size="small"
                 variant="contained"
                 color="primary"
+                disabled={status !== 'pre-event'}
                 onClick={() => startEvent(eventId)}
               >
                 Start Event
