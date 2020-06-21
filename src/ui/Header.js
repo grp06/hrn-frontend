@@ -84,7 +84,6 @@ const useStyles = makeStyles((theme) => ({
     opacity: 1,
   },
   adminPanelContainer: {
-    width: '40%',
     marginLeft: 'auto',
   },
   buttonSmall: {
@@ -104,6 +103,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
+  const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
 
   const { user, event, app, resetUser } = useAppContext()
   const { role, name: usersName, userId } = user
@@ -140,11 +140,13 @@ const Header = ({ activeTab, setActiveTab }) => {
       buttonVariant: 'outlined',
       buttonColor: 'secondary',
     },
-    modalBody: 'This will close the game for all users.',
+    modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await resetEventMutation(event.id)
-      await startEvent(null, true)
+      await startEvent(event.id, true)
+      // setCurrentRound(0)
+      // history.replace(`/events/${event_id}`)
     },
   })
 
@@ -214,12 +216,11 @@ const Header = ({ activeTab, setActiveTab }) => {
     </>
   )
 
-  const adminNavPanel = () => {
-    const { event_id, current_round, host_id } = event
-    return (
-      role === 'host' &&
-      current_round !== 0 &&
-      host_id === userId && (
+  const renderAdminHeader = () => {
+    const { status, current_round, id: eventId } = event
+
+    if (role === 'host' && status !== 'not-started') {
+      return (
         <Grid
           container
           direction="row"
@@ -227,21 +228,37 @@ const Header = ({ activeTab, setActiveTab }) => {
           alignItems="center"
           className={classes.adminPanelContainer}
         >
-          <Grid item className={classes.tab}>
-            <p>
-              Curent Round:
-              {current_round}
-            </p>
-          </Grid>
-          <Grid item>{resetRoundsModal}</Grid>
+          <>
+            <Grid item>{resetRoundsModal}</Grid>
+            <Grid item className={classes.tab}>
+              <p>
+                Curent Round:
+                {current_round || 'Pre Event'}
+              </p>
+            </Grid>
+            <Grid>
+              <Button
+                size="small"
+                variant="contained"
+                color="primary"
+                disabled={status !== 'pre-event'}
+                onClick={() => startEvent(eventId)}
+              >
+                Start Event
+                <span className={classes.partyEmoji} role="img" aria-label="party emoji">
+                  🥳
+                </span>
+              </Button>
+            </Grid>
+          </>
         </Grid>
       )
-    )
+    }
   }
 
   const navContent = (
     <Grid container justify="flex-end" alignItems="center">
-      <Typography className={classes.howdyText}>Howdy, {usersName}! 🤠</Typography>
+      <Typography className={classes.howdyText}>Howdy,{usersName}! 🤠</Typography>
       <Button
         color="secondary"
         variant="outlined"
@@ -267,7 +284,7 @@ const Header = ({ activeTab, setActiveTab }) => {
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
           {usersName && navContent}
-          {event && adminNavPanel()}
+          {eventIdInUrl && renderAdminHeader()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>
