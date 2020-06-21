@@ -56,13 +56,10 @@ const PreEvent = ({ match }) => {
 
   useEffect(() => {
     if (token) {
-      console.log('PreEvent -> role', role)
       const setupRoom = async () => {
         let localTracks
         if (role === 'host') {
           try {
-            console.log('hi')
-
             localTracks = await createLocalTracks({
               video: true,
               audio: false,
@@ -78,8 +75,6 @@ const PreEvent = ({ match }) => {
         })
 
         startPreEventTwilio(myRoom)
-
-        console.warn('setting room to ID = ', `pre-event-${eventId}`)
       }
 
       setupRoom()

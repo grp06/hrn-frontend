@@ -9,9 +9,6 @@ const usePreEventTwilio = () => {
 
   const startPreEventTwilio = (room) => {
     if (room) {
-      const { localParticipant } = room
-      console.log('startPreEventTwilio -> localParticipant', localParticipant)
-
       if (role === 'host') {
         setupHostPreEvent(room)
       } else {
