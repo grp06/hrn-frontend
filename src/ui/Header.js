@@ -11,6 +11,7 @@ import {
   ListItem,
   ListItemText,
   Grid,
+  Typography,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
 import { useMutation } from 'react-apollo'
@@ -25,23 +26,7 @@ import { deleteRounds, resetEvent } from '../gql/mutations'
 
 import logo from '../assets/logoWhite.svg'
 
-// function ElevationScroll(props) {
-//   const { children } = props
-//   const trigger = useScrollTrigger({
-//     disableHysteresis: true,
-//     threshold: 0,
-//   })
-
-//   return React.cloneElement(children, {
-//     elevation: trigger ? 4 : 0,
-//   })
-// }
-
 const useStyles = makeStyles((theme) => ({
-  // toolbarMargin: {
-  //   ...theme.mixins.toolbar,
-  //   // marginBottom: '2em',
-  // },
   [theme.breakpoints.down('md')]: {
     marginBottom: '1em',
   },
@@ -49,12 +34,12 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '0.75em',
   },
   logo: {
-    height: '4em',
+    height: '3em',
     [theme.breakpoints.down('md')]: {
       height: '3em',
     },
     [theme.breakpoints.down('xs')]: {
-      height: '2em',
+      height: '1.5em',
     },
   },
   logoContainer: {
@@ -105,6 +90,14 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.8rem',
     fontFamily: 'Muli',
   },
+  howdyText: {
+    fontSize: '1rem',
+    color: theme.palette.common.sunray,
+  },
+  logoutButton: {
+    marginLeft: '20px',
+    marginRight: '20px',
+  },
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
@@ -112,8 +105,8 @@ const Header = ({ activeTab, setActiveTab }) => {
   const history = useHistory()
   const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
 
-  const { user, event, app } = useAppContext()
-  const { role } = user
+  const { user, event, app, resetUser } = useAppContext()
+  const { role, name: usersName, userId } = user
   const { appLoading } = app
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
   const [openDrawer, setOpenDrawer] = useState(false)
@@ -150,7 +143,6 @@ const Header = ({ activeTab, setActiveTab }) => {
     modalBody: 'This will close the game for all users.',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
-
       await resetEventMutation(event.id)
       await startEvent(event.id, true)
       // setCurrentRound(0)
@@ -169,6 +161,12 @@ const Header = ({ activeTab, setActiveTab }) => {
     { name: 'Contact Us', link: '/contact', activeIndex: 3 },
     { name: 'Test', link: '/test', activeIndex: 4 },
   ]
+
+  const handleLogout = () => {
+    localStorage.clear()
+    resetUser()
+    history.push('/')
+  }
 
   const drawer = (
     <>
@@ -257,9 +255,22 @@ const Header = ({ activeTab, setActiveTab }) => {
     }
   }
 
+  const navContent = (
+    <Grid container justify="flex-end" alignItems="center">
+      <Typography className={classes.howdyText}>Howdy,{usersName}! 🤠</Typography>
+      <Button
+        color="secondary"
+        variant="outlined"
+        onClick={handleLogout}
+        className={classes.logoutButton}
+      >
+        Log Out
+      </Button>
+    </Grid>
+  )
+
   return (
     <>
-      {/* <ElevationScroll> */}
       <AppBar position="fixed">
         <Toolbar disableGutters>
           <Button
@@ -271,12 +282,11 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
+          {usersName && navContent}
           {eventIdInUrl && renderAdminHeader()}
           {/* {matches ? drawer : tabs} */}
         </Toolbar>
       </AppBar>
-      {/* </ElevationScroll> */}
-      {/* <div className={classes.toolbarMargin} /> */}
     </>
   )
 }

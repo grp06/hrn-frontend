@@ -11,8 +11,8 @@ import {
   FloatCardWide,
   AttendeesList,
   TransitionModal,
-  Timer,
   StartEventButton,
+  ListOfRSVPs,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -118,7 +118,11 @@ const AdminPanel = ({ eventData, timeState }) => {
           <Typography variant="body1">{eventDescription}</Typography>
         </Grid>
         <Divider light variant="middle" />
-        <AttendeesList eventId={eventId} timeState={timeState} />
+        {timeState === 'future' ? (
+          <ListOfRSVPs />
+        ) : (
+          <AttendeesList eventId={eventId} timeState={timeState} />
+        )}
       </Grid>
     </FloatCardWide>
   )

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   pinkHighlight: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.sunray,
   },
   modalBody: {
     ...theme.typography.modalBody,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
   aTag: {
     textDecoration: 'none',
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.sunray,
     marginBottom: '10px',
     cursor: 'pointer',
     '&:hover': {
