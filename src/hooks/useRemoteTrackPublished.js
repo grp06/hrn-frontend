@@ -3,6 +3,8 @@ import { useAppContext } from '../context/useAppContext'
 const useRemoteTrackPublished = () => {
   const { setDidPartnerDisconnect, setVideoRouter } = useAppContext()
   const remoteTrackPublished = (publication) => {
+    const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1
+
     if (publication.isSubscribed) {
       const remoteDiv = document.getElementById('remote-video')
       if (remoteDiv) {
@@ -19,7 +21,11 @@ const useRemoteTrackPublished = () => {
       if (publication.kind === 'video') {
         attachedTrack.muted = true
       }
-      document.getElementById('remote-video').appendChild(attachedTrack)
+      if (onPreEvent) {
+        document.getElementById('host-video').appendChild(attachedTrack)
+      } else {
+        document.getElementById('remote-video').appendChild(attachedTrack)
+      }
       // setDidPartnerDisconnect(false)
     })
 

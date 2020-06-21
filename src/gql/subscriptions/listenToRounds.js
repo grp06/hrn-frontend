@@ -10,7 +10,6 @@ const listenToRounds = gql`
       partnerY_thumb
       round_number
       started_at
-      ended_at
     }
   }
 `

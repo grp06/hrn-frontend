@@ -155,7 +155,10 @@ const VideoRoom = ({ match }) => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
     if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
       const getTwilioToken = async () => {
-        const res = await getToken(myRound.id, userId).then((response) => response.json())
+        console.log('getTwilioToken -> eventId', eventId)
+        const res = await getToken(`${eventId}-${myRound.id}`, userId).then((response) =>
+          response.json()
+        )
         console.warn('setting token to something long')
 
         setToken(res.token)
@@ -173,7 +176,7 @@ const VideoRoom = ({ match }) => {
         try {
           localTracks = await createLocalTracks({
             video: true,
-            audio: true,
+            audio: false,
           })
         } catch (err) {
           setGUMError(err.name)
@@ -181,7 +184,6 @@ const VideoRoom = ({ match }) => {
         }
 
         const myRoom = await connect(token, {
-          name: myRound.id,
           tracks: localTracks,
         })
 

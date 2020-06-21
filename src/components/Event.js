@@ -60,20 +60,24 @@ const Event = ({ match }) => {
   }, [eventId])
 
   useEffect(() => {
-    if (eventSet && event.status === 'room-in-progress' && userId) {
+    if (eventSet && userId) {
       const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
       if (isEventParticipant) {
-        return history.push(`/events/${eventId}/video-room`)
+        switch (event.status) {
+          case 'pre-event':
+            return history.push(`/events/${eventId}/pre-event`)
+          case 'room-in-progress':
+            return history.push(`/events/${eventId}/video-room`)
+          case 'complete':
+            return history.push(`/events/${eventId}/event-complete`)
+          default:
+            break
+        }
       }
     }
-    if (eventSet && event.status === 'complete' && userId) {
-      const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
-      if (isEventParticipant) {
-        return history.push(`/events/${eventId}/event-complete`)
-      }
-    }
-  }, [event])
+  }, [event, userId])
 
+  // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
     return <Loading />
   }
