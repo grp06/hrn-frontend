@@ -155,7 +155,7 @@ const VideoRoom = ({ match }) => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
     if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
       const getTwilioToken = async () => {
-        console.log('getTwilioToken -> eventId', eventId)
+        console.log('getTwilioToken -> myRound.id', myRound.id)
         const res = await getToken(`${eventId}-${myRound.id}`, userId).then((response) =>
           response.json()
         )
