@@ -62,7 +62,7 @@ const PreEvent = ({ match }) => {
           try {
             localTracks = await createLocalTracks({
               video: true,
-              audio: false,
+              audio: process.env.NODE_ENV !== 'development',
             })
           } catch (err) {
             setGUMError(err.name)
