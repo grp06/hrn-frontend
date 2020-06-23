@@ -1,6 +1,6 @@
 const constants = {
   // change me back to 20000?
-  lastSeenDuration: 10000,
+  lastSeenDuration: 60000,
   roundLength: 300,
   partnerCameraIssueTimeout: 15000,
   firefoxCameraPermissionHowTo:
