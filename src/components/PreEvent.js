@@ -48,6 +48,7 @@ const PreEvent = ({ match }) => {
         const res = await getToken(`${eventId}-pre-event`, userId).then((response) =>
           response.json()
         )
+
         setToken(res.token)
       }
       setupToken()
