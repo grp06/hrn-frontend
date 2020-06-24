@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme) => ({
   totalSnapshotGrid: {
     width: '100%',
-    height: '500px',
+    height: '520px',
     [theme.breakpoints.down('md')]: {
       height: 'auto',
     },

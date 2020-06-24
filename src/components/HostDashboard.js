@@ -11,7 +11,6 @@ import {
 } from '../common'
 import { useQuery } from '@apollo/react-hooks'
 import { getHostEventsAndRounds } from '../gql/queries'
-import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -68,7 +67,8 @@ const HostDashboard = () => {
       }, 0)
 
       // calculate average connections per event
-      const averageThumbs = totalThumbs / eventsAndRoundsData.events.length
+      // we round up because why not ;)
+      const averageThumbs = Math.ceil(totalThumbs / eventsAndRoundsData.events.length)
 
       setAllTimeRSVPed(totalRSVP)
       setAllTimeMutualThumbs(totalThumbs)

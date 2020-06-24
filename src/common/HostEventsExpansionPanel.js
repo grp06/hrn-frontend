@@ -8,12 +8,22 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getHostEventAnalytics } from '../helpers'
+import formatDate from '../utils/formatDate'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
     ...theme.typography.h3,
     fontWeight: '300',
     color: theme.palette.common.ghostWhite,
+    flexBasis: '33.33%',
+    flexShrink: 0,
+  },
+  secondaryHeading: {
+    color: theme.palette.common.ghostWhiteSub,
+  },
+  detailsHeading: {
+    marginBottom: '15px',
+    textAlign: 'center',
   },
 }))
 
@@ -33,7 +43,9 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     const { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent } = getHostEventAnalytics(
       event
     )
+    const startTime = formatDate(new Date(event.start_at).getTime())
     // console.log('dropOffsInEvent -> ', dropOffsInEvent)
+
     return (
       <ExpansionPanel expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
         <ExpansionPanelSummary
@@ -42,22 +54,42 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           id={`${id}-header`}
         >
           <Typography className={classes.eventPanelHeading}>{event.event_name}</Typography>
+          <Typography className={classes.secondaryHeading}>{startTime}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Grid container>
-            <Grid item md={6} xs={12}>
-              <Typography>Total Registered: {event_users.length}</Typography>
+          {event.status === 'complete' ? (
+            <Grid container justify="center" alignItems="center">
+              <Grid item md={6} xs={12}>
+                <Typography className={classes.detailsHeading}>
+                  Total Registered: {event_users.length}
+                </Typography>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Typography className={classes.detailsHeading}>
+                  Total Mutual Connections: {mutualThumbsInEvent}
+                </Typography>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Typography className={classes.detailsHeading}>
+                  Total Drop Offs: {dropOffsInEvent}
+                </Typography>
+              </Grid>
+              <Grid item md={6} xs={12}>
+                <Typography className={classes.detailsHeading}>
+                  Total Attendees: {totalAttendeesInEvent}
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography>Total Mutual Connections: {mutualThumbsInEvent}</Typography>
+          ) : (
+            <Grid container justify="center" alignItems="center">
+              <Grid item md={6} xs={12}>
+                <Typography className={classes.detailsHeading}>
+                  This event has not started. Come back when it is over and we'll have some stats
+                  for you! 👍
+                </Typography>
+              </Grid>
             </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography>Total Drop Offs: {dropOffsInEvent}</Typography>
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <Typography>Total Attendees: {totalAttendeesInEvent}</Typography>
-            </Grid>
-          </Grid>
+          )}
         </ExpansionPanelDetails>
       </ExpansionPanel>
     )

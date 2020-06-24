@@ -13,6 +13,7 @@ const getHostEventsAndRounds = gql`
       }
       id
       start_at
+      status
       rounds {
         partnerY_id
         partnerX_id
