@@ -72,6 +72,8 @@ const AppProvider = ({ children }) => {
 
   useEffect(() => {
     if (eventIdInUrl && eventData) {
+      console.log('AppProvider -> eventIdInUrl', eventIdInUrl)
+      console.log('AppProvider -> eventData', eventData)
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
@@ -87,6 +89,7 @@ const AppProvider = ({ children }) => {
       const incomingData = JSON.stringify(eventData.events[0])
 
       if (existingData !== incomingData) {
+        console.log('AppProvider -> existingData !== incomingData', existingData !== incomingData)
         return dispatch((draft) => {
           draft.event = eventData.events[0]
           draft.app.appLoading = false
