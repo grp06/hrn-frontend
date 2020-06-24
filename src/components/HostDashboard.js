@@ -11,6 +11,7 @@ import {
 } from '../common'
 import { useQuery } from '@apollo/react-hooks'
 import { getHostEventsAndRounds } from '../gql/queries'
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const HostDashboard = () => {
   const classes = useStyles()
   const { user } = useAppContext()
-  const { userId } = user
+  const { userId, role } = user
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
   const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
@@ -75,6 +76,10 @@ const HostDashboard = () => {
       setAvgThumbsPerEvent(averageThumbs)
     }
   }, [eventsAndRoundsData])
+
+  if (role !== 'host') {
+    return <Redirect to="/events" />
+  }
 
   if (!eventsAndRoundsData) {
     return <Loading />
