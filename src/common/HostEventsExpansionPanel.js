@@ -10,11 +10,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
-  sectionHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-    marginBottom: '25px',
-  },
   eventPanelHeading: {
     ...theme.typography.h3,
     fontWeight: '300',

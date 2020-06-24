@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: '25px',
     paddingRight: '25px',
   },
+  sectionHeader: {
+    ...theme.typography.h2,
+    color: theme.palette.common.ghostWhite,
+    marginBottom: '25px',
+  },
 }))
 
 const HostDashboard = () => {
