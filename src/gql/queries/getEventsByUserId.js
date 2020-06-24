@@ -10,7 +10,6 @@ const getEventsByUserId = gql`
         description
         event_name
         host_id
-        id
         current_round
         start_at
       }

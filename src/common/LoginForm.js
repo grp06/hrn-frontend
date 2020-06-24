@@ -93,8 +93,8 @@ const LoginForm = () => {
     localStorage.setItem('token', token)
 
     localStorage.setItem('userId', id)
-
-    setUserId(id)
+    window.location.reload()
+    // setUserId(id)
   }
 
   return (
