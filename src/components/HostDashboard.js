@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
-import Grid from '@material-ui/core/Grid'
-import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from 'recharts'
 import { useAppContext } from '../context/useAppContext'
 import { makeStyles } from '@material-ui/styles'
-import { FloatCardXLarge, Loading } from '../common'
+import {
+  FloatCardXLarge,
+  FloatCardLarge,
+  Loading,
+  HostMetricsSnapshot,
+  HostEventsExpansionPanel,
+} from '../common'
 import { useQuery } from '@apollo/react-hooks'
 import { getHostEventsAndRounds } from '../gql/queries'
+import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
     marginTop: '100px',
+    paddingLeft: '25px',
+    paddingRight: '25px',
   },
 }))
-
-let allHostEventsObject = {}
 
 const HostDashboard = () => {
   const classes = useStyles()
   const { user } = useAppContext()
   const { userId } = user
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
+  const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
+  const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
 
-  // const calculateEventStats = (eventId) => {
-  //   const event = allHostEventsObject.eventId
-  //   const numberOfRounds
-  // }
   const {
     data: eventsAndRoundsData,
     loading: eventsAndRoundsLoading,
@@ -38,18 +41,33 @@ const HostDashboard = () => {
   })
 
   useEffect(() => {
+    // TODO: abstract to its own function that returns three variables
+    // totalRSVP, totalThumbs, avgThumbs
     if (eventsAndRoundsData && !eventsAndRoundsLoading) {
-      // populate allHostEventsObject with each object. The key is the eventId
-      eventsAndRoundsData.events.forEach((event) => {
-        allHostEventsObject[event.id] = JSON.parse(JSON.stringify(event))
-      })
-
-      // calculate all the RSVPed people in all your events and set state
+      // calculate all the RSVPed people in all your events
       const totalRSVP = eventsAndRoundsData.events.reduce((total, event) => {
         total += event.event_users.length
         return total
       }, 0)
+
+      // calcuate all the Mutual Thumbs in all your events
+      const totalThumbs = eventsAndRoundsData.events.reduce((total, event) => {
+        const mutualThumbsInEvent = event.rounds.reduce((thumbTotal, round) => {
+          if (round.partnerY_thumb && round.partnerX_thumb) {
+            thumbTotal++
+          }
+          return thumbTotal
+        }, 0)
+        total += mutualThumbsInEvent
+        return total
+      }, 0)
+
+      // calculate average connections per event
+      const averageThumbs = totalThumbs / eventsAndRoundsData.events.length
+
       setAllTimeRSVPed(totalRSVP)
+      setAllTimeMutualThumbs(totalThumbs)
+      setAvgThumbsPerEvent(averageThumbs)
     }
   }, [eventsAndRoundsData])
 
@@ -57,31 +75,20 @@ const HostDashboard = () => {
     return <Loading />
   }
 
-  console.log('allHostEventsObject ->', allHostEventsObject)
-  console.log('allTimeRSVPed ->', allTimeRSVPed)
+  const totalMetrics = [{ allTimeRSVPed, allTimeMutualThumbs, avgThumbsPerEvent }]
 
   return (
     <div className={classes.pageContainer}>
+      <Typography className={classes.sectionHeader}>Your Progress as a Host:</Typography>
       <FloatCardXLarge>
-        <Typography variant="h1">Hello There</Typography>
+        <HostMetricsSnapshot totalMetrics={totalMetrics} />
       </FloatCardXLarge>
+      <Typography className={classes.sectionHeader}>Your Past Events:</Typography>
+      <FloatCardLarge>
+        <HostEventsExpansionPanel eventsAndRoundsData={eventsAndRoundsData} />
+      </FloatCardLarge>
     </div>
   )
 }
 
 export default HostDashboard
-
-// return (
-//   <div className={classes.pageContainer}>
-//     <Typography variant="h1">Hello There</Typography>
-//     <FloatCardXLarge>
-//       <div className={classes.rotatedContainer}>
-//         <ResponsiveContainer width="100%" height={300}>
-//           <BarChart data={data}>
-//             <Bar dataKey="uv" fill="#8884d8" />
-//           </BarChart>
-//         </ResponsiveContainer>
-//       </div>
-//     </FloatCardXLarge>
-//   </div>
-// )
