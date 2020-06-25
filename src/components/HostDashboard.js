@@ -69,7 +69,7 @@ const HostDashboard = () => {
 
       // calculate average connections per event
       // we round up because why not ;)
-      const averageThumbs = Math.ceil(totalThumbs / eventsAndRoundsData.events.length)
+      const averageThumbs = (totalThumbs / eventsAndRoundsData.events.length).toFixed(1)
 
       setAllTimeRSVPed(totalRSVP)
       setAllTimeMutualThumbs(totalThumbs)

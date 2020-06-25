@@ -29,7 +29,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const classes = useStyles()
-  const [eventPanelExpanded, setEventPanelExpanded] = useState(false)
+  const [eventPanelExpanded, setEventPanelExpanded] = useState(
+    eventsAndRoundsData.events[0].id || false
+  )
 
   const handlePanelPress = (panel) => (event, isExpanded) => {
     setEventPanelExpanded(isExpanded ? panel : false)
@@ -38,7 +40,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     return <div>You've got no events 🏖</div>
   }
 
-  return eventsAndRoundsData.events.map((event) => {
+  return eventsAndRoundsData.events.map((event, index) => {
     const { id, event_users } = event
     const { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent } = getHostEventAnalytics(
       event
@@ -61,17 +63,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  Total Registered: {event_users.length}
+                  People Registered: {event_users.length}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  Total Mutual Connections: {mutualThumbsInEvent}
+                  Mutual Connections: {mutualThumbsInEvent}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  Total Drop Offs: {dropOffsInEvent}
+                  Drop Offs: {dropOffsInEvent}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
