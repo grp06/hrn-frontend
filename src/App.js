@@ -6,7 +6,7 @@ import { Route, BrowserRouter as Router, Switch, Redirect, withRouter } from 're
 
 import makeApolloClient from './apollo'
 import { LoginForm, EventForm, ErrorBoundary } from './common'
-import { Event, Events, VideoRoom, GameOver, SignUp, HostDashboard } from './components'
+import { Event, Events, VideoRoom, GameOver, SignUp, Prevent, HostDashboard } from './components'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -49,6 +49,7 @@ const App = () => {
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />
+                  <Route exact path="/events/:id/pre-event" component={PreEvent} />
                   <Route exact path="/events/:id/event-complete" component={GameOver} />
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>

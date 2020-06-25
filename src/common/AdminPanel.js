@@ -6,9 +6,14 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
-import { EventForm, FloatCardLarge, AttendeesList, ListOfRSVPs, TransitionModal, Timer } from '.'
-import { useAppContext } from '../context/useAppContext'
-import { startEvent } from '../helpers'
+import {
+  EventForm,
+  FloatCardWide,
+  AttendeesList,
+  TransitionModal,
+  StartEventButton,
+  ListOfRSVPs,
+} from '.'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -56,46 +61,29 @@ const AdminPanel = ({ eventData, timeState }) => {
       buttonText: '✏️ Edit Event',
     },
   })
+
   const {
     event_users,
     id: eventId,
     start_at: eventStartTime,
     description: eventDescription,
+    status,
   } = eventData
 
   const renderButton = () => {
     let element
+    console.log('timeState = ', timeState)
+
     switch (timeState) {
-      case 'future':
-        element = editFormModal
+      case 'within 30 mins':
+        element = <StartEventButton within30Mins eventStartTime={eventStartTime} />
         break
       case 'go time':
-        element = (
-          <Button
-            size="large"
-            variant="contained"
-            color="primary"
-            onClick={() => startEvent(eventId)}
-          >
-            Start Event
-            <span className={classes.partyEmoji} role="img" aria-label="party emoji">
-              🥳
-            </span>
-          </Button>
-        )
+        element = <StartEventButton eventId={eventId} status={status} />
         break
       default:
-        element = (
-          <>
-            <Button size="large" variant="contained" disabled color="primary">
-              Start Event
-              <span className={classes.partyEmoji} role="img" aria-label="party emoji">
-                🥳
-              </span>
-            </Button>
-            <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
-          </>
-        )
+        element = editFormModal
+        break
     }
     return element
   }

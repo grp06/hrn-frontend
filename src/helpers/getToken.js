@@ -1,10 +1,10 @@
-const getToken = async (roomId, userId) => {
+const getToken = async (uniqueName, userId) => {
   return fetch(`${process.env.REACT_APP_API_URL}/api/token`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ roomId, myUserId: userId }),
+    body: JSON.stringify({ uniqueName, userId }),
   })
 }
 

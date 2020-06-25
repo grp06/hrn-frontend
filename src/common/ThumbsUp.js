@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useAppContext } from '../context/useAppContext'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import Button from '@material-ui/core/Button'
@@ -8,6 +7,7 @@ import Snackbar from '@material-ui/core/Snackbar'
 import Typography from '@material-ui/core/Typography'
 import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/core/styles'
+import { useAppContext } from '../context/useAppContext'
 import { setPartnerXThumb, setPartnerYThumb } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -84,14 +84,14 @@ const ThumbsUp = ({ myRound, userId }) => {
     }
     setShowThumbUpButton(false)
     setShowSnackbar(true)
-    if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+    if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
     }
   }
 
   const handlePassOnThumbingClick = () => {
     setShowThumbUpButton(false)
-    if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
+    if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
     }
   }

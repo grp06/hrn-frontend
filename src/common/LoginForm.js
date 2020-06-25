@@ -89,11 +89,12 @@ const LoginForm = () => {
       return
     }
     const { id, token } = loginResponse
+    console.log('LoginForm -> loginResponse', loginResponse)
     localStorage.setItem('token', token)
 
     localStorage.setItem('userId', id)
-
-    setUserId(id)
+    window.location.reload()
+    // setUserId(id)
   }
 
   return (
