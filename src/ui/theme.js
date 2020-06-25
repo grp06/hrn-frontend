@@ -1,6 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
 const rebeccaPurple = '#6638aa'
+const lightPurple = '#723EBD'
 const orchid = '#df97d1'
 const materialPink = '#ffb6ec'
 const ghostWhite = '#f4f6fa'
@@ -18,6 +19,8 @@ const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
+const black1dp = '#1d1d1d'
+const black2dp = '#212121'
 const black3dp = '#232323'
 const black6dp = '#2c2c2c'
 
@@ -25,6 +28,7 @@ const theme = createMuiTheme({
   palette: {
     common: {
       rebeccaPurple,
+      lightPurple,
       orchid,
       sunray,
       ghostWhite,
@@ -121,7 +125,7 @@ const theme = createMuiTheme({
   overrides: {
     MuiAppBar: {
       colorPrimary: {
-        backgroundColor: greyCard,
+        backgroundColor: black2dp,
       },
     },
     // this is for the boxshadow on the navbar
@@ -134,6 +138,14 @@ const theme = createMuiTheme({
       },
       elevation4: {
         boxShadow: 'none',
+      },
+    },
+    MuiExpansionPanel: {
+      root: {
+        backgroundColor: greyCard,
+        // '&.Mui-expanded': {
+        //   backgroundColor: greyHighlight,
+        // },
       },
     },
     MuiInputLabel: {

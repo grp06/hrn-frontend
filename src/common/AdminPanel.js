@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import {
   EventForm,
-  FloatCardWide,
+  FloatCardLarge,
   AttendeesList,
   TransitionModal,
   StartEventButton,
@@ -89,7 +89,7 @@ const AdminPanel = ({ eventData, timeState }) => {
   }
 
   return (
-    <FloatCardWide>
+    <FloatCardLarge>
       <Grid
         item
         container
@@ -124,7 +124,7 @@ const AdminPanel = ({ eventData, timeState }) => {
           <AttendeesList eventId={eventId} timeState={timeState} />
         )}
       </Grid>
-    </FloatCardWide>
+    </FloatCardLarge>
   )
 }
 

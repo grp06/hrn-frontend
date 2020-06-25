@@ -5,10 +5,9 @@ import Grid from '@material-ui/core/Grid'
 const createStyles = makeStyles((theme) => ({
   cardContainer: {
     position: 'relative',
-    top: '-40px',
     bottom: '0%',
     display: 'block',
-    width: '75vw',
+    width: '90vw',
     height: 'auto',
     marginRight: 'auto',
     marginLeft: 'auto',
@@ -20,7 +19,7 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const FloatCardWide = ({ children }) => {
+const FloatCardXLarge = ({ children }) => {
   const classes = createStyles()
   return (
     <Grid container direction="column" className={classes.cardContainer}>
@@ -29,4 +28,4 @@ const FloatCardWide = ({ children }) => {
   )
 }
 
-export default FloatCardWide
+export default FloatCardXLarge

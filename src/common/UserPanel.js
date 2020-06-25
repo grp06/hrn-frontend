@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import { FloatCardWide, AttendeesList, Timer, HiRightNowBreakdown } from '.'
+import { FloatCardLarge, AttendeesList, Timer, HiRightNowBreakdown } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
@@ -131,7 +131,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   const renderWaitingForAdmin = () =>
     waitingForAdmin && (
-      <FloatCardWide>
+      <FloatCardLarge>
         <Grid
           item
           container
@@ -153,13 +153,13 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             </Typography>
           </Grid>
         </Grid>
-      </FloatCardWide>
+      </FloatCardLarge>
     )
 
   return (
     <>
       {renderWaitingForAdmin()}
-      <FloatCardWide>
+      <FloatCardLarge>
         <Grid
           item
           container
@@ -195,7 +195,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
           </Grid>
         </Grid>
         <HiRightNowBreakdown />
-      </FloatCardWide>
+      </FloatCardLarge>
     </>
   )
 }

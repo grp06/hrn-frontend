@@ -71,6 +71,7 @@ const AppProvider = ({ children }) => {
   )
 
   useEffect(() => {
+    // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
@@ -81,8 +82,8 @@ const AppProvider = ({ children }) => {
       }
 
       // cases to set event data
-      // no event data
-      // new event data is different from existing
+      // no event data set yet
+      // incoming data from subscription is different from existing
       const existingData = JSON.stringify(event)
       const incomingData = JSON.stringify(eventData.events[0])
 
@@ -95,7 +96,7 @@ const AppProvider = ({ children }) => {
     }
   }, [eventData])
 
-  // Setting lastSeen Mutation
+  // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
     if (userId) {
       const interval = setInterval(async () => {
@@ -114,16 +115,20 @@ const AppProvider = ({ children }) => {
 
   // Setting the user state in context after findUserById Query is made
   useEffect(() => {
-    if (userData && userData.users.length) {
-      const { name, role, id } = userData.users[0]
-      return dispatch((draft) => {
-        draft.user.role = role
-        draft.user.userId = id
-        draft.user.name = name
-        if (!eventIdInUrl) {
-          draft.app.appLoading = false
-        }
-      })
+    if (userData) {
+      if (userData.users.length) {
+        const { name, role, id } = userData.users[0]
+        return dispatch((draft) => {
+          draft.user.role = role
+          draft.user.userId = id
+          draft.user.name = name
+          if (!eventIdInUrl) {
+            draft.app.appLoading = false
+          }
+        })
+      }
+      localStorage.clear()
+      return history.push('/')
     }
   }, [userData, userId])
 
