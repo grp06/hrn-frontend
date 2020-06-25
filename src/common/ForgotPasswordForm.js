@@ -37,29 +37,32 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.orchid,
     },
   },
+  successMessage: {
+    textAlign: 'center',
+    marginBottom: '1em',
+  },
 }))
 
 const ForgotPasswordForm = () => {
   const classes = useStyles()
 
   const [email, setEmail] = useState('')
-
+  const [successMessage, setSuccessMessage] = useState(null)
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const resetPasswordResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/password_reset/user/${email}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ email }),
-      }
-    ).then((response) => response.json())
-
-    console.log('resetPasswordResponse = ', resetPasswordResponse)
+    await fetch(`${process.env.REACT_APP_API_URL}/api/password_reset/user/${email}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        Accept: 'application/json',
+      },
+      body: JSON.stringify({ email }),
+    })
+    setSuccessMessage(
+      "If we found an account associated with that email address, we've sent along the password reset instructions."
+    )
   }
 
   return (
@@ -86,6 +89,11 @@ const ForgotPasswordForm = () => {
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
+            </Grid>
+            <Grid>
+              <Typography className={classes.successMessage} variant="body1">
+                {successMessage}
+              </Typography>
             </Grid>
             <Grid container direction="column" justify="center" alignItems="center">
               <Button color="primary" type="submit" variant="contained">

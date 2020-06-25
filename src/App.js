@@ -54,7 +54,11 @@ const App = () => {
                   <Route exact path="/" component={LoginForm} />
                   <Route exact path="/sign-up" component={SignUp} />
                   <Route exact path="/forgot-password" component={ForgotPassword} />
-                  <Route exact path="/set-new-password" component={SetNewPassword} />
+                  <Route
+                    exact
+                    path="/set-new-password/:userId/:token/"
+                    component={SetNewPassword}
+                  />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/:id" component={Event} />

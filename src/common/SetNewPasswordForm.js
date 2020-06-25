@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, Link } from 'react-router-dom'
+import { Redirect, Link, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
 import { useAppContext } from '../context/useAppContext'
@@ -28,38 +28,71 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginBottom: '1em',
   },
-  linkRedirectToSignUp: {
+  forgotPasswordWrapper: {
+    marginTop: 25,
+    textAlign: 'center',
+  },
+  forgotPasswordLink: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
     textDecoration: 'none',
-    marginTop: '20px',
     '&:hover': {
       color: theme.palette.common.orchid,
     },
   },
+  errorMessage: {
+    textAlign: 'center',
+    marginBottom: '1em',
+    marginTop: '1em',
+  },
 }))
 
-const SetNewPasswordForm = () => {
+const SetNewPasswordForm = ({ match }) => {
   const classes = useStyles()
-
+  const { userId, token } = match.params
+  const history = useHistory()
   const [newPassword, setNewPassword] = useState('')
   const [repeatedPassword, setRepeatedPassword] = useState('')
-
+  const [error, setError] = useState()
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const newPasswordSetResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/password_reset/receive_new_password/109/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEwOSwiaWF0IjoxNTkzMDQ5ODAzLCJleHAiOjE1OTMwNTM0MDN9.svk99ccEkwc0GUMCY-HYAUDgw_zQWH6jA8no-0Wse48`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ password: newPassword }),
+    if (newPassword !== repeatedPassword) {
+      return setError('Passwords must match')
+    }
+
+    let newPasswordSetResponse
+    try {
+      newPasswordSetResponse = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/password_reset/receive_new_password/${userId}/${token}`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Credentials': true,
+          },
+          body: JSON.stringify({ password: newPassword }),
+        }
+      ).then((response) => response.json())
+
+      if (newPasswordSetResponse.error) {
+        throw newPasswordSetResponse.error
       }
-    ).then((response) => response.json())
-    console.log('newPasswordSetResponse = ', newPasswordSetResponse)
+    } catch (err) {
+      if (err === 'Unauthorized request') {
+        return setError(
+          'Looks like there was an issue setting your new password. Please request a new password again.'
+        )
+      }
+      return setError(err)
+    }
+
+    const { id, token: newPasswordToken } = newPasswordSetResponse
+
+    localStorage.setItem('token', newPasswordToken)
+    localStorage.setItem('userId', id)
+    history.push('/events')
+    window.location.reload()
   }
 
   return (
@@ -70,7 +103,7 @@ const SetNewPasswordForm = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Reset Password
+                  Set a new password
                 </Typography>
               </Grid>
             </Grid>
@@ -79,6 +112,7 @@ const SetNewPasswordForm = () => {
                 <TextField
                   id="new-password"
                   label="New password"
+                  type="password"
                   required
                   fullWidth
                   className={classes.input}
@@ -90,6 +124,7 @@ const SetNewPasswordForm = () => {
                 <TextField
                   id="repeated-password"
                   label="Repeat new password"
+                  type="password"
                   required
                   fullWidth
                   className={classes.input}
@@ -102,6 +137,16 @@ const SetNewPasswordForm = () => {
               <Button color="primary" type="submit" variant="contained">
                 Set New Password
               </Button>
+            </Grid>
+            <Grid>
+              <Typography className={classes.errorMessage} variant="body1">
+                {error}
+              </Typography>
+            </Grid>
+            <Grid className={classes.forgotPasswordWrapper}>
+              <Link className={classes.forgotPasswordLink} to="/forgot-password">
+                Forgot Password?
+              </Link>
             </Grid>
           </form>
         </Grid>

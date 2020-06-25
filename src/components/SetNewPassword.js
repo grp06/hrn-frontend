@@ -1,8 +1,8 @@
 import React from 'react'
 import { SetNewPasswordForm } from '../common'
 
-const SetNewPassword = () => {
-  return <SetNewPasswordForm />
+const SetNewPassword = ({ match }) => {
+  return <SetNewPasswordForm match={match} />
 }
 
 export default SetNewPassword
