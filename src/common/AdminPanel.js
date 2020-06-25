@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import {
   EventForm,
-  FloatCardWide,
+  FloatCardLarge,
   AttendeesList,
   TransitionModal,
   StartEventButton,
