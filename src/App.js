@@ -15,6 +15,7 @@ import {
   PreEvent,
   ForgotPassword,
   SetNewPassword,
+  HostDashboard,
 } from './components'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
@@ -60,6 +61,7 @@ const App = () => {
                     component={SetNewPassword}
                   />
                   <Route exact path="/create-event" component={EventForm} />
+                  <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />

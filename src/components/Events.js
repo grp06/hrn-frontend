@@ -9,7 +9,7 @@ import { getEventsByUserId } from '../gql/queries'
 
 import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
-import { EventCard, Loading, FloatCardWide } from '../common'
+import { EventCard, Loading, FloatCardLarge } from '../common'
 import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -93,7 +93,7 @@ const Events = () => {
     if (!eventsData || !eventsData.event_users.length) {
       return (
         <>
-          <FloatCardWide>
+          <FloatCardLarge>
             <Grid
               container
               direction="column"
@@ -109,7 +109,7 @@ const Events = () => {
                 shareable link!
               </Typography>
             </Grid>
-          </FloatCardWide>
+          </FloatCardLarge>
           {role === 'host' && <CreateEventButton />}
         </>
       )
