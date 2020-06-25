@@ -82,7 +82,7 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
-  const { host_id, start_at, event_name } = event
+  const { host_id, start_at, event_name, description } = event
   const startTime = new Date(start_at).getTime()
   const now = Date.now()
   const diff = startTime - now
@@ -108,6 +108,11 @@ const Event = ({ match }) => {
                 {formatDate(startTime)}
               </Typography>
             </Grid>
+            <Grid item container direction="row" alignItems="center">
+              <Typography className={classes.subtitle} variant="subtitle1">
+                {description}
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
       </div>
@@ -115,7 +120,6 @@ const Event = ({ match }) => {
         <AdminPanel timeState={timeState()} eventData={event} />
       ) : (
         <UserPanel timeState={timeState()} eventData={event} />
-        // <UserPanel timeState={timeState()} eventData={event} refetch={refetch} />
       )}
     </>
   )
