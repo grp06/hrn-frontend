@@ -35,7 +35,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1em',
   },
   linkRedirectToSignUp: {
-    color: theme.palette.common.rebeccaPurple,
+    color: theme.palette.common.ghostWhite,
+    fontFamily: 'Muli',
     textDecoration: 'none',
     marginTop: '20px',
     '&:hover': {
@@ -139,7 +140,10 @@ const LoginForm = () => {
                 Log In
               </Button>
               <Link className={classes.linkRedirectToSignUp} to="/sign-up">
-                Don't have an account?
+                Don&apos;t have an account?
+              </Link>
+              <Link className={classes.linkRedirectToSignUp} to="/forgot-password">
+                Forgot Password?
               </Link>
               <Snackbar
                 open={errorSnackbarOpen}

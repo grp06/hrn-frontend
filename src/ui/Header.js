@@ -261,12 +261,12 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   const navContent = (
     <Grid container justify="flex-end" alignItems="center">
-      <Typography className={classes.howdyText}>Howdy, {usersName}! 🤠</Typography>
+      <Typography className={classes.howdyText}>Howdy,{usersName}! 🤠</Typography>
       {role === 'host' && (
         <Button
           color="secondary"
           variant="contained"
-          onClick={() => history.push('host-dashboard')}
+          onClick={() => history.push('/host-dashboard')}
           className={classes.dashboardButton}
         >
           Dashboard

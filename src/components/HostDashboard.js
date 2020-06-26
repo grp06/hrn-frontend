@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Typography from '@material-ui/core/Typography'
-import { useAppContext } from '../context/useAppContext'
 import { makeStyles } from '@material-ui/styles'
+import { useQuery } from '@apollo/react-hooks'
+import { Redirect } from 'react-router-dom'
+import { useAppContext } from '../context/useAppContext'
 import {
   FloatCardXLarge,
   FloatCardLarge,
@@ -9,9 +11,7 @@ import {
   HostMetricsSnapshot,
   HostEventsExpansionPanel,
 } from '../common'
-import { useQuery } from '@apollo/react-hooks'
 import { getHostEventsAndRounds } from '../gql/queries'
-import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {

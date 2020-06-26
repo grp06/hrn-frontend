@@ -176,7 +176,9 @@ const VideoRoom = ({ match }) => {
         try {
           localTracks = await createLocalTracks({
             video: true,
-            audio: process.env.NODE_ENV !== 'development',
+            audio:
+              process.env.NODE_ENV === 'production' &&
+              window.location.pathname.indexOf('staging') === -1,
           })
         } catch (err) {
           setGUMError(err.name)

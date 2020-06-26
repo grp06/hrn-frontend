@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '1em',
   },
   linkRedirectToLogin: {
-    color: theme.palette.common.rebeccaPurple,
+    color: theme.palette.common.ghostWhite,
+    fontFamily: 'Muli',
     textDecoration: 'none',
     marginTop: '20px',
     '&:hover': {
