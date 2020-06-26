@@ -23,8 +23,6 @@ import Header from './ui/Header'
 import theme from './ui/theme'
 
 const App = () => {
-  console.log('process.env.NODE_ENV = ', process.env.NODE_ENV)
-
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
 

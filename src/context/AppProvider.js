@@ -2,13 +2,12 @@ import React, { useEffect } from 'react'
 
 import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
-import { useHistory, Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
-import { useAppContext } from './useAppContext'
 
 const { lastSeenDuration } = constants
 
@@ -34,7 +33,8 @@ const defaultState = {
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { event } = state
-  const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
+  const regex = /\/\d+/
+  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
   // if we are on a route that has '/events/id' in it, then we can peel off the id
   // and use it to make our subscription to the event
   const pathnameArray = eventIdInUrl ? window.location.pathname.split('/') : null
@@ -122,6 +122,7 @@ const AppProvider = ({ children }) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
+
           if (!eventIdInUrl) {
             draft.app.appLoading = false
           }
