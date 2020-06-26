@@ -6,7 +6,7 @@ import { Route, BrowserRouter as Router, Switch, Redirect, withRouter } from 're
 
 import makeApolloClient from './apollo'
 import { LoginForm, EventForm, ErrorBoundary } from './common'
-import { Event, Events, VideoRoom, GameOver, SignUp, Prevent, HostDashboard } from './components'
+import { Event, Events, VideoRoom, GameOver, SignUp, PreEvent, HostDashboard } from './components'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'

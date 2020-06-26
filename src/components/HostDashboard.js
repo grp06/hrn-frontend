@@ -24,6 +24,15 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     marginBottom: '25px',
   },
+  noEventsContainer: {
+    marginTop: '150px',
+  },
+  noEventsMessage: {
+    ...theme.typography.h2,
+    textAlign: 'center',
+    paddingTop: '25px',
+    paddingBottom: '25px',
+  },
 }))
 
 const HostDashboard = () => {
@@ -81,8 +90,20 @@ const HostDashboard = () => {
     return <Redirect to="/events" />
   }
 
-  if (!eventsAndRoundsData) {
+  if (eventsAndRoundsLoading) {
     return <Loading />
+  }
+
+  if (!eventsAndRoundsData || !eventsAndRoundsData.events.length) {
+    return (
+      <div className={classes.noEventsContainer}>
+        <FloatCardLarge>
+          <Typography className={classes.noEventsMessage}>
+            Sorry, but you need to host some events for us to provide you with some data! 😩
+          </Typography>
+        </FloatCardLarge>
+      </div>
+    )
   }
 
   const totalMetrics = [{ allTimeRSVPed, allTimeMutualThumbs, avgThumbsPerEvent }]
