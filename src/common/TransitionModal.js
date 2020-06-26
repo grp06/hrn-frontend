@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     boxShadow: theme.palette.common.greyBoxShadow,
     // padding: theme.spacing(2, 4, 3),
-    width: 'auto',
+    width: '55vw',
     minWidth: '20vw',
     height: 'auto',
     padding: '40px',
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function TransitionModal({ button, modalBody, onAcceptFunction }) {
+function TransitionModal({ button, modalBody, onAcceptFunction, onAcceptButtonText }) {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize } = button
   const [open, setOpen] = useState(false)
@@ -104,7 +104,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction }) {
                     handleClose()
                   }}
                 >
-                  Yes, I'm Sure
+                  {onAcceptButtonText || 'Yes, I am Sure'}
                 </Button>
                 <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
                   Woops, No Way!
