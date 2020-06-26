@@ -77,6 +77,7 @@ const theme = createMuiTheme({
       fontSize: '1.5rem',
       fontWeight: '700',
       marginBottom: '10px',
+      lineHeight: '2rem',
     },
     h3: {
       fontFamily: 'Muli',
@@ -140,6 +141,11 @@ const theme = createMuiTheme({
         boxShadow: 'none',
       },
     },
+    MuiDivider: {
+      root: {
+        backgroundColor: ghostWhiteSub,
+      },
+    },
     MuiExpansionPanel: {
       root: {
         backgroundColor: greyCard,
@@ -171,8 +177,8 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       containedSizeLarge: {
-        padding: '20px 20px',
-        fontSize: '1.2rem',
+        padding: '11px 11px',
+        fontSize: '1.1rem',
       },
     },
     MuiFab: {
@@ -192,6 +198,11 @@ const theme = createMuiTheme({
     MuiSnackbar: {
       bottom: 'none',
       top: '20px',
+    },
+    MuiAlert: {
+      filledInfo: {
+        backgroundColor: sunray,
+      },
     },
     MuiStepLabel: {
       label: {

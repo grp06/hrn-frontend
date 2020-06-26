@@ -1,13 +1,9 @@
 import React from 'react'
 
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
-import copy from 'copy-to-clipboard'
 
 import {
   EventForm,
@@ -16,6 +12,7 @@ import {
   TransitionModal,
   StartEventButton,
   ListOfRSVPs,
+  ShareEventPromptModal,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +49,6 @@ const useStyles = makeStyles((theme) => ({
   descriptionContainer: {
     marginBottom: '25px',
   },
-  eventPromptModal: {},
 }))
 
 const AdminPanel = ({ eventData, timeState }) => {
@@ -74,52 +70,7 @@ const AdminPanel = ({ eventData, timeState }) => {
     },
   })
 
-  const copyEventPromptModal = TransitionModal({
-    modalBody: (
-      <Grid container direction="column" justify="center" alignItems="center">
-        <div className={classes.eventPromptModal} id="eventPrompt">
-          <Typography>Hi 👋, </Typography>
-          <Typography>
-            I'm hosting a speed-networking event with Hi Right Now at {eventStartTime}. The event
-            will have a structure as follows:
-          </Typography>
-          <List dense>
-            <ListItem key={1}>
-              <Typography>
-                1. You will get paired with one other event participant randomly.
-              </Typography>
-            </ListItem>
-            <ListItem key={2}>
-              <Typography>2. You two will video-chat for 5 minutes.</Typography>
-            </ListItem>
-            <ListItem key={3}>
-              <Typography>
-                3. Decide if you want to exchange contact details with your partner.
-              </Typography>
-            </ListItem>
-            <ListItem key={4}>
-              <Typography>4. Rinse and repeat for an hour!</Typography>
-            </ListItem>
-          </List>
-          <Typography>
-            You can sign-up for the event **for free** here (link to event)! Just make sure to come
-            back to that page 5 minutes before the event so you can get settled in before the event.
-            Can't wait to see your smiling face soon 😁
-          </Typography>
-        </div>
-      </Grid>
-    ),
-    button: {
-      buttonText: '✏️ Share Event',
-      buttonColor: 'secondary',
-      buttonSize: 'medium',
-    },
-    onAcceptFunction: () => {
-      const copyPrompt = document.getElementById('eventPrompt').innerText
-      copy(copyPrompt)
-    },
-    onAcceptButtonText: 'Copy this prompt!',
-  })
+  const copyEventPromptModal = <ShareEventPromptModal event={eventData} />
 
   const renderButton = () => {
     let element
@@ -134,13 +85,14 @@ const AdminPanel = ({ eventData, timeState }) => {
         break
       default:
         element = (
-          <div>
+          <Grid container direction="column" alignItems="center" justify="space-around">
+            <div style={{ marginBottom: '20px' }}>{copyEventPromptModal}</div>
             <div>{editFormModal}</div>
-            <div>{copyEventPromptModal}</div>
-          </div>
+          </Grid>
         )
         break
     }
+
     return element
   }
 
