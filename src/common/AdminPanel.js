@@ -72,7 +72,6 @@ const AdminPanel = ({ eventData, timeState }) => {
 
   const renderButton = () => {
     let element
-    console.log('timeState = ', timeState)
 
     switch (timeState) {
       case 'within 30 mins':
