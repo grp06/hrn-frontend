@@ -7,6 +7,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
+import copy from 'copy-to-clipboard'
 
 import {
   EventForm,
@@ -115,9 +116,7 @@ const AdminPanel = ({ eventData, timeState }) => {
     },
     onAcceptFunction: () => {
       const copyPrompt = document.getElementById('eventPrompt').innerText
-      console.log(copyPrompt)
-      // copyPrompt.current.select()
-      document.execCommand('copy')
+      copy(copyPrompt)
     },
     onAcceptButtonText: 'Copy this prompt!',
   })
