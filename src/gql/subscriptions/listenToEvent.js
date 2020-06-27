@@ -18,6 +18,9 @@ const listenToEvent = gql`
           id
         }
       }
+      host {
+        name
+      }
     }
   }
 `
