@@ -1,6 +1,5 @@
 import React from 'react'
 
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
@@ -13,6 +12,7 @@ import {
   TransitionModal,
   StartEventButton,
   ListOfRSVPs,
+  ShareEventPromptModal,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -54,6 +54,14 @@ const useStyles = makeStyles((theme) => ({
 const AdminPanel = ({ eventData, timeState }) => {
   const classes = useStyles()
 
+  const {
+    event_users,
+    id: eventId,
+    start_at: eventStartTime,
+    description: eventDescription,
+    status,
+  } = eventData
+
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
     button: {
@@ -62,13 +70,7 @@ const AdminPanel = ({ eventData, timeState }) => {
     },
   })
 
-  const {
-    event_users,
-    id: eventId,
-    start_at: eventStartTime,
-    description: eventDescription,
-    status,
-  } = eventData
+  const copyEventPromptModal = <ShareEventPromptModal event={eventData} />
 
   const renderButton = () => {
     let element
@@ -81,9 +83,15 @@ const AdminPanel = ({ eventData, timeState }) => {
         element = <StartEventButton eventId={eventId} status={status} />
         break
       default:
-        element = editFormModal
+        element = (
+          <Grid container direction="column" alignItems="center" justify="space-around">
+            <div style={{ marginBottom: '20px' }}>{copyEventPromptModal}</div>
+            <div>{editFormModal}</div>
+          </Grid>
+        )
         break
     }
+
     return element
   }
 
