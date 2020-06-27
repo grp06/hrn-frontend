@@ -166,23 +166,35 @@ const GameOver = ({ match }) => {
               <List>{renderList()}</List>
             </Grid>
           </Grid>
+          <Grid container item direction="column" className={classes.descriptionContainer}>
+            <Typography className={classes.zoomLink}>
+              <a
+                href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+                target="_blank"
+                className={classes.zoomLink}
+              >
+                Click to join everyone from the event on a Zoom call!
+              </a>
+            </Typography>
+          </Grid>
         </FloatCardMedium>
       ) : (
         <div className={classes.textContainer}>
           <Typography className={classes.categoryHeader}>Thanks for joining the event!</Typography>
+          <Grid container item direction="column" className={classes.descriptionContainer}>
+            <Typography className={classes.zoomLink}>
+              <a
+                href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
+                target="_blank"
+                className={classes.zoomLink}
+              >
+                Click to join everyone from the event on a Zoom call!
+              </a>
+            </Typography>
+          </Grid>
         </div>
       )}
     </div>
   )
 }
 export default GameOver
-
-// <Typography className={classes.zoomLink}>
-//   <a
-//     href="https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09"
-//     target="_blank"
-//     className={classes.zoomLink}
-//   >
-//     Click to join everyone from the event on a Zoom call!
-//   </a>
-// </Typography>

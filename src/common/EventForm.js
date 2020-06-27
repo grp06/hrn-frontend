@@ -101,6 +101,7 @@ const EventForm = ({ eventData, match }) => {
     } else {
       const res = await createEventMutation()
       const { id } = res.data.insert_events.returning[0]
+
       await insertEventUserMutation({
         variables: {
           eventId: id,
