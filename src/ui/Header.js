@@ -262,7 +262,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   }
 
   const navContent = () => {
-    const { current_round } = event
+    const { current_round, status } = event
     return (
       <>
         <Grid container alignItems="center">
@@ -277,12 +277,14 @@ const Header = ({ activeTab, setActiveTab }) => {
               Dashboard
             </Button>
           )}
-          <Grid item className={classes.tab}>
-            <p>
-              Curent Round:
-              {` ${current_round || 'Pre Event'}`}
-            </p>
-          </Grid>
+          {status !== 'not-started' && eventIdInUrl ? (
+            <Grid item className={classes.tab}>
+              <p>
+                Curent Round:
+                {` ${current_round || 'Pre-event'}`}
+              </p>
+            </Grid>
+          ) : null}
         </Grid>
         {isEventHost && eventIdInUrl && renderAdminHeader()}
         <Grid container justify="flex-end" alignItems="center">
