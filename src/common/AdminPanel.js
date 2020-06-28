@@ -120,10 +120,6 @@ const AdminPanel = ({ eventData, timeState }) => {
         justify="space-around"
         className={classes.cardBodyContainer}
       >
-        <Grid container item direction="column" className={classes.descriptionContainer}>
-          <Typography className={classes.sectionHeader}>Description</Typography>
-          <Typography variant="body1">{eventDescription}</Typography>
-        </Grid>
         <Divider light variant="middle" />
         {timeState === 'future' ? (
           <ListOfRSVPs />
