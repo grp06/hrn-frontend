@@ -134,13 +134,25 @@ const ThumbsUp = ({ myRound, userId }) => {
           </>
         ) : (
           <>
-            <Typography className={classes.messageText}>Awesome!</Typography>
-            <Typography className={classes.messageText}>
-              Connecting you to a new friend soon!
-            </Typography>
-            <div className={classes.emoji}>
-              <span>🥳</span>
-            </div>
+            {showSnackbar ? (
+              <>
+                <Typography className={classes.messageText}>Awesome!</Typography>
+                <Typography className={classes.messageText}>
+                  Connecting you to a new friend soon!
+                </Typography>
+                <div className={classes.emoji}>
+                  <span>🥳</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <Typography className={classes.messageText}>Sorry to Hear! 😔</Typography>
+                <Typography className={classes.messageText}>
+                  This next person is going to be great!
+                </Typography>
+              </>
+            )}
+
             <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
               <Alert onClose={handleSnackbarClose} severity="success">
                 Carrier pigeon sent 🕊
