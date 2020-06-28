@@ -74,14 +74,12 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     if (timeState === 'go time' && alreadyAttending) {
       setWaitingForAdmin(true)
     }
-  }, [timeState, role])
+  }, [timeState])
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
     history.push('/sign-up')
   }
-
-  const token = localStorage.getItem('token')
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>

@@ -96,6 +96,7 @@ const Event = ({ match }) => {
     }
     return 'within 30 mins'
   }
+
   return (
     <>
       <div className={classes.eventBanner}>
