@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
-  const regex = /\/\d+/
+  const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
 
   const { user, event, app, resetUser } = useAppContext()
