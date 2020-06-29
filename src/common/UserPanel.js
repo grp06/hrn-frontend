@@ -61,28 +61,25 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
       eventId,
       userId,
     },
-    skip: role === 'host' || !userId || !eventId,
+    skip: !userId || !eventId,
   })
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
       eventId,
       userId,
     },
-    skip: role === 'host',
   })
 
   useEffect(() => {
-    if (timeState === 'go time' && role === 'user' && alreadyAttending) {
+    if (timeState === 'go time' && alreadyAttending) {
       setWaitingForAdmin(true)
     }
-  }, [timeState, role])
+  }, [timeState])
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
     history.push('/sign-up')
   }
-
-  const token = localStorage.getItem('token')
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>

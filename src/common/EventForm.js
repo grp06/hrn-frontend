@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
   dateTime: {
     width: '100%',
+    marginBottom: '1em',
   },
   eventUpdated: {
     width: '100%',
@@ -49,6 +50,7 @@ const EventForm = ({ eventData, match }) => {
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
+  const [roundLength, setRoundLength] = useState(5)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
   const initialEventData = useRef()
@@ -58,6 +60,7 @@ const EventForm = ({ eventData, match }) => {
       event_name: title,
       start_at: selectedDate,
       host_id: userId,
+      round_length: roundLength,
     },
   })
 
@@ -163,8 +166,19 @@ const EventForm = ({ eventData, match }) => {
                     label="Date and time"
                     value={selectedDate}
                     onChange={setSelectedDate}
-                    minutesStep={15}
+                    minutesStep={5}
                     className={classes.dateTime}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="round-length"
+                    label="Round Length (in minutes)"
+                    required
+                    fullWidth
+                    className={classes.input}
+                    value={roundLength}
+                    onChange={(e) => setRoundLength(e.target.value)}
                   />
                 </Grid>
               </Grid>

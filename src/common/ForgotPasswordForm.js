@@ -50,7 +50,7 @@ const ForgotPasswordForm = () => {
   const [successMessage, setSuccessMessage] = useState(null)
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    await fetch(`${process.env.REACT_APP_API_URL}/api/password_reset/user/${email}`, {
+    await fetch(`${process.env.REACT_APP_API_URL}/api/email/password_reset/user/${email}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

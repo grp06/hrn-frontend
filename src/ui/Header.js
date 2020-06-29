@@ -99,20 +99,27 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '20px',
   },
   dashboardButton: {
-    marginLeft: '20px',
+    margin: '0 20px',
+  },
+  startEvent: {
+    marginLeft: 10,
   },
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
   const classes = useStyles()
   const history = useHistory()
-  const eventIdInUrl = window.location.pathname.indexOf('/events/') > -1
+  const regex = /\/\d+/
+  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
 
   const { user, event, app, resetUser } = useAppContext()
   const { role, name: usersName, userId } = user
+  const { host_id } = event
   const { appLoading } = app
   const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
   const [openDrawer, setOpenDrawer] = useState(false)
+
+  const isEventHost = host_id === userId
 
   const [deleteRoundsMutation] = useMutation(deleteRounds)
   const [resetEventMutation] = useMutation(resetEvent, {
@@ -142,12 +149,13 @@ const Header = ({ activeTab, setActiveTab }) => {
       buttonText: 'Reset Event',
       buttonVariant: 'outlined',
       buttonColor: 'secondary',
+      buttonSize: 'small',
     },
     modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await resetEventMutation(event.id)
-      await startEvent(event.id, true)
+      await startEvent(event.id, null, true)
       // setCurrentRound(0)
       // history.replace(`/events/${event_id}`)
     },
@@ -220,32 +228,26 @@ const Header = ({ activeTab, setActiveTab }) => {
   )
 
   const renderAdminHeader = () => {
-    const { status, current_round, id: eventId } = event
+    const { status, id: eventId, round_length } = event
 
-    if (role === 'host' && status !== 'not-started') {
+    if (status !== 'not-started') {
       return (
         <Grid
           container
           direction="row"
-          justify="space-around"
+          justify="flex-end"
           alignItems="center"
           className={classes.adminPanelContainer}
         >
           <>
             <Grid item>{resetRoundsModal}</Grid>
-            <Grid item className={classes.tab}>
-              <p>
-                Curent Round:
-                {current_round || 'Pre Event'}
-              </p>
-            </Grid>
-            <Grid>
+            <Grid className={classes.startEvent}>
               <Button
                 size="small"
                 variant="contained"
                 color="primary"
                 disabled={status !== 'pre-event'}
-                onClick={() => startEvent(eventId)}
+                onClick={() => startEvent(eventId, round_length)}
               >
                 Start Event
                 <span className={classes.partyEmoji} role="img" aria-label="party emoji">
@@ -259,29 +261,48 @@ const Header = ({ activeTab, setActiveTab }) => {
     }
   }
 
-  const navContent = (
-    <Grid container justify="flex-end" alignItems="center">
-      <Typography className={classes.howdyText}>Howdy, {usersName}! 🤠</Typography>
-      {role === 'host' && (
-        <Button
-          color="secondary"
-          variant="contained"
-          onClick={() => history.push('/host-dashboard')}
-          className={classes.dashboardButton}
-        >
-          Dashboard
-        </Button>
-      )}
-      <Button
-        color="secondary"
-        variant="outlined"
-        onClick={handleLogout}
-        className={classes.logoutButton}
-      >
-        Log Out
-      </Button>
-    </Grid>
-  )
+  const navContent = () => {
+    const { current_round, status } = event
+    return (
+      <>
+        <Grid container alignItems="center">
+          {role === 'host' && (
+            <Button
+              color="secondary"
+              variant="contained"
+              size="small"
+              onClick={() => history.push('/host-dashboard')}
+              className={classes.dashboardButton}
+            >
+              Dashboard
+            </Button>
+          )}
+          {status !== 'not-started' && eventIdInUrl ? (
+            <Grid item className={classes.tab}>
+              <p>
+                Curent Round:
+                {` ${current_round || 'Pre-event'}`}
+              </p>
+            </Grid>
+          ) : null}
+        </Grid>
+        {isEventHost && eventIdInUrl && renderAdminHeader()}
+        <Grid container justify="flex-end" alignItems="center">
+          <Typography className={classes.howdyText}>Howdy,{` ${usersName}`}! 🤠</Typography>
+
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={handleLogout}
+            size="small"
+            className={classes.logoutButton}
+          >
+            Logout
+          </Button>
+        </Grid>
+      </>
+    )
+  }
 
   return (
     <>
@@ -296,9 +317,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           >
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
-          {usersName && navContent}
-          {eventIdInUrl && renderAdminHeader()}
-          {/* {matches ? drawer : tabs} */}
+          {usersName && navContent()}
         </Toolbar>
       </AppBar>
     </>
