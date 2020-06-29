@@ -199,7 +199,10 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (room) {
       const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
-      const roundEndTime = moment(myRound.started_at).seconds(roundStartedAtInSeconds + roundLength)
+      const roundEndTime = moment(myRound.started_at).seconds(
+        // round length is measured in minutes and stored as an int
+        roundStartedAtInSeconds + (event.round_length || 5) * 60
+      )
       setTimerTimeInput(roundEndTime)
       setShowTimer(true)
       console.warn('starting twilio')
