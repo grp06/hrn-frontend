@@ -34,7 +34,7 @@ const defaultState = {
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { event } = state
-  const regex = /\/\d+/
+  const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
   // if we are on a route that has '/events/id' in it, then we can peel off the id
   // and use it to make our subscription to the event
