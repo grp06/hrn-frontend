@@ -176,6 +176,7 @@ const EventForm = ({ eventData, match }) => {
                     label="Round Length (in minutes)"
                     required
                     fullWidth
+                    type="number"
                     className={classes.input}
                     value={roundLength}
                     onChange={(e) => setRoundLength(e.target.value)}

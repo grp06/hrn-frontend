@@ -63,7 +63,7 @@ const SetNewPasswordForm = ({ match }) => {
     let newPasswordSetResponse
     try {
       newPasswordSetResponse = await fetch(
-        `${process.env.REACT_APP_API_URL}/api/email/reset_password/receive_new_password/${userId}/${token}`,
+        `${process.env.REACT_APP_API_URL}/api/email/receive_new_password/${userId}/${token}`,
         {
           method: 'POST',
           headers: {
