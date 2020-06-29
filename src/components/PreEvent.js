@@ -58,11 +58,8 @@ const PreEvent = ({ match }) => {
   useEffect(() => {
     if (token) {
       const isEventHost = event.host_id === userId
-      console.log('PreEvent -> userId', userId)
-      console.log('PreEvent ->  event.host_id', event.host_id)
       const setupRoom = async () => {
         let localTracks
-        console.log('PreEvent -> isEventHost', isEventHost)
         if (isEventHost) {
           try {
             localTracks = await createLocalTracks({

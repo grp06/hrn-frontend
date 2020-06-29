@@ -1,15 +1,12 @@
 import { useSetupUserPreEvent } from '.'
-import { useAppContext } from '../context/useAppContext'
 import { setupHostPreEvent } from '../helpers'
 
 const usePreEventTwilio = () => {
-  const { user } = useAppContext()
-  const { role } = user
   const { setupUserPreEvent } = useSetupUserPreEvent()
 
-  const startPreEventTwilio = (room) => {
+  const startPreEventTwilio = (room, isEventHost) => {
     if (room) {
-      if (role === 'host') {
+      if (isEventHost) {
         setupHostPreEvent(room)
       } else {
         setupUserPreEvent(room)
