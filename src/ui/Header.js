@@ -107,6 +107,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
+  console.log('process.env = ', process.env)
+
   const classes = useStyles()
   const history = useHistory()
   const regex = /\/events\/\d+/

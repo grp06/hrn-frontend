@@ -64,9 +64,7 @@ const PreEvent = ({ match }) => {
           try {
             localTracks = await createLocalTracks({
               video: true,
-              audio:
-                process.env.NODE_ENV === 'production' &&
-                window.location.pathname.indexOf('staging') === -1,
+              audio: process.env.NODE_ENV === 'production',
             })
           } catch (err) {
             setGUMError(err.name)
@@ -78,7 +76,7 @@ const PreEvent = ({ match }) => {
           tracks: isEventHost ? localTracks : [],
         })
 
-        startPreEventTwilio(myRoom)
+        startPreEventTwilio(myRoom, isEventHost)
       }
 
       setupRoom()
