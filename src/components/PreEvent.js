@@ -57,9 +57,10 @@ const PreEvent = ({ match }) => {
 
   useEffect(() => {
     if (token) {
+      const isHost = event.host_id === userId
       const setupRoom = async () => {
         let localTracks
-        if (role === 'host') {
+        if (isHost) {
           try {
             localTracks = await createLocalTracks({
               video: true,
@@ -74,7 +75,7 @@ const PreEvent = ({ match }) => {
         }
 
         const myRoom = await connect(token, {
-          tracks: role === 'host' ? localTracks : [],
+          tracks: isHost ? localTracks : [],
         })
 
         startPreEventTwilio(myRoom)
