@@ -155,7 +155,7 @@ const Header = ({ activeTab, setActiveTab }) => {
     onAcceptFunction: async () => {
       await deleteRoundsMutation()
       await resetEventMutation(event.id)
-      await startEvent(event.id, true)
+      await startEvent(event.id, null, true)
       // setCurrentRound(0)
       // history.replace(`/events/${event_id}`)
     },
@@ -228,7 +228,7 @@ const Header = ({ activeTab, setActiveTab }) => {
   )
 
   const renderAdminHeader = () => {
-    const { status, id: eventId } = event
+    const { status, id: eventId, round_length } = event
 
     if (status !== 'not-started') {
       return (
@@ -247,7 +247,7 @@ const Header = ({ activeTab, setActiveTab }) => {
                 variant="contained"
                 color="primary"
                 disabled={status !== 'pre-event'}
-                onClick={() => startEvent(eventId)}
+                onClick={() => startEvent(eventId, round_length)}
               >
                 Start Event
                 <span className={classes.partyEmoji} role="img" aria-label="party emoji">
