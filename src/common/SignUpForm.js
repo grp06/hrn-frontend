@@ -96,6 +96,8 @@ const SignUpForm = () => {
       // FIXME
       window.location.reload()
     }
+
+    setUserId(id)
   }
 
   return (
