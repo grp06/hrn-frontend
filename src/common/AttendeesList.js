@@ -10,6 +10,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+import Grid from '@material-ui/core/Grid'
 import { displayOnlineUsers } from '../gql/subscriptions'
 import { constants } from '../utils'
 import { useAppContext } from '../context/useAppContext'
@@ -20,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
   sectionHeader: {
     ...theme.typography.h3,
     color: theme.palette.common.ghostWhite,
+  },
+  attendeesList: {
+    alignSelf: 'flex-start',
   },
 }))
 
@@ -55,7 +59,7 @@ const AttendeesList = ({ eventId, timeState }) => {
         // server time and local computer could be a bit off?
         // this could actually be an issue..
         // a single source of truth for online users would be preferable :(
-        return diff < lastSeenDuration + 60000
+        return diff < lastSeenDuration + 10000
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {
@@ -65,7 +69,7 @@ const AttendeesList = ({ eventId, timeState }) => {
   }, [onlineUsersData, timeState])
 
   return (
-    <>
+    <Grid container item direction="column" alignItems="center" className={classes.attendeesList}>
       <Typography className={classes.sectionHeader}>Online Attendees</Typography>
       <List dense>
         {oldOnlineUsers.map(({ user }) => {
@@ -83,7 +87,7 @@ const AttendeesList = ({ eventId, timeState }) => {
           )
         })}
       </List>
-    </>
+    </Grid>
   )
 }
 

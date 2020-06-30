@@ -130,13 +130,25 @@ const AdminPanel = ({ eventData, timeState }) => {
         item
         direction="column"
         justify="space-around"
+        alignItems="flex-start"
         className={classes.cardBodyContainer}
       >
-        <Divider light variant="middle" />
-        {timeState === 'future' ? (
-          <ListOfRSVPs />
+        {timeState === 'go time' ? (
+          <Grid
+            container
+            item
+            direction="row"
+            wrap="nowrap"
+            justify="space-between"
+            alignItems="center"
+          >
+            <ListOfRSVPs />
+            <AttendeesList eventId={eventId} timeState={timeState} />
+          </Grid>
         ) : (
-          <AttendeesList eventId={eventId} timeState={timeState} />
+          <Grid>
+            <ListOfRSVPs />
+          </Grid>
         )}
       </Grid>
     </FloatCardLarge>

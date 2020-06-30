@@ -7,6 +7,7 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../context/useAppContext'
@@ -24,7 +25,7 @@ const ListOfRSVPs = () => {
   const { event_users } = event
 
   return (
-    <>
+    <Grid container item direction="column" justify="center" alignItems="center">
       <Typography className={classes.sectionHeader}>People who've signed up</Typography>
       {event_users && event_users.length ? (
         <List dense>
@@ -44,7 +45,7 @@ const ListOfRSVPs = () => {
       ) : (
         <Typography variant="body1">No one has signed up yet!</Typography>
       )}
-    </>
+    </Grid>
   )
 }
 
