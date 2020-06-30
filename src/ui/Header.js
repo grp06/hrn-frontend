@@ -107,8 +107,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Header = ({ activeTab, setActiveTab }) => {
-  console.log('process.env = ', process.env)
-
   const classes = useStyles()
   const history = useHistory()
   const regex = /\/events\/\d+/
@@ -291,7 +289,6 @@ const Header = ({ activeTab, setActiveTab }) => {
         {isEventHost && eventIdInUrl && renderAdminHeader()}
         <Grid container justify="flex-end" alignItems="center">
           <Typography className={classes.howdyText}>Howdy,{` ${usersName}`}! 🤠</Typography>
-
           <Button
             color="secondary"
             variant="outlined"

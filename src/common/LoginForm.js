@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
   const classes = useStyles()
-  const { setUserId } = useAppContext()
+  const history = useHistory()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -94,8 +94,13 @@ const LoginForm = () => {
     localStorage.setItem('token', token)
 
     localStorage.setItem('userId', id)
-    window.location.reload()
-    // setUserId(id)
+    const eventIdInLocalStorage = localStorage.getItem('eventId')
+
+    if (eventIdInLocalStorage) {
+      history.replace(`/events/${eventIdInLocalStorage}`)
+      // FIXME
+      window.location.reload()
+    }
   }
 
   return (
