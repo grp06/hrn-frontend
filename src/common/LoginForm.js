@@ -99,8 +99,8 @@ const LoginForm = () => {
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
       // FIXME
-      window.location.reload()
     }
+    window.location.reload()
   }
 
   return (
