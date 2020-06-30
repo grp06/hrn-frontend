@@ -94,10 +94,9 @@ const SignUpForm = () => {
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
       // FIXME
-      window.location.reload()
     }
 
-    setUserId(id)
+    window.location.reload()
   }
 
   return (
