@@ -89,6 +89,13 @@ const AppProvider = ({ children }) => {
       const incomingData = JSON.stringify(eventData.events[0])
 
       if (existingData !== incomingData) {
+        const eventWasReset =
+          event.status &&
+          event.status !== 'not-started' &&
+          eventData.events[0].status === 'not-started'
+        if (eventWasReset) {
+          window.location.reload()
+        }
         return dispatch((draft) => {
           draft.event = eventData.events[0]
           draft.app.appLoading = false

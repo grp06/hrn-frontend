@@ -6,8 +6,7 @@ import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
 const useTwilio = () => {
-  const { event, setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
-  const history = useHistory()
+  const { setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
   const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
 
@@ -25,7 +24,6 @@ const useTwilio = () => {
     }, partnerCameraIssueTimeout)
 
     if (room) {
-      const { current_round } = event
       const { localParticipant } = room
 
       localParticipant.tracks.forEach((publication) => {
@@ -63,9 +61,7 @@ const useTwilio = () => {
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
-        // if (parseInt(current_round, 10) === parseInt(process.env.REACT_APP_NUM_ROUNDS, 10)) {
-        //   history.push(`/events/${event.id}/event-complete`)
-        // }
+
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
         })

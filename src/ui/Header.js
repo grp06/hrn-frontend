@@ -121,7 +121,11 @@ const Header = ({ activeTab, setActiveTab }) => {
 
   const isEventHost = host_id === userId
 
-  const [deleteRoundsMutation] = useMutation(deleteRounds)
+  const [deleteRoundsMutation] = useMutation(deleteRounds, {
+    variables: {
+      eventId: event.id,
+    },
+  })
   const [resetEventMutation] = useMutation(resetEvent, {
     variables: {
       id: event.id,
@@ -153,7 +157,7 @@ const Header = ({ activeTab, setActiveTab }) => {
     },
     modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
     onAcceptFunction: async () => {
-      await deleteRoundsMutation()
+      await deleteRoundsMutation(event.id)
       await resetEventMutation(event.id)
       await startEvent(event.id, null, true)
       // setCurrentRound(0)
