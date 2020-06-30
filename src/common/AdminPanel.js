@@ -13,6 +13,7 @@ import {
   StartEventButton,
   ListOfRSVPs,
   ShareEventPromptModal,
+  Timer,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -77,10 +78,21 @@ const AdminPanel = ({ eventData, timeState }) => {
 
     switch (timeState) {
       case 'within 30 mins':
-        element = <StartEventButton within30Mins eventStartTime={eventStartTime} />
+        element = (
+          <Grid container direction="column" alignItems="center" justify="space-around">
+            <StartEventButton within30Mins eventStartTime={eventStartTime} />
+            <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
+            <div>{editFormModal}</div>
+          </Grid>
+        )
         break
       case 'go time':
-        element = <StartEventButton eventId={eventId} status={status} />
+        element = (
+          <Grid container direction="column" alignItems="center" justify="space-around">
+            <StartEventButton eventId={eventId} status={status} />
+            <div style={{ marginTop: '20px' }}>{editFormModal}</div>
+          </Grid>
+        )
         break
       default:
         element = (

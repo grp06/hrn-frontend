@@ -166,7 +166,7 @@ const EventForm = ({ eventData, match }) => {
                     label="Date and time"
                     value={selectedDate}
                     onChange={setSelectedDate}
-                    minutesStep={5}
+                    minutesStep={1}
                     className={classes.dateTime}
                   />
                 </Grid>
