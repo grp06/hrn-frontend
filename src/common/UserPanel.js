@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
-import { FloatCardLarge, AttendeesList, Timer, HiRightNowBreakdown } from '.'
+import { FloatCardLarge, Timer, HiRightNowBreakdown } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
 
@@ -40,10 +40,9 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useAppContext()
-  const { userId, role, name, email } = user
+  const { userId, name, email } = user
   const {
     id: eventId,
-    current_round,
     event_users,
     start_at: eventStartTime,
     event_name,
@@ -54,7 +53,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
 
   const [waitingForAdmin, setWaitingForAdmin] = useState()
 
-  const alreadyAttending = event_users.find((user) => user.user.id === userId)
+  const alreadyAttending = event_users.find((u) => u.user.id === userId)
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
@@ -74,7 +73,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     if (timeState === 'go time' && alreadyAttending) {
       setWaitingForAdmin(true)
     }
-  }, [timeState])
+  }, [timeState, alreadyAttending])
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)

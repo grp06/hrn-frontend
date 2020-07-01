@@ -47,7 +47,6 @@ const ThumbsUp = ({ myRound, userId }) => {
   const classes = useStyles()
   const history = useHistory()
   const { event } = useAppContext()
-  const { current_round } = event
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [showSnackbar, setShowSnackbar] = useState(false)
 

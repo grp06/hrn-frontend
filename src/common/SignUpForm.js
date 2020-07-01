@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
@@ -45,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { redirect, setRedirect, setUserId, userId } = useAppContext()
+  const { redirect, setRedirect } = useAppContext()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

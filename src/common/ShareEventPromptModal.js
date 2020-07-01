@@ -9,7 +9,7 @@ import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/styles'
 import copy from 'copy-to-clipboard'
 import formatDate from '../utils/formatDate'
-import { TransitionModal, EventCard } from '.'
+import { TransitionModal } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventPromptHeader: {
@@ -84,8 +84,14 @@ const ShareEventPromptModal = ({ event }) => {
               wait to see your smiling face soon 😁
             </Typography>
             <br />
-            <Typography>Sign Up: https://launch.hirightnow.co/events/{id}</Typography>
-            <Typography>Event Time: {eventStartTime}</Typography>
+            <Typography>
+              Sign Up: https://launch.hirightnow.co/events/
+              {id}
+            </Typography>
+            <Typography>
+              Event Time:
+              {eventStartTime}
+            </Typography>
           </div>
         </Grid>
       </Grid>

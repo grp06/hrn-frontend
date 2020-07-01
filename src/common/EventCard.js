@@ -5,17 +5,16 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import ScheduleIcon from '@material-ui/icons/Schedule'
-import PeopleIcon from '@material-ui/icons/People'
 import formatDate from '../utils/formatDate'
-import eventImage1 from '../assets/personBeach.jpg'
-import eventImage2 from '../assets/personBook.jpg'
-import eventImage3 from '../assets/personClimbing.jpg'
+// import eventImage1 from '../assets/personBeach.jpg'
+// import eventImage2 from '../assets/personBook.jpg'
+// import eventImage3 from '../assets/personClimbing.jpg'
 import eventImage4 from '../assets/personPhone.jpg'
-import eventImage5 from '../assets/personSalon.png'
+// import eventImage5 from '../assets/personSalon.png'
 
 import { FloatCardLarge } from '.'
 
-const eventImages = [eventImage1, eventImage2, eventImage3, eventImage4, eventImage5]
+// const eventImages = [eventImage1, eventImage2, eventImage3, eventImage4, eventImage5]
 // const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
 
 const useStyles = makeStyles((theme) => ({

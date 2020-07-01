@@ -9,7 +9,6 @@ import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
 import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
-import { constants } from '../utils'
 
 import { VideoRouter } from '.'
 
@@ -84,8 +83,6 @@ const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
 
-  const { roundLength } = constants
-
   const { app, user, event, setLateArrival } = useAppContext()
   const { userId } = user
   const { appLoading } = app
@@ -104,16 +101,13 @@ const VideoRoom = ({ match }) => {
   const eventSet = Object.keys(event).length > 1
   const eventStatus = useRef()
 
-  const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
-    getMyRoundById,
-    {
-      variables: {
-        round_number: event.current_round,
-        user_id: userId,
-      },
-      skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
-    }
-  )
+  const { data: myRoundData, loading: myRoundDataLoading } = useQuery(getMyRoundById, {
+    variables: {
+      round_number: event.current_round,
+      user_id: userId,
+    },
+    skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
+  })
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
