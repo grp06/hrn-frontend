@@ -47,8 +47,8 @@ const ThumbsUp = ({ myRound, userId }) => {
   const classes = useStyles()
   const history = useHistory()
   const { event } = useAppContext()
-  const { current_round } = event
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
+  const [userThumbed, setUserThumbed] = useState(false)
   const [showSnackbar, setShowSnackbar] = useState(false)
 
   const [setPartnerXThumbMutation] = useMutation(setPartnerXThumb, {
@@ -83,6 +83,7 @@ const ThumbsUp = ({ myRound, userId }) => {
       setPartnerYThumbMutation()
     }
     setShowThumbUpButton(false)
+    setUserThumbed(true)
     setShowSnackbar(true)
     if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
@@ -91,6 +92,7 @@ const ThumbsUp = ({ myRound, userId }) => {
 
   const handlePassOnThumbingClick = () => {
     setShowThumbUpButton(false)
+    setUserThumbed(false)
     if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
     }
@@ -134,7 +136,7 @@ const ThumbsUp = ({ myRound, userId }) => {
           </>
         ) : (
           <>
-            {showSnackbar ? (
+            {userThumbed ? (
               <>
                 <Typography className={classes.messageText}>Awesome!</Typography>
                 <Typography className={classes.messageText}>
