@@ -53,6 +53,7 @@ const EventForm = ({ eventData, match }) => {
   const [roundLength, setRoundLength] = useState(5)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
+
   const initialEventData = useRef()
   const [createEventMutation] = useMutation(createEvent, {
     variables: {
@@ -70,10 +71,11 @@ const EventForm = ({ eventData, match }) => {
   useEffect(() => {
     if (eventData && !initialEventData.current) {
       initialEventData.current = eventData
-      const { description: eventDescription, event_name, start_at } = eventData
+      const { description: eventDescription, event_name, start_at, round_length } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
+      setRoundLength(round_length)
     }
   }, [eventData])
 
@@ -95,6 +97,7 @@ const EventForm = ({ eventData, match }) => {
           event_name: title,
           start_at: selectedDate,
           id: eventData.id,
+          round_length: roundLength,
         },
       })
       setEventUpdated(true)
