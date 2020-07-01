@@ -115,8 +115,8 @@ const Header = ({ activeTab, setActiveTab }) => {
   const { role, name: usersName, userId } = user
   const { host_id } = event
   const { appLoading } = app
-  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const [openDrawer, setOpenDrawer] = useState(false)
+  // const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
+  // const [openDrawer, setOpenDrawer] = useState(false)
 
   const isEventHost = host_id === userId
 
@@ -168,13 +168,13 @@ const Header = ({ activeTab, setActiveTab }) => {
     return <Loading />
   }
 
-  const routes = [
-    { name: 'Home', link: '/', activeIndex: 0 },
-    { name: 'My Events', link: '/myevents', activeIndex: 1 },
-    { name: 'About Us', link: '/about', activeIndex: 2 },
-    { name: 'Contact Us', link: '/contact', activeIndex: 3 },
-    { name: 'Test', link: '/test', activeIndex: 4 },
-  ]
+  // const routes = [
+  //   { name: 'Home', link: '/', activeIndex: 0 },
+  //   { name: 'My Events', link: '/myevents', activeIndex: 1 },
+  //   { name: 'About Us', link: '/about', activeIndex: 2 },
+  //   { name: 'Contact Us', link: '/contact', activeIndex: 3 },
+  //   { name: 'Test', link: '/test', activeIndex: 4 },
+  // ]
 
   const handleLogout = () => {
     localStorage.clear()
