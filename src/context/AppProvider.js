@@ -51,14 +51,6 @@ const AppProvider = ({ children }) => {
     }
   )
 
-  const [updateLastSeenMutation] = useMutation(updateLastSeen, {
-    variables: {
-      now: new Date().toISOString(),
-      id: userId,
-    },
-    skip: !userId,
-  })
-
   // listen to the Event only if we have an eventId from match
   // this means we have to be on a route with an id
   const { data: eventData, loading: eventDataLoading, error: eventDataError } = useSubscription(
@@ -109,7 +101,15 @@ const AppProvider = ({ children }) => {
     if (userId) {
       const interval = setInterval(async () => {
         try {
-          await updateLastSeenMutation()
+          await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-last-seen`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify({ userId }),
+          })
         } catch (error) {
           // sometimes theres an error here. Reloading "fixes" it  :|
           window.location.reload()
