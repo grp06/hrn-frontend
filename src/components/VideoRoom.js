@@ -110,6 +110,7 @@ const VideoRoom = ({ match }) => {
       variables: {
         round_number: event.current_round,
         user_id: userId,
+        event_id: event.id,
       },
       skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
     }

@@ -1,11 +1,12 @@
 import gql from 'graphql-tag'
 
 const getMyRoundById = gql`
-  query getMyRoundById($round_number: Int!, $user_id: Int!) {
+  query getMyRoundById($round_number: Int!, $user_id: Int!, $event_id: Int!) {
     rounds(
       where: {
         _or: [{ partnerY_id: { _eq: $user_id } }, { partnerX_id: { _eq: $user_id } }]
         _and: { round_number: { _eq: $round_number } }
+        event_id: { _eq: $event_id }
       }
     ) {
       id

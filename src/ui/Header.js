@@ -284,7 +284,7 @@ const Header = ({ activeTab, setActiveTab }) => {
           {status !== 'not-started' && eventIdInUrl ? (
             <Grid item className={classes.tab}>
               <p>
-                Curent Round:
+                Current Round:
                 {` ${current_round || 'Pre-event'}`}
               </p>
             </Grid>
