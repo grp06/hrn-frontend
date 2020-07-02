@@ -1,6 +1,5 @@
 export { default as updateUser } from './updateUser'
 export { default as createUser } from './createUser'
-export { default as updateLastSeen } from './updateLastSeen'
 export { default as createEvent } from './createEvent'
 export { default as updateEvent } from './updateEvent'
 export { default as insertEventUser } from './insertEventUser'

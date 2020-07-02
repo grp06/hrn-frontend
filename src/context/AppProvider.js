@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
+import { useQuery, useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 
 import { findUserById } from '../gql/queries'
-import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
 
@@ -48,8 +47,7 @@ const AppProvider = ({ children }) => {
     skip: !userId,
   })
 
-  // listen to the Event only if we have an eventId from match
-  // this means we have to be on a route with an id
+  // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
       event_id: eventId,
