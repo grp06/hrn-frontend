@@ -43,16 +43,15 @@ const HostDashboard = () => {
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
   const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
 
-  const {
-    data: eventsAndRoundsData,
-    loading: eventsAndRoundsLoading,
-    error: eventsAndRoundsError,
-  } = useQuery(getHostEventsAndRounds, {
-    variables: {
-      userId: userId,
-    },
-    skip: !userId,
-  })
+  const { data: eventsAndRoundsData, loading: eventsAndRoundsLoading } = useQuery(
+    getHostEventsAndRounds,
+    {
+      variables: {
+        userId: userId,
+      },
+      skip: !userId,
+    }
+  )
 
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables
@@ -84,7 +83,7 @@ const HostDashboard = () => {
       setAllTimeMutualThumbs(totalThumbs)
       setAvgThumbsPerEvent(averageThumbs)
     }
-  }, [eventsAndRoundsData])
+  }, [eventsAndRoundsData, eventsAndRoundsLoading])
 
   if (role !== 'host') {
     return <Redirect to="/events" />

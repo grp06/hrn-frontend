@@ -1,17 +1,15 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
 import { startPreEvent } from '../helpers'
-import { Timer } from '.'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   partyEmoji: {
     marginLeft: 10,
   },
 }))
 
-const StartEventButton = ({ eventId, within30Mins, eventStartTime, status }) => {
+const StartEventButton = ({ eventId, within30Mins }) => {
   const classes = useStyles()
 
   return (

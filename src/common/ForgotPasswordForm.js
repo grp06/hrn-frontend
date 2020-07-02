@@ -5,10 +5,9 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
-import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

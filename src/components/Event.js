@@ -57,11 +57,11 @@ const Event = ({ match }) => {
     if (!Object.keys(event).length && eventId) {
       setEventId(parseInt(eventId, 10))
     }
-  }, [eventId])
+  }, [eventId, event, setEventId])
 
   useEffect(() => {
     if (eventSet && userId) {
-      const isEventParticipant = event.event_users.find((user) => user.user.id === userId)
+      const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
       if (isEventParticipant) {
         switch (event.status) {
           case 'pre-event':
@@ -75,7 +75,7 @@ const Event = ({ match }) => {
         }
       }
     }
-  }, [event, userId])
+  }, [event, userId, eventId, eventSet, history])
 
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {

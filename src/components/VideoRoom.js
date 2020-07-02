@@ -9,7 +9,6 @@ import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
 import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
-import { constants } from '../utils'
 
 import { VideoRouter } from '.'
 
@@ -83,8 +82,6 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-
-  const { roundLength } = constants
 
   const { app, user, event, setLateArrival } = useAppContext()
   const { userId } = user

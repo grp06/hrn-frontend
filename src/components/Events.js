@@ -69,17 +69,14 @@ const Events = () => {
   const classes = useStyles()
   const { app, user } = useAppContext()
   const { appLoading } = app
-  const { userId, role, name } = user
+  const { userId, role } = user
 
-  const { data: eventsData, loading: eventsLoading, error: eventsError } = useQuery(
-    getEventsByUserId,
-    {
-      variables: {
-        userId: userId,
-      },
-      skip: !userId,
-    }
-  )
+  const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
+    variables: {
+      userId: userId,
+    },
+    skip: !userId,
+  })
 
   if (!userId) {
     return <Redirect to="/" />

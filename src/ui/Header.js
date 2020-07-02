@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import {
   AppBar,
   Toolbar,
-  useScrollTrigger,
   Button,
-  SwipeableDrawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
+  // SwipeableDrawer,
+  // IconButton,
+  // List,
+  // ListItem,
+  // ListItemText,
   Grid,
   Typography,
 } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
+// import MenuIcon from '@material-ui/icons/Menu'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { Link, useHistory } from 'react-router-dom'
@@ -116,8 +115,8 @@ const Header = ({ activeTab, setActiveTab }) => {
   const { role, name: usersName, userId } = user
   const { host_id } = event
   const { appLoading } = app
-  const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
-  const [openDrawer, setOpenDrawer] = useState(false)
+  // const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent)
+  // const [openDrawer, setOpenDrawer] = useState(false)
 
   const isEventHost = host_id === userId
 
@@ -169,13 +168,13 @@ const Header = ({ activeTab, setActiveTab }) => {
     return <Loading />
   }
 
-  const routes = [
-    { name: 'Home', link: '/', activeIndex: 0 },
-    { name: 'My Events', link: '/myevents', activeIndex: 1 },
-    { name: 'About Us', link: '/about', activeIndex: 2 },
-    { name: 'Contact Us', link: '/contact', activeIndex: 3 },
-    { name: 'Test', link: '/test', activeIndex: 4 },
-  ]
+  // const routes = [
+  //   { name: 'Home', link: '/', activeIndex: 0 },
+  //   { name: 'My Events', link: '/myevents', activeIndex: 1 },
+  //   { name: 'About Us', link: '/about', activeIndex: 2 },
+  //   { name: 'Contact Us', link: '/contact', activeIndex: 3 },
+  //   { name: 'Test', link: '/test', activeIndex: 4 },
+  // ]
 
   const handleLogout = () => {
     localStorage.clear()
@@ -183,53 +182,53 @@ const Header = ({ activeTab, setActiveTab }) => {
     history.push('/')
   }
 
-  const drawer = (
-    <>
-      <SwipeableDrawer
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
-        open={openDrawer}
-        onClose={() => setOpenDrawer(false)}
-        onOpen={() => setOpenDrawer(true)}
-        classes={{ paper: classes.drawer }}
-      >
-        <List disablePadding>
-          {routes.map((route, idx) => (
-            <ListItem
-              key={idx}
-              divider
-              button
-              component={Link}
-              to={route.link}
-              selected={activeTab === route.activeIndex}
-              onClick={() => {
-                setOpenDrawer(false)
-                setActiveTab(route.activeIndex)
-              }}
-            >
-              <ListItemText
-                className={
-                  activeTab === 0
-                    ? [classes.drawerItem, classes.drawerItemSelected]
-                    : classes.drawerItem
-                }
-                disabledTypography
-              >
-                {route.name}
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
-      </SwipeableDrawer>
-      <IconButton
-        onClick={() => setOpenDrawer(!openDrawer)}
-        className={classes.drawerIconContainer}
-        disableRipple
-      >
-        <MenuIcon className={classes.drawerIcon} />
-      </IconButton>
-    </>
-  )
+  // const drawer = (
+  //   <>
+  //     <SwipeableDrawer
+  //       disableBackdropTransition={!iOS}
+  //       disableDiscovery={iOS}
+  //       open={openDrawer}
+  //       onClose={() => setOpenDrawer(false)}
+  //       onOpen={() => setOpenDrawer(true)}
+  //       classes={{ paper: classes.drawer }}
+  //     >
+  //       <List disablePadding>
+  //         {routes.map((route, idx) => (
+  //           <ListItem
+  //             key={idx}
+  //             divider
+  //             button
+  //             component={Link}
+  //             to={route.link}
+  //             selected={activeTab === route.activeIndex}
+  //             onClick={() => {
+  //               setOpenDrawer(false)
+  //               setActiveTab(route.activeIndex)
+  //             }}
+  //           >
+  //             <ListItemText
+  //               className={
+  //                 activeTab === 0
+  //                   ? [classes.drawerItem, classes.drawerItemSelected]
+  //                   : classes.drawerItem
+  //               }
+  //               disabledTypography
+  //             >
+  //               {route.name}
+  //             </ListItemText>
+  //           </ListItem>
+  //         ))}
+  //       </List>
+  //     </SwipeableDrawer>
+  //     <IconButton
+  //       onClick={() => setOpenDrawer(!openDrawer)}
+  //       className={classes.drawerIconContainer}
+  //       disableRipple
+  //     >
+  //       <MenuIcon className={classes.drawerIcon} />
+  //     </IconButton>
+  //   </>
+  // )
 
   const renderAdminHeader = () => {
     const { status, id: eventId, round_length } = event

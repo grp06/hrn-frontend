@@ -43,25 +43,19 @@ const AppProvider = ({ children }) => {
   const history = useHistory()
   const { userId } = state.user
 
-  const { data: userData, loading: userDataLoading, error: userDataError } = useQuery(
-    findUserById,
-    {
-      variables: { id: userId },
-      skip: !userId,
-    }
-  )
+  const { data: userData } = useQuery(findUserById, {
+    variables: { id: userId },
+    skip: !userId,
+  })
 
   // listen to the Event only if we have an eventId from match
   // this means we have to be on a route with an id
-  const { data: eventData, loading: eventDataLoading, error: eventDataError } = useSubscription(
-    listenToEvent,
-    {
-      variables: {
-        event_id: eventId,
-      },
-      skip: !eventId,
-    }
-  )
+  const { data: eventData } = useSubscription(listenToEvent, {
+    variables: {
+      event_id: eventId,
+    },
+    skip: !eventId,
+  })
 
   useEffect(() => {
     // if on event page and its a valid event
@@ -94,7 +88,7 @@ const AppProvider = ({ children }) => {
         })
       }
     }
-  }, [eventData])
+  }, [eventData, dispatch, event, eventIdInUrl, history])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {

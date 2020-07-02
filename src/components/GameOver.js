@@ -85,17 +85,15 @@ const GameOver = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
-  const {
-    data: mutualThumbsData,
-    loading: mutualThumbsLoading,
-    error: mutualThumbsError,
-    refetch,
-  } = useSubscription(getMyMutualThumbsData, {
-    variables: {
-      event_id: eventId || localStorageEventId,
-      user_id: userId,
-    },
-  })
+  const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
+    getMyMutualThumbsData,
+    {
+      variables: {
+        event_id: eventId || localStorageEventId,
+        user_id: userId,
+      },
+    }
+  )
 
   useEffect(() => {
     if (eventSet && event.status === 'not-started') {

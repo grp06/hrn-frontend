@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -10,7 +10,6 @@ import MuiAlert from '@material-ui/lab/Alert'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '.'
-import { useAppContext } from '../context/useAppContext'
 
 const Alert = (props) => {
   return <MuiAlert elevation={1} variant="filled" {...props} />

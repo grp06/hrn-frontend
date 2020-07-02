@@ -31,16 +31,15 @@ const AttendeesList = ({ eventId, timeState }) => {
   const classes = useStyles()
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { event } = useAppContext()
-  const {
-    data: onlineUsersData,
-    loading: onlineUsersLoading,
-    error: onlineUsersError,
-  } = useSubscription(displayOnlineUsers, {
-    variables: {
-      event_id: eventId,
-    },
-    skip: !eventId,
-  })
+  const { data: onlineUsersData, loading: onlineUsersLoading } = useSubscription(
+    displayOnlineUsers,
+    {
+      variables: {
+        event_id: eventId,
+      },
+      skip: !eventId,
+    }
+  )
 
   useEffect(() => {
     if (event) {

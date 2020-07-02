@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
 import { ThumbsUp } from '../common'
 import {
@@ -15,9 +14,8 @@ const VideoRouter = ({ myRound }) => {
   const { user, event, twilio } = useAppContext()
   const { userId } = user
   const { partnerDisconnected, partnerNeverConnected, lateArrival } = twilio
-  const { status, id } = event
+  const { status } = event
 
-  const history = useHistory()
   const displayVideoMessage = () => {
     const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
 
