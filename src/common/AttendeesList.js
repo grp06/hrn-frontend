@@ -55,9 +55,7 @@ const AttendeesList = ({ eventId, timeState }) => {
         const { updated_at } = user.user
         const lastSeen = new Date(updated_at).getTime()
         const diff = Date.now() - lastSeen
-        // server time and local computer could be a bit off?
-        // this could actually be an issue..
-        // a single source of truth for online users would be preferable :(
+
         return diff < lastSeenDuration + 10000
       })
       // if someone comes online or goes offline
