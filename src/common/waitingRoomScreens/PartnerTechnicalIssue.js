@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const PartnerCameraIssue = () => {
+const PartnerTechnicalIssue = () => {
   const classes = useStyles()
   return (
     <div className={classes.waitingRoom}>
@@ -34,4 +34,4 @@ const PartnerCameraIssue = () => {
   )
 }
 
-export default PartnerCameraIssue
+export default PartnerTechnicalIssue

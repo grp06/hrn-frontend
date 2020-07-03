@@ -29,6 +29,7 @@ const defaultState = {
   twilio: {
     partnerDisconnected: false,
     lateArrival: false,
+    hasPartnerAndIsConnecting: false,
   },
 }
 
