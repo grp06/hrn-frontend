@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useSubscription } from '@apollo/react-hooks'
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 
 import { findUserById } from '../gql/queries'
+import { updateLastSeen } from '../gql/mutations'
+
 import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
 
@@ -55,6 +57,14 @@ const AppProvider = ({ children }) => {
     skip: !eventId,
   })
 
+  const [updateLastSeenMutation] = useMutation(updateLastSeen, {
+    variables: {
+      now: new Date().toISOString(),
+      id: userId,
+    },
+    skip: !userId,
+  })
+
   useEffect(() => {
     // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
@@ -93,16 +103,9 @@ const AppProvider = ({ children }) => {
     if (userId) {
       const interval = setInterval(async () => {
         try {
-          await fetch(`${process.env.REACT_APP_API_URL}/api/auth/update-last-seen`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Credentials': true,
-            },
-            body: JSON.stringify({ userId }),
-          })
+          await updateLastSeenMutation()
         } catch (error) {
+          console.log('interval -> error', error)
           // sometimes theres an error here. Reloading "fixes" it  :|
           window.location.reload()
         }
