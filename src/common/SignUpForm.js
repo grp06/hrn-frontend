@@ -44,7 +44,6 @@ const SignUpForm = () => {
   const history = useHistory()
   const { redirect, setRedirect } = useAppContext()
 
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -70,7 +69,7 @@ const SignUpForm = () => {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
         },
-        body: JSON.stringify({ name, email, password, role: 'user' }),
+        body: JSON.stringify({ email, password, role: 'user' }),
       })
       // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
@@ -85,15 +84,16 @@ const SignUpForm = () => {
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
 
+    // USE ME FOR ONBOARDING
     // check to see if we were redirected here by an event
-    const eventIdInLocalStorage = localStorage.getItem('eventId')
+    // const eventIdInLocalStorage = localStorage.getItem('eventId')
+    // if (eventIdInLocalStorage) {
+    //   history.replace(`/events/${eventIdInLocalStorage}`)
+    //   // FIXME
+    // }
+    // window.location.reload()
 
-    if (eventIdInLocalStorage) {
-      history.replace(`/events/${eventIdInLocalStorage}`)
-      // FIXME
-    }
-
-    window.location.reload()
+    history.push('/onboarding')
   }
 
   return (
@@ -109,17 +109,6 @@ const SignUpForm = () => {
               </Grid>
             </Grid>
             <Grid item container direction="column" className={classes.inputContainer}>
-              <Grid item>
-                <TextField
-                  id="name"
-                  label="Name"
-                  required
-                  fullWidth
-                  className={classes.input}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Grid>
               <Grid item>
                 <TextField
                   id="email"
