@@ -1,6 +1,8 @@
 import { useAppContext } from '../context/useAppContext'
 
 const useRemoteTrackPublished = () => {
+  const { setHasPartnerAndIsConnecting } = useAppContext()
+
   const remoteTrackPublished = (publication) => {
     const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1
 
@@ -25,6 +27,7 @@ const useRemoteTrackPublished = () => {
       } else {
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
+      setHasPartnerAndIsConnecting(false)
       // setDidPartnerDisconnect(false)
     })
 

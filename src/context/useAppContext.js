@@ -55,6 +55,12 @@ const useAppContext = () => {
     })
   }
 
+  function setHasPartnerAndIsConnecting(hasPartnerAndIsConnecting) {
+    dispatch((draft) => {
+      draft.twilio.hasPartnerAndIsConnecting = hasPartnerAndIsConnecting
+    })
+  }
+
   return {
     ...state,
     resetUser,
@@ -64,6 +70,7 @@ const useAppContext = () => {
     setPartnerDisconnected,
     setPartnerNeverConnected,
     setLateArrival,
+    setHasPartnerAndIsConnecting,
   }
 }
 

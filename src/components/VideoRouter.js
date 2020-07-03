@@ -4,7 +4,7 @@ import { useAppContext } from '../context/useAppContext'
 import { ThumbsUp } from '../common'
 import {
   PartnerDisconnected,
-  PartnerCameraIssue,
+  PartnerTechnicalIssue,
   SittingOut,
   UserJoinedDuringRound,
   ConnectingToSomeone,
@@ -13,7 +13,12 @@ import {
 const VideoRouter = ({ myRound }) => {
   const { user, event, twilio } = useAppContext()
   const { userId } = user
-  const { partnerDisconnected, partnerNeverConnected, lateArrival } = twilio
+  const {
+    partnerDisconnected,
+    partnerNeverConnected,
+    lateArrival,
+    hasPartnerAndIsConnecting,
+  } = twilio
   const { status } = event
 
   const displayVideoMessage = () => {
@@ -39,7 +44,11 @@ const VideoRouter = ({ myRound }) => {
         }
         if (partnerNeverConnected) {
           console.log('partner never connected')
-          return <PartnerCameraIssue />
+          return <PartnerTechnicalIssue />
+        }
+        if (hasPartnerAndIsConnecting) {
+          console.log('has partner and is connecting')
+          return <ConnectingToSomeone />
         }
         return null
       case 'complete':

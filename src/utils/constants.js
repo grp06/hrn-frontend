@@ -3,6 +3,7 @@ const constants = {
   lastSeenDuration: 10000,
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
+  hasPartnerAndIsConnectingBreathingRoom: 4000,
 
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',

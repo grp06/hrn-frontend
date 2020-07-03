@@ -4,15 +4,36 @@ import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
 
+const intentionalConnectingPause = (milliseconds) => {
+  const now = new Date()
+  while (new Date() - now <= milliseconds) {
+    /* Do nothing */
+  }
+}
 const useTwilio = () => {
-  const { setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
-  const { partnerCameraIssueTimeout } = constants
+  const {
+    setPartnerDisconnected,
+    setPartnerNeverConnected,
+    setHasPartnerAndIsConnecting,
+  } = useAppContext()
+  const { partnerCameraIssueTimeout, hasPartnerAndIsConnectingBreathingRoom } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()
+
   const startTwilio = (room) => {
     setTwilioStarted(true)
     setPartnerNeverConnected(false)
+    setHasPartnerAndIsConnecting(true)
+    // intentionalConnectingPause(hasPartnerAndIsConnectingBreathingRoom)
+    // // Give us a few seconds for participants to match without showing anything
+    // // on their screen. This will prevent from quickly flashing a message and then
+    // // mounting the video
+    // setTimeout(() => {
+    //   if (!room.participants.size) {
+    //     setHasPartnerAndIsConnecting(true)
+    //   }
+    // }, hasPartnerAndIsConnectingBreathingRoom)
 
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
@@ -39,6 +60,7 @@ const useTwilio = () => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
+        setHasPartnerAndIsConnecting(false)
         participantConnected(remoteParticipant)
       })
 
@@ -60,6 +82,7 @@ const useTwilio = () => {
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
+        setHasPartnerAndIsConnecting(false)
 
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()
