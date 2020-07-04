@@ -108,7 +108,7 @@ const AppProvider = ({ children }) => {
         } catch (error) {
           console.log('interval -> error', error)
           // sometimes theres an error here. Reloading "fixes" it  :|
-          window.location.reload()
+          // window.location.reload()
         }
       }, lastSeenDuration)
       return () => {

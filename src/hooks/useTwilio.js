@@ -3,13 +3,8 @@ import { useState } from 'react'
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
+import { intentionalPause } from '../helpers'
 
-const intentionalConnectingPause = (milliseconds) => {
-  const now = new Date()
-  while (new Date() - now <= milliseconds) {
-    /* Do nothing */
-  }
-}
 const useTwilio = () => {
   const {
     setPartnerDisconnected,
@@ -24,17 +19,6 @@ const useTwilio = () => {
   const startTwilio = (room) => {
     setTwilioStarted(true)
     setPartnerNeverConnected(false)
-    setHasPartnerAndIsConnecting(true)
-    // intentionalConnectingPause(hasPartnerAndIsConnectingBreathingRoom)
-    // // Give us a few seconds for participants to match without showing anything
-    // // on their screen. This will prevent from quickly flashing a message and then
-    // // mounting the video
-    // setTimeout(() => {
-    //   if (!room.participants.size) {
-    //     setHasPartnerAndIsConnecting(true)
-    //   }
-    // }, hasPartnerAndIsConnectingBreathingRoom)
-
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
     setTimeout(() => {
@@ -62,6 +46,7 @@ const useTwilio = () => {
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
         participantConnected(remoteParticipant)
+        intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
