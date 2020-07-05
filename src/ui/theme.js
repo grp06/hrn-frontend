@@ -164,19 +164,30 @@ const theme = createMuiTheme({
         // },
       },
     },
+    MuiFormLabel: {
+      root: {
+        color: ghostWhiteSub,
+        '&.Mui-focused': {
+          color: orchid,
+        },
+      },
+    },
     MuiInputLabel: {
       root: {
-        color: orchid,
+        color: ghostWhiteSub,
         fontSize: '1rem',
+      },
+      shrink: {
+        color: orchid,
       },
     },
     MuiInput: {
       underline: {
         '&:before': {
-          borderBottom: `2px solid ${dankPurp}`,
+          borderBottom: `2px solid ${greyBorder}`,
         },
         '&:hover:not(disabled):not($focused):not($error):before': {
-          borderBottom: `2px solid ${dankPurp}`,
+          borderBottom: `2px solid ${greyBorder}`,
         },
       },
     },
