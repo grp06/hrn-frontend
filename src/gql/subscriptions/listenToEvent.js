@@ -12,6 +12,7 @@ const listenToEvent = gql`
       start_at
       status
       round_length
+      num_rounds
       event_users(order_by: { user: { name: asc } }) {
         user {
           email

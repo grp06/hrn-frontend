@@ -11,6 +11,7 @@ const getEventById = gql`
       event_name
       current_round
       round_length
+      num_rounds
       event_users {
         user {
           id

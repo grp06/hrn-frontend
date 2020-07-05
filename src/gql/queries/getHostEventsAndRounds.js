@@ -15,6 +15,7 @@ const getHostEventsAndRounds = gql`
       start_at
       status
       round_length
+      num_rounds
       rounds {
         partnerY_id
         partnerX_id
