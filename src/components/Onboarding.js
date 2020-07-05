@@ -1,9 +1,11 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box'
-import { FloatCardMedium, FormikStepper } from '../common'
-import { Field, Form, Formik } from 'formik'
+import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
+import { FloatCardMedium, FormikStepper } from '../common'
+import { sleep } from '../helpers'
+
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: '150px',
@@ -23,9 +25,12 @@ const Onboarding = () => {
             jobTitle: '',
             location: '',
           }}
-          onSubmit={() => {}}
+          onSubmit={async (values) => {
+            await sleep(3000)
+            console.log('values', values)
+          }}
         >
-          <div>
+          <div label="names">
             <Box paddingBottom={2}>
               <Field name="firstName" component={TextField} label="First Name" fullWidth />
             </Box>
@@ -33,7 +38,7 @@ const Onboarding = () => {
               <Field name="lastName" component={TextField} label="Last Name" fullWidth />
             </Box>
           </div>
-          <div>
+          <div label="job">
             <Box paddingBottom={2}>
               <Field name="userBio" component={TextField} label="User Bio" fullWidth />
             </Box>
@@ -41,7 +46,7 @@ const Onboarding = () => {
               <Field name="jobTitle" component={TextField} label="Job Title" fullWidth />
             </Box>
           </div>
-          <div>
+          <div label="location">
             <Box paddingBottom={2}>
               <Field name="location" component={TextField} label="Location" fullWidth />
             </Box>

@@ -1,5 +1,5 @@
 import { useAppContext } from '../context/useAppContext'
-import { intentionalPause } from '../helpers'
+import { sleep } from '../helpers'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants
@@ -19,10 +19,10 @@ const useRemoteTrackPublished = () => {
         }
         remoteDiv.appendChild(attachedTrack)
         setHasPartnerAndIsConnecting(false)
-        intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
+        sleep(hasPartnerAndIsConnectingBreathingRoom)
       }
     }
-    publication.on('subscribed', (track) => {
+    publication.on('subscribed', async (track) => {
       console.log('onSubscribed')
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {
@@ -34,7 +34,7 @@ const useRemoteTrackPublished = () => {
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
       setHasPartnerAndIsConnecting(false)
-      intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
+      await sleep(hasPartnerAndIsConnectingBreathingRoom)
       // setDidPartnerDisconnect(false)
     })
 

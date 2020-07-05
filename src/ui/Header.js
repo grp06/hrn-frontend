@@ -17,8 +17,8 @@ import logo from '../assets/logoWhite.svg'
 
 const useStyles = makeStyles((theme) => ({
   logo: {
-    height: '2.85em',
-    [theme.breakpoints.down('md')]: {
+    height: '3em',
+    [theme.breakpoints.down('s')]: {
       height: '2em',
     },
     [theme.breakpoints.down('xs')]: {
