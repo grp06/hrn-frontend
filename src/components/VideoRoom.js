@@ -61,17 +61,24 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     height: '150px',
   },
-  partnerNameContainer: {
+  partnerNameGrid: {
     position: 'fixed',
     left: 'auto',
     top: 'auto',
     right: 'auto',
-    bottom: '0%',
+    bottom: '5%',
     width: '100vw',
-    height: '150px',
+    height: 'auto',
+  },
+  partnerNameContainer: {
+    padding: '5px 20px',
+    backgroundColor: theme.palette.common.greyCard,
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
   },
   partnerName: {
     fontFamily: 'Muli',
+    textAlign: 'center',
     fontSize: '2rem',
     color: theme.palette.common.ghostWhite,
   },
@@ -225,15 +232,6 @@ const VideoRoom = ({ match }) => {
 
   const showPartnersName = () => {
     let userIsPartnerX = false
-    // const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
-    // if (
-    //   !myRound ||
-    //   event.status !== 'room-in-progress' ||
-    //   !hasPartner ||
-    //   hasPartnerAndIsConnecting
-    // ) {
-    //   return null
-    // }
     if (!twilioStarted) {
       return null
     }
@@ -242,10 +240,12 @@ const VideoRoom = ({ match }) => {
       userIsPartnerX = true
     }
     return (
-      <Grid container justify="center" alignItems="center" className={classes.partnerNameContainer}>
-        <Typography className={classes.partnerName}>
-          {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
-        </Typography>
+      <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
+        <div className={classes.partnerNameContainer}>
+          <Typography className={classes.partnerName}>
+            {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
+          </Typography>
+        </div>
       </Grid>
     )
   }

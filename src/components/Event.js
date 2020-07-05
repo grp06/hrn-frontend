@@ -4,6 +4,7 @@ import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
 
+import FeatherIcon from 'feather-icons-react'
 import { useHistory } from 'react-router-dom'
 import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
@@ -104,7 +105,7 @@ const Event = ({ match }) => {
           <Grid item container direction="column" className={classes.eventBannerContentContainer}>
             <Typography className={classes.eventTitle}>{event_name}</Typography>
             <Grid item container direction="row" alignItems="center">
-              <ScheduleIcon className={classes.scheduleIcon} />
+              <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
               <Typography className={classes.subtitle} variant="subtitle1">
                 {formatDate(startTime)}
               </Typography>
