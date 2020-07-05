@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
   partnerNameContainer: {
     padding: '5px 20px',
     backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
   },
