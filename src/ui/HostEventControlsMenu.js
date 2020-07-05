@@ -35,7 +35,7 @@ const HostEventControlsMenu = ({ event, user }) => {
   const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
   const anchorRef = useRef(null)
-  const { host_id, id: eventId, round_length, status: eventStatus } = event
+  const { host_id, id: eventId, round_length, status: eventStatus, num_rounds } = event
   const { userId } = user
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
@@ -80,7 +80,7 @@ const HostEventControlsMenu = ({ event, user }) => {
       'Starting the event will stop your current broadcast. Are you sure you want to start the event?',
     onAcceptButtonText: 'Lets Start!',
     onAcceptFunction: async () => {
-      startEvent(eventId, round_length)
+      startEvent({ eventId, round_length, num_rounds })
     },
     onCloseFunction: () => {
       setMenuOpen(false)
@@ -97,7 +97,7 @@ const HostEventControlsMenu = ({ event, user }) => {
     onAcceptFunction: async () => {
       await deleteRoundsMutation(eventId)
       await resetEventMutation(eventId)
-      await startEvent(eventId, null, true)
+      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
     },
     onCloseFunction: () => {
       setMenuOpen(false)

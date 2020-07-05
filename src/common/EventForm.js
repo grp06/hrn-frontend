@@ -51,6 +51,7 @@ const EventForm = ({ eventData, match }) => {
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
   const [roundLength, setRoundLength] = useState(5)
+  const [numRounds, setNumRounds] = useState(10)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
 
@@ -62,6 +63,7 @@ const EventForm = ({ eventData, match }) => {
       start_at: selectedDate,
       host_id: userId,
       round_length: roundLength,
+      num_rounds: numRounds,
     },
   })
 
@@ -71,11 +73,18 @@ const EventForm = ({ eventData, match }) => {
   useEffect(() => {
     if (eventData && !initialEventData.current) {
       initialEventData.current = eventData
-      const { description: eventDescription, event_name, start_at, round_length } = eventData
+      const {
+        description: eventDescription,
+        event_name,
+        start_at,
+        round_length,
+        num_rounds,
+      } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
       setRoundLength(round_length)
+      setNumRounds(num_rounds)
     }
   }, [eventData])
 
@@ -98,6 +107,7 @@ const EventForm = ({ eventData, match }) => {
           start_at: selectedDate,
           id: eventData.id,
           round_length: roundLength,
+          num_rounds: numRounds,
         },
       })
       setEventUpdated(true)
@@ -183,6 +193,18 @@ const EventForm = ({ eventData, match }) => {
                     className={classes.input}
                     value={roundLength}
                     onChange={(e) => setRoundLength(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="num-rounds"
+                    label="Number of total rounds in event"
+                    required
+                    fullWidth
+                    type="number"
+                    className={classes.input}
+                    value={numRounds}
+                    onChange={(e) => setNumRounds(e.target.value)}
                   />
                 </Grid>
               </Grid>
