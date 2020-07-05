@@ -7,7 +7,6 @@ import { Redirect } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getEventsByUserId } from '../gql/queries'
 
-import { CreateEventButton } from '.'
 import bannerBackground5 from '../assets/purpleOil.jpg'
 import { EventCard, Loading, FloatCardLarge } from '../common'
 import { useAppContext } from '../context/useAppContext'
@@ -107,7 +106,6 @@ const Events = () => {
               </Typography>
             </Grid>
           </FloatCardLarge>
-          {role === 'host' && <CreateEventButton />}
         </>
       )
     }
@@ -132,7 +130,6 @@ const Events = () => {
         </Grid>
       </div>
       {renderNullDataText()}
-      {role === 'host' && <CreateEventButton />}
       {eventsData &&
         eventsData.event_users.map(({ event }) => {
           return <EventCard key={event.id} event={event} />

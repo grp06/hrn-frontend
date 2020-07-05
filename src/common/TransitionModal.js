@@ -27,9 +27,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     marginLeft: 'auto',
     marginRight: 'auto',
+    textAlign: 'center',
   },
   buttonContainer: {
-    width: '100%',
+    width: '50%',
   },
   cancelButton: {
     backgroundColor: theme.palette.common.greyButton,
@@ -40,7 +41,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function TransitionModal({ button, modalBody, onAcceptFunction, onAcceptButtonText }) {
+function TransitionModal({
+  button,
+  modalBody,
+  onAcceptFunction,
+  onAcceptButtonText,
+  onCloseFunction,
+}) {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize } = button
   const [open, setOpen] = useState(false)
@@ -51,6 +58,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction, onAcceptButtonTe
 
   const handleClose = () => {
     setOpen(false)
+    onCloseFunction()
   }
 
   return (
@@ -84,7 +92,7 @@ function TransitionModal({ button, modalBody, onAcceptFunction, onAcceptButtonTe
             alignItems="center"
             className={classes.paper}
           >
-            <Grid container item justy="center" alignItems="center" className={classes.modalBody}>
+            <Grid item justy="center" className={classes.modalBody}>
               {modalBody}
             </Grid>
             {onAcceptFunction && (

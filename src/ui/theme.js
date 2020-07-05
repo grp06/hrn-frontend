@@ -2,13 +2,15 @@ import { createMuiTheme } from '@material-ui/core/styles'
 
 const rebeccaPurple = '#6638aa'
 const lightPurple = '#723EBD'
-const orchid = '#df97d1'
-const materialPink = '#ffb6ec'
+const dankPurp = '#6327bb'
+const orchid = '#e98dd7'
+const oldPink = '#df97d1'
 const ghostWhite = '#f4f6fa'
 const ghostWhiteSub = '#E2E8F2'
 const ghostWhiteBody = '#D1D9EA'
 const ghostWhiteDark = '#BFCBE2'
-const sunray = '#edb868'
+const sunray = '#fabb5b'
+const oldYellow = '#edb868'
 const independence = '#3a405a'
 // const mediumGreen = '#4eab6d'
 const white = '#fff'
@@ -27,7 +29,7 @@ const black2dp = '#212121'
 const theme = createMuiTheme({
   palette: {
     common: {
-      rebeccaPurple,
+      dankPurp,
       lightPurple,
       orchid,
       sunray,
@@ -35,7 +37,6 @@ const theme = createMuiTheme({
       ghostWhiteBody,
       ghostWhiteDark,
       independence,
-      materialPink,
       bodyBlack,
       greyCard,
       greyBorder,
@@ -45,7 +46,7 @@ const theme = createMuiTheme({
       greyButtonHover,
     },
     primary: {
-      main: rebeccaPurple,
+      main: dankPurp,
     },
     secondary: {
       main: orchid,
@@ -129,6 +130,9 @@ const theme = createMuiTheme({
         backgroundColor: black2dp,
       },
     },
+    MuiToolbar: {
+      root: { padding: '0 10px' },
+    },
     // this is for the boxshadow on the navbar
     MuiPaper: {
       root: {
@@ -139,6 +143,12 @@ const theme = createMuiTheme({
       },
       elevation4: {
         boxShadow: 'none',
+      },
+      elevation1: {
+        border: '1px solid #f4f6fa',
+        boxShadow: '3px 3px 0 #f4f6fa',
+        // border: '1px solid #fabb5b',
+        // boxShadow: '3px 3px 0 #fabb5b',
       },
     },
     MuiDivider: {
@@ -163,10 +173,10 @@ const theme = createMuiTheme({
     MuiInput: {
       underline: {
         '&:before': {
-          borderBottom: `2px solid ${rebeccaPurple}`,
+          borderBottom: `2px solid ${dankPurp}`,
         },
         '&:hover:not(disabled):not($focused):not($error):before': {
-          borderBottom: `2px solid ${rebeccaPurple}`,
+          borderBottom: `2px solid ${dankPurp}`,
         },
       },
     },
@@ -176,6 +186,10 @@ const theme = createMuiTheme({
       },
     },
     MuiButton: {
+      root: {
+        color: 'inherit',
+        fontWeight: 'inherit',
+      },
       containedSizeLarge: {
         padding: '11px 11px',
         fontSize: '1.1rem',
