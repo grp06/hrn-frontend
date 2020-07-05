@@ -15,7 +15,11 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
-    boxShadow: theme.palette.common.greyBoxShadow,
+    border: '2px solid #6638aa',
+    boxShadow: '4px 4px 0 #6638aa',
+    // border: '2px solid #3e4042',
+    // boxShadow: '5px 5px 0 #3e4042',
+    // boxShadow: theme.palette.common.greyBoxShadow,
     // padding: theme.spacing(2, 4, 3),
     width: '55vw',
     minWidth: '20vw',
@@ -58,7 +62,9 @@ function TransitionModal({
 
   const handleClose = () => {
     setOpen(false)
-    onCloseFunction()
+    if (onCloseFunction) {
+      onCloseFunction()
+    }
   }
 
   return (
