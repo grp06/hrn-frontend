@@ -14,8 +14,10 @@ const createStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginBottom: '75px',
     borderRadius: '4px',
-    borderColor: theme.palette.common.greyBorder,
-    boxShadow: theme.palette.common.greyBoxShadow,
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    // borderColor: theme.palette.common.greyBorder,
+    // boxShadow: theme.palette.common.greyBoxShadow,
     backgroundColor: theme.palette.common.greyCard,
   },
 }))
