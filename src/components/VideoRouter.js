@@ -4,7 +4,7 @@ import { useAppContext } from '../context/useAppContext'
 import { ThumbsUp } from '../common'
 import {
   PartnerDisconnected,
-  PartnerCameraIssue,
+  PartnerTechnicalIssue,
   SittingOut,
   UserJoinedDuringRound,
   ConnectingToSomeone,
@@ -39,7 +39,7 @@ const VideoRouter = ({ myRound }) => {
         }
         if (partnerNeverConnected) {
           console.log('partner never connected')
-          return <PartnerCameraIssue />
+          return <PartnerTechnicalIssue />
         }
         return null
       case 'complete':

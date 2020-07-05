@@ -52,12 +52,10 @@ const AttendeesList = ({ eventId, timeState }) => {
       const allUsers = onlineUsersData.event_users
       // users who've submitted a mutation within the last 10 seconds
       const freshOnlineUsers = allUsers.filter((user) => {
-        const { last_seen } = user.user
-        const lastSeen = new Date(last_seen).getTime()
+        const { updated_at } = user.user
+        const lastSeen = new Date(updated_at).getTime()
         const diff = Date.now() - lastSeen
-        // server time and local computer could be a bit off?
-        // this could actually be an issue..
-        // a single source of truth for online users would be preferable :(
+
         return diff < lastSeenDuration + 10000
       })
       // if someone comes online or goes offline
@@ -72,7 +70,7 @@ const AttendeesList = ({ eventId, timeState }) => {
       <Typography className={classes.sectionHeader}>Online Attendees</Typography>
       <List dense>
         {oldOnlineUsers.map(({ user }) => {
-          // const formattedDate = user.last_seen.slice(0, 10)
+          // const formattedDate = user.updated_at.slice(0, 10)
           // const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
           return (
             <ListItem key={user.id}>

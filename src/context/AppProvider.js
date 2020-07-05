@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks'
+import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 
 import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
+
 import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
 
@@ -28,6 +29,7 @@ const defaultState = {
   twilio: {
     partnerDisconnected: false,
     lateArrival: false,
+    hasPartnerAndIsConnecting: false,
   },
 }
 
@@ -48,21 +50,20 @@ const AppProvider = ({ children }) => {
     skip: !userId,
   })
 
+  // subscribe to the Event only if we have an eventId
+  const { data: eventData } = useSubscription(listenToEvent, {
+    variables: {
+      event_id: eventId,
+    },
+    skip: !eventId,
+  })
+
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
     variables: {
       now: new Date().toISOString(),
       id: userId,
     },
     skip: !userId,
-  })
-
-  // listen to the Event only if we have an eventId from match
-  // this means we have to be on a route with an id
-  const { data: eventData } = useSubscription(listenToEvent, {
-    variables: {
-      event_id: eventId,
-    },
-    skip: !eventId,
   })
 
   useEffect(() => {
@@ -105,8 +106,9 @@ const AppProvider = ({ children }) => {
         try {
           await updateLastSeenMutation()
         } catch (error) {
+          console.log('interval -> error', error)
           // sometimes theres an error here. Reloading "fixes" it  :|
-          window.location.reload()
+          // window.location.reload()
         }
       }, lastSeenDuration)
       return () => {

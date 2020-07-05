@@ -11,6 +11,7 @@ import { Loading, Timer, GUMErrorModal } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
+import { ConnectingToSomeone } from '../common/waitingRoomScreens'
 
 import { useAppContext } from '../context/useAppContext'
 import { useTwilio } from '../hooks'
@@ -20,6 +21,16 @@ const { createLocalTracks, connect } = require('twilio-video')
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     background: theme.palette.common.blackBody,
+  },
+  screenOverlay: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 99,
+    width: '100vw',
+    height: '100vh',
   },
   mainVid: {
     width: '100%',
@@ -83,9 +94,10 @@ const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
 
-  const { app, user, event, setLateArrival } = useAppContext()
+  const { app, user, event, twilio, setLateArrival, setHasPartnerAndIsConnecting } = useAppContext()
   const { userId } = user
   const { appLoading } = app
+  const { hasPartnerAndIsConnecting } = twilio
 
   const { startTwilio, twilioStarted } = useTwilio()
 
@@ -101,13 +113,17 @@ const VideoRoom = ({ match }) => {
   const eventSet = Object.keys(event).length > 1
   const eventStatus = useRef()
 
-  const { data: myRoundData, loading: myRoundDataLoading } = useQuery(getMyRoundById, {
-    variables: {
-      round_number: event.current_round,
-      user_id: userId,
-    },
-    skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
-  })
+  const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
+    getMyRoundById,
+    {
+      variables: {
+        round_number: event.current_round,
+        user_id: userId,
+        event_id: event.id,
+      },
+      skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
+    }
+  )
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
@@ -198,7 +214,7 @@ const VideoRoom = ({ match }) => {
       setTimerTimeInput(roundEndTime)
       setShowTimer(true)
       console.warn('starting twilio')
-
+      setHasPartnerAndIsConnecting(true)
       startTwilio(room)
     }
   }, [room])
@@ -209,8 +225,16 @@ const VideoRoom = ({ match }) => {
 
   const showPartnersName = () => {
     let userIsPartnerX = false
-    const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
-    if (!myRound || event.status !== 'room-in-progress' || !hasPartner) {
+    // const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
+    // if (
+    //   !myRound ||
+    //   event.status !== 'room-in-progress' ||
+    //   !hasPartner ||
+    //   hasPartnerAndIsConnecting
+    // ) {
+    //   return null
+    // }
+    if (!twilioStarted) {
       return null
     }
 
@@ -247,6 +271,11 @@ const VideoRoom = ({ match }) => {
       )}
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
+        {hasPartnerAndIsConnecting && (
+          <div className={classes.screenOverlay}>
+            <ConnectingToSomeone />
+          </div>
+        )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
         {showTimer ? (

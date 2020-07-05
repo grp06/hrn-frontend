@@ -5,7 +5,7 @@ const displayOnlineUsers = gql`
     event_users(where: { event_id: { _eq: $event_id } }, order_by: { user: { name: asc } }) {
       user {
         id
-        last_seen
+        updated_at
         name
       }
     }

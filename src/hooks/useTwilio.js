@@ -3,17 +3,22 @@ import { useState } from 'react'
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
+import { intentionalPause } from '../helpers'
 
 const useTwilio = () => {
-  const { setPartnerDisconnected, setPartnerNeverConnected } = useAppContext()
-  const { partnerCameraIssueTimeout } = constants
+  const {
+    setPartnerDisconnected,
+    setPartnerNeverConnected,
+    setHasPartnerAndIsConnecting,
+  } = useAppContext()
+  const { partnerCameraIssueTimeout, hasPartnerAndIsConnectingBreathingRoom } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()
+
   const startTwilio = (room) => {
     setTwilioStarted(true)
     setPartnerNeverConnected(false)
-
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
     setTimeout(() => {
@@ -39,7 +44,9 @@ const useTwilio = () => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
+        setHasPartnerAndIsConnecting(false)
         participantConnected(remoteParticipant)
+        intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
@@ -60,6 +67,7 @@ const useTwilio = () => {
         setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
+        setHasPartnerAndIsConnecting(false)
 
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()

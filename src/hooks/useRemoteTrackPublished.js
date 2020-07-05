@@ -1,6 +1,12 @@
 import { useAppContext } from '../context/useAppContext'
+import { intentionalPause } from '../helpers'
+import { constants } from '../utils'
+
+const { hasPartnerAndIsConnectingBreathingRoom } = constants
 
 const useRemoteTrackPublished = () => {
+  const { setHasPartnerAndIsConnecting } = useAppContext()
+
   const remoteTrackPublished = (publication) => {
     const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1
 
@@ -12,6 +18,8 @@ const useRemoteTrackPublished = () => {
           attachedTrack.muted = true
         }
         remoteDiv.appendChild(attachedTrack)
+        setHasPartnerAndIsConnecting(false)
+        intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
       }
     }
     publication.on('subscribed', (track) => {
@@ -25,6 +33,8 @@ const useRemoteTrackPublished = () => {
       } else {
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
+      setHasPartnerAndIsConnecting(false)
+      intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
       // setDidPartnerDisconnect(false)
     })
 

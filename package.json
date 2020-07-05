@@ -30,6 +30,7 @@
     "env-cmd": "^10.1.0",
     "formik": "^2.1.4",
     "formik-material-ui": "^2.0.1",
+    "feather-icons-react": "^0.4.1",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "jstz": "^2.1.1",

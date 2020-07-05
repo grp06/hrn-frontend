@@ -7,6 +7,7 @@ const updateLastSeen = gql`
         id
         last_seen
         name
+        updated_at
       }
     }
   }

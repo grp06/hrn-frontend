@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
   },
   mainContainer: {
-    backgroundColor: theme.palette.common.rebeccaPurple,
+    backgroundColor: theme.palette.common.dankPurp,
     position: 'absolute',
   },
   link: {

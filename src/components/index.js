@@ -1,6 +1,5 @@
 export { default as Events } from './Events'
 export { default as Event } from './Event'
-export { default as CreateEventButton } from './CreateEventButton'
 export { default as VideoRoom } from './VideoRoom'
 export { default as VideoRouter } from './VideoRouter'
 export { default as GameOver } from './GameOver'

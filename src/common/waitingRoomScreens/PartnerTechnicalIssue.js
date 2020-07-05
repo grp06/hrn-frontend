@@ -20,12 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const PartnerCameraIssue = () => {
+const PartnerTechnicalIssue = () => {
   const classes = useStyles()
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        It seems that your partner is having some camera issues.
+        It seems that your partner is having some technical issues.
       </Typography>
       <Typography className={classes.messageText}>
         Unfortunately you two will have to sit out this round. Sorry for disappointing 😔
@@ -34,4 +34,4 @@ const PartnerCameraIssue = () => {
   )
 }
 
-export default PartnerCameraIssue
+export default PartnerTechnicalIssue

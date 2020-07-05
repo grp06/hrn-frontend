@@ -15,7 +15,7 @@ const getEventById = gql`
         user {
           id
           name
-          last_seen
+          updated_at
         }
       }
     }
