@@ -189,6 +189,9 @@ const theme = createMuiTheme({
         '&:hover:not(disabled):not($focused):not($error):before': {
           borderBottom: `2px solid ${greyBorder}`,
         },
+        '&:after': {
+          borderBottom: `2px solid ${ghostWhiteDark}`,
+        },
       },
     },
     MuiInputBase: {
