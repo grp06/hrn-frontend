@@ -4,17 +4,10 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import Divider from '@material-ui/core/Divider'
-import ListItemText from '@material-ui/core/ListItemText'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import PersonIcon from '@material-ui/icons/Person'
-import Avatar from '@material-ui/core/Avatar'
 import { useHistory } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
 import { getMyMutualThumbsData } from '../gql/queries'
-import { FloatCardMedium, Loading } from '../common'
+import { FloatCardMedium, Loading, MutualThumbsList } from '../common'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -50,10 +43,6 @@ const useStyles = makeStyles((theme) => ({
   },
   descriptionContainer: {
     marginBottom: '25px',
-  },
-  inlineEmailText: {
-    ...theme.typography.body1,
-    display: 'inline',
   },
   textContainer: {
     marginTop: '-100px',
@@ -105,40 +94,9 @@ const GameOver = ({ match }) => {
     return <Loading />
   }
 
-  // returns [ { id: ___, email: ___ }, {....} ]
-  const partnerDetails = mutualThumbsData.rounds.map((round) => {
-    const idsAndEmails = Object.values(round)
-    return idsAndEmails.filter((person) => person.id !== userId)
-  })
-
-  const renderList = () => {
-    return partnerDetails.map((partner) => {
-      return (
-        <>
-          <ListItem key={partner[0].id}>
-            <ListItemAvatar>
-              <Avatar>
-                <PersonIcon />
-              </Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary={partner[0].name}
-              secondary={
-                <Typography component="span" className={classes.inlineEmailText}>
-                  {partner[0].email}
-                </Typography>
-              }
-            />
-          </ListItem>
-          <Divider variant="inset" component="li" />
-        </>
-      )
-    })
-  }
-
   return (
     <div className={classes.wrapper}>
-      {partnerDetails.length > 0 ? (
+      {mutualThumbsData.rounds.length > 0 ? (
         <FloatCardMedium>
           <Grid
             item
@@ -161,7 +119,7 @@ const GameOver = ({ match }) => {
             className={classes.cardBodyContainer}
           >
             <Grid container item direction="column" className={classes.descriptionContainer}>
-              <List>{renderList()}</List>
+              <MutualThumbsList mutualThumbsData={mutualThumbsData} userId={userId} />
             </Grid>
           </Grid>
           <Grid container item direction="column" className={classes.descriptionContainer}>

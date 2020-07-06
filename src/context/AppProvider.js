@@ -69,6 +69,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
+      console.log('im getting in here')
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
@@ -76,7 +77,7 @@ const AppProvider = ({ children }) => {
         })
         return history.push('/events')
       }
-
+      console.log('im getting in here')
       // cases to set event data
       // no event data set yet
       // incoming data from subscription is different from existing
