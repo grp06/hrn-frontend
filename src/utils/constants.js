@@ -4,7 +4,9 @@ const constants = {
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 2000,
-
+  stephenZoomLink: 'https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09',
+  becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
+  giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',
   chromeCameraPermissionHowTo:

@@ -10,7 +10,7 @@ import {
   Event,
   Events,
   VideoRoom,
-  GameOver,
+  EventComplete,
   SignUp,
   PreEvent,
   ForgotPassword,
@@ -66,7 +66,7 @@ const App = () => {
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />
                   <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                  <Route exact path="/events/:id/event-complete" component={GameOver} />
+                  <Route exact path="/events/:id/event-complete" component={EventComplete} />
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />

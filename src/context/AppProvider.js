@@ -76,7 +76,6 @@ const AppProvider = ({ children }) => {
         })
         return history.push('/events')
       }
-
       // cases to set event data
       // no event data set yet
       // incoming data from subscription is different from existing
