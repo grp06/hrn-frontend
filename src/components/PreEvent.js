@@ -59,6 +59,7 @@ const PreEvent = ({ match }) => {
     if (eventSet && onlineUsersData && userId) {
       const onlineUsers = onlineUsersData.event_users.map((userObject) => userObject.user.id)
       const numOnlineUsers = onlineUsers.length
+      // 113 < 50
 
       if (numOnlineUsers < maxNumRoomUsers) {
         setMyRoomNumber(1)
@@ -68,9 +69,9 @@ const PreEvent = ({ match }) => {
       const numberOfRooms = Math.ceil(numOnlineUsers / maxNumRoomUsers)
       const usersPerRoom = Math.ceil(numOnlineUsers / numberOfRooms)
       const currentUserIndex = onlineUsers.indexOf(userId)
-      const room = currentUserIndex === 0 ? 1 : Math.floor(currentUserIndex / usersPerRoom) + 1
+      const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
 
-      setMyRoomNumber(room)
+      setMyRoomNumber(roomNumber)
       setNumRooms(numberOfRooms)
     }
   }, [event, onlineUsersData, userId])
@@ -95,7 +96,8 @@ const PreEvent = ({ match }) => {
         const hostTokens = (
           await Promise.all(tokenPromisesResponse.map((token) => token.json()))
         ).map((tokenObj) => tokenObj.token)
-        console.log('hostTokens.length = ', hostTokens.length)
+        console.log('setupTokens -> hostTokens.length', hostTokens.length)
+
         return setRoomTokens(hostTokens)
       }
 
@@ -105,7 +107,6 @@ const PreEvent = ({ match }) => {
 
   useEffect(() => {
     if (roomTokens.length) {
-      console.log('roomTokens', roomTokens)
       const isEventHost = event.host_id === userId
       const setupRoom = async () => {
         let localTracks
@@ -121,11 +122,9 @@ const PreEvent = ({ match }) => {
             return setIsGUMErrorModalActive(true)
           }
         }
-        console.log('myRoomNumber = ', myRoomNumber)
+
         // if theres only 1 room, or if you're a user - do this
         if (roomTokens.length === 1) {
-          console.log('only one token')
-
           const myRoom = await connect(roomTokens[0], {
             tracks: isEventHost ? localTracks : [],
           })
