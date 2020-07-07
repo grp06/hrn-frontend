@@ -6,6 +6,7 @@ const usePreEventTwilio = () => {
 
   const startPreEventTwilio = (room, isEventHost) => {
     if (room) {
+      console.log('startPreEventTwilio -> room', room)
       if (isEventHost) {
         setupHostPreEvent(room)
       } else {
