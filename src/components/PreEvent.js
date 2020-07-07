@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
 import { useAppContext } from '../context/useAppContext'
 import { getToken } from '../helpers'
 import { GUMErrorModal } from '../common'
 import { usePreEventTwilio } from '../hooks'
-import { getOnlineUsersByEventId } from '../gql/queries'
 import { constants } from '../utils'
 
 const { maxNumRoomUsers } = constants
@@ -37,14 +35,7 @@ const PreEvent = ({ match }) => {
   const [numRooms, setNumRooms] = useState(null)
   const { startPreEventTwilio } = usePreEventTwilio()
   const eventSet = Object.keys(event).length > 1
-
-  const { data: onlineUsersData, loading: onlineUsersLoading } = useQuery(getOnlineUsersByEventId, {
-    variables: {
-      event_id: eventId,
-    },
-    skip: !eventId,
-  })
-
+  const [onlineUsers, setOnlineUsers] = useState(null)
   useEffect(() => {
     if (eventSet) {
       const { status } = event
@@ -56,11 +47,29 @@ const PreEvent = ({ match }) => {
   }, [event])
 
   useEffect(() => {
-    if (eventSet && onlineUsersData && userId) {
-      const onlineUsers = onlineUsersData.event_users.map((userObject) => userObject.user.id)
-      const numOnlineUsers = onlineUsers.length
-      // 113 < 50
+    if (eventSet && userId) {
+      const getOnlineUsers = async () => {
+        const res = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/rooms/get-online-event-users/${eventId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+            },
+          }
+        )
+        const response = await res.json()
+        setOnlineUsers(response.data)
+      }
+      getOnlineUsers()
+    }
+  }, [event, userId])
 
+  useEffect(() => {
+    if (onlineUsers) {
+      const numOnlineUsers = onlineUsers.length
       if (numOnlineUsers < maxNumRoomUsers) {
         setMyRoomNumber(1)
         return setNumRooms(1)
@@ -74,7 +83,7 @@ const PreEvent = ({ match }) => {
       setMyRoomNumber(roomNumber)
       setNumRooms(numberOfRooms)
     }
-  }, [event, onlineUsersData, userId])
+  }, [onlineUsers])
 
   useEffect(() => {
     if (userId && myRoomNumber !== null) {
@@ -96,7 +105,6 @@ const PreEvent = ({ match }) => {
         const hostTokens = (
           await Promise.all(tokenPromisesResponse.map((token) => token.json()))
         ).map((tokenObj) => tokenObj.token)
-        console.log('setupTokens -> hostTokens.length', hostTokens.length)
 
         return setRoomTokens(hostTokens)
       }

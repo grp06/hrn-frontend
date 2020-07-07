@@ -4,7 +4,7 @@ const constants = {
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 2000,
-  maxNumRoomUsers: 2,
+  maxNumRoomUsers: 49,
   stephenZoomLink: 'https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09',
   becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
