@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -33,6 +34,17 @@ const useStyles = makeStyles((theme) => ({
   },
   partyEmoji: {
     marginLeft: 10,
+  },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    top: 'auto',
   },
 }))
 
@@ -179,9 +191,12 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             alignItems="center"
           >
             <Typography className={classes.categoryHeader}>
-              Waiting for host to start event
+              The Host will begin the event shortly
             </Typography>
           </Grid>
+          <div className={classes.root}>
+            <LinearProgress />
+          </div>
         </Grid>
       </FloatCardLarge>
     )
