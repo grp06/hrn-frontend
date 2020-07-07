@@ -59,8 +59,6 @@ const PreEvent = ({ match }) => {
     if (eventSet && onlineUsersData && userId) {
       const onlineUsers = onlineUsersData.event_users.map((userObject) => userObject.user.id)
       const numOnlineUsers = onlineUsers.length
-      console.log('numOnlineUsers ->', numOnlineUsers)
-      console.log('onlineUsers ->', onlineUsers)
 
       if (numOnlineUsers < maxNumRoomUsers) {
         setMyRoomNumber(1)
@@ -68,13 +66,10 @@ const PreEvent = ({ match }) => {
       }
       // get online users, divide by 50 and round up = number of rooms
       const numberOfRooms = Math.ceil(numOnlineUsers / maxNumRoomUsers)
-      console.log('numberOfRooms ->', numberOfRooms)
       const usersPerRoom = Math.ceil(numOnlineUsers / numberOfRooms)
-      console.log('usersPerRoom ->', usersPerRoom)
       const currentUserIndex = onlineUsers.indexOf(userId)
-      console.log('currentUserIndex ->', currentUserIndex)
       const room = currentUserIndex === 0 ? 1 : Math.floor(currentUserIndex / usersPerRoom) + 1
-      console.log('room ->', room)
+
       setMyRoomNumber(room)
       setNumRooms(numberOfRooms)
     }
@@ -100,7 +95,7 @@ const PreEvent = ({ match }) => {
         const hostTokens = (
           await Promise.all(tokenPromisesResponse.map((token) => token.json()))
         ).map((tokenObj) => tokenObj.token)
-        console.log(hostTokens)
+        console.log('hostTokens.length = ', hostTokens.length)
         return setRoomTokens(hostTokens)
       }
 
@@ -110,6 +105,7 @@ const PreEvent = ({ match }) => {
 
   useEffect(() => {
     if (roomTokens.length) {
+      console.log('roomTokens', roomTokens)
       const isEventHost = event.host_id === userId
       const setupRoom = async () => {
         let localTracks
@@ -125,9 +121,11 @@ const PreEvent = ({ match }) => {
             return setIsGUMErrorModalActive(true)
           }
         }
-        console.log(myRoomNumber)
+        console.log('myRoomNumber = ', myRoomNumber)
         // if theres only 1 room, or if you're a user - do this
         if (roomTokens.length === 1) {
+          console.log('only one token')
+
           const myRoom = await connect(roomTokens[0], {
             tracks: isEventHost ? localTracks : [],
           })
@@ -144,7 +142,7 @@ const PreEvent = ({ match }) => {
         })
 
         Promise.all(roomCreationPromises).then((res) => {
-          startPreEventTwilio(res.room, isEventHost)
+          res.forEach((room) => startPreEventTwilio(room, isEventHost))
         })
       }
       setupRoom()
