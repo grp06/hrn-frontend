@@ -18,8 +18,11 @@ const useRemoteTrackPublished = () => {
           attachedTrack.muted = true
         }
         remoteDiv.appendChild(attachedTrack)
-        setHasPartnerAndIsConnecting(false)
-        sleep(hasPartnerAndIsConnectingBreathingRoom)
+        console.log('do we have a black screen?')
+
+        setTimeout(() => {
+          setHasPartnerAndIsConnecting(false)
+        }, hasPartnerAndIsConnectingBreathingRoom)
       }
     }
     publication.on('subscribed', (track) => {
@@ -33,9 +36,10 @@ const useRemoteTrackPublished = () => {
       } else {
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
-      setHasPartnerAndIsConnecting(false)
-      sleep(hasPartnerAndIsConnectingBreathingRoom)
-      // setDidPartnerDisconnect(false)
+
+      setTimeout(() => {
+        setHasPartnerAndIsConnecting(false)
+      }, hasPartnerAndIsConnectingBreathingRoom)
     })
 
     publication.on('unsubscribed', (track) => {})

@@ -44,9 +44,7 @@ const useTwilio = () => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
-        setHasPartnerAndIsConnecting(false)
         participantConnected(remoteParticipant)
-        sleep(hasPartnerAndIsConnectingBreathingRoom)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
