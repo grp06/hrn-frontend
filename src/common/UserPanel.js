@@ -191,7 +191,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             alignItems="center"
           >
             <Typography className={classes.categoryHeader}>
-              The Host will begin the event shortly
+              The host will begin the event shortly
             </Typography>
           </Grid>
           <div className={classes.root}>
