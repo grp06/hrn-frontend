@@ -5,7 +5,9 @@ const getOnlineUsersByEventId = gql`
     event_users(
       where: { user: { updated_at: { _gte: $later_than } }, _and: { event_id: { _eq: $event_id } } }
     ) {
-      id
+      user {
+        id
+      }
     }
   }
 `
