@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
-import { intentionalPause } from '../helpers'
+import { sleep } from '../helpers'
 
 const useTwilio = () => {
   const {
@@ -46,7 +46,7 @@ const useTwilio = () => {
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
         participantConnected(remoteParticipant)
-        intentionalPause(hasPartnerAndIsConnectingBreathingRoom)
+        sleep(hasPartnerAndIsConnectingBreathingRoom)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
