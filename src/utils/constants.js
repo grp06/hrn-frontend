@@ -3,7 +3,7 @@ const constants = {
   lastSeenDuration: 10000,
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
-  hasPartnerAndIsConnectingBreathingRoom: 2000,
+  hasPartnerAndIsConnectingBreathingRoom: 15000,
   maxNumRoomUsers: 49,
   stephenZoomLink: 'https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09',
   becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
