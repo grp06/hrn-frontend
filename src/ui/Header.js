@@ -1,19 +1,20 @@
 import React, { useState, useRef } from 'react'
-import SettingsMenu from './SettingsMenu'
-import HostControlsMenu from './HostControlsMenu'
-import HostEventControlsMenu from './HostEventControlsMenu'
 import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import { useAppContext } from '../context/useAppContext'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { StartEventButton } from '../common'
 import IconButton from '@material-ui/core/IconButton'
 import FeatherIcon from 'feather-icons-react'
 
 import logo from '../assets/logoWhite.svg'
+import { StartEventButton } from '../common'
+import { useAppContext } from '../context/useAppContext'
+import HostEventControlsMenu from './HostEventControlsMenu'
+import HostControlsMenu from './HostControlsMenu'
+import SettingsMenu from './SettingsMenu'
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -47,6 +48,23 @@ const Header = () => {
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
 
+  const renderHeaderElements = () => {
+    return localStorage.getItem('userId') ? (
+      <Grid container justify="flex-end" alignItems="center">
+        <div>
+          <IconButton color="inherit" disableRipple disabled>
+            <Typography>{user.name}</Typography>
+          </IconButton>
+          {/* <IconButton color="inherit" disableRipple>
+        <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
+      </IconButton> */}
+        </div>
+        {role === 'host' && <HostControlsMenu />}
+        <SettingsMenu resetUser={resetUser} />
+      </Grid>
+    ) : null
+  }
+
   return (
     <>
       <AppBar position="fixed">
@@ -68,16 +86,7 @@ const Header = () => {
             </Typography>
           )}
           <div className={classes.grow} />
-          <div>
-            <IconButton color="inherit" disableRipple disabled>
-              <Typography>{user.name}</Typography>
-            </IconButton>
-            {/* <IconButton color="inherit" disableRipple>
-              <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
-            </IconButton> */}
-          </div>
-          {role === 'host' && <HostControlsMenu />}
-          <SettingsMenu resetUser={resetUser} />
+          {renderHeaderElements()}
         </Toolbar>
       </AppBar>
     </>
