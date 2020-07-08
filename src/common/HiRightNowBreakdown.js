@@ -36,29 +36,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function getSteps() {
-  return ['Join an event', 'Give video permissions', '5 minute mingles', 'Connect with new friends']
+function getSteps(eventRoundLength) {
+  return [
+    'Join an event',
+    'Host delivers speech',
+    'Give video permissions',
+    `${eventRoundLength} minute mingles`,
+    'Connect with new friends',
+  ]
 }
 
-function getStepContent(step) {
+function getStepContent(step, eventRoundLength) {
   switch (step) {
     case 0:
       return `Well, you're already here so all you have to do is click 'RSVP for Event'. This will put your name into our matching algorithm.`
     case 1:
-      return 'We all want to see your beautiful face, so do not be camera shy! We will ask for your video permissions within 30 minutes of the event start time.'
+      return 'Before you start chatting with everyone, your host will share a few words with you through a live stream to get you hyped for the event!'
     case 2:
-      return 'Once the event starts, you will be put into a private videochat with one other event attendee. You two will have 5 minutes to chat about whatever you like. After 5 minutes, you will be paired with someone else after a short stretching intermission.'
+      return 'We all want to see your beautiful face, so do not be camera shy! We will ask for your video permissions right after the pre-event speech so watch out for the notification in your browser.'
     case 3:
+      return `Once the event starts, you will be put into a private videochat with one other event attendee. You two will have ${eventRoundLength} minutes to chat about whatever you like. After ${eventRoundLength} minutes, you will be paired with someone else after a short stretching intermission.`
+    case 4:
       return `After each round you elect to share your email with the person you just chatted with. If theres a mutual interest, you each will get the others contact information at the end of the event.`
     default:
       return 'Unknown step'
   }
 }
 
-const HiRightNowBreakdown = () => {
+const HiRightNowBreakdown = ({ eventRoundLength }) => {
   const classes = useStyles()
   const [activeStep, setActiveStep] = useState(0)
-  const steps = getSteps()
+  const steps = getSteps(eventRoundLength)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -79,7 +87,7 @@ const HiRightNowBreakdown = () => {
           <Step key={label}>
             <StepLabel className={classes.stepLabel}>{label}</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
+              <Typography>{getStepContent(index, eventRoundLength)}</Typography>
               <div className={classes.actionsContainer}>
                 <div>
                   <Button

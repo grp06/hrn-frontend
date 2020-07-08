@@ -60,6 +60,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     event_name,
     description,
     host: eventHost,
+    round_length,
   } = eventData
   const { name: eventHostName } = eventHost
 
@@ -239,7 +240,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             {renderCTAButton()}
           </Grid>
         </Grid>
-        <HiRightNowBreakdown />
+        <HiRightNowBreakdown eventRoundLength={round_length} />
       </FloatCardLarge>
     </>
   )
