@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import { useAppContext } from '../context/useAppContext'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-
+import { StartEventButton } from '../common'
 import IconButton from '@material-ui/core/IconButton'
 import FeatherIcon from 'feather-icons-react'
 
@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => ({
       stroke: theme.palette.common.sunray,
     },
   },
+  marginRight: {
+    marginRight: '10px',
+  },
 }))
 
 const Header = () => {
@@ -52,6 +55,12 @@ const Header = () => {
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
           <HostEventControlsMenu event={event} user={user} />
+          {/* {eventStatus === 'pre-event' && (
+            <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
+          )} */}
+          <div className={classes.marginRight}>
+            <StartEventButton event={event} user={user} />
+          </div>
           {eventStatus !== 'not-started' && eventIdInUrl && (
             <Typography>
               Current Round:
@@ -63,9 +72,9 @@ const Header = () => {
             <IconButton color="inherit" disableRipple disabled>
               <Typography>{user.name}</Typography>
             </IconButton>
-            <IconButton color="inherit" disableRipple>
+            {/* <IconButton color="inherit" disableRipple>
               <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
-            </IconButton>
+            </IconButton> */}
           </div>
           {role === 'host' && <HostControlsMenu />}
           <SettingsMenu resetUser={resetUser} />

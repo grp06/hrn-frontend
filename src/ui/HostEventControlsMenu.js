@@ -70,23 +70,6 @@ const HostEventControlsMenu = ({ event, user }) => {
     }
   }
 
-  const handleStartEventModal = TransitionModal({
-    button: {
-      buttonText: 'Start Event',
-      buttonVariant: 'text',
-      buttonColor: 'default',
-    },
-    modalBody:
-      'Starting the event will stop your current broadcast. Are you sure you want to start the event?',
-    onAcceptButtonText: 'Lets Start!',
-    onAcceptFunction: async () => {
-      startEvent({ eventId, round_length, num_rounds })
-    },
-    onCloseFunction: () => {
-      setMenuOpen(false)
-    },
-  })
-
   const handleResetEventModal = TransitionModal({
     button: {
       buttonText: 'Reset Event',
@@ -131,12 +114,12 @@ const HostEventControlsMenu = ({ event, user }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {eventStatus === 'pre-event' && (
+                  {/* {eventStatus === 'pre-event' && (
                     <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
-                  )}
-                  <MenuItem onClick={handleMenuClose} className={classes.menuItem}>
+                  )} */}
+                  {/* <MenuItem onClick={handleMenuClose} className={classes.menuItem}>
                     Active Participants
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem className={classes.menuItem}>{handleResetEventModal}</MenuItem>
                 </MenuList>
               </ClickAwayListener>

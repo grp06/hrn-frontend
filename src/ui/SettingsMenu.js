@@ -100,9 +100,6 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={handleMenuClose} className={classes.menuItem}>
-                    My Account
-                  </MenuItem>
                   <MenuItem className={classes.menuItem}>{logoutModalButton}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
