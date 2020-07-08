@@ -46,7 +46,6 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
       event
     )
     const startTime = formatDate(new Date(event.start_at).getTime())
-    // console.log('dropOffsInEvent -> ', dropOffsInEvent)
 
     return (
       <ExpansionPanel expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
