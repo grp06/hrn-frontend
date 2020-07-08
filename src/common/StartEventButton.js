@@ -7,7 +7,6 @@ const StartEventButton = ({ event, user }) => {
   const { userId } = user
   const isEventHost = host_id === userId
 
-  console.log('renderStart Event Button')
   return isEventHost && eventStatus === 'pre-event'
     ? TransitionModal({
         button: {

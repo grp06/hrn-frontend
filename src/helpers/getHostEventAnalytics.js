@@ -14,9 +14,6 @@ const getTotalDropOffsInEvent = (event) => {
   const numberOfRounds = event.rounds[event.rounds.length - 1].round_number
   const firstRound = event.rounds.filter((round) => round.round_number === 1)
   const lastRound = event.rounds.filter((round) => round.round_number === numberOfRounds)
-  // console.log('numberOfRounds ->', numberOfRounds)
-  // console.log('firstRound ->', firstRound)
-  // console.log('lastRound ->', lastRound)
 
   const firstRoundUserIdArray = firstRound
     .reduce((userIdArray, pairing) => {
@@ -35,9 +32,6 @@ const getTotalDropOffsInEvent = (event) => {
       return userIdArray
     }, [])
     .sort()
-
-  // console.log('lastRoundUserIdArray ->', lastRoundUserIdArray)
-  // console.log('firstRoundUserIdArray ->', firstRoundUserIdArray)
 
   return firstRoundUserIdArray.reduce((totalDropOffs, userId) => {
     if (lastRoundUserIdArray.indexOf(userId) < 0) {
@@ -58,9 +52,6 @@ const getTotalAttendeesInEvent = (event) => {
     (a, b) => (masterRoundsMap[a] > masterRoundsMap[b] ? a : b),
     0
   )
-
-  // console.log('roundWithMostPairings ->', roundWithMostPairings)
-  // console.log('masterRoundsMap ->', masterRoundsMap)
 
   return masterRoundsMap[roundWithMostPairings] * 2
 }

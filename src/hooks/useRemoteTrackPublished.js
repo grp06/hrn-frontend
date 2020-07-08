@@ -18,7 +18,6 @@ const useRemoteTrackPublished = () => {
           attachedTrack.muted = true
         }
         remoteDiv.appendChild(attachedTrack)
-        console.log('do we have a black screen?')
 
         setTimeout(() => {
           setHasPartnerAndIsConnecting(false)

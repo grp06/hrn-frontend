@@ -29,8 +29,6 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
   useEffect(() => {
     let interval = null
     interval = setInterval(() => {
-      // console.log('seconds = ', seconds)
-
       setSeconds((seconds) => seconds - 1)
     }, 1000)
 
@@ -42,7 +40,6 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
     }
 
     return () => {
-      // console.log('timer is unmounting')
       clearInterval(interval)
     }
   }, [seconds])
