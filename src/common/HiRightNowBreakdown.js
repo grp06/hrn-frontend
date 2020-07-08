@@ -27,12 +27,19 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   resetContainer: {
-    padding: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     width: '100%',
     textAlign: 'center',
   },
   stepLabel: {
     color: theme.palette.common.ghostWhite,
+  },
+  endMessage: {
+    textAlign: 'center',
+    width: '75%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: theme.spacing(3),
   },
 }))
 
@@ -113,10 +120,11 @@ const HiRightNowBreakdown = ({ eventRoundLength }) => {
       </Stepper>
       {activeStep === steps.length && (
         <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
-          <Typography>
-            You're all set! Sit tight and wait a couple of minutes for the event to start!
+          <Typography className={classes.endMessage}>
+            You're all set! If you have already RSVPed, sit tight and wait for the event to start.
+            If you have not RSVPed, scroll up and click the Sign Up / RSVP button!
           </Typography>
-          <Button onClick={handleReset} className={classes.backResetButton}>
+          <Button onClick={handleReset} variant="contained" color="primary">
             Reset Steps
           </Button>
         </Grid>
