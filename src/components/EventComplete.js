@@ -93,6 +93,17 @@ const EventComplete = ({ match }) => {
       ? 'Say Hi Right Now to your new friends 👋'
       : 'Thanks for joining the event! 🎊'
 
+  const renderNextEntrepreneurEventButton = () => {
+    return eventId === '49' ? (
+      <Button variant="contained" href="https://launch.hirightnow.co/events/56" target="_blank">
+        Join our next event
+        <span role="img" aria-label="rocket">
+          🚀
+        </span>
+      </Button>
+    ) : null
+  }
+
   return (
     <div className={classes.wrapper}>
       <FloatCardMedium>
@@ -143,6 +154,7 @@ const EventComplete = ({ match }) => {
                     💁‍♀️
                   </span>
                 </Button>
+                {renderNextEntrepreneurEventButton()}
               </Grid>
             </Grid>
           </Grid>
