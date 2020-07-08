@@ -48,6 +48,24 @@ const Header = () => {
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
 
+  const renderCurrentEventStatus = () => {
+    if (!eventIdInUrl) return null
+    let textToShow
+    switch (eventStatus) {
+      case 'not-started':
+        textToShow = null
+        break
+      case 'pre-event':
+        textToShow = 'Pre-event'
+        break
+      case 'complete':
+        textToShow = 'Event Complete'
+        break
+      default:
+        textToShow = `Current Round: ${current_round}`
+    }
+    return <Typography>{textToShow}</Typography>
+  }
   const renderHeaderElements = () => {
     return localStorage.getItem('userId') ? (
       <Grid container justify="flex-end" alignItems="center">
@@ -76,15 +94,12 @@ const Header = () => {
           {/* {eventStatus === 'pre-event' && (
             <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
           )} */}
-          <div className={classes.marginRight}>
-            <StartEventButton event={event} user={user} />
-          </div>
-          {eventStatus !== 'not-started' && eventIdInUrl && (
-            <Typography>
-              Current Round:
-              {` ${current_round || 'Pre-event'}`}
-            </Typography>
-          )}
+          <Grid container alignItems="center">
+            <div className={classes.marginRight}>
+              <StartEventButton event={event} user={user} />
+            </div>
+            {renderCurrentEventStatus()}
+          </Grid>
           <div className={classes.grow} />
           {renderHeaderElements()}
         </Toolbar>
