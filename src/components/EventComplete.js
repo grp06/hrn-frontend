@@ -11,7 +11,7 @@ import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading, MutualThumbsList } from '../common'
 import { constants } from '../utils'
 
-const { giveFeedbackTypeform, becomeAHostTypeform, stephenZoomLink } = constants
+const { giveFeedbackTypeform, becomeAHostTypeform, stephenZoomLink, johnMorleyZoomLink } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -66,6 +66,8 @@ const EventComplete = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
+  const zoomLink = eventId === '16' ? johnMorleyZoomLink : stephenZoomLink
+
   const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
     getMyMutualThumbsData,
     {
@@ -112,7 +114,7 @@ const EventComplete = ({ match }) => {
             </Grid>
             <Grid item className={classes.cardBodySection}>
               <Typography className={classes.zoomLink}>
-                <a href={stephenZoomLink} target="_blank" className={classes.zoomLink}>
+                <a href={zoomLink} target="_blank" className={classes.zoomLink}>
                   Click to join everyone from the event on a Zoom call!
                 </a>
               </Typography>
