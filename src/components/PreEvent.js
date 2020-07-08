@@ -144,6 +144,7 @@ const PreEvent = ({ match }) => {
           roomCreationPromises.push(
             connect(token, {
               tracks: localTracks,
+              preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
             })
           )
         })

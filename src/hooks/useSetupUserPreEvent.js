@@ -16,14 +16,6 @@ const useSetupUserPreEvent = () => {
 
     room.on('participantDisconnected', (remoteParticipant) => {
       console.log('ON --- participantDisconnected', remoteParticipant)
-
-      // if you're watching the host and he disconnects, tear down his video
-      if (role !== 'host') {
-        const hostVideo = document.getElementById('host-video')
-        if (hostVideo) {
-          hostVideo.innerHTML = ''
-        }
-      }
     })
   }
 
