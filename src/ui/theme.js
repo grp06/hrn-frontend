@@ -208,6 +208,9 @@ const theme = createMuiTheme({
         padding: '11px 11px',
         fontSize: '1.1rem',
       },
+      contained: {
+        backgroundColor: sunray,
+      },
     },
     MuiFab: {
       extended: {
