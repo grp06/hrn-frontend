@@ -121,7 +121,7 @@ function TransitionModal({
                   {onAcceptButtonText || 'Yes, I am Sure'}
                 </Button>
                 <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
-                  Woops, No Way!
+                  Whoops, No Way!
                 </Button>
               </Grid>
             )}

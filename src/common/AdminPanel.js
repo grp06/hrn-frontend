@@ -10,7 +10,7 @@ import {
   FloatCardLarge,
   AttendeesList,
   TransitionModal,
-  StartEventButton,
+  StartPreEventButton,
   ListOfRSVPs,
   ShareEventPromptModal,
   Timer,
@@ -80,7 +80,7 @@ const AdminPanel = ({ eventData, timeState }) => {
       case 'within 30 mins':
         element = (
           <Grid container direction="column" alignItems="center" justify="space-around">
-            <StartEventButton within30Mins eventStartTime={eventStartTime} />
+            <StartPreEventButton within30Mins eventStartTime={eventStartTime} />
             <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
             <div>{editFormModal}</div>
           </Grid>
@@ -89,7 +89,7 @@ const AdminPanel = ({ eventData, timeState }) => {
       case 'go time':
         element = (
           <Grid container direction="column" alignItems="center" justify="space-around">
-            <StartEventButton eventId={eventId} status={status} />
+            <StartPreEventButton eventId={eventId} status={status} />
             <div style={{ marginTop: '20px' }}>{editFormModal}</div>
           </Grid>
         )
