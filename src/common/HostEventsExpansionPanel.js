@@ -37,7 +37,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     setEventPanelExpanded(isExpanded ? panel : false)
   }
   if (!eventsAndRoundsData) {
-    return <div>You've got no events 🏖</div>
+    return <div>No events to see here 🏖</div>
   }
 
   return eventsAndRoundsData.events.map((event, index) => {
@@ -48,7 +48,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     const startTime = formatDate(new Date(event.start_at).getTime())
 
     return (
-      <ExpansionPanel expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
+      <ExpansionPanel key={id} expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ color: '#f4f6fa' }} />}
           aria-controls={`${id}-content`}
@@ -62,7 +62,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  People Registered: {event_users.length}
+                  Total RSVPs: {event_users.length}
                 </Typography>
               </Grid>
               <Grid item md={6} xs={12}>
@@ -85,8 +85,8 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  This event has not started. Come back when it is over and we'll have some stats
-                  for you! 👍
+                  This event has not started. Come back when it is over and we&rsquo;ll have some
+                  stats for you! 👍
                 </Typography>
               </Grid>
             </Grid>

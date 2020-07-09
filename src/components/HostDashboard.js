@@ -37,8 +37,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HostDashboard = () => {
   const classes = useStyles()
-  const { user } = useAppContext()
+  const { user, app } = useAppContext()
   const { userId, role } = user
+  const { appLoading } = app
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
   const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
@@ -49,7 +50,7 @@ const HostDashboard = () => {
       variables: {
         userId: userId,
       },
-      skip: !userId,
+      skip: !userId || (role && role !== 'host'),
     }
   )
 
@@ -67,7 +68,7 @@ const HostDashboard = () => {
       const totalThumbs = eventsAndRoundsData.events.reduce((total, event) => {
         const mutualThumbsInEvent = event.rounds.reduce((thumbTotal, round) => {
           if (round.partnerY_thumb && round.partnerX_thumb) {
-            thumbTotal++
+            thumbTotal += 1
           }
           return thumbTotal
         }, 0)
@@ -76,7 +77,6 @@ const HostDashboard = () => {
       }, 0)
 
       // calculate average connections per event
-      // we round up because why not ;)
       const averageThumbs = (totalThumbs / eventsAndRoundsData.events.length).toFixed(1)
 
       setAllTimeRSVPed(totalRSVP)
@@ -85,11 +85,11 @@ const HostDashboard = () => {
     }
   }, [eventsAndRoundsData, eventsAndRoundsLoading])
 
-  if (role !== 'host') {
+  if (role && role !== 'host') {
     return <Redirect to="/events" />
   }
 
-  if (eventsAndRoundsLoading) {
+  if (eventsAndRoundsLoading || appLoading) {
     return <Loading />
   }
 
@@ -103,7 +103,7 @@ const HostDashboard = () => {
       <div className={classes.noEventsContainer}>
         <FloatCardLarge>
           <Typography className={classes.noEventsMessage}>
-            Sorry, but you need to host some events for us to provide you with some data! 😩
+            Once you host some events we&rsquo;ll show you some data!
           </Typography>
           <Typography className={classes.noEventsMessage}>
             Come back when you have created and finished an event!

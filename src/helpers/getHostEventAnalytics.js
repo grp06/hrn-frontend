@@ -1,7 +1,7 @@
 const getMutualThumbsInEvent = (event) => {
   return event.rounds.reduce((thumbTotal, round) => {
     if (round.partnerY_thumb && round.partnerX_thumb) {
-      thumbTotal++
+      thumbTotal += 1
     }
     return thumbTotal
   }, 0)
@@ -35,7 +35,7 @@ const getTotalDropOffsInEvent = (event) => {
 
   return firstRoundUserIdArray.reduce((totalDropOffs, userId) => {
     if (lastRoundUserIdArray.indexOf(userId) < 0) {
-      totalDropOffs++
+      totalDropOffs += 1
     }
     return totalDropOffs
   }, 0)
