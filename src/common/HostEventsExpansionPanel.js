@@ -9,6 +9,9 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { getHostEventAnalytics } from '../helpers'
 import formatDate from '../utils/formatDate'
+import Button from '@material-ui/core/Button'
+import FeatherIcon from 'feather-icons-react'
+import { CSVDownload } from 'react-csv'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
@@ -17,13 +20,17 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     flexBasis: '33.33%',
     flexShrink: 0,
+    marginBottom: 0,
   },
   secondaryHeading: {
     color: theme.palette.common.ghostWhiteSub,
   },
   detailsHeading: {
-    marginBottom: '15px',
     textAlign: 'center',
+    padding: theme.spacing(1),
+  },
+  downloadButton: {
+    margin: `0 ${theme.spacing(1)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
   },
 }))
 
@@ -36,15 +43,63 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const handlePanelPress = (panel) => (event, isExpanded) => {
     setEventPanelExpanded(isExpanded ? panel : false)
   }
+
   if (!eventsAndRoundsData) {
     return <div>No events to see here 🏖</div>
   }
 
-  return eventsAndRoundsData.events.map((event, index) => {
-    const { id, event_users } = event
+  const renderExpansionPanelWithData = (event) => {
+    const { event_users } = event
     const { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent } = getHostEventAnalytics(
       event
     )
+
+    const csvData = [
+      ['firstname', 'lastname', 'email'],
+      ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
+      ['Raed', 'Labes', 'rl@smthing.co.com'],
+      ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
+    ]
+    return (
+      <Grid container direction="column" alignItems="center">
+        <Grid item>
+          <Button variant="contained" color="primary" className={classes.downloadButton}>
+            Dowload list of all RSVPs
+            <FeatherIcon icon="download" stroke="#e98dd7" size="24" />
+          </Button>
+
+          <Button variant="contained" color="secondary" className={classes.downloadButton}>
+            Dowload list of all attendees
+            <FeatherIcon icon="download" stroke="#6327bb" size="24" />
+          </Button>
+        </Grid>
+        <Grid container justify="center" alignItems="center">
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Total RSVPs: {event_users.length}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Mutual Connections: {mutualThumbsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>Drop Offs: {dropOffsInEvent}</Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Total Attendees: {totalAttendeesInEvent}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
+  }
+
+  return eventsAndRoundsData.events.map((event) => {
+    const { id } = event
+
     const startTime = formatDate(new Date(event.start_at).getTime())
 
     return (
@@ -59,28 +114,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {event.status === 'complete' ? (
-            <Grid container justify="center" alignItems="center">
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Total RSVPs: {event_users.length}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Mutual Connections: {mutualThumbsInEvent}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Drop Offs: {dropOffsInEvent}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Total Attendees: {totalAttendeesInEvent}
-                </Typography>
-              </Grid>
-            </Grid>
+            renderExpansionPanelWithData(event)
           ) : (
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>

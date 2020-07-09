@@ -162,6 +162,12 @@ const theme = createMuiTheme({
         // '&.Mui-expanded': {
         //   backgroundColor: greyHighlight,
         // },
+        padding: 8,
+      },
+    },
+    MuiExpansionPanelSummary: {
+      content: {
+        alignItems: 'center',
       },
     },
     MuiFormLabel: {
