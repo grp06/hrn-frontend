@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/styles'
 import Grid from '@material-ui/core/Grid'
@@ -65,13 +65,21 @@ const useStyles = makeStyles((theme) => ({
 
 const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const classes = useStyles()
-  const [eventPanelExpanded, setEventPanelExpanded] = useState(
-    eventsAndRoundsData.events[0].id || false
-  )
 
+  const [sortedEvents, setSortedEvents] = useState(null)
+
+  const [eventPanelExpanded, setEventPanelExpanded] = useState(null)
   const handlePanelPress = (panel) => (event, isExpanded) => {
     setEventPanelExpanded(isExpanded ? panel : false)
   }
+
+  useEffect(() => {
+    const sorted = eventsAndRoundsData.events.sort((a, b) => {
+      return new Date(b.start_at).getTime() - new Date(a.start_at).getTime()
+    })
+    setSortedEvents(sorted)
+    setEventPanelExpanded(sorted[0].id)
+  }, [eventsAndRoundsData])
 
   if (!eventsAndRoundsData) {
     return <div>No events to see here 🏖</div>
@@ -133,7 +141,11 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     )
   }
 
-  return eventsAndRoundsData.events.map((event) => {
+  if (!sortedEvents) {
+    return null
+  }
+
+  return sortedEvents.map((event) => {
     const { id } = event
 
     const startTime = formatDate(new Date(event.start_at).getTime())
