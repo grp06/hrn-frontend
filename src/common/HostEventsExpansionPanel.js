@@ -7,11 +7,11 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { getHostEventAnalytics } from '../helpers'
-import formatDate from '../utils/formatDate'
 import Button from '@material-ui/core/Button'
 import FeatherIcon from 'feather-icons-react'
-import { CSVDownload } from 'react-csv'
+import { CSVLink } from 'react-csv'
+import formatDate from '../utils/formatDate'
+import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
@@ -30,7 +30,36 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   downloadButton: {
-    margin: `0 ${theme.spacing(1)}px ${theme.spacing(1)}px ${theme.spacing(1)}px`,
+    backgroundColor: theme.palette.common.dankPurp,
+    color: theme.palette.common.ghostWhite,
+    padding: '8px 20px',
+    margin: `0 8px 8px 8px`,
+    textDecoration: 'none',
+    fontFamily: 'Muli',
+    borderRadius: 4,
+    display: 'flex',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    textAlign: 'center',
+    '& svg': {
+      marginLeft: theme.spacing(1),
+    },
+  },
+  downloadAttendees: {
+    backgroundColor: theme.palette.common.dankPurp,
+    color: theme.palette.common.ghostWhite,
+    padding: '8px 20px',
+    margin: `0 8px 8px 8px`,
+    textDecoration: 'none',
+    fontFamily: 'Muli',
+    borderRadius: 4,
+    display: 'flex',
+
+    alignItems: 'center',
+    textAlign: 'center',
+    '& svg': {
+      marginLeft: theme.spacing(1),
+    },
   },
 }))
 
@@ -50,28 +79,33 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
 
   const renderExpansionPanelWithData = (event) => {
     const { event_users } = event
-    const { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent } = getHostEventAnalytics(
-      event
-    )
+    const {
+      mutualThumbsInEvent,
+      dropOffsInEvent,
+      totalAttendeesInEvent,
+      getRSVPs,
+      getAttendeesCSV,
+    } = getHostEventAnalytics(event)
 
-    const csvData = [
-      ['firstname', 'lastname', 'email'],
-      ['Ahmed', 'Tomi', 'ah@smthing.co.com'],
-      ['Raed', 'Labes', 'rl@smthing.co.com'],
-      ['Yezzi', 'Min l3b', 'ymin@cocococo.com'],
-    ]
     return (
       <Grid container direction="column" alignItems="center">
-        <Grid item>
-          <Button variant="contained" color="primary" className={classes.downloadButton}>
+        <Grid item direction="row">
+          <CSVLink
+            data={getRSVPs.data}
+            headers={getRSVPs.headers}
+            className={classes.downloadButton}
+          >
             Dowload list of all RSVPs
-            <FeatherIcon icon="download" stroke="#e98dd7" size="24" />
-          </Button>
-
-          <Button variant="contained" color="secondary" className={classes.downloadButton}>
+            <FeatherIcon icon="download" stroke="#fff" size="20" />
+          </CSVLink>
+          <CSVLink
+            data={getAttendeesCSV.data}
+            headers={getAttendeesCSV.headers}
+            className={classes.downloadButton}
+          >
             Dowload list of all attendees
-            <FeatherIcon icon="download" stroke="#6327bb" size="24" />
-          </Button>
+            <FeatherIcon icon="download" stroke="#fff" size="20" />
+          </CSVLink>
         </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid item md={6} xs={12}>
@@ -85,7 +119,10 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography className={classes.detailsHeading}>Drop Offs: {dropOffsInEvent}</Typography>
+            <Typography className={classes.detailsHeading}>
+              Drop Offs:
+              {dropOffsInEvent}
+            </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography className={classes.detailsHeading}>

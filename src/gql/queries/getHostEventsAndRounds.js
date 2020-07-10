@@ -9,6 +9,7 @@ const getHostEventsAndRounds = gql`
         user {
           id
           name
+          email
         }
       }
       id
@@ -22,6 +23,14 @@ const getHostEventsAndRounds = gql`
         partnerX_thumb
         partnerY_thumb
         round_number
+        partnerX {
+          name
+          email
+        }
+        partnerY {
+          email
+          name
+        }
       }
     }
   }
