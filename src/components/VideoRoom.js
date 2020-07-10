@@ -193,7 +193,7 @@ const VideoRoom = ({ match }) => {
         let localTracks
         try {
           localTracks = await createLocalTracks({
-            video: true,
+            video: false,
             audio: process.env.NODE_ENV === 'production',
           })
         } catch (err) {
@@ -215,14 +215,20 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (room) {
       const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
+
+      // console.log('VideoRoom -> myRound.started_at', myRound.started_at)
+      console.log('  -> roundStartedAtInSeconds', roundStartedAtInSeconds)
       const roundEndTime = moment(myRound.started_at).seconds(
         // round length is measured in minutes and stored as an int
         roundStartedAtInSeconds + (event.round_length || 5) * 60
       )
+      const realStartTime = new Date(myRound.started_at).getTime()
+      const realEndTime = realStartTime + (event.round_length || 5) * 60
       setTimerTimeInput(roundEndTime)
+      console.log('VideoRoom -> roundEndTime', roundEndTime)
       setShowTimer(true)
       console.warn('starting twilio')
-      setHasPartnerAndIsConnecting(true)
+      // setHasPartnerAndIsConnecting(true)
       startTwilio(room)
     }
   }, [room])
@@ -292,6 +298,8 @@ const VideoRoom = ({ match }) => {
               onRoundComplete={() => {
                 setShowTimer(false)
               }}
+              myRound={myRound}
+              event={event}
             />
           </Grid>
         ) : null}
