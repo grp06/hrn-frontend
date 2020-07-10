@@ -66,8 +66,6 @@ const EventComplete = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
-  const zoomLink = eventId === '16' ? johnMorleyZoomLink : stephenZoomLink
-
   const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
     getMyMutualThumbsData,
     {
@@ -103,6 +101,18 @@ const EventComplete = ({ match }) => {
       </Button>
     ) : null
   }
+  console.log(' event.post_event_link - ', event.post_event_link)
+
+  const renderPostEventLink = () =>
+    event.post_event_link && (
+      <Grid item className={classes.cardBodySection}>
+        <Typography className={classes.zoomLink}>
+          <a href={event.post_event_link} target="_blank" className={classes.zoomLink}>
+            Click to join everyone from the event on a video call!
+          </a>
+        </Typography>
+      </Grid>
+    )
 
   return (
     <div className={classes.wrapper}>
@@ -123,13 +133,7 @@ const EventComplete = ({ match }) => {
             <Grid item className={classes.cardBodySection}>
               <MutualThumbsList mutualThumbsData={mutualThumbsData} userId={userId} />
             </Grid>
-            <Grid item className={classes.cardBodySection}>
-              <Typography className={classes.zoomLink}>
-                <a href={zoomLink} target="_blank" className={classes.zoomLink}>
-                  Click to join everyone from the event on a Zoom call!
-                </a>
-              </Typography>
-            </Grid>
+            {renderPostEventLink()}
             <Grid item className={classes.cardBodySection}>
               <Grid container item direction="row" justify="space-around" alignItems="center">
                 <Button

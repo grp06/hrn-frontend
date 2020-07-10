@@ -52,6 +52,7 @@ const EventForm = ({ eventData, match }) => {
   const [description, setDescription] = useState("Let's get people hyped!")
   const [roundLength, setRoundLength] = useState(5)
   const [numRounds, setNumRounds] = useState(10)
+  const [postEventVideoCallLink, setPostEventVideoCallLink] = useState(null)
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
 
@@ -64,10 +65,11 @@ const EventForm = ({ eventData, match }) => {
       host_id: userId,
       round_length: roundLength,
       num_rounds: numRounds,
+      post_event_link: postEventVideoCallLink,
     },
   })
 
-  const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
+  const [insertEventUserMutation] = useMutation(insertEventUser)
   const [updateEventMutation] = useMutation(updateEvent)
 
   useEffect(() => {
@@ -79,12 +81,14 @@ const EventForm = ({ eventData, match }) => {
         start_at,
         round_length,
         num_rounds,
+        post_event_link,
       } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
       setRoundLength(round_length)
       setNumRounds(num_rounds)
+      setPostEventVideoCallLink(post_event_link)
     }
   }, [eventData])
 
@@ -108,6 +112,7 @@ const EventForm = ({ eventData, match }) => {
           id: eventData.id,
           round_length: roundLength,
           num_rounds: numRounds,
+          post_event_link: postEventVideoCallLink,
         },
       })
       setEventUpdated(true)
@@ -205,6 +210,17 @@ const EventForm = ({ eventData, match }) => {
                     className={classes.input}
                     value={numRounds}
                     onChange={(e) => setNumRounds(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="post-event-call"
+                    label="Link to post-event Zoom/Google Meet"
+                    placeholder="(not required)"
+                    fullWidth
+                    className={classes.input}
+                    value={postEventVideoCallLink}
+                    onChange={(e) => setPostEventVideoCallLink(e.target.value)}
                   />
                 </Grid>
               </Grid>

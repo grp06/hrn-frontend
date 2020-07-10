@@ -8,6 +8,7 @@ const updateEvent = gql`
     $start_at: timestamptz
     $round_length: Int!
     $num_rounds: Int!
+    $post_event_link: String
   ) {
     update_events(
       where: { id: { _eq: $id } }
@@ -17,6 +18,7 @@ const updateEvent = gql`
         start_at: $start_at
         round_length: $round_length
         num_rounds: $num_rounds
+        post_event_link: $post_event_link
       }
     ) {
       returning {
@@ -27,6 +29,7 @@ const updateEvent = gql`
         start_at
         round_length
         num_rounds
+        post_event_link
       }
     }
   }
