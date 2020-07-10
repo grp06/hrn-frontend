@@ -82,14 +82,13 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     const {
       mutualThumbsInEvent,
       dropOffsInEvent,
-      totalAttendeesInEvent,
       getRSVPs,
       getAttendeesCSV,
     } = getHostEventAnalytics(event)
 
     return (
       <Grid container direction="column" alignItems="center">
-        <Grid item direction="row">
+        <Grid item>
           <CSVLink
             data={getRSVPs.data}
             headers={getRSVPs.headers}
@@ -126,7 +125,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography className={classes.detailsHeading}>
-              Total Attendees: {totalAttendeesInEvent}
+              Total Attendees: {getAttendeesCSV.data.length}
             </Typography>
           </Grid>
         </Grid>

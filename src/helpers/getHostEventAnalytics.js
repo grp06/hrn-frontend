@@ -41,22 +41,6 @@ const getTotalDropOffsInEvent = (event) => {
   }, 0)
 }
 
-const getTotalAttendeesInEvent = (event) => {
-  const masterRoundsMap = event.rounds.reduce((roundsMap, pairing) => {
-    const { round_number } = pairing
-    roundsMap[round_number] = roundsMap[round_number] + 1 || 1
-    return roundsMap
-  }, {})
-  console.log('getTotalAttendeesInEvent -> masterRoundsMap', masterRoundsMap)
-
-  const roundWithMostPairings = Object.keys(masterRoundsMap).reduce(
-    (a, b) => (masterRoundsMap[a] > masterRoundsMap[b] ? a : b),
-    0
-  )
-
-  return masterRoundsMap[roundWithMostPairings] * 2
-}
-
 const getRsvps = (event) => {
   const initialData = {
     headers: [
@@ -104,13 +88,11 @@ const getAttendees = (event) => {
 function getHostEventAnalytics(event) {
   const mutualThumbsInEvent = getMutualThumbsInEvent(event)
   const dropOffsInEvent = getTotalDropOffsInEvent(event)
-  const totalAttendeesInEvent = getTotalAttendeesInEvent(event)
   const getRSVPs = getRsvps(event)
   const getAttendeesCSV = getAttendees(event)
   return {
     mutualThumbsInEvent,
     dropOffsInEvent,
-    totalAttendeesInEvent,
     getRSVPs,
     getAttendeesCSV,
   }
