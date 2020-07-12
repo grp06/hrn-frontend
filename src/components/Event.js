@@ -52,6 +52,7 @@ const Event = ({ match }) => {
   const { userId } = user
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
@@ -67,7 +68,7 @@ const Event = ({ match }) => {
   useEffect(() => {
     if (eventSet && userId) {
       const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
-      if (isEventParticipant) {
+      if (isEventParticipant && !micOrCameraIsDisabled) {
         switch (event.status) {
           case 'pre-event':
             return history.push(`/events/${eventId}/pre-event`)

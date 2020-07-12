@@ -55,7 +55,6 @@ const AttendeesList = ({ eventId, timeState }) => {
         const { updated_at } = user.user
         const lastSeen = new Date(updated_at).getTime()
         const diff = Date.now() - lastSeen
-        console.log('AttendeesList -> diff', diff)
 
         return diff < lastSeenDuration + 20000
       })
