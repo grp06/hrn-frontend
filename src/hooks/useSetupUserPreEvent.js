@@ -16,12 +16,9 @@ const useSetupUserPreEvent = () => {
 
     room.on('participantDisconnected', (remoteParticipant) => {
       const { host_id } = event
-      console.log('someone disconnectd')
-      console.log('setupUserPreEvent -> host_id', host_id)
-      console.log('setupUserPreEvent -> remoteParticipant.identity', remoteParticipant.identity)
+
       if (parseInt(remoteParticipant.identity, 10) === host_id) {
         const hostVideo = document.getElementById('host-video')
-        console.log('setupUserPreEvent -> hostVideo', hostVideo)
         if (hostVideo) {
           // instead of just giving them a black screen, give them something if the host disconnects...
           hostVideo.innerHTML = 'waiting for host connect'
