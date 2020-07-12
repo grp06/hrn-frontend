@@ -5,8 +5,7 @@ const constants = {
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 2000,
   maxNumRoomUsers: 35,
-  stephenZoomLink: 'https://us04web.zoom.us/j/4926017058?pwd=QnVLMHloaGtKWWg2L01EeFZhUFNjQT09',
-  johnMorleyZoomLink: 'https://us02web.zoom.us/j/83486950062?pwd=TjNNRG51OXZrUEpZbG5BL1R5VCtpUT09',
+
   becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:

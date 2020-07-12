@@ -52,7 +52,7 @@ const EventForm = ({ eventData, match }) => {
   const [description, setDescription] = useState("Let's get people hyped!")
   const [roundLength, setRoundLength] = useState(5)
   const [numRounds, setNumRounds] = useState(10)
-  const [postEventVideoCallLink, setPostEventVideoCallLink] = useState(null)
+  const [postEventVideoCallLink, setPostEventVideoCallLink] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
 

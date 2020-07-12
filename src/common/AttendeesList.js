@@ -50,7 +50,7 @@ const AttendeesList = ({ eventId, timeState }) => {
   useEffect(() => {
     if (!onlineUsersLoading && onlineUsersData.event_users.length && !timeState !== 'future') {
       const allUsers = onlineUsersData.event_users
-      // users who've submitted a mutation within the last 10 seconds
+      // users who've submitted a mutation within the last x seconds
       const freshOnlineUsers = allUsers.filter((user) => {
         const { updated_at } = user.user
         const lastSeen = new Date(updated_at).getTime()

@@ -7,14 +7,14 @@ import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, Timer, GUMErrorModal } from '../common'
+import { Loading, Timer, GUMErrorModal, CameraDisabledBanner } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
 import { ConnectingToSomeone } from '../common/waitingRoomScreens'
 
 import { useAppContext } from '../context/useAppContext'
-import { useTwilio } from '../hooks'
+import { useTwilio, useGetCameraAndMicStatus } from '../hooks'
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -96,15 +96,26 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     fontFamily: 'Muli',
   },
+  cameraDisabledWrapper: {
+    height: '100vh',
+  },
 }))
 
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
 
-  const { app, user, event, twilio, setLateArrival, setHasPartnerAndIsConnecting } = useAppContext()
+  const {
+    app,
+    user,
+    event,
+    twilio,
+    setLateArrival,
+    setHasPartnerAndIsConnecting,
+    setCameraAndMicPermissions,
+  } = useAppContext()
   const { userId } = user
-  const { appLoading } = app
+  const { appLoading, permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 
   const { startTwilio, twilioStarted } = useTwilio()
@@ -120,6 +131,11 @@ const VideoRoom = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatus = useRef()
+
+  const hasCheckedCamera = useRef()
+
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
 
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
@@ -197,7 +213,8 @@ const VideoRoom = ({ match }) => {
             audio: process.env.NODE_ENV === 'production',
           })
         } catch (err) {
-          setGUMError(err.name)
+          console.log('camera wasnt enabled')
+          // setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
 
@@ -268,8 +285,20 @@ const VideoRoom = ({ match }) => {
   return eventStatus.current === latestStatus ? (
     <div>
       {isGUMErrorModalActive && (
-        <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+        // <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+        <Grid
+          className={classes.cameraDisabledWrapper}
+          container
+          direction="column"
+          justify="center"
+        >
+          <CameraDisabledBanner
+            permissions={permissions}
+            setCameraAndMicPermissions={setCameraAndMicPermissions}
+          />
+        </Grid>
       )}
+
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (

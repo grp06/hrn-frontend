@@ -1,4 +1,10 @@
-const setupHostPreEvent = (room) => {
+const setupHostPreEvent = (room, setCameraAndMicPermissions) => {
+  setCameraAndMicPermissions({
+    hasWebcam: true,
+    hasMicrophone: true,
+    isMicrophoneAlreadyCaptured: true,
+    isWebcamAlreadyCaptured: true,
+  })
   const { localParticipant } = room
   localParticipant.tracks.forEach((publication) => {
     console.log('local tracks looping')

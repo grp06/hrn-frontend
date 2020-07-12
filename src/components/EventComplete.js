@@ -11,7 +11,7 @@ import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading, MutualThumbsList } from '../common'
 import { constants } from '../utils'
 
-const { giveFeedbackTypeform, becomeAHostTypeform, stephenZoomLink, johnMorleyZoomLink } = constants
+const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

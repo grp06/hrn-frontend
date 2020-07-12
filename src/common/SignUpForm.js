@@ -78,6 +78,7 @@ const SignUpForm = () => {
         throw signUpResponse.error
       }
     } catch (err) {
+      console.log('err === ', err)
       return setError(err)
     }
 
@@ -166,3 +167,4 @@ const SignUpForm = () => {
 }
 
 export default SignUpForm
+// (must contain 1 upper case, lower case, and special character)

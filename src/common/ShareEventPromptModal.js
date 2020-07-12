@@ -48,7 +48,7 @@ const ShareEventPromptModal = ({ event }) => {
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
           <Typography className={classes.eventPromptHeader}>
-            We've curated a message for you to easily share your event with your friends and
+            We&apos;ve curated a message for you to easily share your event with your friends and
             community!
           </Typography>
         </Grid>
@@ -99,7 +99,7 @@ const ShareEventPromptModal = ({ event }) => {
     button: {
       buttonText: '🌏 Invite Friends',
       buttonColor: 'secondary',
-      buttonSize: 'large',
+      buttonSize: 'medium',
     },
     onAcceptFunction: () => {
       const copyPrompt = document.getElementById('eventPrompt').innerText

@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Timer = ({ eventStartTime, onRoundComplete }) => {
+const Timer = ({ eventStartTime, onRoundComplete, adminHeader }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -53,7 +53,7 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}
+      className={adminHeader ? null : classes.container}
     >
       <div className={classes.time}>{displayTime}</div>
     </Grid>

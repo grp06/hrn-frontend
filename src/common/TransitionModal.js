@@ -51,6 +51,7 @@ function TransitionModal({
   onAcceptFunction,
   onAcceptButtonText,
   onCloseFunction,
+  hideNoWay,
 }) {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize } = button
@@ -98,7 +99,7 @@ function TransitionModal({
             alignItems="center"
             className={classes.paper}
           >
-            <Grid item justy="center" className={classes.modalBody}>
+            <Grid item justify="center" className={classes.modalBody}>
               {modalBody}
             </Grid>
             {onAcceptFunction && (
@@ -120,9 +121,11 @@ function TransitionModal({
                 >
                   {onAcceptButtonText || 'Yes, I am Sure'}
                 </Button>
-                <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
-                  Whoops, No Way!
-                </Button>
+                {!hideNoWay && (
+                  <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
+                    Whoops, No Way!
+                  </Button>
+                )}
               </Grid>
             )}
           </Grid>

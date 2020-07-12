@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
@@ -10,6 +10,7 @@ import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useAppContext } from '../context/useAppContext'
 import formatDate from '../utils/formatDate'
+import { useGetCameraAndMicStatus } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
@@ -47,10 +48,13 @@ const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { app, user, event, setEventId } = useAppContext()
-  const { appLoading } = app
+  const { appLoading, permissions } = app
   const { userId } = user
   const eventSet = Object.keys(event).length > 1
+  const hasCheckedCamera = useRef()
 
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', eventId)
 
@@ -80,6 +84,7 @@ const Event = ({ match }) => {
 
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
+    console.log('Event -> event', event)
     return <Loading />
   }
 
@@ -119,9 +124,9 @@ const Event = ({ match }) => {
         </Grid>
       </div>
       {parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} />
+        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
       ) : (
-        <UserPanel timeState={timeState()} eventData={event} />
+        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
       )}
     </>
   )

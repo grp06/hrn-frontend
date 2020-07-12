@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
 import { useAppContext } from '../context/useAppContext'
 import { getToken } from '../helpers'
-import { GUMErrorModal } from '../common'
-import { usePreEventTwilio } from '../hooks'
+import { GUMErrorModal, CameraDisabledBanner } from '../common'
+import { usePreEventTwilio, useGetCameraAndMicStatus } from '../hooks'
 import { constants } from '../utils'
 
 const { maxNumRoomUsers } = constants
@@ -20,14 +21,18 @@ const useStyles = makeStyles((theme) => ({
       height: 'calc(100vh)',
     },
   },
+  preEventWrapper: {
+    height: '100vh',
+  },
 }))
 
 const PreEvent = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const history = useHistory()
-  const { user, event } = useAppContext()
+  const { user, event, app, setCameraAndMicPermissions } = useAppContext()
   const { userId, role } = user
+  const { permissions } = app
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
   const [GUMError, setGUMError] = useState('')
   const [roomTokens, setRoomTokens] = useState([])
@@ -36,6 +41,12 @@ const PreEvent = ({ match }) => {
   const { startPreEventTwilio } = usePreEventTwilio()
   const eventSet = Object.keys(event).length > 1
   const [onlineUsers, setOnlineUsers] = useState(null)
+  const hasCheckedCamera = useRef()
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
+
   useEffect(() => {
     if (eventSet) {
       const { status } = event
@@ -158,9 +169,15 @@ const PreEvent = ({ match }) => {
   }, [roomTokens])
 
   return (
-    <div className={classes.videoWrapper}>
+    <Grid className={classes.preEventWrapper} container direction="column" justify="center">
+      {micOrCameraIsDisabled && (
+        <CameraDisabledBanner
+          permissions={permissions}
+          setCameraAndMicPermissions={setCameraAndMicPermissions}
+        />
+      )}
       <div id="host-video" className={classes.hostVid} />
-    </div>
+    </Grid>
   )
 }
 
