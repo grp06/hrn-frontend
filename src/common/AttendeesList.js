@@ -55,8 +55,9 @@ const AttendeesList = ({ eventId, timeState }) => {
         const { updated_at } = user.user
         const lastSeen = new Date(updated_at).getTime()
         const diff = Date.now() - lastSeen
+        console.log('AttendeesList -> diff', diff)
 
-        return diff < lastSeenDuration + 10000
+        return diff < lastSeenDuration + 20000
       })
       // if someone comes online or goes offline
       if (freshOnlineUsers.length !== oldOnlineUsers.length) {

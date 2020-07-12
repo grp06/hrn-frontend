@@ -1,10 +1,10 @@
 const constants = {
   // change me back to 20000?
-  lastSeenDuration: 10000,
+  lastSeenDuration: 5000,
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
-  hasPartnerAndIsConnectingBreathingRoom: 2000,
-  maxNumRoomUsers: 35,
+  hasPartnerAndIsConnectingBreathingRoom: 1500,
+  maxNumUsersPerRoom: 40,
 
   becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',

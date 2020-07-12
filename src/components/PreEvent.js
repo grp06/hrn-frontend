@@ -8,7 +8,7 @@ import { GUMErrorModal, CameraDisabledBanner } from '../common'
 import { usePreEventTwilio, useGetCameraAndMicStatus } from '../hooks'
 import { constants } from '../utils'
 
-const { maxNumRoomUsers } = constants
+const { maxNumUsersPerRoom } = constants
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -72,6 +72,7 @@ const PreEvent = ({ match }) => {
           }
         )
         const response = await res.json()
+
         setOnlineUsers(response.data)
       }
       getOnlineUsers()
@@ -81,12 +82,13 @@ const PreEvent = ({ match }) => {
   useEffect(() => {
     if (onlineUsers) {
       const numOnlineUsers = onlineUsers.length
-      if (numOnlineUsers < maxNumRoomUsers) {
+
+      if (numOnlineUsers < maxNumUsersPerRoom) {
         setMyRoomNumber(1)
         return setNumRooms(1)
       }
       // get online users, divide by 50 and round up = number of rooms
-      const numberOfRooms = Math.ceil(numOnlineUsers / maxNumRoomUsers)
+      const numberOfRooms = Math.ceil(numOnlineUsers / maxNumUsersPerRoom)
       const usersPerRoom = Math.ceil(numOnlineUsers / numberOfRooms)
       const currentUserIndex = onlineUsers.indexOf(userId)
       const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
@@ -124,6 +126,14 @@ const PreEvent = ({ match }) => {
     }
   }, [userId, role, myRoomNumber, numRooms])
 
+  // get online event users
+  // set room number
+  // set number of rooms
+  // get users a token
+  // get hosts a bunch of tokens
+  // set tokens
+  // connect to rooms accordingly
+
   useEffect(() => {
     if (roomTokens.length) {
       const isEventHost = event.host_id === userId
@@ -142,7 +152,7 @@ const PreEvent = ({ match }) => {
           }
         }
 
-        // if theres only 1 room, or if you're a user - do this
+        // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
             tracks: isEventHost ? localTracks : [],
@@ -150,8 +160,10 @@ const PreEvent = ({ match }) => {
           return startPreEventTwilio(myRoom, isEventHost)
         }
 
+        // if we get here, we have an array of tokens (hosts only)
+        // multiple rooms to connect to
         const roomCreationPromises = []
-        roomTokens.map((token) => {
+        roomTokens.forEach((token) => {
           roomCreationPromises.push(
             connect(token, {
               tracks: localTracks,
@@ -159,7 +171,8 @@ const PreEvent = ({ match }) => {
             })
           )
         })
-
+        // Ask Mike: should we await here?
+        console.log('setupRoom -> roomCreationPromises.length', roomCreationPromises.length)
         Promise.all(roomCreationPromises).then((res) => {
           res.forEach((room) => startPreEventTwilio(room, isEventHost))
         })

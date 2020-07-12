@@ -1,5 +1,4 @@
-import React from 'react'
-import { TransitionModal } from './'
+import { TransitionModal } from '.'
 import { startEvent } from '../helpers'
 
 const StartEventButton = ({ event, user }) => {

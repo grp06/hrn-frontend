@@ -7,10 +7,8 @@ const useSetupUserPreEvent = () => {
   const setupUserPreEvent = (room) => {
     // nothing to loop over for the host
     room.participants.forEach(participantConnected)
-    console.log('setupUserPreEvent -> room.participants', room.participants)
 
     room.on('participantConnected', (remoteParticipant) => {
-      console.log('ON --- participantConnected', remoteParticipant)
       participantConnected(remoteParticipant)
     })
 

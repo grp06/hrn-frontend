@@ -11,7 +11,7 @@ const useTwilio = () => {
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
   } = useAppContext()
-  const { partnerCameraIssueTimeout, hasPartnerAndIsConnectingBreathingRoom } = constants
+  const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()

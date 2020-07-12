@@ -84,7 +84,6 @@ const Event = ({ match }) => {
 
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
-    console.log('Event -> event', event)
     return <Loading />
   }
 
