@@ -11,6 +11,7 @@ const getMyMutualThumbsData = gql`
           { partnerX_thumb: { _eq: true } }
         ]
       }
+      order_by: { round_number: asc }
     ) {
       partnerY {
         id
@@ -22,6 +23,7 @@ const getMyMutualThumbsData = gql`
         name
         email
       }
+      round_number
     }
   }
 `

@@ -9,14 +9,14 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const StartPreEventButton = ({ eventId, within30Mins }) => {
+const StartPreEventButton = ({ eventId, within30Mins, disabled }) => {
   const classes = useStyles()
 
   return (
     <Button
       size="large"
       variant="contained"
-      disabled={within30Mins}
+      disabled={within30Mins || disabled}
       color="primary"
       onClick={() => startPreEvent(eventId)}
     >

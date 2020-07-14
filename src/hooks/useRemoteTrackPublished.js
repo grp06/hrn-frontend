@@ -14,6 +14,7 @@ const useRemoteTrackPublished = () => {
       const remoteDiv = document.getElementById('remote-video')
       if (remoteDiv) {
         const attachedTrack = publication.track.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
         if (publication.kind === 'video') {
           attachedTrack.muted = true
         }
@@ -27,6 +28,7 @@ const useRemoteTrackPublished = () => {
     publication.on('subscribed', (track) => {
       console.log('onSubscribed')
       const attachedTrack = track.attach()
+      attachedTrack.style.transform = 'scale(-1, 1)'
       if (publication.kind === 'video') {
         attachedTrack.muted = true
       }

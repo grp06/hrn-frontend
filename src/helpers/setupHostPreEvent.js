@@ -1,4 +1,10 @@
-const setupHostPreEvent = (room) => {
+const setupHostPreEvent = (room, setCameraAndMicPermissions) => {
+  setCameraAndMicPermissions({
+    hasWebcam: true,
+    hasMicrophone: true,
+    isMicrophoneAlreadyCaptured: true,
+    isWebcamAlreadyCaptured: true,
+  })
   const { localParticipant } = room
   localParticipant.tracks.forEach((publication) => {
     console.log('local tracks looping')
@@ -6,6 +12,7 @@ const setupHostPreEvent = (room) => {
     const hostVideoDiv = document.getElementById('host-video')
     if (hostVideoDiv && !hostVideoDiv.children.length && publication.track.kind === 'video') {
       const attachedTrack = publication.track.attach()
+      attachedTrack.style.transform = 'scale(-1, 1)'
       hostVideoDiv.appendChild(attachedTrack)
     }
   })

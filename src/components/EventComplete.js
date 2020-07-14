@@ -11,7 +11,7 @@ import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading, MutualThumbsList } from '../common'
 import { constants } from '../utils'
 
-const { giveFeedbackTypeform, becomeAHostTypeform, stephenZoomLink, johnMorleyZoomLink } = constants
+const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -92,8 +92,8 @@ const EventComplete = ({ match }) => {
       : 'Thanks for joining the event! 🎊'
 
   const renderNextEntrepreneurEventButton = () => {
-    return eventId === '49' ? (
-      <Button variant="contained" href="https://launch.hirightnow.co/events/56" target="_blank">
+    return eventId === '56' ? (
+      <Button variant="contained" href="https://launch.hirightnow.co/events/96" target="_blank">
         Join our next event
         <span role="img" aria-label="rocket">
           🚀

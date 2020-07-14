@@ -25,6 +25,12 @@ const useAppContext = () => {
     })
   }
 
+  function setCameraAndMicPermissions(permissions) {
+    dispatch((draft) => {
+      draft.app.permissions = permissions
+    })
+  }
+
   function setUserId(userId) {
     dispatch((draft) => {
       draft.user.userId = userId
@@ -77,6 +83,7 @@ const useAppContext = () => {
     setPartnerNeverConnected,
     setLateArrival,
     setHasPartnerAndIsConnecting,
+    setCameraAndMicPermissions,
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { Typography, Grid } from '@material-ui/core'
 import ScheduleIcon from '@material-ui/icons/Schedule'
@@ -10,6 +10,7 @@ import bannerBackground from '../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, Loading } from '../common'
 import { useAppContext } from '../context/useAppContext'
 import formatDate from '../utils/formatDate'
+import { useGetCameraAndMicStatus } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
@@ -38,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
   },
   subtitle: {
-    marginLeft: '5px',
+    margin: theme.spacing(1),
+    width: '50%',
   },
 }))
 
@@ -47,10 +49,14 @@ const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { app, user, event, setEventId } = useAppContext()
-  const { appLoading } = app
+  const { appLoading, permissions } = app
   const { userId } = user
   const eventSet = Object.keys(event).length > 1
+  const hasCheckedCamera = useRef()
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', eventId)
 
@@ -63,7 +69,7 @@ const Event = ({ match }) => {
   useEffect(() => {
     if (eventSet && userId) {
       const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
-      if (isEventParticipant) {
+      if (isEventParticipant && !micOrCameraIsDisabled) {
         switch (event.status) {
           case 'pre-event':
             return history.push(`/events/${eventId}/pre-event`)
@@ -76,7 +82,7 @@ const Event = ({ match }) => {
         }
       }
     }
-  }, [event, userId, eventId, eventSet, history])
+  }, [event, userId, eventId, eventSet, history, micOrCameraIsDisabled])
 
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
@@ -119,9 +125,9 @@ const Event = ({ match }) => {
         </Grid>
       </div>
       {parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} />
+        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
       ) : (
-        <UserPanel timeState={timeState()} eventData={event} />
+        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
       )}
     </>
   )

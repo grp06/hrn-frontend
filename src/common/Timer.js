@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Timer = ({ eventStartTime, onRoundComplete, myRound, event }) => {
+const Timer = ({ eventStartTime, onRoundComplete, myRound, event, adminHeader }) => {
   const { user } = useAppContext()
   const { updatedAt } = user
   const realStartTime = new Date(myRound.started_at).getTime()
@@ -66,7 +66,7 @@ const Timer = ({ eventStartTime, onRoundComplete, myRound, event }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}
+      className={adminHeader ? null : classes.container}
     >
       <div className={classes.time}>{displayTime}</div>
     </Grid>

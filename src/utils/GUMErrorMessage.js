@@ -2,7 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { constants } from './'
+import { constants } from '.'
 
 const {
   firefoxCameraPermissionHowTo,
@@ -53,8 +53,8 @@ const GUMErrorMessage = (errorName) => {
             <span className={classes.pinkHighlight}>
               could not get permission to use your camera or microphone.{' '}
             </span>
-            Unfortunately, we need access to your camera and microphone so other people can see your
-            pretty face and hear your story or awesome ideas while you network.
+            We need access to your camera and microphone so other people can see your face and hear
+            your story.
           </Typography>
           <Typography className={classes.modalBody}>
             You can follow the links below to help troubleshoot. When you're done with the changes
@@ -69,10 +69,6 @@ const GUMErrorMessage = (errorName) => {
           <a className={classes.aTag} href={safariCameraPermissionHowTo} target="_blank">
             Safari troubleshoot
           </a>
-          <Typography className={[classes.modalBody, classes.extraMargin]}>
-            And don't worry, your name will be put into the algorithm for the next round. We got you
-            👌
-          </Typography>
         </Grid>
       )
 
@@ -85,10 +81,9 @@ const GUMErrorMessage = (errorName) => {
           <Typography className={classes.modalBody}>
             It seems that we{' '}
             <span className={classes.pinkHighlight}>could not find an audio or video source. </span>
-            Unfortunately, this platform requires both a video and an audio source for you and the
-            other participants to get the most out of this event. We're so happy that you wanted to
-            be apart of our events though! Try to sign in with a computer that has a webcam and a
-            mic.
+            Hi Right Now requires both a video and an audio source for you and the other
+            participants to get the most out of this event. We're so happy that you wanted to be
+            apart of our events though! Try to sign in with a computer that has a webcam and a mic.
           </Typography>
         </Grid>
       )
@@ -115,7 +110,7 @@ const GUMErrorMessage = (errorName) => {
             <span className={classes.pinkHighlight}>
               Make sure to come back to the event page and refresh once you're back.
             </span>{' '}
-            Refreshing will ensure your name gets thrown into our algorithm for the next round
+            Refreshing will ensure your name gets thrown in for the next round
           </Typography>
         </Grid>
       )

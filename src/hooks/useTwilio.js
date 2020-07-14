@@ -11,7 +11,7 @@ const useTwilio = () => {
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
   } = useAppContext()
-  const { partnerCameraIssueTimeout, hasPartnerAndIsConnectingBreathingRoom } = constants
+  const { partnerCameraIssueTimeout } = constants
   const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()
@@ -34,6 +34,7 @@ const useTwilio = () => {
         const localDiv = document.getElementById('local-video')
         if (localDiv && !localDiv.children.length && publication.track.kind === 'video') {
           const attachedTrack = publication.track.attach()
+          attachedTrack.style.transform = 'scale(-1, 1)'
           localDiv.appendChild(attachedTrack)
         }
       })
