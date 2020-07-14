@@ -3,8 +3,9 @@ import { makeStyles } from '@material-ui/styles'
 import Box from '@material-ui/core/Box'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import { FloatCardMedium, FormikStepper } from '../common'
-import { sleep } from '../helpers'
+import { FloatCardMedium } from '../../common'
+import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
+import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -17,7 +18,7 @@ const Onboarding = () => {
   return (
     <div className={classes.container}>
       <FloatCardMedium>
-        <FormikStepper
+        <FormikOnboardingStepper
           initialValues={{
             firstName: '',
             lastName: '',
@@ -30,28 +31,21 @@ const Onboarding = () => {
             console.log('values', values)
           }}
         >
-          <div label="names">
-            <Box paddingBottom={2}>
-              <Field name="firstName" component={TextField} label="First Name" fullWidth />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field name="lastName" component={TextField} label="Last Name" fullWidth />
-            </Box>
-          </div>
-          <div label="job">
-            <Box paddingBottom={2}>
-              <Field name="userBio" component={TextField} label="User Bio" fullWidth />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field name="jobTitle" component={TextField} label="Job Title" fullWidth />
-            </Box>
-          </div>
           <div label="location">
             <Box paddingBottom={2}>
               <Field name="location" component={TextField} label="Location" fullWidth />
             </Box>
           </div>
-        </FormikStepper>
+          <div label="interests">
+            <Field name="interests" component={OnboardingInterestTagInput} />
+            {/* <Box paddingBottom={2}>
+              <Field name="userBio" component={TextField} label="User Bio" fullWidth />
+            </Box>
+            <Box paddingBottom={2}>
+              <Field name="jobTitle" component={TextField} label="Job Title" fullWidth />
+            </Box> */}
+          </div>
+        </FormikOnboardingStepper>
       </FloatCardMedium>
     </div>
   )

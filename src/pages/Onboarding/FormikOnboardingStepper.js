@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const FormikStepper = ({ children, ...props }) => {
+const FormikOnboardingStepper = ({ children, ...props }) => {
   const classes = useStyles()
   const stepArray = React.Children.toArray(children)
   const [step, setStep] = useState(0)
@@ -31,6 +31,7 @@ const FormikStepper = ({ children, ...props }) => {
   return (
     <Formik
       {...props}
+      initialValues={{ location: '', tags: [] }}
       onSubmit={async (values, helpers) => {
         if (isLastStep()) {
           await props.onSubmit(values, helpers)
@@ -81,4 +82,4 @@ const FormikStepper = ({ children, ...props }) => {
   )
 }
 
-export default FormikStepper
+export default FormikOnboardingStepper
