@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
   },
   subtitle: {
-    marginLeft: '5px',
+    margin: theme.spacing(1),
+    width: '50%',
   },
 }))
 

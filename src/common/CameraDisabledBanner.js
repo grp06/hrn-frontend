@@ -41,13 +41,11 @@ const CameraDisabledBanner = ({ setCameraAndMicPermissions, admin, permissions }
               </span>
             </Typography>
             <Typography style={{ textAlign: 'center' }} variant="h2">
-              Your Camera seems to be disabled
+              Your Camera is off
             </Typography>
-            {admin && (
-              <Typography style={{ textAlign: 'center' }} variant="h2">
-                Camera must be enabled to start the event
-              </Typography>
-            )}
+            <Typography style={{ textAlign: 'center' }} variant="h2">
+              It must be enabled to {admin ? 'start' : 'participate in'} the event
+            </Typography>
           </div>
           <SetupMicAndCameraButton
             permissions={permissions}
