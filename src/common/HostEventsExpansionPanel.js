@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { makeStyles } from '@material-ui/styles'
 import Grid from '@material-ui/core/Grid'
@@ -7,8 +7,11 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { getHostEventAnalytics } from '../helpers'
+import Button from '@material-ui/core/Button'
+import FeatherIcon from 'feather-icons-react'
+import { CSVLink } from 'react-csv'
 import formatDate from '../utils/formatDate'
+import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
@@ -17,39 +20,138 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     flexBasis: '33.33%',
     flexShrink: 0,
+    marginBottom: 0,
   },
   secondaryHeading: {
     color: theme.palette.common.ghostWhiteSub,
   },
   detailsHeading: {
-    marginBottom: '15px',
     textAlign: 'center',
+    padding: theme.spacing(1),
+  },
+  downloadButton: {
+    backgroundColor: theme.palette.common.dankPurp,
+    color: theme.palette.common.ghostWhite,
+    padding: '8px 20px',
+    margin: `0 8px 8px 8px`,
+    textDecoration: 'none',
+    fontFamily: 'Muli',
+    borderRadius: 4,
+    display: 'flex',
+    flexWrap: 'nowrap',
+    alignItems: 'center',
+    textAlign: 'center',
+    '& svg': {
+      marginLeft: theme.spacing(1),
+    },
+  },
+  downloadAttendees: {
+    backgroundColor: theme.palette.common.dankPurp,
+    color: theme.palette.common.ghostWhite,
+    padding: '8px 20px',
+    margin: `0 8px 8px 8px`,
+    textDecoration: 'none',
+    fontFamily: 'Muli',
+    borderRadius: 4,
+    display: 'flex',
+
+    alignItems: 'center',
+    textAlign: 'center',
+    '& svg': {
+      marginLeft: theme.spacing(1),
+    },
   },
 }))
 
 const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const classes = useStyles()
-  const [eventPanelExpanded, setEventPanelExpanded] = useState(
-    eventsAndRoundsData.events[0].id || false
-  )
 
+  const [sortedEvents, setSortedEvents] = useState(null)
+
+  const [eventPanelExpanded, setEventPanelExpanded] = useState(null)
   const handlePanelPress = (panel) => (event, isExpanded) => {
     setEventPanelExpanded(isExpanded ? panel : false)
   }
+
+  useEffect(() => {
+    const sorted = eventsAndRoundsData.events.sort((a, b) => {
+      return new Date(b.start_at).getTime() - new Date(a.start_at).getTime()
+    })
+    setSortedEvents(sorted)
+    setEventPanelExpanded(sorted[0].id)
+  }, [eventsAndRoundsData])
+
   if (!eventsAndRoundsData) {
-    return <div>You've got no events 🏖</div>
+    return <div>No events to see here 🏖</div>
   }
 
-  return eventsAndRoundsData.events.map((event, index) => {
-    const { id, event_users } = event
-    const { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent } = getHostEventAnalytics(
-      event
-    )
-    const startTime = formatDate(new Date(event.start_at).getTime())
-    // console.log('dropOffsInEvent -> ', dropOffsInEvent)
+  const renderExpansionPanelWithData = (event) => {
+    const { event_users } = event
+    const {
+      mutualThumbsInEvent,
+      dropOffsInEvent,
+      getRSVPs,
+      getAttendeesCSV,
+    } = getHostEventAnalytics(event)
 
     return (
-      <ExpansionPanel expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
+      <Grid container direction="column" alignItems="center">
+        <Grid item>
+          <CSVLink
+            data={getRSVPs.data}
+            headers={getRSVPs.headers}
+            className={classes.downloadButton}
+          >
+            Dowload list of all RSVPs
+            <FeatherIcon icon="download" stroke="#fff" size="20" />
+          </CSVLink>
+          <CSVLink
+            data={getAttendeesCSV.data}
+            headers={getAttendeesCSV.headers}
+            className={classes.downloadButton}
+          >
+            Dowload list of all attendees
+            <FeatherIcon icon="download" stroke="#fff" size="20" />
+          </CSVLink>
+        </Grid>
+        <Grid container justify="center" alignItems="center">
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Total RSVPs: {event_users.length}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Mutual Connections: {mutualThumbsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Drop Offs:
+              {dropOffsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography className={classes.detailsHeading}>
+              Total Attendees: {getAttendeesCSV.data.length}
+            </Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+    )
+  }
+
+  if (!sortedEvents) {
+    return null
+  }
+
+  return sortedEvents.map((event) => {
+    const { id } = event
+
+    const startTime = formatDate(new Date(event.start_at).getTime())
+
+    return (
+      <ExpansionPanel key={id} expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ color: '#f4f6fa' }} />}
           aria-controls={`${id}-content`}
@@ -60,34 +162,13 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {event.status === 'complete' ? (
-            <Grid container justify="center" alignItems="center">
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  People Registered: {event_users.length}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Mutual Connections: {mutualThumbsInEvent}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Drop Offs: {dropOffsInEvent}
-                </Typography>
-              </Grid>
-              <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
-                  Total Attendees: {totalAttendeesInEvent}
-                </Typography>
-              </Grid>
-            </Grid>
+            renderExpansionPanelWithData(event)
           ) : (
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>
                 <Typography className={classes.detailsHeading}>
-                  This event has not started. Come back when it is over and we'll have some stats
-                  for you! 👍
+                  This event has not started. Come back when it is over and we&rsquo;ll have some
+                  stats for you! 👍
                 </Typography>
               </Grid>
             </Grid>

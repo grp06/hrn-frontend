@@ -20,10 +20,17 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
+    updatedAt: null,
   },
   app: {
     redirect: null,
     appLoading: true,
+    permissions: {
+      hasWebCam: false,
+      hasMicrophone: false,
+      isWebcamAlreadyCaptured: false,
+      isMicrophoneAlreadyCaptured: false,
+    },
   },
   event: {},
   twilio: {
@@ -35,7 +42,8 @@ const defaultState = {
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { event } = state
+  const { event, app } = state
+  const { permissions } = app
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
   // if we are on a route that has '/events/id' in it, then we can peel off the id
@@ -76,7 +84,6 @@ const AppProvider = ({ children }) => {
         })
         return history.push('/events')
       }
-
       // cases to set event data
       // no event data set yet
       // incoming data from subscription is different from existing
@@ -101,10 +108,15 @@ const AppProvider = ({ children }) => {
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
-    if (userId) {
+    if (userId && permissions.isWebcamAlreadyCaptured && permissions.isMicrophoneAlreadyCaptured) {
       const interval = setInterval(async () => {
+        console.log('last seen')
         try {
-          await updateLastSeenMutation()
+          const lastSeenUpdated = await updateLastSeenMutation()
+
+          dispatch((draft) => {
+            draft.user.updatedAt = lastSeenUpdated.data.update_users.returning[0].updated_at
+          })
         } catch (error) {
           console.log('interval -> error', error)
           // sometimes theres an error here. Reloading "fixes" it  :|
@@ -115,7 +127,7 @@ const AppProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId])
+  }, [userId, permissions])
 
   // Setting the user state in context after findUserById Query is made
   useEffect(() => {

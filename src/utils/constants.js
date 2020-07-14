@@ -1,10 +1,13 @@
 const constants = {
   // change me back to 20000?
-  lastSeenDuration: 10000,
+  lastSeenDuration: 5000,
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
-  hasPartnerAndIsConnectingBreathingRoom: 2000,
+  hasPartnerAndIsConnectingBreathingRoom: 1500,
+  maxNumUsersPerRoom: 40,
 
+  becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
+  giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',
   chromeCameraPermissionHowTo:

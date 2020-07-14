@@ -3,13 +3,15 @@ import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+import { FloatCardLarge, Timer, HiRightNowBreakdown, CameraDisabledBanner } from '.'
 
-import { FloatCardLarge, Timer, HiRightNowBreakdown } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../gql/mutations'
+import SetupMicAndCameraButton from './SetupMicAndCameraButton'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -34,12 +36,26 @@ const useStyles = makeStyles((theme) => ({
   partyEmoji: {
     marginLeft: 10,
   },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    top: 'auto',
+  },
+  cameraTest: {
+    marginBottom: theme.spacing(4),
+  },
 }))
 
-const UserPanel = ({ timeState, eventData, refetch }) => {
+const UserPanel = ({ timeState, eventData, permissions }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { user } = useAppContext()
+  const { user, setCameraAndMicPermissions } = useAppContext()
   const { userId, name, email } = user
   const {
     id: eventId,
@@ -48,6 +64,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     event_name,
     description,
     host: eventHost,
+    round_length,
   } = eventData
   const { name: eventHostName } = eventHost
 
@@ -159,7 +176,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
     return element
   }
 
-  const renderWaitingForAdmin = () =>
+  const renderWaitingForHost = () =>
     waitingForAdmin && (
       <FloatCardLarge>
         <Grid
@@ -179,16 +196,38 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             alignItems="center"
           >
             <Typography className={classes.categoryHeader}>
-              Waiting for host to start event
+              The host will begin the event shortly
             </Typography>
           </Grid>
+          <div className={classes.root}>
+            <LinearProgress />
+          </div>
         </Grid>
       </FloatCardLarge>
     )
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+
+  if (micOrCameraIsDisabled && timeState !== 'future' && alreadyAttending) {
+    return (
+      <CameraDisabledBanner
+        permissions={permissions}
+        setCameraAndMicPermissions={setCameraAndMicPermissions}
+      />
+    )
+  }
 
   return (
     <>
-      {renderWaitingForAdmin()}
+      {alreadyAttending && (
+        <Grid container direction="row" justify="center" className={classes.cameraTest}>
+          <SetupMicAndCameraButton
+            permissions={permissions}
+            setCameraAndMicPermissions={setCameraAndMicPermissions}
+          />
+        </Grid>
+      )}
+      {renderWaitingForHost()}
+
       <FloatCardLarge>
         <Grid
           item
@@ -224,7 +263,7 @@ const UserPanel = ({ timeState, eventData, refetch }) => {
             {renderCTAButton()}
           </Grid>
         </Grid>
-        <HiRightNowBreakdown />
+        {userId ? <HiRightNowBreakdown eventRoundLength={round_length} /> : null}
       </FloatCardLarge>
     </>
   )

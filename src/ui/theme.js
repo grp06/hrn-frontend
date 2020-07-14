@@ -162,21 +162,41 @@ const theme = createMuiTheme({
         // '&.Mui-expanded': {
         //   backgroundColor: greyHighlight,
         // },
+        padding: 8,
+      },
+    },
+    MuiExpansionPanelSummary: {
+      content: {
+        alignItems: 'center',
+      },
+    },
+    MuiFormLabel: {
+      root: {
+        color: ghostWhiteSub,
+        '&.Mui-focused': {
+          color: orchid,
+        },
       },
     },
     MuiInputLabel: {
       root: {
-        color: orchid,
+        color: ghostWhiteSub,
         fontSize: '1rem',
+      },
+      shrink: {
+        color: orchid,
       },
     },
     MuiInput: {
       underline: {
         '&:before': {
-          borderBottom: `2px solid ${dankPurp}`,
+          borderBottom: `2px solid ${greyBorder}`,
         },
         '&:hover:not(disabled):not($focused):not($error):before': {
-          borderBottom: `2px solid ${dankPurp}`,
+          borderBottom: `2px solid ${greyBorder}`,
+        },
+        '&:after': {
+          borderBottom: `2px solid ${ghostWhiteDark}`,
         },
       },
     },
@@ -193,6 +213,9 @@ const theme = createMuiTheme({
       containedSizeLarge: {
         padding: '11px 11px',
         fontSize: '1.1rem',
+      },
+      contained: {
+        backgroundColor: sunray,
       },
     },
     MuiFab: {
@@ -235,6 +258,11 @@ const theme = createMuiTheme({
       root: {
         width: '25px',
         height: '25px',
+      },
+    },
+    MuiLinearProgress: {
+      root: {
+        width: '100%',
       },
     },
   },

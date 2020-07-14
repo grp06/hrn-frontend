@@ -1,7 +1,7 @@
 const getMutualThumbsInEvent = (event) => {
   return event.rounds.reduce((thumbTotal, round) => {
     if (round.partnerY_thumb && round.partnerX_thumb) {
-      thumbTotal++
+      thumbTotal += 1
     }
     return thumbTotal
   }, 0)
@@ -14,9 +14,6 @@ const getTotalDropOffsInEvent = (event) => {
   const numberOfRounds = event.rounds[event.rounds.length - 1].round_number
   const firstRound = event.rounds.filter((round) => round.round_number === 1)
   const lastRound = event.rounds.filter((round) => round.round_number === numberOfRounds)
-  // console.log('numberOfRounds ->', numberOfRounds)
-  // console.log('firstRound ->', firstRound)
-  // console.log('lastRound ->', lastRound)
 
   const firstRoundUserIdArray = firstRound
     .reduce((userIdArray, pairing) => {
@@ -36,41 +33,69 @@ const getTotalDropOffsInEvent = (event) => {
     }, [])
     .sort()
 
-  // console.log('lastRoundUserIdArray ->', lastRoundUserIdArray)
-  // console.log('firstRoundUserIdArray ->', firstRoundUserIdArray)
-
   return firstRoundUserIdArray.reduce((totalDropOffs, userId) => {
     if (lastRoundUserIdArray.indexOf(userId) < 0) {
-      totalDropOffs++
+      totalDropOffs += 1
     }
     return totalDropOffs
   }, 0)
 }
 
-const getTotalAttendeesInEvent = (event) => {
-  const masterRoundsMap = event.rounds.reduce((roundsMap, pairing) => {
-    const { round_number } = pairing
-    roundsMap[round_number] = roundsMap[round_number] + 1 || 1
-    return roundsMap
-  }, {})
+const getRsvps = (event) => {
+  const initialData = {
+    headers: [
+      { label: 'name', key: 'name' },
+      { label: 'Email', key: 'email' },
+    ],
+    data: [],
+  }
+  const csvData = event.event_users.reduce((all, item, index) => {
+    all.data.push({
+      name: item.user.name,
+      email: item.user.email,
+    })
+    return all
+  }, initialData)
+  return csvData
+}
 
-  const roundWithMostPairings = Object.keys(masterRoundsMap).reduce(
-    (a, b) => (masterRoundsMap[a] > masterRoundsMap[b] ? a : b),
-    0
-  )
+const getAttendees = (event) => {
+  const initialData = {
+    headers: [
+      { label: 'name', key: 'name' },
+      { label: 'Email', key: 'email' },
+    ],
+    data: [],
+  }
+  const csvData = event.rounds.reduce((all, item, index) => {
+    const found = all.data.find((user) => {
+      return item.partnerX && item.partnerX.email === user.email
+    })
 
-  // console.log('roundWithMostPairings ->', roundWithMostPairings)
-  // console.log('masterRoundsMap ->', masterRoundsMap)
+    if (!found && item.partnerX) {
+      all.data.push({
+        name: item.partnerX.name,
+        email: item.partnerX.email,
+      })
+    }
 
-  return masterRoundsMap[roundWithMostPairings] * 2
+    return all
+  }, initialData)
+
+  return csvData
 }
 
 function getHostEventAnalytics(event) {
   const mutualThumbsInEvent = getMutualThumbsInEvent(event)
   const dropOffsInEvent = getTotalDropOffsInEvent(event)
-  const totalAttendeesInEvent = getTotalAttendeesInEvent(event)
-
-  return { mutualThumbsInEvent, dropOffsInEvent, totalAttendeesInEvent }
+  const getRSVPs = getRsvps(event)
+  const getAttendeesCSV = getAttendees(event)
+  return {
+    mutualThumbsInEvent,
+    dropOffsInEvent,
+    getRSVPs,
+    getAttendeesCSV,
+  }
 }
 
 export default getHostEventAnalytics

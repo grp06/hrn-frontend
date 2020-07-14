@@ -1,31 +1,25 @@
-import React from 'react'
-import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/styles'
-import { startPreEvent } from '../helpers'
+import { TransitionModal } from '.'
+import { startEvent } from '../helpers'
 
-const useStyles = makeStyles(() => ({
-  partyEmoji: {
-    marginLeft: 10,
-  },
-}))
+const StartEventButton = ({ event, user }) => {
+  const { id: eventId, round_length, num_rounds, status: eventStatus, host_id } = event
+  const { userId } = user
+  const isEventHost = host_id === userId
 
-const StartEventButton = ({ eventId, within30Mins }) => {
-  const classes = useStyles()
-
-  return (
-    <Button
-      size="large"
-      variant="contained"
-      disabled={within30Mins}
-      color="primary"
-      onClick={() => startPreEvent(eventId)}
-    >
-      Start pre-event speech
-      <span className={classes.partyEmoji} role="img" aria-label="party emoji">
-        🥳
-      </span>
-    </Button>
-  )
+  return isEventHost && eventStatus === 'pre-event'
+    ? TransitionModal({
+        button: {
+          buttonText: 'Start Event 🥳',
+          buttonVariant: 'contained',
+        },
+        modalBody:
+          'Starting the event will stop your current broadcast. Are you sure you want to start the event?',
+        onAcceptButtonText: 'Lets Start!',
+        onAcceptFunction: async () => {
+          startEvent({ eventId, round_length, num_rounds })
+        },
+      })
+    : null
 }
 
 export default StartEventButton

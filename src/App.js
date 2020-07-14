@@ -10,14 +10,15 @@ import {
   Event,
   Events,
   VideoRoom,
-  GameOver,
+  EventComplete,
   SignUp,
   PreEvent,
   ForgotPassword,
   SetNewPassword,
   HostDashboard,
+  MyProfile,
   Onboarding,
-} from './components'
+} from './pages'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -62,13 +63,14 @@ const App = () => {
                     component={SetNewPassword}
                   />
                   <Route exact path="/onboarding" component={Onboarding} />
+                  <Route exact path="/my-profile" component={MyProfile} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />
                   <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                  <Route exact path="/events/:id/event-complete" component={GameOver} />
+                  <Route exact path="/events/:id/event-complete" component={EventComplete} />
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />

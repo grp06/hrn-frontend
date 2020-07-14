@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Timer = ({ eventStartTime, onRoundComplete }) => {
+const Timer = ({ eventStartTime, onRoundComplete, adminHeader }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -29,8 +29,6 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
   useEffect(() => {
     let interval = null
     interval = setInterval(() => {
-      // console.log('seconds = ', seconds)
-
       setSeconds((seconds) => seconds - 1)
     }, 1000)
 
@@ -42,7 +40,6 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
     }
 
     return () => {
-      // console.log('timer is unmounting')
       clearInterval(interval)
     }
   }, [seconds])
@@ -56,7 +53,7 @@ const Timer = ({ eventStartTime, onRoundComplete }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}
+      className={adminHeader ? null : classes.container}
     >
       <div className={classes.time}>{displayTime}</div>
     </Grid>

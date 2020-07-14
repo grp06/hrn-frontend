@@ -56,6 +56,7 @@ const ThumbsUp = ({ myRound, userId }) => {
       round_id: myRound.id,
       partnerX_id: userId,
     },
+    skip: !myRound,
   })
 
   const [setPartnerYThumbMutation] = useMutation(setPartnerYThumb, {
@@ -63,6 +64,7 @@ const ThumbsUp = ({ myRound, userId }) => {
       round_id: myRound.id,
       partnerY_id: userId,
     },
+    skip: !myRound,
   })
 
   const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />

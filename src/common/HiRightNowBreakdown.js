@@ -27,38 +27,51 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   resetContainer: {
-    padding: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     width: '100%',
     textAlign: 'center',
   },
   stepLabel: {
     color: theme.palette.common.ghostWhite,
   },
+  endMessage: {
+    textAlign: 'center',
+    width: '75%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    marginBottom: theme.spacing(3),
+  },
+  whatToExpect: {
+    color: theme.palette.common.ghostWhite,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+  eventFormatStepper: {
+    paddingTop: 0,
+  },
 }))
 
-function getSteps() {
-  return ['Join an event', 'Give video permissions', '5 minute mingles', 'Connect with new friends']
+function getSteps(eventRoundLength) {
+  return ['Welcome remarks from the host', '1 on 1 conversations', 'Share contact details (or not)']
 }
 
-function getStepContent(step) {
+function getStepContent(step, eventRoundLength) {
   switch (step) {
     case 0:
-      return `Well, you're already here so all you have to do is click 'RSVP for Event'. This will put your name into our matching algorithm.`
+      return `Before the event starts, the event host will share a few words with you via a live stream to get you hyped for the event!`
     case 1:
-      return 'We all want to see your beautiful face, so do not be camera shy! We will ask for your video permissions within 30 minutes of the event start time.'
+      return `Once the event starts, you'll be put into a private video chat with another event attendee. Throughout the event, you'll have a series of ${eventRoundLength} minute conversations with someone new every round.`
     case 2:
-      return 'Once the event starts, you will be put into a private videochat with one other event attendee. You two will have 5 minutes to chat about whatever you like. After 5 minutes, you will be paired with someone else after a short stretching intermission.'
-    case 3:
-      return `After each round you elect to share your email with the person you just chatted with. If theres a mutual interest, you each will get the others contact information at the end of the event.`
+      return `After each round, you can choose to share contact details with the person you just chatted with. If it's mutual, you'll receive each other's contact info at the end of the event. `
     default:
       return 'Unknown step'
   }
 }
 
-const HiRightNowBreakdown = () => {
+const HiRightNowBreakdown = ({ eventRoundLength }) => {
   const classes = useStyles()
   const [activeStep, setActiveStep] = useState(0)
-  const steps = getSteps()
+  const steps = getSteps(eventRoundLength)
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
@@ -74,12 +87,19 @@ const HiRightNowBreakdown = () => {
 
   return (
     <div className={classes.root}>
-      <Stepper activeStep={activeStep} orientation="vertical">
+      <Grid container justify="center" align="center" className={classes.whatToExpect}>
+        <Typography variant="h1">What to expect</Typography>
+      </Grid>
+      <Stepper
+        activeStep={activeStep}
+        orientation="vertical"
+        className={classes.eventFormatStepper}
+      >
         {steps.map((label, index) => (
           <Step key={label}>
             <StepLabel className={classes.stepLabel}>{label}</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index)}</Typography>
+              <Typography>{getStepContent(index, eventRoundLength)}</Typography>
               <div className={classes.actionsContainer}>
                 <div>
                   <Button
@@ -105,10 +125,11 @@ const HiRightNowBreakdown = () => {
       </Stepper>
       {activeStep === steps.length && (
         <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
-          <Typography>
-            You're all set! Sit tight and wait a couple of minutes for the event to start!
+          <Typography className={classes.endMessage}>
+            You&apos;re all set! If you have already RSVPed, sit tight and wait for the event to
+            start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!
           </Typography>
-          <Button onClick={handleReset} className={classes.backResetButton}>
+          <Button onClick={handleReset} variant="contained" color="primary">
             Reset Steps
           </Button>
         </Grid>

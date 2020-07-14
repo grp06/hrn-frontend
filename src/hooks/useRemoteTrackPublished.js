@@ -14,17 +14,21 @@ const useRemoteTrackPublished = () => {
       const remoteDiv = document.getElementById('remote-video')
       if (remoteDiv) {
         const attachedTrack = publication.track.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
         if (publication.kind === 'video') {
           attachedTrack.muted = true
         }
         remoteDiv.appendChild(attachedTrack)
-        setHasPartnerAndIsConnecting(false)
-        sleep(hasPartnerAndIsConnectingBreathingRoom)
+
+        setTimeout(() => {
+          setHasPartnerAndIsConnecting(false)
+        }, hasPartnerAndIsConnectingBreathingRoom)
       }
     }
     publication.on('subscribed', async (track) => {
       console.log('onSubscribed')
       const attachedTrack = track.attach()
+      attachedTrack.style.transform = 'scale(-1, 1)'
       if (publication.kind === 'video') {
         attachedTrack.muted = true
       }
@@ -33,9 +37,10 @@ const useRemoteTrackPublished = () => {
       } else {
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
-      setHasPartnerAndIsConnecting(false)
-      await sleep(hasPartnerAndIsConnectingBreathingRoom)
-      // setDidPartnerDisconnect(false)
+
+      setTimeout(() => {
+        setHasPartnerAndIsConnecting(false)
+      }, hasPartnerAndIsConnectingBreathingRoom)
     })
 
     publication.on('unsubscribed', (track) => {})

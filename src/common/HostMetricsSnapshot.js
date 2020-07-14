@@ -92,38 +92,20 @@ const HostMetricsSnapshot = ({ totalMetrics }) => {
         lg={3}
         md={12}
       >
-        <Grid
-          item
-          direction="column"
-          justify="center"
-          alignItems="center"
-          className={classes.metricContainer}
-        >
-          <Typography className={[classes.metricHeader, classes.purpleText]}>
+        <Grid item className={classes.metricContainer}>
+          <Typography className={`${classes.metricHeader} ${classes.purpleText}`}>
             Total Participants RSVPed
           </Typography>
           <Typography className={classes.metricNumber}>{allTimeRSVPed}</Typography>
         </Grid>
-        <Grid
-          item
-          direction="column"
-          justify="center"
-          alignItems="center"
-          className={classes.metricContainer}
-        >
-          <Typography className={[classes.metricHeader, classes.pinkText]}>
+        <Grid item className={classes.metricContainer}>
+          <Typography className={`${classes.metricHeader} ${classes.pinkText}`}>
             Total Connections Fostered
           </Typography>
           <Typography className={classes.metricNumber}>{allTimeMutualThumbs}</Typography>
         </Grid>
-        <Grid
-          item
-          direction="column"
-          justify="center"
-          alignItems="center"
-          className={classes.metricContainer}
-        >
-          <Typography className={[classes.metricHeader, classes.yellowText]}>
+        <Grid item className={classes.metricContainer}>
+          <Typography className={`${classes.metricHeader} ${classes.yellowText}`}>
             Avg. Connections per Event
           </Typography>
           <Typography className={classes.metricNumber}>{avgThumbsPerEvent}</Typography>

@@ -3,18 +3,17 @@ import React, { useEffect, useState, useRef } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, Timer, GUMErrorModal } from '../common'
+import { Loading, GUMErrorModal, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
 import { ConnectingToSomeone } from '../common/waitingRoomScreens'
 
 import { useAppContext } from '../context/useAppContext'
-import { useTwilio } from '../hooks'
+import { useTwilio, useGetCameraAndMicStatus } from '../hooks'
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -61,17 +60,25 @@ const useStyles = makeStyles((theme) => ({
     width: '200px',
     height: '150px',
   },
-  partnerNameContainer: {
+  partnerNameGrid: {
     position: 'fixed',
     left: 'auto',
     top: 'auto',
     right: 'auto',
-    bottom: '0%',
+    bottom: '5%',
     width: '100vw',
-    height: '150px',
+    height: 'auto',
+  },
+  partnerNameContainer: {
+    padding: '5px 20px',
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
   },
   partnerName: {
     fontFamily: 'Muli',
+    textAlign: 'center',
     fontSize: '2rem',
     color: theme.palette.common.ghostWhite,
   },
@@ -88,21 +95,30 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     fontFamily: 'Muli',
   },
+  cameraDisabledWrapper: {
+    height: '100vh',
+  },
 }))
 
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
 
-  const { app, user, event, twilio, setLateArrival, setHasPartnerAndIsConnecting } = useAppContext()
+  const {
+    app,
+    user,
+    event,
+    twilio,
+    setLateArrival,
+    setHasPartnerAndIsConnecting,
+    setCameraAndMicPermissions,
+  } = useAppContext()
   const { userId } = user
-  const { appLoading } = app
+  const { appLoading, permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 
   const { startTwilio, twilioStarted } = useTwilio()
 
-  const [showTimer, setShowTimer] = useState(false)
-  const [timerTimeInput, setTimerTimeInput] = useState('')
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
@@ -112,6 +128,11 @@ const VideoRoom = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatus = useRef()
+
+  const hasCheckedCamera = useRef()
+
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
 
   const { data: myRoundData, loading: myRoundDataLoading, error: myRoundDataError } = useQuery(
     getMyRoundById,
@@ -189,7 +210,8 @@ const VideoRoom = ({ match }) => {
             audio: process.env.NODE_ENV === 'production',
           })
         } catch (err) {
-          setGUMError(err.name)
+          console.log('camera wasnt enabled')
+          // setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
 
@@ -203,16 +225,8 @@ const VideoRoom = ({ match }) => {
     }
   }, [token])
 
-  // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
-      const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
-      const roundEndTime = moment(myRound.started_at).seconds(
-        // round length is measured in minutes and stored as an int
-        roundStartedAtInSeconds + (event.round_length || 5) * 60
-      )
-      setTimerTimeInput(roundEndTime)
-      setShowTimer(true)
       console.warn('starting twilio')
       setHasPartnerAndIsConnecting(true)
       startTwilio(room)
@@ -225,15 +239,6 @@ const VideoRoom = ({ match }) => {
 
   const showPartnersName = () => {
     let userIsPartnerX = false
-    // const hasPartner = myRound ? myRound && myRound.partnerX_id && myRound.partnerY_id : null
-    // if (
-    //   !myRound ||
-    //   event.status !== 'room-in-progress' ||
-    //   !hasPartner ||
-    //   hasPartnerAndIsConnecting
-    // ) {
-    //   return null
-    // }
     if (!twilioStarted) {
       return null
     }
@@ -242,10 +247,12 @@ const VideoRoom = ({ match }) => {
       userIsPartnerX = true
     }
     return (
-      <Grid container justify="center" alignItems="center" className={classes.partnerNameContainer}>
-        <Typography className={classes.partnerName}>
-          {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
-        </Typography>
+      <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
+        <div className={classes.partnerNameContainer}>
+          <Typography className={classes.partnerName}>
+            {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
+          </Typography>
+        </div>
       </Grid>
     )
   }
@@ -267,8 +274,20 @@ const VideoRoom = ({ match }) => {
   return eventStatus.current === latestStatus ? (
     <div>
       {isGUMErrorModalActive && (
-        <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+        // <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
+        <Grid
+          className={classes.cameraDisabledWrapper}
+          container
+          direction="column"
+          justify="center"
+        >
+          <CameraDisabledBanner
+            permissions={permissions}
+            setCameraAndMicPermissions={setCameraAndMicPermissions}
+          />
+        </Grid>
       )}
+
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
@@ -278,22 +297,7 @@ const VideoRoom = ({ match }) => {
         )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {showTimer ? (
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            id="timer-container"
-            className={classes.timerContainer}
-          >
-            <Timer
-              eventStartTime={timerTimeInput}
-              onRoundComplete={() => {
-                setShowTimer(false)
-              }}
-            />
-          </Grid>
-        ) : null}
+        {myRound ? <RoundProgressBar myRound={myRound} event={event} /> : null}
         {showPartnersName()}
       </div>
     </div>

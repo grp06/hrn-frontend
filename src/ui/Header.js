@@ -1,19 +1,20 @@
 import React, { useState, useRef } from 'react'
-import SettingsMenu from './SettingsMenu'
-import HostControlsMenu from './HostControlsMenu'
-import HostEventControlsMenu from './HostEventControlsMenu'
 import AppBar from '@material-ui/core/AppBar'
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import { useAppContext } from '../context/useAppContext'
 import { Link, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-
 import IconButton from '@material-ui/core/IconButton'
 import FeatherIcon from 'feather-icons-react'
 
 import logo from '../assets/logoWhite.svg'
+import { StartEventButton } from '../common'
+import { useAppContext } from '../context/useAppContext'
+import HostEventControlsMenu from './HostEventControlsMenu'
+import HostControlsMenu from './HostControlsMenu'
+import SettingsMenu from './SettingsMenu'
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -33,6 +34,9 @@ const useStyles = makeStyles((theme) => ({
       stroke: theme.palette.common.sunray,
     },
   },
+  marginRight: {
+    marginRight: '10px',
+  },
 }))
 
 const Header = () => {
@@ -44,6 +48,42 @@ const Header = () => {
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
 
+  const renderCurrentEventStatus = () => {
+    if (!eventIdInUrl) return null
+    const { num_rounds } = event
+    let textToShow
+    switch (eventStatus) {
+      case 'not-started':
+        textToShow = null
+        break
+      case 'pre-event':
+        textToShow = 'Welcome remarks from the host'
+        break
+      case 'complete':
+        textToShow = 'Event Complete'
+        break
+      default:
+        textToShow = `Round ${current_round} of ${num_rounds}`
+    }
+    return <Typography>{textToShow}</Typography>
+  }
+  const renderHeaderElements = () => {
+    return localStorage.getItem('userId') ? (
+      <Grid container justify="flex-end" alignItems="center">
+        <div>
+          <IconButton color="inherit" disableRipple disabled>
+            <Typography>{user.name}</Typography>
+          </IconButton>
+          {/* <IconButton color="inherit" disableRipple>
+        <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
+      </IconButton> */}
+        </div>
+        {role === 'host' && <HostControlsMenu />}
+        <SettingsMenu resetUser={resetUser} />
+      </Grid>
+    ) : null
+  }
+
   return (
     <>
       <AppBar position="fixed">
@@ -52,23 +92,17 @@ const Header = () => {
             <img alt="company-logo" className={classes.logo} src={logo} />
           </Button>
           <HostEventControlsMenu event={event} user={user} />
-          {eventStatus !== 'not-started' && eventIdInUrl && (
-            <Typography>
-              Current Round:
-              {` ${current_round || 'Pre-event'}`}
-            </Typography>
-          )}
+          {/* {eventStatus === 'pre-event' && (
+            <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
+          )} */}
+          <Grid container alignItems="center">
+            <div className={classes.marginRight}>
+              <StartEventButton event={event} user={user} />
+            </div>
+            {renderCurrentEventStatus()}
+          </Grid>
           <div className={classes.grow} />
-          <div>
-            <IconButton color="inherit" disableRipple disabled>
-              <Typography>{user.name}</Typography>
-            </IconButton>
-            <IconButton color="inherit" disableRipple>
-              <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
-            </IconButton>
-          </div>
-          {role === 'host' && <HostControlsMenu />}
-          <SettingsMenu resetUser={resetUser} />
+          {renderHeaderElements()}
         </Toolbar>
       </AppBar>
     </>

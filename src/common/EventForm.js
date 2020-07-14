@@ -13,7 +13,7 @@ import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '100px',
+    marginTop: '200px',
   },
   formContainer: {
     marginLeft: 'auto',
@@ -51,6 +51,8 @@ const EventForm = ({ eventData, match }) => {
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
   const [roundLength, setRoundLength] = useState(5)
+  const [numRounds, setNumRounds] = useState(10)
+  const [postEventVideoCallLink, setPostEventVideoCallLink] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [eventUpdated, setEventUpdated] = useState(null)
 
@@ -62,20 +64,31 @@ const EventForm = ({ eventData, match }) => {
       start_at: selectedDate,
       host_id: userId,
       round_length: roundLength,
+      num_rounds: numRounds,
+      post_event_link: postEventVideoCallLink,
     },
   })
 
-  const [insertEventUserMutation, { data }] = useMutation(insertEventUser)
+  const [insertEventUserMutation] = useMutation(insertEventUser)
   const [updateEventMutation] = useMutation(updateEvent)
 
   useEffect(() => {
     if (eventData && !initialEventData.current) {
       initialEventData.current = eventData
-      const { description: eventDescription, event_name, start_at, round_length } = eventData
+      const {
+        description: eventDescription,
+        event_name,
+        start_at,
+        round_length,
+        num_rounds,
+        post_event_link,
+      } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
       setRoundLength(round_length)
+      setNumRounds(num_rounds)
+      setPostEventVideoCallLink(post_event_link)
     }
   }, [eventData])
 
@@ -98,6 +111,8 @@ const EventForm = ({ eventData, match }) => {
           start_at: selectedDate,
           id: eventData.id,
           round_length: roundLength,
+          num_rounds: numRounds,
+          post_event_link: postEventVideoCallLink,
         },
       })
       setEventUpdated(true)
@@ -183,6 +198,29 @@ const EventForm = ({ eventData, match }) => {
                     className={classes.input}
                     value={roundLength}
                     onChange={(e) => setRoundLength(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="num-rounds"
+                    label="Number of total rounds in event"
+                    required
+                    fullWidth
+                    type="number"
+                    className={classes.input}
+                    value={numRounds}
+                    onChange={(e) => setNumRounds(e.target.value)}
+                  />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    id="post-event-call"
+                    label="Link to post-event Zoom/Google Meet"
+                    placeholder="(not required)"
+                    fullWidth
+                    className={classes.input}
+                    value={postEventVideoCallLink}
+                    onChange={(e) => setPostEventVideoCallLink(e.target.value)}
                   />
                 </Grid>
               </Grid>

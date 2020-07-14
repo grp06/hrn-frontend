@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
-    boxShadow: theme.palette.common.greyBoxShadow,
+    border: '2px solid #fabb5b',
+    boxShadow: '4px 4px 0 #fabb5b',
     // padding: theme.spacing(2, 4, 3),
     width: 'auto',
     minWidth: '20vw',

@@ -6,11 +6,14 @@ const getEventById = gql`
       id
       host_id
       start_at
+      updated_at
       description
       ended_at
       event_name
       current_round
       round_length
+      num_rounds
+      post_event_link
       event_users {
         user {
           id

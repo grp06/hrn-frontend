@@ -10,11 +10,14 @@ import {
   FloatCardLarge,
   AttendeesList,
   TransitionModal,
-  StartEventButton,
+  StartPreEventButton,
   ListOfRSVPs,
   ShareEventPromptModal,
   Timer,
+  CameraDisabledBanner,
+  SetupMicAndCameraButton,
 } from '.'
+import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -50,10 +53,18 @@ const useStyles = makeStyles((theme) => ({
   descriptionContainer: {
     marginBottom: '25px',
   },
+  adminButtons: {
+    height: 160,
+  },
+  cameraTest: {
+    marginBottom: theme.spacing(4),
+  },
 }))
 
-const AdminPanel = ({ eventData, timeState }) => {
+const AdminPanel = ({ eventData, timeState, permissions }) => {
   const classes = useStyles()
+  const { setCameraAndMicPermissions } = useAppContext()
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const {
     event_users,
@@ -66,7 +77,7 @@ const AdminPanel = ({ eventData, timeState }) => {
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
     button: {
-      buttonSize: 'large',
+      buttonSize: 'medium',
       buttonText: '✏️ Edit Event',
     },
   })
@@ -79,25 +90,51 @@ const AdminPanel = ({ eventData, timeState }) => {
     switch (timeState) {
       case 'within 30 mins':
         element = (
-          <Grid container direction="column" alignItems="center" justify="space-around">
-            <StartEventButton within30Mins eventStartTime={eventStartTime} />
-            <Timer eventStartTime={eventStartTime} subtitle="Event Starts In:" />
+          <Grid
+            className={classes.adminButtons}
+            container
+            direction="column"
+            alignItems="center"
+            justify="space-between"
+          >
+            <StartPreEventButton
+              disabled={micOrCameraIsDisabled}
+              within30Mins
+              eventStartTime={eventStartTime}
+            />
+            <Timer adminHeader eventStartTime={eventStartTime} subtitle="Event Starts In:" />
             <div>{editFormModal}</div>
           </Grid>
         )
         break
       case 'go time':
         element = (
-          <Grid container direction="column" alignItems="center" justify="space-around">
-            <StartEventButton eventId={eventId} status={status} />
-            <div style={{ marginTop: '20px' }}>{editFormModal}</div>
+          <Grid
+            className={classes.adminButtons}
+            container
+            direction="column"
+            alignItems="center"
+            justify="space-around"
+          >
+            <StartPreEventButton
+              disabled={micOrCameraIsDisabled}
+              eventId={eventId}
+              status={status}
+            />
+            <div>{editFormModal}</div>
           </Grid>
         )
         break
       default:
         element = (
-          <Grid container direction="column" alignItems="center" justify="space-around">
-            <div style={{ marginBottom: '20px' }}>{copyEventPromptModal}</div>
+          <Grid
+            className={classes.adminButtons}
+            container
+            direction="column"
+            alignItems="center"
+            justify="space-around"
+          >
+            <div>{copyEventPromptModal}</div>
             <div>{editFormModal}</div>
           </Grid>
         )
@@ -108,50 +145,83 @@ const AdminPanel = ({ eventData, timeState }) => {
   }
 
   return (
-    <FloatCardLarge>
-      <Grid
-        item
-        container
-        justify="space-around"
-        alignItems="center"
-        // wrap="nowrap"
-        className={classes.topDashboard}
-      >
-        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-          <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+    <>
+      {micOrCameraIsDisabled ? (
+        <CameraDisabledBanner
+          permissions={permissions}
+          setCameraAndMicPermissions={setCameraAndMicPermissions}
+          admin
+        />
+      ) : (
+        <Grid container direction="row" justify="center" className={classes.cameraTest}>
+          <SetupMicAndCameraButton
+            permissions={permissions}
+            setCameraAndMicPermissions={setCameraAndMicPermissions}
+          />
         </Grid>
-        <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          {renderButton()}
-        </Grid>
-      </Grid>
-      <Grid
-        container
-        item
-        direction="column"
-        justify="space-around"
-        alignItems="flex-start"
-        className={classes.cardBodyContainer}
-      >
-        {timeState === 'go time' ? (
+      )}
+
+      <FloatCardLarge>
+        <Grid
+          item
+          container
+          justify="space-around"
+          alignItems="center"
+          // wrap="nowrap"
+          className={classes.topDashboard}
+        >
           <Grid
             container
             item
-            direction="row"
-            wrap="nowrap"
-            justify="space-between"
+            md={6}
+            xs={12}
+            direction="column"
+            justify="center"
             alignItems="center"
           >
-            <ListOfRSVPs />
-            <AttendeesList eventId={eventId} timeState={timeState} />
+            <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
+            <Typography className={classes.displayNumber}>{event_users.length}</Typography>
           </Grid>
-        ) : (
-          <Grid>
-            <ListOfRSVPs />
+          <Grid
+            container
+            item
+            md={6}
+            xs={12}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            {renderButton()}
           </Grid>
-        )}
-      </Grid>
-    </FloatCardLarge>
+        </Grid>
+        <Grid
+          container
+          item
+          direction="column"
+          justify="space-around"
+          alignItems="flex-start"
+          className={classes.cardBodyContainer}
+        >
+          {timeState === 'go time' || timeState === 'within 30 mins' ? (
+            <Grid
+              container
+              item
+              direction="row"
+              wrap="nowrap"
+              justify="space-between"
+              alignItems="center"
+            >
+              <ListOfRSVPs />
+              <AttendeesList eventId={eventId} timeState={timeState} />
+            </Grid>
+          ) : (
+            <Grid>
+              <ListOfRSVPs />
+            </Grid>
+          )}
+        </Grid>
+      </FloatCardLarge>
+    </>
   )
 }
 
