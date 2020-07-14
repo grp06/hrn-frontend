@@ -57,7 +57,7 @@ const Header = () => {
         textToShow = null
         break
       case 'pre-event':
-        textToShow = 'Pre-event'
+        textToShow = 'Welcome remarks from the host'
         break
       case 'complete':
         textToShow = 'Event Complete'

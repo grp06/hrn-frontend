@@ -12,6 +12,7 @@ const setupHostPreEvent = (room, setCameraAndMicPermissions) => {
     const hostVideoDiv = document.getElementById('host-video')
     if (hostVideoDiv && !hostVideoDiv.children.length && publication.track.kind === 'video') {
       const attachedTrack = publication.track.attach()
+      attachedTrack.style.transform = 'scale(-1, 1)'
       hostVideoDiv.appendChild(attachedTrack)
     }
   })
