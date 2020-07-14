@@ -44,6 +44,13 @@ const SettingsMenu = ({ resetUser }) => {
     setMenuOpen(false)
   }
 
+  const handleListKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault()
+      setMenuOpen(false)
+    }
+  }
+
   const handleLogout = () => {
     localStorage.clear()
     resetUser()
@@ -51,28 +58,15 @@ const SettingsMenu = ({ resetUser }) => {
     history.push('/')
   }
 
-  const logoutModalButton = TransitionModal({
-    button: {
-      buttonText: 'Logout',
-      buttonVariant: 'text',
-      buttonColor: 'default',
-    },
-    modalBody: 'Are you sure you want to leave us 😢?',
-    onAcceptFunction: async () => {
-      handleLogout()
-    },
-    onAcceptButtonText: 'Im sure',
-    onCloseFunction: () => {
-      setMenuOpen(false)
-    },
-  })
-
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault()
-      setMenuOpen(false)
-    }
+  const myProfileClick = () => {
+    history.push('/my-profile')
   }
+
+  const logoutClick = () => {
+    handleLogout()
+    setMenuOpen(false)
+  }
+
   return (
     <div>
       <IconButton color="inherit" onClick={handleMenuOpen} ref={anchorRef} disableRipple>
@@ -100,7 +94,12 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem className={classes.menuItem}>{logoutModalButton}</MenuItem>
+                  <MenuItem onClick={myProfileClick} className={classes.menuItem}>
+                    My Profile
+                  </MenuItem>
+                  <MenuItem onClick={logoutClick} className={classes.menuItem}>
+                    Log Out
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
