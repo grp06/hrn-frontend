@@ -10,6 +10,7 @@ const listenToEvent = gql`
       event_name
       host_id
       start_at
+      updated_at
       status
       round_length
       num_rounds

@@ -260,6 +260,11 @@ const theme = createMuiTheme({
         height: '25px',
       },
     },
+    MuiLinearProgress: {
+      root: {
+        width: '100%',
+      },
+    },
   },
 })
 

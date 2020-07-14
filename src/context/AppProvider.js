@@ -20,6 +20,7 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
+    updatedAt: null,
   },
   app: {
     redirect: null,
@@ -111,7 +112,11 @@ const AppProvider = ({ children }) => {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
-          await updateLastSeenMutation()
+          const lastSeenUpdated = await updateLastSeenMutation()
+
+          dispatch((draft) => {
+            draft.user.updatedAt = lastSeenUpdated.data.update_users.returning[0].updated_at
+          })
         } catch (error) {
           console.log('interval -> error', error)
           // sometimes theres an error here. Reloading "fixes" it  :|
