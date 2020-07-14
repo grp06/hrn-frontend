@@ -50,6 +50,7 @@ const Header = () => {
 
   const renderCurrentEventStatus = () => {
     if (!eventIdInUrl) return null
+    const { num_rounds } = event
     let textToShow
     switch (eventStatus) {
       case 'not-started':
@@ -62,7 +63,7 @@ const Header = () => {
         textToShow = 'Event Complete'
         break
       default:
-        textToShow = `Current Round: ${current_round}`
+        textToShow = `Round ${current_round} of ${num_rounds}`
     }
     return <Typography>{textToShow}</Typography>
   }
