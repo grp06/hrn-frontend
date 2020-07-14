@@ -16,7 +16,8 @@ import {
   ForgotPassword,
   SetNewPassword,
   HostDashboard,
-} from './components'
+  MyProfile,
+} from './pages'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
 import Header from './ui/Header'
@@ -60,6 +61,7 @@ const App = () => {
                     path="/set-new-password/:userId/:token/"
                     component={SetNewPassword}
                   />
+                  <Route exact path="/my-profile" component={MyProfile} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />
