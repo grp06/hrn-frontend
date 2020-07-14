@@ -82,7 +82,7 @@ const Event = ({ match }) => {
         }
       }
     }
-  }, [event, userId, eventId, eventSet, history])
+  }, [event, userId, eventId, eventSet, history, micOrCameraIsDisabled])
 
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
