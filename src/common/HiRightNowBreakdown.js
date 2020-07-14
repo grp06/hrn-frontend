@@ -126,7 +126,7 @@ const HiRightNowBreakdown = ({ eventRoundLength }) => {
       {activeStep === steps.length && (
         <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
           <Typography className={classes.endMessage}>
-            You&amp;re all set! If you have already RSVPed, sit tight and wait for the event to
+            You&apos;re all set! If you have already RSVPed, sit tight and wait for the event to
             start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!
           </Typography>
           <Button onClick={handleReset} variant="contained" color="primary">
