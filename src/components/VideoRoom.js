@@ -3,7 +3,6 @@ import React, { useEffect, useState, useRef } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
@@ -120,8 +119,6 @@ const VideoRoom = ({ match }) => {
 
   const { startTwilio, twilioStarted } = useTwilio()
 
-  const [showTimer, setShowTimer] = useState(false)
-  const [timerTimeInput, setTimerTimeInput] = useState('')
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
@@ -209,7 +206,7 @@ const VideoRoom = ({ match }) => {
         let localTracks
         try {
           localTracks = await createLocalTracks({
-            video: false,
+            video: true,
             audio: process.env.NODE_ENV === 'production',
           })
         } catch (err) {
@@ -228,21 +225,10 @@ const VideoRoom = ({ match }) => {
     }
   }, [token])
 
-  // After getting a room, we set the timer
   useEffect(() => {
     if (room) {
-      const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
-
-      const roundEndTime = moment(myRound.started_at).seconds(
-        // round length is measured in minutes and stored as an int
-        roundStartedAtInSeconds + (event.round_length || 5) * 60
-      )
-      const realStartTime = new Date(myRound.started_at).getTime()
-      const realEndTime = realStartTime + (event.round_length || 5) * 60
-      setTimerTimeInput(roundEndTime)
-      setShowTimer(true)
       console.warn('starting twilio')
-      // setHasPartnerAndIsConnecting(true)
+      setHasPartnerAndIsConnecting(true)
       startTwilio(room)
     }
   }, [room])
