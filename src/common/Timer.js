@@ -3,7 +3,6 @@ import moment from 'moment-timezone'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
-import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -16,23 +15,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Timer = ({ eventStartTime, onRoundComplete, myRound, event, adminHeader }) => {
-  const { user } = useAppContext()
-  const { updatedAt } = user
-  const realStartTime = new Date(myRound.started_at).getTime()
-  const latestUpdateFromServer = new Date(updatedAt).getTime()
-  console.log('Timer -> latestUpdateFromServer', latestUpdateFromServer)
-  const realEndTime = realStartTime + (event.round_length || 5) * 60
+const Timer = ({ eventStartTime, onRoundComplete, adminHeader }) => {
   const classes = useStyles()
-  // const roundEndsAt = moment(myRound.started_at).seconds(
-  //   // round length is measured in minutes and stored as an int
-  //   roundStartedAtInSeconds + (event.round_length || 5) * 60
-  // )
-  // console.log("Timer -> roundEndsAt", roundEndsAt)
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
   const secondsUntilEvent = Math.trunc(duration._milliseconds / 1000)
-  console.log('Timer -> secondsUntilEvent', secondsUntilEvent)
   const minutesToDisplay = Math.floor(secondsUntilEvent / 60)
   const secondsToDisplay = secondsUntilEvent - minutesToDisplay * 60
 

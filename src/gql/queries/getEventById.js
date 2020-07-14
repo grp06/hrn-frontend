@@ -6,6 +6,7 @@ const getEventById = gql`
       id
       host_id
       start_at
+      updated_at
       description
       ended_at
       event_name

@@ -7,7 +7,7 @@ import moment from 'moment-timezone'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, Timer, GUMErrorModal, CameraDisabledBanner } from '../common'
+import { Loading, GUMErrorModal, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
@@ -233,8 +233,6 @@ const VideoRoom = ({ match }) => {
     if (room) {
       const roundStartedAtInSeconds = moment(myRound.started_at).seconds()
 
-      // console.log('VideoRoom -> myRound.started_at', myRound.started_at)
-      console.log('  -> roundStartedAtInSeconds', roundStartedAtInSeconds)
       const roundEndTime = moment(myRound.started_at).seconds(
         // round length is measured in minutes and stored as an int
         roundStartedAtInSeconds + (event.round_length || 5) * 60
@@ -242,7 +240,6 @@ const VideoRoom = ({ match }) => {
       const realStartTime = new Date(myRound.started_at).getTime()
       const realEndTime = realStartTime + (event.round_length || 5) * 60
       setTimerTimeInput(roundEndTime)
-      console.log('VideoRoom -> roundEndTime', roundEndTime)
       setShowTimer(true)
       console.warn('starting twilio')
       // setHasPartnerAndIsConnecting(true)
@@ -314,24 +311,7 @@ const VideoRoom = ({ match }) => {
         )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {showTimer ? (
-          <Grid
-            container
-            justify="center"
-            alignItems="center"
-            id="timer-container"
-            className={classes.timerContainer}
-          >
-            <Timer
-              eventStartTime={timerTimeInput}
-              onRoundComplete={() => {
-                setShowTimer(false)
-              }}
-              myRound={myRound}
-              event={event}
-            />
-          </Grid>
-        ) : null}
+        {myRound ? <RoundProgressBar myRound={myRound} event={event} /> : null}
         {showPartnersName()}
       </div>
     </div>
