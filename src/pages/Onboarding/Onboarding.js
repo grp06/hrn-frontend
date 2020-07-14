@@ -1,10 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
+import { useQuery } from '@apollo/react-hooks'
 import Box from '@material-ui/core/Box'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import { FloatCardMedium } from '../../common'
+import { FloatCardMedium, Loading } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
+import { getAllTags } from '../../gql/queries'
 import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +17,13 @@ const useStyles = makeStyles((theme) => ({
 
 const Onboarding = () => {
   const classes = useStyles()
+  const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
+
+  if (tagsLoading) {
+    return <Loading />
+  }
+  const InterestTagInputComponent = () => <OnboardingInterestTagInput tagsData={tagsData.tags} />
+
   return (
     <div className={classes.container}>
       <FloatCardMedium>
@@ -37,7 +46,7 @@ const Onboarding = () => {
             </Box>
           </div>
           <div label="interests">
-            <Field name="interests" component={OnboardingInterestTagInput} />
+            <Field name="interests" component={InterestTagInputComponent} />
             {/* <Box paddingBottom={2}>
               <Field name="userBio" component={TextField} label="User Bio" fullWidth />
             </Box>
