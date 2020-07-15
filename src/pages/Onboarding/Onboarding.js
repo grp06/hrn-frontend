@@ -33,9 +33,7 @@ const Onboarding = () => {
             interests: [],
           }}
           onSubmit={async (values) => {
-            useMutation
             await sleep(3000)
-
             console.log('values', values)
           }}
         >
