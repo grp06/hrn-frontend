@@ -31,8 +31,8 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
   return (
     <Formik
       {...props}
-      initialValues={{ location: '', tags: [] }}
       onSubmit={async (values, helpers) => {
+        console.log(values)
         if (isLastStep()) {
           await props.onSubmit(values, helpers)
           setCompleted(true)

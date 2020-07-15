@@ -1,12 +1,13 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 import Box from '@material-ui/core/Box'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { FloatCardMedium, Loading } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
 import { getAllTags } from '../../gql/queries'
+import { insertUserTags } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -22,21 +23,19 @@ const Onboarding = () => {
   if (tagsLoading) {
     return <Loading />
   }
-  const InterestTagInputComponent = () => <OnboardingInterestTagInput tagsData={tagsData.tags} />
 
   return (
     <div className={classes.container}>
       <FloatCardMedium>
         <FormikOnboardingStepper
           initialValues={{
-            firstName: '',
-            lastName: '',
-            userBio: '',
-            jobTitle: '',
             location: '',
+            interests: [],
           }}
           onSubmit={async (values) => {
+            useMutation
             await sleep(3000)
+
             console.log('values', values)
           }}
         >
@@ -46,13 +45,19 @@ const Onboarding = () => {
             </Box>
           </div>
           <div label="interests">
-            <Field name="interests" component={InterestTagInputComponent} />
-            {/* <Box paddingBottom={2}>
-              <Field name="userBio" component={TextField} label="User Bio" fullWidth />
-            </Box>
-            <Box paddingBottom={2}>
-              <Field name="jobTitle" component={TextField} label="Job Title" fullWidth />
-            </Box> */}
+            {/* <Field name="interests" component={InterestTagInputComponent} /> */}
+            <Field name="interests">
+              {({ field, form }) => (
+                <OnboardingInterestTagInput
+                  tagsData={tagsData.tags}
+                  value={field.value}
+                  onChange={(interests) => {
+                    console.log('I got the value correctly from my child: ', interests)
+                    form.setFieldValue('interests', interests)
+                  }}
+                />
+              )}
+            </Field>
           </div>
         </FormikOnboardingStepper>
       </FloatCardMedium>

@@ -265,6 +265,12 @@ const theme = createMuiTheme({
         width: '100%',
       },
     },
+    MuiChip: {
+      root: {
+        borderRadius: '4px',
+        margin: '5px',
+      },
+    },
   },
 })
 
