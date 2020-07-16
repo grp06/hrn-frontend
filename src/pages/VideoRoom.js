@@ -205,10 +205,12 @@ const VideoRoom = ({ match }) => {
       const setupRoom = async () => {
         let localTracks
         try {
+          console.log('about to create local tracks at ', new Date())
           localTracks = await createLocalTracks({
             video: true,
             audio: process.env.NODE_ENV === 'production',
           })
+          console.log('created local tracks at ', new Date())
         } catch (err) {
           console.log('camera wasnt enabled')
           // setGUMError(err.name)
