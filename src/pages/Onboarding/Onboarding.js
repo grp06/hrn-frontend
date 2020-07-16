@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
+import Geosuggest from 'react-geosuggest'
 import Box from '@material-ui/core/Box'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -39,11 +40,11 @@ const Onboarding = () => {
         >
           <div label="location">
             <Box paddingBottom={2}>
-              <Field name="location" component={TextField} label="Location" fullWidth />
+              {/* <Field name="location" component={TextField} label="Location" fullWidth /> */}
+              <Geosuggest />
             </Box>
           </div>
           <div label="interests">
-            {/* <Field name="interests" component={InterestTagInputComponent} /> */}
             <Field name="interests">
               {({ field, form }) => (
                 <OnboardingInterestTagInput
