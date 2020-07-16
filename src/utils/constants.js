@@ -5,7 +5,7 @@ const constants = {
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,
-
+  linkedInCommunityLink: 'https://www.linkedin.com/groups/8951502/',
   becomeAHostTypeform: 'https://www.hirightnow.co/hostevent.html',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
