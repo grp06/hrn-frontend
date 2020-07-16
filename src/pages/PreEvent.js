@@ -51,7 +51,8 @@ const PreEvent = ({ match }) => {
     if (eventSet) {
       const { status } = event
 
-      if (status !== 'pre-event') {
+      if (status !== 'pre-event' || micOrCameraIsDisabled) {
+        console.log('PreEvent -> status', status)
         return history.push(`/events/${eventId}`)
       }
     }
