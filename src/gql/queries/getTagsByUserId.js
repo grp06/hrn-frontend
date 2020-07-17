@@ -6,6 +6,7 @@ const getTagsByUserId = gql`
       tag {
         name
         id
+        category
       }
     }
   }

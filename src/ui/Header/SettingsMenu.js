@@ -93,9 +93,9 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={myProfileClick} className={classes.menuItem}>
+                  {/* <MenuItem onClick={myProfileClick} className={classes.menuItem}>
                     My Profile
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={logoutClick} className={classes.menuItem}>
                     Log Out
                   </MenuItem>
