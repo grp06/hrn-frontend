@@ -31,14 +31,22 @@ const UserJoinedDuringRound = () => {
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        Awh shucks, we just missed throwing your name into the hat for this round 🧢.
+        Awh shucks, we just missed throwing your name into the hat for this round{' '}
+        <span role="img" aria-label="blue cap">
+          🧢
+        </span>
+        .
       </Typography>
       <Typography className={classes.messageText}>
         But don&apos;t worry! We&apos;ve penciled you in and you&apos;ll join the next round in a
         few minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        In the meantime, press 'up' on your keyboard to kill some time 😉.
+        In the meantime, press &apos;up&apos; on your keyboard to kill some time{' '}
+        <span role="img" aria-label="wink face">
+          😉
+        </span>
+        .
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />

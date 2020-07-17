@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 500,
   },
   bannerGradient: {
-    background: ' rgb(25,25,25)',
     background:
       'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
     width: '100%',
@@ -68,7 +67,7 @@ const Events = () => {
   const classes = useStyles()
   const { app, user } = useAppContext()
   const { appLoading } = app
-  const { userId, role } = user
+  const { userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
     variables: {

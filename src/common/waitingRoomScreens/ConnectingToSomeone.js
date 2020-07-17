@@ -26,7 +26,11 @@ const ConnectingToSomeone = () => {
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>Connecting you to someone awesome!</Typography>
       <Typography className={classes.messageText}>
-        Give us a few seconds to roll out your red carpet 💃.
+        Give us a few seconds to roll out your red carpet{' '}
+        <span role="img" aria-label="woman dancing">
+          💃
+        </span>
+        .
       </Typography>
     </div>
   )

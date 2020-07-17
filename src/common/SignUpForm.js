@@ -105,7 +105,10 @@ const SignUpForm = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Glad to have you join us! 🙌
+                  Glad to have you join us!{' '}
+                  <span role="img" aria-label="hands up">
+                    🙌
+                  </span>
                 </Typography>
               </Grid>
             </Grid>

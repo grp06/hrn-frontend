@@ -109,7 +109,10 @@ const LoginForm = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Welcome 👋
+                  Welcome{' '}
+                  <span role="img" aria-label="hand wave">
+                    👋
+                  </span>
                 </Typography>
               </Grid>
             </Grid>

@@ -55,7 +55,13 @@ const ShareEventPromptModal = ({ event }) => {
         <Divider variant="middle" className={classes.divider} />
         <Grid container item direction="column">
           <div className={classes.eventPromptBody} id="eventPrompt">
-            <Typography>Hi 👋, </Typography>
+            <Typography>
+              Hi{' '}
+              <span role="img" aria-label="hand wave">
+                👋
+              </span>
+              ,{' '}
+            </Typography>
             <Typography>
               I'm hosting a speed-networking event with Hi Right Now and wanted to get you involved!
               Heres the flow of the event:
@@ -80,8 +86,11 @@ const ShareEventPromptModal = ({ event }) => {
             </List>
             <Typography>
               The time of the event and the sign up link are below. Just make sure to come back to
-              that page 5 minutes before the event so you can get settled in before the event. Can't
-              wait to see your smiling face soon 😁
+              that page 5 minutes before the event so you can get settled in before the event.
+              Can&apos;t wait to see your smiling face soon{' '}
+              <span role="img" aria-label="cheesy smiley">
+                😁
+              </span>
             </Typography>
             <br />
             <Typography>
@@ -114,7 +123,10 @@ const ShareEventPromptModal = ({ event }) => {
       {renderModalButton}
       <Snackbar open={showSnackbar} autoHideDuration={1800} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity="info">
-          Copied 💾
+          Copied{' '}
+          <span role="img" aria-label="floppy disk">
+            💾
+          </span>
         </Alert>
       </Snackbar>
     </div>
