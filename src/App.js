@@ -21,7 +21,7 @@ import {
 } from './pages'
 import { AppProvider } from './context/AppProvider'
 import Footer from './ui/Footer'
-import Header from './ui/Header'
+import Header from './ui/Header/Header'
 import theme from './ui/theme'
 
 const App = () => {

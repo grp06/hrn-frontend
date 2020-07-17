@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
+import { Typography } from '@material-ui/core'
 import { useAppContext } from '../context/useAppContext'
 import { getToken } from '../helpers'
 import { GUMErrorModal, CameraDisabledBanner } from '../common'
@@ -51,7 +52,8 @@ const PreEvent = ({ match }) => {
     if (eventSet) {
       const { status } = event
 
-      if (status !== 'pre-event') {
+      if (status !== 'pre-event' || micOrCameraIsDisabled) {
+        console.log('PreEvent -> status', status)
         return history.push(`/events/${eventId}`)
       }
     }
@@ -139,11 +141,11 @@ const PreEvent = ({ match }) => {
       const isEventHost = event.host_id === userId
       const setupRoom = async () => {
         let localTracks
-
+        console.log('event.host_id = ', event.host_id)
         if (isEventHost) {
           try {
             localTracks = await createLocalTracks({
-              video: true,
+              video: event.host_id !== 614,
               audio: process.env.NODE_ENV === 'production',
             })
           } catch (err) {
@@ -189,6 +191,11 @@ const PreEvent = ({ match }) => {
           setCameraAndMicPermissions={setCameraAndMicPermissions}
         />
       )}
+      {event.host_id === 614 ? (
+        <Typography style={{ textAlign: 'center' }} variant="h1">
+          Host will begin speaking shortly
+        </Typography>
+      ) : null}
       <div id="host-video" className={classes.hostVid} />
     </Grid>
   )

@@ -11,7 +11,7 @@ import { getMyMutualThumbsData } from '../gql/queries'
 import { FloatCardMedium, Loading, MutualThumbsList } from '../common'
 import { constants } from '../utils'
 
-const { giveFeedbackTypeform, becomeAHostTypeform } = constants
+const { giveFeedbackTypeform, becomeAHostTypeform, linkedInCommunityLink } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -91,19 +91,7 @@ const EventComplete = ({ match }) => {
       ? 'Say Hi Right Now to your new friends 👋'
       : 'Thanks for joining the event! 🎊'
 
-  const renderNextEntrepreneurEventButton = () => {
-    return eventId === '56' ? (
-      <Button variant="contained" href="https://launch.hirightnow.co/events/96" target="_blank">
-        Join our next event
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>
-      </Button>
-    ) : null
-  }
-  console.log(' event.post_event_link - ', event.post_event_link)
-
-  const renderPostEventLink = () =>
+  const renderPostEventZoomLink = () =>
     event.post_event_link && (
       <Grid item className={classes.cardBodySection}>
         <Typography className={classes.zoomLink}>
@@ -133,7 +121,7 @@ const EventComplete = ({ match }) => {
             <Grid item className={classes.cardBodySection}>
               <MutualThumbsList mutualThumbsData={mutualThumbsData} userId={userId} />
             </Grid>
-            {renderPostEventLink()}
+            {renderPostEventZoomLink()}
             <Grid item className={classes.cardBodySection}>
               <Grid container item direction="row" justify="space-around" alignItems="center">
                 <Button
@@ -158,7 +146,12 @@ const EventComplete = ({ match }) => {
                     💁‍♀️
                   </span>
                 </Button>
-                {renderNextEntrepreneurEventButton()}
+                <Button variant="contained" href={linkedInCommunityLink} target="_blank">
+                  Join our LinkedIn community
+                  <span role="img" aria-label="brief case">
+                    💼
+                  </span>
+                </Button>
               </Grid>
             </Grid>
           </Grid>

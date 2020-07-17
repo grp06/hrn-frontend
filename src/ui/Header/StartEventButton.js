@@ -1,5 +1,5 @@
-import { TransitionModal } from '.'
-import { startEvent } from '../helpers'
+import { TransitionModal } from '../../common'
+import { startEvent } from '../../helpers'
 
 const StartEventButton = ({ event, user }) => {
   const { id: eventId, round_length, num_rounds, status: eventStatus, host_id } = event
