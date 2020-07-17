@@ -55,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, permissions }) => {
   const classes = useStyles()
   const history = useHistory()
+  const [rsvpInFlight, setRSVPInFlight] = useState(false)
   const { user, setCameraAndMicPermissions } = useAppContext()
   const { userId, name, email } = user
   const {
@@ -106,9 +107,11 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   const renderRsvpButton = () => (
     <Button
       variant="contained"
+      disabled={rsvpInFlight}
       size="large"
       color="primary"
       onClick={async () => {
+        setRSVPInFlight(true)
         if (alreadyAttending) {
           try {
             await deleteEventUserMutation()
