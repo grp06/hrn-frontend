@@ -95,7 +95,12 @@ const EventComplete = ({ match }) => {
     event.post_event_link && (
       <Grid item className={classes.cardBodySection}>
         <Typography className={classes.zoomLink}>
-          <a href={event.post_event_link} target="_blank" className={classes.zoomLink}>
+          <a
+            href={event.post_event_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.zoomLink}
+          >
             Click to join everyone from the event on a video call!
           </a>
         </Typography>
@@ -129,6 +134,7 @@ const EventComplete = ({ match }) => {
                   color="primary"
                   href={giveFeedbackTypeform}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Give Feedback
                   <span role="img" aria-label="woman hand out">
@@ -140,13 +146,19 @@ const EventComplete = ({ match }) => {
                   color="secondary"
                   href={becomeAHostTypeform}
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
                   Become a Host
                   <span role="img" aria-label="woman hand out">
                     💁‍♀️
                   </span>
                 </Button>
-                <Button variant="contained" href={linkedInCommunityLink} target="_blank">
+                <Button
+                  variant="contained"
+                  href={linkedInCommunityLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Join our LinkedIn community
                   <span role="img" aria-label="brief case">
                     💼

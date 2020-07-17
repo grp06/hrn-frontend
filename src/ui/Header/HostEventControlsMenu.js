@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -32,10 +31,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HostEventControlsMenu = ({ event, user }) => {
   const classes = useStyles()
-  const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
   const anchorRef = useRef(null)
-  const { host_id, id: eventId, round_length, status: eventStatus, num_rounds } = event
+  const { host_id, id: eventId, status: eventStatus } = event
   const { userId } = user
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))

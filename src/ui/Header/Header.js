@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
-import FeatherIcon from 'feather-icons-react'
 
 import logo from '../../assets/logoWhite.svg'
 import { useAppContext } from '../../context/useAppContext'
@@ -47,8 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles()
-  const history = useHistory()
-  const { user, event, app, resetUser } = useAppContext()
+  const { user, event, resetUser } = useAppContext()
   const { role } = user
   const { status: eventStatus, current_round } = event
   const regex = /\/events\/\d+/

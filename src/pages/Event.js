@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 
 import { Typography, Grid } from '@material-ui/core'
-import ScheduleIcon from '@material-ui/icons/Schedule'
 import { makeStyles } from '@material-ui/styles'
 
 import FeatherIcon from 'feather-icons-react'
@@ -14,7 +13,6 @@ import { useGetCameraAndMicStatus } from '../hooks'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
-    background: ' rgb(25,25,25)',
     background:
       'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
     width: '100%',
@@ -34,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
   },
   eventTitle: {
     ...theme.typography.h1,
-  },
-  scheduleIcon: {
-    color: theme.palette.common.ghostWhite,
   },
   subtitle: {
     margin: theme.spacing(1),

@@ -1,5 +1,4 @@
 import { useAppContext } from '../context/useAppContext'
-import { sleep } from '../helpers'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants

@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, GUMErrorModal, CameraDisabledBanner, RoundProgressBar } from '../common'
+import { Loading, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
@@ -122,7 +122,6 @@ const VideoRoom = ({ match }) => {
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
-  const [GUMError, setGUMError] = useState('')
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
 
   const history = useHistory()
@@ -213,7 +212,6 @@ const VideoRoom = ({ match }) => {
           console.log('created local tracks at ', new Date())
         } catch (err) {
           console.log('camera wasnt enabled')
-          // setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
 
@@ -276,7 +274,6 @@ const VideoRoom = ({ match }) => {
   return eventStatus.current === latestStatus ? (
     <div>
       {isGUMErrorModalActive && (
-        // <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
         <Grid
           className={classes.cameraDisabledWrapper}
           container

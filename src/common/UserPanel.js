@@ -100,7 +100,10 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>
-      Sign Up 🚀
+      Sign Up{' '}
+      <span role="img" aria-label="rocket">
+        🚀
+      </span>
     </Button>
   )
 
