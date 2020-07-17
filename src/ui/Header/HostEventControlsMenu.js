@@ -10,9 +10,9 @@ import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
-import { TransitionModal } from '../common'
-import { deleteRounds, resetEvent } from '../gql/mutations'
-import { startEvent } from '../helpers'
+import { TransitionModal } from '../../common'
+import { deleteRounds, resetEvent } from '../../gql/mutations'
+import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   headerIcon: {

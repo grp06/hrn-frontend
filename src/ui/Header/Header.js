@@ -9,12 +9,15 @@ import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import FeatherIcon from 'feather-icons-react'
 
-import logo from '../assets/logoWhite.svg'
-import { StartEventButton } from '../common'
-import { useAppContext } from '../context/useAppContext'
-import HostEventControlsMenu from './HostEventControlsMenu'
-import HostControlsMenu from './HostControlsMenu'
-import SettingsMenu from './SettingsMenu'
+import logo from '../../assets/logoWhite.svg'
+import { useAppContext } from '../../context/useAppContext'
+import {
+  HostEventControlsMenu,
+  HostControlsMenu,
+  SettingsMenu,
+  StartEventButton,
+  HavingIssuesButton,
+} from '.'
 
 const useStyles = makeStyles((theme) => ({
   logo: {
@@ -25,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       height: '1.5em',
     },
+  },
+  userName: {
+    color: theme.palette.common.ghostWhiteBody,
   },
   grow: {
     flexGrow: 1,
@@ -71,8 +77,11 @@ const Header = () => {
     return localStorage.getItem('userId') ? (
       <Grid container justify="flex-end" alignItems="center">
         <div>
+          <HavingIssuesButton event={event} />
+        </div>
+        <div>
           <IconButton color="inherit" disableRipple disabled>
-            <Typography>{user.name}</Typography>
+            <Typography className={classes.userName}>{user.name}</Typography>
           </IconButton>
           {/* <IconButton color="inherit" disableRipple>
         <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
