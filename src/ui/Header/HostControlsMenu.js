@@ -9,7 +9,6 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { makeStyles } from '@material-ui/styles'
-import { TransitionModal } from '../common'
 
 const useStyles = makeStyles((theme) => ({
   headerIcon: {
@@ -27,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SettingsMenu = ({ resetUser }) => {
+const SettingsMenu = () => {
   const classes = useStyles()
   const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -44,33 +43,26 @@ const SettingsMenu = ({ resetUser }) => {
     setMenuOpen(false)
   }
 
+  const handleHostEvent = () => {
+    history.push('/create-event')
+    setMenuOpen(false)
+  }
+
+  const handleMyAnalytics = () => {
+    history.push('/host-dashboard')
+    setMenuOpen(false)
+  }
+
   const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault()
       setMenuOpen(false)
     }
   }
-
-  const handleLogout = () => {
-    localStorage.clear()
-    resetUser()
-    setMenuOpen(false)
-    history.push('/')
-  }
-
-  const myProfileClick = () => {
-    history.push('/my-profile')
-  }
-
-  const logoutClick = () => {
-    handleLogout()
-    setMenuOpen(false)
-  }
-
   return (
     <div>
       <IconButton color="inherit" onClick={handleMenuOpen} ref={anchorRef} disableRipple>
-        <FeatherIcon icon="settings" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
+        <FeatherIcon icon="menu" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
       </IconButton>
       <Popper
         open={menuOpen}
@@ -93,12 +85,13 @@ const SettingsMenu = ({ resetUser }) => {
                   autoFocusItem={menuOpen}
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
+                  // MenuListProps={{ onMouseLeave: handleMenuClose }}
                 >
-                  <MenuItem onClick={myProfileClick} className={classes.menuItem}>
-                    My Profile
+                  <MenuItem onClick={handleHostEvent} className={classes.menuItem}>
+                    Host an Event
                   </MenuItem>
-                  <MenuItem onClick={logoutClick} className={classes.menuItem}>
-                    Log Out
+                  <MenuItem onClick={handleMyAnalytics} className={classes.menuItem}>
+                    My Analytics
                   </MenuItem>
                 </MenuList>
               </ClickAwayListener>

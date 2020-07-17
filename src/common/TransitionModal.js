@@ -54,7 +54,7 @@ function TransitionModal({
   hideNoWay,
 }) {
   const classes = useStyles()
-  const { buttonText, buttonVariant, buttonColor, buttonSize } = button
+  const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button
   const [open, setOpen] = useState(false)
 
   const handleOpen = () => {
@@ -76,6 +76,7 @@ function TransitionModal({
         variant={buttonVariant || 'contained'}
         color={buttonColor || 'primary'}
         onClick={handleOpen}
+        style={buttonStyle}
       >
         {buttonText}
       </Button>
