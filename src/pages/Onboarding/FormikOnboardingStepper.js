@@ -9,6 +9,9 @@ import Step from '@material-ui/core/Step'
 import StepLabel from '@material-ui/core/StepLabel'
 
 const useStyles = makeStyles((theme) => ({
+  formContainer: {
+    padding: '25px',
+  },
   backResetButton: {
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
@@ -42,7 +45,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
       }}
     >
       {({ isSubmitting }) => (
-        <Form autoComplete="off">
+        <Form autoComplete="off" className={classes.formContainer}>
           <Stepper alternativeLabel activeStep={step}>
             {stepArray.map((child, index) => (
               <Step key={child.props.label} completed={step > index || completed}>
@@ -51,7 +54,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
             ))}
           </Stepper>
           {currentStep}
-          <Grid container spacing={2}>
+          <Grid container spacing={2} justify="center" alignItems="center">
             {step > 0 ? (
               <Grid item>
                 <Button

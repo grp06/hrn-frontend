@@ -11,8 +11,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    paddingLeft: '20px',
-    paddingRight: '20px',
+    padding: '0px 20px',
   },
   gridItemContainer: {
     marginBottom: '20px',
