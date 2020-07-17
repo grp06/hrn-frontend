@@ -43,6 +43,7 @@ const HavingIssuesButton = ({ event }) => {
         ),
         onAcceptButtonText: 'Sounds Good!',
         onAcceptFunction: async () => {},
+        hideNoWay: true,
       })
     : null
 }

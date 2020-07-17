@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
@@ -56,7 +56,7 @@ function TransitionModal({
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button
   const [open, setOpen] = useState(false)
-
+  const acceptButtonRef = useRef()
   const handleOpen = () => {
     setOpen(true)
   }
@@ -114,8 +114,10 @@ function TransitionModal({
               >
                 <Button
                   variant="contained"
+                  ref={acceptButtonRef}
                   color="primary"
                   onClick={() => {
+                    acceptButtonRef.current.setAttribute('disabled', 'disabled')
                     onAcceptFunction()
                     handleClose()
                   }}
