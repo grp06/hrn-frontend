@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
-import { sleep } from '../helpers'
 
 const useTwilio = () => {
   const {

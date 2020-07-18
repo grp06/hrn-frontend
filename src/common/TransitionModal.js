@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
@@ -17,14 +17,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     border: '2px solid #6638aa',
     boxShadow: '4px 4px 0 #6638aa',
-    // border: '2px solid #3e4042',
-    // boxShadow: '5px 5px 0 #3e4042',
-    // boxShadow: theme.palette.common.greyBoxShadow,
-    // padding: theme.spacing(2, 4, 3),
     width: '55vw',
     minWidth: '20vw',
     height: 'auto',
     padding: '40px',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   modalBody: {
     ...theme.typography.modalBody,
@@ -35,8 +34,15 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     width: '50%',
+    [theme.breakpoints.down('md')]: {
+      width: '80%',
+    },
+  },
+  acceptButton: {
+    margin: theme.spacing(1.5, 0),
   },
   cancelButton: {
+    margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
@@ -56,7 +62,7 @@ function TransitionModal({
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button
   const [open, setOpen] = useState(false)
-  const acceptButtonRef = useRef()
+  const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
   const handleOpen = () => {
     setOpen(true)
   }
@@ -100,7 +106,7 @@ function TransitionModal({
             alignItems="center"
             className={classes.paper}
           >
-            <Grid item justify="center" className={classes.modalBody}>
+            <Grid container justify="center" className={classes.modalBody}>
               {modalBody}
             </Grid>
             {onAcceptFunction && (
@@ -110,14 +116,17 @@ function TransitionModal({
                 direction="row"
                 justify="space-around"
                 alignItems="center"
+                wrap
                 className={classes.buttonContainer}
               >
                 <Button
                   variant="contained"
-                  ref={acceptButtonRef}
+                  disabled={acceptFunctionInFlight}
                   color="primary"
+                  className={classes.acceptButton}
                   onClick={() => {
-                    acceptButtonRef.current.setAttribute('disabled', 'disabled')
+                    setAcceptFunctionInFlight(true)
+                    // acceptButtonRef.current.setAttribute('disabled', 'disabled')
                     onAcceptFunction()
                     handleClose()
                   }}

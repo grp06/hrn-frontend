@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -93,9 +93,9 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem onClick={myProfileClick} className={classes.menuItem}>
+                  {/* <MenuItem onClick={myProfileClick} className={classes.menuItem}>
                     My Profile
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={logoutClick} className={classes.menuItem}>
                     Log Out
                   </MenuItem>

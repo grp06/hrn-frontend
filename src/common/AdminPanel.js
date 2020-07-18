@@ -2,7 +2,6 @@ import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider'
 import { makeStyles } from '@material-ui/styles'
 
 import {
@@ -22,36 +21,21 @@ import { useAppContext } from '../context/useAppContext'
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
     width: '100%',
-    paddingTop: '40px',
-    paddingBottom: '40px',
+    padding: theme.spacing(5, 0),
     borderStyle: 'none none solid',
     borderWidth: '1px',
     borderColor: theme.palette.common.greyBorder,
     borderRadius: '4px 4px 0px 0px',
     backgroundColor: theme.palette.common.greyHighlight,
-    // backgroundColor: '#3a3b3c',
-  },
-  categoryHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-  },
-  sectionHeader: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
-  },
-  displayNumber: {
-    fontFamily: 'Muli',
-    color: theme.palette.common.orchid,
-    fontSize: '4.5rem',
   },
   partyEmoji: {
-    marginLeft: 10,
+    marginLeft: theme.spacing(1),
   },
   cardBodyContainer: {
-    padding: '50px',
+    padding: theme.spacing(6),
   },
   descriptionContainer: {
-    marginBottom: '25px',
+    marginBottom: theme.spacing(3),
   },
   adminButtons: {
     height: 160,
@@ -78,11 +62,18 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
     modalBody: <EventForm eventData={eventData} />,
     button: {
       buttonSize: 'medium',
-      buttonText: '✏️ Edit Event',
+      buttonText: 'Edit Event ✍️',
     },
   })
 
   const copyEventPromptModal = <ShareEventPromptModal event={eventData} />
+  const renderOnlineUsers = () => {
+    return timeState === 'go time' || timeState === 'within 30 mins' ? (
+      <Grid container item md={6} xs={12} direction="column">
+        <AttendeesList eventId={eventId} timeState={timeState} />
+      </Grid>
+    ) : null
+  }
 
   const renderButton = () => {
     let element
@@ -163,7 +154,6 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
 
       <FloatCardLarge>
         <Grid
-          item
           container
           justify="space-around"
           alignItems="center"
@@ -179,8 +169,8 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
             justify="center"
             alignItems="center"
           >
-            <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-            <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+            <Typography variant="h5">Participants Signed Up</Typography>
+            <Typography variant="h2">{event_users.length}</Typography>
           </Grid>
           <Grid
             container
@@ -196,29 +186,22 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
         </Grid>
         <Grid
           container
-          item
-          direction="column"
+          direction="row"
           justify="space-around"
           alignItems="flex-start"
           className={classes.cardBodyContainer}
         >
-          {timeState === 'go time' || timeState === 'within 30 mins' ? (
-            <Grid
-              container
-              item
-              direction="row"
-              wrap="nowrap"
-              justify="space-between"
-              alignItems="center"
-            >
-              <ListOfRSVPs />
-              <AttendeesList eventId={eventId} timeState={timeState} />
-            </Grid>
-          ) : (
-            <Grid>
-              <ListOfRSVPs />
-            </Grid>
-          )}
+          <Grid
+            container
+            item
+            md={6}
+            xs={12}
+            direction="column"
+            className={classes.descriptionContainer}
+          >
+            <ListOfRSVPs />
+          </Grid>
+          {renderOnlineUsers()}
         </Grid>
       </FloatCardLarge>
     </>

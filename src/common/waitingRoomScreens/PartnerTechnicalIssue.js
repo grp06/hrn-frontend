@@ -28,7 +28,10 @@ const PartnerTechnicalIssue = () => {
         It seems that your partner is having some technical issues.
       </Typography>
       <Typography className={classes.messageText}>
-        Unfortunately you two will have to sit out this round. Sorry for disappointing 😔
+        Unfortunately you two will have to sit out this round. Sorry for disappointing{' '}
+        <span role="img" aria-label="dissapointed face">
+          😔
+        </span>
       </Typography>
     </div>
   )

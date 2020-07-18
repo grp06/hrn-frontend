@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -8,6 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
 import { TransitionModal } from '../../common'
@@ -32,10 +32,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HostEventControlsMenu = ({ event, user }) => {
   const classes = useStyles()
-  const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
   const anchorRef = useRef(null)
-  const { host_id, id: eventId, round_length, status: eventStatus, num_rounds } = event
+  const { host_id, id: eventId, status: eventStatus } = event
   const { userId } = user
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
@@ -76,7 +75,11 @@ const HostEventControlsMenu = ({ event, user }) => {
       buttonVariant: 'text',
       buttonColor: 'default',
     },
-    modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
+    modalBody: (
+      <Typography variant="h5">
+        This will reset the event in its entirety. Are you 100% sure?
+      </Typography>
+    ),
     onAcceptFunction: async () => {
       await deleteRoundsMutation(eventId)
       await resetEventMutation(eventId)

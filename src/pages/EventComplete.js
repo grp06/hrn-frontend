@@ -19,8 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
   topDashboard: {
     width: '100%',
-    paddingTop: '40px',
-    paddingBottom: '40px',
+    padding: theme.spacing(5),
     borderStyle: 'none none solid',
     borderWidth: '1px',
     borderColor: theme.palette.common.greyBorder,
@@ -29,30 +28,25 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: '#3a3b3c',
   },
   categoryHeader: {
-    ...theme.typography.h1,
-    color: theme.palette.common.ghostWhite,
     textAlign: 'center',
-  },
-  sectionHeader: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
   },
   cardBodyContainer: {
     padding: '50px',
   },
   cardBodySection: {
-    marginBottom: '25px',
+    marginBottom: theme.spacing(3),
   },
   zoomLink: {
-    ...theme.typography.h3,
     color: theme.palette.common.ghostWhite,
     width: '60%',
     textAlign: 'center',
-    margin: '0 auto',
-    marginBottom: '25',
+    margin: theme.spacing(0, 'auto', 3, 'auto'),
     '&:hover': {
       color: theme.palette.common.orchid,
     },
+  },
+  button: {
+    margin: theme.spacing(1.5, 0),
   },
 }))
 
@@ -94,8 +88,13 @@ const EventComplete = ({ match }) => {
   const renderPostEventZoomLink = () =>
     event.post_event_link && (
       <Grid item className={classes.cardBodySection}>
-        <Typography className={classes.zoomLink}>
-          <a href={event.post_event_link} target="_blank" className={classes.zoomLink}>
+        <Typography variant="h5">
+          <a
+            href={event.post_event_link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={classes.zoomLink}
+          >
             Click to join everyone from the event on a video call!
           </a>
         </Typography>
@@ -107,7 +106,9 @@ const EventComplete = ({ match }) => {
       <FloatCardMedium>
         <Grid item container justify="center" alignItems="center" className={classes.topDashboard}>
           <div style={{ width: '80%' }}>
-            <Typography className={classes.categoryHeader}>{cardHeading}</Typography>
+            <Typography variant="h4" className={classes.categoryHeader}>
+              {cardHeading}
+            </Typography>
           </div>
         </Grid>
         <Grid
@@ -129,6 +130,8 @@ const EventComplete = ({ match }) => {
                   color="primary"
                   href={giveFeedbackTypeform}
                   target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
                 >
                   Give Feedback
                   <span role="img" aria-label="woman hand out">
@@ -140,13 +143,21 @@ const EventComplete = ({ match }) => {
                   color="secondary"
                   href={becomeAHostTypeform}
                   target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
                 >
                   Become a Host
                   <span role="img" aria-label="woman hand out">
                     💁‍♀️
                   </span>
                 </Button>
-                <Button variant="contained" href={linkedInCommunityLink} target="_blank">
+                <Button
+                  variant="contained"
+                  href={linkedInCommunityLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
+                >
                   Join our LinkedIn community
                   <span role="img" aria-label="brief case">
                     💼

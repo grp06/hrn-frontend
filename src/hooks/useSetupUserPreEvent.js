@@ -2,7 +2,7 @@ import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 
 const useSetupUserPreEvent = () => {
-  const { user, event } = useAppContext()
+  const { event } = useAppContext()
   const { participantConnected } = useParticipantConnected()
   const setupUserPreEvent = (room) => {
     // nothing to loop over for the host

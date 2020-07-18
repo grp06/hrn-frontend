@@ -21,17 +21,26 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   thumbsUpContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto'),
     width: '70%',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   buttonContainer: {
     width: '35%',
+    [theme.breakpoints.down('md')]: {
+      width: '70%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
+  thumbingButton: {
+    margin: theme.spacing(1.5, 0),
+  },
   noThanksButton: {
+    margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
@@ -123,8 +132,16 @@ const ThumbsUp = ({ myRound, userId }) => {
               alignItems="center"
               className={classes.buttonContainer}
             >
-              <Button variant="contained" color="primary" onClick={handleThumbUpClick}>
-                Connect Us 👍
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleThumbUpClick}
+                className={classes.thumbingButton}
+              >
+                Connect Us{' '}
+                <span role="img" aria-label="thumbs up">
+                  👍
+                </span>
               </Button>
               <Button
                 variant="contained"
@@ -132,7 +149,10 @@ const ThumbsUp = ({ myRound, userId }) => {
                 className={classes.noThanksButton}
                 onClick={handlePassOnThumbingClick}
               >
-                No Thanks 😇
+                No Thanks{' '}
+                <span role="img" aria-label="halo smiley">
+                  😇
+                </span>
               </Button>
             </Grid>
           </>
@@ -145,12 +165,19 @@ const ThumbsUp = ({ myRound, userId }) => {
                   Connecting you to a new friend soon!
                 </Typography>
                 <div className={classes.emoji}>
-                  <span>🥳</span>
+                  <span role="img" aria-label="party smiley">
+                    🥳
+                  </span>
                 </div>
               </>
             ) : (
               <>
-                <Typography className={classes.messageText}>Sorry to Hear! 😔</Typography>
+                <Typography className={classes.messageText}>
+                  Sorry to Hear!{' '}
+                  <span role="img" aria-label="dissapointed face">
+                    😔
+                  </span>
+                </Typography>
                 <Typography className={classes.messageText}>
                   This next person is going to be great!
                 </Typography>
@@ -159,7 +186,10 @@ const ThumbsUp = ({ myRound, userId }) => {
 
             <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
               <Alert onClose={handleSnackbarClose} severity="success">
-                Carrier pigeon sent 🕊
+                Carrier pigeon sent{' '}
+                <span role="img" aria-label="dove">
+                  🕊
+                </span>
               </Alert>
             </Snackbar>
           </>

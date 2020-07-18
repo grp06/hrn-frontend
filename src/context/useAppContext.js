@@ -37,12 +37,6 @@ const useAppContext = () => {
     })
   }
 
-  function setUserUpdatedAt(updatedAt) {
-    dispatch((draft) => {
-      draft.user.updatedAt = updatedAt
-    })
-  }
-
   function setEventId(eventId) {
     dispatch((draft) => {
       draft.event.eventId = eventId

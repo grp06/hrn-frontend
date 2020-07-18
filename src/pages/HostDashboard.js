@@ -20,18 +20,14 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: '25px',
   },
   sectionHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-    marginBottom: '25px',
+    marginBottom: theme.spacing(3),
   },
   noEventsContainer: {
     marginTop: '150px',
   },
   noEventsMessage: {
-    ...theme.typography.h2,
     textAlign: 'center',
-    paddingTop: '20px',
-    paddingBottom: '10px',
+    padding: theme.spacing(2, 0, 1, 0),
   },
 }))
 
@@ -102,10 +98,10 @@ const HostDashboard = () => {
     return (
       <div className={classes.noEventsContainer}>
         <FloatCardLarge>
-          <Typography className={classes.noEventsMessage}>
+          <Typography variant="h4" className={classes.noEventsMessage}>
             Once you host some events we&rsquo;ll show you some data!
           </Typography>
-          <Typography className={classes.noEventsMessage}>
+          <Typography variant="h4" className={classes.noEventsMessage}>
             Come back when you have created and finished an event!
           </Typography>
         </FloatCardLarge>
@@ -117,11 +113,15 @@ const HostDashboard = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <Typography className={classes.sectionHeader}>Your Progress as a Host:</Typography>
+      <Typography variant="h4" className={classes.sectionHeader}>
+        Your Progress as a Host:
+      </Typography>
       <FloatCardXLarge>
         <HostMetricsSnapshot totalMetrics={totalMetrics} />
       </FloatCardXLarge>
-      <Typography className={classes.sectionHeader}>Your Past Events:</Typography>
+      <Typography variant="h4" className={classes.sectionHeader}>
+        Your Past Events:
+      </Typography>
       <FloatCardLarge>
         <HostEventsExpansionPanel eventsAndRoundsData={eventsAndRoundsData} />
       </FloatCardLarge>

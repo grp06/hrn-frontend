@@ -6,8 +6,9 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   totalSnapshotGrid: {
+    padding: theme.spacing(5),
     width: '100%',
-    height: '520px',
+    height: '575px',
     [theme.breakpoints.down('md')]: {
       height: 'auto',
     },
@@ -20,11 +21,10 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   totalMetricsContainer: {
-    height: '90%',
+    height: '100%',
     [theme.breakpoints.down('md')]: {
       display: 'flex',
       flexDirection: 'row',
-      marginBottom: '15px',
     },
   },
   metricContainer: {
@@ -36,20 +36,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   metricHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
     marginBottom: 0,
     textAlign: 'center',
     [theme.breakpoints.down('md')]: {
       width: '70%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
+      margin: theme.spacing(0, 'auto'),
     },
   },
   metricNumber: {
-    fontFamily: 'Muli',
     color: theme.palette.common.ghostWhite,
-    fontSize: '4.5rem',
     textAlign: 'center',
   },
   purpleText: {
@@ -87,28 +82,34 @@ const HostMetricsSnapshot = ({ totalMetrics }) => {
         item
         direction="column"
         alignItems="center"
-        justify="space-around"
+        justify="space-between"
         className={classes.totalMetricsContainer}
         lg={3}
         md={12}
       >
         <Grid item className={classes.metricContainer}>
-          <Typography className={`${classes.metricHeader} ${classes.purpleText}`}>
+          <Typography variant="h5" className={`${classes.metricHeader} ${classes.purpleText}`}>
             Total Participants RSVPed
           </Typography>
-          <Typography className={classes.metricNumber}>{allTimeRSVPed}</Typography>
+          <Typography variant="h2" className={classes.metricNumber}>
+            {allTimeRSVPed}
+          </Typography>
         </Grid>
         <Grid item className={classes.metricContainer}>
-          <Typography className={`${classes.metricHeader} ${classes.pinkText}`}>
+          <Typography variant="h5" className={`${classes.metricHeader} ${classes.pinkText}`}>
             Total Connections Fostered
           </Typography>
-          <Typography className={classes.metricNumber}>{allTimeMutualThumbs}</Typography>
+          <Typography variant="h2" className={classes.metricNumber}>
+            {allTimeMutualThumbs}
+          </Typography>
         </Grid>
         <Grid item className={classes.metricContainer}>
-          <Typography className={`${classes.metricHeader} ${classes.yellowText}`}>
+          <Typography variant="h5" className={`${classes.metricHeader} ${classes.yellowText}`}>
             Avg. Connections per Event
           </Typography>
-          <Typography className={classes.metricNumber}>{avgThumbsPerEvent}</Typography>
+          <Typography variant="h2" className={classes.metricNumber}>
+            {avgThumbsPerEvent}
+          </Typography>
         </Grid>
       </Grid>
     </Grid>

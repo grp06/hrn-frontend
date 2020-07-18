@@ -16,9 +16,15 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px 4px 0px 0px',
     backgroundColor: theme.palette.common.greyHighlight,
   },
-  categoryHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
+  typographyContainer: {
+    marginBottom: theme.spacing(3),
+  },
+  centerText: {
+    textAlign: 'center',
+  },
+  emoji: {
+    marginLeft: theme.spacing(1),
+    fontSize: '40px',
   },
 }))
 
@@ -29,21 +35,17 @@ const CameraDisabledBanner = ({ setCameraAndMicPermissions, admin, permissions }
     <FloatCardLarge id="crikey">
       <Grid item container justify="center" alignItems="center" className={classes.topDashboard}>
         <Grid container item md={6} xs={12} direction="column" justify="center" alignItems="center">
-          <div className={classes.categoryHeader}>
-            <Typography variant="h2" style={{ textAlign: 'center', display: 'block' }}>
+          <div className={classes.typographyContainer}>
+            <Typography variant="h5" className={classes.centerText}>
               Crikey
-              <span
-                style={{ marginLeft: 10, fontSize: 40 }}
-                role="img"
-                aria-label="woozy face emoji"
-              >
+              <span className={classes.emoji} role="img" aria-label="woozy face emoji">
                 🥴
               </span>
             </Typography>
-            <Typography style={{ textAlign: 'center' }} variant="h2">
+            <Typography variant="h5" className={classes.centerText}>
               Your Camera is off
             </Typography>
-            <Typography style={{ textAlign: 'center' }} variant="h2">
+            <Typography variant="h5" className={classes.centerText}>
               It must be enabled to {admin ? 'start' : 'participate in'} the event
             </Typography>
           </div>

@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { Typography } from '@material-ui/core'
 import { useAppContext } from '../context/useAppContext'
 import { getToken } from '../helpers'
-import { GUMErrorModal, CameraDisabledBanner } from '../common'
+import { CameraDisabledBanner } from '../common'
 import { usePreEventTwilio, useGetCameraAndMicStatus } from '../hooks'
 import { constants } from '../utils'
 
@@ -191,11 +191,6 @@ const PreEvent = ({ match }) => {
           setCameraAndMicPermissions={setCameraAndMicPermissions}
         />
       )}
-      {event.host_id === 614 ? (
-        <Typography style={{ textAlign: 'center' }} variant="h1">
-          Host will begin speaking shortly
-        </Typography>
-      ) : null}
       <div id="host-video" className={classes.hostVid} />
     </Grid>
   )

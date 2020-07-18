@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 500,
   },
   bannerGradient: {
-    background: ' rgb(25,25,25)',
     background:
       'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
     width: '100%',
@@ -40,26 +39,17 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     textAlign: 'center',
   },
-  pageHeader: {
-    ...theme.typography.h1,
-    fontSize: '3rem',
-  },
   scheduleIcon: {
     color: theme.palette.common.ghostWhite,
   },
-  subtitle: {
-    fontSize: '1.2rem',
-  },
   nullDataContainer: {
-    padding: '50px',
+    padding: theme.spacing(5),
   },
   nullDataHeader: {
-    ...theme.typography.h1,
-    marginBottom: '30px',
+    marginBottom: theme.spacing(4),
     textAlign: 'center',
   },
   nullDataSub: {
-    ...theme.typography.h2,
     textAlign: 'center',
   },
 }))
@@ -68,7 +58,7 @@ const Events = () => {
   const classes = useStyles()
   const { app, user } = useAppContext()
   const { appLoading } = app
-  const { userId, role } = user
+  const { userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
     variables: {
@@ -97,10 +87,10 @@ const Events = () => {
               alignItems="center"
               className={classes.nullDataContainer}
             >
-              <Typography className={classes.nullDataHeader}>
+              <Typography variant="h4" className={classes.nullDataHeader}>
                 Sorry, we are currently only hosting invite-only events
               </Typography>
-              <Typography className={classes.nullDataSub}>
+              <Typography variant="h5" className={classes.nullDataSub}>
                 But no worries! If you know someone who is hosting an event they can give you the
                 shareable link!
               </Typography>
@@ -122,8 +112,8 @@ const Events = () => {
           className={classes.bannerGradient}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography className={classes.pageHeader}>Find a community for you</Typography>
-            <Typography className={classes.subtitle} variant="subtitle1">
+            <Typography variant="h3">Find a community for you</Typography>
+            <Typography variant="h6">
               Scroll through our events and start video-chatting with awesome people.
             </Typography>
           </Grid>
