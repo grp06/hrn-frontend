@@ -37,11 +37,10 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: theme.palette.common.ghostWhiteBody,
-    marginTop: '4px',
-    marginBottom: '4px',
+    margin: theme.spacing(0.5, 0),
   },
   subtitle: {
-    marginLeft: '5px',
+    marginLeft: theme.spacing(0.5),
     color: theme.palette.common.orchid,
     fontWeight: '500',
   },
@@ -88,12 +87,6 @@ const EventCard = ({ event }) => {
               {eventTime}
             </Typography>
           </Grid>
-          {/* <Grid item container direction="row" alignItems="center">
-            <PeopleIcon className={classes.icon} />
-            <Typography className={classes.subtitle} variant="subtitle1">
-              3 people attending
-            </Typography>
-          </Grid> */}
         </Grid>
       </Grid>
     </FloatCardLarge>

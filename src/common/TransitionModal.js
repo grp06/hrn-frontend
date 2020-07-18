@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: '20vw',
     height: 'auto',
     padding: '40px',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   modalBody: {
     ...theme.typography.modalBody,
@@ -31,8 +34,15 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     width: '50%',
+    [theme.breakpoints.down('md')]: {
+      width: '80%',
+    },
+  },
+  acceptButton: {
+    margin: theme.spacing(1.5, 0),
   },
   cancelButton: {
+    margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
@@ -106,12 +116,14 @@ function TransitionModal({
                 direction="row"
                 justify="space-around"
                 alignItems="center"
+                wrap
                 className={classes.buttonContainer}
               >
                 <Button
                   variant="contained"
                   disabled={acceptFunctionInFlight}
                   color="primary"
+                  className={classes.acceptButton}
                   onClick={() => {
                     setAcceptFunctionInFlight(true)
                     // acceptButtonRef.current.setAttribute('disabled', 'disabled')

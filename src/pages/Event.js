@@ -30,12 +30,12 @@ const useStyles = makeStyles((theme) => ({
   eventBannerContentContainer: {
     marginLeft: '30px',
   },
-  eventTitle: {
-    ...theme.typography.h1,
-  },
   subtitle: {
     margin: theme.spacing(1),
     width: '50%',
+    [theme.breakpoints.down('sm')]: {
+      width: '80%',
+    },
   },
 }))
 
@@ -103,16 +103,24 @@ const Event = ({ match }) => {
     <>
       <div className={classes.eventBanner}>
         <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
-          <Grid item container direction="column" className={classes.eventBannerContentContainer}>
-            <Typography className={classes.eventTitle}>{event_name}</Typography>
+          <Grid
+            item
+            container
+            direction="column"
+            justify="flex-end"
+            md={9}
+            xs={12}
+            className={classes.eventBannerContentContainer}
+          >
+            <Typography variant="h3">{event_name}</Typography>
             <Grid item container direction="row" alignItems="center">
               <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
-              <Typography className={classes.subtitle} variant="subtitle1">
+              <Typography variant="subtitle1" className={classes.subtitle}>
                 {formatDate(startTime)}
               </Typography>
             </Grid>
             <Grid item container direction="row" alignItems="center">
-              <Typography className={classes.subtitle} variant="subtitle1">
+              <Typography variant="subtitle1" className={classes.subtitle}>
                 {description}
               </Typography>
             </Grid>

@@ -13,9 +13,7 @@ import { TransitionModal } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventPromptHeader: {
-    ...theme.typography.h2,
     textAlign: 'center',
-    color: theme.palette.common.ghostWhite,
   },
   divider: {
     width: '25%',
@@ -47,7 +45,7 @@ const ShareEventPromptModal = ({ event }) => {
     modalBody: (
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <Typography className={classes.eventPromptHeader}>
+          <Typography variant="h5" className={classes.eventPromptHeader}>
             We&apos;ve curated a message for you to easily share your event with your friends and
             community!
           </Typography>
@@ -55,36 +53,36 @@ const ShareEventPromptModal = ({ event }) => {
         <Divider variant="middle" className={classes.divider} />
         <Grid container item direction="column">
           <div className={classes.eventPromptBody} id="eventPrompt">
-            <Typography>
+            <Typography variant="body1">
               Hi{' '}
               <span role="img" aria-label="hand wave">
                 👋
               </span>
               ,{' '}
             </Typography>
-            <Typography>
+            <Typography variant="body1">
               I'm hosting a speed-networking event with Hi Right Now and wanted to get you involved!
               Heres the flow of the event:
             </Typography>
             <List dense>
               <ListItem key={1}>
-                <Typography>
+                <Typography variant="body1">
                   1. You will get paired with one other event participant randomly.
                 </Typography>
               </ListItem>
               <ListItem key={2}>
-                <Typography>2. You two will video-chat for 5 minutes.</Typography>
+                <Typography variant="body1">2. You two will video-chat for 5 minutes.</Typography>
               </ListItem>
               <ListItem key={3}>
-                <Typography>
+                <Typography variant="body1">
                   3. Decide if you want to exchange contact details with your partner.
                 </Typography>
               </ListItem>
               <ListItem key={4}>
-                <Typography>4. Rinse and repeat for an hour!</Typography>
+                <Typography variant="body1">4. Rinse and repeat for an hour!</Typography>
               </ListItem>
             </List>
-            <Typography>
+            <Typography variant="body1">
               The time of the event and the sign up link are below. Just make sure to come back to
               that page 5 minutes before the event so you can get settled in before the event.
               Can&apos;t wait to see your smiling face soon{' '}
@@ -93,11 +91,11 @@ const ShareEventPromptModal = ({ event }) => {
               </span>
             </Typography>
             <br />
-            <Typography>
+            <Typography variant="body1">
               Sign Up: https://launch.hirightnow.co/events/
               {id}
             </Typography>
-            <Typography>
+            <Typography variant="body1">
               Event Time:
               {eventStartTime}
             </Typography>
@@ -106,7 +104,7 @@ const ShareEventPromptModal = ({ event }) => {
       </Grid>
     ),
     button: {
-      buttonText: '🌏 Invite Friends',
+      buttonText: 'Invite Friends 🌏',
       buttonColor: 'secondary',
       buttonSize: 'medium',
     },

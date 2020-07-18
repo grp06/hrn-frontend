@@ -22,11 +22,11 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     height: '2.85em',
     [theme.breakpoints.down('md')]: {
-      height: '2em',
+      height: '2.5em',
     },
-    [theme.breakpoints.down('xs')]: {
-      height: '1.5em',
-    },
+    // [theme.breakpoints.down('xs')]: {
+    //   height: '2.5em',
+    // },
   },
   userName: {
     color: theme.palette.common.ghostWhiteBody,
@@ -69,7 +69,7 @@ const Header = () => {
       default:
         textToShow = `Round ${current_round} of ${num_rounds}`
     }
-    return <Typography>{textToShow}</Typography>
+    return <Typography variant="subtitle1">{textToShow}</Typography>
   }
   const renderHeaderElements = () => {
     return localStorage.getItem('userId') ? (

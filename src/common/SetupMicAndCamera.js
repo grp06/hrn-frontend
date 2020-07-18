@@ -93,11 +93,11 @@ const SetupMicAndCamera = () => {
       return (
         <div className={classes.cameraBlocked}>
           <Grid container justify="center" direction="column" className={classes.blockedText}>
-            <Typography>Your camera or mic is blocked</Typography>
-            <Typography>
+            <Typography variant="h5">Your camera or mic is blocked</Typography>
+            <Typography variant="h5">
               To unblock - click the &quot;camera blocked&quot; icon in the address bar
             </Typography>
-            <Typography>Allow access, then refresh the page</Typography>
+            <Typography variant="h5">Allow access, then refresh the page</Typography>
           </Grid>
         </div>
       )
@@ -114,7 +114,7 @@ const SetupMicAndCamera = () => {
     return (
       !permissionNotYetAllowed &&
       !permissionDenied && (
-        <Typography className={classes.animatedItem} variant="h2">
+        <Typography variant="h4" className={classes.animatedItem}>
           Damn
           <span
             style={{ margin: '0px 10px', fontSize: 40 }}

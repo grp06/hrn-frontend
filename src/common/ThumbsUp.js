@@ -21,17 +21,26 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   thumbsUpContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto'),
     width: '70%',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   buttonContainer: {
     width: '35%',
+    [theme.breakpoints.down('md')]: {
+      width: '70%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
+  thumbingButton: {
+    margin: theme.spacing(1.5, 0),
+  },
   noThanksButton: {
+    margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
@@ -123,7 +132,12 @@ const ThumbsUp = ({ myRound, userId }) => {
               alignItems="center"
               className={classes.buttonContainer}
             >
-              <Button variant="contained" color="primary" onClick={handleThumbUpClick}>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleThumbUpClick}
+                className={classes.thumbingButton}
+              >
                 Connect Us{' '}
                 <span role="img" aria-label="thumbs up">
                   👍

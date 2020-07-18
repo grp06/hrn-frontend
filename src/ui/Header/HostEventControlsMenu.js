@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
 import { TransitionModal } from '../../common'
@@ -74,7 +75,11 @@ const HostEventControlsMenu = ({ event, user }) => {
       buttonVariant: 'text',
       buttonColor: 'default',
     },
-    modalBody: 'This will reset the event in its entirety. Are you 100% sure?',
+    modalBody: (
+      <Typography variant="h5">
+        This will reset the event in its entirety. Are you 100% sure?
+      </Typography>
+    ),
     onAcceptFunction: async () => {
       await deleteRoundsMutation(eventId)
       await resetEventMutation(eventId)

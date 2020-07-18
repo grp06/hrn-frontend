@@ -24,17 +24,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px 4px 0px 0px',
     backgroundColor: theme.palette.common.greyHighlight,
   },
-  categoryHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-  },
-  displayNumber: {
-    fontFamily: 'Muli',
-    color: theme.palette.common.orchid,
-    fontSize: '4.5rem',
-  },
   partyEmoji: {
-    marginLeft: 10,
+    marginLeft: theme.spacing(1),
   },
   root: {
     width: '100%',
@@ -201,9 +192,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             justify="center"
             alignItems="center"
           >
-            <Typography className={classes.categoryHeader}>
-              The host will begin the event shortly
-            </Typography>
+            <Typography variant="h5">The host will begin the event shortly</Typography>
           </Grid>
           <div className={classes.root}>
             <LinearProgress />
@@ -253,8 +242,8 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
               justify="center"
               alignItems="center"
             >
-              <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-              <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+              <Typography variant="h5">Participants Signed Up</Typography>
+              <Typography variant="h2">{event_users.length}</Typography>
             </Grid>
           )}
           <Grid
