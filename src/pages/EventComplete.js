@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.orchid,
     },
   },
+  button: {
+    margin: theme.spacing(1.5, 0),
+  },
 }))
 
 const EventComplete = ({ match }) => {
@@ -128,6 +131,7 @@ const EventComplete = ({ match }) => {
                   href={giveFeedbackTypeform}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={classes.button}
                 >
                   Give Feedback
                   <span role="img" aria-label="woman hand out">
@@ -140,6 +144,7 @@ const EventComplete = ({ match }) => {
                   href={becomeAHostTypeform}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={classes.button}
                 >
                   Become a Host
                   <span role="img" aria-label="woman hand out">
@@ -151,6 +156,7 @@ const EventComplete = ({ match }) => {
                   href={linkedInCommunityLink}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className={classes.button}
                 >
                   Join our LinkedIn community
                   <span role="img" aria-label="brief case">

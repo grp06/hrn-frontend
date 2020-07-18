@@ -246,7 +246,7 @@ const VideoRoom = ({ match }) => {
     return (
       <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
         <div className={classes.partnerNameContainer}>
-          <Typography variant="h4" className={classes.partnerName}>
+          <Typography variant="h5" className={classes.partnerName}>
             {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
           </Typography>
         </div>
