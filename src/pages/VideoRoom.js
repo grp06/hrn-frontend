@@ -77,10 +77,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
   },
   partnerName: {
-    fontFamily: 'Muli',
     textAlign: 'center',
-    fontSize: '2rem',
-    color: theme.palette.common.ghostWhite,
   },
   notReady: {
     position: 'fixed',
@@ -249,7 +246,7 @@ const VideoRoom = ({ match }) => {
     return (
       <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
         <div className={classes.partnerNameContainer}>
-          <Typography className={classes.partnerName}>
+          <Typography variant="h4" className={classes.partnerName}>
             {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
           </Typography>
         </div>

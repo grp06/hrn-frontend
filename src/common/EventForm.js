@@ -16,27 +16,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '200px',
   },
   formContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-    width: '40vw',
+    margin: theme.spacing(0, 'auto'),
+    padding: theme.spacing(5),
   },
   inputContainer: {
-    marginTop: '2em',
-    marginBottom: '2em',
+    margin: theme.spacing(4, 0),
   },
   input: {
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   dateTime: {
     width: '100%',
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   eventUpdated: {
     width: '100%',
-    margin: '0 auto',
-    fontSize: 18,
+    margin: theme.spacing(0, 'auto'),
     textAlign: 'center',
     color: 'green',
   },
@@ -143,11 +138,11 @@ const EventForm = ({ eventData, match }) => {
     <div className={classes.wrapper}>
       <FloatCardMedium>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid item container direction="column" className={classes.formContainer}>
+          <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
             <form onSubmit={handleSubmit}>
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
-                  <Typography variant="h4" style={{ lineHeight: 1 }}>
+                  <Typography variant="h4">
                     {eventData ? 'Edit ' : 'Create '}
                     Your Event
                   </Typography>
@@ -230,7 +225,11 @@ const EventForm = ({ eventData, match }) => {
                 </Button>
               </Grid>
             </form>
-            {eventUpdated && <div className={classes.eventUpdated}>Event updated</div>}
+            {eventUpdated && (
+              <Typography variant="h5" className={classes.eventUpdated}>
+                Event updated
+              </Typography>
+            )}
           </Grid>
         </MuiPickersUtilsProvider>
       </FloatCardMedium>

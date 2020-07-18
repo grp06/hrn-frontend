@@ -31,14 +31,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     textAlign: 'center',
   },
-  stepLabel: {
-    color: theme.palette.common.ghostWhite,
-  },
   endMessage: {
     textAlign: 'center',
     width: '75%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto'),
     marginBottom: theme.spacing(3),
   },
   whatToExpect: {
@@ -88,7 +84,7 @@ const HiRightNowBreakdown = ({ eventRoundLength }) => {
   return (
     <div className={classes.root}>
       <Grid container justify="center" align="center" className={classes.whatToExpect}>
-        <Typography variant="h1">What to expect</Typography>
+        <Typography variant="h5">What to expect</Typography>
       </Grid>
       <Stepper
         activeStep={activeStep}
@@ -97,9 +93,9 @@ const HiRightNowBreakdown = ({ eventRoundLength }) => {
       >
         {steps.map((label, index) => (
           <Step key={label}>
-            <StepLabel className={classes.stepLabel}>{label}</StepLabel>
+            <StepLabel>{label}</StepLabel>
             <StepContent>
-              <Typography>{getStepContent(index, eventRoundLength)}</Typography>
+              <Typography variant="body1">{getStepContent(index, eventRoundLength)}</Typography>
               <div className={classes.actionsContainer}>
                 <div>
                   <Button
@@ -125,7 +121,7 @@ const HiRightNowBreakdown = ({ eventRoundLength }) => {
       </Stepper>
       {activeStep === steps.length && (
         <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
-          <Typography className={classes.endMessage}>
+          <Typography variant="h6" className={classes.endMessage}>
             You&apos;re all set! If you have already RSVPed, sit tight and wait for the event to
             start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!
           </Typography>

@@ -11,7 +11,6 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   inlineEmailText: {
-    ...theme.typography.body1,
     display: 'inline',
   },
 }))
@@ -38,7 +37,7 @@ const MutualThumbsList = ({ mutualThumbsData, userId }) => {
             <ListItemText
               primary={partner[0].name}
               secondary={
-                <Typography component="span" className={classes.inlineEmailText}>
+                <Typography variant="body1" className={classes.inlineEmailText}>
                   {partner[0].email}
                 </Typography>
               }

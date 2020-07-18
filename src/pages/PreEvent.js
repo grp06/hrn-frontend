@@ -191,11 +191,6 @@ const PreEvent = ({ match }) => {
           setCameraAndMicPermissions={setCameraAndMicPermissions}
         />
       )}
-      {event.host_id === 614 ? (
-        <Typography style={{ textAlign: 'center' }} variant="h1">
-          Host will begin speaking shortly
-        </Typography>
-      ) : null}
       <div id="host-video" className={classes.hostVid} />
     </Grid>
   )

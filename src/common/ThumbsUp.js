@@ -21,8 +21,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   thumbsUpContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto'),
     width: '70%',
   },
   buttonContainer: {

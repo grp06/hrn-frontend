@@ -70,42 +70,46 @@ const theme = createMuiTheme({
       lineHeight: '2.9rem',
       color: ghostWhite,
     },
+    // for very large numbers
     h2: {
       fontFamily: 'Muli',
-      fontSize: '1.5rem',
-      fontWeight: '700',
-      marginBottom: '10px',
-      lineHeight: '2rem',
+      fontSize: '4.5rem',
+      color: orchid,
     },
+    // Event Title
+    // 3REM
     h3: {
       fontFamily: 'Muli',
-      fontSize: '1.3rem',
-      fontWeight: '500',
-      marginBottom: '7px',
+      color: ghostWhite,
+      fontWeight: '600',
     },
+    // Card Headers (login / signup form)
+    // 2.12REM
     h4: {
       color: ghostWhite,
+      fontFamily: 'Muli',
     },
+    // Section Headers (Participants Signed Up)
+    // 1.5REM
+    h5: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+      marginBottom: '8px',
+    },
+    // 1.25REM
+    h6: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+    },
+    // 1REM
     subtitle1: {
       fontFamily: 'Muli',
-      color: ghostWhite,
-    },
-    body: {
-      fontFamily: 'Muli',
-      fontSize: '1rem',
-      color: ghostWhite,
-      fontWeight: '300',
+      color: ghostWhiteSub,
     },
     body1: {
       fontFamily: 'Muli',
-      fontSize: '1rem',
       color: ghostWhiteBody,
       fontWeight: '300',
-    },
-    modalBody: {
-      fontFamily: 'Muli',
-      fontSize: '1.2rem',
-      color: ghostWhite,
     },
     p: {
       color: white,
@@ -114,7 +118,7 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1.8rem',
       color: ghostWhiteSub,
-      marginBottom: '25px',
+      marginBottom: '24px',
       width: '100%',
       lineHeight: '2.3rem',
       fontWeight: '500',
@@ -240,7 +244,7 @@ const theme = createMuiTheme({
     },
     MuiStepLabel: {
       label: {
-        fontSize: '1.2rem',
+        fontSize: '1.25rem',
         fontWeight: '400',
         color: ghostWhite,
         '&.MuiStepLabel-active': {

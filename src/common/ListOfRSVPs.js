@@ -8,25 +8,17 @@ import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
-
-import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../context/useAppContext'
 
-const useStyles = makeStyles((theme) => ({
-  sectionHeader: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
-  },
-}))
-
 const ListOfRSVPs = () => {
-  const classes = useStyles()
   const { event } = useAppContext()
   const { event_users } = event
 
   return (
-    <Grid container item direction="column" justify="center" alignItems="center">
-      <Typography className={classes.sectionHeader}>People who've signed up</Typography>
+    <Grid container direction="column" justify="center" alignItems="center">
+      <Typography variant="h5" style={{ textAlign: 'center' }}>
+        People who&apos;ve signed up
+      </Typography>
       {event_users && event_users.length ? (
         <List dense>
           {event_users.map(({ user }) => {

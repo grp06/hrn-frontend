@@ -14,15 +14,10 @@ import { getHostEventAnalytics } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
-    ...theme.typography.h3,
-    fontWeight: '300',
-    color: theme.palette.common.ghostWhite,
     flexBasis: '33.33%',
     flexShrink: 0,
     marginBottom: 0,
-  },
-  secondaryHeading: {
-    color: theme.palette.common.ghostWhiteSub,
+    color: theme.palette.common.ghostWhite,
   },
   detailsHeading: {
     textAlign: 'center',
@@ -47,13 +42,12 @@ const useStyles = makeStyles((theme) => ({
   downloadAttendees: {
     backgroundColor: theme.palette.common.dankPurp,
     color: theme.palette.common.ghostWhite,
-    padding: '8px 20px',
-    margin: `0 8px 8px 8px`,
+    padding: theme.spacing(1, 2.5),
+    margin: theme.spacing(0, 1, 1, 1),
     textDecoration: 'none',
     fontFamily: 'Muli',
     borderRadius: 4,
     display: 'flex',
-
     alignItems: 'center',
     textAlign: 'center',
     '& svg': {
@@ -122,23 +116,23 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
         </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid item md={6} xs={12}>
-            <Typography className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
               Total RSVPs: {event_users.length}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
               Mutual Connections: {mutualThumbsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
               Drop Offs:
               {dropOffsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
               Total Attendees: {getAttendeesCSV.data.length}
             </Typography>
           </Grid>
@@ -163,8 +157,10 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           aria-controls={`${id}-content`}
           id={`${id}-header`}
         >
-          <Typography className={classes.eventPanelHeading}>{event.event_name}</Typography>
-          <Typography className={classes.secondaryHeading}>{startTime}</Typography>
+          <Typography variant="h5" className={classes.eventPanelHeading}>
+            {event.event_name}
+          </Typography>
+          <Typography variant="h6">{startTime}</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {event.status === 'complete' ? (
@@ -172,7 +168,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           ) : (
             <Grid container justify="center" alignItems="center">
               <Grid item md={6} xs={12}>
-                <Typography className={classes.detailsHeading}>
+                <Typography variant="subtitle1" className={classes.detailsHeading}>
                   This event has not started. Come back when it is over and we&rsquo;ll have some
                   stats for you!{' '}
                   <span role="img" aria-label="thumbs up">
