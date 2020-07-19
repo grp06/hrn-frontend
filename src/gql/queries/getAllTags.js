@@ -5,6 +5,7 @@ const getAllTags = gql`
     tags {
       name
       id
+      category
     }
   }
 `

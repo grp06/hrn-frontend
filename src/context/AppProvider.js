@@ -20,6 +20,7 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
+    city: '',
     updatedAt: null,
   },
   app: {
@@ -133,12 +134,13 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        const { name, role, id, email } = userData.users[0]
+        const { name, role, id, email, city } = userData.users[0]
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
           draft.user.email = email
+          draft.user.city = city
 
           if (!eventIdInUrl) {
             draft.app.appLoading = false

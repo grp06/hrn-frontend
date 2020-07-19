@@ -28,8 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OnboardingInterestTagInput = ({ tagsData, value, onChange }) => {
-  console.log('value', value)
+const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
   const classes = useStyles()
   const [selectedTags, setSelectedTags] = useState(value)
 
@@ -48,33 +47,31 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange }) => {
     const chipElement =
       elementClicked.className === 'MuiChip-label' ? elementClicked.parentElement : elementClicked
 
-    const tagIndexInArray = selectedTags.indexOf(tagId)
+    const tagIndexInArray = selectedTags
+      .map((tag, idx) => {
+        if (tag.tag_id === tagId) return idx
+        return null
+      })
+      .filter((foundTag) => foundTag !== null)
 
     // user clicked to remove tag
-    if (tagIndexInArray >= 0) {
+    if (tagIndexInArray.length > 0) {
       setSelectedTags((prevTags) => {
         const copiedPrevTags = [...prevTags]
-        copiedPrevTags.splice(tagIndexInArray, 1)
+        copiedPrevTags.splice(tagIndexInArray[0], 1)
         return copiedPrevTags
       })
       return chipElement.classList.remove('MuiChip-colorPrimary', classes.toggleTagActive)
     }
 
-    setSelectedTags((prevTags) => [...prevTags, tagId])
+    setSelectedTags((prevTags) => [...prevTags, { tag_id: tagId, user_id: userId }])
     return chipElement.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
   }
 
-  const renderBusinessTags = () => {
-    const listOfBusinessTags = tagsData.filter((tag) => tag.id >= 201 && tag.id <= 400).sort()
-    return listOfBusinessTags.map((businessTag) => {
-      return <Chip label={businessTag.name} id={businessTag.id} clickable onClick={toggleTag} />
-    })
-  }
-
-  const renderSocialTags = () => {
-    const listOfSocialTags = tagsData.filter((tag) => tag.id >= 1 && tag.id <= 200)
-    return listOfSocialTags.map((socialTag) => {
-      return <Chip label={socialTag.name} id={socialTag.id} clickable onClick={toggleTag} />
+  const renderTagsByCategory = (category) => {
+    const listOfTagsOfGivenCategory = tagsData.filter((tag) => tag.category === category).sort()
+    return listOfTagsOfGivenCategory.map((categoryTag) => {
+      return <Chip label={categoryTag.name} id={categoryTag.id} clickable onClick={toggleTag} />
     })
   }
 
@@ -89,12 +86,12 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange }) => {
           </Typography>
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography className={classes.tagCategoryHeader}>Business</Typography>
-          {renderBusinessTags()}
+          <Typography className={classes.tagCategoryHeader}>Professional</Typography>
+          {renderTagsByCategory('professional')}
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography className={classes.tagCategoryHeader}>Social</Typography>
-          {renderSocialTags()}
+          <Typography className={classes.tagCategoryHeader}>Hobbies</Typography>
+          {renderTagsByCategory('hobby')}
         </Grid>
       </Grid>
     </div>

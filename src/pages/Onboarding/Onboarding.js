@@ -2,14 +2,14 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import Geosuggest from 'react-geosuggest'
-import Box from '@material-ui/core/Box'
 import { Field } from 'formik'
-import { TextField } from 'formik-material-ui'
+import { useHistory } from 'react-router-dom'
 import { FloatCardMedium, Loading } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
 import { getAllTags } from '../../gql/queries'
-import { insertUserTags } from '../../gql/mutations'
+import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
+import { useAppContext } from '../../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -45,15 +45,49 @@ const useStyles = makeStyles((theme) => ({
 
 const Onboarding = () => {
   const classes = useStyles()
+  const history = useHistory()
+  const { user } = useAppContext()
+  const { userId, name } = user
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
+  const [updateUserMutation] = useMutation(updateUser)
+  const [insertUserTagsMutation] = useMutation(insertUserTags)
 
   if (tagsLoading) {
     return <Loading />
   }
+  console.log(user)
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
     form.setFieldValue('location', suggest.gmaps.name)
+  }
+
+  const handleFormikSubmit = async (values) => {
+    try {
+      await updateUserMutation({
+        variables: {
+          id: userId,
+          name,
+          city: values.location,
+        },
+      })
+    } catch (err) {
+      console.log('updateUserMutation error ->', err)
+    }
+
+    try {
+      await insertUserTagsMutation({
+        variables: {
+          objects: values.interests,
+        },
+      })
+    } catch (err) {
+      console.log('insertUserTagsMutation error ->', err)
+    }
+
+    await sleep(2000)
+    history.push('/events')
+    console.log('values', values)
   }
 
   return (
@@ -64,10 +98,7 @@ const Onboarding = () => {
             location: '',
             interests: [],
           }}
-          onSubmit={async (values) => {
-            await sleep(3000)
-            console.log('values', values)
-          }}
+          onSubmit={handleFormikSubmit}
         >
           <div label="location" className={classes.locationInputContainer}>
             <Field name="location">
@@ -87,6 +118,7 @@ const Onboarding = () => {
               {({ field, form }) => (
                 <OnboardingInterestTagInput
                   tagsData={tagsData.tags}
+                  userId={userId}
                   value={field.value}
                   onChange={(interests) => {
                     console.log('I got the value correctly from my child: ', interests)
