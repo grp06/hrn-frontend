@@ -25,17 +25,28 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
   const [step, setStep] = useState(0)
   const currentStep = stepArray[step]
   const [completed, setCompleted] = useState(false)
+  const [disabledButton, setDisabledButton] = useState(true)
 
   function isLastStep() {
     return step === stepArray.length - 1
   }
-  console.log(isLastStep)
+
+  const toggleDisableButton = (values) => {
+    if (step === 0) {
+      if (values.location) setDisabledButton(false)
+    }
+    if (step === 1) {
+      if (values.interests.length >= 1) setDisabledButton(false)
+      else {
+        setDisabledButton(true)
+      }
+    }
+  }
 
   return (
     <Formik
       {...props}
       onSubmit={async (values, helpers) => {
-        console.log(values)
         if (isLastStep()) {
           await props.onSubmit(values, helpers)
           setCompleted(true)
@@ -44,8 +55,12 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
         }
       }}
     >
-      {({ isSubmitting }) => (
-        <Form autoComplete="off" className={classes.formContainer}>
+      {({ isSubmitting, values }) => (
+        <Form
+          autoComplete="off"
+          className={classes.formContainer}
+          onChange={toggleDisableButton(values)}
+        >
           <Stepper alternativeLabel activeStep={step}>
             {stepArray.map((child, index) => (
               <Step key={child.props.label} completed={step > index || completed}>
@@ -70,7 +85,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
             <Grid item>
               <Button
                 startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
-                disabled={isSubmitting}
+                disabled={isSubmitting || disabledButton}
                 variant="contained"
                 color="primary"
                 type="submit"

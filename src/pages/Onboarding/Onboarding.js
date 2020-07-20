@@ -66,7 +66,7 @@ const Onboarding = () => {
     form.setFieldValue('location', suggest.gmaps.name)
   }
 
-  const handleFormikSubmit = async (values) => {
+  const handleOnboardingFormSubmit = async (values) => {
     try {
       await updateUserMutation({
         variables: {
@@ -102,7 +102,7 @@ const Onboarding = () => {
             location: '',
             interests: [],
           }}
-          onSubmit={handleFormikSubmit}
+          onSubmit={handleOnboardingFormSubmit}
         >
           <div label="location" className={classes.locationInputContainer}>
             <Field name="location">

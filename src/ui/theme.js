@@ -217,6 +217,10 @@ const theme = createMuiTheme({
       },
       contained: {
         backgroundColor: sunray,
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(0,0,0,0.50)',
+          color: greyBorder,
+        },
       },
     },
     MuiFab: {
@@ -240,6 +244,7 @@ const theme = createMuiTheme({
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,
+        color: bodyBlack,
       },
       filledSuccess: {
         backgroundColor: dankPurp,

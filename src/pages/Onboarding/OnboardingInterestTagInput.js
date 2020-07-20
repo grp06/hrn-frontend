@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
+import MuiAlert from '@material-ui/lab/Alert'
+import Snackbar from '@material-ui/core/Snackbar'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
@@ -27,13 +29,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
+
 const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
   const classes = useStyles()
   const [selectedTags, setSelectedTags] = useState(value)
+  const [showTooManyTagsAlert, setShowTooManyTagsAlert] = useState(false)
 
   useEffect(() => {
     onChange(selectedTags)
   }, [selectedTags])
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+    setShowTooManyTagsAlert(false)
+  }
 
   const toggleTag = (event) => {
     const elementClicked = event.target
@@ -63,6 +75,9 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
       return chipElement.classList.remove('MuiChip-colorPrimary', classes.toggleTagActive)
     }
 
+    if (selectedTags.length >= 5) {
+      return setShowTooManyTagsAlert(true)
+    }
     setSelectedTags((prevTags) => [...prevTags, { tag_id: tagId, user_id: userId }])
     return chipElement.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
   }
@@ -107,6 +122,16 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
           {renderTagsByCategory('hobby')}
         </Grid>
       </Grid>
+      <Snackbar
+        open={showTooManyTagsAlert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        autoHideDuration={5000}
+        onClose={handleAlertClose}
+      >
+        <Alert onClose={handleAlertClose} severity="info">
+          Please only choose 5 interests
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
