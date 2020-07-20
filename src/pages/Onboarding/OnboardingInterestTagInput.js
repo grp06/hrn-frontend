@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
   gridItemContainer: {
     marginBottom: theme.spacing(2.5),
   },
-  sectionTitle: {
-    color: theme.palette.common.ghostWhite,
-  },
 }))
 
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
@@ -99,12 +96,9 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
     <div>
       <Grid container direction="column" className={classes.container}>
         <Grid item className={classes.gridItemContainer}>
-          <Typography variant="h5" className={classes.sectionTitle}>
-            Interests:
-          </Typography>
           <Typography variant="subtitle1">
-            Choose up to 5 that best represent you. Other users who get matched with you will see
-            them.
+            Choose up to 5 interests that best represent you. Other users who get matched with you
+            will see them.
           </Typography>
         </Grid>
         <Grid item className={classes.gridItemContainer}>

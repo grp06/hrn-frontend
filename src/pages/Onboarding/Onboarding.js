@@ -57,9 +57,9 @@ const Onboarding = () => {
   }
 
   // Onboarding should only be displayed directly after signing up
-  // if (usersCityInContext || usersTagsInContext.length) {
-  //   history.push('/events')
-  // }
+  if (usersCityInContext || usersTagsInContext.length) {
+    history.push('/events')
+  }
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
@@ -67,6 +67,7 @@ const Onboarding = () => {
   }
 
   const handleOnboardingFormSubmit = async (values) => {
+    console.log('values', values)
     try {
       await updateUserMutation({
         variables: {
@@ -90,8 +91,13 @@ const Onboarding = () => {
     }
 
     await sleep(2000)
+    // check to see if we were redirected here by an event
+    const eventIdInLocalStorage = localStorage.getItem('eventId')
+    if (eventIdInLocalStorage) {
+      history.push(`/events/${eventIdInLocalStorage}`)
+      return
+    }
     history.push('/events')
-    console.log('values', values)
   }
 
   return (
