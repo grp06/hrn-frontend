@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 'auto',
   },
+  centerText: {
+    textAlign: 'center',
+  },
   cameraTest: {
     marginBottom: theme.spacing(4),
   },
@@ -192,7 +195,9 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             justify="center"
             alignItems="center"
           >
-            <Typography variant="h5">The host will begin the event shortly</Typography>
+            <Typography variant="h5" className={classes.centerText}>
+              The host will begin the event shortly
+            </Typography>
           </Grid>
           <div className={classes.root}>
             <LinearProgress />

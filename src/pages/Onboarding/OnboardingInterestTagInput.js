@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '20px',
   },
   sectionTitle: {
-    ...theme.typography.h3,
     color: theme.palette.common.ghostWhite,
   },
   tagCategoryHeader: {
@@ -69,9 +68,21 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
   }
 
   const renderTagsByCategory = (category) => {
-    const listOfTagsOfGivenCategory = tagsData.filter((tag) => tag.category === category).sort()
+    const listOfTagsOfGivenCategory = tagsData
+      .filter((tag) => tag.category === category)
+      .sort((tagA, tagB) => {
+        return tagA.name.toLowerCase() > tagB.name.toLowerCase()
+      })
     return listOfTagsOfGivenCategory.map((categoryTag) => {
-      return <Chip label={categoryTag.name} id={categoryTag.id} clickable onClick={toggleTag} />
+      return (
+        <Chip
+          key={categoryTag.id}
+          label={categoryTag.name}
+          id={categoryTag.id}
+          clickable
+          onClick={toggleTag}
+        />
+      )
     })
   }
 
@@ -79,7 +90,9 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
     <div>
       <Grid container direction="column" className={classes.container}>
         <Grid item className={classes.gridItemContainer}>
-          <Typography className={classes.sectionTitle}>Interests:</Typography>
+          <Typography variant="h5" className={classes.sectionTitle}>
+            Interests:
+          </Typography>
           <Typography>
             Choose up to 5 that best represent you. Other users who get matched with you will see
             them.

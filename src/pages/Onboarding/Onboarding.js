@@ -47,7 +47,7 @@ const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useAppContext()
-  const { userId, name } = user
+  const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
@@ -55,7 +55,11 @@ const Onboarding = () => {
   if (tagsLoading) {
     return <Loading />
   }
-  console.log(user)
+
+  // Onboarding should only be displayed directly after signing up
+  // if (usersCityInContext || usersTagsInContext.length) {
+  //   history.push('/events')
+  // }
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
@@ -67,7 +71,7 @@ const Onboarding = () => {
       await updateUserMutation({
         variables: {
           id: userId,
-          name,
+          name: userName,
           city: values.location,
         },
       })
@@ -105,6 +109,8 @@ const Onboarding = () => {
               {({ form }) => (
                 <Geosuggest
                   placeholder="Type in your city"
+                  types={['(cities)']}
+                  ignoreTab
                   inputClassName={classes.geosuggestInput}
                   suggestsClassName={classes.geosuggestSuggests}
                   suggestItemClassName={classes.geosuggestItem}

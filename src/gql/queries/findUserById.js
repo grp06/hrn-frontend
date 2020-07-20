@@ -7,6 +7,13 @@ const findUserById = gql`
       name
       role
       email
+      city
+      tags_users {
+        tag {
+          name
+          id
+        }
+      }
     }
   }
 `
