@@ -293,7 +293,13 @@ const VideoRoom = ({ match }) => {
         )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound ? <RoundProgressBar myRound={myRound} event={event} /> : null}
+        {myRound ? (
+          <RoundProgressBar
+            myRound={myRound}
+            event={event}
+            hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
+          />
+        ) : null}
         {showPartnersName()}
       </div>
     </div>
