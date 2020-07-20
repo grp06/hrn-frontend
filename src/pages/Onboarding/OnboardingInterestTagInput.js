@@ -13,18 +13,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    padding: '0px 20px',
+    padding: theme.spacing(0, 2.5),
   },
   gridItemContainer: {
-    marginBottom: '20px',
+    marginBottom: theme.spacing(2.5),
   },
   sectionTitle: {
-    color: theme.palette.common.ghostWhite,
-  },
-  tagCategoryHeader: {
-    fontWeight: '300px',
-    fontFamily: 'Muli',
-    fontSize: '0.8rem',
     color: theme.palette.common.ghostWhite,
   },
 }))
@@ -108,17 +102,17 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
           <Typography variant="h5" className={classes.sectionTitle}>
             Interests:
           </Typography>
-          <Typography>
+          <Typography variant="subtitle1">
             Choose up to 5 that best represent you. Other users who get matched with you will see
             them.
           </Typography>
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography className={classes.tagCategoryHeader}>Professional</Typography>
+          <Typography variant="subtitle2">Professional</Typography>
           {renderTagsByCategory('professional')}
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography className={classes.tagCategoryHeader}>Hobbies</Typography>
+          <Typography variant="subtitle2">Hobbies</Typography>
           {renderTagsByCategory('hobby')}
         </Grid>
       </Grid>

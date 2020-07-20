@@ -10,7 +10,7 @@ import StepLabel from '@material-ui/core/StepLabel'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
-    padding: '25px',
+    padding: theme.spacing(3),
   },
   backResetButton: {
     backgroundColor: theme.palette.common.greyButton,

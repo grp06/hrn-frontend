@@ -13,14 +13,14 @@ import { useAppContext } from '../../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: '150px',
+    marginTop: '200px',
   },
   locationInputContainer: {
-    padding: '0px 20px',
+    padding: theme.spacing(0, 2.5),
   },
   geosuggestInput: {
     width: '100%',
-    padding: '10px 5px',
+    padding: theme.spacing(1, 0.5),
     fontSize: '1.3rem',
     borderRadius: '4px',
   },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     fontFamily: 'Muli',
     color: theme.palette.common.ghostWhite,
-    padding: '10px 0px',
+    padding: theme.spacing(1, 0),
     borderBottom: '1px solid #3e4042',
     '&:hover': {
       cursor: 'pointer',

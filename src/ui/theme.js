@@ -105,6 +105,13 @@ const theme = createMuiTheme({
     subtitle1: {
       fontFamily: 'Muli',
       color: ghostWhiteSub,
+      fontWeight: '300',
+    },
+    subtitle2: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+      fontSize: '0.8rem',
+      fontWeight: '300',
     },
     body1: {
       fontFamily: 'Muli',
