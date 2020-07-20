@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
+import TimerIcon from '@material-ui/icons/Timer'
 import { useAppContext } from '../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
@@ -16,9 +17,6 @@ const useStyles = makeStyles((theme) => ({
   },
   roundStartedMessage: {
     padding: '10px 30px',
-  },
-  emoji: {
-    marginLeft: 5,
   },
 }))
 const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
@@ -94,16 +92,13 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
         autoHideDuration={10000}
         onClose={() => setShowRoundStartedMessage(false)}
       >
-        <Alert severity="success" className={classes.roundStartedMessage}>
+        <Alert severity="success" icon={<TimerIcon />} className={classes.roundStartedMessage}>
           {`${event.round_length} mintues left`}
-          <span role="img" aria-label="fire" className={classes.emoji}>
-            🔥
-          </span>
         </Alert>
       </Snackbar>
       <Snackbar
         open={show15SecondsLeftWarning}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
         autoHideDuration={8000}
         onClose={() => setShow15SecondsLeftWarning(false)}
       >

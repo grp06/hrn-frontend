@@ -241,6 +241,9 @@ const theme = createMuiTheme({
       filledInfo: {
         backgroundColor: sunray,
       },
+      filledSuccess: {
+        backgroundColor: dankPurp,
+      },
     },
     MuiStepLabel: {
       label: {
