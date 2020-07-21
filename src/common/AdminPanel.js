@@ -153,13 +153,7 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
       )}
 
       <FloatCardLarge>
-        <Grid
-          container
-          justify="space-around"
-          alignItems="center"
-          // wrap="nowrap"
-          className={classes.topDashboard}
-        >
+        <Grid container justify="space-around" alignItems="center" className={classes.topDashboard}>
           <Grid
             container
             item

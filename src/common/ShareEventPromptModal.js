@@ -4,12 +4,10 @@ import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Divider from '@material-ui/core/Divider'
-import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/styles'
 import copy from 'copy-to-clipboard'
 import formatDate from '../utils/formatDate'
-import { TransitionModal } from '.'
+import { TransitionModal, Snack } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventPromptHeader: {
@@ -30,16 +28,7 @@ const ShareEventPromptModal = ({ event }) => {
   const { start_at, id } = event
   const eventStartTime = formatDate(start_at)
 
-  const [showSnackbar, setShowSnackbar] = useState(false)
-
-  const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
-
-  const handleSnackbarClose = (pressEvent, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setShowSnackbar(false)
-  }
+  const [showSnack, setShowSnack] = useState(false)
 
   const renderModalButton = TransitionModal({
     modalBody: (
@@ -111,7 +100,7 @@ const ShareEventPromptModal = ({ event }) => {
     onAcceptFunction: () => {
       const copyPrompt = document.getElementById('eventPrompt').innerText
       copy(copyPrompt)
-      setShowSnackbar(true)
+      setShowSnack(true)
     },
     onAcceptButtonText: 'Copy this prompt!',
   })
@@ -119,14 +108,20 @@ const ShareEventPromptModal = ({ event }) => {
   return (
     <div>
       {renderModalButton}
-      <Snackbar open={showSnackbar} autoHideDuration={1800} onClose={handleSnackbarClose}>
-        <Alert onClose={handleSnackbarClose} severity="info">
-          Copied{' '}
-          <span role="img" aria-label="floppy disk">
-            💾
-          </span>
-        </Alert>
-      </Snackbar>
+      <Snack
+        open={showSnack}
+        duration={1800}
+        onClose={() => setShowSnack(false)}
+        severity="info"
+        snackMessage={
+          <div>
+            Copied{' '}
+            <span role="img" aria-label="floppy disk">
+              💾
+            </span>
+          </div>
+        }
+      />
     </div>
   )
 }

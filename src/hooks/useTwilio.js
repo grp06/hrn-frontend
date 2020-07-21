@@ -40,7 +40,7 @@ const useTwilio = () => {
 
       room.participants.forEach(participantConnected)
 
-      room.on('participantConnected', (remoteParticipant) => {
+      room.on('participantConnected', async (remoteParticipant) => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)

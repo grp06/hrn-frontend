@@ -105,6 +105,13 @@ const theme = createMuiTheme({
     subtitle1: {
       fontFamily: 'Muli',
       color: ghostWhiteSub,
+      fontWeight: '300',
+    },
+    subtitle2: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+      fontSize: '0.8rem',
+      fontWeight: '300',
     },
     body1: {
       fontFamily: 'Muli',
@@ -217,6 +224,10 @@ const theme = createMuiTheme({
       },
       contained: {
         backgroundColor: sunray,
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(0,0,0,0.50)',
+          color: greyBorder,
+        },
       },
     },
     MuiFab: {
@@ -240,6 +251,7 @@ const theme = createMuiTheme({
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,
+        color: bodyBlack,
       },
       filledSuccess: {
         backgroundColor: dankPurp,
@@ -267,6 +279,12 @@ const theme = createMuiTheme({
     MuiLinearProgress: {
       root: {
         width: '100%',
+      },
+    },
+    MuiChip: {
+      root: {
+        borderRadius: '4px',
+        margin: '5px',
       },
     },
   },
