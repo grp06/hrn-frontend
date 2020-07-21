@@ -58,9 +58,9 @@ const Onboarding = () => {
   }
 
   // Onboarding should only be displayed directly after signing up
-  // if (usersCityInContext || usersTagsInContext.length) {
-  //   history.push('/events')
-  // }
+  if (usersCityInContext || usersTagsInContext.length) {
+    history.push('/events')
+  }
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
