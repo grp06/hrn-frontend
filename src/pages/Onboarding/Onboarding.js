@@ -46,14 +46,15 @@ const useStyles = makeStyles((theme) => ({
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { user } = useAppContext()
+  const { user, app } = useAppContext()
+  const { appLoading } = app
   const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
 
-  if (tagsLoading) {
+  if (appLoading || tagsLoading) {
     return <Loading />
   }
 
