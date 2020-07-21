@@ -3,12 +3,11 @@ import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import Snackbar from '@material-ui/core/Snackbar'
 import Typography from '@material-ui/core/Typography'
-import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/core/styles'
 import { useAppContext } from '../context/useAppContext'
 import { setPartnerXThumb, setPartnerYThumb } from '../gql/mutations'
+import { Snack } from '.'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -58,7 +57,7 @@ const ThumbsUp = ({ myRound, userId }) => {
   const { event } = useAppContext()
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [userThumbed, setUserThumbed] = useState(false)
-  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [showThumbSnack, setShowThumbSnack] = useState(false)
 
   const [setPartnerXThumbMutation] = useMutation(setPartnerXThumb, {
     variables: {
@@ -76,15 +75,6 @@ const ThumbsUp = ({ myRound, userId }) => {
     skip: !myRound,
   })
 
-  const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setShowSnackbar(false)
-  }
-
   const handleThumbUpClick = () => {
     const iAmPartnerX = myRound.partnerX_id === userId
     if (iAmPartnerX) {
@@ -95,7 +85,7 @@ const ThumbsUp = ({ myRound, userId }) => {
     }
     setShowThumbUpButton(false)
     setUserThumbed(true)
-    setShowSnackbar(true)
+    setShowThumbSnack(true)
     if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
     }
@@ -183,15 +173,21 @@ const ThumbsUp = ({ myRound, userId }) => {
                 </Typography>
               </>
             )}
-
-            <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-              <Alert onClose={handleSnackbarClose} severity="success">
-                Carrier pigeon sent{' '}
-                <span role="img" aria-label="dove">
-                  🕊
-                </span>
-              </Alert>
-            </Snackbar>
+            <Snack
+              open={showThumbSnack}
+              onClose={() => setShowThumbSnack(false)}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              duration={6000}
+              severity="success"
+              snackMessage={
+                <div>
+                  Carrier pigeon sent{' '}
+                  <span role="img" aria-label="dove">
+                    🕊
+                  </span>
+                </div>
+              }
+            />
           </>
         )}
       </Grid>

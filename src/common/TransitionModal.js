@@ -116,7 +116,7 @@ function TransitionModal({
                 direction="row"
                 justify="space-around"
                 alignItems="center"
-                wrap
+                wrap="wrap"
                 className={classes.buttonContainer}
               >
                 <Button

@@ -3,10 +3,9 @@ import React, { useState, useEffect, useRef } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import LinearProgress from '@material-ui/core/LinearProgress'
-import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert from '@material-ui/lab/Alert'
 import TimerIcon from '@material-ui/icons/Timer'
 import { useAppContext } from '../context/useAppContext'
+import { Snack } from '.'
 
 const useStyles = makeStyles((theme) => ({
   roundProgressBarContainer: {
@@ -15,18 +14,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     bottom: 0,
   },
-  roundStartedMessage: {
-    padding: '10px 30px',
-  },
 }))
-const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
 
 const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const classes = useStyles()
   const { user } = useAppContext()
   const { updatedAt } = user
-  const [showRoundStartedMessage, setShowRoundStartedMessage] = useState(false)
-  const [show15SecondsLeftWarning, setShow15SecondsLeftWarning] = useState(false)
+  const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
+  const [show15SecondsLeftSnack, setShow15SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
   const getDuration = () => {
     const { status } = event
@@ -41,7 +36,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
 
   useEffect(() => {
     if (isLast15Seconds) {
-      setShow15SecondsLeftWarning(true)
+      setShow15SecondsLeftSnack(true)
     }
   }, [isLast15Seconds])
 
@@ -73,7 +68,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
     if (hasStartedConnectingToPartner && !hasPartnerAndIsConnecting && msFromStart < 45000) {
       // without this, the green banner annoyingly shows up right before the connecting screen
       setTimeout(() => {
-        setShowRoundStartedMessage(true)
+        setShowRoundStartedSnack(true)
       }, 3000)
     }
   }, [hasPartnerAndIsConnecting])
@@ -86,26 +81,23 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
       alignItems="center"
       className={classes.roundProgressBarContainer}
     >
-      <Snackbar
-        open={showRoundStartedMessage}
+      <Snack
+        open={showRoundStartedSnack}
+        onClose={() => setShowRoundStartedSnack(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        autoHideDuration={10000}
-        onClose={() => setShowRoundStartedMessage(false)}
-      >
-        <Alert severity="success" icon={<TimerIcon />} className={classes.roundStartedMessage}>
-          {`${event.round_length} mintues left`}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={show15SecondsLeftWarning}
+        duration={6000}
+        severity="success"
+        snackIcon={<TimerIcon />}
+        snackMessage={`${event.round_length} mintues left`}
+      />
+      <Snack
+        open={show15SecondsLeftSnack}
+        onClose={() => setShow15SecondsLeftSnack(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        autoHideDuration={8000}
-        onClose={() => setShow15SecondsLeftWarning(false)}
-      >
-        <Alert severity="error" className={classes.roundStartedMessage}>
-          15 seconds left. Wrap it up!
-        </Alert>
-      </Snackbar>
+        duration={6000}
+        severity="error"
+        snackMessage="15 seconds left!"
+      />
       <LinearProgress variant="determinate" value={currentPercentWayThrough} />
     </Grid>
   )
