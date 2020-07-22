@@ -9,9 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { useMutation } from 'react-apollo'
 import { TransitionModal } from '../../common'
-import { deleteRounds, resetEvent } from '../../gql/mutations'
 import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,17 +37,6 @@ const HostEventControlsMenu = ({ event, user }) => {
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
   const isEventHost = host_id === userId
-
-  const [deleteRoundsMutation] = useMutation(deleteRounds, {
-    variables: {
-      eventId,
-    },
-  })
-  const [resetEventMutation] = useMutation(resetEvent, {
-    variables: {
-      id: eventId,
-    },
-  })
 
   const handleMenuOpen = () => {
     setMenuOpen((prevOpen) => !prevOpen)
@@ -81,8 +68,6 @@ const HostEventControlsMenu = ({ event, user }) => {
       </Typography>
     ),
     onAcceptFunction: async () => {
-      await deleteRoundsMutation(eventId)
-      await resetEventMutation(eventId)
       await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
     },
     onCloseFunction: () => {

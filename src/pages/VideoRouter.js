@@ -8,6 +8,7 @@ import {
   SittingOut,
   UserJoinedDuringRound,
   ConnectingToSomeone,
+  PartnerPreview,
 } from '../common/waitingRoomScreens'
 
 const VideoRouter = ({ myRound }) => {
@@ -22,6 +23,8 @@ const VideoRouter = ({ myRound }) => {
     switch (status) {
       case 'not-started':
         return <ConnectingToSomeone />
+      case 'partner-preview':
+        return <PartnerPreview myRound={myRound} userId={userId} />
       case 'in-between-rounds':
         return hasPartner ? <ThumbsUp userId={userId} myRound={myRound} /> : <ConnectingToSomeone />
       case 'room-in-progress':

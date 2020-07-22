@@ -50,6 +50,7 @@ const AttendeesList = ({ eventId, timeState }) => {
       const freshOnlineUsers = allUsers.filter((user) => {
         const { updated_at } = user.user
         const lastSeen = new Date(updated_at).getTime()
+        // some number in ms
         const diff = Date.now() - lastSeen
 
         return diff < lastSeenDuration + 20000

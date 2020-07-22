@@ -120,10 +120,9 @@ const VideoRoom = ({ match }) => {
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
-
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
-  const eventStatus = useRef()
+  const eventStatusRef = useRef()
 
   const hasCheckedCamera = useRef()
 
@@ -138,7 +137,8 @@ const VideoRoom = ({ match }) => {
         user_id: userId,
         event_id: event.id,
       },
-      skip: !userId || !eventSet || (eventStatus && eventStatus.current === 'in-between-rounds'),
+      skip:
+        !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
     }
   )
 
@@ -180,7 +180,7 @@ const VideoRoom = ({ match }) => {
   // to get twilio token
   useEffect(() => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner && eventSet && event.status !== 'in-between-rounds' && !twilioStarted) {
+    if (hasPartner && eventSet && event.status === 'room-in-progress' && !twilioStarted) {
       const getTwilioToken = async () => {
         console.log('getTwilioToken -> myRound.id', myRound.id)
         const res = await getToken(`${eventId}-${myRound.id}`, userId).then((response) =>
@@ -257,18 +257,20 @@ const VideoRoom = ({ match }) => {
   // If you are switching from room-in-progress to in-between-rounds
   // then we want to clear your room and token
   const { status: latestStatus } = event
-  if (latestStatus !== eventStatus.current) {
-    if (latestStatus === 'room-in-progress' && eventStatus.current === 'in-between-rounds') {
+  console.log('VideoRoom -> latestStatus', latestStatus)
+  if (latestStatus !== eventStatusRef.current) {
+    if (latestStatus === 'room-in-progress' && eventStatusRef.current === 'in-between-rounds') {
       console.warn('setting token, room, round to null')
       setToken(null)
       setRoom(null)
-      eventStatus.current = latestStatus
+      eventStatusRef.current = latestStatus
       return null
     }
-    eventStatus.current = latestStatus
+    eventStatusRef.current = latestStatus
   }
 
-  return eventStatus.current === latestStatus ? (
+  console.log('VideoRoom -> eventStatusRef.current', eventStatusRef.current)
+  return eventStatusRef.current === latestStatus ? (
     <div>
       {isGUMErrorModalActive && (
         <Grid
@@ -293,7 +295,7 @@ const VideoRoom = ({ match }) => {
         )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound ? (
+        {myRound && latestStatus !== 'partner-preview' ? (
           <RoundProgressBar
             myRound={myRound}
             event={event}

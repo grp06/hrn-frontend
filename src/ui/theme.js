@@ -244,10 +244,10 @@ const theme = createMuiTheme({
         color: ghostWhiteDark,
       },
     },
-    MuiSnackbar: {
-      bottom: 'none',
-      top: '20px',
-    },
+    // MuiSnackbar: {
+    //   bottom: 'none',
+    //   top: '20px',
+    // },
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,
