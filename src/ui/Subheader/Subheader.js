@@ -15,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       top: '11%',
       width: '100vw',
+      left: '0%',
+      right: '0%',
     },
     // top: '10%',
   },
@@ -28,6 +30,9 @@ const Subheader = () => {
   const { app, user } = useAppContext()
   const { tags_users: usersTags } = user
   const { appLoading } = app
+  const EventHomeRegex = /\/events\/\d+/
+  const EventInProgressRegex = /\/events\/\d+\//
+
   const handleAlertButtonClick = () => {
     history.push('/my-profile')
   }
@@ -36,7 +41,17 @@ const Subheader = () => {
     return null
   }
 
-  const showSubheader = usersTags.length === 0
+  const onEventsPage = window.location.pathname === '/events'
+  const onEventHomePage = Boolean(window.location.pathname.match(EventHomeRegex))
+  const onEventInProgressPage = Boolean(window.location.pathname.match(EventInProgressRegex))
+
+  console.log('onEventsPage ->', onEventsPage)
+  console.log('onEventHomePage ->', onEventHomePage)
+  console.log('onEventInProgressPage ->', onEventInProgressPage)
+
+  const showSubheader =
+    usersTags.length === 0 && (onEventsPage || onEventHomePage) && !onEventInProgressPage
+  // console.log('showSubheader ->', showSubheader)
 
   return (
     showSubheader && (
