@@ -24,17 +24,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px 4px 0px 0px',
     backgroundColor: theme.palette.common.greyHighlight,
   },
-  categoryHeader: {
-    ...theme.typography.h2,
-    color: theme.palette.common.ghostWhite,
-  },
-  displayNumber: {
-    fontFamily: 'Muli',
-    color: theme.palette.common.orchid,
-    fontSize: '4.5rem',
-  },
   partyEmoji: {
-    marginLeft: 10,
+    marginLeft: theme.spacing(1),
   },
   root: {
     width: '100%',
@@ -47,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 'auto',
   },
+  centerText: {
+    textAlign: 'center',
+  },
   cameraTest: {
     marginBottom: theme.spacing(4),
   },
@@ -55,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const UserPanel = ({ timeState, eventData, permissions }) => {
   const classes = useStyles()
   const history = useHistory()
+  const [rsvpInFlight, setRSVPInFlight] = useState(false)
   const { user, setCameraAndMicPermissions } = useAppContext()
   const { userId, name, email } = user
   const {
@@ -99,16 +94,21 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>
-      Sign Up 🚀
+      Sign Up{' '}
+      <span role="img" aria-label="rocket">
+        🚀
+      </span>
     </Button>
   )
 
   const renderRsvpButton = () => (
     <Button
       variant="contained"
+      disabled={rsvpInFlight}
       size="large"
       color="primary"
       onClick={async () => {
+        setRSVPInFlight(true)
         if (alreadyAttending) {
           try {
             await deleteEventUserMutation()
@@ -195,7 +195,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             justify="center"
             alignItems="center"
           >
-            <Typography className={classes.categoryHeader}>
+            <Typography variant="h5" className={classes.centerText}>
               The host will begin the event shortly
             </Typography>
           </Grid>
@@ -247,8 +247,8 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
               justify="center"
               alignItems="center"
             >
-              <Typography className={classes.categoryHeader}>Participants Signed Up</Typography>
-              <Typography className={classes.displayNumber}>{event_users.length}</Typography>
+              <Typography variant="h5">Participants Signed Up</Typography>
+              <Typography variant="h2">{event_users.length}</Typography>
             </Grid>
           )}
           <Grid

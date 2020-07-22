@@ -29,7 +29,13 @@ const SittingOut = () => {
   const classes = useStyles()
   return (
     <div className={classes.waitingRoom}>
-      <Typography className={classes.messageText}>You are the chosen one 👑 !</Typography>
+      <Typography className={classes.messageText}>
+        You are the chosen one{' '}
+        <span role="img" aria-label="crown">
+          👑
+        </span>{' '}
+        !
+      </Typography>
       <Typography className={classes.messageText}>
         Sometimes we have an odd number of people and need someone to sit out.
       </Typography>
@@ -37,7 +43,11 @@ const SittingOut = () => {
         But no worries, you'll be paired with someone new in 5 minutes.
       </Typography>
       <Typography className={classes.messageText}>
-        Get a drink of water. Stretch. Do a little dance 🕺.
+        Get a drink of water. Stretch. Do a little dance{' '}
+        <span role="img" aria-label="dancing man">
+          🕺
+        </span>
+        .
       </Typography>
       <Typography className={classes.messageText}>
         Or press 'up' on your keyboard to kill some time.

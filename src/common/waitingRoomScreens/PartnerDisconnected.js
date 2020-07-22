@@ -26,7 +26,11 @@ const PartnerDisconnected = () => {
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
         Sorry to break the bad news to you, but your partner disconnected ... something to do with
-        squirrels chewing their router 🤷‍♀️.
+        squirrels chewing their router{' '}
+        <span role="img" aria-label="woman shrugging">
+          🤷‍♀️
+        </span>
+        .
       </Typography>
       <Typography className={classes.messageText}>
         Stay put and we will connect you with someone soon!

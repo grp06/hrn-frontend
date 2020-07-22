@@ -1,16 +1,13 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const rebeccaPurple = '#6638aa'
 const lightPurple = '#723EBD'
 const dankPurp = '#6327bb'
 const orchid = '#e98dd7'
-const oldPink = '#df97d1'
 const ghostWhite = '#f4f6fa'
 const ghostWhiteSub = '#E2E8F2'
 const ghostWhiteBody = '#D1D9EA'
 const ghostWhiteDark = '#BFCBE2'
 const sunray = '#fabb5b'
-const oldYellow = '#edb868'
 const independence = '#3a405a'
 // const mediumGreen = '#4eab6d'
 const white = '#fff'
@@ -73,42 +70,53 @@ const theme = createMuiTheme({
       lineHeight: '2.9rem',
       color: ghostWhite,
     },
+    // for very large numbers
     h2: {
       fontFamily: 'Muli',
-      fontSize: '1.5rem',
-      fontWeight: '700',
-      marginBottom: '10px',
-      lineHeight: '2rem',
+      fontSize: '4.5rem',
+      color: orchid,
     },
+    // Event Title
+    // 3REM
     h3: {
       fontFamily: 'Muli',
-      fontSize: '1.3rem',
-      fontWeight: '500',
-      marginBottom: '7px',
+      color: ghostWhite,
+      fontWeight: '600',
     },
+    // Card Headers (login / signup form)
+    // 2.12REM
     h4: {
       color: ghostWhite,
+      fontFamily: 'Muli',
     },
+    // Section Headers (Participants Signed Up)
+    // 1.5REM
+    h5: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+      marginBottom: '8px',
+    },
+    // 1.25REM
+    h6: {
+      fontFamily: 'Muli',
+      color: ghostWhiteSub,
+    },
+    // 1REM
     subtitle1: {
       fontFamily: 'Muli',
-      color: ghostWhite,
+      color: ghostWhiteSub,
+      fontWeight: '300',
     },
-    body: {
+    subtitle2: {
       fontFamily: 'Muli',
-      fontSize: '1rem',
-      color: ghostWhite,
+      color: ghostWhiteSub,
+      fontSize: '0.8rem',
       fontWeight: '300',
     },
     body1: {
       fontFamily: 'Muli',
-      fontSize: '1rem',
       color: ghostWhiteBody,
       fontWeight: '300',
-    },
-    modalBody: {
-      fontFamily: 'Muli',
-      fontSize: '1.2rem',
-      color: ghostWhite,
     },
     p: {
       color: white,
@@ -117,7 +125,7 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1.8rem',
       color: ghostWhiteSub,
-      marginBottom: '25px',
+      marginBottom: '24px',
       width: '100%',
       lineHeight: '2.3rem',
       fontWeight: '500',
@@ -216,6 +224,10 @@ const theme = createMuiTheme({
       },
       contained: {
         backgroundColor: sunray,
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(0,0,0,0.50)',
+          color: greyBorder,
+        },
       },
     },
     MuiFab: {
@@ -239,11 +251,15 @@ const theme = createMuiTheme({
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,
+        color: bodyBlack,
+      },
+      filledSuccess: {
+        backgroundColor: dankPurp,
       },
     },
     MuiStepLabel: {
       label: {
-        fontSize: '1.2rem',
+        fontSize: '1.25rem',
         fontWeight: '400',
         color: ghostWhite,
         '&.MuiStepLabel-active': {
@@ -263,6 +279,12 @@ const theme = createMuiTheme({
     MuiLinearProgress: {
       root: {
         width: '100%',
+      },
+    },
+    MuiChip: {
+      root: {
+        borderRadius: '4px',
+        margin: '5px',
       },
     },
   },

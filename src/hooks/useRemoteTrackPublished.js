@@ -1,5 +1,4 @@
 import { useAppContext } from '../context/useAppContext'
-import { sleep } from '../helpers'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants
@@ -24,7 +23,7 @@ const useRemoteTrackPublished = () => {
         }, hasPartnerAndIsConnectingBreathingRoom)
       }
     }
-    publication.on('subscribed', (track) => {
+    publication.on('subscribed', async (track) => {
       console.log('onSubscribed')
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {

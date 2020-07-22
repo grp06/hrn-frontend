@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -9,8 +9,6 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 import { makeStyles } from '@material-ui/styles'
-import { TransitionModal } from '../common'
-import { formatRelativeWithOptions } from 'date-fns/fp'
 
 const useStyles = makeStyles((theme) => ({
   headerIcon: {

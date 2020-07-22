@@ -14,31 +14,30 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '200px',
   },
   formContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-    width: '40vw',
+    margin: theme.spacing(0, 'auto'),
+    padding: theme.spacing(5),
+  },
+  formHeader: {
+    textAlign: 'center',
   },
   inputContainer: {
-    marginTop: '2em',
-    marginBottom: '2em',
+    margin: theme.spacing(4, 0),
   },
   input: {
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   linkRedirectToSignUp: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
     textDecoration: 'none',
-    marginTop: '20px',
+    marginTop: theme.spacing(2.5),
     '&:hover': {
       color: theme.palette.common.orchid,
     },
   },
   successMessage: {
     textAlign: 'center',
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
 }))
 
@@ -67,11 +66,11 @@ const ForgotPasswordForm = () => {
   return (
     <div className={classes.wrapper}>
       <FloatCardMedium>
-        <Grid item container direction="column" className={classes.formContainer}>
+        <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" style={{ lineHeight: 1 }}>
+                <Typography variant="h4" className={classes.formHeader}>
                   Reset Password
                 </Typography>
               </Grid>

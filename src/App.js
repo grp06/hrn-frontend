@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
-import { Route, BrowserRouter as Router, Switch, Redirect, withRouter } from 'react-router-dom'
+import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
 import { LoginForm, EventForm, ErrorBoundary } from './common'
@@ -16,10 +16,11 @@ import {
   ForgotPassword,
   SetNewPassword,
   HostDashboard,
-} from './components'
+  MyProfile,
+  Onboarding,
+} from './pages'
 import { AppProvider } from './context/AppProvider'
-import Footer from './ui/Footer'
-import Header from './ui/Header'
+import Header from './ui/Header/Header'
 import theme from './ui/theme'
 
 const App = () => {
@@ -60,6 +61,8 @@ const App = () => {
                     path="/set-new-password/:userId/:token/"
                     component={SetNewPassword}
                   />
+                  <Route exact path="/onboarding" component={Onboarding} />
+                  <Route exact path="/my-profile" component={MyProfile} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />
@@ -80,5 +83,3 @@ const App = () => {
 }
 
 export default App
-//            <Footer activeTab={activeTab} setActiveTab={setActiveTab} />
-// route to root when the go to a bad route

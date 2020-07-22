@@ -18,10 +18,6 @@ import { useAppContext } from '../context/useAppContext'
 const { lastSeenDuration } = constants
 
 const useStyles = makeStyles((theme) => ({
-  sectionHeader: {
-    ...theme.typography.h3,
-    color: theme.palette.common.ghostWhite,
-  },
   attendeesList: {
     alignSelf: 'flex-start',
   },
@@ -67,7 +63,7 @@ const AttendeesList = ({ eventId, timeState }) => {
 
   return (
     <Grid container item direction="column" alignItems="center" className={classes.attendeesList}>
-      <Typography className={classes.sectionHeader}>Online Attendees</Typography>
+      <Typography variant="h5">Online Attendees</Typography>
       <List dense>
         {oldOnlineUsers.map(({ user }) => {
           // const formattedDate = user.updated_at.slice(0, 10)

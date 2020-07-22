@@ -15,24 +15,23 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '200px',
   },
   formContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-    width: '40vw',
+    margin: theme.spacing(0, 'auto'),
+    padding: theme.spacing(5),
+  },
+  formHeader: {
+    textAlign: 'center',
   },
   inputContainer: {
-    marginTop: '2em',
-    marginBottom: '2em',
+    margin: theme.spacing(4, 0),
   },
   input: {
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   linkRedirectToLogin: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
     textDecoration: 'none',
-    marginTop: '20px',
+    marginTop: theme.spacing(2.5),
     '&:hover': {
       color: theme.palette.common.orchid,
     },
@@ -86,12 +85,11 @@ const SignUpForm = () => {
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
 
+    // history.push('/onboarding')
     // check to see if we were redirected here by an event
     const eventIdInLocalStorage = localStorage.getItem('eventId')
-
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)
-      // FIXME
     }
 
     window.location.reload()
@@ -100,12 +98,15 @@ const SignUpForm = () => {
   return (
     <div className={classes.wrapper}>
       <FloatCardMedium>
-        <Grid item container direction="column" className={classes.formContainer}>
+        <Grid item container direction="column" sm={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Glad to have you join us! 🙌
+                <Typography variant="h4" className={classes.formHeader}>
+                  Glad to have you join us!{' '}
+                  <span role="img" aria-label="hands up">
+                    🙌
+                  </span>
                 </Typography>
               </Grid>
             </Grid>

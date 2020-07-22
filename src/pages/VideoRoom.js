@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, GUMErrorModal, CameraDisabledBanner, RoundProgressBar } from '../common'
+import { Loading, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
@@ -77,10 +77,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
   },
   partnerName: {
-    fontFamily: 'Muli',
     textAlign: 'center',
-    fontSize: '2rem',
-    color: theme.palette.common.ghostWhite,
   },
   notReady: {
     position: 'fixed',
@@ -122,7 +119,6 @@ const VideoRoom = ({ match }) => {
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
-  const [GUMError, setGUMError] = useState('')
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
 
   const history = useHistory()
@@ -213,7 +209,6 @@ const VideoRoom = ({ match }) => {
           console.log('created local tracks at ', new Date())
         } catch (err) {
           console.log('camera wasnt enabled')
-          // setGUMError(err.name)
           return setIsGUMErrorModalActive(true)
         }
 
@@ -251,7 +246,7 @@ const VideoRoom = ({ match }) => {
     return (
       <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
         <div className={classes.partnerNameContainer}>
-          <Typography className={classes.partnerName}>
+          <Typography variant="h5" className={classes.partnerName}>
             {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
           </Typography>
         </div>
@@ -276,7 +271,6 @@ const VideoRoom = ({ match }) => {
   return eventStatus.current === latestStatus ? (
     <div>
       {isGUMErrorModalActive && (
-        // <GUMErrorModal onComplete={() => setIsGUMErrorModalActive(false)} errorName={GUMError} />
         <Grid
           className={classes.cameraDisabledWrapper}
           container
@@ -299,7 +293,13 @@ const VideoRoom = ({ match }) => {
         )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound ? <RoundProgressBar myRound={myRound} event={event} /> : null}
+        {myRound ? (
+          <RoundProgressBar
+            myRound={myRound}
+            event={event}
+            hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
+          />
+        ) : null}
         {showPartnersName()}
       </div>
     </div>

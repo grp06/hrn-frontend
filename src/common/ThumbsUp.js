@@ -3,12 +3,11 @@ import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import Snackbar from '@material-ui/core/Snackbar'
 import Typography from '@material-ui/core/Typography'
-import MuiAlert from '@material-ui/lab/Alert'
 import { makeStyles } from '@material-ui/core/styles'
 import { useAppContext } from '../context/useAppContext'
 import { setPartnerXThumb, setPartnerYThumb } from '../gql/mutations'
+import { Snack } from '.'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -21,17 +20,26 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   thumbsUpContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto'),
     width: '70%',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   buttonContainer: {
     width: '35%',
+    [theme.breakpoints.down('md')]: {
+      width: '70%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
+  thumbingButton: {
+    margin: theme.spacing(1.5, 0),
+  },
   noThanksButton: {
+    margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
@@ -49,7 +57,7 @@ const ThumbsUp = ({ myRound, userId }) => {
   const { event } = useAppContext()
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [userThumbed, setUserThumbed] = useState(false)
-  const [showSnackbar, setShowSnackbar] = useState(false)
+  const [showThumbSnack, setShowThumbSnack] = useState(false)
 
   const [setPartnerXThumbMutation] = useMutation(setPartnerXThumb, {
     variables: {
@@ -67,15 +75,6 @@ const ThumbsUp = ({ myRound, userId }) => {
     skip: !myRound,
   })
 
-  const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
-
-  const handleSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setShowSnackbar(false)
-  }
-
   const handleThumbUpClick = () => {
     const iAmPartnerX = myRound.partnerX_id === userId
     if (iAmPartnerX) {
@@ -86,7 +85,7 @@ const ThumbsUp = ({ myRound, userId }) => {
     }
     setShowThumbUpButton(false)
     setUserThumbed(true)
-    setShowSnackbar(true)
+    setShowThumbSnack(true)
     if (event.status === 'complete') {
       history.push(`/events/${event.id}/event-complete`)
     }
@@ -123,8 +122,16 @@ const ThumbsUp = ({ myRound, userId }) => {
               alignItems="center"
               className={classes.buttonContainer}
             >
-              <Button variant="contained" color="primary" onClick={handleThumbUpClick}>
-                Connect Us 👍
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleThumbUpClick}
+                className={classes.thumbingButton}
+              >
+                Connect Us{' '}
+                <span role="img" aria-label="thumbs up">
+                  👍
+                </span>
               </Button>
               <Button
                 variant="contained"
@@ -132,7 +139,10 @@ const ThumbsUp = ({ myRound, userId }) => {
                 className={classes.noThanksButton}
                 onClick={handlePassOnThumbingClick}
               >
-                No Thanks 😇
+                No Thanks{' '}
+                <span role="img" aria-label="halo smiley">
+                  😇
+                </span>
               </Button>
             </Grid>
           </>
@@ -145,23 +155,39 @@ const ThumbsUp = ({ myRound, userId }) => {
                   Connecting you to a new friend soon!
                 </Typography>
                 <div className={classes.emoji}>
-                  <span>🥳</span>
+                  <span role="img" aria-label="party smiley">
+                    🥳
+                  </span>
                 </div>
               </>
             ) : (
               <>
-                <Typography className={classes.messageText}>Sorry to Hear! 😔</Typography>
+                <Typography className={classes.messageText}>
+                  Sorry to Hear!{' '}
+                  <span role="img" aria-label="dissapointed face">
+                    😔
+                  </span>
+                </Typography>
                 <Typography className={classes.messageText}>
                   This next person is going to be great!
                 </Typography>
               </>
             )}
-
-            <Snackbar open={showSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
-              <Alert onClose={handleSnackbarClose} severity="success">
-                Carrier pigeon sent 🕊
-              </Alert>
-            </Snackbar>
+            <Snack
+              open={showThumbSnack}
+              onClose={() => setShowThumbSnack(false)}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              duration={6000}
+              severity="success"
+              snackMessage={
+                <div>
+                  Carrier pigeon sent{' '}
+                  <span role="img" aria-label="dove">
+                    🕊
+                  </span>
+                </div>
+              }
+            />
           </>
         )}
       </Grid>

@@ -3,7 +3,6 @@ import { useState } from 'react'
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
-import { sleep } from '../helpers'
 
 const useTwilio = () => {
   const {
@@ -41,7 +40,7 @@ const useTwilio = () => {
 
       room.participants.forEach(participantConnected)
 
-      room.on('participantConnected', (remoteParticipant) => {
+      room.on('participantConnected', async (remoteParticipant) => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)

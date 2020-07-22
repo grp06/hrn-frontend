@@ -2,42 +2,34 @@ import React, { useState } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import Snackbar from '@material-ui/core/Snackbar'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import MuiAlert from '@material-ui/lab/Alert'
 import { Redirect, Link, useHistory } from 'react-router-dom'
-
-import { FloatCardMedium } from '.'
-
-const Alert = (props) => {
-  return <MuiAlert elevation={1} variant="filled" {...props} />
-}
+import { Snack, FloatCardMedium } from '.'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     marginTop: '200px',
   },
   formContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-    width: '40vw',
+    margin: theme.spacing(0, 'auto'),
+    padding: theme.spacing(5),
+  },
+  formHeader: {
+    textAlign: 'center',
   },
   inputContainer: {
-    marginTop: '2em',
-    marginBottom: '2em',
+    margin: theme.spacing(4, 0),
   },
   input: {
-    marginBottom: '1em',
+    marginBottom: theme.spacing(2),
   },
   linkRedirectToSignUp: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
     textDecoration: 'none',
-    marginTop: '20px',
+    marginTop: theme.spacing(2.5),
     '&:hover': {
       color: theme.palette.common.orchid,
     },
@@ -50,20 +42,12 @@ const LoginForm = () => {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [errorSnackbarOpen, setErrorSnackbarOpen] = useState(false)
+  const [showErrorSnack, setShowErrorSnack] = useState(false)
 
   const userIdInLocalStorage = localStorage.getItem('userId')
   // check to see if a user is already logged in, if so redirect
   if (userIdInLocalStorage && userIdInLocalStorage !== undefined) {
     return <Redirect to="/events" />
-  }
-
-  const handleErrorSnackbarClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return
-    }
-
-    setErrorSnackbarOpen(false)
   }
 
   const handleFormSubmit = async (event) => {
@@ -85,7 +69,7 @@ const LoginForm = () => {
     // I tried try and catch, but it doesn't seem that we are throwing
     // an error from the backend
     if (!loginResponse.token) {
-      setErrorSnackbarOpen(true)
+      setShowErrorSnack(true)
       return
     }
     const { id, token } = loginResponse
@@ -104,12 +88,15 @@ const LoginForm = () => {
   return (
     <div className={classes.wrapper}>
       <FloatCardMedium>
-        <Grid item container direction="column" className={classes.formContainer}>
+        <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" style={{ lineHeight: 1 }}>
-                  Welcome 👋
+                <Typography variant="h4" className={classes.formHeader}>
+                  Welcome{' '}
+                  <span role="img" aria-label="hand wave">
+                    👋
+                  </span>
                 </Typography>
               </Grid>
             </Grid>
@@ -148,16 +135,12 @@ const LoginForm = () => {
               <Link className={classes.linkRedirectToSignUp} to="/forgot-password">
                 Forgot Password?
               </Link>
-              <Snackbar
-                open={errorSnackbarOpen}
-                autoHideDuration={6000}
-                onClose={handleErrorSnackbarClose}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              >
-                <Alert onClose={handleErrorSnackbarClose} severity="error">
-                  Incorrect password or email
-                </Alert>
-              </Snackbar>
+              <Snack
+                open={showErrorSnack}
+                onClose={() => setShowErrorSnack(false)}
+                severity="error"
+                snackMessage="Incorrect password or email"
+              />
             </Grid>
           </form>
         </Grid>

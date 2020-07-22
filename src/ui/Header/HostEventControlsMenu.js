@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -8,8 +7,12 @@ import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { TransitionModal } from '../common'
+import { useMutation } from 'react-apollo'
+import { TransitionModal } from '../../common'
+import { deleteRounds, resetEvent } from '../../gql/mutations'
+import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   headerIcon: {
@@ -27,61 +30,75 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SettingsMenu = ({ resetUser }) => {
+const HostEventControlsMenu = ({ event, user }) => {
   const classes = useStyles()
-  const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
   const anchorRef = useRef(null)
+  const { host_id, id: eventId, status: eventStatus } = event
+  const { userId } = user
+  const regex = /\/events\/\d+/
+  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
+  const isEventHost = host_id === userId
+
+  const [deleteRoundsMutation] = useMutation(deleteRounds, {
+    variables: {
+      eventId,
+    },
+  })
+  const [resetEventMutation] = useMutation(resetEvent, {
+    variables: {
+      id: eventId,
+    },
+  })
 
   const handleMenuOpen = () => {
     setMenuOpen((prevOpen) => !prevOpen)
   }
 
-  const handleMenuClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+  const handleMenuClose = (clickEvent) => {
+    if (anchorRef.current && anchorRef.current.contains(clickEvent.target)) {
       return
     }
     setMenuOpen(false)
   }
 
-  const handleLogout = () => {
-    localStorage.clear()
-    resetUser()
-    setMenuOpen(false)
-    history.push('/')
+  const handleListKeyDown = (clickEvent) => {
+    if (clickEvent.key === 'Tab') {
+      clickEvent.preventDefault()
+      setMenuOpen(false)
+    }
   }
 
-  const logoutModalButton = TransitionModal({
+  const handleResetEventModal = TransitionModal({
     button: {
-      buttonText: 'Logout',
+      buttonText: 'Reset Event',
       buttonVariant: 'text',
       buttonColor: 'default',
     },
-    modalBody: 'Are you sure you want to leave us 😢?',
+    modalBody: (
+      <Typography variant="h5">
+        This will reset the event in its entirety. Are you 100% sure?
+      </Typography>
+    ),
     onAcceptFunction: async () => {
-      handleLogout()
+      await deleteRoundsMutation(eventId)
+      await resetEventMutation(eventId)
+      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
     },
-    onAcceptButtonText: 'Im sure',
     onCloseFunction: () => {
       setMenuOpen(false)
     },
   })
 
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault()
-      setMenuOpen(false)
-    }
-  }
-  return (
+  return isEventHost && eventIdInUrl && eventStatus !== 'not-started' ? (
     <div>
       <IconButton color="inherit" onClick={handleMenuOpen} ref={anchorRef} disableRipple>
-        <FeatherIcon icon="settings" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
+        <FeatherIcon icon="command" stroke="#fabb5b" size="24" className={classes.headerIcon} />
       </IconButton>
       <Popper
         open={menuOpen}
         anchorEl={anchorRef.current}
-        placement="bottom-end"
+        placement="bottom-start"
         role={undefined}
         transition
         disablePortal
@@ -100,7 +117,13 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem className={classes.menuItem}>{logoutModalButton}</MenuItem>
+                  {/* {eventStatus === 'pre-event' && (
+                    <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
+                  )} */}
+                  {/* <MenuItem onClick={handleMenuClose} className={classes.menuItem}>
+                    Active Participants
+                  </MenuItem> */}
+                  <MenuItem className={classes.menuItem}>{handleResetEventModal}</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -108,7 +131,7 @@ const SettingsMenu = ({ resetUser }) => {
         )}
       </Popper>
     </div>
-  )
+  ) : null
 }
 
-export default SettingsMenu
+export default HostEventControlsMenu
