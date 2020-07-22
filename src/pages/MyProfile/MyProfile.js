@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
 import { getTagsByUserId } from '../../gql/queries'
 import { Loading, TagsList } from '../../common'
-import { MyProfileDashboard, MyProfileSidebar } from '.'
+import { MyProfileSidebar } from '.'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -40,9 +40,6 @@ const MyProfile = () => {
     >
       <Grid item>
         <MyProfileSidebar user={user} />
-      </Grid>
-      <Grid item>
-        <MyProfileDashboard />
       </Grid>
     </Grid>
   )

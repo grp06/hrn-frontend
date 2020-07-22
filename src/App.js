@@ -21,6 +21,7 @@ import {
 } from './pages'
 import { AppProvider } from './context/AppProvider'
 import Header from './ui/Header/Header'
+import Subheader from './ui/Subheader/Subheader'
 import theme from './ui/theme'
 
 const App = () => {
@@ -73,6 +74,7 @@ const App = () => {
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+                <Subheader />
               </AppProvider>
             </ErrorBoundary>
           </Router>
