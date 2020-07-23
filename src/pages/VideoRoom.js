@@ -10,8 +10,6 @@ import { Loading, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
 
 import { VideoRouter } from '.'
-import { ConnectingToSomeone } from '../common/waitingRoomScreens'
-
 import { useAppContext } from '../context/useAppContext'
 import { useTwilio, useGetCameraAndMicStatus } from '../hooks'
 
@@ -106,7 +104,6 @@ const VideoRoom = ({ match }) => {
     user,
     event,
     twilio,
-    setLateArrival,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
   } = useAppContext()
@@ -165,13 +162,11 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundDataLoading && myRoundData) {
-      // if you're on this page and you don't have roundData --- youre late!
-      if (!myRoundData.rounds.length) {
-        setLateArrival(true)
-      } else {
-        setMyRound(myRoundData.rounds[0])
-        setLateArrival(false)
-      }
+      // if you're on this page and you don't have roundData, you either
+      // 1. arrived late
+      // 2. didn't get put into matching algorithm since your camera is off
+
+      setMyRound(myRoundData.rounds[0] || 'no-assignment')
     }
   }, [myRoundDataLoading, myRoundData])
 
@@ -192,7 +187,7 @@ const VideoRoom = ({ match }) => {
       }
       getTwilioToken()
     }
-  }, [myRound])
+  }, [myRound, event])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your room
@@ -201,14 +196,11 @@ const VideoRoom = ({ match }) => {
       const setupRoom = async () => {
         let localTracks
         try {
-          console.log('about to create local tracks at ', new Date())
           localTracks = await createLocalTracks({
             video: true,
             audio: process.env.NODE_ENV === 'production',
           })
-          console.log('created local tracks at ', new Date())
         } catch (err) {
-          console.log('camera wasnt enabled')
           return setIsGUMErrorModalActive(true)
         }
 
@@ -230,7 +222,7 @@ const VideoRoom = ({ match }) => {
     }
   }, [room])
 
-  if (appLoading || !eventSet) {
+  if (appLoading || !eventSet || !myRound) {
     return <Loading />
   }
 
@@ -257,10 +249,9 @@ const VideoRoom = ({ match }) => {
   // If you are switching from room-in-progress to in-between-rounds
   // then we want to clear your room and token
   const { status: latestStatus } = event
-  console.log('VideoRoom -> latestStatus', latestStatus)
+
   if (latestStatus !== eventStatusRef.current) {
     if (latestStatus === 'room-in-progress' && eventStatusRef.current === 'in-between-rounds') {
-      console.warn('setting token, room, round to null')
       setToken(null)
       setRoom(null)
       eventStatusRef.current = latestStatus
@@ -269,8 +260,7 @@ const VideoRoom = ({ match }) => {
     eventStatusRef.current = latestStatus
   }
 
-  console.log('VideoRoom -> eventStatusRef.current', eventStatusRef.current)
-  return eventStatusRef.current === latestStatus ? (
+  return (
     <div>
       {isGUMErrorModalActive && (
         <Grid
@@ -285,17 +275,11 @@ const VideoRoom = ({ match }) => {
           />
         </Grid>
       )}
-
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
-        {hasPartnerAndIsConnecting && (
-          <div className={classes.screenOverlay}>
-            <ConnectingToSomeone />
-          </div>
-        )}
         <div id="local-video" className={classes.myVideo} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound && latestStatus !== 'partner-preview' ? (
+        {myRound !== 'no-assignment' && latestStatus !== 'partner-preview' ? (
           <RoundProgressBar
             myRound={myRound}
             event={event}
@@ -305,7 +289,7 @@ const VideoRoom = ({ match }) => {
         {showPartnersName()}
       </div>
     </div>
-  ) : null
+  )
 }
 
 export default VideoRoom

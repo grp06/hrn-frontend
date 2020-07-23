@@ -37,7 +37,6 @@ const defaultState = {
   event: {},
   twilio: {
     partnerDisconnected: false,
-    lateArrival: false,
     hasPartnerAndIsConnecting: false,
   },
 }

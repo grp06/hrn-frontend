@@ -66,7 +66,7 @@ const PreEvent = ({ match }) => {
   }, [event])
 
   useEffect(() => {
-    if (eventSet && userId) {
+    if (eventSet && userId && !onlineUsers) {
       const getOnlineUsers = async () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/rooms/get-online-event-users/${eventId}`,
@@ -80,12 +80,12 @@ const PreEvent = ({ match }) => {
           }
         )
         const response = await res.json()
-
+        console.warn('ONLINE USERS = ', onlineUsers)
         setOnlineUsers(response.data)
       }
       getOnlineUsers()
     }
-  }, [event, userId])
+  }, [event, userId, onlineUsers])
 
   useEffect(() => {
     if (onlineUsers) {

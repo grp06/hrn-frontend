@@ -28,10 +28,10 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
     if (status === 'room-in-progress') {
       return event.round_length * 60000
     }
-    return 20000
+    return 10000
   }
 
-  const roundEndTime = new Date(myRound.started_at).getTime() + getDuration()
+  const roundEndTime = new Date(event.updated_at).getTime() + getDuration()
   const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 15000
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
     const latestUpdateFromServer = new Date(updatedAt).getTime()
 
     if (status === 'room-in-progress') {
-      const roundStartTime = new Date(myRound.started_at).getTime()
+      const roundStartTime = new Date(event.updated_at).getTime()
 
       return latestUpdateFromServer - roundStartTime
     }
