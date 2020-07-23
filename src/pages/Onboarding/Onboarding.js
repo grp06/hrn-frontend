@@ -10,6 +10,7 @@ import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { useAppContext } from '../../context/useAppContext'
+import SelectInput from '@material-ui/core/Select/SelectInput'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { user, app } = useAppContext()
+  const { setUsersTags, user, app } = useAppContext()
   const { appLoading } = app
   const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
@@ -58,10 +59,12 @@ const Onboarding = () => {
     return <Loading />
   }
 
+  console.log('tagsData ->', tagsData)
+
   // Onboarding should only be displayed directly after signing up
-  if (usersCityInContext || usersTagsInContext.length) {
-    history.push('/events')
-  }
+  // if (usersCityInContext || usersTagsInContext.length) {
+  //   history.push('/events')
+  // }
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
@@ -70,6 +73,7 @@ const Onboarding = () => {
 
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)
+    let insertTagMutationResponse
     try {
       await updateUserMutation({
         variables: {
@@ -83,7 +87,7 @@ const Onboarding = () => {
     }
 
     try {
-      await insertUserTagsMutation({
+      insertTagMutationResponse = await insertUserTagsMutation({
         variables: {
           objects: values.interests,
         },
@@ -92,8 +96,12 @@ const Onboarding = () => {
       console.log('insertUserTagsMutation error ->', err)
     }
 
+    await sleep(500)
+    setShowSubmitSuccessSnack(true)
     await sleep(1000)
-    return setShowSubmitSuccessSnack(true)
+    if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
+      setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
+    }
   }
 
   return (

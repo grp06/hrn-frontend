@@ -13,7 +13,8 @@ const insertUserTags = gql`
           tags_users {
             tag {
               name
-              id
+              tag_id
+              category
             }
           }
         }

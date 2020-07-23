@@ -23,11 +23,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const TagsForm = ({ tags, userId }) => {
+const TagsForm = ({ tags, userId, onClose }) => {
   const classes = useStyles()
-  const { setUsersTags } = useAppContext()
+  const { setUsersTags, user } = useAppContext()
+  const { tags_users: usersTags } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
+
+  const usersTagsAsFormInput = usersTags.map((tagObject) => {
+    return { tag_id: tagObject.tag.tag_id, user_id: userId }
+  })
+
   return (
     <div>
       <Formik
@@ -44,12 +50,15 @@ const TagsForm = ({ tags, userId }) => {
           }
 
           setShowSubmitSuccessSnack(true)
-          await sleep(1500)
+          await sleep(1000)
 
           if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
             setUsersTags(
               insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users
             )
+          }
+          if (onClose) {
+            onClose()
           }
         }}
         initialValues={{
@@ -63,6 +72,7 @@ const TagsForm = ({ tags, userId }) => {
                 <OnboardingInterestTagInput
                   tagsData={tags}
                   userId={userId}
+                  usersTags={usersTagsAsFormInput}
                   value={field.value}
                   onChange={(selectedTags) => {
                     console.log('I got the value correctly from my child: ', selectedTags)
@@ -71,7 +81,7 @@ const TagsForm = ({ tags, userId }) => {
                 />
               )}
             </Field>
-            <Grid container justify="center" alignItems="Center">
+            <Grid container justify="center" alignItems="center">
               <Button
                 startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                 disabled={isSubmitting}

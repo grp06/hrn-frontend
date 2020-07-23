@@ -34,11 +34,11 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         </Avatar>
         <Typography variant="h5">{name}</Typography>
         <Typography variant="subtitle1">{city}</Typography>
+        {/* <SidebarAchievements /> */}
+        <SidebarTags userId={userId} usersTags={usersTags} databaseTags={databaseTags.tags} />
         <Button variant="contained" color="primary" className={classes.editProfileButton}>
           Edit Profile
         </Button>
-        <SidebarAchievements />
-        <SidebarTags userId={userId} usersTags={usersTags} databaseTags={databaseTags.tags} />
       </Grid>
     </FloatCardNarrow>
   )

@@ -7,18 +7,26 @@ import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   subheaderContainer: {
-    width: '50vw',
+    width: '70vw',
+    padding: theme.spacing(3),
     position: 'fixed',
-    top: '6%',
-    left: '25%',
-    right: '25%',
+    top: '7%',
+    left: '15vw',
+    right: '15vw',
     [theme.breakpoints.down('sm')]: {
-      top: '11%',
+      top: '12%',
       width: '100vw',
       left: '0%',
       right: '0%',
     },
     // top: '10%',
+  },
+  darkButton: {
+    backgroundColor: theme.palette.common.greyButton,
+    color: theme.palette.common.ghostWhite,
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
   },
 }))
 
@@ -60,7 +68,13 @@ const Subheader = () => {
           variant="filled"
           severity="info"
           action={
-            <Button color="inherit" size="small" onClick={handleAlertButtonClick}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              className={classes.darkButton}
+              onClick={handleAlertButtonClick}
+            >
               Fill out my tags
             </Button>
           }

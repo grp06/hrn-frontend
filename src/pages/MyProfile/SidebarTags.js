@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import FeatherIcon from 'feather-icons-react'
 import { TagsForm } from '.'
 
 const createStyles = makeStyles((theme) => ({
@@ -14,17 +15,28 @@ const createStyles = makeStyles((theme) => ({
     width: '100%',
     margin: theme.spacing(2, 0),
   },
+  editTagsIcon: {
+    cursor: 'pointer',
+    marginLeft: theme.spacing(1),
+  },
 }))
 
 const SidebarTags = ({ userId, usersTags, databaseTags }) => {
   const classes = createStyles()
+  const [showTagsForm, setShowTagsForm] = useState(false)
   console.log('usersTags ->', usersTags)
   console.log('databaseTags ->', databaseTags)
 
   const renderUserTags = () => {
-    if (usersTags.length === 0) {
-      return <TagsForm tags={databaseTags} userId={userId} />
+    if (showTagsForm) {
+      return null
     }
+
+    if (usersTags.length === 0) {
+      console.log('keep getting into here')
+      return setShowTagsForm(true)
+    }
+
     if (usersTags.length > 1) {
       usersTags = usersTags.sort((tagA, tagB) => {
         return tagA.tag.name.toLowerCase() > tagB.tag.name.toLowerCase()
@@ -36,6 +48,12 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
     })
   }
 
+  const renderTagsForm = () => {
+    return showTagsForm ? (
+      <TagsForm tags={databaseTags} userId={userId} onClose={() => setShowTagsForm(false)} />
+    ) : null
+  }
+
   return (
     <Grid
       container
@@ -44,9 +62,24 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
       alignItems="flex-start"
       className={classes.sidebarTagsContainer}
     >
-      <Typography variant="subtitle2">TAGS</Typography>
-      <Grid container alignItems="center" wrap="wrap" className={classes.tagsContainer}>
+      <Grid container item direction="row">
+        <Typography variant="subtitle2">TAGS</Typography>
+        <div
+          onClick={() => setShowTagsForm((prevFormState) => !prevFormState)}
+          className={classes.editTagsIcon}
+        >
+          <FeatherIcon icon="edit-3" stroke="#fabb5b" size="20" />
+        </div>
+      </Grid>
+      <Grid
+        container
+        alignItems="center"
+        justify="center"
+        wrap="wrap"
+        className={classes.tagsContainer}
+      >
         {renderUserTags()}
+        {renderTagsForm()}
       </Grid>
     </Grid>
   )
