@@ -55,6 +55,7 @@ const AppProvider = ({ children }) => {
   const history = useHistory()
   const { userId } = state.user
 
+  console.log('state.user ->', state.user)
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
     skip: !userId,
@@ -136,6 +137,7 @@ const AppProvider = ({ children }) => {
     if (userData) {
       if (userData.users.length) {
         const { name, role, id, email, city, tags_users } = userData.users[0]
+        console.log('tags_users ->', tags_users)
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
@@ -143,6 +145,7 @@ const AppProvider = ({ children }) => {
           draft.user.email = email
           draft.user.city = city
           draft.user.tags_users = tags_users
+          // draft.user = userData.users[0]
 
           if (!eventIdInUrl) {
             draft.app.appLoading = false

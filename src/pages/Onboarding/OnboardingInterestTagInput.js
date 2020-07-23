@@ -56,8 +56,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
       return chipElement.classList.remove('MuiChip-colorPrimary', classes.toggleTagActive)
     }
 
-    if (selectedTags.length >= 5) {
-      console.log('getting in here')
+    if (selectedTags.length >= 8) {
       return setShowTooManyTagsSnack(true)
     }
     setSelectedTags((prevTags) => [...prevTags, { tag_id: tagId, user_id: userId }])
@@ -88,7 +87,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
       <Grid container direction="column" className={classes.container}>
         <Grid item className={classes.gridItemContainer}>
           <Typography variant="subtitle1">
-            Choose up to 5 interests that best represent you. Other users who get matched with you
+            Choose up to 8 interests that best represent you. Other users who get matched with you
             will see them.
           </Typography>
         </Grid>
@@ -97,7 +96,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
           {renderTagsByCategory('professional')}
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography variant="subtitle2">Hobbies</Typography>
+          <Typography variant="subtitle2">Personal</Typography>
           {renderTagsByCategory('hobby')}
         </Grid>
       </Grid>
@@ -105,7 +104,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
         open={showTooManyTagsSnack}
         onClose={() => setShowTooManyTagsSnack(false)}
         severity="info"
-        snackMessage={'Please only choose 5 interests'}
+        snackMessage={'Please only choose 8 interests'}
       />
     </div>
   )

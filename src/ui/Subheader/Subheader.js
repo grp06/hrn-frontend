@@ -45,9 +45,9 @@ const Subheader = () => {
   const onEventHomePage = Boolean(window.location.pathname.match(EventHomeRegex))
   const onEventInProgressPage = Boolean(window.location.pathname.match(EventInProgressRegex))
 
-  console.log('onEventsPage ->', onEventsPage)
-  console.log('onEventHomePage ->', onEventHomePage)
-  console.log('onEventInProgressPage ->', onEventInProgressPage)
+  // console.log('onEventsPage ->', onEventsPage)
+  // console.log('onEventHomePage ->', onEventHomePage)
+  // console.log('onEventInProgressPage ->', onEventInProgressPage)
 
   const showSubheader =
     usersTags.length === 0 && (onEventsPage || onEventHomePage) && !onEventInProgressPage

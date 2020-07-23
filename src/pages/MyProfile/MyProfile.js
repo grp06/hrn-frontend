@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
-import { getTagsByUserId } from '../../gql/queries'
+import { getAllTags } from '../../gql/queries'
 import { Loading, TagsList } from '../../common'
 import { MyProfileSidebar } from '.'
 
@@ -20,17 +20,12 @@ const MyProfile = () => {
   const { userId } = user
   const { appLoading } = app
 
-  const { data: tagsData, loading: tagsLoading } = useQuery(getTagsByUserId, {
-    variables: {
-      user_id: userId,
-    },
-    skip: !userId,
-  })
+  const { data: databaseTags, loading: allTagsLoading } = useQuery(getAllTags)
 
-  if (appLoading || tagsLoading) {
+  if (appLoading || allTagsLoading) {
     return <Loading />
   }
-  console.log('tagsData = ', tagsData)
+  console.log('tagsData = ', databaseTags)
   return (
     <Grid
       container
@@ -39,7 +34,7 @@ const MyProfile = () => {
       justify="space-around"
     >
       <Grid item>
-        <MyProfileSidebar user={user} />
+        <MyProfileSidebar user={user} databaseTags={databaseTags} />
       </Grid>
     </Grid>
   )

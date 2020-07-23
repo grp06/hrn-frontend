@@ -8,7 +8,7 @@ const createStyles = makeStyles((theme) => ({
     top: '-40px',
     bottom: '0%',
     display: 'block',
-    width: '25vw',
+    width: '35vw',
     height: 'auto',
     padding: theme.spacing(3),
     borderRadius: '4px',
@@ -16,7 +16,7 @@ const createStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
     [theme.breakpoints.down('md')]: {
-      width: '40vw',
+      width: '50vw',
     },
     [theme.breakpoints.down('sm')]: {
       width: '85vw',

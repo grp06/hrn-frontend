@@ -23,9 +23,9 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const MyProfileSidebar = ({ user }) => {
+const MyProfileSidebar = ({ user, databaseTags }) => {
   const classes = createStyles()
-  const { name, city, tags_users: usersTags } = user
+  const { userId, name, city, tags_users: usersTags } = user
   return (
     <FloatCardNarrow>
       <Grid container direction="column" alignItems="center" justify="center">
@@ -38,7 +38,7 @@ const MyProfileSidebar = ({ user }) => {
           Edit Profile
         </Button>
         <SidebarAchievements />
-        <SidebarTags usersTags={usersTags} />
+        <SidebarTags userId={userId} usersTags={usersTags} databaseTags={databaseTags.tags} />
       </Grid>
     </FloatCardNarrow>
   )

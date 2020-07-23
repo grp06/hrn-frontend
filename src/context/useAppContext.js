@@ -19,6 +19,12 @@ const useAppContext = () => {
     })
   }
 
+  function setUsersTags(usersTags) {
+    dispatch((draft) => {
+      draft.user.tags_users = usersTags
+    })
+  }
+
   function setRedirect(redirect) {
     dispatch((draft) => {
       draft.app.redirect = redirect
@@ -78,6 +84,7 @@ const useAppContext = () => {
     setLateArrival,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
+    setUsersTags,
   }
 }
 
