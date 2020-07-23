@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-
+import clsx from 'clsx'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
@@ -8,10 +8,10 @@ import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
 import { Loading, CameraDisabledBanner, RoundProgressBar } from '../common'
 import { getToken } from '../helpers'
-
+import { ConnectingToSomeone } from '../common/waitingRoomScreens'
 import { VideoRouter } from '.'
 import { useAppContext } from '../context/useAppContext'
-import { useTwilio, useGetCameraAndMicStatus } from '../hooks'
+import { useTwilio, useGetCameraAndMicStatus, useIsUserActive } from '../hooks'
 
 const { createLocalTracks, connect } = require('twilio-video')
 
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     background: theme.palette.common.blackBody,
   },
+
   screenOverlay: {
     position: 'absolute',
     left: 0,
@@ -43,7 +44,12 @@ const useStyles = makeStyles((theme) => ({
     top: '79px',
     right: '15px',
     zIndex: 99,
-
+    opacity: 0,
+    transition: '.6s',
+    '&.showControls, &:hover': {
+      transition: 'opacity 0.6s',
+      opacity: 1,
+    },
     '& video': {
       borderRadius: 4,
       width: '150px',
@@ -66,6 +72,12 @@ const useStyles = makeStyles((theme) => ({
     bottom: '5%',
     width: '100vw',
     height: 'auto',
+    opacity: 0,
+    transition: '.6s',
+    '&.showControls, &:hover': {
+      transition: 'opacity 0.6s',
+      opacity: 1,
+    },
   },
   partnerNameContainer: {
     padding: '5px 20px',
@@ -122,6 +134,7 @@ const VideoRoom = ({ match }) => {
   const eventStatusRef = useRef()
 
   const hasCheckedCamera = useRef()
+  const showControls = useIsUserActive()
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
@@ -236,7 +249,12 @@ const VideoRoom = ({ match }) => {
       userIsPartnerX = true
     }
     return (
-      <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
+      <Grid
+        container
+        justify="center"
+        alignItems="center"
+        className={`${clsx(classes.partnerNameGrid, { showControls })}`}
+      >
         <div className={classes.partnerNameContainer}>
           <Typography variant="h5" className={classes.partnerName}>
             {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
@@ -277,7 +295,12 @@ const VideoRoom = ({ match }) => {
       )}
       <VideoRouter myRound={myRound} />
       <div className={classes.videoWrapper}>
-        <div id="local-video" className={classes.myVideo} />
+        {hasPartnerAndIsConnecting && (
+          <div className={classes.screenOverlay}>
+            <ConnectingToSomeone />
+          </div>
+        )}
+        <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
         {myRound !== 'no-assignment' && latestStatus !== 'partner-preview' ? (
           <RoundProgressBar
