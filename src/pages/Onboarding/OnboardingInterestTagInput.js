@@ -120,8 +120,8 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
       <Grid container direction="column" className={classes.container}>
         <Grid item className={classes.gridItemContainer}>
           <Typography variant="subtitle1">
-            Choose up to 8 interests that best describe you. Other users who get matched with you
-            will see them.
+            Choose up to 8 tags that best describe you. Other users who get matched with you will
+            see them.
           </Typography>
         </Grid>
         <Grid item className={classes.gridItemContainer}>

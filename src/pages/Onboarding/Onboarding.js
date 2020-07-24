@@ -10,37 +10,14 @@ import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { useAppContext } from '../../context/useAppContext'
-import SelectInput from '@material-ui/core/Select/SelectInput'
+import { GeosuggestCityInput } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: '200px',
   },
-  locationInputContainer: {
+  cityInputContainer: {
     padding: theme.spacing(0, 2.5),
-  },
-  geosuggestInput: {
-    width: '100%',
-    padding: theme.spacing(1, 0.5),
-    fontSize: '1.3rem',
-    borderRadius: '4px',
-  },
-  geosuggestSuggests: {
-    marginTop: 0,
-    // padding: '10px 0px',
-    backgroundColor: theme.palette.common.greyHighlight,
-    borderRadius: '4px',
-  },
-  geosuggestItem: {
-    width: '100%',
-    fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1, 0),
-    borderBottom: '1px solid #3e4042',
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: theme.palette.common.greyBorder,
-    },
   },
 }))
 
@@ -65,11 +42,6 @@ const Onboarding = () => {
   // if (usersCityInContext || usersTagsInContext.length) {
   //   history.push('/events')
   // }
-
-  const handleSuggestSelect = (suggest, form) => {
-    console.log(suggest.gmaps.name)
-    form.setFieldValue('city', suggest.gmaps.name)
-  }
 
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)
@@ -114,17 +86,12 @@ const Onboarding = () => {
           }}
           onSubmit={handleOnboardingFormSubmit}
         >
-          <div label="city" className={classes.locationInputContainer}>
+          <div label="city" className={classes.cityInputContainer}>
             <Field name="city">
               {({ form }) => (
-                <Geosuggest
+                <GeosuggestCityInput
                   placeholder="Type in your city"
-                  types={['(cities)']}
-                  ignoreTab
-                  inputClassName={classes.geosuggestInput}
-                  suggestsClassName={classes.geosuggestSuggests}
-                  suggestItemClassName={classes.geosuggestItem}
-                  onSuggestSelect={(suggest) => {
+                  onSuggestSelectCallback={(suggest) => {
                     if (suggest) {
                       console.log(suggest.gmaps.name)
                       form.setFieldValue('city', suggest.gmaps.name)

@@ -3,7 +3,6 @@ import { Formik, Form, Field } from 'formik'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
-import Geosuggest from 'react-geosuggest'
 import { Snack } from '../../common'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
@@ -12,48 +11,16 @@ import { sleep } from '../../helpers'
 import { TextField } from 'formik-material-ui'
 import { OnboardingInterestTagInput } from '../Onboarding'
 import { useAppContext } from '../../context/useAppContext'
-import './geosuggest.css'
+import { GeosuggestCityInput } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
     width: '80%',
     margin: theme.spacing(3, 'auto'),
   },
-  geosuggestContainer: {
-    width: '100%',
-    marginTop: theme.spacing(3),
-  },
   tagsContainer: {
     width: '100%',
     marginTop: theme.spacing(5),
-  },
-  geosuggestInput: {
-    width: '100%',
-    padding: theme.spacing(0.5, 0),
-    fontSize: '1rem',
-    backgroundColor: 'transparent',
-    border: 'none',
-    borderBottom: '2px solid #3e4042',
-    fontWeight: '300',
-    color: theme.palette.common.ghostWhiteBody,
-    fontFamily: 'Muli',
-    marginTop: theme.spacing(3),
-  },
-  geosuggestSuggests: {
-    marginTop: 0,
-    backgroundColor: theme.palette.common.greyHighlight,
-    borderRadius: '4px',
-  },
-  geosuggestItem: {
-    width: '100%',
-    fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1, 0),
-    borderBottom: '1px solid #3e4042',
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: theme.palette.common.greyBorder,
-    },
   },
   buttonContainer: {
     width: '65%',
@@ -83,29 +50,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
   })
-
-  useEffect(() => {
-    const geosuggestLabelDOMElement = document.getElementById('geosuggest-label')
-    const geosuggestUnderlineDOMElement = document.getElementById('geosuggest-form-container')
-    geosuggestLabelDOMElement.classList.add(
-      'MuiFormLabel-root',
-      'MuiInputLabel-root',
-      'MuiInputLabel-formControl',
-      'MuiInputLabel-animated',
-      'MuiInputLabel-shrink',
-      'MuiFormLabel-filled'
-    )
-    geosuggestUnderlineDOMElement.classList.add(
-      // 'MuiInputBase-root',
-      'MuiInput-root',
-      // 'MuiInput-underline',
-      'MuiInputBase-fullWidth',
-      'MuiInput-fullWidth',
-      'MuiInputBase-formControl',
-      'MuiInput-formControl'
-    )
-    // console.log(geosuggestDOMElement)
-  }, [])
 
   const handleFormClose = () => {
     if (onClose) {
@@ -160,26 +104,16 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
             </div>
             <Field name="city">
               {({ form }) => (
-                <>
-                  <div id="geosuggest-form-container" className={classes.geosuggestContainer}>
-                    <div id="geosuggest-label">city</div>
-                    <Geosuggest
-                      placeholder="Type in your city"
-                      types={['(cities)']}
-                      initialValue={values.city}
-                      ignoreTab
-                      inputClassName={classes.geosuggestInput}
-                      suggestsClassName={classes.geosuggestSuggests}
-                      suggestItemClassName={classes.geosuggestItem}
-                      onSuggestSelect={(suggest) => {
-                        if (suggest) {
-                          console.log(suggest.gmaps.name)
-                          form.setFieldValue('city', suggest.gmaps.name)
-                        }
-                      }}
-                    />
-                  </div>
-                </>
+                <GeosuggestCityInput
+                  placeholder="Type in your city"
+                  initialValue={values.city}
+                  onSuggestSelectCallback={(suggest) => {
+                    if (suggest) {
+                      console.log(suggest.gmaps.name)
+                      form.setFieldValue('city', suggest.gmaps.name)
+                    }
+                  }}
+                />
               )}
             </Field>
             <Field name="selectedTags">
