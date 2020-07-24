@@ -15,6 +15,8 @@ const useAppContext = () => {
         name: '',
         userId: null,
         role: '',
+        city: '',
+        tags_users: [],
       }
     })
   }
@@ -73,6 +75,13 @@ const useAppContext = () => {
     })
   }
 
+  function updateUserObject(userObject) {
+    dispatch((draft) => {
+      draft.user.name = userObject.name
+      draft.user.city = userObject.city
+    })
+  }
+
   return {
     ...state,
     resetUser,
@@ -85,6 +94,7 @@ const useAppContext = () => {
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
     setUsersTags,
+    updateUserObject,
   }
 }
 

@@ -4,13 +4,12 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import Geosuggest from 'react-geosuggest'
 import { Field } from 'formik'
 import { useHistory } from 'react-router-dom'
-import { FloatCardMedium, Loading, Snack } from '../../common'
+import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { useAppContext } from '../../context/useAppContext'
-import { GeosuggestCityInput } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -39,9 +38,9 @@ const Onboarding = () => {
   console.log('tagsData ->', tagsData)
 
   // Onboarding should only be displayed directly after signing up
-  // if (usersCityInContext || usersTagsInContext.length) {
-  //   history.push('/events')
-  // }
+  if (usersCityInContext || usersTagsInContext.length) {
+    history.push('/events')
+  }
 
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)

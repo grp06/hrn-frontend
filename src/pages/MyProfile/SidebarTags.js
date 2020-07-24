@@ -22,8 +22,6 @@ const createStyles = makeStyles((theme) => ({
 const SidebarTags = ({ userId, usersTags, databaseTags }) => {
   const classes = createStyles()
   const [showTagsForm, setShowTagsForm] = useState(false)
-  console.log('usersTags ->', usersTags)
-  console.log('databaseTags ->', databaseTags)
 
   const renderUserTags = () => {
     if (showTagsForm) {

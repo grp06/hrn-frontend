@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { FloatCardNarrow } from '../../common'
 import { makeStyles } from '@material-ui/styles'
 import Avatar from '@material-ui/core/Avatar'
@@ -31,6 +31,12 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
   const classes = createStyles()
   const { userId, name, city, tags_users: usersTags } = user
   const [showEditSidebarForm, setShowEditSidebarForm] = useState(false)
+
+  useEffect(() => {
+    if (usersTags.length === 0) {
+      setShowEditSidebarForm(true)
+    }
+  }, [])
 
   const renderSidebarContent = () => {
     return !showEditSidebarForm ? (

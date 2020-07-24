@@ -55,7 +55,6 @@ const AppProvider = ({ children }) => {
   const history = useHistory()
   const { userId } = state.user
 
-  console.log('state.user ->', state.user)
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
     skip: !userId,

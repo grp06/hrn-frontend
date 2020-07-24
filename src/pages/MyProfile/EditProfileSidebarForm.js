@@ -6,7 +6,7 @@ import Grid from '@material-ui/core/Grid'
 import { Snack } from '../../common'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
-import { insertUserTags } from '../../gql/mutations'
+import { deleteUsersTags, insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { TextField } from 'formik-material-ui'
 import { OnboardingInterestTagInput } from '../Onboarding'
@@ -41,10 +41,12 @@ const useStyles = makeStyles((theme) => ({
 
 const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const classes = useStyles()
-  const { setUsersTags, user } = useAppContext()
+  const { setUsersTags, updateUserObject, user } = useAppContext()
   const { userId, tags_users: usersTags, name: usersName, city: usersCity } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
+  const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
+  const [deleteUsersTagsMutation] = useMutation(deleteUsersTags)
   console.log('databaseTags ->', databaseTags)
 
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
@@ -58,7 +60,59 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   }
 
   const handleFormSubmit = async (values) => {
+    let updateUserMutationResponse
     let insertTagMutationResponse
+    const userChangedName = !(values.name === usersName)
+    const userChangedCity = !(values.city === usersCity)
+
+    // Update User City and Name
+    if (userChangedName || userChangedCity) {
+      try {
+        updateUserMutationResponse = await updateUserMutation({
+          variables: {
+            id: userId,
+            name: values.name,
+            city: values.city,
+          },
+        })
+      } catch (err) {
+        console.log('updateUserMutation error ->', err)
+      }
+    }
+
+    // Delete all users tags
+    if (usersTags.length > 0) {
+      try {
+        await deleteUsersTagsMutation({
+          variables: {
+            user_id: userId,
+          },
+        })
+      } catch (err) {
+        console.log('deleteUsersTagsMutation error ->', err)
+      }
+    }
+
+    // const idsOfUsersCurrentTags = usersTags.map((tagObject) => tagObject.tag.tag_id)
+    // const idsOfUsersSelectedTags = values.selectedTags.map((selectedTag) => selectedTag.tag_id)
+    // const newUsersTagsToAdd = values.selectedTags.filter((selectedTag) => {
+    //   return idsOfUsersCurrentTags.indexOf(selectedTag.tag_id) === -1
+    // })
+    // const usersTagsToRemove = usersTags
+    //   .map((tagObject) => {
+    //     if (idsOfUsersSelectedTags.indexOf(tagObject.tag.tag_id) === -1) {
+    //       return tagObject.tag
+    //     }
+    //   })
+    //   .filter((foundTag) => foundTag)
+    // // const usersTagsToRemove = values.idsOfUsersCurrentTags.filter((selectedTag) => {})
+    // console.log('idsOfUsersCurrentTags ->', idsOfUsersCurrentTags)
+    // console.log('idsOfUsersSelectedTags ->', idsOfUsersSelectedTags)
+    // console.log('values tags ->', values.selectedTags)
+    // console.log('newUsersTagsToAdd ->', newUsersTagsToAdd)
+    // console.log('usersTagsToRemove ->', usersTagsToRemove)
+
+    // Insert Users Tags
     try {
       insertTagMutationResponse = await insertUserTagsMutation({
         variables: {
@@ -69,9 +123,14 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
       console.log('insertUserTagsMutation error ->', err)
     }
 
+    await sleep(500)
     setShowSubmitSuccessSnack(true)
-    await sleep(1000)
+    await sleep(500)
 
+    console.log('updateUserMutationResponse ->', updateUserMutationResponse)
+    if (updateUserMutationResponse.data.update_users.returning.length) {
+      updateUserObject(updateUserMutationResponse.data.update_users.returning[0])
+    }
     if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
