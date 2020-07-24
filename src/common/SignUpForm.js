@@ -86,12 +86,6 @@ const SignUpForm = () => {
     localStorage.setItem('token', token)
 
     history.push('/onboarding')
-    // check to see if we were redirected here by an event
-    const eventIdInLocalStorage = localStorage.getItem('eventId')
-    if (eventIdInLocalStorage) {
-      history.replace(`/events/${eventIdInLocalStorage}`)
-    }
-
     window.location.reload()
   }
 
