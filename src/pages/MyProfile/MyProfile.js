@@ -20,9 +20,9 @@ const MyProfile = () => {
   const { userId } = user
   const { appLoading } = app
 
-  const { data: databaseTags, loading: allTagsLoading } = useQuery(getAllTags)
+  const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)
 
-  if (appLoading || allTagsLoading) {
+  if (appLoading || databaseTagsLoading) {
     return <Loading />
   }
   console.log('tagsData = ', databaseTags)

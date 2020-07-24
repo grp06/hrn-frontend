@@ -62,15 +62,6 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
       alignItems="flex-start"
       className={classes.sidebarTagsContainer}
     >
-      <Grid container item direction="row">
-        <Typography variant="subtitle2">TAGS</Typography>
-        <div
-          onClick={() => setShowTagsForm((prevFormState) => !prevFormState)}
-          className={classes.editTagsIcon}
-        >
-          <FeatherIcon icon="edit-3" stroke="#fabb5b" size="20" />
-        </div>
-      </Grid>
       <Grid
         container
         alignItems="center"

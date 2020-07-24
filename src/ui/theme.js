@@ -31,6 +31,7 @@ const theme = createMuiTheme({
       orchid,
       sunray,
       ghostWhite,
+      ghostWhiteSub,
       ghostWhiteBody,
       ghostWhiteDark,
       independence,

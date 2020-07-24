@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    padding: theme.spacing(0, 2.5),
+    // padding: theme.spacing(0, 2.5),
   },
   gridItemContainer: {
     marginBottom: theme.spacing(2.5),
@@ -24,6 +24,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
   const [selectedTags, setSelectedTags] = useState(usersTags || value)
   const [showTooManyTagsSnack, setShowTooManyTagsSnack] = useState(false)
   console.log('selectedTags ->', selectedTags)
+  console.log('tagsData ->', tagsData)
 
   // user has tags in database and has clicked to edit their tags
   // change color of these tags to purple
