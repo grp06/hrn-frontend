@@ -170,7 +170,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                     usersTags={usersTagsAsFormInput}
                     value={field.value}
                     onChange={(selectedTags) => {
-                      console.log('I got the value correctly from my child: ', selectedTags)
                       form.setFieldValue('selectedTags', selectedTags)
                     }}
                   />

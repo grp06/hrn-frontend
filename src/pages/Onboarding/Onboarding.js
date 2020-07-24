@@ -108,7 +108,6 @@ const Onboarding = () => {
                   userId={userId}
                   value={field.value}
                   onChange={(interests) => {
-                    console.log('I got the value correctly from my child: ', interests)
                     form.setFieldValue('interests', interests)
                   }}
                 />
