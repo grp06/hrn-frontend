@@ -68,7 +68,7 @@ const Onboarding = () => {
 
   const handleSuggestSelect = (suggest, form) => {
     console.log(suggest.gmaps.name)
-    form.setFieldValue('location', suggest.gmaps.name)
+    form.setFieldValue('city', suggest.gmaps.name)
   }
 
   const handleOnboardingFormSubmit = async (values) => {
@@ -79,7 +79,7 @@ const Onboarding = () => {
         variables: {
           id: userId,
           name: userName,
-          city: values.location,
+          city: values.city,
         },
       })
     } catch (err) {
@@ -109,13 +109,13 @@ const Onboarding = () => {
       <FloatCardMedium>
         <FormikOnboardingStepper
           initialValues={{
-            location: '',
+            city: '',
             interests: [],
           }}
           onSubmit={handleOnboardingFormSubmit}
         >
-          <div label="location" className={classes.locationInputContainer}>
-            <Field name="location">
+          <div label="city" className={classes.locationInputContainer}>
+            <Field name="city">
               {({ form }) => (
                 <Geosuggest
                   placeholder="Type in your city"
@@ -124,7 +124,12 @@ const Onboarding = () => {
                   inputClassName={classes.geosuggestInput}
                   suggestsClassName={classes.geosuggestSuggests}
                   suggestItemClassName={classes.geosuggestItem}
-                  onSuggestSelect={(suggest) => handleSuggestSelect(suggest, form)}
+                  onSuggestSelect={(suggest) => {
+                    if (suggest) {
+                      console.log(suggest.gmaps.name)
+                      form.setFieldValue('city', suggest.gmaps.name)
+                    }
+                  }}
                 />
               )}
             </Field>

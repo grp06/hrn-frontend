@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import FeatherIcon from 'feather-icons-react'
 import { TagsForm } from '.'
 
 const createStyles = makeStyles((theme) => ({
