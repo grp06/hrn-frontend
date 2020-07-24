@@ -1,6 +1,6 @@
 const constants = {
   // change me back to 20000?
-  lastSeenDuration: 5000,
+  lastSeenDuration: 4000,
   roundLength: 300,
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 1500,

@@ -20,9 +20,7 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
-    city: '',
     updatedAt: null,
-    tags_users: [],
   },
   app: {
     redirect: null,
