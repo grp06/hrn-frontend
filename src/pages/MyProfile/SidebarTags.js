@@ -29,7 +29,6 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
     }
 
     if (usersTags.length === 0) {
-      console.log('keep getting into here')
       return setShowTagsForm(true)
     }
 

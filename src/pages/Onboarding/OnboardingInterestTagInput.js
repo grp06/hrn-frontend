@@ -23,8 +23,6 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
   const classes = useStyles()
   const [selectedTags, setSelectedTags] = useState(usersTags || value)
   const [showTooManyTagsSnack, setShowTooManyTagsSnack] = useState(false)
-  console.log('selectedTags ->', selectedTags)
-  console.log('tagsData ->', tagsData)
 
   // user has tags in database and has clicked to edit their tags
   // change color of these tags to purple
@@ -42,7 +40,6 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
 
   useEffect(() => {
     if (usersTags) {
-      console.log('getting into toggleAlreadySelectedTags useEffect')
       toggleAlreadySelectedTags()
     }
   }, [usersTags])
@@ -59,25 +56,18 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
         ? elementClicked.parentElement.id
         : elementClicked.id
 
-    console.log('tagIdFromChip ->', tagIdFromChip)
-    console.log(typeof tagIdFromChip)
     const chipElement =
       elementClicked.className === 'MuiChip-label' ? elementClicked.parentElement : elementClicked
 
     const tagIndexInSelectedTagsArray = selectedTags
       .map((tag, idx) => {
-        // console.log('tag from selectedTags ->', tag)
-        console.log('tag in selectedTags', tag)
         if (tag.tag_id === parseInt(tagIdFromChip, 10)) return idx
         return null
       })
       .filter((foundTag) => foundTag !== null)
 
-    console.log('tagIndexInSelectedTagsArray ->', tagIndexInSelectedTagsArray)
-
     // user clicked to remove tag
     if (tagIndexInSelectedTagsArray.length > 0) {
-      console.log('user clicked to remove')
       setSelectedTags((prevTags) => {
         const copiedPrevTags = [...prevTags]
         copiedPrevTags.splice(tagIndexInSelectedTagsArray[0], 1)

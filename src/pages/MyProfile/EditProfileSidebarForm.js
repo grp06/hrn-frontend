@@ -47,7 +47,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const [deleteUsersTagsMutation] = useMutation(deleteUsersTags)
-  console.log('databaseTags ->', databaseTags)
 
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
@@ -93,25 +92,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
       }
     }
 
-    // const idsOfUsersCurrentTags = usersTags.map((tagObject) => tagObject.tag.tag_id)
-    // const idsOfUsersSelectedTags = values.selectedTags.map((selectedTag) => selectedTag.tag_id)
-    // const newUsersTagsToAdd = values.selectedTags.filter((selectedTag) => {
-    //   return idsOfUsersCurrentTags.indexOf(selectedTag.tag_id) === -1
-    // })
-    // const usersTagsToRemove = usersTags
-    //   .map((tagObject) => {
-    //     if (idsOfUsersSelectedTags.indexOf(tagObject.tag.tag_id) === -1) {
-    //       return tagObject.tag
-    //     }
-    //   })
-    //   .filter((foundTag) => foundTag)
-    // // const usersTagsToRemove = values.idsOfUsersCurrentTags.filter((selectedTag) => {})
-    // console.log('idsOfUsersCurrentTags ->', idsOfUsersCurrentTags)
-    // console.log('idsOfUsersSelectedTags ->', idsOfUsersSelectedTags)
-    // console.log('values tags ->', values.selectedTags)
-    // console.log('newUsersTagsToAdd ->', newUsersTagsToAdd)
-    // console.log('usersTagsToRemove ->', usersTagsToRemove)
-
     // Insert Users Tags
     try {
       insertTagMutationResponse = await insertUserTagsMutation({
@@ -128,10 +108,16 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     await sleep(500)
 
     console.log('updateUserMutationResponse ->', updateUserMutationResponse)
-    if (updateUserMutationResponse.data.update_users.returning.length) {
+    if (
+      updateUserMutationResponse &&
+      updateUserMutationResponse.data.update_users.returning.length
+    ) {
       updateUserObject(updateUserMutationResponse.data.update_users.returning[0])
     }
-    if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
+    if (
+      insertTagMutationResponse &&
+      insertTagMutationResponse.data.insert_tags_users.returning.length
+    ) {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
     if (onClose) {

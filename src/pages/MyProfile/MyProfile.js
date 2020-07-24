@@ -25,7 +25,7 @@ const MyProfile = () => {
   if (appLoading || databaseTagsLoading) {
     return <Loading />
   }
-  console.log('tagsData = ', databaseTags)
+
   return (
     <Grid
       container

@@ -1,1 +1,1 @@
-export { default as Subheader } from './Subheader'
+export { default as GetTagsModal } from './GetTagsModal'
