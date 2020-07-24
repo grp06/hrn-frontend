@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import Geosuggest from 'react-geosuggest'
 import { Field } from 'formik'
 import { useHistory } from 'react-router-dom'
-import { FloatCardMedium, Loading, Snack } from '../../common'
+import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
@@ -15,66 +15,42 @@ const useStyles = makeStyles((theme) => ({
   container: {
     marginTop: '200px',
   },
-  locationInputContainer: {
+  cityInputContainer: {
     padding: theme.spacing(0, 2.5),
-  },
-  geosuggestInput: {
-    width: '100%',
-    padding: theme.spacing(1, 0.5),
-    fontSize: '1.3rem',
-    borderRadius: '4px',
-  },
-  geosuggestSuggests: {
-    marginTop: 0,
-    // padding: '10px 0px',
-    backgroundColor: theme.palette.common.greyHighlight,
-    borderRadius: '4px',
-  },
-  geosuggestItem: {
-    width: '100%',
-    fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1, 0),
-    borderBottom: '1px solid #3e4042',
-    '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: theme.palette.common.greyBorder,
-    },
   },
 }))
 
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { user } = useAppContext()
+  const { setUsersTags, user, app } = useAppContext()
+  const { appLoading } = app
   const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
 
-  if (tagsLoading) {
+  if (appLoading || tagsLoading) {
     return <Loading />
   }
+
+  console.log('tagsData ->', tagsData)
 
   // Onboarding should only be displayed directly after signing up
   if (usersCityInContext || usersTagsInContext.length) {
     history.push('/events')
   }
 
-  const handleSuggestSelect = (suggest, form) => {
-    console.log(suggest.gmaps.name)
-    form.setFieldValue('location', suggest.gmaps.name)
-  }
-
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)
+    let insertTagMutationResponse
     try {
       await updateUserMutation({
         variables: {
           id: userId,
           name: userName,
-          city: values.location,
+          city: values.city,
         },
       })
     } catch (err) {
@@ -82,7 +58,7 @@ const Onboarding = () => {
     }
 
     try {
-      await insertUserTagsMutation({
+      insertTagMutationResponse = await insertUserTagsMutation({
         variables: {
           objects: values.interests,
         },
@@ -91,8 +67,12 @@ const Onboarding = () => {
       console.log('insertUserTagsMutation error ->', err)
     }
 
+    await sleep(500)
+    setShowSubmitSuccessSnack(true)
     await sleep(1000)
-    return setShowSubmitSuccessSnack(true)
+    if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
+      setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
+    }
   }
 
   return (
@@ -100,22 +80,22 @@ const Onboarding = () => {
       <FloatCardMedium>
         <FormikOnboardingStepper
           initialValues={{
-            location: '',
+            city: '',
             interests: [],
           }}
           onSubmit={handleOnboardingFormSubmit}
         >
-          <div label="location" className={classes.locationInputContainer}>
-            <Field name="location">
+          <div label="city" className={classes.cityInputContainer}>
+            <Field name="city">
               {({ form }) => (
-                <Geosuggest
+                <GeosuggestCityInput
                   placeholder="Type in your city"
-                  types={['(cities)']}
-                  ignoreTab
-                  inputClassName={classes.geosuggestInput}
-                  suggestsClassName={classes.geosuggestSuggests}
-                  suggestItemClassName={classes.geosuggestItem}
-                  onSuggestSelect={(suggest) => handleSuggestSelect(suggest, form)}
+                  onSuggestSelectCallback={(suggest) => {
+                    if (suggest) {
+                      console.log(suggest.gmaps.name)
+                      form.setFieldValue('city', suggest.gmaps.name)
+                    }
+                  }}
                 />
               )}
             </Field>

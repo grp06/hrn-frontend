@@ -15,7 +15,15 @@ const useAppContext = () => {
         name: '',
         userId: null,
         role: '',
+        city: '',
+        tags_users: [],
       }
+    })
+  }
+
+  function setUsersTags(usersTags) {
+    dispatch((draft) => {
+      draft.user.tags_users = usersTags
     })
   }
 
@@ -67,6 +75,13 @@ const useAppContext = () => {
     })
   }
 
+  function updateUserObject(userObject) {
+    dispatch((draft) => {
+      draft.user.name = userObject.name
+      draft.user.city = userObject.city
+    })
+  }
+
   return {
     ...state,
     resetUser,
@@ -78,6 +93,8 @@ const useAppContext = () => {
     setLateArrival,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
+    setUsersTags,
+    updateUserObject,
   }
 }
 

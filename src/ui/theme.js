@@ -31,6 +31,7 @@ const theme = createMuiTheme({
       orchid,
       sunray,
       ghostWhite,
+      ghostWhiteSub,
       ghostWhiteBody,
       ghostWhiteDark,
       independence,
@@ -244,10 +245,10 @@ const theme = createMuiTheme({
         color: ghostWhiteDark,
       },
     },
-    MuiSnackbar: {
-      bottom: 'none',
-      top: '20px',
-    },
+    // MuiSnackbar: {
+    //   bottom: 'none',
+    //   top: '20px',
+    // },
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,

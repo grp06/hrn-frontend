@@ -33,7 +33,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
 
   const toggleDisableButton = (values) => {
     if (step === 0) {
-      if (values.location) setDisabledButton(false)
+      if (values.city) setDisabledButton(false)
     }
     if (step === 1) {
       if (values.interests.length >= 1) setDisabledButton(false)
