@@ -120,7 +120,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
         </Grid>
         <Grid item className={classes.gridItemContainer}>
           <Typography variant="subtitle2">Personal</Typography>
-          {renderTagsByCategory('hobby')}
+          {renderTagsByCategory('personal')}
         </Grid>
       </Grid>
       <Snack
