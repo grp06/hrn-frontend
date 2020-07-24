@@ -63,12 +63,6 @@ const useAppContext = () => {
     })
   }
 
-  function setLateArrival(lateArrival) {
-    dispatch((draft) => {
-      draft.twilio.lateArrival = lateArrival
-    })
-  }
-
   function setHasPartnerAndIsConnecting(hasPartnerAndIsConnecting) {
     dispatch((draft) => {
       draft.twilio.hasPartnerAndIsConnecting = hasPartnerAndIsConnecting
@@ -90,7 +84,6 @@ const useAppContext = () => {
     setEventId,
     setPartnerDisconnected,
     setPartnerNeverConnected,
-    setLateArrival,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
     setUsersTags,

@@ -16,9 +16,21 @@ const getMyRoundById = gql`
       started_at
       partnerX {
         name
+        city
+        tags_users {
+          tag {
+            name
+          }
+        }
       }
       partnerY {
         name
+        city
+        tags_users {
+          tag {
+            name
+          }
+        }
       }
     }
   }

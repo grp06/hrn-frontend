@@ -4,9 +4,8 @@ import { Typography, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 import FeatherIcon from 'feather-icons-react'
-import { useHistory } from 'react-router-dom'
 import bannerBackground from '../assets/eventBannerMountain.png'
-import { AdminPanel, UserPanel, Loading } from '../common'
+import { AdminPanel, UserPanel, Loading, EventStatusRedirect } from '../common'
 import { useAppContext } from '../context/useAppContext'
 import formatDate from '../utils/formatDate'
 import { useGetCameraAndMicStatus } from '../hooks'
@@ -40,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const Event = ({ match }) => {
-  const history = useHistory()
   const { id: eventId } = match.params
   const classes = useStyles()
   const { app, user, event, setEventId } = useAppContext()
@@ -61,28 +59,12 @@ const Event = ({ match }) => {
     }
   }, [eventId, event, setEventId])
 
-  useEffect(() => {
-    if (eventSet && userId) {
-      const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
-      if (isEventParticipant && !micOrCameraIsDisabled) {
-        switch (event.status) {
-          case 'pre-event':
-            return history.push(`/events/${eventId}/pre-event`)
-          case 'room-in-progress':
-            return history.push(`/events/${eventId}/video-room`)
-          case 'complete':
-            return history.push(`/events/${eventId}/event-complete`)
-          default:
-            break
-        }
-      }
-    }
-  }, [event, userId, eventId, eventSet, history, micOrCameraIsDisabled])
-
   // clean up this check?
   if (appLoading || Object.keys(event).length < 2) {
     return <Loading />
   }
+
+  const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 
   const { host_id, start_at, event_name, description } = event
   const startTime = new Date(start_at).getTime()
@@ -101,6 +83,13 @@ const Event = ({ match }) => {
 
   return (
     <>
+      <EventStatusRedirect
+        isEventParticipant={isEventParticipant}
+        micOrCameraIsDisabled={micOrCameraIsDisabled}
+        userId={userId}
+        eventSet={eventSet}
+        event={event}
+      />
       <div className={classes.eventBanner}>
         <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
           <Grid

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Redirect } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
-import { Typography } from '@material-ui/core'
 import { useAppContext } from '../context/useAppContext'
 import { getToken } from '../helpers'
 import { CameraDisabledBanner } from '../common'
@@ -47,20 +46,27 @@ const PreEvent = ({ match }) => {
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
-
   useEffect(() => {
     if (eventSet) {
       const { status } = event
 
-      if (status !== 'pre-event' || micOrCameraIsDisabled) {
-        console.log('PreEvent -> status', status)
+      if (micOrCameraIsDisabled) {
+        return history.push(`/events/${eventId}`)
+      }
+
+      if (status === 'in-between-rounds') {
+        console.log('force to video room')
+        return history.push(`/events/${eventId}/video-room`)
+      }
+
+      if (status !== 'pre-event') {
         return history.push(`/events/${eventId}`)
       }
     }
   }, [event])
 
   useEffect(() => {
-    if (eventSet && userId) {
+    if (eventSet && userId && !onlineUsers) {
       const getOnlineUsers = async () => {
         const res = await fetch(
           `${process.env.REACT_APP_API_URL}/api/rooms/get-online-event-users/${eventId}`,
@@ -74,12 +80,12 @@ const PreEvent = ({ match }) => {
           }
         )
         const response = await res.json()
-
+        console.warn('ONLINE USERS = ', onlineUsers)
         setOnlineUsers(response.data)
       }
       getOnlineUsers()
     }
-  }, [event, userId])
+  }, [event, userId, onlineUsers])
 
   useEffect(() => {
     if (onlineUsers) {
