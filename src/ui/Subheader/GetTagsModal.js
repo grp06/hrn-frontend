@@ -68,7 +68,10 @@ const GetTagsModal = () => {
   const onEventInProgressPage = Boolean(window.location.pathname.match(EventInProgressRegex))
 
   const showGetTagsModal =
-    usersTags.length === 0 && (onEventsPage || onEventHomePage) && !onEventInProgressPage
+    usersTags &&
+    usersTags.length === 0 &&
+    (onEventsPage || onEventHomePage) &&
+    !onEventInProgressPage
 
   useEffect(() => {
     console.log('getting in here again')
