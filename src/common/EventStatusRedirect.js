@@ -12,8 +12,6 @@ const EventStatusRedirect = ({
     switch (event.status) {
       case 'pre-event':
         return <Redirect to={`/events/${event.id}/pre-event`} />
-      case 'partner-preview':
-        return <Redirect to={`/events/${event.id}/video-room`} />
       case 'room-in-progress':
         return <Redirect to={`/events/${event.id}/video-room`} />
       case 'complete':

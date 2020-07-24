@@ -1,12 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getMyRoundById } from '../gql/queries'
-import { Loading, CameraDisabledBanner, RoundProgressBar } from '../common'
+import { Loading, CameraDisabledBanner, RoundProgressBar, TagsList } from '../common'
 import { getToken } from '../helpers'
 import { ConnectingToSomeone } from '../common/waitingRoomScreens'
 import { VideoRouter } from '.'
@@ -19,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   videoWrapper: {
     background: theme.palette.common.blackBody,
   },
-
   screenOverlay: {
     position: 'absolute',
     left: 0,
@@ -55,53 +53,7 @@ const useStyles = makeStyles((theme) => ({
       width: '150px',
     },
   },
-  timerContainer: {
-    position: 'fixed',
-    left: 0,
-    top: 'auto',
-    right: 'auto',
-    bottom: 0,
-    width: '200px',
-    height: '150px',
-  },
-  partnerNameGrid: {
-    position: 'fixed',
-    left: 'auto',
-    top: 'auto',
-    right: 'auto',
-    bottom: '5%',
-    width: '100vw',
-    height: 'auto',
-    opacity: 0,
-    transition: '.6s',
-    '&.showControls, &:hover': {
-      transition: 'opacity 0.6s',
-      opacity: 1,
-    },
-  },
-  partnerNameContainer: {
-    padding: '5px 20px',
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
-  },
-  partnerName: {
-    textAlign: 'center',
-  },
-  notReady: {
-    position: 'fixed',
-    width: '100%',
-    height: 'calc(100vh - 64px)',
-    top: '64px',
-    background: '#111',
-    zIndex: 9,
-    color: '#fff',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontFamily: 'Muli',
-  },
+
   cameraDisabledWrapper: {
     height: '100vh',
   },
@@ -239,31 +191,6 @@ const VideoRoom = ({ match }) => {
     return <Loading />
   }
 
-  const showPartnersName = () => {
-    let userIsPartnerX = false
-    if (!twilioStarted) {
-      return null
-    }
-
-    if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
-      userIsPartnerX = true
-    }
-    return (
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        className={`${clsx(classes.partnerNameGrid, { showControls })}`}
-      >
-        <div className={classes.partnerNameContainer}>
-          <Typography variant="h5" className={classes.partnerName}>
-            {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
-          </Typography>
-        </div>
-      </Grid>
-    )
-  }
-
   // If you are switching from room-in-progress to in-between-rounds
   // then we want to clear your room and token
   const { status: latestStatus } = event
@@ -300,16 +227,16 @@ const VideoRoom = ({ match }) => {
             <ConnectingToSomeone />
           </div>
         )}
+
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound !== 'no-assignment' && latestStatus !== 'partner-preview' ? (
+        {myRound !== 'no-assignment' ? (
           <RoundProgressBar
             myRound={myRound}
             event={event}
             hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
           />
         ) : null}
-        {showPartnersName()}
       </div>
     </div>
   )

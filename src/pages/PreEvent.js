@@ -54,7 +54,7 @@ const PreEvent = ({ match }) => {
         return history.push(`/events/${eventId}`)
       }
 
-      if (status === 'partner-preview') {
+      if (status === 'in-between-rounds') {
         console.log('force to video room')
         return history.push(`/events/${eventId}/video-room`)
       }

@@ -3,33 +3,39 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import Chip from '@material-ui/core/Chip'
+import { useQuery } from 'react-apollo'
+import { getTagsByUserId } from '../gql/queries'
 
-const useStyles = makeStyles((theme) => ({
-  tagsListContainer: {
-    paddingTop: theme.spacing(2),
-  },
-  chip: {
-    marginRight: theme.spacing(1),
-  },
-}))
+const useStyles = makeStyles((theme) => ({}))
 
-const TagsList = ({ tagsData }) => {
-  console.log('TagsList -> tagsData', tagsData)
+const TagsList = ({ myRound, userId }) => {
   const classes = useStyles()
+  const myPartnerId = myRound.partnerX_id === userId ? myRound.partnerY_id : myRound.partnerX_id
 
-  return (
-    <Grid container alignItems="center" direction="row" className={classes.tagsListContainer}>
-      {tagsData.tags_users.map((tag) => {
-        return (
-          <Chip
-            label={tag.tag.name}
-            color="primary"
-            className={classes.chip}
-            onDelete={() => console.log('hi')}
-          />
-        )
-      })}
+  const { data: tagsData, loading: tagsDataLoading } = useQuery(getTagsByUserId, {
+    variables: {
+      user_id: myPartnerId,
+    },
+  })
+  return !tagsDataLoading && tagsData && tagsData.tags_users.length > 0 ? (
+    <Grid
+      container
+      alignItems="center"
+      justify="center"
+      wrap="wrap"
+      className={classes.tagsContainer}
+    >
+      {tagsData.tags_users
+        .sort((tagA, tagB) => {
+          return tagA.tag.name.toLowerCase() > tagB.tag.name.toLowerCase()
+        })
+        .map((tagObject) => {
+          const { tag } = tagObject
+          return (
+            <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" clickable />
+          )
+        })}
     </Grid>
-  )
+  ) : null
 }
 export default TagsList
