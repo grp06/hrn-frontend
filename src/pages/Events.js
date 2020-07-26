@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     textAlign: 'center',
   },
-  scheduleIcon: {
-    color: theme.palette.common.ghostWhite,
-  },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
@@ -116,10 +113,7 @@ const Events = () => {
           className={classes.bannerGradient}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">Find a community for you</Typography>
-            <Typography variant="h6">
-              Scroll through our events and start video-chatting with awesome people.
-            </Typography>
+            <Typography variant="h3">My Events</Typography>
           </Grid>
         </Grid>
       </div>

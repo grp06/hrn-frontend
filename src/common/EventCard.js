@@ -6,16 +6,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import formatDate from '../utils/formatDate'
-// import eventImage1 from '../assets/personBeach.jpg'
-// import eventImage2 from '../assets/personBook.jpg'
-// import eventImage3 from '../assets/personClimbing.jpg'
-import eventImage4 from '../assets/personPhone.jpg'
-// import eventImage5 from '../assets/personSalon.png'
+import eventImage from '../assets/globeMask.png'
 
 import { FloatCardLarge } from '.'
-
-// const eventImages = [eventImage1, eventImage2, eventImage3, eventImage4, eventImage5]
-// const imageToMount = eventImages[Math.floor(Math.random() * eventImages.length)]
 
 const useStyles = makeStyles((theme) => ({
   eventContainer: {
@@ -25,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '275px',
     borderRadius: '4px 0px 0px 4px',
-    backgroundImage: `url(${eventImage4})`,
+    backgroundImage: `url(${eventImage})`,
     backgroundPosition: '0% 50%',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
