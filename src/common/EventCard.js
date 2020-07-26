@@ -15,15 +15,17 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   eventImage: {
+    cursor: 'pointer',
     width: '100%',
     height: '275px',
     borderRadius: '4px 0px 0px 4px',
     backgroundImage: `url(${eventImage})`,
-    backgroundPosition: '0% 50%',
+    backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
   },
   eventContentContainer: {
+    cursor: 'pointer',
     width: '100%',
     height: '275px',
     padding: '20px',
