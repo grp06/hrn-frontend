@@ -1,5 +1,6 @@
 import React from 'react'
 
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
@@ -8,11 +9,23 @@ import ScheduleIcon from '@material-ui/icons/Schedule'
 import formatDate from '../utils/formatDate'
 import eventImage from '../assets/globeMask.png'
 
-import { FloatCardLarge } from '.'
+import { FloatCardMediumLarge } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventContainer: {
     width: '100%',
+    position: 'relative',
+  },
+  eventEndedOverlay: {
+    position: 'absolute',
+    left: '0%',
+    right: '0%',
+    top: '0%',
+    bottom: '0%',
+    zIndex: 9,
+    width: '100%',
+    height: '100%',
+    backgroundImage: 'linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5))',
   },
   eventImage: {
     cursor: 'pointer',
@@ -39,24 +52,37 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.orchid,
     fontWeight: '500',
   },
+  eventOverButton: {
+    position: 'relative',
+    zIndex: 10,
+  },
 }))
 
 const EventCard = ({ event }) => {
-  const { description, event_name, id, start_at } = event
-
+  const { description, event_name, id, start_at, ended_at } = event
   const classes = useStyles()
   const history = useHistory()
 
   const eventTime = formatDate(start_at)
+
+  const handleEventOverButtonClick = () => {
+    history.push(`/events/${id}/event-complete`)
+  }
+
   return (
-    <FloatCardLarge>
+    <FloatCardMediumLarge>
       <Grid
         container
         justify="flex-start"
         wrap="wrap"
         className={classes.eventContainer}
-        onClick={() => history.push(`/events/${id}`)}
+        onClick={() => {
+          if (!ended_at) {
+            history.push(`/events/${id}`)
+          }
+        }}
       >
+        {ended_at && <div className={classes.eventEndedOverlay} />}
         <Grid item lg={4} md={12} className={classes.eventImage}>
           <div />
         </Grid>
@@ -82,9 +108,19 @@ const EventCard = ({ event }) => {
               {eventTime}
             </Typography>
           </Grid>
+          {ended_at && (
+            <Button
+              className={classes.eventOverButton}
+              variant="contained"
+              color="secondary"
+              onClick={handleEventOverButtonClick}
+            >
+              View My Connections
+            </Button>
+          )}
         </Grid>
       </Grid>
-    </FloatCardLarge>
+    </FloatCardMediumLarge>
   )
 }
 
