@@ -73,10 +73,15 @@ const EventsPublic = () => {
         </Grid>
       </div>
       {allPublicEventsData &&
-        allPublicEventsData.events.map((event) => {
-          console.log('event', event)
-          return <EventCard key={event.id} event={event} />
-        })}
+        allPublicEventsData.events
+          .sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              return eventA.event.start_at < eventB.event.start_at
+            }
+          })
+          .map((event) => {
+            return <EventCard key={event.id} event={event} />
+          })}
     </>
   )
 }

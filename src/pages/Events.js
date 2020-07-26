@@ -138,9 +138,15 @@ const Events = () => {
       </div>
       {renderNullDataText()}
       {eventsData &&
-        eventsData.event_users.map(({ event }) => {
-          return <EventCard key={event.id} event={event} />
-        })}
+        eventsData.event_users
+          .sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              return eventA.event.start_at < eventB.event.start_at
+            }
+          })
+          .map(({ event }) => {
+            return <EventCard key={event.id} event={event} />
+          })}
     </>
   )
 }
