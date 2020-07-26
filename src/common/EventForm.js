@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 import DateFnsUtils from '@date-io/date-fns'
-import { TextField, Button, Grid, Typography } from '@material-ui/core'
+import { TextField, Button, Grid, Typography, Switch, FormLabel } from '@material-ui/core'
 import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
@@ -29,6 +29,14 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     marginBottom: theme.spacing(2),
   },
+  publicEventLabel: {
+    color: theme.palette.common.orchid,
+    fontSize: '0.75rem',
+    fontWeight: '300',
+    letterSpacing: '0.00938em',
+    marginBottom: theme.spacing(1.5),
+    marginRight: 'auto',
+  },
   eventUpdated: {
     width: '100%',
     margin: theme.spacing(0, 'auto'),
@@ -45,6 +53,7 @@ const EventForm = ({ eventData, match }) => {
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState("Let's get people hyped!")
+  const [isEventPublic, setIsEventPublic] = useState(false)
   const [roundLength, setRoundLength] = useState(5)
   const [numRounds, setNumRounds] = useState(10)
   const [postEventVideoCallLink, setPostEventVideoCallLink] = useState('')
@@ -58,6 +67,7 @@ const EventForm = ({ eventData, match }) => {
       event_name: title,
       start_at: selectedDate,
       host_id: userId,
+      public_event: isEventPublic,
       round_length: roundLength,
       num_rounds: numRounds,
       post_event_link: postEventVideoCallLink,
@@ -77,12 +87,14 @@ const EventForm = ({ eventData, match }) => {
         round_length,
         num_rounds,
         post_event_link,
+        public_event,
       } = eventData
       setDescription(eventDescription)
       setTitle(event_name)
       setSelectedDate(start_at)
       setRoundLength(round_length)
       setNumRounds(num_rounds)
+      setIsEventPublic(public_event)
       setPostEventVideoCallLink(post_event_link)
     }
   }, [eventData])
@@ -108,6 +120,7 @@ const EventForm = ({ eventData, match }) => {
           round_length: roundLength,
           num_rounds: numRounds,
           post_event_link: postEventVideoCallLink,
+          public_event: isEventPublic,
         },
       })
       setEventUpdated(true)
@@ -205,6 +218,27 @@ const EventForm = ({ eventData, match }) => {
                     className={classes.input}
                     value={numRounds}
                     onChange={(e) => setNumRounds(e.target.value)}
+                  />
+                </Grid>
+                <Grid
+                  container
+                  direction="column"
+                  justify="flex-start"
+                  style={{ marginBottom: '8px' }}
+                >
+                  <FormLabel className={classes.publicEventLabel}>
+                    Public Event (any user can join)
+                  </FormLabel>
+                  <Switch
+                    checked={isEventPublic}
+                    onChange={(e) => {
+                      console.log(e.target.checked)
+                      setIsEventPublic(e.target.checked)
+                    }}
+                    color="secondary"
+                    name="public_event"
+                    label="public event"
+                    size="small"
                   />
                 </Grid>
                 <Grid item>
