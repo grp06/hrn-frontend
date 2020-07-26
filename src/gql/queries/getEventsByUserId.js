@@ -15,6 +15,7 @@ const getEventsByUserId = gql`
         round_length
         num_rounds
         post_event_link
+        public
         event_users {
           user {
             id
