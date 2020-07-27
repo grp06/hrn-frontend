@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import { Redirect } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
+import { Redirect, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { getEventsByUserId } from '../gql/queries'
 
@@ -39,9 +40,6 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     textAlign: 'center',
   },
-  scheduleIcon: {
-    color: theme.palette.common.ghostWhite,
-  },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
@@ -56,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Events = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { app, user } = useAppContext()
   const { appLoading } = app
   const { userId } = user
@@ -79,6 +78,10 @@ const Events = () => {
     return <Loading />
   }
 
+  const handleGoToPublicEventsClick = () => {
+    return history.push('/events/public')
+  }
+
   const renderNullDataText = () => {
     if (!eventsData || !eventsData.event_users.length) {
       return (
@@ -92,12 +95,25 @@ const Events = () => {
               className={classes.nullDataContainer}
             >
               <Typography variant="h4" className={classes.nullDataHeader}>
-                Sorry, we are currently only hosting invite-only events
+                Sorry, we are currently mostly hosting invite-only events{' '}
+                <span role="img" aria-label="neutral face">
+                  😐
+                </span>
               </Typography>
-              <Typography variant="h5" className={classes.nullDataSub}>
-                But no worries! If you know someone who is hosting an event they can give you the
-                shareable link!
+              <Typography variant="h6" className={classes.nullDataSub}>
+                If you know someone who is hosting an event they can give you their shareable link!
               </Typography>
+              <Typography variant="h6" className={classes.nullDataSub}>
+                Or take a gander through our limited public events.
+              </Typography>
+              <Button
+                onClick={handleGoToPublicEventsClick}
+                color="primary"
+                variant="contained"
+                style={{ marginTop: '20px' }}
+              >
+                Take Me There!
+              </Button>
             </Grid>
           </FloatCardLarge>
         </>
@@ -116,18 +132,21 @@ const Events = () => {
           className={classes.bannerGradient}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">Find a community for you</Typography>
-            <Typography variant="h6">
-              Scroll through our events and start video-chatting with awesome people.
-            </Typography>
+            <Typography variant="h3">My Events</Typography>
           </Grid>
         </Grid>
       </div>
       {renderNullDataText()}
       {eventsData &&
-        eventsData.event_users.map(({ event }) => {
-          return <EventCard key={event.id} event={event} />
-        })}
+        eventsData.event_users
+          .sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              return eventA.event.start_at < eventB.event.start_at
+            }
+          })
+          .map(({ event }) => {
+            return <EventCard key={event.id} event={event} />
+          })}
     </>
   )
 }
