@@ -28,7 +28,8 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
     if (status === 'room-in-progress') {
       return event.round_length * 60000
     }
-    return 10000
+    // needs to match round_interval on the backend
+    return 20000
   }
 
   const roundEndTime = new Date(event.updated_at).getTime() + getDuration()
