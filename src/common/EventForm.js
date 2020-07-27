@@ -7,7 +7,8 @@ import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory, Redirect } from 'react-router-dom'
 import { useAppContext } from '../context/useAppContext'
-import { FloatCardMedium } from '.'
+import { FloatCardMedium, Snack } from '.'
+import { sleep } from '../helpers'
 
 import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
@@ -58,7 +59,7 @@ const EventForm = ({ eventData, match }) => {
   const [numRounds, setNumRounds] = useState(10)
   const [postEventVideoCallLink, setPostEventVideoCallLink] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
-  const [eventUpdated, setEventUpdated] = useState(null)
+  const [showCreateEditEventSuccess, setShowCreateEditEventSuccess] = useState(false)
 
   const initialEventData = useRef()
   const [createEventMutation] = useMutation(createEvent, {
@@ -123,10 +124,7 @@ const EventForm = ({ eventData, match }) => {
           public_event: isEventPublic,
         },
       })
-      setEventUpdated(true)
-      setTimeout(() => {
-        setEventUpdated(false)
-      }, 5000)
+      setShowCreateEditEventSuccess(true)
     } else {
       const res = await createEventMutation()
       const { id } = res.data.insert_events.returning[0]
@@ -137,6 +135,9 @@ const EventForm = ({ eventData, match }) => {
           userId,
         },
       })
+
+      setShowCreateEditEventSuccess(true)
+      await sleep(800)
       history.push(`/events/${id}`)
     }
   }
@@ -259,11 +260,12 @@ const EventForm = ({ eventData, match }) => {
                 </Button>
               </Grid>
             </form>
-            {eventUpdated && (
-              <Typography variant="h5" className={classes.eventUpdated}>
-                Event updated
-              </Typography>
-            )}
+            <Snack
+              open={showCreateEditEventSuccess}
+              onClose={() => setShowCreateEditEventSuccess(false)}
+              severity="success"
+              snackMessage="Event Created/Updated"
+            />
           </Grid>
         </MuiPickersUtilsProvider>
       </FloatCardMedium>

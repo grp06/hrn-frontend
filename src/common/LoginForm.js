@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '.'
+import { sleep } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -43,6 +44,7 @@ const LoginForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showErrorSnack, setShowErrorSnack] = useState(false)
+  const [showLoginSuccessSnack, setShowLoginSuccessSnack] = useState(false)
 
   const userIdInLocalStorage = localStorage.getItem('userId')
   // check to see if a user is already logged in, if so redirect
@@ -72,6 +74,10 @@ const LoginForm = () => {
       setShowErrorSnack(true)
       return
     }
+
+    setShowLoginSuccessSnack(true)
+    await sleep(500)
+
     const { id, token } = loginResponse
     localStorage.setItem('token', token)
 
@@ -126,7 +132,12 @@ const LoginForm = () => {
               </Grid>
             </Grid>
             <Grid container direction="column" justify="center" alignItems="center">
-              <Button color="primary" type="submit" variant="contained">
+              <Button
+                disabled={showLoginSuccessSnack}
+                color="primary"
+                type="submit"
+                variant="contained"
+              >
                 Log In
               </Button>
               <Link className={classes.linkRedirectToSignUp} to="/sign-up">
@@ -140,6 +151,12 @@ const LoginForm = () => {
                 onClose={() => setShowErrorSnack(false)}
                 severity="error"
                 snackMessage="Incorrect password or email"
+              />
+              <Snack
+                open={showLoginSuccessSnack}
+                onClose={() => setShowLoginSuccessSnack(false)}
+                severity="success"
+                snackMessage="Welcome Home 🏡"
               />
             </Grid>
           </form>

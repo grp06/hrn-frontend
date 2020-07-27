@@ -6,8 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
-
-import { FloatCardMedium } from '.'
+import { FloatCardMedium, Snack } from '.'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -45,7 +44,7 @@ const ForgotPasswordForm = () => {
   const classes = useStyles()
 
   const [email, setEmail] = useState('')
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [showSentEmail, setShowSentEmail] = useState(false)
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     await fetch(`${process.env.REACT_APP_API_URL}/api/email/reset_password/user/${email}`, {
@@ -58,9 +57,7 @@ const ForgotPasswordForm = () => {
       },
       body: JSON.stringify({ email }),
     })
-    setSuccessMessage(
-      "If we found an account associated with that email address, we've sent along the password reset instructions."
-    )
+    setShowSentEmail(true)
   }
 
   return (
@@ -88,11 +85,6 @@ const ForgotPasswordForm = () => {
                 />
               </Grid>
             </Grid>
-            <Grid>
-              <Typography className={classes.successMessage} variant="body1">
-                {successMessage}
-              </Typography>
-            </Grid>
             <Grid container direction="column" justify="center" alignItems="center">
               <Button color="primary" type="submit" variant="contained">
                 Reset Password
@@ -105,6 +97,12 @@ const ForgotPasswordForm = () => {
               </Link>
             </Grid>
           </form>
+          <Snack
+            open={showSentEmail}
+            onClose={() => setShowSentEmail(false)}
+            severity="info"
+            snackMessage="Reset Instructions Sent 📫"
+          />
         </Grid>
       </FloatCardMedium>
     </div>
