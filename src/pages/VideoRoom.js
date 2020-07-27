@@ -130,7 +130,6 @@ const VideoRoom = ({ match }) => {
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
-
       setMyRound(myRoundData.rounds[0] || 'no-assignment')
     }
   }, [myRoundDataLoading, myRoundData])
@@ -161,6 +160,7 @@ const VideoRoom = ({ match }) => {
       const setupRoom = async () => {
         let localTracks
         try {
+          console.log('bout to create local tracks')
           localTracks = await createLocalTracks({
             video: true,
             audio: process.env.NODE_ENV === 'production',
@@ -169,10 +169,11 @@ const VideoRoom = ({ match }) => {
           return setIsGUMErrorModalActive(true)
         }
 
+        console.log('calling CONNECT')
         const myRoom = await connect(token, {
           tracks: localTracks,
         })
-
+        console.log('setting room')
         setRoom(myRoom)
       }
       setupRoom()
