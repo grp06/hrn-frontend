@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useAppContext } from '../../context/useAppContext'
 import Backdrop from '@material-ui/core/Backdrop'
 import Button from '@material-ui/core/Button'
 import Fade from '@material-ui/core/Fade'
@@ -8,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
+import { useAppContext } from '../../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -74,7 +74,6 @@ const GetTagsModal = () => {
     !onEventInProgressPage
 
   useEffect(() => {
-    console.log('getting in here again')
     if (showGetTagsModal) {
       return setShowModal(true)
     }

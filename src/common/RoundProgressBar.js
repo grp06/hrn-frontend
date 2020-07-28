@@ -23,6 +23,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show15SecondsLeftSnack, setShow15SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
+
   const getDuration = () => {
     const { status } = event
     if (status === 'room-in-progress') {
@@ -64,15 +65,22 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   }
 
   useEffect(() => {
+    const { status } = event
+
     // make sure we've already started the process of connecting, and that the connection has been made, and its within 45sec of round start
     // this way, it won't show up on refresh if they're in the middle of the round
-    if (hasStartedConnectingToPartner && !hasPartnerAndIsConnecting && msFromStart < 45000) {
+    if (
+      hasStartedConnectingToPartner &&
+      !hasPartnerAndIsConnecting &&
+      msFromStart < 45000 &&
+      status !== 'in-between-rounds'
+    ) {
       // without this, the green banner annoyingly shows up right before the connecting screen
       setTimeout(() => {
         setShowRoundStartedSnack(true)
       }, 3000)
     }
-  }, [hasPartnerAndIsConnecting])
+  }, [hasPartnerAndIsConnecting, event])
 
   return (
     <Grid

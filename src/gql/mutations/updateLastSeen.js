@@ -9,6 +9,7 @@ const updateLastSeen = gql`
         role
         email
         city
+        updated_at
         tags_users {
           tag {
             name

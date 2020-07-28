@@ -75,7 +75,7 @@ const VideoRoom = ({ match }) => {
   const { appLoading, permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 
-  const { startTwilio, twilioStarted } = useTwilio()
+  const { startTwilio } = useTwilio()
 
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
@@ -84,7 +84,6 @@ const VideoRoom = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
-
   const hasCheckedCamera = useRef()
   const showControls = useIsUserActive()
 
@@ -139,13 +138,16 @@ const VideoRoom = ({ match }) => {
   // to get twilio token
   useEffect(() => {
     const hasPartner = myRound && myRound.partnerX_id && myRound.partnerY_id
-    if (hasPartner && eventSet && event.status === 'room-in-progress' && !twilioStarted) {
+    if (
+      hasPartner &&
+      eventSet &&
+      event.status !== 'in-between-rounds' &&
+      event.current_round === myRound.round_number
+    ) {
       const getTwilioToken = async () => {
-        console.log('getTwilioToken -> myRound.id', myRound.id)
         const res = await getToken(`${eventId}-${myRound.id}`, userId).then((response) =>
           response.json()
         )
-        console.warn('setting token to something long')
 
         setToken(res.token)
       }
@@ -194,16 +196,19 @@ const VideoRoom = ({ match }) => {
 
   // If you are switching from room-in-progress to in-between-rounds
   // then we want to clear your room and token
-  const { status: latestStatus } = event
+  const { status: statusFromSubscription } = event
 
-  if (latestStatus !== eventStatusRef.current) {
-    if (latestStatus === 'room-in-progress' && eventStatusRef.current === 'in-between-rounds') {
+  if (statusFromSubscription !== eventStatusRef.current) {
+    if (
+      statusFromSubscription === 'room-in-progress' &&
+      eventStatusRef.current === 'in-between-rounds'
+    ) {
       setToken(null)
       setRoom(null)
-      eventStatusRef.current = latestStatus
+      eventStatusRef.current = statusFromSubscription
       return null
     }
-    eventStatusRef.current = latestStatus
+    eventStatusRef.current = statusFromSubscription
   }
 
   return (

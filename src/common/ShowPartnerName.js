@@ -28,12 +28,32 @@ const ShowPartnerName = ({ userId, myRound }) => {
   if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
     userIsPartnerX = true
   }
+
+  const getPartnerCity = () => {
+    if (userIsPartnerX && myRound.partnerY.city) {
+      return (
+        <Typography variant="h5" className={classes.partnerName}>
+          {myRound.partnerY.city}
+        </Typography>
+      )
+    }
+    if (myRound.partnerX.city) {
+      return (
+        <Typography variant="h5" className={classes.partnerName}>
+          {myRound.partnerX.city}
+        </Typography>
+      )
+    }
+    return null
+  }
+
   return (
     <Grid container justify="center" alignItems="center" className={classes.partnerNameGrid}>
       <div className={classes.partnerNameContainer}>
         <Typography variant="h5" className={classes.partnerName}>
           {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
         </Typography>
+        {getPartnerCity()}
       </div>
     </Grid>
   )
