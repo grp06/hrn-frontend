@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useParticipantConnected } from '.'
 import { useAppContext } from '../context/useAppContext'
 import { constants } from '../utils'
@@ -11,12 +9,10 @@ const useTwilio = () => {
     setHasPartnerAndIsConnecting,
   } = useAppContext()
   const { partnerCameraIssueTimeout } = constants
-  const [twilioStarted, setTwilioStarted] = useState(null)
 
   const { participantConnected } = useParticipantConnected()
 
   const startTwilio = (room) => {
-    setTwilioStarted(true)
     setPartnerNeverConnected(false)
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
@@ -62,7 +58,6 @@ const useTwilio = () => {
       })
 
       room.on('disconnected', function (rum) {
-        setTwilioStarted(false)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
@@ -79,7 +74,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio, twilioStarted }
+  return { startTwilio }
 }
 
 export default useTwilio

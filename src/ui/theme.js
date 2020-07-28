@@ -3,14 +3,13 @@ import { createMuiTheme } from '@material-ui/core/styles'
 const lightPurple = '#723EBD'
 const dankPurp = '#6327bb'
 const orchid = '#e98dd7'
+const sunray = '#fabb5b'
+const independence = '#3a405a'
+const white = '#fff'
 const ghostWhite = '#f4f6fa'
 const ghostWhiteSub = '#E2E8F2'
 const ghostWhiteBody = '#D1D9EA'
 const ghostWhiteDark = '#BFCBE2'
-const sunray = '#fabb5b'
-const independence = '#3a405a'
-// const mediumGreen = '#4eab6d'
-const white = '#fff'
 const bodyBlack = '#191919'
 const greyBorder = '#3e4042'
 const greyCard = '#242526'
@@ -23,6 +22,17 @@ const black2dp = '#212121'
 // const black3dp = '#232323'
 // const black6dp = '#2c2c2c'
 
+// HRN Lab Colors
+// const softPurp = '#d2b6e5'
+// const softOrchid = '#e3b6e5'
+// const cottonCandy = '#8dd7e9'
+// const lightSalmon = '#e99f8d'
+// const sandDune = '#e9cd8d'
+// const vanilla = '#fffce1'
+// const vomit = '#7fbb27'
+// const hiSky = '#5b9afa'
+// const banana = '#ffdd43'
+
 const theme = createMuiTheme({
   palette: {
     common: {
@@ -31,6 +41,7 @@ const theme = createMuiTheme({
       orchid,
       sunray,
       ghostWhite,
+      ghostWhiteSub,
       ghostWhiteBody,
       ghostWhiteDark,
       independence,
@@ -244,10 +255,10 @@ const theme = createMuiTheme({
         color: ghostWhiteDark,
       },
     },
-    MuiSnackbar: {
-      bottom: 'none',
-      top: '20px',
-    },
+    // MuiSnackbar: {
+    //   bottom: 'none',
+    //   top: '20px',
+    // },
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,

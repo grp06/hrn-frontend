@@ -57,8 +57,9 @@ const SettingsMenu = ({ resetUser }) => {
     history.push('/')
   }
 
-  const myProfileClick = () => {
-    history.push('/my-profile')
+  const eventsPublicClick = (event) => {
+    history.push('/events/public')
+    handleMenuClose(event)
   }
 
   const logoutClick = () => {
@@ -93,9 +94,9 @@ const SettingsMenu = ({ resetUser }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {/* <MenuItem onClick={myProfileClick} className={classes.menuItem}>
-                    My Profile
-                  </MenuItem> */}
+                  <MenuItem onClick={eventsPublicClick} className={classes.menuItem}>
+                    Public Events
+                  </MenuItem>
                   <MenuItem onClick={logoutClick} className={classes.menuItem}>
                     Log Out
                   </MenuItem>

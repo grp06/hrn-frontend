@@ -23,22 +23,26 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show15SecondsLeftSnack, setShow15SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
+
   const getDuration = () => {
     const { status } = event
     if (status === 'room-in-progress') {
       return event.round_length * 60000
     }
+    // needs to match round_interval on the backend
     return 20000
   }
 
-  const roundEndTime = new Date(myRound.started_at).getTime() + getDuration()
+  const roundEndTime = new Date(event.updated_at).getTime() + getDuration()
   const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 15000
 
   useEffect(() => {
-    if (isLast15Seconds) {
+    const { status } = event
+
+    if (isLast15Seconds && status === 'room-in-progress') {
       setShow15SecondsLeftSnack(true)
     }
-  }, [isLast15Seconds])
+  }, [isLast15Seconds, event])
 
   const getMsFromRoundStart = () => {
     const { status, updated_at } = event
@@ -46,7 +50,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
     const latestUpdateFromServer = new Date(updatedAt).getTime()
 
     if (status === 'room-in-progress') {
-      const roundStartTime = new Date(myRound.started_at).getTime()
+      const roundStartTime = new Date(event.updated_at).getTime()
 
       return latestUpdateFromServer - roundStartTime
     }
@@ -63,15 +67,23 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   }
 
   useEffect(() => {
+    const { status } = event
+
     // make sure we've already started the process of connecting, and that the connection has been made, and its within 45sec of round start
     // this way, it won't show up on refresh if they're in the middle of the round
-    if (hasStartedConnectingToPartner && !hasPartnerAndIsConnecting && msFromStart < 45000) {
+    if (
+      hasStartedConnectingToPartner &&
+      !hasPartnerAndIsConnecting &&
+      msFromStart < 45000 &&
+      status === 'room-in-progress'
+    ) {
+      console.log('RoundProgressBar -> status', status)
       // without this, the green banner annoyingly shows up right before the connecting screen
       setTimeout(() => {
         setShowRoundStartedSnack(true)
       }, 3000)
     }
-  }, [hasPartnerAndIsConnecting])
+  }, [hasPartnerAndIsConnecting, event])
 
   return (
     <Grid

@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   userName: {
     color: theme.palette.common.ghostWhiteBody,
+    '&:hover': {
+      color: theme.palette.common.sunray,
+    },
   },
   grow: {
     flexGrow: 1,
@@ -46,11 +50,16 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { user, event, resetUser } = useAppContext()
   const { role } = user
   const { status: eventStatus, current_round } = event
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
+
+  const handleUserNameClick = () => {
+    history.push('/my-profile')
+  }
 
   const renderCurrentEventStatus = () => {
     if (!eventIdInUrl) return null
@@ -71,6 +80,7 @@ const Header = () => {
     }
     return <Typography variant="subtitle1">{textToShow}</Typography>
   }
+
   const renderHeaderElements = () => {
     return localStorage.getItem('userId') ? (
       <Grid container justify="flex-end" alignItems="center">
@@ -78,7 +88,7 @@ const Header = () => {
           <HavingIssuesButton event={event} />
         </div>
         <div>
-          <IconButton color="inherit" disableRipple disabled>
+          <IconButton color="inherit" disableRipple onClick={handleUserNameClick}>
             <Typography className={classes.userName}>{user.name}</Typography>
           </IconButton>
           {/* <IconButton color="inherit" disableRipple>

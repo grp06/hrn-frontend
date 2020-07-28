@@ -15,6 +15,7 @@ const listenToEvent = gql`
       round_length
       num_rounds
       post_event_link
+      public_event
       event_users(order_by: { user: { name: asc } }) {
         user {
           email

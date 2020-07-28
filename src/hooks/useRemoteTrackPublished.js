@@ -24,7 +24,7 @@ const useRemoteTrackPublished = () => {
       }
     }
     publication.on('subscribed', async (track) => {
-      console.log('onSubscribed')
+      console.log('remoteTrackPublished -> track', track)
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {
         attachedTrack.muted = true
@@ -32,6 +32,7 @@ const useRemoteTrackPublished = () => {
       if (onPreEvent) {
         document.getElementById('host-video').appendChild(attachedTrack)
       } else {
+        console.log('subscribed, attaching track')
         document.getElementById('remote-video').appendChild(attachedTrack)
       }
 

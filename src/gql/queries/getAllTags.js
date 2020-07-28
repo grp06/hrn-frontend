@@ -4,7 +4,7 @@ const getAllTags = gql`
   query getAllTags {
     tags {
       name
-      id
+      tag_id
       category
     }
   }

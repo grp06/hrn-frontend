@@ -12,17 +12,37 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   container: {
-    padding: theme.spacing(0, 2.5),
+    // padding: theme.spacing(0, 2.5),
   },
   gridItemContainer: {
     marginBottom: theme.spacing(2.5),
   },
 }))
 
-const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
+const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTags }) => {
   const classes = useStyles()
-  const [selectedTags, setSelectedTags] = useState(value)
+  const [selectedTags, setSelectedTags] = useState(usersTags || value)
   const [showTooManyTagsSnack, setShowTooManyTagsSnack] = useState(false)
+
+  // user has tags in database and has clicked to edit their tags
+  // change color of these tags to purple
+  const toggleAlreadySelectedTags = () => {
+    const arrayOfSelectedTagsIds = selectedTags.map((tag) => tag.tag_id)
+    const arrayOfDOMElementChips = Array.from(document.getElementsByClassName('MuiChip-root'))
+    arrayOfDOMElementChips.forEach((chip) => {
+      const indexOfSelectedTagInDOMChips = arrayOfSelectedTagsIds.indexOf(parseInt(chip.id, 10))
+
+      if (indexOfSelectedTagInDOMChips >= 0) {
+        chip.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (usersTags) {
+      toggleAlreadySelectedTags()
+    }
+  }, [usersTags])
 
   useEffect(() => {
     onChange(selectedTags)
@@ -31,7 +51,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
   const toggleTag = (event) => {
     const elementClicked = event.target
     // check to see if we clicked label instead of actual chip
-    const tagId =
+    const tagIdFromChip =
       elementClicked.className === 'MuiChip-label'
         ? elementClicked.parentElement.id
         : elementClicked.id
@@ -39,28 +59,30 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
     const chipElement =
       elementClicked.className === 'MuiChip-label' ? elementClicked.parentElement : elementClicked
 
-    const tagIndexInArray = selectedTags
+    const tagIndexInSelectedTagsArray = selectedTags
       .map((tag, idx) => {
-        if (tag.tag_id === tagId) return idx
+        if (tag.tag_id === parseInt(tagIdFromChip, 10)) return idx
         return null
       })
       .filter((foundTag) => foundTag !== null)
 
     // user clicked to remove tag
-    if (tagIndexInArray.length > 0) {
+    if (tagIndexInSelectedTagsArray.length > 0) {
       setSelectedTags((prevTags) => {
         const copiedPrevTags = [...prevTags]
-        copiedPrevTags.splice(tagIndexInArray[0], 1)
+        copiedPrevTags.splice(tagIndexInSelectedTagsArray[0], 1)
         return copiedPrevTags
       })
       return chipElement.classList.remove('MuiChip-colorPrimary', classes.toggleTagActive)
     }
 
-    if (selectedTags.length >= 5) {
-      console.log('getting in here')
+    if (selectedTags.length >= 8) {
       return setShowTooManyTagsSnack(true)
     }
-    setSelectedTags((prevTags) => [...prevTags, { tag_id: tagId, user_id: userId }])
+    setSelectedTags((prevTags) => [
+      ...prevTags,
+      { tag_id: parseInt(tagIdFromChip, 10), user_id: userId },
+    ])
     return chipElement.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
   }
 
@@ -73,9 +95,9 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
     return listOfTagsOfGivenCategory.map((categoryTag) => {
       return (
         <Chip
-          key={categoryTag.id}
+          key={categoryTag.tag_id}
           label={categoryTag.name}
-          id={categoryTag.id}
+          id={categoryTag.tag_id}
           clickable
           onClick={toggleTag}
         />
@@ -88,8 +110,8 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
       <Grid container direction="column" className={classes.container}>
         <Grid item className={classes.gridItemContainer}>
           <Typography variant="subtitle1">
-            Choose up to 5 interests that best represent you. Other users who get matched with you
-            will see them.
+            Choose up to 8 tags that best describe you. Other users who get matched with you will
+            see them.
           </Typography>
         </Grid>
         <Grid item className={classes.gridItemContainer}>
@@ -97,15 +119,15 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId }) => {
           {renderTagsByCategory('professional')}
         </Grid>
         <Grid item className={classes.gridItemContainer}>
-          <Typography variant="subtitle2">Hobbies</Typography>
-          {renderTagsByCategory('hobby')}
+          <Typography variant="subtitle2">Personal</Typography>
+          {renderTagsByCategory('personal')}
         </Grid>
       </Grid>
       <Snack
         open={showTooManyTagsSnack}
         onClose={() => setShowTooManyTagsSnack(false)}
         severity="info"
-        snackMessage={'Please only choose 5 interests'}
+        snackMessage={'Please only choose 8 interests'}
       />
     </div>
   )

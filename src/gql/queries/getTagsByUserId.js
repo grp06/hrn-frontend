@@ -5,7 +5,7 @@ const getTagsByUserId = gql`
     tags_users(where: { user_id: { _eq: $user_id } }) {
       tag {
         name
-        id
+        tag_id
         category
       }
     }

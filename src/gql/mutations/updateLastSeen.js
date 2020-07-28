@@ -5,9 +5,18 @@ const updateLastSeen = gql`
     update_users(where: { id: { _eq: $id } }, _set: { last_seen: $now }) {
       returning {
         id
-        last_seen
         name
+        role
+        email
+        city
         updated_at
+        tags_users {
+          tag {
+            name
+            tag_id
+            category
+          }
+        }
       }
     }
   }

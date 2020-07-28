@@ -35,7 +35,6 @@ const defaultState = {
   event: {},
   twilio: {
     partnerDisconnected: false,
-    lateArrival: false,
     hasPartnerAndIsConnecting: false,
   },
 }
@@ -133,12 +132,16 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        const { name, role, id, email } = userData.users[0]
+        const { name, role, id, email, city, tags_users } = userData.users[0]
+        console.log('tags_users ->', tags_users)
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
           draft.user.email = email
+          draft.user.city = city
+          draft.user.tags_users = tags_users
+          // draft.user = userData.users[0]
 
           if (!eventIdInUrl) {
             draft.app.appLoading = false

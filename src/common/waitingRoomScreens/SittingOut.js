@@ -40,7 +40,7 @@ const SittingOut = () => {
         Sometimes we have an odd number of people and need someone to sit out.
       </Typography>
       <Typography className={classes.messageText}>
-        But no worries, you'll be paired with someone new in 5 minutes.
+        But no worries, you&apos;ll be paired with someone new in 5 minutes.
       </Typography>
       <Typography className={classes.messageText}>
         Get a drink of water. Stretch. Do a little dance{' '}

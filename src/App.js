@@ -18,9 +18,11 @@ import {
   HostDashboard,
   MyProfile,
   Onboarding,
+  EventsPublic,
 } from './pages'
 import { AppProvider } from './context/AppProvider'
 import Header from './ui/Header/Header'
+import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
 
 const App = () => {
@@ -66,6 +68,7 @@ const App = () => {
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />
+                  <Route exact path="/events/public" component={EventsPublic} />
                   <Route exact path="/events/:id" component={Event} />
                   <Route exact path="/events/:id/video-room" component={VideoRoom} />
                   <Route exact path="/events/:id/pre-event" component={PreEvent} />
@@ -73,6 +76,7 @@ const App = () => {
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <Header activeTab={activeTab} setActiveTab={setActiveTab} />
+                <GetTagsModal />
               </AppProvider>
             </ErrorBoundary>
           </Router>

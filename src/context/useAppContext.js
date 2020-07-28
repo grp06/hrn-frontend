@@ -15,7 +15,15 @@ const useAppContext = () => {
         name: '',
         userId: null,
         role: '',
+        city: '',
+        tags_users: [],
       }
+    })
+  }
+
+  function setUsersTags(usersTags) {
+    dispatch((draft) => {
+      draft.user.tags_users = usersTags
     })
   }
 
@@ -55,15 +63,16 @@ const useAppContext = () => {
     })
   }
 
-  function setLateArrival(lateArrival) {
-    dispatch((draft) => {
-      draft.twilio.lateArrival = lateArrival
-    })
-  }
-
   function setHasPartnerAndIsConnecting(hasPartnerAndIsConnecting) {
     dispatch((draft) => {
       draft.twilio.hasPartnerAndIsConnecting = hasPartnerAndIsConnecting
+    })
+  }
+
+  function updateUserObject(userObject) {
+    dispatch((draft) => {
+      draft.user.name = userObject.name
+      draft.user.city = userObject.city
     })
   }
 
@@ -75,9 +84,10 @@ const useAppContext = () => {
     setEventId,
     setPartnerDisconnected,
     setPartnerNeverConnected,
-    setLateArrival,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
+    setUsersTags,
+    updateUserObject,
   }
 }
 

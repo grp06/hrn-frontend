@@ -7,8 +7,9 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
-import { FloatCardMedium } from '.'
+import { FloatCardMedium, Snack } from '.'
 import { useAppContext } from '../context/useAppContext'
+import { sleep } from '../helpers'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -46,7 +47,10 @@ const SignUpForm = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showErrorSnack, setShowErrorSnack] = useState(false)
+  const [showSignupSuccessSnack, setShowSignupSuccessSnack] = useState(false)
   const [error, setError] = useState(null)
+
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
@@ -58,7 +62,7 @@ const SignUpForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    setError(false)
+    // setError(false)
 
     let signUpResponse
     try {
@@ -74,6 +78,7 @@ const SignUpForm = () => {
       // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
       if (signUpResponse.error) {
+        setShowErrorSnack(true)
         throw signUpResponse.error
       }
     } catch (err) {
@@ -81,17 +86,14 @@ const SignUpForm = () => {
       return setError(err)
     }
 
+    setShowSignupSuccessSnack(true)
+    await sleep(800)
+
     const { token, id } = signUpResponse
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
 
-    // history.push('/onboarding')
-    // check to see if we were redirected here by an event
-    const eventIdInLocalStorage = localStorage.getItem('eventId')
-    if (eventIdInLocalStorage) {
-      history.replace(`/events/${eventIdInLocalStorage}`)
-    }
-
+    history.push('/onboarding')
     window.location.reload()
   }
 
@@ -136,7 +138,7 @@ const SignUpForm = () => {
               <Grid item>
                 <TextField
                   id="password"
-                  label="Password"
+                  label="Password (8 chars min)"
                   type="password"
                   required
                   fullWidth
@@ -145,20 +147,31 @@ const SignUpForm = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
-              <Grid>
-                <Typography variant="body1" style={{ textAlign: 'center' }}>
-                  {error || ''}
-                </Typography>
-              </Grid>
             </Grid>
-
             <Grid container direction="column" justify="center" alignItems="center">
-              <Button color="primary" type="submit" variant="contained">
+              <Button
+                disabled={showSignupSuccessSnack}
+                color="primary"
+                type="submit"
+                variant="contained"
+              >
                 Signup
               </Button>
               <Link className={classes.linkRedirectToLogin} to="/">
                 Already have an account?
               </Link>
+              <Snack
+                open={showErrorSnack}
+                onClose={() => setShowErrorSnack(false)}
+                severity="error"
+                snackMessage={error}
+              />
+              <Snack
+                open={showSignupSuccessSnack}
+                onClose={() => setShowSignupSuccessSnack(false)}
+                severity="success"
+                snackMessage="Unlocking the doors 🚪"
+              />
             </Grid>
           </form>
         </Grid>
