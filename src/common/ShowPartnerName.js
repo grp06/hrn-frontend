@@ -32,14 +32,14 @@ const ShowPartnerName = ({ userId, myRound }) => {
   const getPartnerCity = () => {
     if (userIsPartnerX && myRound.partnerY.city) {
       return (
-        <Typography variant="h5" className={classes.partnerName}>
+        <Typography variant="h6" className={classes.partnerName}>
           {myRound.partnerY.city}
         </Typography>
       )
     }
     if (myRound.partnerX.city) {
       return (
-        <Typography variant="h5" className={classes.partnerName}>
+        <Typography variant="h6" className={classes.partnerName}>
           {myRound.partnerX.city}
         </Typography>
       )

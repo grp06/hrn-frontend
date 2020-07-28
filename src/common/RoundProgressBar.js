@@ -73,8 +73,9 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
       hasStartedConnectingToPartner &&
       !hasPartnerAndIsConnecting &&
       msFromStart < 45000 &&
-      status !== 'in-between-rounds'
+      status === 'room-in-progress'
     ) {
+      console.log('RoundProgressBar -> status', status)
       // without this, the green banner annoyingly shows up right before the connecting screen
       setTimeout(() => {
         setShowRoundStartedSnack(true)
