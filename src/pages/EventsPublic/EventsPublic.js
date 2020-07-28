@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
-import formatDate from '../../utils/formatDate'
+import { formatDate, isEventInFuture } from '../../utils/'
 import { EventCard, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +76,7 @@ const EventsPublic = () => {
       {allPublicEventsData &&
         allPublicEventsData.events
           .filter((event) => {
-            return formatDate(event.start_at) > formatDate(Date.now())
+            return isEventInFuture(event.start_at)
           })
           .sort((eventA, eventB) => {
             if (eventA && eventB) {
