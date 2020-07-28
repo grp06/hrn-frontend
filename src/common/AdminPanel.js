@@ -61,8 +61,10 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
     button: {
+      buttonColor: 'secondary',
+      buttonVariant: 'outlined',
       buttonSize: 'medium',
-      buttonText: 'Edit Event ✍️',
+      buttonText: 'Edit Event',
     },
   })
 

@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import ScheduleIcon from '@material-ui/icons/Schedule'
-import formatDate from '../utils/formatDate'
+import { formatDate, truncateText } from '../utils'
 import eventImage from '../assets/globeMask.png'
 
 import { FloatCardMediumLarge } from '.'
@@ -100,7 +100,7 @@ const EventCard = ({ event }) => {
             {event_name}
           </Typography>
           <Typography variant="body1" component="p">
-            {description}
+            {truncateText(description, 350)}
           </Typography>
           <Grid item container direction="row" alignItems="center">
             <ScheduleIcon className={classes.icon} />
