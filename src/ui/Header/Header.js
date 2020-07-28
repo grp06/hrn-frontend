@@ -12,11 +12,12 @@ import IconButton from '@material-ui/core/IconButton'
 import logo from '../../assets/logoWhite.svg'
 import { useAppContext } from '../../context/useAppContext'
 import {
+  EventsConnectionsMenu,
+  HavingIssuesButton,
   HostEventControlsMenu,
   HostControlsMenu,
   SettingsMenu,
   StartEventButton,
-  HavingIssuesButton,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -91,11 +92,9 @@ const Header = () => {
           <IconButton color="inherit" disableRipple onClick={handleUserNameClick}>
             <Typography className={classes.userName}>{user.name}</Typography>
           </IconButton>
-          {/* <IconButton color="inherit" disableRipple>
-        <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
-      </IconButton> */}
         </div>
         {role === 'host' && <HostControlsMenu />}
+        <EventsConnectionsMenu />
         <SettingsMenu resetUser={resetUser} />
       </Grid>
     ) : null

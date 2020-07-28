@@ -17,6 +17,7 @@ import {
   SetNewPassword,
   HostDashboard,
   MyProfile,
+  MyConnections,
   Onboarding,
   EventsPublic,
 } from './pages'
@@ -65,6 +66,7 @@ const App = () => {
                   />
                   <Route exact path="/onboarding" component={Onboarding} />
                   <Route exact path="/my-profile" component={MyProfile} />
+                  <Route exact path="/my-connections" component={MyConnections} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/events" component={Events} />

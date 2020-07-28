@@ -1,4 +1,5 @@
 export { default as Header } from './Header'
+export { default as EventsConnectionsMenu } from './EventsConnectionsMenu'
 export { default as HavingIssuesButton } from './HavingIssuesButton'
 export { default as HostControlsMenu } from './HostControlsMenu'
 export { default as HostEventControlsMenu } from './HostEventControlsMenu'
