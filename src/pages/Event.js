@@ -19,7 +19,8 @@ const useStyles = makeStyles((theme) => ({
   },
   eventBanner: {
     width: '100%',
-    height: '55vh',
+    height: 'auto',
+    minHeight: '55vh',
     backgroundImage: `url(${bannerBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
@@ -27,13 +28,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '80px',
   },
   eventBannerContentContainer: {
+    paddingTop: '40vh',
     marginLeft: '30px',
   },
   subtitle: {
     margin: theme.spacing(1),
-    width: '50%',
+    width: '75%',
     [theme.breakpoints.down('sm')]: {
-      width: '80%',
+      width: '90%',
     },
   },
 }))
@@ -96,8 +98,8 @@ const Event = ({ match }) => {
             item
             container
             direction="column"
-            justify="flex-end"
-            md={9}
+            justify="flex-start"
+            md={12}
             xs={12}
             className={classes.eventBannerContentContainer}
           >
