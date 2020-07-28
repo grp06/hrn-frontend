@@ -37,10 +37,12 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 15000
 
   useEffect(() => {
-    if (isLast15Seconds) {
+    const { status } = event
+
+    if (isLast15Seconds && status !== 'room-in-progress') {
       setShow15SecondsLeftSnack(true)
     }
-  }, [isLast15Seconds])
+  }, [isLast15Seconds, event])
 
   const getMsFromRoundStart = () => {
     const { status, updated_at } = event
