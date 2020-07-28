@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-import Geosuggest from 'react-geosuggest'
 import { Field } from 'formik'
-import { useHistory } from 'react-router-dom'
+import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
 import { getAllTags } from '../../gql/queries'
@@ -30,6 +29,7 @@ const Onboarding = () => {
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
+  const eventIdInLocalStorage = localStorage.getItem('eventId')
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -37,6 +37,9 @@ const Onboarding = () => {
 
   console.log('tagsData ->', tagsData)
 
+  if (eventIdInLocalStorage && (usersCityInContext || usersTagsInContext.length)) {
+    return <Redirect to={`/events/${eventIdInLocalStorage}`} />
+  }
   // Onboarding should only be displayed directly after signing up
   if (usersCityInContext || usersTagsInContext.length) {
     history.push('/events')
@@ -119,13 +122,6 @@ const Onboarding = () => {
           open={showSubmitSuccessSnack}
           onClose={() => {
             setShowSubmitSuccessSnack(false)
-            // check to see if we were redirected here by an event
-            const eventIdInLocalStorage = localStorage.getItem('eventId')
-            if (eventIdInLocalStorage) {
-              history.push(`/events/${eventIdInLocalStorage}`)
-              return
-            }
-            history.push('/events')
           }}
           duration={1500}
           snackMessage="Updated our books!"
