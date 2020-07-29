@@ -80,7 +80,7 @@ const EventsPublic = () => {
           })
           .sort((eventA, eventB) => {
             if (eventA && eventB) {
-              return eventA.event.start_at < eventB.event.start_at
+              return eventA.start_at < eventB.start_at
             }
           })
           .map((event) => {
