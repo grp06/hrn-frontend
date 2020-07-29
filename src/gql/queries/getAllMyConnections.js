@@ -35,9 +35,6 @@ const getAllMyConnections = gql`
           }
         }
       }
-      event {
-        event_name
-      }
     }
   }
 `
