@@ -46,7 +46,18 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   button: {
-    margin: theme.spacing(1.5, 0),
+    margin: theme.spacing(1, 1),
+  },
+  buttonContainer: {
+    margin: theme.spacing(0, 'auto'),
+  },
+  upcomingEventsButton: {
+    margin: theme.spacing(1, 0),
+    backgroundColor: theme.palette.common.ghostWhiteBody,
+    color: theme.palette.common.blackBody,
+    '&:hover': {
+      backgroundColor: theme.palette.common.ghostWhite,
+    },
   },
 }))
 
@@ -123,46 +134,71 @@ const EventComplete = ({ match }) => {
               <MutualThumbsList mutualThumbsData={mutualThumbsData} userId={userId} />
             </Grid>
             {renderPostEventZoomLink()}
-            <Grid item className={classes.cardBodySection}>
-              <Grid container item direction="row" justify="space-around" alignItems="center">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  href={giveFeedbackTypeform}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Give Feedback
-                  <span role="img" aria-label="woman hand out">
-                    💭
-                  </span>
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  href={becomeAHostTypeform}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Become a Host
-                  <span role="img" aria-label="woman hand out">
-                    💁‍♀️
-                  </span>
-                </Button>
-                <Button
-                  variant="contained"
-                  href={linkedInCommunityLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Join our LinkedIn community
-                  <span role="img" aria-label="brief case">
-                    💼
-                  </span>
-                </Button>
+            <Grid item className={classes.buttonContainer}>
+              <Grid
+                container
+                item
+                direction="column"
+                justify="space-around"
+                alignItems="center"
+                md={12}
+                xs={12}
+              >
+                <Grid container direction="row" justify="space-around" alignItems="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    href={giveFeedbackTypeform}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.button}
+                  >
+                    Give Feedback{' '}
+                    <span role="img" aria-label="woman hand out">
+                      💭
+                    </span>
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    href={becomeAHostTypeform}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.button}
+                  >
+                    Become a Host
+                    <span role="img" aria-label="woman hand out">
+                      💁‍♀️
+                    </span>
+                  </Button>
+                </Grid>
+                <Grid>
+                  <Button
+                    variant="contained"
+                    href={linkedInCommunityLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.button}
+                  >
+                    Join our LinkedIn community
+                    <span role="img" aria-label="brief case">
+                      💼
+                    </span>
+                  </Button>
+                </Grid>
+                <Grid>
+                  <Button
+                    variant="contained"
+                    className={classes.upcomingEventsButton}
+                    onClick={() => history.push('/events/public')}
+                    target="_blank"
+                  >
+                    Join our Upcoming Events
+                    <span role="img" aria-label="red balloon">
+                      🎈
+                    </span>
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
