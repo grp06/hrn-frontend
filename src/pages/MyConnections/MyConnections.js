@@ -1,11 +1,19 @@
 import React from 'react'
 import { useQuery } from 'react-apollo'
+import { makeStyles } from '@material-ui/styles'
 import { getAllMyConnections } from '../../gql/queries'
 import { useAppContext } from '../../context/useAppContext'
 import { ConnectionCard } from '.'
 import { Loading } from '../../common'
 
+const useStyles = makeStyles((theme) => ({
+  pageContainer: {
+    marginTop: '150px',
+  },
+}))
+
 const MyConnections = () => {
+  const classes = useStyles()
   const { app, user } = useAppContext()
   const { userId } = user
   const { appLoading } = app
@@ -50,10 +58,10 @@ const MyConnections = () => {
   }
 
   console.log('renderConnectionCards ->', renderConnectionCards)
-
   console.log('allMyConnectionsData ->', allMyConnectionsData)
   console.log('arrayOfMyAllMyUniqueConnections ->', arrayOfMyAllMyUniqueConnections)
-  return <div>{renderConnectionCards()}</div>
+
+  return <div className={classes.pageContainer}>{renderConnectionCards()}</div>
 }
 
 export default MyConnections
