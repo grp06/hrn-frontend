@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { setUsersTags, user, app } = useAppContext()
+  const { updateUserObject, setUsersTags, user, app } = useAppContext()
   const { appLoading } = app
   const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
@@ -39,6 +39,13 @@ const Onboarding = () => {
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const eventIdInLocalStorage = localStorage.getItem('eventId')
+
+  useEffect(() => {
+    const abortController = new AbortController()
+    return function cleanup() {
+      abortController.abort()
+    }
+  }, [])
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -54,18 +61,12 @@ const Onboarding = () => {
     history.push('/events')
   }
 
-  const getRowNumber = (value) => {
-    console.log(value)
-    const charsPerLine = 65
-    // const numRows = Math.ceil(field.value.length / charsPerLine)
-    // return numRows === 0 ? 1 : numRows
-  }
-
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)
     let insertTagMutationResponse
+    let updateUserMutationResponse
     try {
-      await updateUserMutation({
+      updateUserMutationResponse = await updateUserMutation({
         variables: {
           id: userId,
           name: userName,
@@ -90,6 +91,12 @@ const Onboarding = () => {
     await sleep(500)
     setShowSubmitSuccessSnack(true)
     await sleep(1000)
+    if (
+      updateUserMutationResponse &&
+      updateUserMutationResponse.data.update_users.returning.length
+    ) {
+      updateUserObject(updateUserMutationResponse.data.update_users.returning[0])
+    }
     if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
@@ -134,8 +141,6 @@ const Onboarding = () => {
               required
               fullWidth
               multiline
-              rows={4}
-              variant="outlined"
               placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
             />
           </div>

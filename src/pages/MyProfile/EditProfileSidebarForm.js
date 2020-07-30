@@ -41,7 +41,13 @@ const useStyles = makeStyles((theme) => ({
 const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const classes = useStyles()
   const { setUsersTags, updateUserObject, user } = useAppContext()
-  const { userId, tags_users: usersTags, name: usersName, city: usersCity } = user
+  const {
+    userId,
+    tags_users: usersTags,
+    name: usersName,
+    city: usersCity,
+    short_bio: usersShortBio,
+  } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
@@ -50,6 +56,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
   })
+
+  console.log('short_bio', usersShortBio)
 
   const handleFormClose = () => {
     if (onClose) {
@@ -62,15 +70,17 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     let insertTagMutationResponse
     const userChangedName = !(values.name === usersName)
     const userChangedCity = !(values.city === usersCity)
+    const userChangedShortBio = !(values.short_bio === usersShortBio)
 
     // Update User City and Name
-    if (userChangedName || userChangedCity) {
+    if (userChangedName || userChangedCity || userChangedShortBio) {
       try {
         updateUserMutationResponse = await updateUserMutation({
           variables: {
             id: userId,
             name: values.name,
             city: values.city,
+            short_bio: values.short_bio,
           },
         })
       } catch (err) {
@@ -132,11 +142,12 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
           name: usersName,
           city: usersCity,
           selectedTags: usersTags,
+          short_bio: usersShortBio,
         }}
       >
         {({ isSubmitting, values }) => (
           <Form autoComplete="off" className={classes.formContainer}>
-            <div className={classes.locationInputContainer}>
+            <div>
               <Field
                 name="name"
                 component={TextField}
@@ -160,6 +171,21 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                 />
               )}
             </Field>
+            <div>
+              <Field
+                name="short_bio"
+                component={TextField}
+                fullWidth
+                value={values.short_bio}
+                id="short_bio"
+                multiline
+                autoFocus={!values.short_bio}
+                margin="normal"
+                label="a quick blurb about yourself for others to get to know you"
+                // variant="outlined"
+                placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
+              />
+            </div>
             <Field name="selectedTags">
               {({ field, form }) => (
                 <div className={classes.tagsContainer}>

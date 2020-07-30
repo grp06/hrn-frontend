@@ -137,7 +137,7 @@ const GetTagsModal = () => {
             >
               <Button
                 variant="contained"
-                color="info"
+                color="default"
                 className={classes.acceptButton}
                 onClick={() => {
                   handleModalButtonClick()

@@ -135,6 +135,7 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
+        console.log('userData', userData)
         const {
           name,
           role,
@@ -146,14 +147,16 @@ const AppProvider = ({ children }) => {
           tags_users,
         } = userData.users[0]
         console.log('tags_users ->', tags_users)
+        console.log('short_bio ->', short_bio)
+        console.log('linkedIn_url ->', linkedIn_url)
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
           draft.user.email = email
           draft.user.city = city
-          draft.user.city = city
-          draft.user.city = city
+          draft.user.short_bio = short_bio
+          draft.user.linkedIn_url = linkedIn_url
           draft.user.tags_users = tags_users
           // draft.user = userData.users[0]
 

@@ -59,6 +59,9 @@ const theme = createMuiTheme({
     secondary: {
       main: orchid,
     },
+    default: {
+      main: sunray,
+    },
   },
   typography: {
     tab: {
