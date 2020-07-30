@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { FloatCardLarge } from '.'
-import SetupMicAndCameraButton from './SetupMicAndCameraButton'
+import { SetupMicAndCameraButton } from '../pages/Event'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {

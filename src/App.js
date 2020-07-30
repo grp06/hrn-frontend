@@ -5,20 +5,21 @@ import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
-import { LoginForm, EventForm, ErrorBoundary } from './common'
+import { EventForm, ErrorBoundary } from './common'
 import {
   Event,
   Events,
-  VideoRoom,
   EventComplete,
-  SignUp,
-  PreEvent,
+  EventsPublic,
   ForgotPassword,
-  SetNewPassword,
   HostDashboard,
+  LoginForm,
   MyProfile,
   Onboarding,
-  EventsPublic,
+  PreEvent,
+  SetNewPassword,
+  SignUp,
+  VideoRoom,
 } from './pages'
 import { AppProvider } from './context/AppProvider'
 import Header from './ui/Header/Header'
