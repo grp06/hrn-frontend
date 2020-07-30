@@ -47,6 +47,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     name: usersName,
     city: usersCity,
     short_bio: usersShortBio,
+    linkedIn_url: usersLinkedIn,
   } = user
 
   const [submitErrorSnackMessage, setSubmitErrorSnackMessage] = useState(null)
@@ -82,9 +83,10 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     const userChangedName = !(values.name === usersName)
     const userChangedCity = !(values.city === usersCity)
     const userChangedShortBio = !(values.short_bio === usersShortBio)
+    const userChangedLinkedIn = !(values.linkedIn_url === usersLinkedIn)
 
     // Update User City and Name
-    if (userChangedName || userChangedCity || userChangedShortBio) {
+    if (userChangedName || userChangedCity || userChangedShortBio || userChangedLinkedIn) {
       try {
         updateUserMutationResponse = await updateUserMutation({
           variables: {
@@ -92,6 +94,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
             name: values.name,
             city: values.city,
             short_bio: values.short_bio,
+            linkedIn_url: values.linkedIn_url,
           },
         })
       } catch (err) {
@@ -154,6 +157,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
           city: usersCity,
           selectedTags: usersTags,
           short_bio: usersShortBio,
+          linkedIn_url: usersLinkedIn,
         }}
       >
         {({ isSubmitting, values }) => (
@@ -182,6 +186,16 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                 />
               )}
             </Field>
+            <div>
+              <Field
+                name="linkedIn_url"
+                component={TextField}
+                fullWidth
+                value={values.linkedIn_url}
+                id="linkedIn_url"
+                label="Your LinkedIn Profile URL"
+              />
+            </div>
             <div>
               <Field
                 name="short_bio"
