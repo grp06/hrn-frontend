@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/logoPurple.svg'
-import { FloatCardMediumLarge } from '../../common'
+import { FloatCardMedium } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   avatarContainer: {
@@ -23,11 +23,19 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
     },
   },
+  button: {
+    margin: theme.spacing(0, 1),
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(1, 1),
+    },
+  },
   buttonContainer: {
     marginTop: theme.spacing(2),
+    marginLeft: theme.spacing(-1),
     [theme.breakpoints.down('sm')]: {
       margin: theme.spacing(2, 'auto'),
       marginBottom: 0,
+      justifyContent: 'space-around',
     },
   },
   cardContainer: {
@@ -67,7 +75,7 @@ const ConnectionCard = ({ connection }) => {
   }
 
   return (
-    <FloatCardMediumLarge>
+    <FloatCardMedium>
       <Grid
         container
         alignItems="center"
@@ -101,22 +109,23 @@ const ConnectionCard = ({ connection }) => {
           <Grid
             container
             item
-            justify="space-between"
+            // justify="space-between"
             alignItems="center"
             className={classes.buttonContainer}
-            md={3}
-            xs={6}
+            md={12}
+            sm={5}
+            xs={8}
           >
-            <Button variant="outlined" color="secondary" size="small">
-              Email
+            <Button variant="outlined" color="secondary" size="small" className={classes.button}>
+              Copy Email
             </Button>
-            <Button variant="outlined" color="secondary" size="small">
+            <Button variant="outlined" color="secondary" size="small" className={classes.button}>
               LinkedIn
             </Button>
           </Grid>
         </Grid>
       </Grid>
-    </FloatCardMediumLarge>
+    </FloatCardMedium>
   )
 }
 
