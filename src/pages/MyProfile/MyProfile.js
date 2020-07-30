@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
 import { getAllTags } from '../../gql/queries'
-import { Loading, TagsList } from '../../common'
+import { Loading } from '../../common'
 import { MyProfileSidebar } from '.'
 
 const useStyles = makeStyles((theme) => ({
