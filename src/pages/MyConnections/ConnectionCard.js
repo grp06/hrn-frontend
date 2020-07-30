@@ -132,7 +132,7 @@ const ConnectionCard = ({ connection }) => {
             </Typography>
           </Grid>
           <Typography variant="body1" className={classes.shortBioDesc}>
-            {short_bio}
+            {short_bio || 'Your connection seems to have forgotten to write about themselves 😧'}
           </Typography>
           <Grid
             container

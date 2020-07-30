@@ -175,7 +175,7 @@ const theme = createMuiTheme({
     },
     MuiDivider: {
       root: {
-        backgroundColor: ghostWhiteSub,
+        backgroundColor: greyBorder,
       },
     },
     MuiExpansionPanel: {
