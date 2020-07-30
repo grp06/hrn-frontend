@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
+import Typography from '@material-ui/core/Typography'
 import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
@@ -17,6 +18,13 @@ const useStyles = makeStyles((theme) => ({
   },
   cityInputContainer: {
     padding: theme.spacing(0, 2.5),
+  },
+  shortBioDesc: {
+    marginBottom: theme.spacing(2.5),
+  },
+  shortBioInputContainer: {
+    padding: theme.spacing(0, 2.5),
+    marginBottom: theme.spacing(1),
   },
 }))
 
@@ -62,6 +70,7 @@ const Onboarding = () => {
           id: userId,
           name: userName,
           city: values.city,
+          short_bio: values.short_bio,
         },
       })
     } catch (err) {
@@ -112,29 +121,23 @@ const Onboarding = () => {
               )}
             </Field>
           </div>
-          <div label="short bio" className={classes.cityInputContainer}>
+          <div label="short_bio" className={classes.shortBioInputContainer}>
+            <Typography variant="subtitle1" className={classes.shortBioDesc}>
+              Please provide a short bio that will be used to send out to people who you connect
+              with!
+            </Typography>
             <Field
-              name="short bio"
+              name="short_bio"
               component={TextField}
               label="Short Bio"
+              autoFocus
               required
               fullWidth
               multiline
-              rows={3}
+              rows={4}
               variant="outlined"
-              placeholder="Hello there"
-            >
-              {/* {({ field, form }) => (
-                <TextField
-                  id="short_bio"
-                  label="Short Bio"
-                  required
-                  fullWidth
-                  {...field}
-                  // onChange={(e) => form.setFieldValue('short_bio', e.target.value)}
-                />
-              )} */}
-            </Field>
+              placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
+            />
           </div>
           <div label="interests">
             <Field name="interests">
