@@ -7,7 +7,7 @@ import { TagsForm } from '.'
 const createStyles = makeStyles((theme) => ({
   sidebarTagsContainer: {
     width: '100%',
-    margin: theme.spacing(4, 0),
+    margin: theme.spacing(2, 0, 3, 0),
   },
   tagsContainer: {
     width: '100%',

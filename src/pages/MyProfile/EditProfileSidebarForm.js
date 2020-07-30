@@ -48,6 +48,9 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     city: usersCity,
     short_bio: usersShortBio,
   } = user
+
+  const [submitErrorSnackMessage, setSubmitErrorSnackMessage] = useState(null)
+  const [showSubmitErrorSnack, setShowSubmitErrorSnack] = useState(false)
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
@@ -68,6 +71,14 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const handleFormSubmit = async (values) => {
     let updateUserMutationResponse
     let insertTagMutationResponse
+    if (!values.name || !values.city || !values.short_bio || !values.selectedTags) {
+      setSubmitErrorSnackMessage('something seems to be empty 🧐')
+      return setShowSubmitErrorSnack(true)
+    }
+    if (values.short_bio.length < 100) {
+      setSubmitErrorSnackMessage('Bio must be at least 100 chars')
+      return setShowSubmitErrorSnack(true)
+    }
     const userChangedName = !(values.name === usersName)
     const userChangedCity = !(values.city === usersCity)
     const userChangedShortBio = !(values.short_bio === usersShortBio)
@@ -182,7 +193,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                 autoFocus={!values.short_bio}
                 margin="normal"
                 label="a quick blurb about yourself for others to get to know you"
-                // variant="outlined"
                 placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
               />
             </div>
@@ -233,6 +243,15 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
         }}
         duration={1500}
         snackMessage="Updated our books!"
+      />
+      <Snack
+        open={showSubmitErrorSnack}
+        onClose={() => {
+          setShowSubmitErrorSnack(false)
+        }}
+        duration={3000}
+        severity="error"
+        snackMessage={submitErrorSnackMessage}
       />
     </div>
   )

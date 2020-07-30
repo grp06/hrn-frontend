@@ -36,7 +36,10 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
       if (values.city) setDisabledButton(false)
     }
     if (step === 1) {
-      if (values.short_bio) setDisabledButton(false)
+      if (values.short_bio.length < 100) setDisabledButton(true)
+      else {
+        setDisabledButton(false)
+      }
     }
     if (step === 2) {
       if (values.interests.length >= 1) setDisabledButton(false)

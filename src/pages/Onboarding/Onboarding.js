@@ -19,8 +19,11 @@ const useStyles = makeStyles((theme) => ({
   cityInputContainer: {
     padding: theme.spacing(0, 2.5),
   },
+  pinkText: {
+    color: theme.palette.common.orchid,
+  },
   shortBioDesc: {
-    marginBottom: theme.spacing(2.5),
+    marginBottom: theme.spacing(3.5),
   },
   shortBioInputContainer: {
     padding: theme.spacing(0, 2.5),
@@ -129,9 +132,18 @@ const Onboarding = () => {
             </Field>
           </div>
           <div label="short_bio" className={classes.shortBioInputContainer}>
-            <Typography variant="subtitle1" className={classes.shortBioDesc}>
+            <Typography variant="subtitle1">
               Please provide a short bio that will be used to send out to people who you connect
-              with!
+              with.
+            </Typography>
+            <Typography variant="subtitle1" className={classes.shortBioDesc}>
+              We think you&apos;re pretty awesome and think that most people would agree!
+              That&apos;s why we ask that you try to write{' '}
+              <span className={classes.pinkText}>at least 100 characters (2 short sentences)</span>,
+              so others get a general picture of you{' '}
+              <span role="img" aria-label="jazz-hands">
+                🤗
+              </span>
             </Typography>
             <Field
               name="short_bio"

@@ -32,12 +32,17 @@ const createStyles = makeStyles((theme) => ({
   editProfileButton: {
     margin: theme.spacing(2, 0),
   },
+  shortBio: {
+    marginTop: theme.spacing(1),
+    width: '75%',
+    textAlign: 'center',
+  },
 }))
 
 const MyProfileSidebar = ({ user, databaseTags }) => {
   const classes = createStyles()
   const history = useHistory()
-  const { userId, name, city, tags_users: usersTags } = user
+  const { userId, name, city, tags_users: usersTags, short_bio } = user
   const [showEditSidebarForm, setShowEditSidebarForm] = useState(false)
 
   const eventIdInLS = localStorage.getItem('eventId')
@@ -53,6 +58,9 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
       <Grid container direction="column" alignItems="center" justify="center">
         <Typography variant="h5">{name}</Typography>
         <Typography variant="subtitle1">{city}</Typography>
+        <Typography variant="body1" className={classes.shortBio}>
+          {short_bio}
+        </Typography>
         {/* <SidebarAchievements /> */}
         <SidebarTags userId={userId} usersTags={usersTags} databaseTags={databaseTags.tags} />
         <Grid
