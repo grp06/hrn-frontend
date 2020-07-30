@@ -1,4 +1,3 @@
-export { default as findUsers } from './findUsers'
 export { default as findUserById } from './findUserById'
 export { default as getEventsByUserId } from './getEventsByUserId'
 export { default as getOnlineUsersId } from './getOnlineUsersId'

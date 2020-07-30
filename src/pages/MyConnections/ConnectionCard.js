@@ -58,8 +58,9 @@ const useStyles = makeStyles((theme) => ({
 const ConnectionCard = ({ connection }) => {
   const classes = useStyles()
   console.log('connection ->', connection)
-  const { name, city, tags_users: connectionsTags } = connection
-  console.log(connectionsTags)
+  const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url } = connection
+  console.log(short_bio)
+  console.log(linkedIn_url)
 
   const renderConnectionsTags = () => {
     return connectionsTags

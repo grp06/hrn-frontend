@@ -16,6 +16,8 @@ const useAppContext = () => {
         userId: null,
         role: '',
         city: '',
+        shortBio: '',
+        linkedIn_url: '',
         tags_users: [],
       }
     })

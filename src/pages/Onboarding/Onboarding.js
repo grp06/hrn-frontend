@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
+import { TextField } from 'formik-material-ui'
 import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
@@ -45,6 +46,13 @@ const Onboarding = () => {
     history.push('/events')
   }
 
+  const getRowNumber = (value) => {
+    console.log(value)
+    const charsPerLine = 65
+    // const numRows = Math.ceil(field.value.length / charsPerLine)
+    // return numRows === 0 ? 1 : numRows
+  }
+
   const handleOnboardingFormSubmit = async (values) => {
     console.log('values', values)
     let insertTagMutationResponse
@@ -84,6 +92,7 @@ const Onboarding = () => {
         <FormikOnboardingStepper
           initialValues={{
             city: '',
+            short_bio: '',
             interests: [],
           }}
           onSubmit={handleOnboardingFormSubmit}
@@ -101,6 +110,30 @@ const Onboarding = () => {
                   }}
                 />
               )}
+            </Field>
+          </div>
+          <div label="short bio" className={classes.cityInputContainer}>
+            <Field
+              name="short bio"
+              component={TextField}
+              label="Short Bio"
+              required
+              fullWidth
+              multiline
+              rows={3}
+              variant="outlined"
+              placeholder="Hello there"
+            >
+              {/* {({ field, form }) => (
+                <TextField
+                  id="short_bio"
+                  label="Short Bio"
+                  required
+                  fullWidth
+                  {...field}
+                  // onChange={(e) => form.setFieldValue('short_bio', e.target.value)}
+                />
+              )} */}
             </Field>
           </div>
           <div label="interests">

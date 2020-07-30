@@ -14,6 +14,8 @@ const getAllMyConnections = gql`
         name
         email
         city
+        short_bio
+        linkedIn_url
         tags_users {
           tag {
             name
@@ -27,6 +29,8 @@ const getAllMyConnections = gql`
         name
         email
         city
+        short_bio
+        linkedIn_url
         tags_users {
           tag {
             tag_id
