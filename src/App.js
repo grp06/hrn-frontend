@@ -13,6 +13,7 @@ import {
   EventsPublic,
   ForgotPassword,
   HostDashboard,
+  HRNAnalytics,
   LoginForm,
   MyProfile,
   Onboarding,
@@ -68,6 +69,7 @@ const App = () => {
                   <Route exact path="/my-profile" component={MyProfile} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
+                  <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/public" component={EventsPublic} />
                   <Route exact path="/events/:id" component={Event} />

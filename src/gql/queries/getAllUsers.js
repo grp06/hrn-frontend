@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const findUsers = gql`
-  query findUsers {
+const getAllUsers = gql`
+  query getAllUsers {
     users {
       id
       name
@@ -10,4 +10,4 @@ const findUsers = gql`
   }
 `
 
-export default findUsers
+export default getAllUsers
