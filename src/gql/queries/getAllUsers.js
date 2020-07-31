@@ -6,6 +6,7 @@ const getAllUsers = gql`
       id
       name
       role
+      created_at
     }
   }
 `

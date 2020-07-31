@@ -2,6 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 
+import Typography from '@material-ui/core/Typography'
 import { getAllUsers, getAllEvents } from '../../gql/queries'
 import { Loading } from '../../common'
 import { EventExpansionPanelAdmin } from '.'
@@ -25,11 +26,17 @@ const HRNAnalytics = () => {
   if (allDBUsersLoading || allDBEventsAndRoundsLoading) {
     return <Loading />
   }
-  // the number of users we have in the db
-  console.log(allDBUsers.users.length)
-  console.log(allDBEventsAndRounds)
+
   return (
     <div className={classes.pageContainer}>
+      <div>
+        <Typography variant="subtitle1">Number of total users:</Typography>
+        <Typography variant="h2">{allDBUsers.users.length}</Typography>
+      </div>
+      <div>
+        <Typography variant="subtitle1">Number of total events:</Typography>
+        <Typography variant="h2">{allDBEventsAndRounds.events.length}</Typography>
+      </div>
       <div className={classes.expansionPanelsContainer}>
         <EventExpansionPanelAdmin eventsAndRoundsData={allDBEventsAndRounds} />
       </div>

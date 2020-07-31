@@ -11,7 +11,7 @@ import { CSVLink } from 'react-csv'
 import { makeStyles } from '@material-ui/styles'
 
 import formatDate from '../../utils/formatDate'
-import { getHostEventAnalytics } from '../../helpers'
+import { getEventAnalytics } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   eventPanelHeading: {
@@ -89,26 +89,31 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
   const renderExpansionPanelWithData = (event) => {
     const { event_users } = event
     const {
-      mutualThumbsInEvent,
-      dropOffsInEvent,
-      getRSVPs,
-      getAttendeesCSV,
-    } = getHostEventAnalytics(event)
-
+      attendanceRateForEvent,
+      attendeesCSVofEvent,
+      RSVPsCSVofEvent,
+      numberOfDropOffsInEvent,
+      numberOfEventParticipants,
+      numberOfMutualThumbsInEvent,
+      numberOfTotalRoundsInEvent,
+      relevancyOfEvent,
+      roundLengthOfEvent,
+    } = getEventAnalytics(event)
+    console.log('attendeesCSVofEvent ->', attendeesCSVofEvent)
     return (
       <Grid container direction="column" alignItems="center">
         <Grid item>
           <CSVLink
-            data={getRSVPs.data}
-            headers={getRSVPs.headers}
+            data={RSVPsCSVofEvent.data}
+            headers={RSVPsCSVofEvent.headers}
             className={classes.downloadButton}
           >
             Dowload list of all RSVPs
             <FeatherIcon icon="download" stroke="#fff" size="20" />
           </CSVLink>
           <CSVLink
-            data={getAttendeesCSV.data}
-            headers={getAttendeesCSV.headers}
+            data={attendeesCSVofEvent.data}
+            headers={attendeesCSVofEvent.headers}
             className={classes.downloadButton}
           >
             Dowload list of all attendees
@@ -123,18 +128,38 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Mutual Connections: {mutualThumbsInEvent}
+              Total Participants: {numberOfEventParticipants}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Attendance Rate: {attendanceRateForEvent} %
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Total Number of Mutual Connections: {numberOfMutualThumbsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
               Drop Offs:
-              {dropOffsInEvent}
+              {numberOfDropOffsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Total Attendees: {getAttendeesCSV.data.length}
+              Total Number of Rounds: {numberOfTotalRoundsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Length of Rounds: {roundLengthOfEvent} mins
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Relevancy of event: {relevancyOfEvent} %
             </Typography>
           </Grid>
         </Grid>
