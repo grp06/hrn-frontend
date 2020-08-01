@@ -8,21 +8,26 @@ import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
-import { EventCountdown, SetupMicAndCameraButton, EventBreakdownStepper } from '.'
+import {
+  EventBreakdownStepper,
+  EventCountdown,
+  SetupMicAndCameraButton,
+  ShareEventPromptModal,
+} from '.'
 import { FloatCardLarge, CameraDisabledBanner } from '../../common'
 import { useAppContext } from '../../context/useAppContext'
 import { insertEventUser, deleteEventUser } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
-  topDashboard: {
-    width: '100%',
-    paddingTop: '40px',
-    paddingBottom: '40px',
-    borderStyle: 'none none solid',
-    borderWidth: '1px',
-    borderColor: theme.palette.common.greyBorder,
-    borderRadius: '4px 4px 0px 0px',
-    backgroundColor: theme.palette.common.greyHighlight,
+  cameraTest: {
+    marginBottom: theme.spacing(4),
+  },
+  centerText: {
+    textAlign: 'center',
+  },
+  ctaButtonContainer: {
+    minHeight: '125px',
+    height: 'auto',
   },
   partyEmoji: {
     marginLeft: theme.spacing(1),
@@ -38,11 +43,15 @@ const useStyles = makeStyles((theme) => ({
     right: 0,
     top: 'auto',
   },
-  centerText: {
-    textAlign: 'center',
-  },
-  cameraTest: {
-    marginBottom: theme.spacing(4),
+  topDashboard: {
+    width: '100%',
+    paddingTop: '40px',
+    paddingBottom: '40px',
+    borderStyle: 'none none solid',
+    borderWidth: '1px',
+    borderColor: theme.palette.common.greyBorder,
+    borderRadius: '4px 4px 0px 0px',
+    backgroundColor: theme.palette.common.greyHighlight,
   },
 }))
 
@@ -256,11 +265,17 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             item
             md={6}
             xs={12}
+            className={classes.ctaButtonContainer}
             direction="column"
-            justify="center"
+            justify="space-between"
             alignItems="center"
           >
-            {renderCTAButton()}
+            <Grid container item direction="column" justify="center" alignItems="center">
+              {renderCTAButton()}
+            </Grid>
+            <Grid container item direction="column" justify="center" alignItems="center">
+              <ShareEventPromptModal event={eventData} renderHostMessage={false} />
+            </Grid>
           </Grid>
         </Grid>
         {userId ? <EventBreakdownStepper eventRoundLength={round_length} /> : null}
