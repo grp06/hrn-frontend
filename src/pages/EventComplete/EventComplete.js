@@ -101,24 +101,23 @@ const EventComplete = ({ match }) => {
       ? 'Say Hi Right Now to your new friends 👋'
       : 'Thanks for joining the event! 🎊'
 
-  const renderPostEventZoomLink = () => (
-    // event.post_event_link && (
-    <Grid item className={classes.cardBodySection}>
-      <div className={classes.zoomContainer}>
-        <Typography variant="h5">
-          <a
-            href={event.post_event_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={classes.zoomLink}
-          >
-            Click here to join everyone from the event on a video call!
-          </a>
-        </Typography>
-      </div>
-    </Grid>
-  )
-  // )
+  const renderPostEventZoomLink = () =>
+    event.post_event_link && (
+      <Grid item className={classes.cardBodySection}>
+        <div className={classes.zoomContainer}>
+          <Typography variant="h5">
+            <a
+              href={event.post_event_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.zoomLink}
+            >
+              Click here to join everyone from the event on a video call!
+            </a>
+          </Typography>
+        </div>
+      </Grid>
+    )
 
   return (
     <div className={classes.wrapper}>
