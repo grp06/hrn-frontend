@@ -35,7 +35,7 @@ const VideoRouter = ({ myRound }) => {
   const { user, event, twilio } = useAppContext()
   const { userId } = user
   const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
-  const { status } = event
+  const { status, round_length } = event
   const showControls = useIsUserActive()
 
   const displayVideoMessage = () => {
@@ -48,7 +48,7 @@ const VideoRouter = ({ myRound }) => {
     }
 
     if (hasRoundsData && !hasPartner) {
-      return <SittingOut />
+      return <SittingOut roundLength={round_length} />
     }
 
     switch (status) {

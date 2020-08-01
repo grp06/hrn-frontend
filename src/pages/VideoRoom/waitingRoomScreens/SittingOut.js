@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SittingOut = () => {
+const SittingOut = ({ roundLength }) => {
   const classes = useStyles()
   return (
     <div className={classes.waitingRoom}>
@@ -40,7 +40,7 @@ const SittingOut = () => {
         Sometimes we have an odd number of people and need someone to sit out.
       </Typography>
       <Typography className={classes.messageText}>
-        But no worries, you&apos;ll be paired with someone new in 5 minutes.
+        But no worries, you&apos;ll be paired with someone new in {roundLength} minutes.
       </Typography>
       <Typography className={classes.messageText}>
         Get a drink of water. Stretch. Do a little dance{' '}
