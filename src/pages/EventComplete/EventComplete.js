@@ -39,12 +39,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
   },
   zoomLink: {
-    color: theme.palette.common.ghostWhite,
-    width: '60%',
-    textAlign: 'center',
+    color: theme.palette.common.sunray,
     margin: theme.spacing(0, 'auto', 3, 'auto'),
     '&:hover': {
-      color: theme.palette.common.orchid,
+      color: '#fcd08c',
     },
   },
   button: {
@@ -60,6 +58,11 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.common.ghostWhite,
     },
+  },
+  zoomContainer: {
+    width: '75%',
+    margin: theme.spacing(0, 'auto'),
+    textAlign: 'center',
   },
 }))
 
@@ -98,9 +101,10 @@ const EventComplete = ({ match }) => {
       ? 'Say Hi Right Now to your new friends 👋'
       : 'Thanks for joining the event! 🎊'
 
-  const renderPostEventZoomLink = () =>
-    event.post_event_link && (
-      <Grid item className={classes.cardBodySection}>
+  const renderPostEventZoomLink = () => (
+    // event.post_event_link && (
+    <Grid item className={classes.cardBodySection}>
+      <div className={classes.zoomContainer}>
         <Typography variant="h5">
           <a
             href={event.post_event_link}
@@ -108,11 +112,13 @@ const EventComplete = ({ match }) => {
             rel="noopener noreferrer"
             className={classes.zoomLink}
           >
-            Click to join everyone from the event on a video call!
+            Click here to join everyone from the event on a video call!
           </a>
         </Typography>
-      </Grid>
-    )
+      </div>
+    </Grid>
+  )
+  // )
 
   return (
     <div className={classes.wrapper}>
