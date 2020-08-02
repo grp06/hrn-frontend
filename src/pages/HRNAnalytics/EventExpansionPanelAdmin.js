@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
+const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
   const classes = useStyles()
 
   const [sortedEvents, setSortedEvents] = useState(null)
@@ -89,12 +89,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const renderExpansionPanelWithData = (event) => {
     const { event_users } = event
     const {
-      numberOfMutualThumbsInEvent,
-      numberOfDropOffsInEvent,
-      RSVPsCSVofEvent,
+      attendanceRateForEvent,
       attendeesCSVofEvent,
+      RSVPsCSVofEvent,
+      numberOfDropOffsInEvent,
+      numberOfEventParticipants,
+      numberOfMutualThumbsInEvent,
+      numberOfTotalRoundsInEvent,
+      relevancyOfEvent,
+      roundLengthOfEvent,
     } = getEventAnalytics(event)
-
+    console.log('attendeesCSVofEvent ->', attendeesCSVofEvent)
     return (
       <Grid container direction="column" alignItems="center">
         <Grid item>
@@ -123,7 +128,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Mutual Connections: {numberOfMutualThumbsInEvent}
+              Total Participants: {numberOfEventParticipants}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Attendance Rate: {attendanceRateForEvent} %
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Total Number of Mutual Connections: {numberOfMutualThumbsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
@@ -134,7 +149,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Total Attendees: {attendeesCSVofEvent.data.length}
+              Total Number of Rounds: {numberOfTotalRoundsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Length of Rounds: {roundLengthOfEvent} mins
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Relevancy of event: {relevancyOfEvent} %
             </Typography>
           </Grid>
         </Grid>
@@ -185,4 +210,4 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   })
 }
 
-export default HostEventsExpansionPanel
+export default EventExpansionPanelAdmin
