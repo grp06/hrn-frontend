@@ -173,7 +173,7 @@ const ConnectionCard = ({ connection }) => {
         open={showCopyEmailSnack}
         onClose={() => setShowCopyEmailSnack(false)}
         severity="info"
-        duration="1500"
+        duration={1500}
         snackMessage="Copied  💾"
       />
     </FloatCardMedium>
