@@ -56,6 +56,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const [deleteUsersTagsMutation] = useMutation(deleteUsersTags)
+  const linkedInRegex = /linkedin/
 
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
@@ -79,6 +80,13 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     if (values.short_bio.length < 100) {
       setSubmitErrorSnackMessage('Bio must be at least 100 chars')
       return setShowSubmitErrorSnack(true)
+    }
+    if (values.linkedIn_url) {
+      const linkedInInUrl = Boolean(values.linkedIn_url.match(linkedInRegex))
+      if (!linkedInInUrl) {
+        setSubmitErrorSnackMessage('We only allow linkedIn urls')
+        return setShowSubmitErrorSnack(true)
+      }
     }
     const userChangedName = !(values.name === usersName)
     const userChangedCity = !(values.city === usersCity)

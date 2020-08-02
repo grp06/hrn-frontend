@@ -1,12 +1,27 @@
 import React from 'react'
+
+import Button from '@material-ui/core/Button'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { useQuery } from 'react-apollo'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { getAllMyConnections } from '../../gql/queries'
 import { useAppContext } from '../../context/useAppContext'
 import { ConnectionCard } from '.'
-import { Loading } from '../../common'
+import { FloatCardLarge, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  nullDataContainer: {
+    padding: theme.spacing(5),
+  },
+  nullDataHeader: {
+    marginBottom: theme.spacing(4),
+    textAlign: 'center',
+  },
+  nullDataSub: {
+    textAlign: 'center',
+  },
   pageContainer: {
     marginTop: '150px',
   },
@@ -14,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MyConnections = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { app, user } = useAppContext()
   const { userId } = user
   const { appLoading } = app
@@ -28,6 +44,46 @@ const MyConnections = () => {
 
   if (appLoading || allMyConnectionsDataLoading) {
     return <Loading />
+  }
+
+  const handleGoToPublicEventsClick = () => {
+    return history.push('/events/public')
+  }
+
+  const renderNullDataText = () => {
+    if (!allMyConnectionsData || !allMyConnectionsData.rounds.length) {
+      return (
+        <>
+          <FloatCardLarge>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.nullDataContainer}
+            >
+              <Typography variant="h4" className={classes.nullDataHeader}>
+                Looks like you haven&apos;t connected with anyone yet{' '}
+                <span role="img" aria-label="neutral face">
+                  😐
+                </span>
+              </Typography>
+              <Typography variant="h6" className={classes.nullDataSub}>
+                Join one of our public events and connect with other awesome people!
+              </Typography>
+              <Button
+                onClick={handleGoToPublicEventsClick}
+                color="primary"
+                variant="contained"
+                style={{ marginTop: '20px' }}
+              >
+                Take Me There!
+              </Button>
+            </Grid>
+          </FloatCardLarge>
+        </>
+      )
+    }
   }
 
   // TODO: make this its own util function
@@ -52,16 +108,23 @@ const MyConnections = () => {
     .filter((el) => el !== null)
 
   const renderConnectionCards = () => {
-    return arrayOfMyAllMyUniqueConnections.map((connection) => {
-      return <ConnectionCard key={connection.id} connection={connection} />
-    })
+    if (arrayOfMyAllMyUniqueConnections.length) {
+      return arrayOfMyAllMyUniqueConnections.map((connection) => {
+        return <ConnectionCard key={connection.id} connection={connection} />
+      })
+    }
   }
 
   console.log('renderConnectionCards ->', renderConnectionCards)
   console.log('allMyConnectionsData ->', allMyConnectionsData)
   console.log('arrayOfMyAllMyUniqueConnections ->', arrayOfMyAllMyUniqueConnections)
 
-  return <div className={classes.pageContainer}>{renderConnectionCards()}</div>
+  return (
+    <div className={classes.pageContainer}>
+      {renderNullDataText()}
+      {renderConnectionCards()}
+    </div>
+  )
 }
 
 export default MyConnections

@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import FeatherIcon from 'feather-icons-react'
+import LinkedInIcon from '@material-ui/icons/LinkedIn'
 import { makeStyles } from '@material-ui/styles'
 
 import { FloatCardNarrow } from '../../common'
@@ -37,6 +37,8 @@ const createStyles = makeStyles((theme) => ({
   },
   linkedInIcon: {
     marginTop: theme.spacing(1),
+    fontSize: '32px',
+    color: '#3176b0',
   },
   shortBio: {
     marginTop: theme.spacing(3),
@@ -66,12 +68,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         <Typography variant="subtitle1">{city}</Typography>
         {linkedIn_url && (
           <Button href={linkedIn_url} target="_blank" rel="noopener noreferrer">
-            <FeatherIcon
-              className={classes.linkedInIcon}
-              icon="linkedin"
-              stroke="#e98dd7"
-              size="22"
-            />
+            <LinkedInIcon className={classes.linkedInIcon} />
           </Button>
         )}
         <Typography variant="body1" className={classes.shortBio}>

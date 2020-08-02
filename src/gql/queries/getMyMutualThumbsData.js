@@ -17,11 +17,31 @@ const getMyMutualThumbsData = gql`
         id
         name
         email
+        city
+        short_bio
+        linkedIn_url
+        tags_users {
+          tag {
+            name
+            tag_id
+            category
+          }
+        }
       }
       partnerX {
         id
         name
         email
+        city
+        short_bio
+        linkedIn_url
+        tags_users {
+          tag {
+            name
+            tag_id
+            category
+          }
+        }
       }
       round_number
     }

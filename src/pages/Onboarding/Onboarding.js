@@ -131,31 +131,6 @@ const Onboarding = () => {
               )}
             </Field>
           </div>
-          <div label="short_bio" className={classes.shortBioInputContainer}>
-            <Typography variant="subtitle1">
-              Please provide a short bio that will be used to send out to people who you connect
-              with.
-            </Typography>
-            <Typography variant="subtitle1" className={classes.shortBioDesc}>
-              We think you&apos;re pretty awesome and think that most people would agree!
-              That&apos;s why we ask that you try to write{' '}
-              <span className={classes.pinkText}>at least 100 characters (2 short sentences)</span>,
-              so others get a general picture of you{' '}
-              <span role="img" aria-label="jazz-hands">
-                🤗
-              </span>
-            </Typography>
-            <Field
-              name="short_bio"
-              component={TextField}
-              label="Short Bio"
-              autoFocus
-              required
-              fullWidth
-              multiline
-              placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
-            />
-          </div>
           <div label="interests">
             <Field name="interests">
               {({ field, form }) => (
@@ -169,6 +144,25 @@ const Onboarding = () => {
                 />
               )}
             </Field>
+          </div>
+          <div label="short bio" className={classes.shortBioInputContainer}>
+            <Typography variant="subtitle1" className={classes.shortBioDesc}>
+              Please provide a short bio that will be used to send out to people who you connect
+              with so everyone gets to see how awesome you are{' '}
+              <span role="img" aria-label="jazz-hands">
+                🤗
+              </span>
+              .
+            </Typography>
+            <Field
+              name="short_bio"
+              component={TextField}
+              label="Short Bio"
+              autoFocus
+              fullWidth
+              multiline
+              placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
+            />
           </div>
         </FormikOnboardingStepper>
         <Snack
