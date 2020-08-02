@@ -65,7 +65,7 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
     },
   })
 
-  const copyEventPromptModal = <ShareEventPromptModal event={eventData} />
+  const copyEventPromptModal = <ShareEventPromptModal event={eventData} renderHostMessage />
   const renderOnlineUsers = () => {
     return timeState === 'go time' || timeState === 'within 30 mins' ? (
       <Grid container item md={6} xs={12} direction="column">
