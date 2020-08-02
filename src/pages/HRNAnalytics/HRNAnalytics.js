@@ -2,6 +2,7 @@ import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { getAllUsers, getAllEvents } from '../../gql/queries'
 import { Loading } from '../../common'
@@ -14,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
   },
   pageContainer: {
     marginTop: '200px',
+  },
+  systemNumbersSnapshotContainer: {
+    width: '50vw',
+    margin: theme.spacing(0, 'auto', 5, 'auto'),
   },
 }))
 
@@ -29,14 +34,21 @@ const HRNAnalytics = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <div>
-        <Typography variant="subtitle1">Number of total users:</Typography>
-        <Typography variant="h2">{allDBUsers.users.length}</Typography>
-      </div>
-      <div>
-        <Typography variant="subtitle1">Number of total events:</Typography>
-        <Typography variant="h2">{allDBEventsAndRounds.events.length}</Typography>
-      </div>
+      <Grid
+        container
+        justify="space-around"
+        alignItems="center"
+        className={classes.systemNumbersSnapshotContainer}
+      >
+        <Grid container direction="column" justify="center" alignItems="center" md={6}>
+          <Typography variant="subtitle1">Number of total users:</Typography>
+          <Typography variant="h2">{allDBUsers.users.length}</Typography>
+        </Grid>
+        <Grid container direction="column" justify="center" alignItems="center" md={6}>
+          <Typography variant="subtitle1">Number of total events:</Typography>
+          <Typography variant="h2">{allDBEventsAndRounds.events.length}</Typography>
+        </Grid>
+      </Grid>
       <div className={classes.expansionPanelsContainer}>
         <EventExpansionPanelAdmin eventsAndRoundsData={allDBEventsAndRounds} />
       </div>
