@@ -40,7 +40,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   useEffect(() => {
     const { status } = event
 
-    if (isLast15Seconds && status !== 'room-in-progress') {
+    if (isLast15Seconds && status === 'room-in-progress') {
       setShow15SecondsLeftSnack(true)
     }
   }, [isLast15Seconds, event])

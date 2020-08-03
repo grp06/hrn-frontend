@@ -42,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '275px',
     padding: '20px',
+    [theme.breakpoints.down('sm')]: {
+      height: 'auto',
+    },
   },
   icon: {
     color: theme.palette.common.ghostWhiteBody,
