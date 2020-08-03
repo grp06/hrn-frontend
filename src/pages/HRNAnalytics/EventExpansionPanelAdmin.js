@@ -99,7 +99,6 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
       relevancyOfEvent,
       roundLengthOfEvent,
     } = getEventAnalytics(event)
-    console.log('attendeesCSVofEvent ->', attendeesCSVofEvent)
     return (
       <Grid container direction="column" alignItems="center">
         <Grid item>
