@@ -14,6 +14,7 @@ const getAllEvents = gql`
       event_name
       ended_at
       current_round
+      num_rounds
       description
       rounds {
         partnerX_thumb
