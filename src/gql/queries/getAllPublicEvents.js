@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-const findUsers = gql`
+const getAllPublicEvents = gql`
   query getAllPublicEvents {
     events(where: { public_event: { _eq: true } }) {
       description
@@ -19,4 +19,4 @@ const findUsers = gql`
   }
 `
 
-export default findUsers
+export default getAllPublicEvents

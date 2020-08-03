@@ -1,0 +1,7 @@
+export { default as ForgotPassword } from './ForgotPassword'
+export { default as ForgotPasswordForm } from './ForgotPasswordForm'
+export { default as LoginForm } from './LoginForm'
+export { default as SignUp } from './SignUp'
+export { default as SignUpForm } from './SignUpForm'
+export { default as SetNewPassword } from './SetNewPassword'
+export { default as SetNewPasswordForm } from './SetNewPasswordForm'
