@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
-import { formatDate, isEventInFuture } from '../../utils/'
+import { formatDate, isEventInFuture } from '../../utils'
 import { EventCard, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({

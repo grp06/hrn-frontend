@@ -68,6 +68,10 @@ const HostEventControlsMenu = ({ event, user }) => {
       </Typography>
     ),
     onAcceptFunction: async () => {
+      window.analytics.track('Event reset', {
+        eventId,
+        hostId: host_id,
+      })
       await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
     },
     onCloseFunction: () => {

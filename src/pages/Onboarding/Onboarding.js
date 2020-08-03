@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
 import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
-import { FormikOnboardingStepper, OnboardingInterestTagInput } from './'
+import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
@@ -65,6 +65,10 @@ const Onboarding = () => {
         variables: {
           objects: values.interests,
         },
+      })
+      window.analytics.track('User Registered', {
+        city: values.city,
+        referringEvent: eventIdInLocalStorage || 'none',
       })
     } catch (err) {
       console.log('insertUserTagsMutation error ->', err)

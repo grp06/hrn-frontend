@@ -63,6 +63,7 @@ const SettingsMenu = ({ resetUser }) => {
   }
 
   const logoutClick = () => {
+    window.analytics.track('logged out')
     handleLogout()
     setMenuOpen(false)
   }
