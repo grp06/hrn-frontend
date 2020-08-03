@@ -5,20 +5,22 @@ import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 
 import makeApolloClient from './apollo'
-import { LoginForm, EventForm, ErrorBoundary } from './common'
+import { EventForm, ErrorBoundary } from './common'
 import {
   Event,
   Events,
-  VideoRoom,
   EventComplete,
-  SignUp,
-  PreEvent,
+  EventsPublic,
   ForgotPassword,
-  SetNewPassword,
   HostDashboard,
+  HRNAnalytics,
+  LoginForm,
   MyProfile,
   Onboarding,
-  EventsPublic,
+  PreEvent,
+  SetNewPassword,
+  SignUp,
+  VideoRoom,
 } from './pages'
 import { AppProvider } from './context/AppProvider'
 import Header from './ui/Header/Header'
@@ -67,6 +69,7 @@ const App = () => {
                   <Route exact path="/my-profile" component={MyProfile} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
+                  <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                   <Route exact path="/events" component={Events} />
                   <Route exact path="/events/public" component={EventsPublic} />
                   <Route exact path="/events/:id" component={Event} />
