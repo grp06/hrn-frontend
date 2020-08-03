@@ -130,12 +130,13 @@ function getEventAnalytics(event) {
   const eventParticipants = getArrayOfEventParticipants(event)
   const numberOfMutualThumbsInEvent = getMutualThumbsInEvent(event)
   const numberOfDropOffsInEvent = getTotalDropOffsInEvent(event)
-  const numberOfTotalRoundsInEvent = event.current_round
+  const numberOfTotalRoundsInEvent = event.num_rounds
   const roundLengthOfEvent = event.round_length
   const numberOfRSVPSinEvent = event.event_users.length
-  const relevancyOfEvent = ((numberOfMutualThumbsInEvent / eventParticipants.length) * 100).toFixed(
-    2
-  )
+  const relevancyOfEvent = (
+    (numberOfMutualThumbsInEvent / (eventParticipants.length * numberOfTotalRoundsInEvent)) *
+    100
+  ).toFixed(2)
   const attendanceRateForEvent = ((eventParticipants.length / numberOfRSVPSinEvent) * 100).toFixed(
     2
   )
