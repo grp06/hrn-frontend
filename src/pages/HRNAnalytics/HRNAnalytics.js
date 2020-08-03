@@ -1,10 +1,12 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import { makeStyles } from '@material-ui/styles'
-
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import { Redirect } from 'react-router-dom'
+import { makeStyles } from '@material-ui/styles'
+
 import { getAllUsers, getAllEvents } from '../../gql/queries'
+import { useAppContext } from '../../context/useAppContext'
 import { Loading } from '../../common'
 import { EventExpansionPanelAdmin } from '.'
 
@@ -24,12 +26,21 @@ const useStyles = makeStyles((theme) => ({
 
 const HRNAnalytics = () => {
   const classes = useStyles()
+  const { user } = useAppContext()
+  const { userId } = user
   const { data: allDBUsers, loading: allDBUsersLoading } = useQuery(getAllUsers)
   const { data: allDBEventsAndRounds, loading: allDBEventsAndRoundsLoading } = useQuery(
     getAllEvents
   )
+
+  const userIsAdmin = userId === 8 || userId === 12 || userId === 115
+
   if (allDBUsersLoading || allDBEventsAndRoundsLoading) {
     return <Loading />
+  }
+
+  if (!userIsAdmin) {
+    return <Redirect to="/" />
   }
 
   return (
@@ -40,11 +51,11 @@ const HRNAnalytics = () => {
         alignItems="center"
         className={classes.systemNumbersSnapshotContainer}
       >
-        <Grid container direction="column" justify="center" alignItems="center" md={6}>
+        <Grid container item direction="column" justify="center" alignItems="center" md={6}>
           <Typography variant="subtitle1">Number of total users:</Typography>
           <Typography variant="h2">{allDBUsers.users.length}</Typography>
         </Grid>
-        <Grid container direction="column" justify="center" alignItems="center" md={6}>
+        <Grid container item direction="column" justify="center" alignItems="center" md={6}>
           <Typography variant="subtitle1">Number of total events:</Typography>
           <Typography variant="h2">{allDBEventsAndRounds.events.length}</Typography>
         </Grid>
