@@ -66,10 +66,11 @@ const Onboarding = () => {
           objects: values.interests,
         },
       })
-      window.analytics.track('User Registered', {
-        city: values.city,
-        referringEvent: eventIdInLocalStorage || 'none',
-      })
+      window.analytics &&
+        window.analytics.track('User Registered', {
+          city: values.city,
+          referringEvent: eventIdInLocalStorage || 'none',
+        })
     } catch (err) {
       console.log('insertUserTagsMutation error ->', err)
     }
