@@ -43,18 +43,9 @@ const Onboarding = () => {
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const eventIdInLocalStorage = localStorage.getItem('eventId')
 
-  useEffect(() => {
-    const abortController = new AbortController()
-    return function cleanup() {
-      abortController.abort()
-    }
-  }, [])
-
   if (appLoading || tagsLoading) {
     return <Loading />
   }
-
-  console.log('tagsData ->', tagsData)
 
   if (eventIdInLocalStorage && (usersCityInContext || usersTagsInContext.length)) {
     return <Redirect to={`/events/${eventIdInLocalStorage}`} />
@@ -65,7 +56,6 @@ const Onboarding = () => {
   }
 
   const handleOnboardingFormSubmit = async (values) => {
-    console.log('values', values)
     let insertTagMutationResponse
     let updateUserMutationResponse
     try {
