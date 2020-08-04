@@ -115,10 +115,6 @@ const MyConnections = () => {
     }
   }
 
-  console.log('renderConnectionCards ->', renderConnectionCards)
-  console.log('allMyConnectionsData ->', allMyConnectionsData)
-  console.log('arrayOfMyAllMyUniqueConnections ->', arrayOfMyAllMyUniqueConnections)
-
   return (
     <div className={classes.pageContainer}>
       {renderNullDataText()}

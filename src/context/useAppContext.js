@@ -55,7 +55,6 @@ const useAppContext = () => {
 
   function setEventId(eventId) {
     dispatch((draft) => {
-      console.log('setting eventId to ->', eventId)
       draft.eventId = eventId
     })
   }

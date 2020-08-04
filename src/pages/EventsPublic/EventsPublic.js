@@ -8,6 +8,7 @@ import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
 import { formatDate, isEventInFuture } from '../../utils'
 import { EventCard, Loading } from '../../common'
+import { useAppContext } from '../../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 const EventsPublic = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { app, user, setEventId, resetEvent } = useAppContext()
 
   const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
     getAllPublicEvents,
@@ -50,13 +52,13 @@ const EventsPublic = () => {
 
   useEffect(() => {
     localStorage.setItem('eventId', '')
+    setEventId(null)
+    resetEvent()
   }, [])
 
   if (allPublicEventsDataLoading) {
     return <Loading />
   }
-
-  console.log(allPublicEventsData.events)
 
   return (
     <>

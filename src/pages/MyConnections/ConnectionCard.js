@@ -69,9 +69,6 @@ const ConnectionCard = ({ connection }) => {
   const classes = useStyles()
   const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
-  console.log('connection ->', connection)
-  console.log(short_bio)
-  console.log(linkedIn_url)
 
   const renderConnectionsTags = () => {
     return connectionsTags
