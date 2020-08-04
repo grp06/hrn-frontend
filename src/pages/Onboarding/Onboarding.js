@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
+import { TextField } from 'formik-material-ui'
+import Typography from '@material-ui/core/Typography'
 import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
@@ -17,12 +19,22 @@ const useStyles = makeStyles((theme) => ({
   cityInputContainer: {
     padding: theme.spacing(0, 2.5),
   },
+  pinkText: {
+    color: theme.palette.common.orchid,
+  },
+  shortBioDesc: {
+    marginBottom: theme.spacing(3.5),
+  },
+  shortBioInputContainer: {
+    padding: theme.spacing(0, 2.5),
+    marginBottom: theme.spacing(1),
+  },
 }))
 
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { setUsersTags, user, app } = useAppContext()
+  const { updateUserObject, setUsersTags, user, app } = useAppContext()
   const { appLoading } = app
   const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
@@ -35,8 +47,6 @@ const Onboarding = () => {
     return <Loading />
   }
 
-  console.log('tagsData ->', tagsData)
-
   if (eventIdInLocalStorage && (usersCityInContext || usersTagsInContext.length)) {
     return <Redirect to={`/events/${eventIdInLocalStorage}`} />
   }
@@ -46,14 +56,15 @@ const Onboarding = () => {
   }
 
   const handleOnboardingFormSubmit = async (values) => {
-    console.log('values', values)
     let insertTagMutationResponse
+    let updateUserMutationResponse
     try {
-      await updateUserMutation({
+      updateUserMutationResponse = await updateUserMutation({
         variables: {
           id: userId,
           name: userName,
           city: values.city,
+          short_bio: values.short_bio,
         },
       })
     } catch (err) {
@@ -78,6 +89,12 @@ const Onboarding = () => {
     await sleep(500)
     setShowSubmitSuccessSnack(true)
     await sleep(1000)
+    if (
+      updateUserMutationResponse &&
+      updateUserMutationResponse.data.update_users.returning.length
+    ) {
+      updateUserObject(updateUserMutationResponse.data.update_users.returning[0])
+    }
     if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
@@ -89,6 +106,7 @@ const Onboarding = () => {
         <FormikOnboardingStepper
           initialValues={{
             city: '',
+            short_bio: '',
             interests: [],
           }}
           onSubmit={handleOnboardingFormSubmit}
@@ -121,6 +139,25 @@ const Onboarding = () => {
                 />
               )}
             </Field>
+          </div>
+          <div label="short bio" className={classes.shortBioInputContainer}>
+            <Typography variant="subtitle1" className={classes.shortBioDesc}>
+              Please provide a short bio that will be used to send out to people who you connect
+              with so everyone gets to see how awesome you are{' '}
+              <span role="img" aria-label="jazz-hands">
+                🤗
+              </span>
+              .
+            </Typography>
+            <Field
+              name="short_bio"
+              component={TextField}
+              label="Short Bio"
+              autoFocus
+              fullWidth
+              multiline
+              placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
+            />
           </div>
         </FormikOnboardingStepper>
         <Snack

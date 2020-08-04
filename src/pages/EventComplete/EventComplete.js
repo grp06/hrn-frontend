@@ -9,15 +9,15 @@ import { useHistory } from 'react-router-dom'
 
 import { useAppContext } from '../../context/useAppContext'
 import { getMyMutualThumbsData } from '../../gql/queries'
-import { MyEventConnectionsList } from '.'
-import { FloatCardMedium, Loading } from '../../common'
+import { Loading } from '../../common'
+import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
 
 const { giveFeedbackTypeform, becomeAHostTypeform, linkedInCommunityLink } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '200px',
+    marginTop: '150px',
   },
   topDashboard: {
     width: '100%',
@@ -30,10 +30,8 @@ const useStyles = makeStyles((theme) => ({
     // backgroundColor: '#3a3b3c',
   },
   categoryHeader: {
+    margin: theme.spacing(0, 'auto'),
     textAlign: 'center',
-  },
-  cardBodyContainer: {
-    padding: '50px',
   },
   cardBodySection: {
     marginBottom: theme.spacing(3),
@@ -49,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 1),
   },
   buttonContainer: {
-    margin: theme.spacing(0, 'auto'),
+    margin: theme.spacing(3, 'auto', 9, 'auto'),
   },
   upcomingEventsButton: {
     margin: theme.spacing(1, 0),
@@ -61,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
   zoomContainer: {
     width: '75%',
-    margin: theme.spacing(0, 'auto'),
+    margin: theme.spacing(4, 'auto', -3, 'auto'),
     textAlign: 'center',
   },
 }))
@@ -109,7 +107,7 @@ const EventComplete = ({ match }) => {
 
   const renderPostEventZoomLink = () =>
     event.post_event_link && (
-      <Grid item className={classes.cardBodySection}>
+      <Grid>
         <div className={classes.zoomContainer}>
           <Typography variant="h5">
             <a
@@ -125,98 +123,96 @@ const EventComplete = ({ match }) => {
       </Grid>
     )
 
+  const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
+    return Object.values(round).filter((person) => person.id !== userId)
+  })
+
+  const renderConnectionCards = () => {
+    return arrayOfMyAllMyUniqueConnections.map((connection) => {
+      return <ConnectionCard key={connection[0].id} connection={connection[0]} />
+    })
+  }
+
   return (
     <div className={classes.wrapper}>
-      <FloatCardMedium>
-        <Grid item container justify="center" alignItems="center" className={classes.topDashboard}>
-          <div style={{ width: '80%' }}>
-            <Typography variant="h4" className={classes.categoryHeader}>
-              {cardHeading}
-            </Typography>
-          </div>
-        </Grid>
-        <Grid
-          container
-          item
-          direction="column"
-          justify="space-around"
-          className={classes.cardBodyContainer}
-        >
-          <Grid container direction="column">
-            <Grid item className={classes.cardBodySection}>
-              <MyEventConnectionsList mutualThumbsData={mutualThumbsData} userId={userId} />
-            </Grid>
-            {renderPostEventZoomLink()}
-            <Grid item className={classes.buttonContainer}>
-              <Grid
-                container
-                item
-                direction="column"
-                justify="space-around"
-                alignItems="center"
-                md={12}
-                xs={12}
-              >
-                <Grid container direction="row" justify="space-around" alignItems="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    href={giveFeedbackTypeform}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.button}
-                  >
-                    Give Feedback{' '}
-                    <span role="img" aria-label="woman hand out">
-                      💭
-                    </span>
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    href={becomeAHostTypeform}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.button}
-                  >
-                    Become a Host
-                    <span role="img" aria-label="woman hand out">
-                      💁‍♀️
-                    </span>
-                  </Button>
-                </Grid>
-                <Grid>
-                  <Button
-                    variant="contained"
-                    href={linkedInCommunityLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.button}
-                  >
-                    Join our LinkedIn community
-                    <span role="img" aria-label="brief case">
-                      💼
-                    </span>
-                  </Button>
-                </Grid>
-                <Grid>
-                  <Button
-                    variant="contained"
-                    className={classes.upcomingEventsButton}
-                    onClick={() => history.push('/events/public')}
-                    target="_blank"
-                  >
-                    Join our Upcoming Events
-                    <span role="img" aria-label="red balloon">
-                      🎈
-                    </span>
-                  </Button>
-                </Grid>
+      <Typography variant="h4" className={classes.categoryHeader}>
+        {cardHeading}
+      </Typography>
+      <Grid container item direction="column" justify="space-around">
+        <Grid container direction="column">
+          {renderPostEventZoomLink()}
+          <Grid item className={classes.buttonContainer}>
+            <Grid
+              container
+              item
+              direction="column"
+              justify="space-around"
+              alignItems="center"
+              md={12}
+              xs={12}
+            >
+              <Grid container direction="row" justify="space-around" alignItems="center">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  href={giveFeedbackTypeform}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
+                >
+                  Give Feedback{' '}
+                  <span role="img" aria-label="woman hand out">
+                    💭
+                  </span>
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  href={becomeAHostTypeform}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
+                >
+                  Become a Host
+                  <span role="img" aria-label="woman hand out">
+                    💁‍♀️
+                  </span>
+                </Button>
+              </Grid>
+              <Grid>
+                <Button
+                  variant="contained"
+                  href={linkedInCommunityLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.button}
+                >
+                  Join our LinkedIn community
+                  <span role="img" aria-label="brief case">
+                    💼
+                  </span>
+                </Button>
+              </Grid>
+              <Grid>
+                <Button
+                  variant="contained"
+                  className={classes.upcomingEventsButton}
+                  onClick={() => history.push('/events/public')}
+                  target="_blank"
+                >
+                  Join our Upcoming Events
+                  <span role="img" aria-label="red balloon">
+                    🎈
+                  </span>
+                </Button>
               </Grid>
             </Grid>
           </Grid>
+          <Grid item className={classes.cardBodySection}>
+            {renderConnectionCards()}
+          </Grid>
         </Grid>
-      </FloatCardMedium>
+      </Grid>
     </div>
   )
 }

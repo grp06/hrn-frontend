@@ -32,9 +32,7 @@ const PartnerTagsList = ({ myRound, userId }) => {
         })
         .map((tagObject) => {
           const { tag } = tagObject
-          return (
-            <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" clickable />
-          )
+          return <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" />
         })}
     </Grid>
   ) : null

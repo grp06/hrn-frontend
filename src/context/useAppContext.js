@@ -16,6 +16,8 @@ const useAppContext = () => {
         userId: null,
         role: '',
         city: '',
+        shortBio: '',
+        linkedIn_url: '',
         tags_users: [],
       }
     })
@@ -80,6 +82,8 @@ const useAppContext = () => {
     dispatch((draft) => {
       draft.user.name = userObject.name
       draft.user.city = userObject.city
+      draft.user.short_bio = userObject.short_bio
+      draft.user.linkedIn_url = userObject.linkedIn_url
     })
   }
 

@@ -1,15 +1,11 @@
 import gql from 'graphql-tag'
 
-const getMyMutualThumbsData = gql`
-  subscription getMyMutualThumbsData($event_id: Int!, $user_id: Int!) {
+const getAllMyConnections = gql`
+  query getAllMyConnections($user_id: Int!) {
     rounds(
       where: {
         _or: [{ partnerY_id: { _eq: $user_id } }, { partnerX_id: { _eq: $user_id } }]
-        _and: [
-          { event_id: { _eq: $event_id } }
-          { partnerY_thumb: { _eq: true } }
-          { partnerX_thumb: { _eq: true } }
-        ]
+        _and: [{ partnerY_thumb: { _eq: true } }, { partnerX_thumb: { _eq: true } }]
       }
       order_by: { round_number: asc }
     ) {
@@ -37,15 +33,14 @@ const getMyMutualThumbsData = gql`
         linkedIn_url
         tags_users {
           tag {
-            name
             tag_id
+            name
             category
           }
         }
       }
-      round_number
     }
   }
 `
 
-export default getMyMutualThumbsData
+export default getAllMyConnections

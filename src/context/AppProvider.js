@@ -20,6 +20,9 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
+    short_bio: '',
+    linkedIn_url: '',
+    tags_users: [],
     updatedAt: null,
   },
   app: {
@@ -137,14 +140,24 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        const { name, role, id, email, city, tags_users } = userData.users[0]
-        console.log('tags_users ->', tags_users)
+        const {
+          name,
+          role,
+          id,
+          email,
+          city,
+          short_bio,
+          linkedIn_url,
+          tags_users,
+        } = userData.users[0]
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
           draft.user.email = email
           draft.user.city = city
+          draft.user.short_bio = short_bio
+          draft.user.linkedIn_url = linkedIn_url
           draft.user.tags_users = tags_users
           // draft.user = userData.users[0]
 

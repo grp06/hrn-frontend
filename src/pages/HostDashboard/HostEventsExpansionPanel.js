@@ -14,12 +14,6 @@ import formatDate from '../../utils/formatDate'
 import { getEventAnalytics } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
-  eventPanelHeading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
-    marginBottom: 0,
-    color: theme.palette.common.ghostWhite,
-  },
   detailsHeading: {
     textAlign: 'center',
     padding: theme.spacing(1),
@@ -54,6 +48,17 @@ const useStyles = makeStyles((theme) => ({
     '& svg': {
       marginLeft: theme.spacing(1),
     },
+  },
+  eventPanelHeading: {
+    flexBasis: '33.33%',
+    flexShrink: 0,
+    marginBottom: 0,
+    color: theme.palette.common.ghostWhite,
+  },
+  expansionPanel: {
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '4px 4px 0 #3e4042',
   },
 }))
 
@@ -152,7 +157,12 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     const startTime = formatDate(new Date(event.start_at).getTime())
 
     return (
-      <ExpansionPanel key={id} expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
+      <ExpansionPanel
+        key={id}
+        expanded={eventPanelExpanded === id}
+        onChange={handlePanelPress(id)}
+        className={classes.expansionPanel}
+      >
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ color: '#f4f6fa' }} />}
           aria-controls={`${id}-content`}

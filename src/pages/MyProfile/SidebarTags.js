@@ -7,7 +7,7 @@ import { TagsForm } from '.'
 const createStyles = makeStyles((theme) => ({
   sidebarTagsContainer: {
     width: '100%',
-    margin: theme.spacing(4, 0),
+    margin: theme.spacing(2, 0, 3, 0),
   },
   tagsContainer: {
     width: '100%',
@@ -39,7 +39,7 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
     }
     return usersTags.map((tagObject) => {
       const { tag } = tagObject
-      return <Chip key={tag.id} label={tag.name} id={tag.id} color="primary" clickable />
+      return <Chip key={tag.tag_id} label={tag.name} id={tag.id} color="primary" clickable />
     })
   }
 

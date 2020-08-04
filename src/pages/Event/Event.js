@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   subtitle: {
     margin: theme.spacing(1),
+    marginBottom: '10px',
     width: '75%',
     [theme.breakpoints.down('sm')]: {
       width: '90%',
