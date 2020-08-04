@@ -62,8 +62,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
   })
 
-  console.log('short_bio', usersShortBio)
-
   const handleFormClose = () => {
     if (onClose) {
       onClose()
@@ -73,12 +71,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const handleFormSubmit = async (values) => {
     let updateUserMutationResponse
     let insertTagMutationResponse
-    if (!values.name || !values.city || !values.short_bio || !values.selectedTags) {
+    if (!values.name || !values.city || !values.selectedTags) {
       setSubmitErrorSnackMessage('something seems to be empty 🧐')
-      return setShowSubmitErrorSnack(true)
-    }
-    if (values.short_bio.length < 100) {
-      setSubmitErrorSnackMessage('Bio must be at least 100 chars')
       return setShowSubmitErrorSnack(true)
     }
     if (values.linkedIn_url) {
@@ -93,7 +87,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     const userChangedShortBio = !(values.short_bio === usersShortBio)
     const userChangedLinkedIn = !(values.linkedIn_url === usersLinkedIn)
 
-    // Update User City and Name
+    // Update User City, Name, ShortBio, LinkedIn
     if (userChangedName || userChangedCity || userChangedShortBio || userChangedLinkedIn) {
       try {
         updateUserMutationResponse = await updateUserMutation({
@@ -138,7 +132,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     setShowSubmitSuccessSnack(true)
     await sleep(500)
 
-    console.log('updateUserMutationResponse ->', updateUserMutationResponse)
     if (
       updateUserMutationResponse &&
       updateUserMutationResponse.data.update_users.returning.length
@@ -187,7 +180,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                   initialValue={values.city}
                   onSuggestSelectCallback={(suggest) => {
                     if (suggest) {
-                      console.log(suggest.gmaps.name)
                       form.setFieldValue('city', suggest.gmaps.name)
                     }
                   }}

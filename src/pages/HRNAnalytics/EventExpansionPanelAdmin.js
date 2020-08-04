@@ -14,6 +14,12 @@ import formatDate from '../../utils/formatDate'
 import { getEventAnalytics } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
+  eventPanelHeading: {
+    flexBasis: '33.33%',
+    flexShrink: 0,
+    marginBottom: 0,
+    color: theme.palette.common.ghostWhite,
+  },
   detailsHeading: {
     textAlign: 'center',
     padding: theme.spacing(1),
@@ -49,20 +55,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(1),
     },
   },
-  eventPanelHeading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
-    marginBottom: 0,
-    color: theme.palette.common.ghostWhite,
-  },
-  expansionPanel: {
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '4px 4px 0 #3e4042',
-  },
 }))
 
-const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
+const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
   const classes = useStyles()
 
   const [sortedEvents, setSortedEvents] = useState(null)
@@ -94,12 +89,16 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   const renderExpansionPanelWithData = (event) => {
     const { event_users } = event
     const {
-      numberOfMutualThumbsInEvent,
-      numberOfDropOffsInEvent,
-      RSVPsCSVofEvent,
+      attendanceRateForEvent,
       attendeesCSVofEvent,
+      RSVPsCSVofEvent,
+      numberOfDropOffsInEvent,
+      numberOfEventParticipants,
+      numberOfMutualThumbsInEvent,
+      numberOfTotalRoundsInEvent,
+      relevancyOfEvent,
+      roundLengthOfEvent,
     } = getEventAnalytics(event)
-
     return (
       <Grid container direction="column" alignItems="center">
         <Grid item>
@@ -128,7 +127,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Mutual Connections: {numberOfMutualThumbsInEvent}
+              Total Participants: {numberOfEventParticipants}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Attendance Rate: {attendanceRateForEvent} %
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Total Number of Mutual Connections: {numberOfMutualThumbsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
@@ -139,7 +148,17 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Total Attendees: {attendeesCSVofEvent.data.length}
+              Total Number of Rounds: {numberOfTotalRoundsInEvent}
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Length of Rounds: {roundLengthOfEvent} mins
+            </Typography>
+          </Grid>
+          <Grid item md={6} xs={12}>
+            <Typography variant="subtitle1" className={classes.detailsHeading}>
+              Relevancy of event: {relevancyOfEvent} %
             </Typography>
           </Grid>
         </Grid>
@@ -157,12 +176,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
     const startTime = formatDate(new Date(event.start_at).getTime())
 
     return (
-      <ExpansionPanel
-        key={id}
-        expanded={eventPanelExpanded === id}
-        onChange={handlePanelPress(id)}
-        className={classes.expansionPanel}
-      >
+      <ExpansionPanel key={id} expanded={eventPanelExpanded === id} onChange={handlePanelPress(id)}>
         <ExpansionPanelSummary
           expandIcon={<ExpandMoreIcon style={{ color: '#f4f6fa' }} />}
           aria-controls={`${id}-content`}
@@ -195,4 +209,4 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   })
 }
 
-export default HostEventsExpansionPanel
+export default EventExpansionPanelAdmin
