@@ -32,6 +32,8 @@ const defaultState = {
       isMicrophoneAlreadyCaptured: false,
     },
   },
+  // eventId is for event subscriptions
+  eventId: null,
   event: {},
   twilio: {
     partnerDisconnected: false,
@@ -60,9 +62,9 @@ const AppProvider = ({ children }) => {
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
-      event_id: eventId,
+      event_id: state.eventId,
     },
-    skip: !eventId,
+    skip: !state.eventId,
   })
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
@@ -76,6 +78,9 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
+      console.log('eventIdInUrl ->', eventIdInUrl)
+      console.log('eventData ->', eventData)
+      console.log('eventId ->', eventId)
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {

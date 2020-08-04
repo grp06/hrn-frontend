@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user, event } = useAppContext()
+  const { user, event, resetEvent } = useAppContext()
   const { userId } = user
 
   const localStorageEventId = localStorage.getItem('eventId')
@@ -85,6 +85,12 @@ const EventComplete = ({ match }) => {
       },
     }
   )
+
+  useEffect(() => {
+    return () => {
+      resetEvent()
+    }
+  }, [])
 
   useEffect(() => {
     if (eventSet && event.status === 'not-started') {

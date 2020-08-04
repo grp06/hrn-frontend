@@ -21,6 +21,12 @@ const useAppContext = () => {
     })
   }
 
+  function resetEvent() {
+    dispatch((draft) => {
+      draft.event = {}
+    })
+  }
+
   function setUsersTags(usersTags) {
     dispatch((draft) => {
       draft.user.tags_users = usersTags
@@ -47,7 +53,8 @@ const useAppContext = () => {
 
   function setEventId(eventId) {
     dispatch((draft) => {
-      draft.event.eventId = eventId
+      console.log('setting eventId to ->', eventId)
+      draft.eventId = eventId
     })
   }
 
@@ -78,6 +85,7 @@ const useAppContext = () => {
 
   return {
     ...state,
+    resetEvent,
     resetUser,
     setRedirect,
     setUserId,
