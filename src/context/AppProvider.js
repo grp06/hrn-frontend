@@ -20,6 +20,9 @@ const defaultState = {
     userId: null,
     role: '',
     email: '',
+    short_bio: '',
+    linkedIn_url: '',
+    tags_users: [],
     updatedAt: null,
   },
   app: {
@@ -32,6 +35,8 @@ const defaultState = {
       isMicrophoneAlreadyCaptured: false,
     },
   },
+  // eventId is for event subscriptions
+  eventId: null,
   event: {},
   twilio: {
     partnerDisconnected: false,
@@ -60,9 +65,9 @@ const AppProvider = ({ children }) => {
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
-      event_id: eventId,
+      event_id: state.eventId,
     },
-    skip: !eventId,
+    skip: !state.eventId,
   })
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
@@ -76,6 +81,9 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
+      console.log('eventIdInUrl ->', eventIdInUrl)
+      console.log('eventData ->', eventData)
+      console.log('eventId ->', eventId)
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
@@ -132,14 +140,24 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        const { name, role, id, email, city, tags_users } = userData.users[0]
-        console.log('tags_users ->', tags_users)
+        const {
+          name,
+          role,
+          id,
+          email,
+          city,
+          short_bio,
+          linkedIn_url,
+          tags_users,
+        } = userData.users[0]
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id
           draft.user.name = name
           draft.user.email = email
           draft.user.city = city
+          draft.user.short_bio = short_bio
+          draft.user.linkedIn_url = linkedIn_url
           draft.user.tags_users = tags_users
           // draft.user = userData.users[0]
 

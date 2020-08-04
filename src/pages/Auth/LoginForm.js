@@ -65,6 +65,7 @@ const LoginForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
+        window.analytics && window.analytics.track('sign in')
         return data
       })
     // check to see if we have token, if not then theres an error

@@ -78,9 +78,11 @@ const Thumbing = ({ myRound, userId }) => {
   const handleThumbUpClick = () => {
     const iAmPartnerX = myRound.partnerX_id === userId
     if (iAmPartnerX) {
+      window.analytics && window.analytics.track('thumbs up given')
       setPartnerXThumbMutation()
     }
     if (!iAmPartnerX) {
+      window.analytics && window.analytics.track('thumbs up given')
       setPartnerYThumbMutation()
     }
     setShowThumbUpButton(false)
@@ -92,6 +94,8 @@ const Thumbing = ({ myRound, userId }) => {
   }
 
   const handlePassOnThumbingClick = () => {
+    window.analytics && window.analytics.track('pass on thumbs up')
+
     setShowThumbUpButton(false)
     setUserThumbed(false)
     if (event.status === 'complete') {

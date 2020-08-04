@@ -41,6 +41,9 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
         setDisabledButton(true)
       }
     }
+    if (step === 2) {
+      setDisabledButton(false)
+    }
   }
 
   return (

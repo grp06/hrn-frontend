@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -7,10 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { TransitionModal } from '../../common'
-import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   headerIcon: {
@@ -28,67 +26,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostEventControlsMenu = ({ event, user }) => {
+const EventsConnectionsMenu = () => {
   const classes = useStyles()
+  const history = useHistory()
   const [menuOpen, setMenuOpen] = useState(false)
   const anchorRef = useRef(null)
-  const { host_id, id: eventId, status: eventStatus } = event
-  const { userId } = user
-  const regex = /\/events\/\d+/
-  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
-  const isEventHost = host_id === userId
 
   const handleMenuOpen = () => {
     setMenuOpen((prevOpen) => !prevOpen)
   }
 
-  const handleMenuClose = (clickEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(clickEvent.target)) {
+  const handleMenuClose = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return
     }
     setMenuOpen(false)
   }
 
-  const handleListKeyDown = (clickEvent) => {
-    if (clickEvent.key === 'Tab') {
-      clickEvent.preventDefault()
+  const handleListKeyDown = (event) => {
+    if (event.key === 'Tab') {
+      event.preventDefault()
       setMenuOpen(false)
     }
   }
 
-  const handleResetEventModal = TransitionModal({
-    button: {
-      buttonText: 'Reset Event',
-      buttonVariant: 'text',
-      buttonColor: 'default',
-    },
-    modalBody: (
-      <Typography variant="h5">
-        This will reset the event in its entirety. Are you 100% sure?
-      </Typography>
-    ),
-    onAcceptFunction: async () => {
-      window.analytics &&
-        window.analytics.track('Event reset', {
-          eventId,
-          hostId: host_id,
-        })
-      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
-    },
-    onCloseFunction: () => {
-      setMenuOpen(false)
-    },
-  })
+  const eventsPublicClick = (event) => {
+    history.push('/events/public')
+    handleMenuClose(event)
+  }
 
-  return isEventHost && eventIdInUrl && eventStatus !== 'not-started' ? (
+  const myConnectionsClick = (event) => {
+    history.push('/my-connections')
+    handleMenuClose(event)
+  }
+
+  return (
     <div>
       <IconButton color="inherit" onClick={handleMenuOpen} ref={anchorRef} disableRipple>
-        <FeatherIcon icon="command" stroke="#fabb5b" size="24" className={classes.headerIcon} />
+        <FeatherIcon icon="users" stroke="#f4f6fa" size="24" className={classes.headerIcon} />
       </IconButton>
       <Popper
         open={menuOpen}
         anchorEl={anchorRef.current}
-        placement="bottom-start"
+        placement="bottom-end"
         role={undefined}
         transition
         disablePortal
@@ -107,13 +87,12 @@ const HostEventControlsMenu = ({ event, user }) => {
                   id="menu-list-grow"
                   onKeyDown={handleListKeyDown}
                 >
-                  {/* {eventStatus === 'pre-event' && (
-                    <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
-                  )} */}
-                  {/* <MenuItem onClick={handleMenuClose} className={classes.menuItem}>
-                    Active Participants
+                  {/* <MenuItem onClick={eventsPublicClick} className={classes.menuItem}>
+                    Public Events
                   </MenuItem> */}
-                  <MenuItem className={classes.menuItem}>{handleResetEventModal}</MenuItem>
+                  <MenuItem onClick={myConnectionsClick} className={classes.menuItem}>
+                    My Connections
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -121,7 +100,7 @@ const HostEventControlsMenu = ({ event, user }) => {
         )}
       </Popper>
     </div>
-  ) : null
+  )
 }
 
-export default HostEventControlsMenu
+export default EventsConnectionsMenu

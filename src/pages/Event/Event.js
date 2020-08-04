@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
   subtitle: {
     margin: theme.spacing(1),
+    marginBottom: '10px',
     width: '75%',
     [theme.breakpoints.down('sm')]: {
       width: '90%',
@@ -45,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { app, user, event, setEventId } = useAppContext()
+  const { app, user, event, setEventId, resetEvent } = useAppContext()
   const { appLoading, permissions } = app
   const { userId } = user
   const eventSet = Object.keys(event).length > 1

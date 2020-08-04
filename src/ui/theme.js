@@ -59,6 +59,9 @@ const theme = createMuiTheme({
     secondary: {
       main: orchid,
     },
+    default: {
+      main: sunray,
+    },
   },
   typography: {
     tab: {
@@ -172,7 +175,7 @@ const theme = createMuiTheme({
     },
     MuiDivider: {
       root: {
-        backgroundColor: ghostWhiteSub,
+        backgroundColor: greyBorder,
       },
     },
     MuiExpansionPanel: {

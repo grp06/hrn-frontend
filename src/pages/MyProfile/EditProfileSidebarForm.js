@@ -3,7 +3,6 @@ import { Formik, Form, Field } from 'formik'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
-import { Snack } from '../../common'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
 import { deleteUsersTags, insertUserTags, updateUser } from '../../gql/mutations'
@@ -11,7 +10,7 @@ import { sleep } from '../../helpers'
 import { TextField } from 'formik-material-ui'
 import { OnboardingInterestTagInput } from '../Onboarding'
 import { useAppContext } from '../../context/useAppContext'
-import { GeosuggestCityInput } from '../../common'
+import { GeosuggestCityInput, Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -42,11 +41,22 @@ const useStyles = makeStyles((theme) => ({
 const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const classes = useStyles()
   const { setUsersTags, updateUserObject, user } = useAppContext()
-  const { userId, tags_users: usersTags, name: usersName, city: usersCity } = user
+  const {
+    userId,
+    tags_users: usersTags,
+    name: usersName,
+    city: usersCity,
+    short_bio: usersShortBio,
+    linkedIn_url: usersLinkedIn,
+  } = user
+
+  const [submitErrorSnackMessage, setSubmitErrorSnackMessage] = useState(null)
+  const [showSubmitErrorSnack, setShowSubmitErrorSnack] = useState(false)
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const [deleteUsersTagsMutation] = useMutation(deleteUsersTags)
+  const linkedInRegex = /linkedin/
 
   const usersTagsAsFormInput = usersTags.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
@@ -61,17 +71,32 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const handleFormSubmit = async (values) => {
     let updateUserMutationResponse
     let insertTagMutationResponse
+    if (!values.name || !values.city || !values.selectedTags) {
+      setSubmitErrorSnackMessage('something seems to be empty 🧐')
+      return setShowSubmitErrorSnack(true)
+    }
+    if (values.linkedIn_url) {
+      const linkedInInUrl = Boolean(values.linkedIn_url.match(linkedInRegex))
+      if (!linkedInInUrl) {
+        setSubmitErrorSnackMessage('We only allow linkedIn urls')
+        return setShowSubmitErrorSnack(true)
+      }
+    }
     const userChangedName = !(values.name === usersName)
     const userChangedCity = !(values.city === usersCity)
+    const userChangedShortBio = !(values.short_bio === usersShortBio)
+    const userChangedLinkedIn = !(values.linkedIn_url === usersLinkedIn)
 
-    // Update User City and Name
-    if (userChangedName || userChangedCity) {
+    // Update User City, Name, ShortBio, LinkedIn
+    if (userChangedName || userChangedCity || userChangedShortBio || userChangedLinkedIn) {
       try {
         updateUserMutationResponse = await updateUserMutation({
           variables: {
             id: userId,
             name: values.name,
             city: values.city,
+            short_bio: values.short_bio,
+            linkedIn_url: values.linkedIn_url,
           },
         })
       } catch (err) {
@@ -107,7 +132,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
     setShowSubmitSuccessSnack(true)
     await sleep(500)
 
-    console.log('updateUserMutationResponse ->', updateUserMutationResponse)
     if (
       updateUserMutationResponse &&
       updateUserMutationResponse.data.update_users.returning.length
@@ -133,11 +157,13 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
           name: usersName,
           city: usersCity,
           selectedTags: usersTags,
+          short_bio: usersShortBio,
+          linkedIn_url: usersLinkedIn,
         }}
       >
         {({ isSubmitting, values }) => (
           <Form autoComplete="off" className={classes.formContainer}>
-            <div className={classes.locationInputContainer}>
+            <div>
               <Field
                 name="name"
                 component={TextField}
@@ -154,13 +180,36 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                   initialValue={values.city}
                   onSuggestSelectCallback={(suggest) => {
                     if (suggest) {
-                      console.log(suggest.gmaps.name)
                       form.setFieldValue('city', suggest.gmaps.name)
                     }
                   }}
                 />
               )}
             </Field>
+            <div>
+              <Field
+                name="linkedIn_url"
+                component={TextField}
+                fullWidth
+                value={values.linkedIn_url}
+                id="linkedIn_url"
+                label="Your LinkedIn Profile URL"
+              />
+            </div>
+            <div>
+              <Field
+                name="short_bio"
+                component={TextField}
+                fullWidth
+                value={values.short_bio}
+                id="short_bio"
+                multiline
+                autoFocus={!values.short_bio}
+                margin="normal"
+                label="a quick blurb about yourself for others to get to know you"
+                placeholder="I'm Sarah! A web developer for Intel for the past 2 years who has a low-key bad obsession with iced coffees and petting peoples dogs. I've recently been practicing a lot of poi and have been perfecting my banana bread recipe during this quarantine 😋 "
+              />
+            </div>
             <Field name="selectedTags">
               {({ field, form }) => (
                 <div className={classes.tagsContainer}>
@@ -208,6 +257,15 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
         }}
         duration={1500}
         snackMessage="Updated our books!"
+      />
+      <Snack
+        open={showSubmitErrorSnack}
+        onClose={() => {
+          setShowSubmitErrorSnack(false)
+        }}
+        duration={3000}
+        severity="error"
+        snackMessage={submitErrorSnackMessage}
       />
     </div>
   )

@@ -77,6 +77,10 @@ const SignUpForm = () => {
       })
       // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
+      window.analytics &&
+        window.analytics.track('User Registered', {
+          role: 'user',
+        })
       if (signUpResponse.error) {
         setShowErrorSnack(true)
         throw signUpResponse.error

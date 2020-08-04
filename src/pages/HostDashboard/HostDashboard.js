@@ -9,15 +9,15 @@ import { useAppContext } from '../../context/useAppContext'
 import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
 import { FloatCardXLarge, FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds } from '../../gql/queries'
+import { ExpansionPanel } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    marginTop: '100px',
-    paddingLeft: '25px',
-    paddingRight: '25px',
-  },
-  sectionHeader: {
-    marginBottom: theme.spacing(3),
+  expansionPanelContent: {
+    width: '75vw',
+    margin: theme.spacing(0, 'auto'),
+    [theme.breakpoints.down('md')]: {
+      width: '85vw',
+    },
   },
   noEventsContainer: {
     marginTop: '150px',
@@ -25,6 +25,14 @@ const useStyles = makeStyles((theme) => ({
   noEventsMessage: {
     textAlign: 'center',
     padding: theme.spacing(2, 0, 1, 0),
+  },
+  pageContainer: {
+    marginTop: '100px',
+    paddingLeft: '25px',
+    paddingRight: '25px',
+  },
+  sectionHeader: {
+    marginBottom: theme.spacing(3),
   },
 }))
 
@@ -119,9 +127,9 @@ const HostDashboard = () => {
       <Typography variant="h4" className={classes.sectionHeader}>
         Your Past Events:
       </Typography>
-      <FloatCardLarge>
+      <div className={classes.expansionPanelContent}>
         <HostEventsExpansionPanel eventsAndRoundsData={eventsAndRoundsData} />
-      </FloatCardLarge>
+      </div>
     </div>
   )
 }

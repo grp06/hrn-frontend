@@ -121,6 +121,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
         if (alreadyAttending) {
           try {
             await deleteEventUserMutation()
+            window.analytics && window.analytics.track('RSVP cancelled')
           } catch (error) {
             console.log('error = ', error)
           }
@@ -128,6 +129,11 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
           let calendarInviteResponse
           try {
             await insertEventUserMutation()
+            window.analytics &&
+              window.analytics.track('RSVP', {
+                eventId,
+                eventName: event_name,
+              })
             calendarInviteResponse = await fetch(
               `${process.env.REACT_APP_API_URL}/api/email/send-calendar-invite`,
               {

@@ -8,6 +8,8 @@ const findUserById = gql`
       role
       email
       city
+      short_bio
+      linkedIn_url
       tags_users {
         tag {
           name

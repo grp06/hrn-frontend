@@ -16,6 +16,7 @@ import {
   HRNAnalytics,
   LoginForm,
   MyProfile,
+  MyConnections,
   Onboarding,
   PreEvent,
   SetNewPassword,
@@ -67,6 +68,7 @@ const App = () => {
                   />
                   <Route exact path="/onboarding" component={Onboarding} />
                   <Route exact path="/my-profile" component={MyProfile} />
+                  <Route exact path="/my-connections" component={MyConnections} />
                   <Route exact path="/create-event" component={EventForm} />
                   <Route exact path="/host-dashboard" component={HostDashboard} />
                   <Route exact path="/hrn-analytics" component={HRNAnalytics} />
