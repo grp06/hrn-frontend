@@ -58,7 +58,7 @@ const GetTagsModal = () => {
   const history = useHistory()
   const [showModal, setShowModal] = useState(true)
   const { app, user } = useAppContext()
-  const { tags_users: usersTags } = user
+  const { tags_users: usersTags, userId } = user
   const { appLoading } = app
   const EventHomeRegex = /\/events\/\d+/
   const EventInProgressRegex = /\/events\/\d+\//
@@ -68,6 +68,7 @@ const GetTagsModal = () => {
   const onEventInProgressPage = Boolean(window.location.pathname.match(EventInProgressRegex))
 
   const showGetTagsModal =
+    userId &&
     usersTags &&
     usersTags.length === 0 &&
     (onEventsPage || onEventHomePage) &&
