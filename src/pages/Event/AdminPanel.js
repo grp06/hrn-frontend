@@ -59,7 +59,7 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
   const instructionModal = TransitionModal({
     modalBody: (
       <div>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Some Tips for hosting:
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
@@ -80,7 +80,11 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
     ),
     iconButton: {
       iconButtonIcon: <HelpOutlineIcon />,
+      iconButtonColor: 'secondary',
     },
+    onAcceptFunction: () => {},
+    onAcceptButtonText: 'Ok, got it',
+    hideNoWay: {},
   })
 
   const editFormModal = TransitionModal({
