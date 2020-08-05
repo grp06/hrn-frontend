@@ -2,6 +2,7 @@ import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { makeStyles } from '@material-ui/styles'
 
 import {
@@ -55,6 +56,37 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
     status,
   } = eventData
 
+  const instructionModal = TransitionModal({
+    modalBody: (
+      <div>
+        <Typography variant="h5" gutterBottom>
+          Some Tips for hosting:
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          As a host, when you press 'start pre-event speech' you'll have a few minutes to address
+          your audience.
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          It takes a few seconds for everyone to connect to this broadcast room, so we suggest that
+          you wait about 5 - 10 seconds after seeing your own video (you wont see any of your
+          participants' video). This way your speech isn't cut off in the beginning.
+        </Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          When you're ready to start the event after your speech just go ahead and press the 'start
+          event button' that will be on the top left of your screen.
+        </Typography>
+        <Typography variant="h6">Enjoy the event ✨</Typography>
+      </div>
+    ),
+    iconButton: {
+      iconButtonIcon: <HelpOutlineIcon />,
+      iconButtonColor: 'secondary',
+    },
+    onAcceptFunction: () => {},
+    onAcceptButtonText: 'Ok, got it',
+    hideNoWay: {},
+  })
+
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
     button: {
@@ -87,11 +119,14 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
             alignItems="center"
             justify="space-between"
           >
-            <StartPreEventButton
-              disabled={micOrCameraIsDisabled}
-              within30Mins
-              eventStartTime={eventStartTime}
-            />
+            <Grid container direction="row" alignItems="center" justify="center">
+              <StartPreEventButton
+                disabled={micOrCameraIsDisabled}
+                within30Mins
+                eventStartTime={eventStartTime}
+              />
+              <div>{instructionModal}</div>
+            </Grid>
             <EventCountdown
               adminHeader
               eventStartTime={eventStartTime}
@@ -110,11 +145,14 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
             alignItems="center"
             justify="space-around"
           >
-            <StartPreEventButton
-              disabled={micOrCameraIsDisabled}
-              eventId={eventId}
-              status={status}
-            />
+            <Grid container direction="row" alignItems="center" justify="center">
+              <StartPreEventButton
+                disabled={micOrCameraIsDisabled}
+                eventId={eventId}
+                status={status}
+              />
+              <div>{instructionModal}</div>
+            </Grid>
             <div>{editFormModal}</div>
           </Grid>
         )

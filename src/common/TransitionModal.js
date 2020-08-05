@@ -5,6 +5,7 @@ import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 function TransitionModal({
   button,
+  iconButton,
   modalBody,
   onAcceptFunction,
   onAcceptButtonText,
@@ -60,7 +62,8 @@ function TransitionModal({
   hideNoWay,
 }) {
   const classes = useStyles()
-  const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button
+  const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button || {}
+  const { iconButtonColor, iconButtonSize, iconButtonIcon } = iconButton || {}
   const [open, setOpen] = useState(false)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
   const handleOpen = () => {
@@ -76,16 +79,27 @@ function TransitionModal({
 
   return (
     <div>
-      <Button
-        disableRipple
-        size={buttonSize || 'medium'}
-        variant={buttonVariant || 'contained'}
-        color={buttonColor || 'primary'}
-        onClick={handleOpen}
-        style={buttonStyle}
-      >
-        {buttonText}
-      </Button>
+      {button ? (
+        <Button
+          disableRipple
+          size={buttonSize || 'medium'}
+          variant={buttonVariant || 'contained'}
+          color={buttonColor || 'primary'}
+          onClick={handleOpen}
+          style={buttonStyle}
+        >
+          {buttonText}
+        </Button>
+      ) : (
+        <IconButton
+          disableRipple
+          size={iconButtonSize || 'medium'}
+          color={iconButtonColor || 'primary'}
+          onClick={handleOpen}
+        >
+          {iconButtonIcon}
+        </IconButton>
+      )}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
