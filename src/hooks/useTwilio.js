@@ -8,6 +8,7 @@ const useTwilio = () => {
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
   } = useAppContext()
+  // 45 seconds is way too long
   const { partnerCameraIssueTimeout } = constants
 
   const { participantConnected } = useParticipantConnected()
@@ -34,9 +35,12 @@ const useTwilio = () => {
         }
       })
 
+      // when we connect to a room, run 'participantConnected'
+      // for each person who is already in the room when we arrive
       room.participants.forEach(participantConnected)
 
-      room.on('participantConnected', async (remoteParticipant) => {
+      // set up a listener to do some stuff when new people join the room
+      room.on('participantConnected', (remoteParticipant) => {
         console.log('participantConnected', remoteParticipant)
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
@@ -48,6 +52,7 @@ const useTwilio = () => {
 
         setPartnerDisconnected(true)
         const remoteVideo = document.getElementById('remote-video')
+        // instead of modifying the innerHTML, detatch instead
         if (remoteVideo) {
           remoteVideo.innerHTML = ''
         }
@@ -57,10 +62,36 @@ const useTwilio = () => {
         room.disconnect()
       })
 
-      room.on('disconnected', function (rum) {
+      room.on('reconnecting', (error) => {
+        console.log('reconnecting! error =', error)
+        window.analytics && window.analytics.track('Twilio error')
+        if (error.code === 53001) {
+          window.analytics && window.analytics.track('Twilio error 53001')
+
+          console.log('Reconnecting your signaling connection!', error.message)
+        } else if (error.code === 53405) {
+          window.analytics && window.analytics.track('Twilio error 53405')
+          console.log('Reconnecting your media connection!', error.message)
+        }
+      })
+
+      // local participant reconnects to the room
+      // room.on('reconnected', () => {
+      //   console.log('Reconnected!');
+      // });
+
+      // local participant disconnects
+      room.on('disconnected', function (rum, error) {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
+        if (error) {
+          console.log('Unexpectedly disconnected:', error)
+        }
+        // room.localParticipant.tracks.forEach(function(track) {
+        //   track.stop();
+        //   track.detach();
+        // });
 
         rum.localParticipant.tracks.forEach(function (track) {
           track.unpublish()

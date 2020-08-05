@@ -4,21 +4,28 @@ const useParticipantConnected = () => {
   const { remoteTrackPublished } = useRemoteTrackPublished()
 
   const participantConnected = (participant) => {
-    console.log('room.participants.forEach')
-
+    // when we join a room -- we need to loop over all participants
     participant.tracks.forEach((publication) => {
-      console.log('looping over remote tracks')
-
-      remoteTrackPublished(publication, participant)
+      remoteTrackPublished(publication)
     })
-
+    // when other people join after we're already there
     participant.on('trackPublished', (publication) => {
-      console.log('onTrackPublished')
+      console.log('trackPublished')
 
-      remoteTrackPublished(publication, participant)
+      remoteTrackPublished(publication)
     })
 
-    participant.on('trackUnpublished', (publication) => {})
+    // participant.on('trackUnpublished', (publication) => {
+
+    // })
+
+    // participant.on('trackSubscriptionFailed', (error, publication) => {
+
+    // })
+
+    // participant.on('disconnected', (stuff) => {
+
+    // })
   }
   return { participantConnected }
 }
