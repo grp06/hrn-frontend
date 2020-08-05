@@ -166,6 +166,8 @@ const PreEvent = ({ match }) => {
           const myRoom = await connect(roomTokens[0], {
             tracks: isEventHost ? localTracks : [],
             logLevel: 'debug',
+            maxAudioBitrate: 16000,
+            video: { height: 720, frameRate: 24, width: 1280 },
           })
           return startPreEventTwilio(myRoom, isEventHost)
         }
@@ -178,6 +180,8 @@ const PreEvent = ({ match }) => {
             connect(token, {
               tracks: localTracks,
               preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
+              maxAudioBitrate: 16000,
+              video: { height: 720, frameRate: 24, width: 1280 },
             })
           )
         })
