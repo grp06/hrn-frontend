@@ -47,9 +47,6 @@ const Onboarding = () => {
     return <Loading />
   }
 
-  if (eventIdInLocalStorage && (usersCityInContext || usersTagsInContext.length)) {
-    return <Redirect to={`/events/${eventIdInLocalStorage}`} />
-  }
   // Onboarding should only be displayed directly after signing up
   if (usersCityInContext || usersTagsInContext.length) {
     history.push('/events')
@@ -97,6 +94,10 @@ const Onboarding = () => {
     }
     if (insertTagMutationResponse.data.insert_tags_users.returning.length) {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
+    }
+
+    if (eventIdInLocalStorage) {
+      history.push(`/events/${eventIdInLocalStorage}`)
     }
   }
 
