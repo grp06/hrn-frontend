@@ -65,9 +65,9 @@ const AppProvider = ({ children }) => {
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
-      event_id: state.eventId,
+      event_id: eventId,
     },
-    skip: !state.eventId,
+    skip: eventId,
   })
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
@@ -81,9 +81,6 @@ const AppProvider = ({ children }) => {
   useEffect(() => {
     // if on event page and its a valid event
     if (eventIdInUrl && eventData) {
-      console.log('eventIdInUrl ->', eventIdInUrl)
-      console.log('eventData ->', eventData)
-      console.log('eventId ->', eventId)
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
