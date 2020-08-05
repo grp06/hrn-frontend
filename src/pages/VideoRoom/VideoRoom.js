@@ -175,6 +175,7 @@ const VideoRoom = ({ match }) => {
         console.log('calling CONNECT')
         const myRoom = await connect(token, {
           tracks: localTracks,
+          logLevel: 'debug',
         })
         console.log('setting room')
         setRoom(myRoom)
