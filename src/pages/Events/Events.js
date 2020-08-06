@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   pageBanner: {
     width: '100%',
-    height: '45vh',
+    height: '30vh',
     backgroundImage: `url(${bannerBackground5})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
