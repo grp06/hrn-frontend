@@ -6,7 +6,12 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
 
-import { HostDrawerContent, UserDrawerContent, EventStatusDrawer } from '.'
+import {
+  HostDrawerContent,
+  UserDrawerContent,
+  EventStatusDrawer,
+  EventControlsDrawerContent,
+} from '.'
 import logo from '../../assets/logoWhite.svg'
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +37,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const DrawerContent = () => {
-  const { user, event } = useAppContext()
-  const { role } = user
+  const classes = useStyles()
+  const { user, event, resetUser } = useAppContext()
+  const { name, role, userId } = user
+  const { host_id, status: eventStatus } = event
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))
-  const classes = useStyles()
+  const isEventHost = host_id === userId
+
   return (
     <>
       <div className={classes.toolbar}>
@@ -48,21 +56,11 @@ const DrawerContent = () => {
       </div>
       <Divider />
       {eventIdInUrl && <EventStatusDrawer event={event} user={user} />}
-      <UserDrawerContent />
+      {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && (
+        <EventControlsDrawerContent />
+      )}
+      <UserDrawerContent userName={name} resetUser={resetUser} />
       {role === 'host' && <HostDrawerContent />}
-
-      {/* <HostEventControlsMenu event={event} user={user} /> */}
-      {/* {eventStatus === 'pre-event' && (
-              <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
-            )} */}
-      {/* <Grid container alignItems="center">
-        <div className={classes.marginRight}>
-          <StartEventButton event={event} user={user} />
-        </div>
-        {renderCurrentEventStatus()}
-      </Grid>
-      <div className={classes.grow} />
-      {renderHeaderElements()} */}
     </>
   )
 }

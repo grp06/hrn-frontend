@@ -16,12 +16,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = () => {
+const UserDrawerContent = ({ userName, resetUser }) => {
   const classes = useStyles()
   const history = useHistory()
   const userDrawerRoutes = [
     {
-      label: 'My Profile',
+      label: userName,
       url: '/my-profile',
       icon: 'user',
     },
@@ -36,6 +36,13 @@ const UserDrawerContent = () => {
       icon: 'calendar',
     },
   ]
+
+  const handleLogout = () => {
+    window.analytics && window.analytics.track('logged out')
+    localStorage.clear()
+    resetUser()
+    history.push('/')
+  }
 
   return (
     <div>
@@ -52,6 +59,12 @@ const UserDrawerContent = () => {
             />
           </ListItem>
         ))}
+        <ListItem button disableRipple onClick={() => handleLogout()}>
+          <ListItemIcon>
+            <FeatherIcon icon="cloud" stroke="#f4f6fa" size="24" />
+          </ListItemIcon>
+          <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
+        </ListItem>
       </List>
     </div>
   )
