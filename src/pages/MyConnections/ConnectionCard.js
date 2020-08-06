@@ -84,6 +84,7 @@ const ConnectionCard = ({ connection }) => {
   }
 
   const handleCopyEmailClick = () => {
+    window.analytics.track('Copied email')
     copy(email)
     return setShowCopyEmailSnack(true)
   }

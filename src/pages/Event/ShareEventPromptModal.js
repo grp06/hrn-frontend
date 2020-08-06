@@ -131,6 +131,7 @@ const ShareEventPromptModal = ({ event, renderHostMessage }) => {
     },
     onAcceptFunction: () => {
       const copyPrompt = document.getElementById('eventPrompt').innerText
+      window.analytics.track('Copied share event prompt')
       copy(copyPrompt)
       setShowSnack(true)
     },

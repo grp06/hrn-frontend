@@ -47,16 +47,22 @@ const ForgotPasswordForm = () => {
   const [showSentEmail, setShowSentEmail] = useState(false)
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    await fetch(`${process.env.REACT_APP_API_URL}/api/email/reset_password/user/${email}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true,
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    })
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/email/reset_password/user/${email}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+    } catch (error) {
+      console.log('error = ', error)
+    }
+    window.analytics.track('Reset password')
+
     setShowSentEmail(true)
   }
 
