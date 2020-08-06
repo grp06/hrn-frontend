@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
-import { formatDate, isEventInFuture } from '../../utils'
+import { formatDate, isEventInFuture, constants } from '../../utils'
 import { EventCard, Loading } from '../../common'
 import { useAppContext } from '../../context/useAppContext'
+
+const { becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -37,6 +40,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 'auto',
     width: '50%',
     textAlign: 'center',
+  },
+  floatingButton: {
+    margin: theme.spacing(1, 1),
+    position: 'fixed',
+    bottom: theme.spacing(2),
+    right: theme.spacing(2),
   },
 }))
 
@@ -88,6 +97,21 @@ const EventsPublic = () => {
           .map((event) => {
             return <EventCard key={event.id} event={event} />
           })}
+      {user.role !== 'host' && (
+        <Button
+          variant="contained"
+          color="primary"
+          href={becomeAHostTypeform}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={classes.floatingButton}
+        >
+          Become a Host
+          <span role="img" aria-label="person hand out">
+            💁‍
+          </span>
+        </Button>
+      )}
     </>
   )
 }
