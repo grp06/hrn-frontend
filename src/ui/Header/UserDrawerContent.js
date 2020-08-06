@@ -49,7 +49,7 @@ const UserDrawerContent = () => {
               disableTypography
               primary={route.label}
               className={classes.listItemText}
-            ></ListItemText>
+            />
           </ListItem>
         ))}
       </List>
