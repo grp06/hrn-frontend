@@ -67,7 +67,7 @@ const AppProvider = ({ children }) => {
     variables: {
       event_id: eventId,
     },
-    skip: eventId,
+    skip: !eventId,
   })
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
