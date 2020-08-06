@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
 
-import { HostDrawerContent, UserDrawerContent } from '.'
+import { HostDrawerContent, UserDrawerContent, EventStatusDrawer } from '.'
 import logo from '../../assets/logoWhite.svg'
 
 const useStyles = makeStyles((theme) => ({
@@ -32,8 +32,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const DrawerContent = () => {
-  const { user } = useAppContext()
+  const { user, event } = useAppContext()
   const { role } = user
+  const regex = /\/events\/\d+/
+  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
   const classes = useStyles()
   return (
     <>
@@ -45,6 +47,7 @@ const DrawerContent = () => {
         </Grid>
       </div>
       <Divider />
+      {eventIdInUrl && <EventStatusDrawer event={event} user={user} />}
       <UserDrawerContent />
       {role === 'host' && <HostDrawerContent />}
 
