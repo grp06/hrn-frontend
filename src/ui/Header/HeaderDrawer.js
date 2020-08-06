@@ -120,23 +120,23 @@ const HeaderDrawer = () => {
     return <Typography variant="subtitle1">{textToShow}</Typography>
   }
 
-  const renderHeaderElements = () => {
-    return localStorage.getItem('userId') ? (
-      <Grid container justify="flex-end" alignItems="center">
-        <div>
-          <HavingIssuesButton event={event} />
-        </div>
-        <div>
-          <IconButton color="inherit" disableRipple onClick={handleUserNameClick}>
-            <Typography className={classes.userName}>{user.name}</Typography>
-          </IconButton>
-        </div>
-        {role === 'host' && <HostControlsMenu />}
-        <EventsConnectionsMenu />
-        <SettingsMenu resetUser={resetUser} />
-      </Grid>
-    ) : null
-  }
+  // const renderHeaderElements = () => {
+  //   return localStorage.getItem('userId') ? (
+  //     <Grid container justify="flex-end" alignItems="center">
+  //       <div>
+  //         <HavingIssuesButton event={event} />
+  //       </div>
+  //       <div>
+  //         <IconButton color="inherit" disableRipple onClick={handleUserNameClick}>
+  //           <Typography className={classes.userName}>{user.name}</Typography>
+  //         </IconButton>
+  //       </div>
+  //       {role === 'host' && <HostControlsMenu />}
+  //       <EventsConnectionsMenu />
+  //       <SettingsMenu resetUser={resetUser} />
+  //     </Grid>
+  //   ) : null
+  // }
 
   return (
     <div className={classes.root}>

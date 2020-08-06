@@ -4,6 +4,7 @@ import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
+import { useAppContext } from '../../context/useAppContext'
 
 import { HostDrawerContent, UserDrawerContent } from '.'
 import logo from '../../assets/logoWhite.svg'
@@ -31,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const DrawerContent = () => {
+  const { user } = useAppContext()
+  const { role } = user
   const classes = useStyles()
   return (
     <>
@@ -43,7 +46,8 @@ const DrawerContent = () => {
       </div>
       <Divider />
       <UserDrawerContent />
-      <HostDrawerContent />
+      {role === 'host' && <HostDrawerContent />}
+
       {/* <HostEventControlsMenu event={event} user={user} /> */}
       {/* {eventStatus === 'pre-event' && (
               <MenuItem className={classes.menuItem}>{handleStartEventModal}</MenuItem>
