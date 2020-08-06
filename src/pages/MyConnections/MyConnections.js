@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
@@ -41,6 +41,10 @@ const MyConnections = () => {
       },
     }
   )
+
+  useEffect(() => {
+    window.analytics.page('/my-connections')
+  }, [])
 
   if (appLoading || allMyConnectionsDataLoading) {
     return <Loading />

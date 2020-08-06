@@ -5,9 +5,9 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
+import { TextField } from 'formik-material-ui'
 import { deleteUsersTags, insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
-import { TextField } from 'formik-material-ui'
 import { OnboardingInterestTagInput } from '../Onboarding'
 import { useAppContext } from '../../context/useAppContext'
 import { GeosuggestCityInput, Snack } from '../../common'
@@ -99,10 +99,18 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
             linkedIn_url: values.linkedIn_url,
           },
         })
+        console.log('handleFormSubmit -> updateUserMutationResponse', updateUserMutationResponse)
+        // add email to segment call once we eventually enable users to update their email address
+        window.analytics.identify(userId, {
+          name: values.name,
+          city: values.city,
+        })
       } catch (err) {
         console.log('updateUserMutation error ->', err)
       }
     }
+
+    window.analytics.track('Profile updated')
 
     // Delete all users tags
     if (usersTags.length > 0) {

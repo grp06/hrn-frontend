@@ -36,7 +36,14 @@ const Onboarding = () => {
   const history = useHistory()
   const { updateUserObject, setUsersTags, user, app } = useAppContext()
   const { appLoading } = app
-  const { userId, city: usersCityInContext, tags_users: usersTagsInContext, name: userName } = user
+  const {
+    userId,
+    city: usersCityInContext,
+    tags_users: usersTagsInContext,
+    name: userName,
+    email,
+    role,
+  } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
@@ -74,11 +81,15 @@ const Onboarding = () => {
           objects: values.interests,
         },
       })
-      window.analytics &&
-        window.analytics.track('User Registered', {
-          city: values.city,
-          referringEvent: eventIdInLocalStorage || 'none',
-        })
+      window.analytics.identify(userId, {
+        name: userName,
+        email,
+        role,
+        city: values.city,
+      })
+      window.analytics.track('Onboarding complete', {
+        registeredViaEventId: eventIdInLocalStorage || 'none',
+      })
     } catch (err) {
       console.log('insertUserTagsMutation error ->', err)
     }

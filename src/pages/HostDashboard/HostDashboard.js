@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/react-hooks'
 import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
+import { ExpansionPanel } from '@material-ui/core'
 import { useAppContext } from '../../context/useAppContext'
 import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
 import { FloatCardXLarge, FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds } from '../../gql/queries'
-import { ExpansionPanel } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   expansionPanelContent: {
@@ -54,6 +54,10 @@ const HostDashboard = () => {
       skip: !userId || (role && role !== 'host'),
     }
   )
+
+  useEffect(() => {
+    window.analytics.page('/host-dashbaord')
+  }, [])
 
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables

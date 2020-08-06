@@ -153,7 +153,6 @@ const PreEvent = ({ match }) => {
             localTracks = await createLocalTracks({
               video: event.host_id !== 614,
               audio: process.env.NODE_ENV === 'production',
-              logLevel: 'debug',
             })
           } catch (err) {
             setGUMError(err.name)
@@ -165,7 +164,6 @@ const PreEvent = ({ match }) => {
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
             tracks: isEventHost ? localTracks : [],
-            logLevel: 'debug',
             maxAudioBitrate: 16000,
             video: { height: 720, frameRate: 24, width: 1280 },
           })

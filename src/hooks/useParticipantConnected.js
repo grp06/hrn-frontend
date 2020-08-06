@@ -23,7 +23,7 @@ const useParticipantConnected = () => {
 
     // })
 
-    // participant.on('disconnected', (stuff) => {
+    // participant.on('disconnected', (participant) => {
 
     // })
   }

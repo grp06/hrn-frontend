@@ -63,14 +63,11 @@ const useTwilio = () => {
       })
 
       room.on('reconnecting', (error) => {
-        console.log('reconnecting! error =', error)
-        window.analytics && window.analytics.track('Twilio error')
         if (error.code === 53001) {
-          window.analytics && window.analytics.track('Twilio error 53001')
-
+          window.analytics.track('Twilio error 53001')
           console.log('Reconnecting your signaling connection!', error.message)
         } else if (error.code === 53405) {
-          window.analytics && window.analytics.track('Twilio error 53405')
+          window.analytics.track('Twilio error 53405')
           console.log('Reconnecting your media connection!', error.message)
         }
       })

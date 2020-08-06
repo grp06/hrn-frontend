@@ -112,29 +112,52 @@ const EventForm = ({ eventData, match }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     if (eventData) {
-      await updateEventMutation({
-        variables: {
-          description,
-          event_name: title,
-          start_at: selectedDate,
-          id: eventData.id,
-          round_length: roundLength,
-          num_rounds: numRounds,
-          post_event_link: postEventVideoCallLink,
-          public_event: isEventPublic,
-        },
-      })
+      try {
+        await updateEventMutation({
+          variables: {
+            description,
+            event_name: title,
+            start_at: selectedDate,
+            id: eventData.id,
+            round_length: roundLength,
+            num_rounds: numRounds,
+            post_event_link: postEventVideoCallLink,
+            public_event: isEventPublic,
+          },
+        })
+        window.analytics.track('Event updated', {
+          numRounds,
+          roundLength,
+          isEventPublic,
+        })
+      } catch (error) {
+        console.log('error = ', error)
+      }
       setShowCreateEditEventSuccess(true)
     } else {
-      const res = await createEventMutation()
-      const { id } = res.data.insert_events.returning[0]
+      let createEventResponse
+      try {
+        createEventResponse = await createEventMutation()
+        window.analytics.track('Event created', {
+          numRounds,
+          roundLength,
+          isEventPublic,
+        })
+      } catch (error) {
+        console.log('error')
+      }
 
-      await insertEventUserMutation({
-        variables: {
-          eventId: id,
-          userId,
-        },
-      })
+      const { id } = createEventResponse.data.insert_events.returning[0]
+      try {
+        await insertEventUserMutation({
+          variables: {
+            eventId: id,
+            userId,
+          },
+        })
+      } catch (error) {
+        console.log('error = ', error)
+      }
 
       setShowCreateEditEventSuccess(true)
       await sleep(800)

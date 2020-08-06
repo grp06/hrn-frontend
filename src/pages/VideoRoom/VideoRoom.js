@@ -175,7 +175,6 @@ const VideoRoom = ({ match }) => {
         console.log('calling CONNECT')
         const myRoom = await connect(token, {
           tracks: localTracks,
-          logLevel: 'debug',
           maxAudioBitrate: 16000,
           video: { height: 720, frameRate: 24, width: 1280 },
         })

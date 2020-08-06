@@ -163,6 +163,7 @@ const AppProvider = ({ children }) => {
           }
         })
       }
+      console.warn('do we ever hit here? ')
       localStorage.clear()
       return history.push('/')
     }

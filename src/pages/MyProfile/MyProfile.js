@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from 'react-apollo'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -21,6 +21,10 @@ const MyProfile = () => {
   const { appLoading } = app
 
   const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)
+
+  useEffect(() => {
+    window.analytics.page('/my-profile')
+  }, [])
 
   if (appLoading || databaseTagsLoading) {
     return <Loading />
