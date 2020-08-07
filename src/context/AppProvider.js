@@ -86,7 +86,6 @@ const AppProvider = ({ children }) => {
         dispatch((draft) => {
           draft.app.appLoading = false
         })
-        debugger
         return history.push('/events')
       }
       // cases to set event data

@@ -57,7 +57,7 @@ const DrawerContent = () => {
       <Divider />
       {eventIdInUrl && <EventStatusDrawer event={event} user={user} />}
       {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && (
-        <EventControlsDrawerContent />
+        <EventControlsDrawerContent event={event} user={user} />
       )}
       <UserDrawerContent userName={name} resetUser={resetUser} />
       {role === 'host' && <HostDrawerContent />}

@@ -4,10 +4,15 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
+import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  drawerTitle: {
+    textAlign: 'center',
+    color: '#818588',
+  },
   listItemText: {
     fontFamily: 'Muli',
     color: theme.palette.common.ghostWhiteBody,
@@ -46,6 +51,9 @@ const UserDrawerContent = ({ userName, resetUser }) => {
 
   return (
     <div>
+      <Typography variant="subtitle2" className={classes.drawerTitle}>
+        - User Controls -
+      </Typography>
       <List>
         {userDrawerRoutes.map((route) => (
           <ListItem button disableRipple key={route.label} onClick={() => history.push(route.url)}>

@@ -80,8 +80,8 @@ const App = () => {
                     <Route exact path="/events/:id/video-room" component={VideoRoom} />
                     <Route exact path="/events/:id/pre-event" component={PreEvent} />
                     <Route exact path="/events/:id/event-complete" component={EventComplete} />
-                    <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                   </MarginLeftAppWrapper>
+                  <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                 <GetTagsModal />

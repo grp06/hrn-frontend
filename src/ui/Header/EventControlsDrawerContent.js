@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { StartEventButton } from '.'
+import { StartEventButton, OnlineUsersMenu } from '.'
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
 
@@ -16,18 +17,22 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '1rem',
     '&:hover': { color: theme.palette.common.sunray },
   },
+  onlineUsersText: {
+    color: theme.palette.common.sunray,
+    textAlign: 'center',
+  },
 }))
 
 const EventControlsDrawerContent = ({ user, event }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { host_id, id: eventId } = event
+  const { host_id, id: eventId, event_users } = event
 
   const handleResetEventModal = TransitionModal({
     button: {
       buttonText: 'Reset Event',
       buttonVariant: 'text',
-      buttonColor: 'default',
+      buttonColor: 'link',
     },
     modalBody: (
       <Typography variant="h5">
@@ -44,15 +49,31 @@ const EventControlsDrawerContent = ({ user, event }) => {
     },
   })
 
+  const onlineUsersList =
+    event_users.length <= 14 ? (
+      <OnlineUsersMenu eventUsers={event_users} />
+    ) : (
+      <Grid container justify="center" alignItems="center">
+        <Typography variant="subtitle1" className={classes.onlineUsersText}>
+          Online Users: {event_users.length}
+        </Typography>
+      </Grid>
+    )
+
   return (
-    <div>
+    <Grid container direction="column" justify="center" alignItems="center">
       <List>
         <ListItem>
           <StartEventButton event={event} user={user} />
         </ListItem>
-        <ListItem>{handleResetEventModal}</ListItem>
+        <ListItem>{onlineUsersList}</ListItem>
+        <ListItem>
+          <Grid container justify="center" alignItems="center">
+            {handleResetEventModal}
+          </Grid>
+        </ListItem>
       </List>
-    </div>
+    </Grid>
   )
 }
 
