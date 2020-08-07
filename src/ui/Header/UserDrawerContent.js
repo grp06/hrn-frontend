@@ -69,7 +69,7 @@ const UserDrawerContent = ({ userName, resetUser }) => {
         ))}
         <ListItem button disableRipple onClick={() => handleLogout()}>
           <ListItemIcon>
-            <FeatherIcon icon="cloud" stroke="#f4f6fa" size="24" />
+            <FeatherIcon icon="x-circle" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
         </ListItem>
