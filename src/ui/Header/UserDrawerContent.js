@@ -21,9 +21,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ userName, resetUser }) => {
+const UserDrawerContent = ({ userName }) => {
   const classes = useStyles()
   const history = useHistory()
+  const eventRunning = Boolean(
+    window.location.pathname.includes('pre-event') ||
+      window.location.pathname.includes('video-room')
+  )
+
   const userDrawerRoutes = [
     {
       label: userName,
@@ -42,13 +47,6 @@ const UserDrawerContent = ({ userName, resetUser }) => {
     },
   ]
 
-  const handleLogout = () => {
-    window.analytics && window.analytics.track('logged out')
-    localStorage.clear()
-    resetUser()
-    history.push('/')
-  }
-
   return (
     <div>
       <Typography variant="subtitle2" className={classes.drawerTitle}>
@@ -56,7 +54,13 @@ const UserDrawerContent = ({ userName, resetUser }) => {
       </Typography>
       <List>
         {userDrawerRoutes.map((route) => (
-          <ListItem button disableRipple key={route.label} onClick={() => history.push(route.url)}>
+          <ListItem
+            button
+            disableRipple
+            disabled={eventRunning}
+            key={route.label}
+            onClick={() => history.push(route.url)}
+          >
             <ListItemIcon>
               <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
             </ListItemIcon>
@@ -67,12 +71,6 @@ const UserDrawerContent = ({ userName, resetUser }) => {
             />
           </ListItem>
         ))}
-        <ListItem button disableRipple onClick={() => handleLogout()}>
-          <ListItemIcon>
-            <FeatherIcon icon="x-circle" stroke="#f4f6fa" size="24" />
-          </ListItemIcon>
-          <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
-        </ListItem>
       </List>
     </div>
   )

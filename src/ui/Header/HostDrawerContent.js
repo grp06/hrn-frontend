@@ -25,6 +25,10 @@ const useStyles = makeStyles((theme) => ({
 const HostDrawerContent = () => {
   const classes = useStyles()
   const history = useHistory()
+  const eventRunning = Boolean(
+    window.location.pathname.includes('pre-event') ||
+      window.location.pathname.includes('video-room')
+  )
 
   const hostDrawerRoutes = [
     {
@@ -46,7 +50,13 @@ const HostDrawerContent = () => {
           - Host Controls -
         </Typography>
         {hostDrawerRoutes.map((route) => (
-          <ListItem button disableRipple key={route.label} onClick={() => history.push(route.url)}>
+          <ListItem
+            button
+            disableRipple
+            disabled={eventRunning}
+            key={route.label}
+            onClick={() => history.push(route.url)}
+          >
             <ListItemIcon>
               <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
             </ListItemIcon>

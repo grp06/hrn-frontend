@@ -11,6 +11,7 @@ import {
   UserDrawerContent,
   EventStatusDrawer,
   EventControlsDrawerContent,
+  SettingsDrawerContent,
 } from '.'
 import logo from '../../assets/logoWhite.svg'
 
@@ -59,8 +60,9 @@ const DrawerContent = () => {
       {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && (
         <EventControlsDrawerContent event={event} user={user} />
       )}
-      <UserDrawerContent userName={name} resetUser={resetUser} />
+      <UserDrawerContent userName={name} event={event} />
       {role === 'host' && <HostDrawerContent />}
+      <SettingsDrawerContent resetUser={resetUser} />
     </>
   )
 }

@@ -65,7 +65,7 @@ const App = () => {
                     <Route exact path="/forgot-password" component={ForgotPassword} />
                     <Route
                       exact
-                      path="/set-new-password/:userId/:token/"
+                      path="/set-new-password/:userId/:token"
                       component={SetNewPassword}
                     />
                     <Route exact path="/onboarding" component={Onboarding} />
