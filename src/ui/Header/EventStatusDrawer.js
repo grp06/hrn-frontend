@@ -1,6 +1,8 @@
 import React from 'react'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+import { HavingIssuesButton } from '.'
 
 const useStyles = makeStyles((theme) => ({
   eventStatusTitle: {
@@ -30,9 +32,12 @@ const EventStatusDrawer = ({ event }) => {
         textToShow = `Round ${current_round} of ${num_rounds}`
     }
     return (
-      <Typography className={classes.eventStatusTitle} variant="h6">
-        {textToShow}
-      </Typography>
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Typography className={classes.eventStatusTitle} variant="h6">
+          {textToShow}
+        </Typography>
+        <HavingIssuesButton event={event} />
+      </Grid>
     )
   }
 
