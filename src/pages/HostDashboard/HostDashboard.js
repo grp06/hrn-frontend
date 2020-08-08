@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 import { ExpansionPanel } from '@material-ui/core'
 import { useAppContext } from '../../context/useAppContext'
 import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
-import { FloatCardXLarge, FloatCardLarge, Loading } from '../../common'
+import { FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     width: '75vw',
     margin: theme.spacing(0, 'auto'),
     [theme.breakpoints.down('md')]: {
+      width: '60vw',
+    },
+    [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
   },
@@ -125,9 +128,9 @@ const HostDashboard = () => {
       <Typography variant="h4" className={classes.sectionHeader}>
         Your Progress as a Host:
       </Typography>
-      <FloatCardXLarge>
+      <FloatCardLarge>
         <HostMetricsSnapshot totalMetrics={totalMetrics} />
-      </FloatCardXLarge>
+      </FloatCardLarge>
       <Typography variant="h4" className={classes.sectionHeader}>
         Your Past Events:
       </Typography>

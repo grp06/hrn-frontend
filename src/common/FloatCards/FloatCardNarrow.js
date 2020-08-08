@@ -18,7 +18,7 @@ const createStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '50vw',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
   },

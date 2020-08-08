@@ -17,7 +17,7 @@ const createStyles = makeStyles((theme) => ({
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
   },

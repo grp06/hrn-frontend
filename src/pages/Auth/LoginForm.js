@@ -89,6 +89,7 @@ const LoginForm = () => {
       history.replace(`/events/${eventIdInLocalStorage}`)
       // FIXME
     }
+    debugger
     window.location.reload()
   }
 
