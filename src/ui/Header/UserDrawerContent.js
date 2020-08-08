@@ -49,10 +49,7 @@ const UserDrawerContent = ({ userName }) => {
 
   return (
     <div>
-      <Typography variant="subtitle2" className={classes.drawerTitle}>
-        - User Controls -
-      </Typography>
-      <List>
+      <List disablePadding>
         {userDrawerRoutes.map((route) => (
           <ListItem
             button

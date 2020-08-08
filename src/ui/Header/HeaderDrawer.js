@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { DrawerContent } from '.'
+import { useAppContext } from '../../context/useAppContext'
 
 const drawerWidth = 200
 const useStyles = makeStyles((theme) => ({
@@ -38,23 +39,17 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderDrawer = () => {
   const classes = useStyles()
-  const { pathname } = window.location
+  const { user } = useAppContext()
+  const { userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
   const container = window !== undefined ? () => window.document.body : undefined
-
-  const userNotLoggedIn = Boolean(
-    pathname === '/' ||
-      pathname.includes('sign-up') ||
-      pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password')
-  )
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
 
   return (
-    !userNotLoggedIn && (
+    userId && (
       <div className={classes.root}>
         <Hidden mdUp implementation="css">
           <AppBar position="fixed" className={classes.appBar}>

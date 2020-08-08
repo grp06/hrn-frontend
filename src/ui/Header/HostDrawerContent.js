@@ -37,7 +37,7 @@ const HostDrawerContent = () => {
       icon: 'plus-circle',
     },
     {
-      label: 'Event Analytics',
+      label: 'Analytics',
       url: '/host-dashboard',
       icon: 'bar-chart-2',
     },
@@ -45,10 +45,7 @@ const HostDrawerContent = () => {
 
   return (
     <div>
-      <List>
-        <Typography variant="subtitle2" className={classes.drawerTitle}>
-          - Host Controls -
-        </Typography>
+      <List disablePadding>
         {hostDrawerRoutes.map((route) => (
           <ListItem
             button

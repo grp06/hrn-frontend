@@ -34,10 +34,7 @@ const SettingsDrawerContent = ({ resetUser }) => {
 
   return (
     <div>
-      <Typography variant="subtitle2" className={classes.drawerTitle}>
-        - Settings -
-      </Typography>
-      <List>
+      <List disablePadding>
         <ListItem button disableRipple onClick={() => handleLogout()}>
           <ListItemIcon>
             <FeatherIcon icon="x-circle" stroke="#f4f6fa" size="24" />
