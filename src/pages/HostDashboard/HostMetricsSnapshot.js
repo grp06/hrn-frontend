@@ -41,12 +41,19 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     [theme.breakpoints.down('md')]: {
       width: '70%',
+      fontSize: '1.5rem',
       margin: theme.spacing(0, 'auto'),
+    },
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '1rem',
     },
   },
   metricNumber: {
     color: theme.palette.common.ghostWhite,
     textAlign: 'center',
+    [theme.breakpoints.down('md')]: {
+      fontSize: '2.5rem',
+    },
   },
   purpleText: {
     color: theme.palette.common.lightPurple,

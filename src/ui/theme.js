@@ -232,6 +232,9 @@ const theme = createMuiTheme({
         color: 'inherit',
         fontWeight: 'inherit',
       },
+      text: {
+        color: ghostWhite,
+      },
       containedSizeLarge: {
         padding: '11px 11px',
         fontSize: '1.1rem',

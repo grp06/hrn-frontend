@@ -19,6 +19,12 @@ const createStyles = makeStyles((theme) => ({
     // borderColor: theme.palette.common.greyBorder,
     // boxShadow: theme.palette.common.greyBoxShadow,
     backgroundColor: theme.palette.common.greyCard,
+    [theme.breakpoints.down('md')]: {
+      width: '60vw',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '85vw',
+    },
   },
 }))
 
