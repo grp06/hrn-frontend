@@ -161,22 +161,11 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (token) {
       const setupRoom = async () => {
-        let localTracks
-        try {
-          console.log('bout to create local tracks')
-          localTracks = await createLocalTracks({
-            video: true,
-            audio: process.env.NODE_ENV === 'production',
-          })
-        } catch (err) {
-          return setIsGUMErrorModalActive(true)
-        }
-
         console.log('calling CONNECT')
         const myRoom = await connect(token, {
-          tracks: localTracks,
           maxAudioBitrate: 16000,
-          video: { height: 720, frameRate: 24, width: 1280 },
+          audio: process.env.NODE_ENV === 'production',
+          video: true,
         })
         console.log('setting room')
         setRoom(myRoom)

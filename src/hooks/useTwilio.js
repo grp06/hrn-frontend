@@ -85,15 +85,10 @@ const useTwilio = () => {
         if (error) {
           console.log('Unexpectedly disconnected:', error)
         }
-        // room.localParticipant.tracks.forEach(function(track) {
-        //   track.stop();
-        //   track.detach();
-        // });
-
-        rum.localParticipant.tracks.forEach(function (track) {
-          track.unpublish()
-        })
-
+        const localDiv = document.getElementById('local-video')
+        if (localDiv) {
+          localDiv.innerHTML = ''
+        }
         const remoteVideo = document.getElementById('remote-video')
         if (remoteVideo) {
           remoteVideo.innerHTML = ''

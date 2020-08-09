@@ -146,26 +146,12 @@ const PreEvent = ({ match }) => {
     if (roomTokens.length) {
       const isEventHost = event.host_id === userId
       const setupRoom = async () => {
-        let localTracks
-        console.log('event.host_id = ', event.host_id)
-        if (isEventHost) {
-          try {
-            localTracks = await createLocalTracks({
-              video: event.host_id !== 614,
-              audio: process.env.NODE_ENV === 'production',
-            })
-          } catch (err) {
-            setGUMError(err.name)
-            return setIsGUMErrorModalActive(true)
-          }
-        }
-
         // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
-            tracks: isEventHost ? localTracks : [],
             maxAudioBitrate: 16000,
-            video: { height: 720, frameRate: 24, width: 1280 },
+            video: isEventHost,
+            audio: isEventHost && process.env.NODE_ENV === 'production',
           })
           return startPreEventTwilio(myRoom, isEventHost)
         }
@@ -176,10 +162,10 @@ const PreEvent = ({ match }) => {
         roomTokens.forEach((token) => {
           roomCreationPromises.push(
             connect(token, {
-              tracks: localTracks,
               preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
               maxAudioBitrate: 16000,
-              video: { height: 720, frameRate: 24, width: 1280 },
+              video: isEventHost,
+              audio: isEventHost && process.env.NODE_ENV === 'production',
             })
           )
         })
