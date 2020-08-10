@@ -1,5 +1,5 @@
 export { default as Event } from './Event/Event'
-export { default as Events } from './Events/Events'
+export { default as MyEvents } from './Events/MyEvents'
 export { default as EventComplete } from './EventComplete/EventComplete'
 export { default as EventsPublic } from './EventsPublic/EventsPublic'
 export { default as MyConnections } from './MyConnections/MyConnections'

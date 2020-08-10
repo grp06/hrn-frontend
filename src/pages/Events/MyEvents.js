@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Events = () => {
+const MyEvents = () => {
   const classes = useStyles()
   const history = useHistory()
   const { app, user } = useAppContext()
@@ -79,7 +79,7 @@ const Events = () => {
   }
 
   const handleGoToPublicEventsClick = () => {
-    return history.push('/events/public')
+    return history.push('/events')
   }
 
   const renderNullDataText = () => {
@@ -151,4 +151,4 @@ const Events = () => {
   )
 }
 
-export default Events
+export default MyEvents
