@@ -39,7 +39,8 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerContent = () => {
   const classes = useStyles()
-  const { user, event, resetUser } = useAppContext()
+  const { user, event, resetUser, app } = useAppContext()
+  const { appLoading } = app
   const { name, role, userId } = user
   const { host_id, status: eventStatus } = event
   const regex = /\/events\/\d+/
@@ -47,23 +48,25 @@ const DrawerContent = () => {
   const isEventHost = host_id === userId
 
   return (
-    <>
-      <div className={classes.toolbar}>
-        <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>
-          <Button component={Link} to="/" disableRipple>
-            <img alt="company-logo" className={classes.logo} src={logo} />
-          </Button>
-        </Grid>
-      </div>
-      <Divider />
-      {eventIdInUrl && <EventStatusDrawer event={event} user={user} />}
-      {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && (
-        <EventControlsDrawerContent event={event} user={user} />
-      )}
-      <UserDrawerContent userId={userId} userName={name} />
-      {role === 'host' && <HostDrawerContent />}
-      <SettingsDrawerContent resetUser={resetUser} userId={userId} />
-    </>
+    !appLoading && (
+      <>
+        <div className={classes.toolbar}>
+          <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>
+            <Button component={Link} to="/" disableRipple>
+              <img alt="company-logo" className={classes.logo} src={logo} />
+            </Button>
+          </Grid>
+        </div>
+        <Divider />
+        {eventIdInUrl && <EventStatusDrawer event={event} user={user} />}
+        {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && (
+          <EventControlsDrawerContent event={event} user={user} />
+        )}
+        <UserDrawerContent userId={userId} userName={name} />
+        {role === 'host' && <HostDrawerContent />}
+        <SettingsDrawerContent resetUser={resetUser} userId={userId} />
+      </>
+    )
   )
 }
 
