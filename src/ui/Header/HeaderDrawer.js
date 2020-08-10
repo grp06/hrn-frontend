@@ -42,14 +42,23 @@ const HeaderDrawer = () => {
   const { user } = useAppContext()
   const { userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
+  const { pathname } = window.location
   const container = window !== undefined ? () => window.document.body : undefined
+
+  const userOnAuthRoute = Boolean(
+    pathname === '/' ||
+      pathname.includes('sign-up') ||
+      pathname.includes('forgot-password') ||
+      pathname.includes('set-new-password') ||
+      pathname.includes('onboarding')
+  )
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
 
   return (
-    userId && (
+    !userOnAuthRoute && (
       <div className={classes.root}>
         <Hidden mdUp implementation="css">
           <AppBar position="fixed" className={classes.appBar}>

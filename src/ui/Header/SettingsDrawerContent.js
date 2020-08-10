@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SettingsDrawerContent = ({ resetUser }) => {
+const SettingsDrawerContent = ({ resetUser, userId }) => {
   const classes = useStyles()
   const history = useHistory()
 
@@ -32,16 +32,27 @@ const SettingsDrawerContent = ({ resetUser }) => {
     history.push('/')
   }
 
+  const renderLoginOrLogout = () => {
+    return userId ? (
+      <ListItem button disableRipple onClick={() => handleLogout()}>
+        <ListItemIcon>
+          <FeatherIcon icon="x-circle" stroke="#f4f6fa" size="24" />
+        </ListItemIcon>
+        <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
+      </ListItem>
+    ) : (
+      <ListItem button disableRipple onClick={() => history.push('/')}>
+        <ListItemIcon>
+          <FeatherIcon icon="log-in" stroke="#f4f6fa" size="24" />
+        </ListItemIcon>
+        <ListItemText disableTypography primary="Login" className={classes.listItemText} />
+      </ListItem>
+    )
+  }
+
   return (
     <div>
-      <List disablePadding>
-        <ListItem button disableRipple onClick={() => handleLogout()}>
-          <ListItemIcon>
-            <FeatherIcon icon="x-circle" stroke="#f4f6fa" size="24" />
-          </ListItemIcon>
-          <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
-        </ListItem>
-      </List>
+      <List disablePadding>{renderLoginOrLogout()}</List>
     </div>
   )
 }

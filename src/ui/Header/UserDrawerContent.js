@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ userName }) => {
+const UserDrawerContent = ({ userId, userName }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
@@ -42,33 +42,49 @@ const UserDrawerContent = ({ userName }) => {
     },
     {
       label: 'My Events',
-      url: '/events',
+      url: '/my-events',
       icon: 'calendar',
+    },
+    {
+      label: 'All Events',
+      url: '/events',
+      icon: 'globe',
     },
   ]
 
+  const renderLoggedInContent = () => {
+    return userDrawerRoutes.map((route) => (
+      <ListItem
+        button
+        disableRipple
+        disabled={eventRunning}
+        key={route.label}
+        onClick={() => history.push(route.url)}
+      >
+        <ListItemIcon>
+          <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
+        </ListItemIcon>
+        <ListItemText disableTypography primary={route.label} className={classes.listItemText} />
+      </ListItem>
+    ))
+  }
+
+  const renderContent = () => {
+    return userId ? (
+      renderLoggedInContent()
+    ) : (
+      <ListItem button disableRipple key="1" onClick={() => history.push('/events')}>
+        <ListItemIcon>
+          <FeatherIcon icon="globe" stroke="#f4f6fa" size="24" />
+        </ListItemIcon>
+        <ListItemText disableTypography primary="All Events" className={classes.listItemText} />
+      </ListItem>
+    )
+  }
+
   return (
     <div>
-      <List disablePadding>
-        {userDrawerRoutes.map((route) => (
-          <ListItem
-            button
-            disableRipple
-            disabled={eventRunning}
-            key={route.label}
-            onClick={() => history.push(route.url)}
-          >
-            <ListItemIcon>
-              <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
-            </ListItemIcon>
-            <ListItemText
-              disableTypography
-              primary={route.label}
-              className={classes.listItemText}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <List disablePadding>{renderContent()}</List>
     </div>
   )
 }

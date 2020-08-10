@@ -14,14 +14,14 @@ const useStyles = makeStyles((theme) => ({
 
 const MarginLeftAppWrapper = ({ children }) => {
   const classes = useStyles()
-
   const { pathname } = window.location
 
   const userNotLoggedIn = Boolean(
     pathname === '/' ||
       pathname.includes('sign-up') ||
       pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password')
+      pathname.includes('set-new-password') ||
+      pathname.includes('onboarding')
   )
 
   return <div className={!userNotLoggedIn ? classes.pageWrapper : ''}>{children}</div>
