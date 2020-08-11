@@ -26,6 +26,15 @@ const useStyles = makeStyles((theme) => ({
       height: '2.5em',
     },
   },
+  privacyPolicyLink: {
+    textAlign: 'center',
+    textDecoration: 'none',
+    margin: theme.spacing('auto', 0, 2, 0),
+    color: theme.palette.common.ghostWhiteBody,
+    '&:hover': {
+      color: theme.palette.common.sunray,
+    },
+  },
   toolbar: theme.mixins.toolbar,
   topOfDrawer: {
     height: '100%',
@@ -66,6 +75,9 @@ const DrawerContent = () => {
         <UserDrawerContent userId={userId} userName={name} />
         {role === 'host' && <HostDrawerContent />}
         <SettingsDrawerContent resetUser={resetUser} userId={userId} />
+        <Link to="/privacy-policy" className={classes.privacyPolicyLink}>
+          Privacy Policy
+        </Link>
       </>
     )
   )

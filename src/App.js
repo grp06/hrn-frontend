@@ -19,6 +19,7 @@ import {
   MyConnections,
   Onboarding,
   PreEvent,
+  PrivacyPolicy,
   SetNewPassword,
   SignUp,
   VideoRoom,
@@ -85,6 +86,7 @@ const App = () => {
                     <Route exact path="/events/:id/video-room" component={VideoRoom} />
                     <Route exact path="/events/:id/pre-event" component={PreEvent} />
                     <Route exact path="/events/:id/event-complete" component={EventComplete} />
+                    <Route exact path="/privacy-policy" component={PrivacyPolicy} />
                   </MarginLeftAppWrapper>
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
