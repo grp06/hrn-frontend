@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useAppContext } from '../../context/useAppContext'
@@ -54,6 +54,36 @@ const SetupMicAndCamera = () => {
   const { setCameraAndMicPermissions } = useAppContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
+  const [videoDevices, setVideoDevices] = useState([])
+  const [audioDevices, setAudioDevices] = useState([])
+  const [speakerDevices, setSpeakerDevices] = useState([])
+  const [currentVideoDeviceId, setCurrentVideoDeviceId] = useState('')
+  const [currentAudioDeviceId, setCurrentAudioDeviceId] = useState('')
+  const [currentSpeakerDeviceId, setCurrentSpeakerDeviceId] = useState('')
+
+  const getDevices = async () => {
+    const devices = await navigator.mediaDevices.enumerateDevices()
+    console.log(devices)
+    const initialVideoDevices = devices.filter((device) => device.kind === 'videoinput')
+    const initialAudioDevices = devices.filter((device) => device.kind === 'audioinput')
+    const initialSpeakerDevices = devices.filter((device) => device.kind === 'audiooutput')
+    setVideoDevices(initialVideoDevices)
+    setAudioDevices(initialAudioDevices)
+    setSpeakerDevices(initialSpeakerDevices)
+
+    setCurrentVideoDeviceId(initialVideoDevices[0].deviceId)
+    setCurrentAudioDeviceId(initialAudioDevices[0].deviceId)
+    setCurrentSpeakerDeviceId(initialSpeakerDevices[0].deviceId)
+  }
+
+  navigator.mediaDevices.ondevicechange = () => {
+    getDevices()
+  }
+
+  useEffect(() => {
+    getDevices()
+  }, [])
+
   useEffect(() => {
     const getMedia = async (constraints) => {
       let localMediaStream = null
@@ -85,8 +115,19 @@ const SetupMicAndCamera = () => {
         // }
       }
     }
-    getMedia({ video: true, audio: true })
-  }, [])
+    getMedia({
+      video: { deviceId: currentVideoDeviceId },
+      audio: { deviceId: currentAudioDeviceId },
+    })
+  }, [currentVideoDeviceId, currentAudioDeviceId])
+
+  useEffect(() => {
+    const changeSpeakerDevice = async () => {
+      const video = document.querySelector('#videoElement')
+      await video.setSinkId(currentSpeakerDeviceId)
+    }
+    changeSpeakerDevice()
+  }, [currentSpeakerDeviceId])
 
   const getPermissionDenied = () => {
     if (permissionDenied) {
@@ -129,6 +170,57 @@ const SetupMicAndCamera = () => {
     )
   }
 
+  const handleVideoDeviceChange = (event) => {
+    setCurrentVideoDeviceId(event.target.value)
+  }
+
+  const handleAudioDeviceChange = (event) => {
+    setCurrentAudioDeviceId(event.target.value)
+  }
+  const handleSpeakerDeviceChange = (event) => {
+    setCurrentSpeakerDeviceId(event.target.value)
+  }
+
+  const getMediaControl = () => {
+    return (
+      !permissionNotYetAllowed &&
+      !permissionDenied && (
+        <Grid container direction="column" justify="space-around" alignItems="center">
+          <FormControl>
+            <InputLabel>Camera</InputLabel>
+            <Select native value={currentVideoDeviceId} onChange={handleVideoDeviceChange}>
+              {videoDevices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel>Microphone</InputLabel>
+            <Select native value={currentAudioDeviceId} onChange={handleAudioDeviceChange}>
+              {audioDevices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel>Speakers</InputLabel>
+            <Select native value={currentSpeakerDeviceId} onChange={handleSpeakerDeviceChange}>
+              {speakerDevices.map((device) => (
+                <option key={device.deviceId} value={device.deviceId}>
+                  {device.label}
+                </option>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      )
+    )
+  }
+
   return (
     <Grid
       className={classes.permissionsContainer}
@@ -139,6 +231,7 @@ const SetupMicAndCamera = () => {
       <Grid item>
         {getDamnYouLookGood()}
         <video autoPlay id="videoElement" muted />
+        {getMediaControl()}
         {getPermissionDenied()}
         {getPermissionNotYetAllowed()}
       </Grid>
