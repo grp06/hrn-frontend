@@ -90,7 +90,7 @@ const App = () => {
                   </MarginLeftAppWrapper>
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
-                {/* <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} /> */}
+                <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                 <GetTagsModal />
               </AppProvider>
             </ErrorBoundary>
