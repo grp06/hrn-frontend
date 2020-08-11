@@ -1,6 +1,8 @@
 export { default as PartnerNameCard } from './PartnerNameCard'
 export { default as PartnerTagsList } from './PartnerTagsList'
+export { default as RoundAndPartnerCard } from './RoundAndPartnerCard'
 export { default as RoundProgressBar } from './RoundProgressBar'
 export { default as Thumbing } from './Thumbing'
 export { default as VideoRoom } from './VideoRoom'
+export { default as VideoRoomSidebar } from './VideoRoomSidebar'
 export { default as VideoRouter } from './VideoRouter'

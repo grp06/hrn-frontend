@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
-import { VideoRouter, RoundProgressBar } from '.'
+import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { ConnectingToSomeone } from './waitingRoomScreens'
 import { Loading, CameraDisabledBanner } from '../../common'
 import { getMyRoundById } from '../../gql/queries'
@@ -219,6 +219,7 @@ const VideoRoom = ({ match }) => {
         </Grid>
       )}
       <VideoRouter myRound={myRound} />
+      <VideoRoomSidebar myRound={myRound} userId={userId} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
           <div className={classes.screenOverlay}>
