@@ -5,7 +5,7 @@ const constants = {
   partnerCameraIssueTimeout: 45000,
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,
-  drawerWidth: 200,
+  drawerWidth: 150,
   linkedInCommunityLink: 'https://www.linkedin.com/groups/8951502/',
   becomeAHostTypeform: 'https://stephen687387.typeform.com/to/UOwU16',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',

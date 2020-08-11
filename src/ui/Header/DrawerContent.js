@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    height: '2.85em',
+    padding: theme.spacing(1.75, 0),
+    height: '2.65em',
     [theme.breakpoints.down('md')]: {
       height: '2.5em',
     },
