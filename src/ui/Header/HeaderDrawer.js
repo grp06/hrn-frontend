@@ -8,8 +8,10 @@ import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { DrawerContent } from '.'
 import { useAppContext } from '../../context/useAppContext'
+import { constants } from '../../utils'
 
-const drawerWidth = 200
+const { drawerWidth } = constants
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
