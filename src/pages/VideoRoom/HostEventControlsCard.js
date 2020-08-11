@@ -3,18 +3,11 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { StartEventButton } from '.'
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
-import { useAppContext } from '../../context/useAppContext'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    position: 'absolute',
-    top: '2%',
-    right: 'auto',
-    bottom: 'auto',
-    left: '0%',
     width: '250px',
     height: 'auto',
     borderRadius: '4px',
@@ -22,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
     padding: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   onlineUsersText: {
     color: theme.palette.common.sunray,
@@ -30,15 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventControlsCard = () => {
+const EventControlsCard = ({ event }) => {
   const classes = useStyles()
-  const { user, event, app } = useAppContext()
-  const { appLoading } = app
-  const { userId } = user
   const { host_id, id: eventId, event_users, status: eventStatus } = event
-  const regex = /\/events\/\d+/
-  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
-  const isEventHost = host_id === userId
 
   const numberOfOnlineUsers = () => {
     return (
@@ -48,10 +36,6 @@ const EventControlsCard = () => {
         </Typography>
       )
     )
-  }
-
-  const renderStartEvent = () => {
-    return eventStatus === 'pre-event' && <StartEventButton event={event} user={user} />
   }
 
   const renderResetEvent = TransitionModal({
@@ -76,21 +60,15 @@ const EventControlsCard = () => {
   })
 
   return (
-    <>
-      {isEventHost && eventIdInUrl && eventStatus !== 'not-started' && !appLoading && (
-        <Grid
-          container
-          direction="column"
-          justify="stretch"
-          alignItems="center"
-          className={classes.container}
-        >
-          {numberOfOnlineUsers()}
-          {renderStartEvent()}
-          {renderResetEvent}
-        </Grid>
-      )}
-    </>
+    <Grid
+      container
+      direction="column"
+      justify="stretch"
+      alignItems="center"
+      className={classes.container}
+    >
+      {renderResetEvent}
+    </Grid>
   )
 }
 
