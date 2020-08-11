@@ -49,8 +49,8 @@ const PreEventControlsCard = ({ event, user }) => {
     return isEventHost ? (
       <StartEventButton event={event} user={user} />
     ) : (
-      <Typography variant="h6" className={classes.welcomeRemarks}>
-        Welcome Remarks from the host
+      <Typography variant="body1" className={classes.welcomeRemarks}>
+        Welcome remarks from the host
       </Typography>
     )
   }
