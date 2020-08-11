@@ -33,7 +33,8 @@ const HRNAnalytics = () => {
     getAllEvents
   )
 
-  const userIsAdmin = userId === 8 || userId === 12 || userId === 115
+  const userIsAdmin =
+    userId === 8 || userId === 12 || userId === 115 || userId === 513 || userId === 1628
 
   if (allDBUsersLoading || allDBEventsAndRoundsLoading) {
     return <Loading />
