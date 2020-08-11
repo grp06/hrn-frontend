@@ -14,11 +14,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoomSidebar = ({ myRound, userId }) => {
+const VideoRoomSidebar = ({ event, myRound, userId }) => {
   const classes = useStyles()
   return (
     <Grid container direction="column" className={classes.container}>
-      <RoundAndPartnerCard myRound={myRound} userId={userId} />
+      <RoundAndPartnerCard event={event} myRound={myRound} userId={userId} />
     </Grid>
   )
 }

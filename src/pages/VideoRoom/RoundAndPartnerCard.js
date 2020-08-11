@@ -14,20 +14,33 @@ const createStyles = makeStyles((theme) => ({
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
+    padding: theme.spacing(1, 0),
   },
   partnerName: {
     textAlign: 'center',
+    marginBottom: '0',
+  },
+  roundNumberText: {
+    textAlign: 'center',
+    marginBottom: theme.spacing(1.3),
   },
 }))
 
-const RoundAndPartnerCard = ({ myRound, userId }) => {
+const RoundAndPartnerCard = ({ event, myRound, userId }) => {
   const classes = createStyles()
+  const { num_rounds, current_round } = event
 
   let userIsPartnerX = false
 
   if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
     userIsPartnerX = true
   }
+
+  const getCurrentRoundNumber = () => (
+    <Typography className={classes.roundNumberText} variant="subtitle2">
+      Round {current_round} of {num_rounds}
+    </Typography>
+  )
 
   const getPartnerCity = () => {
     if (!myRound.partnerY || !myRound.partnerX) {
@@ -64,6 +77,7 @@ const RoundAndPartnerCard = ({ myRound, userId }) => {
       justify="center"
       alignItems="center"
     >
+      {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
     </Grid>

@@ -1,6 +1,5 @@
 export { default as DrawerContent } from './DrawerContent'
 export { default as EventControlsCard } from './EventControlsCard'
-export { default as EventStatusDrawer } from './EventStatusDrawer'
 export { default as HavingIssuesButton } from './HavingIssuesButton'
 export { default as HeaderDrawer } from './HeaderDrawer'
 export { default as HostDrawerContent } from './HostDrawerContent'

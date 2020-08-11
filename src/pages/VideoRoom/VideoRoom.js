@@ -219,7 +219,7 @@ const VideoRoom = ({ match }) => {
         </Grid>
       )}
       <VideoRouter myRound={myRound} />
-      <VideoRoomSidebar myRound={myRound} userId={userId} />
+      <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
           <div className={classes.screenOverlay}>
