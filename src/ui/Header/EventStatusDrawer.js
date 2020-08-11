@@ -20,7 +20,7 @@ const EventStatusDrawer = ({ event }) => {
     let textToShow
     switch (status) {
       case 'not-started':
-        textToShow = null
+        return null
         break
       case 'pre-event':
         textToShow = 'Welcome remarks from the host'
