@@ -2,7 +2,9 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+
 import { StartEventButton } from '.'
+import { useGetOnlineEventAttendees } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -10,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     top: '2%',
     right: 'auto',
     bottom: 'auto',
-    left: '0%',
+    left: '1%',
     width: '250px',
     height: 'auto',
     borderRadius: '4px',
@@ -32,22 +34,18 @@ const useStyles = makeStyles((theme) => ({
 const PreEventControlsCard = ({ event, user }) => {
   const classes = useStyles()
   const { userId } = user
-  const { host_id, event_users } = event
+  const { host_id } = event
   const isEventHost = host_id === userId
-
-  const numberOfOnlineUsers = () => {
-    return (
-      event_users.length && (
-        <Typography variant="subtitle1" className={classes.onlineUsersText}>
-          Online Users: {event_users.length}
-        </Typography>
-      )
-    )
-  }
+  const onlineEventAttendees = useGetOnlineEventAttendees(event)
 
   const renderCardContent = () => {
     return isEventHost ? (
-      <StartEventButton event={event} user={user} />
+      <div>
+        <Typography variant="subtitle1" className={classes.onlineUsersText}>
+          Online Users: {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
+        </Typography>
+        <StartEventButton event={event} user={user} />
+      </div>
     ) : (
       <Typography variant="body1" className={classes.welcomeRemarks}>
         Welcome remarks from the host
@@ -59,7 +57,7 @@ const PreEventControlsCard = ({ event, user }) => {
     <Grid
       container
       direction="column"
-      justify="stretch"
+      justify="space-evenly"
       alignItems="center"
       className={classes.container}
     >

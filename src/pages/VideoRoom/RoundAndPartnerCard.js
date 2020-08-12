@@ -22,7 +22,6 @@ const createStyles = makeStyles((theme) => ({
   },
   roundNumberText: {
     textAlign: 'center',
-    marginBottom: theme.spacing(1.3),
   },
 }))
 

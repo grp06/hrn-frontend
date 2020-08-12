@@ -33,8 +33,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     '& video': {
-      width: '100%',
-      height: 'calc(100vh)',
+      width: '100vw',
+      height: '100vh',
+      objectFit: 'cover',
     },
   },
   myVideo: {

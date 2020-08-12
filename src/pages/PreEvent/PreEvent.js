@@ -19,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     '& video': {
       width: '100%',
-      height: 'calc(100vh)',
+      // height: 'calc(100vh)',
+      height: '100%',
+      objectFit: 'cover',
     },
   },
   preEventWrapper: {

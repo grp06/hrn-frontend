@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
+import { useGetOnlineEventAttendees } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,17 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 const EventControlsCard = ({ event }) => {
   const classes = useStyles()
-  const { host_id, id: eventId, event_users, status: eventStatus } = event
-
-  const numberOfOnlineUsers = () => {
-    return (
-      event_users.length && (
-        <Typography variant="subtitle1" className={classes.onlineUsersText}>
-          Online Users: {event_users.length}
-        </Typography>
-      )
-    )
-  }
+  const { host_id, id: eventId } = event
+  const onlineEventAttendees = useGetOnlineEventAttendees(event)
 
   const renderResetEvent = TransitionModal({
     button: {
@@ -63,10 +55,13 @@ const EventControlsCard = ({ event }) => {
     <Grid
       container
       direction="column"
-      justify="stretch"
+      justify="space-evenly"
       alignItems="center"
       className={classes.container}
     >
+      <Typography variant="subtitle1" className={classes.onlineUsersText}>
+        Online Users: {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
+      </Typography>
       {renderResetEvent}
     </Grid>
   )

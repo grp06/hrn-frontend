@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
 import { useAppContext } from '../../context/useAppContext'
-import { PartnerNameCard, Thumbing, PartnerTagsList } from '.'
+import { Thumbing } from '.'
 import {
   PartnerDisconnected,
   PartnerTechnicalIssue,

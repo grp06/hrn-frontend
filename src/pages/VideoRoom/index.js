@@ -1,5 +1,4 @@
 export { default as HostEventControlsCard } from './HostEventControlsCard'
-export { default as PartnerNameCard } from './PartnerNameCard'
 export { default as PartnerTagsList } from './PartnerTagsList'
 export { default as RoundAndPartnerCard } from './RoundAndPartnerCard'
 export { default as RoundProgressBar } from './RoundProgressBar'
