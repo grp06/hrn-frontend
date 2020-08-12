@@ -55,12 +55,15 @@ const HeaderDrawer = () => {
       pathname.includes('onboarding')
   )
 
+  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('pre-event'))
+
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
 
   return (
-    !userOnAuthRoute && (
+    !userOnAuthRoute &&
+    !userInEvent && (
       <div className={classes.root}>
         <Hidden mdUp implementation="css">
           <AppBar position="fixed" className={classes.appBar}>

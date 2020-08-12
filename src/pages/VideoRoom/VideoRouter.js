@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
 import { useAppContext } from '../../context/useAppContext'
-import { PartnerNameCard, Thumbing, PartnerTagsList } from '.'
+import { Thumbing } from '.'
 import {
   PartnerDisconnected,
   PartnerTechnicalIssue,
@@ -41,8 +41,6 @@ const VideoRouter = ({ myRound }) => {
   const displayVideoMessage = () => {
     const hasRoundsData = myRound !== 'no-assignment'
     const hasPartner = !hasRoundsData ? false : myRound.partnerX_id && myRound.partnerY_id
-    const remoteVideoDiv = document.getElementById('remote-video')
-    const partnerVideoDiv = remoteVideoDiv && remoteVideoDiv.innerHTML
     if (!hasRoundsData) {
       return <UserJoinedDuringRound />
     }
@@ -67,17 +65,7 @@ const VideoRouter = ({ myRound }) => {
           return <PartnerTechnicalIssue />
         }
 
-        return partnerVideoDiv ? (
-          <Grid
-            container
-            alignItems="center"
-            justify="center"
-            className={`${clsx(classes.tagsOverlay, { showControls })}`}
-          >
-            <PartnerNameCard userId={userId} myRound={myRound} />
-            <PartnerTagsList myRound={myRound} userId={userId} />
-          </Grid>
-        ) : null
+        return null
       case 'complete':
         return <Thumbing userId={userId} myRound={myRound} />
       default:
