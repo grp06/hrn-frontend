@@ -1,5 +1,4 @@
 export { default as DrawerContent } from './DrawerContent'
-export { default as EventControlsDrawerContent } from './EventControlsDrawerContent'
 export { default as EventStatusDrawer } from './EventStatusDrawer'
 export { default as HavingIssuesButton } from './HavingIssuesButton'
 export { default as HeaderDrawer } from './HeaderDrawer'
