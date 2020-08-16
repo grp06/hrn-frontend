@@ -32,7 +32,7 @@ const EventControlsDrawerContent = ({ user, event }) => {
     button: {
       buttonText: 'Reset Event',
       buttonVariant: 'text',
-      buttonColor: 'link',
+      buttonColor: 'default',
     },
     modalBody: (
       <Typography variant="h5">

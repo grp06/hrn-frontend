@@ -64,16 +64,54 @@ const SetupMicAndCamera = () => {
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     console.log(devices)
-    const initialVideoDevices = devices.filter((device) => device.kind === 'videoinput')
-    const initialAudioDevices = devices.filter((device) => device.kind === 'audioinput')
-    const initialSpeakerDevices = devices.filter((device) => device.kind === 'audiooutput')
-    setVideoDevices(initialVideoDevices)
-    setAudioDevices(initialAudioDevices)
-    setSpeakerDevices(initialSpeakerDevices)
+    const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
+    const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
+    const availableSpeakerDevices = devices.filter((device) => device.kind === 'audiooutput')
+    setVideoDevices(availableVideoDevices)
+    setAudioDevices(availableAudioDevices)
+    setSpeakerDevices(availableSpeakerDevices)
 
-    setCurrentVideoDeviceId(initialVideoDevices[0].deviceId)
-    setCurrentAudioDeviceId(initialAudioDevices[0].deviceId)
-    setCurrentSpeakerDeviceId(initialSpeakerDevices[0].deviceId)
+    const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+    const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+    const localStoragePreferredSpeakerId = localStorage.getItem('preferredSpeakerId')
+
+    if (availableVideoDevices.length) {
+      if (
+        !localStoragePreferredVideoId ||
+        !availableVideoDevices.find((device) => device.deviceId === localStoragePreferredVideoId)
+      ) {
+        localStorage.setItem('preferredVideoId', availableVideoDevices[0].deviceId)
+        setCurrentVideoDeviceId(availableVideoDevices[0].deviceId)
+      } else {
+        setCurrentVideoDeviceId(localStoragePreferredVideoId)
+      }
+    }
+
+    if (availableAudioDevices.length) {
+      if (
+        !localStoragePreferredAudioId ||
+        !availableAudioDevices.find((device) => device.deviceId === localStoragePreferredAudioId)
+      ) {
+        localStorage.setItem('preferredAudioId', availableAudioDevices[0].deviceId)
+        setCurrentAudioDeviceId(availableAudioDevices[0].deviceId)
+      } else {
+        setCurrentAudioDeviceId(localStoragePreferredAudioId)
+      }
+    }
+
+    if (availableSpeakerDevices.length) {
+      if (
+        !localStoragePreferredSpeakerId ||
+        !availableSpeakerDevices.find(
+          (device) => device.deviceId === localStoragePreferredSpeakerId
+        )
+      ) {
+        localStorage.setItem('preferredSpeakerId', availableSpeakerDevices[0].deviceId)
+        setCurrentSpeakerDeviceId(availableSpeakerDevices[0].deviceId)
+      } else {
+        setCurrentSpeakerDeviceId(localStoragePreferredSpeakerId)
+      }
+    }
   }
 
   navigator.mediaDevices.ondevicechange = () => {
@@ -126,7 +164,9 @@ const SetupMicAndCamera = () => {
       const video = document.querySelector('#videoElement')
       await video.setSinkId(currentSpeakerDeviceId)
     }
-    changeSpeakerDevice()
+    if (!permissionNotYetAllowed && !permissionDenied) {
+      changeSpeakerDevice()
+    }
   }, [currentSpeakerDeviceId])
 
   const getPermissionDenied = () => {
@@ -171,13 +211,17 @@ const SetupMicAndCamera = () => {
   }
 
   const handleVideoDeviceChange = (event) => {
+    localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
   }
 
   const handleAudioDeviceChange = (event) => {
+    localStorage.setItem('preferredAudioId', event.target.value)
     setCurrentAudioDeviceId(event.target.value)
   }
+
   const handleSpeakerDeviceChange = (event) => {
+    localStorage.setItem('preferredSpeakerId', event.target.value)
     setCurrentSpeakerDeviceId(event.target.value)
   }
 

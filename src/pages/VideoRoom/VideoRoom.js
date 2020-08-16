@@ -162,10 +162,16 @@ const VideoRoom = ({ match }) => {
     if (token) {
       const setupRoom = async () => {
         console.log('calling CONNECT')
+        const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+        const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+
         const myRoom = await connect(token, {
           maxAudioBitrate: 16000,
-          audio: process.env.NODE_ENV === 'production',
-          video: true,
+          video: { deviceId: localStoragePreferredVideoId },
+          audio:
+            process.env.NODE_ENV === 'production'
+              ? { deviceId: localStoragePreferredAudioId }
+              : false,
         })
         console.log('setting room')
         setRoom(myRoom)
