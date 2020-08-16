@@ -47,6 +47,13 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
+  selectWrapper: {
+    width: '50%',
+    margin: '0 auto',
+  },
+  selectBox: {
+    margin: theme.spacing(0.5, 0),
+  },
 }))
 
 const SetupMicAndCamera = () => {
@@ -129,7 +136,7 @@ const SetupMicAndCamera = () => {
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia(constraints)
         const video = document.querySelector('#videoElement')
-        video.style.maxWidth = '75%'
+        video.style.maxWidth = '50%'
         setPermissionDenied(false)
         setPermissionNotYetAllowed(false)
         setCameraAndMicPermissions({
@@ -195,7 +202,7 @@ const SetupMicAndCamera = () => {
     return (
       !permissionNotYetAllowed &&
       !permissionDenied && (
-        <Typography variant="h4" className={classes.animatedItem}>
+        <Typography variant="h5" className={classes.animatedItem}>
           Damn
           <span
             style={{ margin: '0px 10px', fontSize: 40 }}
@@ -229,8 +236,14 @@ const SetupMicAndCamera = () => {
     return (
       !permissionNotYetAllowed &&
       !permissionDenied && (
-        <Grid container direction="column" justify="space-around" alignItems="center">
-          <FormControl>
+        <Grid
+          container
+          direction="column"
+          justify="space-between"
+          alignItems="center"
+          className={classes.selectWrapper}
+        >
+          <FormControl fullWidth className={classes.selectBox}>
             <InputLabel>Camera</InputLabel>
             <Select native value={currentVideoDeviceId} onChange={handleVideoDeviceChange}>
               {videoDevices.map((device) => (
@@ -240,7 +253,7 @@ const SetupMicAndCamera = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
+          <FormControl fullWidth className={classes.selectBox}>
             <InputLabel>Microphone</InputLabel>
             <Select native value={currentAudioDeviceId} onChange={handleAudioDeviceChange}>
               {audioDevices.map((device) => (
@@ -250,7 +263,7 @@ const SetupMicAndCamera = () => {
               ))}
             </Select>
           </FormControl>
-          <FormControl>
+          <FormControl fullWidth className={classes.selectBox}>
             <InputLabel>Speakers</InputLabel>
             <Select native value={currentSpeakerDeviceId} onChange={handleSpeakerDeviceChange}>
               {speakerDevices.map((device) => (
