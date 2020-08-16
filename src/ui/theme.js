@@ -261,6 +261,11 @@ const theme = createMuiTheme({
         color: ghostWhiteDark,
       },
     },
+    MuiListItemIcon: {
+      root: {
+        minWidth: '0',
+      },
+    },
     // MuiSnackbar: {
     //   bottom: 'none',
     //   top: '20px',

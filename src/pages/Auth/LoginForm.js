@@ -35,6 +35,13 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.orchid,
     },
   },
+  privacyPolicyText: {
+    marginTop: theme.spacing(3),
+  },
+  privacyPolicyLink: {
+    textDecoration: 'none',
+    color: theme.palette.common.sunray,
+  },
 }))
 
 const LoginForm = () => {
@@ -147,6 +154,17 @@ const LoginForm = () => {
               <Link className={classes.linkRedirectToSignUp} to="/forgot-password">
                 Forgot Password?
               </Link>
+              <Typography variant="subtitle2" className={classes.privacyPolicyText}>
+                By logging into our app you acknoweldge that you have read and accept our{' '}
+                <Link
+                  to="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.privacyPolicyLink}
+                >
+                  privacy policy
+                </Link>
+              </Typography>
               <Snack
                 open={showErrorSnack}
                 onClose={() => setShowErrorSnack(false)}

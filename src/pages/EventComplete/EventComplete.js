@@ -197,7 +197,7 @@ const EventComplete = ({ match }) => {
                 <Button
                   variant="contained"
                   className={classes.upcomingEventsButton}
-                  onClick={() => history.push('/events/public')}
+                  onClick={() => history.push('/events')}
                   target="_blank"
                 >
                   Join our Upcoming Events

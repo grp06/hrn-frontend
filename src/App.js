@@ -8,7 +8,7 @@ import makeApolloClient from './apollo'
 import { EventForm, ErrorBoundary } from './common'
 import {
   Event,
-  Events,
+  MyEvents,
   EventComplete,
   EventsPublic,
   ForgotPassword,
@@ -19,6 +19,7 @@ import {
   MyConnections,
   Onboarding,
   PreEvent,
+  PrivacyPolicy,
   SetNewPassword,
   SignUp,
   VideoRoom,
@@ -74,12 +75,18 @@ const App = () => {
                     <Route exact path="/create-event" component={EventForm} />
                     <Route exact path="/host-dashboard" component={HostDashboard} />
                     <Route exact path="/hrn-analytics" component={HRNAnalytics} />
-                    <Route exact path="/events" component={Events} />
-                    <Route exact path="/events/public" component={EventsPublic} />
+                    <Route
+                      exact
+                      path="/events/public"
+                      component={() => <Redirect to={{ pathname: '/events' }} />}
+                    />
+                    <Route exact path="/events" component={EventsPublic} />
+                    <Route exact path="/my-events" component={MyEvents} />
                     <Route exact path="/events/:id" component={Event} />
                     <Route exact path="/events/:id/video-room" component={VideoRoom} />
                     <Route exact path="/events/:id/pre-event" component={PreEvent} />
                     <Route exact path="/events/:id/event-complete" component={EventComplete} />
+                    <Route exact path="/privacy-policy" component={PrivacyPolicy} />
                   </MarginLeftAppWrapper>
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>

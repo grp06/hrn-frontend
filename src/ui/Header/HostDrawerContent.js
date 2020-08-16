@@ -1,10 +1,10 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
@@ -14,11 +14,16 @@ const useStyles = makeStyles((theme) => ({
     color: '#818588',
     marginBottom: theme.spacing(0.5),
   },
+  listItem: {
+    padding: theme.spacing(1.75, 0),
+    '&:hover': {
+      backgroundColor: theme.palette.common.dankPurp,
+    },
+  },
   listItemText: {
     fontFamily: 'Muli',
     color: theme.palette.common.ghostWhiteBody,
     fontSize: '1rem',
-    '&:hover': { color: theme.palette.common.sunray },
   },
 }))
 
@@ -53,15 +58,18 @@ const HostDrawerContent = () => {
             disabled={eventRunning}
             key={route.label}
             onClick={() => history.push(route.url)}
+            className={classes.listItem}
           >
-            <ListItemIcon>
-              <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
-            </ListItemIcon>
-            <ListItemText
-              disableTypography
-              primary={route.label}
-              className={classes.listItemText}
-            />
+            <Grid container direction="column" justify="center" alignItems="center">
+              <ListItemIcon>
+                <FeatherIcon icon={route.icon} stroke="#D1D9EA" size="26" />
+              </ListItemIcon>
+              <ListItemText
+                disableTypography
+                primary={route.label}
+                className={classes.listItemText}
+              />
+            </Grid>
           </ListItem>
         ))}
       </List>

@@ -37,6 +37,13 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.orchid,
     },
   },
+  privacyPolicyText: {
+    marginTop: theme.spacing(3),
+  },
+  privacyPolicyLink: {
+    textDecoration: 'none',
+    color: theme.palette.common.sunray,
+  },
 }))
 
 const SignUpForm = () => {
@@ -168,6 +175,17 @@ const SignUpForm = () => {
               <Link className={classes.linkRedirectToLogin} to="/">
                 Already have an account?
               </Link>
+              <Typography variant="subtitle2" className={classes.privacyPolicyText}>
+                By creating an account on our app you acknoweldge that you have read and accept our{' '}
+                <Link
+                  to="/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={classes.privacyPolicyLink}
+                >
+                  privacy policy
+                </Link>
+              </Typography>
               <Snack
                 open={showErrorSnack}
                 onClose={() => setShowErrorSnack(false)}

@@ -51,7 +51,7 @@ const MyConnections = () => {
   }
 
   const handleGoToPublicEventsClick = () => {
-    return history.push('/events/public')
+    return history.push('/events')
   }
 
   const renderNullDataText = () => {

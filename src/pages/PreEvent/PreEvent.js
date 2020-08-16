@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
+import { PreEventControlsCard } from '.'
 import { useAppContext } from '../../context/useAppContext'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
@@ -18,7 +19,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     '& video': {
       width: '100%',
-      height: 'calc(100vh)',
+      // height: 'calc(100vh)',
+      height: '100%',
+      objectFit: 'cover',
     },
   },
   preEventWrapper: {
@@ -197,6 +200,7 @@ const PreEvent = ({ match }) => {
         />
       )}
       <div id="host-video" className={classes.hostVid} />
+      <PreEventControlsCard event={event} user={user} />
     </Grid>
   )
 }

@@ -8,8 +8,10 @@ import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { DrawerContent } from '.'
 import { useAppContext } from '../../context/useAppContext'
+import { constants } from '../../utils'
 
-const drawerWidth = 200
+const { drawerWidth } = constants
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -42,14 +44,26 @@ const HeaderDrawer = () => {
   const { user } = useAppContext()
   const { userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
+  const { pathname } = window.location
   const container = window !== undefined ? () => window.document.body : undefined
+
+  const userOnAuthRoute = Boolean(
+    pathname === '/' ||
+      pathname.includes('sign-up') ||
+      pathname.includes('forgot-password') ||
+      pathname.includes('set-new-password') ||
+      pathname.includes('onboarding')
+  )
+
+  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('pre-event'))
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
 
   return (
-    userId && (
+    !userOnAuthRoute &&
+    !userInEvent && (
       <div className={classes.root}>
         <Hidden mdUp implementation="css">
           <AppBar position="fixed" className={classes.appBar}>
