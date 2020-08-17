@@ -63,24 +63,19 @@ const SetupMicAndCamera = () => {
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
   const [videoDevices, setVideoDevices] = useState([])
   const [audioDevices, setAudioDevices] = useState([])
-  const [speakerDevices, setSpeakerDevices] = useState([])
   const [currentVideoDeviceId, setCurrentVideoDeviceId] = useState('')
   const [currentAudioDeviceId, setCurrentAudioDeviceId] = useState('')
-  const [currentSpeakerDeviceId, setCurrentSpeakerDeviceId] = useState('')
 
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     console.log(devices)
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
-    const availableSpeakerDevices = devices.filter((device) => device.kind === 'audiooutput')
     setVideoDevices(availableVideoDevices)
     setAudioDevices(availableAudioDevices)
-    setSpeakerDevices(availableSpeakerDevices)
 
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-    const localStoragePreferredSpeakerId = localStorage.getItem('preferredSpeakerId')
 
     if (availableVideoDevices.length) {
       if (
@@ -103,20 +98,6 @@ const SetupMicAndCamera = () => {
         setCurrentAudioDeviceId(availableAudioDevices[0].deviceId)
       } else {
         setCurrentAudioDeviceId(localStoragePreferredAudioId)
-      }
-    }
-
-    if (availableSpeakerDevices.length) {
-      if (
-        !localStoragePreferredSpeakerId ||
-        !availableSpeakerDevices.find(
-          (device) => device.deviceId === localStoragePreferredSpeakerId
-        )
-      ) {
-        localStorage.setItem('preferredSpeakerId', availableSpeakerDevices[0].deviceId)
-        setCurrentSpeakerDeviceId(availableSpeakerDevices[0].deviceId)
-      } else {
-        setCurrentSpeakerDeviceId(localStoragePreferredSpeakerId)
       }
     }
   }
@@ -165,16 +146,6 @@ const SetupMicAndCamera = () => {
       audio: { deviceId: currentAudioDeviceId },
     })
   }, [currentVideoDeviceId, currentAudioDeviceId])
-
-  useEffect(() => {
-    const changeSpeakerDevice = async () => {
-      const video = document.getElementById('videoElement')
-      await video.setSinkId(currentSpeakerDeviceId)
-    }
-    if (!permissionNotYetAllowed && !permissionDenied) {
-      changeSpeakerDevice()
-    }
-  }, [currentSpeakerDeviceId])
 
   const getPermissionDenied = () => {
     if (permissionDenied) {
@@ -227,11 +198,6 @@ const SetupMicAndCamera = () => {
     setCurrentAudioDeviceId(event.target.value)
   }
 
-  const handleSpeakerDeviceChange = (event) => {
-    localStorage.setItem('preferredSpeakerId', event.target.value)
-    setCurrentSpeakerDeviceId(event.target.value)
-  }
-
   const getMediaControl = () => {
     return (
       !permissionNotYetAllowed &&
@@ -257,16 +223,6 @@ const SetupMicAndCamera = () => {
             <InputLabel>Microphone</InputLabel>
             <Select native value={currentAudioDeviceId} onChange={handleAudioDeviceChange}>
               {audioDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl fullWidth className={classes.selectBox}>
-            <InputLabel>Speakers</InputLabel>
-            <Select native value={currentSpeakerDeviceId} onChange={handleSpeakerDeviceChange}>
-              {speakerDevices.map((device) => (
                 <option key={device.deviceId} value={device.deviceId}>
                   {device.label}
                 </option>
