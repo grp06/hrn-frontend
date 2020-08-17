@@ -135,7 +135,7 @@ const SetupMicAndCamera = () => {
 
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia(constraints)
-        const video = document.querySelector('#videoElement')
+        const video = document.getElementById('videoElement')
         video.style.maxWidth = '50%'
         setPermissionDenied(false)
         setPermissionNotYetAllowed(false)
@@ -168,7 +168,7 @@ const SetupMicAndCamera = () => {
 
   useEffect(() => {
     const changeSpeakerDevice = async () => {
-      const video = document.querySelector('#videoElement')
+      const video = document.getElementById('videoElement')
       await video.setSinkId(currentSpeakerDeviceId)
     }
     if (!permissionNotYetAllowed && !permissionDenied) {

@@ -4,6 +4,5 @@
     "terminalCursor.foreground": "#e98dd7",
     "editorCursor.foreground": "#fabb5b"
   },
-  "terminal.integrated.cursorBlinking": true,
-  "editor.cursorStyle": "block"
+  "terminal.integrated.cursorBlinking": true
 }
