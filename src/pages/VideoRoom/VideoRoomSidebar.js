@@ -19,7 +19,7 @@ const VideoRoomSidebar = ({ event, myRound, userId }) => {
   const { host_id } = event
   return (
     <Grid container direction="column" className={classes.container}>
-      {host_id === userId && <HostEventControlsCard event={event} />}
+      {host_id === userId && <HostEventControlsCard event={event} userId={userId} />}
       <RoundAndPartnerCard event={event} myRound={myRound} userId={userId} />
       <PartnerTagsList myRound={myRound} userId={userId} />
     </Grid>

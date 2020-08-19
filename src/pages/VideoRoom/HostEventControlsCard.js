@@ -25,10 +25,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventControlsCard = ({ event }) => {
+const HostEventControlsCard = ({ event, userId }) => {
   const classes = useStyles()
   const { host_id, id: eventId } = event
-  const onlineEventAttendees = useGetOnlineEventAttendees(event)
+  const isEventHost = host_id === userId
+  const onlineEventAttendees = useGetOnlineEventAttendees(event, isEventHost)
 
   const renderResetEvent = TransitionModal({
     button: {
@@ -67,4 +68,4 @@ const EventControlsCard = ({ event }) => {
   )
 }
 
-export default EventControlsCard
+export default HostEventControlsCard

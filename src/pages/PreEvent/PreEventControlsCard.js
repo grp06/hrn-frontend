@@ -36,7 +36,7 @@ const PreEventControlsCard = ({ event, user }) => {
   const { userId } = user
   const { host_id } = event
   const isEventHost = host_id === userId
-  const onlineEventAttendees = useGetOnlineEventAttendees(event)
+  const onlineEventAttendees = useGetOnlineEventAttendees(event, isEventHost)
 
   const renderCardContent = () => {
     return isEventHost ? (

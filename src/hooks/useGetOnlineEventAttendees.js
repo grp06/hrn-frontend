@@ -5,7 +5,7 @@ import { constants } from '../utils'
 
 const { lastSeenDuration } = constants
 
-export default function useGetOnlineEventAttendees(event) {
+export default function useGetOnlineEventAttendees(event, isEventHost) {
   const { id: eventId } = event
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { data: onlineUsersData, loading: onlineUsersLoading } = useSubscription(
@@ -14,7 +14,7 @@ export default function useGetOnlineEventAttendees(event) {
       variables: {
         event_id: eventId,
       },
-      skip: !eventId,
+      skip: !eventId || !isEventHost,
     }
   )
 
@@ -25,7 +25,7 @@ export default function useGetOnlineEventAttendees(event) {
   }, [event])
 
   useEffect(() => {
-    if (!onlineUsersLoading && onlineUsersData.event_users.length) {
+    if (!onlineUsersLoading && onlineUsersData && onlineUsersData.event_users.length) {
       const allUsers = onlineUsersData.event_users
       // users who've submitted a mutation within the last x seconds
       const freshOnlineUsers = allUsers.filter((user) => {
