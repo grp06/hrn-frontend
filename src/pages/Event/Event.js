@@ -9,6 +9,7 @@ import bannerBackground from '../../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
 import { Loading } from '../../common'
 import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context/useUserContext'
 import formatDate from '../../utils/formatDate'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
@@ -46,7 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { app, user, event, setEventId, resetEvent } = useAppContext()
+  const { user } = useUserContext()
+  const { app, event, setEventId, resetEvent } = useAppContext()
   const { appLoading, permissions } = app
   const { userId } = user
   const eventSet = Object.keys(event).length > 1

@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context/useUserContext'
 
 import { HostDrawerContent, UserDrawerContent, SettingsDrawerContent } from '.'
 import logo from '../../assets/logoWhite.svg'
@@ -45,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerContent = () => {
   const classes = useStyles()
-  const { user, event, resetUser, app } = useAppContext()
+  const { user } = useUserContext()
+  const { event, resetUser, app } = useAppContext()
   const { appLoading } = app
   const { name, role, userId } = user
   const { host_id, status: eventStatus } = event

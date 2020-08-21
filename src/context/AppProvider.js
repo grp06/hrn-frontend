@@ -178,10 +178,11 @@ const AppProvider = ({ children }) => {
         dispatch((draft) => {
           draft.app.appLoading = false
         })
+      } else {
+        return dispatch((draft) => {
+          draft.user.userId = parseInt(localStorageUserId, 10)
+        })
       }
-      return dispatch((draft) => {
-        draft.user.userId = parseInt(localStorageUserId, 10)
-      })
     }
   }, [userId])
 

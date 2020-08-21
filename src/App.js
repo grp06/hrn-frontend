@@ -25,6 +25,7 @@ import {
   VideoRoom,
 } from './pages'
 import { AppProvider } from './context/AppProvider'
+import { UserProvider } from './context/UserProvider'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
@@ -58,7 +59,7 @@ const App = () => {
         <ApolloProvider client={client}>
           <Router>
             <ErrorBoundary>
-              <AppProvider>
+              <UserProvider>
                 <Switch>
                   <MarginLeftAppWrapper>
                     <Route exact path="/" component={LoginForm} />
@@ -91,8 +92,8 @@ const App = () => {
                   <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                 </Switch>
                 <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
-                <GetTagsModal />
-              </AppProvider>
+                {/* <GetTagsModal /> */}
+              </UserProvider>
             </ErrorBoundary>
           </Router>
         </ApolloProvider>
