@@ -37,8 +37,8 @@ const defaultState = {
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { user } = useUserContext()
-  const { userId } = user
+  const { user, setUserUpdatedAt } = useUserContext()
+  const { id: userId } = user
   const { event, app } = state
   const { permissions } = app
   const eventRegex = /\/events\/\d+/
@@ -102,14 +102,9 @@ const EventProvider = ({ children }) => {
         console.log('last seen')
         try {
           const lastSeenUpdated = await updateLastSeenMutation()
-
-          dispatch((draft) => {
-            draft.user.updatedAt = lastSeenUpdated.data.update_users.returning[0].updated_at
-          })
+          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
         } catch (error) {
           console.log('interval -> error', error)
-          // sometimes theres an error here. Reloading "fixes" it  :|
-          // window.location.reload()
         }
       }, lastSeenDuration)
       return () => {

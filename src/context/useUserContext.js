@@ -29,9 +29,9 @@ const useUserContext = () => {
     })
   }
 
-  const setUserId = (userId) => {
+  const setUserUpdatedAt = (updatedAt) => {
     dispatch((draft) => {
-      draft.user.userId = userId
+      draft.user.updated_at = updatedAt
     })
   }
 
@@ -48,7 +48,7 @@ const useUserContext = () => {
     ...state,
     resetUser,
     setUsersTags,
-    setUserId,
+    setUserUpdatedAt,
     updateUserObject,
   }
 }

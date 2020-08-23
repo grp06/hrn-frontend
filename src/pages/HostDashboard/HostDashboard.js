@@ -43,7 +43,7 @@ const HostDashboard = () => {
   const classes = useStyles()
   const { user } = useUserContext()
   const { app } = useEventContext()
-  const { userId, role } = user
+  const { id: userId, role } = user
   const { appLoading } = app
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)

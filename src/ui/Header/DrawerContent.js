@@ -48,7 +48,7 @@ const DrawerContent = () => {
   const { user } = useUserContext()
   const { event, resetUser, app } = useEventContext()
   const { appLoading } = app
-  const { name, role, userId } = user
+  const { name, role, id: userId } = user
   const { host_id, status: eventStatus } = event
   const regex = /\/events\/\d+/
   const eventIdInUrl = Boolean(window.location.pathname.match(regex))

@@ -61,7 +61,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   const [rsvpInFlight, setRSVPInFlight] = useState(false)
   const { user } = useUserContext()
   const { setCameraAndMicPermissions } = useEventContext()
-  const { userId, name, email } = user
+  const { id: userId, name, email } = user
   const {
     id: eventId,
     event_users,

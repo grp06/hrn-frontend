@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography'
 
 const StartEventButton = ({ event, user }) => {
   const { id: eventId, round_length, num_rounds, status: eventStatus, host_id } = event
-  const { userId } = user
+  const { id: userId } = user
   const isEventHost = host_id === userId
 
   return isEventHost && eventStatus === 'pre-event'

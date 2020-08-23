@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const HRNAnalytics = () => {
   const classes = useStyles()
   const { user } = useUserContext()
-  const { userId } = user
+  const { id: userId } = user
   const { data: allDBUsers, loading: allDBUsersLoading } = useQuery(getAllUsers)
   const { data: allDBEventsAndRounds, loading: allDBEventsAndRoundsLoading } = useQuery(
     getAllEvents

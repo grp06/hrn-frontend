@@ -50,7 +50,7 @@ const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
 
   const { user } = useUserContext()
-  const { userId, role } = user
+  const { id: userId, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState(

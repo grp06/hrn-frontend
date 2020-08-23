@@ -18,7 +18,7 @@ const MyProfile = () => {
   const classes = useStyles()
   const { user } = useUserContext()
   const { app } = useEventContext()
-  const { userId } = user
+  const { id: userId } = user
   const { appLoading } = app
 
   const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)

@@ -33,7 +33,7 @@ const VideoRouter = ({ myRound }) => {
   const classes = useStyles()
   const { user } = useUserContext()
   const { event, twilio } = useEventContext()
-  const { userId } = user
+  const { id: userId } = user
   const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
   const { status, round_length } = event
   const showControls = useIsUserActive()

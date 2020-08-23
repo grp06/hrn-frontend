@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const HeaderDrawer = () => {
   const classes = useStyles()
   const { user } = useUserContext()
-  const { userId } = user
+  const { id: userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
   const { pathname } = window.location
   const container = window !== undefined ? () => window.document.body : undefined

@@ -49,7 +49,7 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { app, event, setEventId, resetEvent } = useEventContext()
   const { appLoading, permissions } = app
-  const { userId } = user
+  const { id: userId } = user
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
@@ -69,6 +69,9 @@ const Event = ({ match }) => {
   if (appLoading || Object.keys(event).length < 2) {
     return <Loading />
   }
+
+  console.log('user ->', user)
+  console.log('userId ->', userId)
 
   const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 

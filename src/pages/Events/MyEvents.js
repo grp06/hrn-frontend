@@ -58,7 +58,7 @@ const MyEvents = () => {
   const { app } = useEventContext()
   const { user } = useUserContext()
   const { appLoading } = app
-  const { userId } = user
+  const { id: userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
     variables: {

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PreEventControlsCard = ({ event, user }) => {
   const classes = useStyles()
-  const { userId } = user
+  const { id: userId } = user
   const { host_id } = event
   const isEventHost = host_id === userId
   const onlineEventAttendees = useGetOnlineEventAttendees(event, isEventHost)

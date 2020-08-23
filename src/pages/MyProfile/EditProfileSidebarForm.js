@@ -42,7 +42,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const classes = useStyles()
   const { setUsersTags, updateUserObject, user } = useUserContext()
   const {
-    userId,
+    id: userId,
     tags_users: usersTags,
     name: usersName,
     city: usersCity,

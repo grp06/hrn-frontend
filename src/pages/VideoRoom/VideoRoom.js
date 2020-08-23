@@ -72,7 +72,7 @@ const VideoRoom = ({ match }) => {
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
   } = useEventContext()
-  const { userId } = user
+  const { id: userId } = user
   const { appLoading, permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 

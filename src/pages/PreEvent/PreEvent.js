@@ -35,7 +35,7 @@ const PreEvent = ({ match }) => {
   const history = useHistory()
   const { user } = useUserContext()
   const { event, app, setCameraAndMicPermissions } = useEventContext()
-  const { userId, role } = user
+  const { id: userId, role } = user
   const { permissions } = app
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
   const [GUMError, setGUMError] = useState('')

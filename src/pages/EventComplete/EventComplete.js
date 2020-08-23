@@ -69,7 +69,7 @@ const EventComplete = ({ match }) => {
   const classes = useStyles()
   const { event, resetEvent } = useEventContext()
   const { user } = useUserContext()
-  const { userId } = user
+  const { id: userId } = user
 
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()

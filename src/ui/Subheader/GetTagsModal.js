@@ -59,7 +59,7 @@ const GetTagsModal = () => {
   const [showModal, setShowModal] = useState(true)
   const { user } = useUserContext()
   const { app } = useEventContext()
-  const { tags_users: usersTags, userId } = user
+  const { tags_users: usersTags, id: userId } = user
   const { appLoading } = app
   const EventHomeRegex = /\/events\/\d+/
   const EventInProgressRegex = /\/events\/\d+\//

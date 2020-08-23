@@ -38,7 +38,7 @@ const Onboarding = () => {
   const { app } = useEventContext()
   const { appLoading } = app
   const {
-    userId,
+    id: userId,
     city: usersCityInContext,
     tags_users: usersTagsInContext,
     name: userName,
