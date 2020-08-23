@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium, Snack } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { redirect, setRedirect } = useAppContext()
+  const { redirect, setRedirect } = useEventContext()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')

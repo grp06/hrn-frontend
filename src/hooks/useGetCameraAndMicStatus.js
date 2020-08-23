@@ -1,7 +1,7 @@
-import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context'
 
 const useGetCameraAndMicStatus = (hasCheckedCamera) => {
-  const { setCameraAndMicPermissions } = useAppContext()
+  const { setCameraAndMicPermissions } = useEventContext()
   if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
     // Firefox 38+ seems having support of enumerateDevicesx
     navigator.enumerateDevices = function (callback) {

@@ -5,7 +5,7 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import TimerIcon from '@material-ui/icons/Timer'
 import { makeStyles } from '@material-ui/styles'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context'
 import { Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const classes = useStyles()
-  const { user } = useAppContext()
+  const { user } = useUserContext()
   const { updatedAt } = user
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show15SecondsLeftSnack, setShow15SecondsLeftSnack] = useState(false)

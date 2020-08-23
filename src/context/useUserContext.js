@@ -53,4 +53,4 @@ const useUserContext = () => {
   }
 }
 
-export { useUserContext }
+export default useUserContext

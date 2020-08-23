@@ -9,7 +9,7 @@ import { TextField } from 'formik-material-ui'
 import { deleteUsersTags, insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { OnboardingInterestTagInput } from '../Onboarding'
-import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context'
 import { GeosuggestCityInput, Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const classes = useStyles()
-  const { setUsersTags, updateUserObject, user } = useAppContext()
+  const { setUsersTags, updateUserObject, user } = useUserContext()
   const {
     userId,
     tags_users: usersTags,

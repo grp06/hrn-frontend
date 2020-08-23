@@ -8,8 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
 import { Loading } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
-import { useUserContext } from '../../context/useUserContext'
+import { useEventContext, useUserContext } from '../../context'
 import formatDate from '../../utils/formatDate'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
@@ -48,7 +47,7 @@ const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { user } = useUserContext()
-  const { app, event, setEventId, resetEvent } = useAppContext()
+  const { app, event, setEventId, resetEvent } = useEventContext()
   const { appLoading, permissions } = app
   const { userId } = user
   const eventSet = Object.keys(event).length > 1

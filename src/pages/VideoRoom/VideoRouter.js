@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { Thumbing } from '.'
 import {
   PartnerDisconnected,
@@ -31,8 +31,8 @@ const useStyles = makeStyles((theme) => ({
 
 const VideoRouter = ({ myRound }) => {
   const classes = useStyles()
-
-  const { user, event, twilio } = useAppContext()
+  const { user } = useUserContext()
+  const { event, twilio } = useEventContext()
   const { userId } = user
   const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
   const { status, round_length } = event

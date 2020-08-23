@@ -1,10 +1,10 @@
-import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants
 
 const useRemoteTrackPublished = () => {
-  const { setHasPartnerAndIsConnecting } = useAppContext()
+  const { setHasPartnerAndIsConnecting } = useEventContext()
 
   const remoteTrackPublished = (publication) => {
     const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1

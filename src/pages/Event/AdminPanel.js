@@ -14,7 +14,7 @@ import {
   SetupMicAndCameraButton,
 } from '.'
 import { EventForm, FloatCardLarge, TransitionModal, CameraDisabledBanner } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AdminPanel = ({ eventData, timeState, permissions }) => {
   const classes = useStyles()
-  const { setCameraAndMicPermissions } = useAppContext()
+  const { setCameraAndMicPermissions } = useEventContext()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const {

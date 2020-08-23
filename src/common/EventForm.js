@@ -6,7 +6,7 @@ import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers'
 import { useMutation } from 'react-apollo'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory, Redirect } from 'react-router-dom'
-import { useAppContext } from '../context/useAppContext'
+import { useUserContext } from '../context'
 import { FloatCardMedium, Snack } from '.'
 import { sleep } from '../helpers'
 
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
 
-  const { user } = useAppContext()
+  const { user } = useUserContext()
   const { userId, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')

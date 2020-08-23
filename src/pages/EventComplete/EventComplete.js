@@ -7,7 +7,7 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { getMyMutualThumbsData } from '../../gql/queries'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
@@ -67,7 +67,8 @@ const useStyles = makeStyles((theme) => ({
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user, event, resetEvent } = useAppContext()
+  const { event, resetEvent } = useEventContext()
+  const { user } = useUserContext()
   const { userId } = user
 
   const localStorageEventId = localStorage.getItem('eventId')

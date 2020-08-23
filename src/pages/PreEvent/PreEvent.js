@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import { PreEventControlsCard } from '.'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
 import { usePreEventTwilio, useGetCameraAndMicStatus } from '../../hooks'
@@ -33,7 +33,8 @@ const PreEvent = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const history = useHistory()
-  const { user, event, app, setCameraAndMicPermissions } = useAppContext()
+  const { user } = useUserContext()
+  const { event, app, setCameraAndMicPermissions } = useEventContext()
   const { userId, role } = user
   const { permissions } = app
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)

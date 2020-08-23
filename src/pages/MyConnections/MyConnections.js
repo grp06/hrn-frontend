@@ -7,7 +7,7 @@ import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { getAllMyConnections } from '../../gql/queries'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 
@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
 const MyConnections = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { app, user } = useAppContext()
+  const { user } = useUserContext()
+  const { app } = useEventContext()
   const { userId } = user
   const { appLoading } = app
   const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useQuery(

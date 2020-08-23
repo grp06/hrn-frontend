@@ -13,7 +13,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { displayOnlineUsers } from '../../gql/subscriptions'
 import { constants } from '../../utils'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 
 const { lastSeenDuration } = constants
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const AttendeesList = ({ eventId, timeState }) => {
   const classes = useStyles()
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
-  const { event } = useAppContext()
+  const { event } = useEventContext()
   const { data: onlineUsersData, loading: onlineUsersLoading } = useSubscription(
     displayOnlineUsers,
     {

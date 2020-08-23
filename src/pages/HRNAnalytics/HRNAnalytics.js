@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { getAllUsers, getAllEvents } from '../../gql/queries'
-import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context'
 import { Loading } from '../../common'
 import { EventExpansionPanelAdmin } from '.'
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HRNAnalytics = () => {
   const classes = useStyles()
-  const { user } = useAppContext()
+  const { user } = useUserContext()
   const { userId } = user
   const { data: allDBUsers, loading: allDBUsersLoading } = useQuery(getAllUsers)
   const { data: allDBEventsAndRounds, loading: allDBEventsAndRoundsLoading } = useQuery(

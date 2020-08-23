@@ -15,7 +15,7 @@ import {
   ShareEventPromptModal,
 } from '.'
 import { FloatCardLarge, CameraDisabledBanner } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { insertEventUser, deleteEventUser } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,7 +59,8 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   const classes = useStyles()
   const history = useHistory()
   const [rsvpInFlight, setRSVPInFlight] = useState(false)
-  const { user, setCameraAndMicPermissions } = useAppContext()
+  const { user } = useUserContext()
+  const { setCameraAndMicPermissions } = useEventContext()
   const { userId, name, email } = user
   const {
     id: eventId,
