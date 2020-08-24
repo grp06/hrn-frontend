@@ -13,13 +13,11 @@ const { lastSeenDuration } = constants
 const EventContext = React.createContext()
 
 const defaultState = {
-  app: {
-    permissions: {
-      hasWebCam: false,
-      hasMicrophone: false,
-      isWebcamAlreadyCaptured: false,
-      isMicrophoneAlreadyCaptured: false,
-    },
+  permissions: {
+    hasWebCam: false,
+    hasMicrophone: false,
+    isWebcamAlreadyCaptured: false,
+    isMicrophoneAlreadyCaptured: false,
   },
   // eventId is for event subscriptions
   eventId: null,
@@ -35,8 +33,7 @@ const EventProvider = ({ children }) => {
   const { user, setUserUpdatedAt } = useUserContext()
   const { setAppLoading } = useAppContext()
   const { id: userId } = user
-  const { event, app } = state
-  const { permissions } = app
+  const { event, permissions } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(window.location.pathname.match(eventRegex))

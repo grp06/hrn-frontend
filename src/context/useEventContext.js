@@ -17,7 +17,7 @@ const useEventContext = () => {
 
   const setCameraAndMicPermissions = (permissions) => {
     dispatch((draft) => {
-      draft.app.permissions = permissions
+      draft.permissions = permissions
     })
   }
 

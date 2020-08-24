@@ -67,14 +67,13 @@ const VideoRoom = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const {
-    app,
+    permissions,
     event,
     twilio,
     setHasPartnerAndIsConnecting,
     setCameraAndMicPermissions,
   } = useEventContext()
   const { id: userId } = user
-  const { permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 
   const { startTwilio } = useTwilio()

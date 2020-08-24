@@ -34,9 +34,8 @@ const PreEvent = ({ match }) => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useUserContext()
-  const { event, app, setCameraAndMicPermissions } = useEventContext()
+  const { event, permissions, setCameraAndMicPermissions } = useEventContext()
   const { id: userId, role } = user
-  const { permissions } = app
   const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
   const [GUMError, setGUMError] = useState('')
   const [roomTokens, setRoomTokens] = useState([])

@@ -48,8 +48,7 @@ const Event = ({ match }) => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { app, event, setEventId } = useEventContext()
-  const { permissions } = app
+  const { permissions, event, setEventId } = useEventContext()
   const { id: userId } = user
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
