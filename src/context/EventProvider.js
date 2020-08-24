@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react'
 
-import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
+import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
-import { useUserContext } from '.'
 import { useHistory } from 'react-router-dom'
-
-import { findUserById } from '../gql/queries'
+import { useUserContext, useAppContext } from '.'
 import { updateLastSeen } from '../gql/mutations'
-
-import { constants } from '../utils'
 import { listenToEvent } from '../gql/subscriptions'
+import { constants } from '../utils'
 
 const { lastSeenDuration } = constants
 
@@ -17,8 +14,6 @@ const EventContext = React.createContext()
 
 const defaultState = {
   app: {
-    redirect: null,
-    appLoading: true,
     permissions: {
       hasWebCam: false,
       hasMicrophone: false,
@@ -38,6 +33,7 @@ const defaultState = {
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { user, setUserUpdatedAt } = useUserContext()
+  const { setAppLoading } = useAppContext()
   const { id: userId } = user
   const { event, app } = state
   const { permissions } = app
@@ -68,9 +64,7 @@ const EventProvider = ({ children }) => {
     if (userOnEventPage && eventData) {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
-        dispatch((draft) => {
-          draft.app.appLoading = false
-        })
+        setAppLoading(false)
         return history.push('/events')
       }
       // cases to set event data
@@ -87,10 +81,10 @@ const EventProvider = ({ children }) => {
         if (eventWasReset) {
           window.location.reload()
         }
-        return dispatch((draft) => {
+        dispatch((draft) => {
           draft.event = eventData.events[0]
-          draft.app.appLoading = false
         })
+        return setAppLoading(false)
       }
     }
   }, [eventData, dispatch, event, userOnEventPage, history])

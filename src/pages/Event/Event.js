@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
 import { Loading } from '../../common'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useEventContext, useUserContext } from '../../context'
 import formatDate from '../../utils/formatDate'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
@@ -46,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+  const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { app, event, setEventId, resetEvent } = useEventContext()
-  const { appLoading, permissions } = app
+  const { app, event, setEventId } = useEventContext()
+  const { permissions } = app
   const { id: userId } = user
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()

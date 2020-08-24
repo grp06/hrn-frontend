@@ -6,9 +6,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
-import { formatDate, isEventInFuture } from '../../utils'
+import { isEventInFuture } from '../../utils'
 import { EventCard, Loading } from '../../common'
-import { useEventContext, useUserContext } from '../../context'
+import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -42,9 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EventsPublic = () => {
   const classes = useStyles()
-  const history = useHistory()
-  const { user } = useUserContext()
-  const { app, setEventId, resetEvent } = useEventContext()
+  const { setEventId, resetEvent } = useEventContext()
 
   const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
     getAllPublicEvents,

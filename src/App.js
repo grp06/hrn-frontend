@@ -24,9 +24,7 @@ import {
   SignUp,
   VideoRoom,
 } from './pages'
-import { AppProvider } from './context/AppProvider'
-import { UserProvider } from './context/UserProvider'
-import { EventProvider } from './context/EventProvider'
+import { AppProvider, EventProvider, UserProvider } from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
@@ -60,8 +58,8 @@ const App = () => {
         <ApolloProvider client={client}>
           <Router>
             <ErrorBoundary>
-              <UserProvider>
-                <EventProvider>
+              <AppProvider>
+                <UserProvider>
                   <Switch>
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
@@ -83,20 +81,22 @@ const App = () => {
                         path="/events/public"
                         component={() => <Redirect to={{ pathname: '/events' }} />}
                       />
-                      <Route exact path="/events" component={EventsPublic} />
                       <Route exact path="/my-events" component={MyEvents} />
-                      <Route exact path="/events/:id" component={Event} />
-                      <Route exact path="/events/:id/video-room" component={VideoRoom} />
-                      <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                      <Route exact path="/events/:id/event-complete" component={EventComplete} />
+                      <EventProvider>
+                        <Route exact path="/events" component={EventsPublic} />
+                        <Route exact path="/events/:id" component={Event} />
+                        <Route exact path="/events/:id/video-room" component={VideoRoom} />
+                        <Route exact path="/events/:id/pre-event" component={PreEvent} />
+                        <Route exact path="/events/:id/event-complete" component={EventComplete} />
+                      </EventProvider>
                       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
                     </MarginLeftAppWrapper>
                     <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                   </Switch>
                   <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                   {/* <GetTagsModal /> */}
-                </EventProvider>
-              </UserProvider>
+                </UserProvider>
+              </AppProvider>
             </ErrorBoundary>
           </Router>
         </ApolloProvider>

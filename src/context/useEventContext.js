@@ -49,13 +49,6 @@ const useEventContext = () => {
     })
   }
 
-  // LETS TRY TO GET RID OF THIS
-  const setRedirect = (redirect) => {
-    dispatch((draft) => {
-      draft.app.redirect = redirect
-    })
-  }
-
   return {
     ...state,
     resetEvent,
@@ -64,7 +57,6 @@ const useEventContext = () => {
     setPartnerDisconnected,
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
-    setRedirect,
   }
 }
 

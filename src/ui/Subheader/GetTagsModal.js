@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -56,11 +56,10 @@ const useStyles = makeStyles((theme) => ({
 const GetTagsModal = () => {
   const classes = useStyles()
   const history = useHistory()
-  const [showModal, setShowModal] = useState(true)
+  const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { app } = useEventContext()
   const { tags_users: usersTags, id: userId } = user
-  const { appLoading } = app
+  const [showModal, setShowModal] = useState(true)
   const EventHomeRegex = /\/events\/\d+/
   const EventInProgressRegex = /\/events\/\d+\//
 

@@ -10,7 +10,7 @@ import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -34,9 +34,8 @@ const useStyles = makeStyles((theme) => ({
 const Onboarding = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { appLoading } = useAppContext()
   const { updateUserObject, setUsersTags, user } = useUserContext()
-  const { app } = useEventContext()
-  const { appLoading } = app
   const {
     id: userId,
     city: usersCityInContext,

@@ -8,7 +8,7 @@ import { Redirect, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
 import { EventCard, Loading, FloatCardLarge } from '../../common'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useUserContext } from '../../context'
 import { getEventsByUserId } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
 
@@ -55,9 +55,8 @@ const useStyles = makeStyles((theme) => ({
 const MyEvents = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { app } = useEventContext()
   const { user } = useUserContext()
-  const { appLoading } = app
+  const { appLoading } = useAppContext()
   const { id: userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {

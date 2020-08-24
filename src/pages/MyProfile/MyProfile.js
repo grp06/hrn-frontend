@@ -3,7 +3,7 @@ import { useQuery } from 'react-apollo'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useUserContext } from '../../context'
 import { getAllTags } from '../../gql/queries'
 import { Loading } from '../../common'
 import { MyProfileSidebar } from '.'
@@ -17,9 +17,8 @@ const useStyles = makeStyles((theme) => ({
 const MyProfile = () => {
   const classes = useStyles()
   const { user } = useUserContext()
-  const { app } = useEventContext()
+  const { appLoading } = useAppContext()
   const { id: userId } = user
-  const { appLoading } = app
 
   const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)
 

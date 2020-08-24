@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
+import { useAppContext } from '.'
 import { findUserById } from '../gql/queries'
 
 const UserContext = React.createContext()
@@ -12,6 +13,7 @@ const defaultState = {
 
 const UserProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  const { setAppLoading } = useAppContext()
   const history = useHistory()
   const { userId } = state.user
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
@@ -28,9 +30,10 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        return dispatch((draft) => {
+        dispatch((draft) => {
           draft.user = userData.users[0]
         })
+        return setAppLoading(false)
       }
     }
   }, [userData, userId])

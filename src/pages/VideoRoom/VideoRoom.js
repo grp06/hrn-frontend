@@ -10,7 +10,7 @@ import { ConnectingToSomeone } from './waitingRoomScreens'
 import { Loading, CameraDisabledBanner } from '../../common'
 import { getMyRoundById } from '../../gql/queries'
 import { getToken } from '../../helpers'
-import { useEventContext, useUserContext } from '../../context'
+import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { useTwilio, useGetCameraAndMicStatus, useIsUserActive } from '../../hooks'
 
 const { createLocalTracks, connect } = require('twilio-video')
@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+  const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const {
     app,
@@ -73,7 +74,7 @@ const VideoRoom = ({ match }) => {
     setCameraAndMicPermissions,
   } = useEventContext()
   const { id: userId } = user
-  const { appLoading, permissions } = app
+  const { permissions } = app
   const { hasPartnerAndIsConnecting } = twilio
 
   const { startTwilio } = useTwilio()
