@@ -23,6 +23,7 @@ import {
   SetNewPassword,
   SignUp,
   VideoRoom,
+  Lobby,
 } from './pages'
 import { AppProvider, EventProvider, UserProvider } from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
@@ -85,6 +86,7 @@ const App = () => {
                       <EventProvider>
                         <Route exact path="/events" component={EventsPublic} />
                         <Route exact path="/events/:id" component={Event} />
+                        <Route exact path="/events/:id/lobby" component={Lobby} />
                         <Route exact path="/events/:id/video-room" component={VideoRoom} />
                         <Route exact path="/events/:id/pre-event" component={PreEvent} />
                         <Route exact path="/events/:id/event-complete" component={EventComplete} />
