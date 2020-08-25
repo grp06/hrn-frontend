@@ -8,10 +8,10 @@ const SetupMicAndCameraButton = ({ permissions }) => {
     button: {
       buttonText:
         permissions && permissions.isWebcamAlreadyCaptured
-          ? 'Test out your camera'
-          : 'Click to enable',
+          ? 'Test out your camera 🎥'
+          : 'Enable camera and mic 🎙',
       buttonVariant: 'contained',
-      buttonSize: 'medium',
+      buttonSize: 'large',
     },
     modalBody: <SetupMicAndCamera />,
     onAcceptButtonText: 'Done',

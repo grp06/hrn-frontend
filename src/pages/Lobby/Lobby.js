@@ -9,10 +9,8 @@ import {
   BroadcastBox,
   EventChatBox,
   EventTimerCountdown,
-  PreEventInstructionModal,
   UserStatusBox,
 } from '.'
-import { StartPreEventButton } from '../Event'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
@@ -40,7 +38,6 @@ const Lobby = () => {
   const { user } = useUserContext()
   const { id: userId } = user
   const { start_at: eventStartTime, host_id, id: eventId } = event
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   const userIsHost = host_id === userId
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
 
@@ -50,21 +47,18 @@ const Lobby = () => {
       <Grid container direction="row" className={classes.gridContainer}>
         <Grid direction="column" justify="space-around" className={classes.broadcastContainer}>
           <BroadcastBox />
-          <BottomControlPanel />
+          <BottomControlPanel
+            permissions={permissions}
+            eventId={eventId}
+            userIsHost={userIsHost}
+            timeUntilEvent={timeUntilEvent}
+          />
         </Grid>
         <Grid direction="column" justify="space-around" className={classes.rightContainer}>
           <UserStatusBox />
           <EventChatBox />
         </Grid>
       </Grid>
-      {/* <Grid container direction="row" alignItems="center" justify="center">
-        <StartPreEventButton
-          // disabled={micOrCameraIsDisabled}
-          eventId={eventId}
-          timeUntilEvent={timeUntilEvent}
-        />s
-        <PreEventInstructionModal />
-      </Grid> */}
     </div>
   )
 }
