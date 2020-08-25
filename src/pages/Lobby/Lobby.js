@@ -12,8 +12,6 @@ import {
   UserStatusBox,
 } from '.'
 
-import { Loading } from '../../common'
-
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
     overflowX: 'hidden',
@@ -42,9 +40,7 @@ const Lobby = () => {
   const { start_at: eventStartTime, host_id, id: eventId } = event
   const userIsHost = host_id === userId
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
-  if (!event) {
-    return <Loading />
-  }
+
   return (
     <div className={classes.pageContainer}>
       <EventTimerCountdown eventStartTime={eventStartTime} />

@@ -9,18 +9,17 @@ const useStyles = makeStyles((theme) => ({
     bottom: 'auto',
     width: '100%',
     height: 'auto',
-    padding: theme.spacing(2),
-    backgroundColor: 'yellow',
+    top: '0.5%',
   },
 }))
 
 const EventTimerCountdown = ({ eventStartTime }) => {
   const classes = useStyles()
-  return (
+  return eventStartTime ? (
     <Grid container justify="center" alignItems="center" className={classes.container}>
       <EventCountdown eventStartTime={eventStartTime} />
     </Grid>
-  )
+  ) : null
 }
 
 export default EventTimerCountdown
