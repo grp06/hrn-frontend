@@ -9,7 +9,7 @@ import bannerBackground from '../../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
-import formatDate from '../../utils/formatDate'
+import { formatDate, getTimeUntilEvent } from '../../utils'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -77,14 +77,13 @@ const Event = ({ match }) => {
 
   const { host_id, start_at, event_name, description } = event
   const startTime = new Date(start_at).getTime()
-  const now = Date.now()
-  const diff = startTime - now
+  const timeUntilEvent = getTimeUntilEvent(start_at)
 
   const timeState = () => {
-    if (diff > 1800000) {
+    if (timeUntilEvent > 1800000) {
       return 'future'
     }
-    if (diff < 0) {
+    if (timeUntilEvent < 0) {
       return 'go time'
     }
     return 'within 30 mins'
