@@ -6,16 +6,21 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '20px',
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
+    width: 'auto',
   },
   time: {
     fontSize: '2rem',
     fontFamily: 'Muli',
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.ghostWhite,
   },
 }))
 
-const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
+const EventCountdown = ({ eventStartTime }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -26,6 +31,13 @@ const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
   const [seconds, setSeconds] = useState(secondsUntilEvent)
   const [isTimerActive, setIsTimerActive] = useState(true)
 
+  // console.log(isTimerActive)
+  // console.log(eventStartTime)
+  // console.log(seconds)
+  console.log('duration =>', duration)
+  console.log('secondsUtileEvent =>', secondsUntilEvent)
+  console.log('minutesToDisplay =>', minutesToDisplay)
+
   useEffect(() => {
     let interval = null
     interval = setInterval(() => {
@@ -34,15 +46,12 @@ const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
 
     if (seconds === 0) {
       setIsTimerActive(false)
-      if (onRoundComplete) {
-        onRoundComplete()
-      }
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [seconds])
+  }, [seconds, secondsUntilEvent])
 
   const displayTime =
     seconds && seconds >= 0 ? `${minutesToDisplay} : ${secondsToDisplay}` : '-- : --'
@@ -53,7 +62,7 @@ const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={adminHeader ? null : classes.container}
+      className={classes.container}
     >
       <div className={classes.time}>{displayTime}</div>
     </Grid>

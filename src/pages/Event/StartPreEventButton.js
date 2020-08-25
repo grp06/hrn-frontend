@@ -9,7 +9,7 @@ const StartPreEventButton = ({ eventId, timeUntilEvent, disabled }) => {
       size="large"
       variant="contained"
       disabled={timeUntilEvent !== 0 || disabled}
-      color="primary"
+      color="secondary"
       onClick={() => startPreEvent(eventId)}
     >
       Start pre-event speech
