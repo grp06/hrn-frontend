@@ -4,10 +4,38 @@ import { makeStyles } from '@material-ui/styles'
 
 import { useEventContext, useUserContext } from '../../context'
 import { getTimeUntilEvent } from '../../utils'
-import { PreEventInstructionModal } from '.'
+import {
+  BottomControlPanel,
+  BroadcastBox,
+  EventChatBox,
+  EventTimerCountdown,
+  PreEventInstructionModal,
+  UserStatusBox,
+} from '.'
 import { StartPreEventButton } from '../Event'
 
+const useStyles = makeStyles((theme) => ({
+  pageContainer: {
+    overflowX: 'hidden',
+    overflowY: 'hidden',
+  },
+  broadcastContainer: {
+    width: '75vw',
+    height: '100%',
+  },
+  gridContainer: {
+    width: '100vw',
+    height: '100vh',
+    padding: theme.spacing(2),
+  },
+  rightContainer: {
+    width: '20vw',
+    height: '100%',
+    padding: theme.spacing(2),
+  },
+}))
 const Lobby = () => {
+  const classes = useStyles()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
   const { id: userId } = user
@@ -16,17 +44,28 @@ const Lobby = () => {
   const userIsHost = host_id === userId
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
 
-  return userIsHost ? (
-    <Grid container direction="row" alignItems="center" justify="center">
-      <StartPreEventButton
-        // disabled={micOrCameraIsDisabled}
-        eventId={eventId}
-        timeUntilEvent={timeUntilEvent}
-      />
-      <PreEventInstructionModal />
-    </Grid>
-  ) : (
-    <div>Hello</div>
+  return (
+    <div className={classes.pageContainer}>
+      <EventTimerCountdown />
+      <Grid container direction="row" className={classes.gridContainer}>
+        <Grid direction="column" justify="space-around" className={classes.broadcastContainer}>
+          <BroadcastBox />
+          <BottomControlPanel />
+        </Grid>
+        <Grid direction="column" justify="space-around" className={classes.rightContainer}>
+          <UserStatusBox />
+          <EventChatBox />
+        </Grid>
+      </Grid>
+      {/* <Grid container direction="row" alignItems="center" justify="center">
+        <StartPreEventButton
+          // disabled={micOrCameraIsDisabled}
+          eventId={eventId}
+          timeUntilEvent={timeUntilEvent}
+        />s
+        <PreEventInstructionModal />
+      </Grid> */}
+    </div>
   )
 }
 

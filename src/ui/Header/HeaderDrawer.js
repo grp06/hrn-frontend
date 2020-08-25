@@ -55,7 +55,7 @@ const HeaderDrawer = () => {
       pathname.includes('onboarding')
   )
 
-  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('pre-event'))
+  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
