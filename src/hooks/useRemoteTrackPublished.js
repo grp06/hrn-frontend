@@ -7,7 +7,7 @@ const useRemoteTrackPublished = () => {
   const { setHasPartnerAndIsConnecting } = useEventContext()
 
   const remoteTrackPublished = (publication) => {
-    const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1
+    const onPreEvent = window.location.pathname.indexOf('/lobby') > -1
 
     if (publication.isSubscribed) {
       console.log('remoteTrackPublished -> publication.isSubscribed', publication.isSubscribed)

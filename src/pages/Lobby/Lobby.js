@@ -66,7 +66,7 @@ const Lobby = () => {
           <div className={classes.bannerGradient} />
         </div>
       )}
-      <EventTimerCountdown eventStartTime={eventStartTime} />
+      {eventStatus === 'not-started' && <EventTimerCountdown eventStartTime={eventStartTime} />}
       <Grid container direction="row" className={classes.gridContainer}>
         <Grid
           container
