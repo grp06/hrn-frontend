@@ -17,7 +17,7 @@ const { giveFeedbackTypeform, becomeAHostTypeform, linkedInCommunityLink } = con
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '150px',
+    marginTop: '50px',
   },
   topDashboard: {
     width: '100%',
@@ -105,24 +105,6 @@ const EventComplete = ({ match }) => {
       ? 'Say Hi Right Now to your new friends 👋'
       : 'Thanks for joining the event! 🎊'
 
-  const renderPostEventZoomLink = () =>
-    event.post_event_link && (
-      <Grid>
-        <div className={classes.zoomContainer}>
-          <Typography variant="h5">
-            <a
-              href={event.post_event_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.zoomLink}
-            >
-              Click here to join everyone from the event on a video call!
-            </a>
-          </Typography>
-        </div>
-      </Grid>
-    )
-
   const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
     return Object.values(round).filter((person) => person.id !== userId)
   })
@@ -140,7 +122,6 @@ const EventComplete = ({ match }) => {
       </Typography>
       <Grid container item direction="column" justify="space-around">
         <Grid container direction="column">
-          {renderPostEventZoomLink()}
           <Grid item className={classes.buttonContainer}>
             <Grid
               container
@@ -179,20 +160,22 @@ const EventComplete = ({ match }) => {
                   </span>
                 </Button>
               </Grid>
-              <Grid>
-                <Button
-                  variant="contained"
-                  href={linkedInCommunityLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Join our LinkedIn community
-                  <span role="img" aria-label="brief case">
-                    💼
-                  </span>
-                </Button>
-              </Grid>
+              {event.post_event_link && (
+                <Grid>
+                  <Button
+                    variant="contained"
+                    href={event.post_event_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes.button}
+                  >
+                    Join everyone on Zoom now{' '}
+                    <span role="img" aria-label="camera">
+                      🎥
+                    </span>
+                  </Button>
+                </Grid>
+              )}
               <Grid>
                 <Button
                   variant="contained"
