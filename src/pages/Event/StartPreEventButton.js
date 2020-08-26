@@ -3,7 +3,6 @@ import Button from '@material-ui/core/Button'
 import { startPreEvent } from '../../helpers'
 
 const StartPreEventButton = ({ eventId, timeUntilEvent, disabled }) => {
-  console.log('time Until Event ->', timeUntilEvent)
   return (
     <Button
       size="large"

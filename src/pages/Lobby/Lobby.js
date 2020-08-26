@@ -46,7 +46,7 @@ const Lobby = () => {
       <EventTimerCountdown eventStartTime={eventStartTime} />
       <Grid container direction="row" className={classes.gridContainer}>
         <Grid direction="column" justify="space-around" className={classes.broadcastContainer}>
-          <BroadcastBox />
+          <BroadcastBox event={event} />
           <BottomControlPanel
             permissions={permissions}
             eventId={eventId}
