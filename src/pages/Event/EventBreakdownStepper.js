@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
+    marginLeft: theme.spacing(3),
   },
   eventFormatStepper: {
     paddingTop: 0,
@@ -83,7 +84,7 @@ const EventBreakdownStepper = ({ eventRoundLength }) => {
 
   return (
     <div className={classes.root}>
-      <Grid container justify="center" align="center" className={classes.whatToExpect}>
+      <Grid container alignItems="center" className={classes.whatToExpect}>
         <Typography variant="h5">What to expect</Typography>
       </Grid>
       <Stepper
