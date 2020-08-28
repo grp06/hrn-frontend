@@ -4,7 +4,6 @@ import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { useEventContext, useUserContext } from '../../context'
-import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -53,11 +52,9 @@ const Lobby = () => {
   const classes = useStyles()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
-  const { id: userId } = user
-  const { start_at: eventStartTime, host_id, id: eventId, status: eventStatus } = event
-  const userIsHost = host_id === userId
-  const timeUntilEvent = getTimeUntilEvent(eventStartTime)
-  console.log('event_status ->', eventStatus)
+  const { start_at: eventStartTime, status: eventStatus } = event
+  // console.log(event)
+  // console.log('event_status ->', eventStatus)
 
   return (
     <div className={classes.pageContainer}>
@@ -75,12 +72,7 @@ const Lobby = () => {
           className={classes.broadcastContainer}
         >
           <BroadcastBox event={event} />
-          <BottomControlPanel
-            permissions={permissions}
-            eventId={eventId}
-            userIsHost={userIsHost}
-            timeUntilEvent={timeUntilEvent}
-          />
+          <BottomControlPanel permissions={permissions} event={event} user={user} />
         </Grid>
         <Grid
           container

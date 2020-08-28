@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Typography from '@material-ui/core/Typography'
+import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
 import { PreEventControlsCard } from '.'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
@@ -26,6 +27,17 @@ const useStyles = makeStyles((theme) => ({
   },
   preEventWrapper: {
     height: '100%',
+  },
+  liveLogo: {
+    position: 'absolute',
+    top: '10%',
+    left: '2%',
+    bottom: 'auto',
+    right: 'auto',
+    width: '100px',
+    height: 'auto',
+    color: theme.palette.common.red,
+    fontWeight: 'bold',
   },
 }))
 
@@ -201,6 +213,9 @@ const PreEvent = () => {
         />
       )}
       <div id="host-video" className={classes.hostVid} />
+      <Typography fontWeight={900} className={classes.liveLogo} variant="subtitle1">
+        LIVE NOW!
+      </Typography>
       <PreEventControlsCard event={event} user={user} />
     </Grid>
   )

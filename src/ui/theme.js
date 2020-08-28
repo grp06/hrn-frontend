@@ -19,6 +19,7 @@ const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
 // const black1dp = '#1d1d1d'
 const black2dp = '#212121'
+const red = '#ff3333'
 // const black3dp = '#232323'
 // const black6dp = '#2c2c2c'
 
@@ -52,6 +53,7 @@ const theme = createMuiTheme({
       greyHighlight,
       greyButton,
       greyButtonHover,
+      red,
     },
     primary: {
       main: dankPurp,

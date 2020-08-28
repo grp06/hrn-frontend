@@ -2,8 +2,9 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-
+import { getTimeUntilEvent } from '../../utils'
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
+import { StartEventButton } from '../PreEvent'
 import { PreEventInstructionModal } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -14,8 +15,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost }) => {
+const BottomControlPanel = ({ permissions, event, user }) => {
   const classes = useStyles()
+  const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
+  const { id: userId } = user
+  const timeUntilEvent = getTimeUntilEvent(eventStartTime)
+  const userIsHost = host_id === userId
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   return (
     <Grid
@@ -27,10 +32,10 @@ const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost }
       className={classes.boxContainer}
     >
       <Grid container direction="column">
-        <Typography variant="subtitle1">Check Your Tech:</Typography>
+        <Typography variant="subtitle1">Frist Check Your Tech:</Typography>
         <SetupMicAndCameraButton permissions={permissions} />
       </Grid>
-      {userIsHost && (
+      {userIsHost && eventStatus === 'not-started' && (
         <Grid container direction="column">
           <Typography variant="subtitle1">Ready?</Typography>
           <Grid container direction="row" alignItems="center">
@@ -40,6 +45,14 @@ const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost }
               timeUntilEvent={timeUntilEvent}
             />
             <PreEventInstructionModal />
+          </Grid>
+        </Grid>
+      )}
+      {userIsHost && eventStatus === 'pre-event' && (
+        <Grid container direction="column">
+          <Typography variant="subtitle1">Ready?</Typography>
+          <Grid container direction="row" alignItems="center">
+            <StartEventButton event={event} user={user} />
           </Grid>
         </Grid>
       )}
