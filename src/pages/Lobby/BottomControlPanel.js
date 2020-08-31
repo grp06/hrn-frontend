@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/styles'
 
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { PreEventInstructionModal } from '.'
+import { TransitionModal } from '../../common'
+import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
@@ -14,9 +16,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost }) => {
+const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost, host_id }) => {
   const classes = useStyles()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+
+  const renderResetEvent = TransitionModal({
+    button: {
+      buttonText: 'Reset Event',
+      buttonVariant: 'text',
+      buttonColor: 'link',
+    },
+    modalBody: (
+      <Typography variant="h5">
+        This will reset the event in its entirety. Are you 100% sure?
+      </Typography>
+    ),
+    onAcceptFunction: async () => {
+      window.analytics &&
+        window.analytics.track('Event reset', {
+          eventId,
+          hostId: host_id,
+        })
+      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
+    },
+  })
+
   return (
     <Grid
       container
@@ -40,6 +64,7 @@ const BottomControlPanel = ({ eventId, permissions, timeUntilEvent, userIsHost }
               timeUntilEvent={timeUntilEvent}
             />
             <PreEventInstructionModal />
+            {renderResetEvent}
           </Grid>
         </Grid>
       )}

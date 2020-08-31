@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import { useHistory } from 'react-router-dom'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { useEventContext, useUserContext } from '../../context'
@@ -51,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 const Lobby = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
   const { id: userId } = user
@@ -59,6 +61,13 @@ const Lobby = () => {
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   console.log('event_status ->', eventStatus)
 
+  useEffect(() => {
+    console.log(eventStatus)
+    if (eventStatus === 'room-in-progress') {
+      console.log('im getting in here')
+      history.push(`/events/${eventId}/video-room`)
+    }
+  }, [eventStatus])
   return (
     <div className={classes.pageContainer}>
       {eventStatus === 'not-started' && (
@@ -80,6 +89,7 @@ const Lobby = () => {
             eventId={eventId}
             userIsHost={userIsHost}
             timeUntilEvent={timeUntilEvent}
+            host_id={host_id}
           />
         </Grid>
         <Grid

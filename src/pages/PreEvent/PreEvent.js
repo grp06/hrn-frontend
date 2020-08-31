@@ -16,6 +16,7 @@ const { createLocalTracks, connect } = require('twilio-video')
 const useStyles = makeStyles((theme) => ({
   hostVid: {
     width: '100%',
+    height: '100%',
     display: 'flex',
     '& video': {
       width: '100%',
