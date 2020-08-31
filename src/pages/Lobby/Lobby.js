@@ -98,7 +98,7 @@ const Lobby = () => {
           justify="space-around"
           className={classes.rightContainer}
         >
-          <UserStatusBox />
+          <UserStatusBox eventStatus={eventStatus} />
           <EventChatBox />
         </Grid>
       </Grid>
