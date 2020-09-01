@@ -1,4 +1,5 @@
 export { default as HostEventControlsCard } from './HostEventControlsCard'
+export { default as NewVideoRoom } from './NewVideoRoom'
 export { default as PartnerTagsList } from './PartnerTagsList'
 export { default as RoundAndPartnerCard } from './RoundAndPartnerCard'
 export { default as RoundProgressBar } from './RoundProgressBar'
