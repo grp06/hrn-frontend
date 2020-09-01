@@ -15,6 +15,7 @@ const getMyRoundPartner = gql`
         tags_users {
           tag {
             name
+            tag_id
           }
         }
       }
