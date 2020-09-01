@@ -78,7 +78,7 @@ const useTwilio = () => {
       // });
 
       // local participant disconnects
-      room.on('disconnected', function (rum, error) {
+      room.on('disconnected', (rum, error) => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)

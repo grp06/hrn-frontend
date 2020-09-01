@@ -149,12 +149,18 @@ const PreEvent = ({ match }) => {
     if (roomTokens.length) {
       const isEventHost = event.host_id === userId
       const setupRoom = async () => {
+        const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+        const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+
         // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
             maxAudioBitrate: 16000,
-            video: isEventHost,
-            audio: isEventHost && process.env.NODE_ENV === 'production',
+            video: isEventHost ? { deviceId: localStoragePreferredVideoId } : false,
+            audio:
+              isEventHost && process.env.NODE_ENV === 'production'
+                ? { deviceId: localStoragePreferredAudioId }
+                : false,
           })
           return startPreEventTwilio(myRoom, isEventHost)
         }
@@ -167,8 +173,11 @@ const PreEvent = ({ match }) => {
             connect(token, {
               preferredVideoCodecs: [{ codec: 'VP8', simulcast: true }],
               maxAudioBitrate: 16000,
-              video: isEventHost,
-              audio: isEventHost && process.env.NODE_ENV === 'production',
+              video: isEventHost ? { deviceId: localStoragePreferredVideoId } : false,
+              audio:
+                isEventHost && process.env.NODE_ENV === 'production'
+                  ? { deviceId: localStoragePreferredAudioId }
+                  : false,
             })
           )
         })

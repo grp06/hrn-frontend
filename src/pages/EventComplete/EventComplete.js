@@ -13,7 +13,7 @@ import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
 
-const { giveFeedbackTypeform, becomeAHostTypeform, linkedInCommunityLink } = constants
+const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -169,8 +169,8 @@ const EventComplete = ({ match }) => {
                     rel="noopener noreferrer"
                     className={classes.button}
                   >
-                    Join everyone on Zoom now{' '}
-                    <span role="img" aria-label="camera">
+                    Join everyone on Zoom now!
+                    <span role="img" aria-label="movie camera">
                       🎥
                     </span>
                   </Button>

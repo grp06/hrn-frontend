@@ -17,7 +17,7 @@ const SetupMicAndCameraButton = ({ permissions }) => {
     onAcceptButtonText: 'Done',
     onAcceptFunction: async () => {
       window.analytics.track('Opened test camera')
-      const video = document.querySelector('#videoElement')
+      const video = document.getElementById('videoElement')
       if (video) {
         video.remove()
       }
