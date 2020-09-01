@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
   },
   statusText: {
     textAlign: 'center',
+    margin: theme.spacing(0),
   },
 }))
 

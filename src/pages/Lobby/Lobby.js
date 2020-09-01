@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { useEventContext, useUserContext } from '../../context'
-import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -55,11 +54,9 @@ const Lobby = () => {
   const history = useHistory()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
-  const { id: userId } = user
-  const { start_at: eventStartTime, host_id, id: eventId, status: eventStatus } = event
-  const userIsHost = host_id === userId
-  const timeUntilEvent = getTimeUntilEvent(eventStartTime)
-  console.log('event_status ->', eventStatus)
+  const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
+  // console.log(event)
+  // console.log('event_status ->', eventStatus)
 
   useEffect(() => {
     console.log(eventStatus)
@@ -68,6 +65,7 @@ const Lobby = () => {
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus])
+
   return (
     <div className={classes.pageContainer}>
       {eventStatus === 'not-started' && (
@@ -84,13 +82,7 @@ const Lobby = () => {
           className={classes.broadcastContainer}
         >
           <BroadcastBox event={event} />
-          <BottomControlPanel
-            permissions={permissions}
-            eventId={eventId}
-            userIsHost={userIsHost}
-            timeUntilEvent={timeUntilEvent}
-            host_id={host_id}
-          />
+          <BottomControlPanel permissions={permissions} event={event} user={user} />
         </Grid>
         <Grid
           container

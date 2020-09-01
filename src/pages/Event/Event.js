@@ -6,7 +6,7 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
-import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
+import { AdminPanel, UserPanel, EventStatusRedirect, EventNotRSVP } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { formatDate, getTimeUntilEvent } from '../../utils'
@@ -70,12 +70,12 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
-  console.log('user ->', user)
-  console.log('userId ->', userId)
+  // console.log('user ->', user)
+  // console.log('userId ->', userId)
 
   const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 
-  const { host_id, start_at, event_name, description } = event
+  const { host_id, start_at, event_name, description, status: eventStatus } = event
   const startTime = new Date(start_at).getTime()
   const timeUntilEvent = getTimeUntilEvent(start_at)
 
@@ -87,6 +87,21 @@ const Event = ({ match }) => {
       return 'go time'
     }
     return 'within 30 mins'
+  }
+
+  let eventInstruction
+  if (eventStatus === 'complete') {
+    eventInstruction = <EventNotRSVP />
+  } else {
+    if (parseInt(host_id, 10) === parseInt(userId, 10)) {
+      eventInstruction = (
+        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
+      )
+    } else {
+      eventInstruction = (
+        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
+      )
+    }
   }
 
   return (
@@ -124,11 +139,12 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
       </div>
-      {parseInt(host_id, 10) === parseInt(userId, 10) ? (
+      {eventInstruction}
+      {/* {parseInt(host_id, 10) === parseInt(userId, 10) ? (
         <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
       ) : (
         <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      )}
+      )} */}
     </>
   )
 }

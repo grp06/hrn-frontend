@@ -44,7 +44,7 @@ const PreEventControlsCard = ({ event, user }) => {
         <Typography variant="subtitle1" className={classes.onlineUsersText}>
           Online Users: {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
         </Typography>
-        <StartEventButton event={event} user={user} />
+        {/* <StartEventButton event={event} user={user} /> */}
       </div>
     ) : (
       <Typography variant="body1" className={classes.welcomeRemarks}>
