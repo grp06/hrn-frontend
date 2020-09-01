@@ -6,15 +6,23 @@ import { HttpLink } from 'apollo-link-http'
 import { RetryLink } from 'apollo-link-retry'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
+import getAnonymousToken from './helpers/get-anonymous-token'
 
 const makeApolloClient = async () => {
-  const token = localStorage.getItem('token')
+  let token
+  token = localStorage.getItem('token')
 
   const httpLink = new HttpLink({
     // uri: 'https://hi-right-now.herokuapp.com/v1/graphql',
     uri: process.env.REACT_APP_HASURA,
     // uri: 'http://localhost:8080/v1/graphql',
   })
+
+  if (!token) {
+    // user must not be logged in
+    const anonTokenResponse = await getAnonymousToken().then((res) => res.json())
+    token = anonTokenResponse.token
+  }
 
   const authLink = setContext(async (req, { headers }) => {
     let authHeaders
@@ -33,6 +41,7 @@ const makeApolloClient = async () => {
   const httpAuthLink = authLink.concat(httpLink)
 
   const connectionParams = async () => {
+    console.log('connectionParams -> token', token)
     if (token) {
       return {
         headers: {
