@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
-import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { NewVideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { ConnectingToSomeone } from './waitingRoomScreens'
 import { Loading, CameraDisabledBanner } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
@@ -90,9 +90,6 @@ const NewVideoRoom = ({ match }) => {
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
-  console.log('userId->', userId)
-  console.log('eventSet->', eventSet)
-  console.log('eventStatusRef->', eventStatusRef)
   const {
     data: myRoundPartnerData,
     loading: myRoundPartnerDataLoading,
@@ -142,25 +139,27 @@ const NewVideoRoom = ({ match }) => {
   // RoomId (which is the id of your round) and your userId are needed
   // to get twilio token
   useEffect(() => {
-    console.log(myRound)
-    const hasPartner = myRound && myRound.partner_id
+    if (myRound) {
+      console.log(myRound)
+      const hasPartner = myRound && myRound.partner_id
 
-    const myIdIsSmaller = myRound.partner_id > myRound.user_id
-    const uniqueRoomName = myIdIsSmaller
-      ? `${eventId}-${myRound.user_id}-${myRound.partner_id}`
-      : `${eventId}-${myRound.partner_id}-${myRound.user_id}`
-    if (
-      hasPartner &&
-      eventSet &&
-      event.status !== 'in-between-rounds'
-      //   event.current_round === myRound.round_number
-    ) {
-      const getTwilioToken = async () => {
-        const res = await getToken(uniqueRoomName, userId).then((response) => response.json())
-
-        setToken(res.token)
+      const myIdIsSmaller = myRound.partner_id > myRound.user_id
+      const uniqueRoomName = myIdIsSmaller
+        ? `${eventId}-${myRound.user_id}-${myRound.partner_id}`
+        : `${eventId}-${myRound.partner_id}-${myRound.user_id}`
+      if (
+        hasPartner &&
+        eventSet &&
+        event.status !== 'in-between-rounds'
+        //   event.current_round === myRound.round_number
+      ) {
+        const getTwilioToken = async () => {
+          const res = await getToken(uniqueRoomName, userId).then((response) => response.json())
+          console.log('getTwilioToken res ->', res)
+          setToken(res.token)
+        }
+        getTwilioToken()
       }
-      getTwilioToken()
     }
   }, [myRound, event])
 
@@ -232,7 +231,7 @@ const NewVideoRoom = ({ match }) => {
           />
         </Grid>
       )}
-      <VideoRouter myRound={myRound} />
+      <NewVideoRouter myRound={myRound} />
       <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
