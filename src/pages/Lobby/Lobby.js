@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { useEventContext, useUserContext } from '../../context'
+import { useLastSeenMutation } from '../../hooks'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -53,15 +54,21 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { event, permissions } = useEventContext()
-  const { user } = useUserContext()
+  const { user, setUserUpdatedAt } = useUserContext()
+
+  const [userSittingOut, setUserSittingOut] = useState(false)
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
-  // console.log(event)
-  // console.log('event_status ->', eventStatus)
+  const { id: userId } = user
+  const { lastSeenMutation } = useLastSeenMutation(userId, setUserUpdatedAt)
+
+  useEffect(() => {
+    clearInterval(window.lastSeenInterval)
+    lastSeenMutation(permissions, userSittingOut)
+  }, [permissions, userSittingOut])
 
   useEffect(() => {
     console.log(eventStatus)
     if (eventStatus === 'room-in-progress') {
-      console.log('im getting in here')
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus])
@@ -90,7 +97,11 @@ const Lobby = () => {
           justify="space-around"
           className={classes.rightContainer}
         >
-          <UserStatusBox eventStatus={eventStatus} />
+          <UserStatusBox
+            eventStatus={eventStatus}
+            userSittingOut={userSittingOut}
+            onToggleClick={(passedInState) => setUserSittingOut(passedInState)}
+          />
           <EventChatBox />
         </Grid>
       </Grid>

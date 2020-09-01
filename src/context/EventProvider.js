@@ -87,22 +87,22 @@ const EventProvider = ({ children }) => {
   }, [eventData, dispatch, event, userOnEventPage, history])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
-  useEffect(() => {
-    if (userId && permissions.isWebcamAlreadyCaptured && permissions.isMicrophoneAlreadyCaptured) {
-      const interval = setInterval(async () => {
-        console.log('last seen')
-        try {
-          const lastSeenUpdated = await updateLastSeenMutation()
-          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
-        } catch (error) {
-          console.log('interval -> error', error)
-        }
-      }, lastSeenDuration)
-      return () => {
-        clearInterval(interval)
-      }
-    }
-  }, [userId, permissions])
+  // useEffect(() => {
+  //   if (userId && permissions.isWebcamAlreadyCaptured && permissions.isMicrophoneAlreadyCaptured) {
+  //     const interval = setInterval(async () => {
+  //       console.log('last seen')
+  //       try {
+  //         const lastSeenUpdated = await updateLastSeenMutation()
+  //         setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+  //       } catch (error) {
+  //         console.log('interval -> error', error)
+  //       }
+  //     }, lastSeenDuration)
+  //     return () => {
+  //       clearInterval(interval)
+  //     }
+  //   }
+  // }, [userId, permissions])
 
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }

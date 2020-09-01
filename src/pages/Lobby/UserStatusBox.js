@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -45,14 +45,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserStatusBox = ({ eventStatus }) => {
+const UserStatusBox = ({ eventStatus, userSittingOut, onToggleClick }) => {
   const classes = useStyles()
-  const [userReadyJoin, setuserReadyJoin] = React.useState(true)
-  const handleStatus = (event) => {
+  const [userReadyJoin, setuserReadyJoin] = useState(!userSittingOut)
+  const handleUserStatusChange = (event) => {
     console.log(event.button)
     event.currentTarget.value === 'sitOut' ? setuserReadyJoin(false) : setuserReadyJoin(true)
+    event.currentTarget.value === 'sitOut' ? onToggleClick(true) : onToggleClick(false)
   }
-
   const renderStatusBoxContent = () => {
     switch (eventStatus) {
       case 'not-started':
@@ -74,13 +74,13 @@ const UserStatusBox = ({ eventStatus }) => {
               className={classes.toggleGroup}
               value={userReadyJoin}
               exclusive
-              onChange={handleStatus}
+              onChange={handleUserStatusChange}
             >
               <ToggleButton
                 value="sitOut"
                 className={!userReadyJoin ? classes.toggleSelect : classes.toggleUnSelect}
               >
-                sit out a round
+                Sit out a round
               </ToggleButton>
               <ToggleButton
                 value="joinNext"
@@ -99,7 +99,30 @@ const UserStatusBox = ({ eventStatus }) => {
 
   return (
     <Grid container justify="center" alignItems="center" className={classes.container}>
-      {renderStatusBoxContent()}
+      <Grid container justify="space-between" alignItems="center" wrap="nowrap">
+        <ToggleButtonGroup
+          className={classes.toggleGroup}
+          value={userReadyJoin}
+          exclusive
+          onChange={handleUserStatusChange}
+        >
+          <ToggleButton
+            value="sitOut"
+            className={!userReadyJoin ? classes.toggleSelect : classes.toggleUnSelect}
+          >
+            Sit out a round
+          </ToggleButton>
+          <ToggleButton
+            value="joinNext"
+            className={userReadyJoin ? classes.toggleSelect : classes.toggleUnSelect}
+          >
+            Join next round
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      <Typography variant="body1" align="center" className={classes.statusBox}>
+        {userReadyJoin ? 'Ready to Join Next Round.' : "You're sitting out rounds."}
+      </Typography>
     </Grid>
   )
 }
