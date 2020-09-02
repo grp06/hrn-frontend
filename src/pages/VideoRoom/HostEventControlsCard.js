@@ -9,6 +9,8 @@ import { useGetOnlineEventAttendees } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    position: 'relative',
+    zIndex: 9999,
     width: '250px',
     height: 'auto',
     borderRadius: '4px',
