@@ -102,7 +102,7 @@ const Lobby = () => {
             userSittingOut={userSittingOut}
             onToggleClick={(passedInState) => setUserSittingOut(passedInState)}
           />
-          <EventChatBox />
+          <EventChatBox event={event} />
         </Grid>
       </Grid>
     </div>

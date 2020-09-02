@@ -29,7 +29,7 @@ const HostEventControlsCard = ({ event, userId }) => {
   const classes = useStyles()
   const { host_id, id: eventId } = event
   const isEventHost = host_id === userId
-  const onlineEventAttendees = useGetOnlineEventAttendees(event, isEventHost)
+  const onlineEventAttendees = useGetOnlineEventAttendees(event)
 
   const renderResetEvent = TransitionModal({
     button: {
