@@ -61,6 +61,15 @@ const Lobby = () => {
   const { id: userId } = user
   const { lastSeenMutation } = useLastSeenMutation(userId, setUserUpdatedAt)
 
+  // when the lobby unmounts it means that we are going to video room so lets
+  // stop calling lastSeenMutation
+
+  useEffect(() => {
+    return () => {
+      clearInterval(window.lastSeenInterval)
+    }
+  }, [])
+
   useEffect(() => {
     clearInterval(window.lastSeenInterval)
     lastSeenMutation(permissions, userSittingOut)
