@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
+import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
 import { Snack } from '../../common'
 import { updateISharedDetails, updatePartnerSharedDetails } from '../../gql/mutations'
-import Button from '@material-ui/core/Button'
 
+const useStyles = makeStyles((theme) => ({
+  shareInfoButton: {
+    width: '100%',
+  },
+}))
 const ShareMyInfoButton = ({ myRound }) => {
+  const classes = useStyles()
   const [showShareMyInfoSnack, setShowShareMyInfoSnack] = useState(false)
   const { event_id, partner_id, user_id } = myRound
   const [iSharedDetailsMutation] = useMutation(updateISharedDetails, {
@@ -32,7 +39,12 @@ const ShareMyInfoButton = ({ myRound }) => {
   }
   return (
     <>
-      <Button variant="contained" color="default" onClick={handleShareMyInfoPress}>
+      <Button
+        className={classes.shareInfoButton}
+        variant="contained"
+        color="default"
+        onClick={handleShareMyInfoPress}
+      >
         Share My Info
       </Button>
       <Snack
