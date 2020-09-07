@@ -17,13 +17,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = ({ permissions, event, user }) => {
+const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
   const classes = useStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
-  const { id: userId } = user
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+  console.log('bottom control panel render')
 
   const renderResetEvent = TransitionModal({
     button: {
@@ -77,12 +77,12 @@ const BottomControlPanel = ({ permissions, event, user }) => {
         <Grid container direction="column">
           <Typography variant="subtitle1">Ready?</Typography>
           <Grid container direction="row" alignItems="center">
-            <StartEventButton event={event} user={user} />
+            <StartEventButton event={event} userId={userId} />
           </Grid>
         </Grid>
       )}
     </Grid>
   )
-}
+})
 
 export default BottomControlPanel

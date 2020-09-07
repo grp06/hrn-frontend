@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserStatusBox = ({ eventStatus, userSittingOut, onToggleClick }) => {
+const UserStatusBox = React.memo(({ eventStatus, userSittingOut, onToggleClick }) => {
   const classes = useStyles()
   const [userReadyJoin, setuserReadyJoin] = useState(!userSittingOut)
   const handleUserStatusChange = (event) => {
@@ -86,6 +86,6 @@ const UserStatusBox = ({ eventStatus, userSittingOut, onToggleClick }) => {
       </Typography>
     </Grid>
   )
-}
+})
 
 export default UserStatusBox

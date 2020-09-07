@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BroadcastBox = ({ event }) => {
+const BroadcastBox = React.memo(({ event }) => {
   const classes = useStyles()
   const { start_at, description, event_name, host_id, status: eventStatus } = event
 
@@ -62,6 +62,6 @@ const BroadcastBox = ({ event }) => {
   }
 
   return <div className={classes.boxContainer}>{renderBroadcastBoxContent()}</div>
-}
+})
 
 export default BroadcastBox

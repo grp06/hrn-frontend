@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -89,7 +89,7 @@ const Lobby = () => {
           className={classes.broadcastContainer}
         >
           <BroadcastBox event={event} />
-          <BottomControlPanel permissions={permissions} event={event} user={user} />
+          <BottomControlPanel permissions={permissions} event={event} userId={userId} />
         </Grid>
         <Grid
           container
@@ -100,7 +100,7 @@ const Lobby = () => {
           <UserStatusBox
             eventStatus={eventStatus}
             userSittingOut={userSittingOut}
-            onToggleClick={(passedInState) => setUserSittingOut(passedInState)}
+            onToggleClick={useCallback((passedInState) => setUserSittingOut(passedInState), [])}
           />
           <EventChatBox event={event} />
         </Grid>

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = ({ event }) => {
+const EventChatBox = React.memo(({ event }) => {
   const classes = useStyles()
   const onlineEventAttendees = useGetOnlineEventAttendees(event)
   return (
@@ -80,6 +80,6 @@ const EventChatBox = ({ event }) => {
       </Grid>
     </Grid>
   )
-}
+})
 
 export default EventChatBox
