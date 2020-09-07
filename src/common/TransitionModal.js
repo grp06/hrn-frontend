@@ -59,6 +59,7 @@ function TransitionModal({
   onAcceptFunction,
   onAcceptButtonText,
   onCloseFunction,
+  onCloseButtonText,
   hideNoWay,
 }) {
   const classes = useStyles()
@@ -66,6 +67,11 @@ function TransitionModal({
   const { iconButtonColor, iconButtonSize, iconButtonIcon } = iconButton || {}
   const [open, setOpen] = useState(false)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
+
+  const closeModal = () => {
+    setOpen(false)
+  }
+
   const handleOpen = () => {
     setOpen(true)
   }
@@ -105,7 +111,7 @@ function TransitionModal({
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={open}
-        onClose={handleClose}
+        onClose={closeModal}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -149,7 +155,7 @@ function TransitionModal({
                 </Button>
                 {!hideNoWay && (
                   <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
-                    Whoops, No Way!
+                    {onCloseButtonText || 'Whoops, No Way!'}
                   </Button>
                 )}
               </Grid>
