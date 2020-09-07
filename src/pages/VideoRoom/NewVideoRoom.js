@@ -191,6 +191,7 @@ const NewVideoRoom = ({ match }) => {
     if (room) {
       console.warn('starting twilio')
       setHasPartnerAndIsConnecting(true)
+      localStorage.setItem('userLeftChat', false)
       startTwilio(room)
     }
   }, [room])

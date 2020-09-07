@@ -31,6 +31,7 @@ const LeaveChatButton = ({ myRound }) => {
   const exitChat = async (mutation) => {
     try {
       await mutation()
+      localStorage.setItem('userLeftChat', true)
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)

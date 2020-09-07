@@ -60,7 +60,7 @@ const Lobby = () => {
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
   const { id: userId } = user
   const { lastSeenMutation } = useLastSeenMutation(userId, setUserUpdatedAt)
-
+  const userLeftChat = localStorage.getItem('userLeftChat')
   // when the lobby unmounts it means that we are going to video room so lets
   // stop calling lastSeenMutation
 
@@ -77,10 +77,11 @@ const Lobby = () => {
 
   useEffect(() => {
     console.log(eventStatus)
-    if (eventStatus === 'room-in-progress') {
+
+    if (eventStatus === 'room-in-progress' && !userLeftChat) {
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [eventStatus])
+  }, [eventStatus, userLeftChat])
 
   return (
     <div className={classes.pageContainer}>
