@@ -6,6 +6,7 @@ const getMyRoundPartner = gql`
       where: { user_id: { _eq: $user_id }, event_id: { _eq: $event_id } }
       order_by: { created_at: desc }
     ) {
+      event_id
       partner_id
       id
       created_at
