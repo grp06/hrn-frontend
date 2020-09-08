@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 const ShareMyInfoButton = ({ myRound }) => {
   const classes = useStyles()
+  const [sharedInfo, setSharedInfo] = useState(false)
   const [showShareMyInfoSnack, setShowShareMyInfoSnack] = useState(false)
   const { event_id, partner_id, user_id } = myRound
   const [iSharedDetailsMutation] = useMutation(updateISharedDetails, {
@@ -33,6 +34,7 @@ const ShareMyInfoButton = ({ myRound }) => {
       await iSharedDetailsMutation()
       await partnerSharedDetailsMutation()
       setShowShareMyInfoSnack(true)
+      setSharedInfo(true)
     } catch (error) {
       console.log(error)
     }
@@ -44,13 +46,14 @@ const ShareMyInfoButton = ({ myRound }) => {
         variant="contained"
         color="default"
         onClick={handleShareMyInfoPress}
+        disabled={sharedInfo}
       >
         Share My Info
       </Button>
       <Snack
         open={showShareMyInfoSnack}
-        severity="success"
-        snackMessage="Shared my info 🥳"
+        severity="info"
+        snackMessage="Shared 📬"
         onClose={() => {
           setShowShareMyInfoSnack(false)
         }}

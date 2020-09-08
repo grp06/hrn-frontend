@@ -243,9 +243,12 @@ const theme = createMuiTheme({
       },
       contained: {
         backgroundColor: sunray,
+        '&:hover': {
+          backgroundColor: '#FCD08C',
+        },
         '&.Mui-disabled': {
-          backgroundColor: 'rgba(0,0,0,0.50)',
-          color: greyBorder,
+          backgroundColor: 'rgba(36,37,38,0.70)',
+          color: 'rgba(191, 203, 226, 0.7)',
         },
       },
     },
