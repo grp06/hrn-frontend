@@ -38,29 +38,30 @@ const PostChatRating = ({ myRound }) => {
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
-  const [ratingValue, setRatingValue] = useState(0)
+  const [ratingValue, setRatingValue] = useState(1)
 
-  const [updatePartnerRatingMutation] = useMutation(updatePartnerRating, {
-    variables: {
-      event_id,
-      partner_id,
-      user_id,
-      rating: ratingValue,
-    },
-    skip: !ratingValue,
-  })
+  const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
-  const handleUpdateRating = async (event, newValue) => {
-    event.preventDefault()
-    setRatingValue(newValue)
+  const handleUpdateRating = async (event, ratingValue) => {
+    setRatingValue(ratingValue)
+    // console.log('rating=', ratingValue)
     try {
-      await updatePartnerRatingMutation()
+      await updatePartnerRatingMutation({
+        variables: {
+          event_id,
+          partner_id,
+          user_id,
+          rating: ratingValue,
+        },
+        skip: !ratingValue,
+      })
       setShowRatingSnack(true)
     } catch (err) {
       console.log(err)
     }
     sleep(300)
     setShowRatingForm(false)
+    // console.log('rating=', ratingValue)
   }
 
   return (
