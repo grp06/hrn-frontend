@@ -76,6 +76,12 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
 
   const alreadyAttending = event_users.find((u) => u.user.id === userId)
 
+  //set event info to user local storage
+  localStorage.setItem('eventStartTime', eventStartTime)
+  localStorage.setItem('event_name', event_name)
+  localStorage.setItem('description', description)
+  localStorage.setItem('eventHostName', eventHostName)
+
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       eventId,
@@ -103,7 +109,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
 
   const renderSignupButton = () => (
     <Button size="large" color="primary" variant="contained" onClick={() => handleSignUpClick()}>
-      Sign Up{' '}
+      RSVP for This Event{' '}
       <span role="img" aria-label="rocket">
         🚀
       </span>
