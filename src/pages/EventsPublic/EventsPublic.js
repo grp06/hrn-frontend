@@ -52,6 +52,7 @@ const EventsPublic = () => {
 
   useEffect(() => {
     localStorage.setItem('eventId', '')
+    localStorage.setItem('event', '')
     setEventId(null)
     resetEvent()
   }, [])

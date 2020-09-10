@@ -68,6 +68,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     localStorage.setItem('eventId', '')
+    localStorage.setItem('event', '')
   }, [])
 
   if (!userId) {
