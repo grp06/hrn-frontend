@@ -77,10 +77,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   const alreadyAttending = event_users.find((u) => u.user.id === userId)
 
   //set event info to user local storage
-  localStorage.setItem('eventStartTime', eventStartTime)
-  localStorage.setItem('event_name', event_name)
-  localStorage.setItem('description', description)
-  localStorage.setItem('eventHostName', eventHostName)
+  localStorage.setItem('event', JSON.stringify(eventData))
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {

@@ -51,10 +51,9 @@ const Onboarding = () => {
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
   const eventIdInLocalStorage = localStorage.getItem('eventId')
-  const eventHostName = localStorage.getItem('eventHostName')
-  const description = localStorage.getItem('description')
-  const eventStartTime = localStorage.getItem('eventStartTime')
-  const event_name = localStorage.getItem('event_name')
+  const eventData = JSON.parse(localStorage.getItem('event'))
+  const { description, start_at: eventStartTime, event_name, host } = eventData
+  const { name: eventHostName } = host
 
   if (appLoading || tagsLoading) {
     return <Loading />
