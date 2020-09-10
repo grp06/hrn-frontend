@@ -8,7 +8,7 @@ import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
-import { insertUserTags, updateUser } from '../../gql/mutations'
+import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { useAppContext } from '../../context/useAppContext'
 
@@ -48,7 +48,12 @@ const Onboarding = () => {
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
+  const [insertEventUserMutation] = useMutation(insertEventUser)
+
   const eventIdInLocalStorage = localStorage.getItem('eventId')
+  const eventData = JSON.parse(localStorage.getItem('event'))
+  const { description, start_at: eventStartTime, event_name, host } = eventData
+  const { name: eventHostName } = host
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -108,6 +113,51 @@ const Onboarding = () => {
     }
 
     if (eventIdInLocalStorage) {
+      // RSVP if got event in localStory
+
+      let calendarInviteResponse
+      try {
+        await insertEventUserMutation({
+          variables: {
+            eventId: eventIdInLocalStorage,
+            userId,
+          },
+          skip: !userId,
+        })
+
+        window.analytics.track('RSVP made', {
+          eventId: eventIdInLocalStorage,
+          eventName: event_name,
+        })
+
+        calendarInviteResponse = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/email/send-calendar-invite`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify({
+              userName,
+              email,
+              event_name,
+              event_id: eventIdInLocalStorage,
+              description,
+              event_start_time: eventStartTime,
+              host_name: eventHostName,
+            }),
+          }
+        ).then((response) => response.json())
+
+        if (calendarInviteResponse.error) {
+          throw calendarInviteResponse.error
+        }
+      } catch (error) {
+        console.log('error = ', error)
+      }
+
       history.push(`/events/${eventIdInLocalStorage}`)
     }
   }
