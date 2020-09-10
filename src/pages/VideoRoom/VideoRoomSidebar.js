@@ -1,7 +1,14 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
-import { HostEventControlsCard, RoundAndPartnerCard, PartnerTagsList, ShareMyInfoButton } from '.'
+import {
+  ConnectionIssuesButton,
+  HostEventControlsCard,
+  PartnerTagsList,
+  ReportUserButton,
+  RoundAndPartnerCard,
+  ShareMyInfoButton,
+} from '.'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,10 +39,16 @@ const VideoRoomSidebar = ({ event, myRound, userId }) => {
     <>
       <Grid container direction="column" className={classes.container}>
         {host_id === userId && <HostEventControlsCard event={event} userId={userId} />}
-        <RoundAndPartnerCard event={event} myRound={myRound} userId={userId} />
+        <RoundAndPartnerCard
+          event={event}
+          myRound={myRound}
+          userId={userId}
+          reportUser={<ReportUserButton myRound={myRound} />}
+        />
         <PartnerTagsList myRound={myRound} userId={userId} />
       </Grid>
-      <Grid className={classes.shareMyInfoContainer}>
+      <Grid container justify="center" alignItems="center" className={classes.shareMyInfoContainer}>
+        <ConnectionIssuesButton myRound={myRound} />
         <ShareMyInfoButton myRound={myRound} />
       </Grid>
     </>

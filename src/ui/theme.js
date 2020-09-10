@@ -314,6 +314,11 @@ const theme = createMuiTheme({
         margin: '5px',
       },
     },
+    MuiIconButton: {
+      root: {
+        color: sunray,
+      },
+    },
   },
 })
 

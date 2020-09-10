@@ -1,12 +1,11 @@
 import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
-import ReportProblemIcon from '@material-ui/icons/ReportProblem'
 import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
 import { insertExitedConvo } from '../../gql/mutations'
 
-const LeaveChatButton = ({ myRound }) => {
+const ConnectionIssuesButton = ({ myRound }) => {
   const history = useHistory()
   const { created_at, event_id, partner_id, user_id } = myRound
   const [partnerNeverConnectedMutation] = useMutation(insertExitedConvo, {
@@ -15,16 +14,6 @@ const LeaveChatButton = ({ myRound }) => {
       event_id,
       partner_id,
       reason: 'partner never connected',
-      user_id,
-    },
-  })
-
-  const [partnerBeingRudeMutation] = useMutation(insertExitedConvo, {
-    variables: {
-      convo_started_at: created_at,
-      event_id,
-      partner_id,
-      reason: 'partner being rude',
       user_id,
     },
   })
@@ -39,36 +28,37 @@ const LeaveChatButton = ({ myRound }) => {
     }
   }
 
-  const renderLeaveChatButton = TransitionModal({
-    fabButton: {
-      fabButtonIcon: <ReportProblemIcon />,
-      fabButtonColor: 'secondary',
+  const renderConnectionIssuesButton = TransitionModal({
+    button: {
+      buttonVariant: 'text',
+      buttonText: 'Connection Issues',
+      buttonColor: 'default',
+      buttonStyle: { textAlign: 'center' },
     },
     modalBody: (
       <div>
         <Typography variant="h5" gutterBottom>
-          Leaving so soon?{' '}
-          <span role="img" aria-label="cry face">
-            😢
+          Having Connection Issues?{' '}
+          <span role="img" aria-label="frowning face">
+            😦
           </span>
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
-          We really encourage you to stick with the conversation until the end as leaving a chat
-          prematurely compromises the experience for your partner.
+          Most of our connection issues can be solved by a simple page refresh, or changing your
+          camera / mic settings by pressing on the gear icon.
         </Typography>
         <Typography variant="subtitle1" gutterBottom>
-          But if you must leave, let us know why you&apos;re leaving so we can make the experience
-          better for you in the future!
+          If that doesn&apos;t solve the problem, then click on the &apos;leave chat&apos; button
+          below and we will try to match you with an available user for the duration of the round.
         </Typography>
       </div>
     ),
-    onAcceptButtonText: 'Never connected to my partner',
+    onAcceptButtonText: 'Leave Chat',
     onAcceptFunction: () => exitChat(partnerNeverConnectedMutation),
-    onCloseButtonText: 'My partner was being rude',
-    onCloseFunction: () => exitChat(partnerBeingRudeMutation),
+    onCloseButtonText: 'Nevermind',
   })
 
-  return <div>{renderLeaveChatButton}</div>
+  return <div>{renderConnectionIssuesButton}</div>
 }
 
-export default LeaveChatButton
+export default ConnectionIssuesButton

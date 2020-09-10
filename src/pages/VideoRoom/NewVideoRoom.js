@@ -234,7 +234,6 @@ const NewVideoRoom = ({ match }) => {
       )}
       <NewVideoRouter myRound={myRound} />
       <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
-      <VideoControlsPanel myRound={myRound} />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
           <div className={classes.screenOverlay}>
