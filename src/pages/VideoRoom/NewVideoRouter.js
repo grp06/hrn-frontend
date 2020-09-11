@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
 import { useEventContext, useUserContext } from '../../context'
-import { Thumbing } from '.'
+import { PostChatRating } from '.'
 import {
   PartnerDisconnected,
   PartnerTechnicalIssue,
@@ -51,7 +51,7 @@ const NewVideoRouter = ({ myRound }) => {
 
     switch (status) {
       case 'in-between-rounds':
-        return hasPartner ? <Thumbing userId={userId} myRound={myRound} /> : <ConnectingToSomeone />
+        return hasPartner ? <PostChatRating myRound={myRound} /> : <ConnectingToSomeone />
       case 'room-in-progress':
         if (hasPartnerAndIsConnecting) {
           return <ConnectingToSomeone />
@@ -67,7 +67,7 @@ const NewVideoRouter = ({ myRound }) => {
 
         return null
       case 'complete':
-        return <Thumbing userId={userId} myRound={myRound} />
+        return <PostChatRating myRound={myRound} />
       default:
         return null
     }

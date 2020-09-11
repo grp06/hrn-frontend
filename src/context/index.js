@@ -1,6 +1,8 @@
 export { AppProvider } from './AppProvider'
 export { EventProvider } from './EventProvider'
 export { UserProvider } from './UserProvider'
+export { UserEventStatusProvider } from './UserEventStatusProvider'
 export { default as useAppContext } from './useAppContext'
 export { default as useEventContext } from './useEventContext'
 export { default as useUserContext } from './useUserContext'
+export { default as useUserEventStatusContext } from './useUserEventStatusContext'
