@@ -42,15 +42,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserStatusBox = React.memo(({ eventStatus, userSittingOut, onToggleClick }) => {
+const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
+  console.log('userEventStatus ->', userEventStatus)
   const classes = useStyles()
-  const [userReadyJoin, setuserReadyJoin] = useState(!userSittingOut)
+  const [sittingOutToggle, setSittingOutToggle] = useState(userEventStatus === 'sitting out')
   const handleUserStatusChange = (event) => {
-    console.log('event.button = ', event.button)
-    event.currentTarget.value === 'sitOut' ? setuserReadyJoin(false) : setuserReadyJoin(true)
-    event.currentTarget.value === 'sitOut' ? onToggleClick(true) : onToggleClick(false)
+    const sittingOutBoolean = event.currentTarget.value === 'sitOut'
+    const status = sittingOutBoolean ? 'sitting out' : 'waiting for match'
+    console.log('sittingOutBoolean ->', sittingOutBoolean)
+    console.log('status ->', status)
+    setSittingOutToggle(sittingOutBoolean)
+    setUserEventStatus(status)
   }
 
+  console.log('sittingOutToggle ->', sittingOutToggle)
   return (
     <Grid
       container
@@ -66,23 +71,23 @@ const UserStatusBox = React.memo(({ eventStatus, userSittingOut, onToggleClick }
         wrap="nowrap"
         className={classes.toggleButtonsContainer}
       >
-        <ToggleButtonGroup value={userReadyJoin} exclusive onChange={handleUserStatusChange}>
+        <ToggleButtonGroup value={sittingOutToggle} exclusive onChange={handleUserStatusChange}>
           <ToggleButton
             value="sitOut"
-            className={!userReadyJoin ? classes.toggleSelect : classes.toggleUnSelect}
+            className={sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
           >
             Sit out a round
           </ToggleButton>
           <ToggleButton
             value="joinNext"
-            className={userReadyJoin ? classes.toggleSelect : classes.toggleUnSelect}
+            className={!sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
           >
             Join next round
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
       <Typography variant="body1" align="center" className={classes.statusText}>
-        {userReadyJoin ? 'Ready to Join Next Round.' : "You're sitting out rounds."}
+        {sittingOutToggle ? "You're sitting out rounds." : 'Ready to Join Next Round.'}
       </Typography>
     </Grid>
   )

@@ -12,7 +12,7 @@ const useUserEventStatusContext = () => {
   // set User's event status: could be "noPartner" "leftChat" "late" "waitGetMatch"
   const setUserEventStatus = (status) => {
     dispatch((draft) => {
-      draft.userEventStatus.status = status
+      draft.userEventStatus = status
     })
   }
 

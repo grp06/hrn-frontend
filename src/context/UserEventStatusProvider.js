@@ -11,11 +11,15 @@ const { lastSeenDuration } = constants
 
 const UserEventStatusContext = React.createContext()
 
+// status' could be
+// no partner
+// late
+// sitting out
+// left chat
+// waiting for match
+// reported
 const defaultState = {
-  userEventStatus: {
-    status: null,
-    partner: null,
-  },
+  userEventStatus: null,
 }
 
 const UserEventStatusProvider = ({ children }) => {
@@ -35,9 +39,6 @@ const UserEventStatusProvider = ({ children }) => {
     skip: !userId,
   })
 
-  //   console.log("user>>>", user)
-  //   console.log("event>>>", event)
-
   // check if need to push back to lobby
   useEffect(() => {
     if (userEventStatus === 'no partner' || userEventStatus === 'late') {
@@ -47,10 +48,7 @@ const UserEventStatusProvider = ({ children }) => {
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
-    if (
-      userId &&
-      (userEventStatus.status !== 'in chat' || userEventStatus.status !== 'sitting out')
-    ) {
+    if (userId && userEventStatus !== 'in chat' && userEventStatus !== 'sitting out') {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {

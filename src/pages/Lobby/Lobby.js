@@ -54,8 +54,7 @@ const Lobby = () => {
   const history = useHistory()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
-  const { setUserEventStatus } = useUserEventStatusContext()
-  const [userSittingOut, setUserSittingOut] = useState(false)
+  const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
   const { id: userId } = user
   const userLeftChat = JSON.parse(localStorage.getItem('userLeftChat'))
@@ -91,9 +90,8 @@ const Lobby = () => {
           className={classes.rightContainer}
         >
           <UserStatusBox
-            eventStatus={eventStatus}
-            userSittingOut={userSittingOut}
-            onToggleClick={useCallback((passedInState) => setUserSittingOut(passedInState), [])}
+            userEventStatus={userEventStatus}
+            setUserEventStatus={useCallback(setUserEventStatus, [])}
           />
           <EventChatBox event={event} />
         </Grid>
