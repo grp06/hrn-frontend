@@ -9,19 +9,16 @@ const useUserEventStatusContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
-  //set User's event status: could be "noPartner" "leftChat" "late" "waitGetMatch"
-  const setUserStatus = (status) => {
+  // set User's event status: could be "noPartner" "leftChat" "late" "waitGetMatch"
+  const setUserEventStatus = (status) => {
     dispatch((draft) => {
       draft.userEventStatus.status = status
-      if (status === 'noPartner') {
-        draft.userEventStatus.partner = null
-      }
     })
   }
 
   return {
     ...state,
-    setUserStatus,
+    setUserEventStatus,
   }
 }
 
