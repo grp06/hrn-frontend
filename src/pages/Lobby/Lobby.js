@@ -57,13 +57,12 @@ const Lobby = () => {
   const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
   const { id: userId } = user
-  const userLeftChat = JSON.parse(localStorage.getItem('userLeftChat'))
 
   useEffect(() => {
-    if (eventStatus === 'room-in-progress' && !userLeftChat) {
+    if (eventStatus === 'room-in-progress' && userEventStatus === 'waiting for match') {
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [eventStatus, userLeftChat])
+  }, [eventStatus, userEventStatus])
 
   return (
     <div className={classes.pageContainer}>

@@ -19,7 +19,7 @@ const UserEventStatusContext = React.createContext()
 // waiting for match
 // reported
 const defaultState = {
-  userEventStatus: null,
+  userEventStatus: 'waiting for match',
 }
 
 const UserEventStatusProvider = ({ children }) => {
