@@ -26,11 +26,12 @@ import {
   VideoRoom,
   Lobby,
 } from './pages'
-import { AppProvider, EventProvider, UserProvider } from './context'
+import { AppProvider, EventProvider, UserProvider, UserEventStatusProvider } from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
+// import { UserEventStatusContext } from './context/UserEventStatusProvider'
 
 const App = () => {
   const [client, setClient] = useState(null)
@@ -87,10 +88,16 @@ const App = () => {
                       <EventProvider>
                         <Route exact path="/events" component={EventsPublic} />
                         <Route exact path="/events/:id" component={Event} />
-                        <Route exact path="/events/:id/lobby" component={Lobby} />
-                        <Route exact path="/events/:id/video-room" component={NewVideoRoom} />
-                        <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                        <Route exact path="/events/:id/event-complete" component={EventComplete} />
+                        <UserEventStatusProvider>
+                          <Route exact path="/events/:id/lobby" component={Lobby} />
+                          <Route exact path="/events/:id/video-room" component={NewVideoRoom} />
+                          <Route exact path="/events/:id/pre-event" component={PreEvent} />
+                          <Route
+                            exact
+                            path="/events/:id/event-complete"
+                            component={EventComplete}
+                          />
+                        </UserEventStatusProvider>
                       </EventProvider>
                       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
                     </MarginLeftAppWrapper>
