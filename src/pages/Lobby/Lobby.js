@@ -4,8 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
-import { useEventContext, useUserContext } from '../../context'
-import { useLastSeenMutation } from '../../hooks'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -54,25 +53,12 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { event, permissions } = useEventContext()
-  const { user, setUserUpdatedAt } = useUserContext()
-
+  const { user } = useUserContext()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [userSittingOut, setUserSittingOut] = useState(false)
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
   const { id: userId } = user
-  const { lastSeenMutation } = useLastSeenMutation(userId, setUserUpdatedAt)
   const userLeftChat = JSON.parse(localStorage.getItem('userLeftChat'))
-  // when the lobby unmounts it means that we are going to video room so lets
-  // stop calling lastSeenMutation
-  useEffect(() => {
-    return () => {
-      clearInterval(window.lastSeenInterval)
-    }
-  }, [])
-
-  useEffect(() => {
-    clearInterval(window.lastSeenInterval)
-    lastSeenMutation(permissions, userSittingOut)
-  }, [permissions, userSittingOut])
 
   useEffect(() => {
     if (eventStatus === 'room-in-progress' && !userLeftChat) {

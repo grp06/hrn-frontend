@@ -28,10 +28,10 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const FloatCardLarge = ({ children, id, extraClasses }) => {
+const FloatCardLarge = ({ children, id }) => {
   const classes = createStyles()
   return (
-    <Grid id={id} container direction="column" className={[classes.cardContainer, extraClasses]}>
+    <Grid id={id} container direction="column" className={classes.cardContainer}>
       {children}
     </Grid>
   )

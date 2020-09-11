@@ -46,7 +46,7 @@ const UserStatusBox = React.memo(({ eventStatus, userSittingOut, onToggleClick }
   const classes = useStyles()
   const [userReadyJoin, setuserReadyJoin] = useState(!userSittingOut)
   const handleUserStatusChange = (event) => {
-    console.log(event.button)
+    console.log('event.button = ', event.button)
     event.currentTarget.value === 'sitOut' ? setuserReadyJoin(false) : setuserReadyJoin(true)
     event.currentTarget.value === 'sitOut' ? onToggleClick(true) : onToggleClick(false)
   }

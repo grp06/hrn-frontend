@@ -2,8 +2,8 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
-import { formatDate } from '../../utils'
 import { makeStyles } from '@material-ui/styles'
+import { formatDate } from '../../utils'
 import { EventBreakdownStepper } from '../Event'
 import { FloatCardLarge } from '../../common'
 import { PreEvent } from '../PreEvent'
@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
     height: '80vh',
-  },
-  floatCardMedium: {
-    margin: theme.spacing(0),
   },
 }))
 
@@ -49,7 +46,7 @@ const BroadcastBox = React.memo(({ event }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <FloatCardLarge extraClasses={classes.floatCardMedium}>
+            <FloatCardLarge>
               <EventBreakdownStepper />
             </FloatCardLarge>
           </Grid>

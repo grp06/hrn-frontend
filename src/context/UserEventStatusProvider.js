@@ -38,16 +38,19 @@ const UserEventStatusProvider = ({ children }) => {
   //   console.log("user>>>", user)
   //   console.log("event>>>", event)
 
-  //check if need to push back to lobby
+  // check if need to push back to lobby
   useEffect(() => {
-    if (userEventStatus === 'noPartner' || userEventStatus === 'late') {
+    if (userEventStatus === 'no partner' || userEventStatus === 'late') {
       history.push(`/events/${event.id}/lobby`)
     }
   }, [userEventStatus])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
-    if (userId && (!!userEventStatus.status || userEventStatus.status !== 'sittingOut')) {
+    if (
+      userId &&
+      (userEventStatus.status !== 'in chat' || userEventStatus.status !== 'sitting out')
+    ) {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
