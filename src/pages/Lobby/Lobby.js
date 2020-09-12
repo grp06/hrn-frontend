@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
+import { useGetCameraAndMicStatus } from '../../hooks'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -57,6 +58,10 @@ const Lobby = () => {
   const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
   const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
   const { id: userId } = user
+  const hasCheckedCamera = useRef()
+  // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+  useGetCameraAndMicStatus(hasCheckedCamera.current)
+  hasCheckedCamera.current = true
 
   useEffect(() => {
     if (eventStatus === 'room-in-progress' && userEventStatus === 'waiting for match') {
