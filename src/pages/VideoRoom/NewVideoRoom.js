@@ -1,19 +1,11 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
-import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
-import {
-  ConnectionIssuesButton,
-  NewVideoRouter,
-  RoundProgressBar,
-  VideoControlsPanel,
-  VideoRoomSidebar,
-} from '.'
-import { ConnectingToSomeone } from './waitingRoomScreens'
-import { Loading, CameraDisabledBanner } from '../../common'
+import { ConnectionIssuesButton, NewVideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { Loading } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { getToken } from '../../helpers'
 import {
@@ -24,7 +16,7 @@ import {
 } from '../../context'
 import { useTwilio, useGetCameraAndMicStatus, useIsUserActive } from '../../hooks'
 
-const { createLocalTracks, connect } = require('twilio-video')
+const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
   videoWrapper: {
@@ -77,23 +69,13 @@ const NewVideoRoom = ({ match }) => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const {
-    permissions,
-    event,
-    twilio,
-    setHasPartnerAndIsConnecting,
-    setCameraAndMicPermissions,
-  } = useEventContext()
+  const { event, setHasPartnerAndIsConnecting } = useEventContext()
   const { setUserEventStatus } = useUserEventStatusContext()
   const { id: userId } = user
-  const { hasPartnerAndIsConnecting } = twilio
-
   const { startTwilio } = useTwilio()
-
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
-  const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
@@ -245,19 +227,6 @@ const NewVideoRoom = ({ match }) => {
 
   return (
     <div>
-      {isGUMErrorModalActive && (
-        <Grid
-          className={classes.cameraDisabledWrapper}
-          container
-          direction="column"
-          justify="center"
-        >
-          <CameraDisabledBanner
-            permissions={permissions}
-            setCameraAndMicPermissions={setCameraAndMicPermissions}
-          />
-        </Grid>
-      )}
       <NewVideoRouter myRound={myRound} />
       <VideoRoomSidebar
         event={event}
@@ -266,12 +235,6 @@ const NewVideoRoom = ({ match }) => {
         ConnectionIssuesButton={<ConnectionIssuesButton myRound={myRound} />}
       />
       <div className={classes.videoWrapper}>
-        {hasPartnerAndIsConnecting && (
-          <div className={classes.screenOverlay}>
-            <ConnectingToSomeone />
-          </div>
-        )}
-
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
         {/* {myRound !== 'no-assignment' ? (

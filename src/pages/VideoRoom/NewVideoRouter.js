@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const NewVideoRouter = ({ myRound }) => {
+  console.log('myRound ->', myRound)
   const classes = useStyles()
   const { user } = useUserContext()
   const { event, twilio } = useEventContext()
@@ -51,18 +52,20 @@ const NewVideoRouter = ({ myRound }) => {
 
     switch (status) {
       case 'in-between-rounds':
-        return hasPartner ? <PostChatRating myRound={myRound} /> : <ConnectingToSomeone />
+        return hasPartner ? (
+          <PostChatRating myRound={myRound} />
+        ) : (
+          <ConnectingToSomeone myRound={myRound} />
+        )
       case 'room-in-progress':
         if (hasPartnerAndIsConnecting) {
-          return <ConnectingToSomeone />
+          return (
+            <ConnectingToSomeone partnerNeverConnected={partnerNeverConnected} myRound={myRound} />
+          )
         }
 
         if (partnerDisconnected && hasPartner) {
           return <PartnerDisconnected myRound={myRound} />
-        }
-
-        if (partnerNeverConnected) {
-          return <PartnerTechnicalIssue />
         }
 
         return null
