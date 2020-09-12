@@ -6,9 +6,7 @@ import { TransitionModal } from '../../common'
 import { updateLeftChat } from '../../gql/mutations'
 
 const ConnectionIssuesButton = ({ myRound, setUserEventStatus }) => {
-  const history = useHistory()
-  const { id: row_id, event_id } = myRound
-
+  const { id: row_id } = myRound
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
@@ -19,8 +17,7 @@ const ConnectionIssuesButton = ({ myRound, setUserEventStatus }) => {
   const exitChat = async (mutation) => {
     try {
       await mutation()
-      setUserEventStatus('left chat')
-      history.push(`/events/${event_id}/lobby`)
+      window.location.reload()
     } catch (err) {
       console.log(err)
     }

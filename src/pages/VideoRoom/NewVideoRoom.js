@@ -151,7 +151,7 @@ const NewVideoRoom = ({ match }) => {
       }
 
       console.log('NewVideoRoom -> myRoundPartnerData', myRoundPartnerData)
-      if (myRoundPartnerData.partners[0].left_chat) {
+      if (myRoundPartnerData.partners.length && myRoundPartnerData.partners[0].left_chat) {
         setUserEventStatus('left chat')
         history.push(`/events/${eventId}/lobby`)
       }
