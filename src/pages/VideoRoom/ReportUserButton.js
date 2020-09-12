@@ -4,19 +4,16 @@ import { useHistory } from 'react-router-dom'
 import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined'
 import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
-import { insertExitedConvo } from '../../gql/mutations'
+import { updateLeftChat } from '../../gql/mutations'
 
 const ReportUserButton = ({ myRound }) => {
   const history = useHistory()
-  const { created_at, event_id, partner_id, user_id } = myRound
+  const { event_id, id: row_id } = myRound
 
-  const [reportUserMutation] = useMutation(insertExitedConvo, {
+  const [reportUserMutation] = useMutation(updateLeftChat, {
     variables: {
-      convo_started_at: created_at,
-      event_id,
-      partner_id,
+      row_id,
       reason: 'partner being rude',
-      user_id,
     },
   })
 

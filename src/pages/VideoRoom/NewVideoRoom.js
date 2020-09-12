@@ -1,11 +1,17 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
 import clsx from 'clsx'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
-import { NewVideoRouter, RoundProgressBar, VideoControlsPanel, VideoRoomSidebar } from '.'
+import {
+  ConnectionIssuesButton,
+  NewVideoRouter,
+  RoundProgressBar,
+  VideoControlsPanel,
+  VideoRoomSidebar,
+} from '.'
 import { ConnectingToSomeone } from './waitingRoomScreens'
 import { Loading, CameraDisabledBanner } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
@@ -143,6 +149,12 @@ const NewVideoRoom = ({ match }) => {
         setUserEventStatus('came late')
         history.push(`/events/${eventId}/lobby`)
       }
+
+      console.log('NewVideoRoom -> myRoundPartnerData', myRoundPartnerData)
+      if (myRoundPartnerData.partners[0].left_chat) {
+        setUserEventStatus('left chat')
+        history.push(`/events/${eventId}/lobby`)
+      }
     }
   }, [myRoundPartnerDataLoading, myRoundPartnerData])
 
@@ -247,7 +259,14 @@ const NewVideoRoom = ({ match }) => {
         </Grid>
       )}
       <NewVideoRouter myRound={myRound} />
-      <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
+      <VideoRoomSidebar
+        event={event}
+        myRound={myRound}
+        userId={userId}
+        ConnectionIssuesButton={
+          <ConnectionIssuesButton myRound={myRound} setUserEventStatus={setUserEventStatus} />
+        }
+      />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
           <div className={classes.screenOverlay}>

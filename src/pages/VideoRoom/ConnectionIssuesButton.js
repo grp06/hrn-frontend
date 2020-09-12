@@ -3,25 +3,23 @@ import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
-import { insertExitedConvo } from '../../gql/mutations'
+import { updateLeftChat } from '../../gql/mutations'
 
-const ConnectionIssuesButton = ({ myRound }) => {
+const ConnectionIssuesButton = ({ myRound, setUserEventStatus }) => {
   const history = useHistory()
-  const { created_at, event_id, partner_id, user_id } = myRound
-  const [partnerNeverConnectedMutation] = useMutation(insertExitedConvo, {
+  const { id: row_id, event_id } = myRound
+
+  const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
-      convo_started_at: created_at,
-      event_id,
-      partner_id,
+      row_id,
       reason: 'partner never connected',
-      user_id,
     },
   })
 
   const exitChat = async (mutation) => {
     try {
       await mutation()
-      localStorage.setItem('userLeftChat', true)
+      setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
@@ -54,7 +52,7 @@ const ConnectionIssuesButton = ({ myRound }) => {
       </div>
     ),
     onAcceptButtonText: 'Leave Chat',
-    onAcceptFunction: () => exitChat(partnerNeverConnectedMutation),
+    onAcceptFunction: () => exitChat(leftChatMutation),
     onCloseButtonText: 'Nevermind',
   })
 

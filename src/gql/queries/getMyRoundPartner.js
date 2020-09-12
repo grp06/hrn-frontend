@@ -10,6 +10,7 @@ const getMyRoundPartner = gql`
       partner_id
       id
       created_at
+      left_chat
       userByPartnerId {
         city
         name
