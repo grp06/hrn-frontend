@@ -42,7 +42,7 @@ const VideoRoomSidebar = ({ event, myRound, userId, ConnectionIssuesButton }) =>
           event={event}
           myRound={myRound}
           userId={userId}
-          // reportUser={<ReportUserButton myRound={myRound} />}
+          reportUser={<ReportUserButton myRound={myRound} />}
         />
         <PartnerTagsList myRound={myRound} userId={userId} />
       </Grid>

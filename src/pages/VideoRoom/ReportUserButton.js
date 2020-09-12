@@ -4,24 +4,34 @@ import { useHistory } from 'react-router-dom'
 import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined'
 import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
-import { updateLeftChat } from '../../gql/mutations'
+import { updateLeftChat, reportPartner } from '../../gql/mutations'
 
 const ReportUserButton = ({ myRound }) => {
   const history = useHistory()
-  const { event_id, id: row_id } = myRound
+  const { event_id, id: row_id, user_id, partner_id, created_at: convo_started_at } = myRound
 
-  const [reportUserMutation] = useMutation(updateLeftChat, {
+  const [updateLeftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
-      reason: 'partner being rude',
+      reason: 'reported my partner',
     },
   })
 
-  const exitChat = async (mutation) => {
+  const [reportPartnerMutation] = useMutation(reportPartner, {
+    variables: {
+      user_id,
+      partner_id,
+      reason: 'default',
+      convo_started_at,
+      event_id,
+    },
+  })
+
+  const exitChat = async () => {
     try {
-      await mutation()
-      localStorage.setItem('userLeftChat', true)
-      history.push(`/events/${event_id}/lobby`)
+      await updateLeftChatMutation()
+      await reportPartnerMutation()
+      window.location.reload()
     } catch (err) {
       console.log(err)
     }
@@ -52,7 +62,7 @@ const ReportUserButton = ({ myRound }) => {
       </div>
     ),
     onAcceptButtonText: 'Report this user',
-    onAcceptFunction: () => exitChat(reportUserMutation),
+    onAcceptFunction: () => exitChat(),
   })
   return <div>{renderReportUserButton}</div>
 }

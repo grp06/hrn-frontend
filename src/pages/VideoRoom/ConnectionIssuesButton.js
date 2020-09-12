@@ -14,9 +14,9 @@ const ConnectionIssuesButton = ({ myRound }) => {
     },
   })
 
-  const exitChat = async (mutation) => {
+  const exitChat = async () => {
     try {
-      await mutation()
+      await leftChatMutation()
       window.location.reload()
     } catch (err) {
       console.log(err)
@@ -49,7 +49,7 @@ const ConnectionIssuesButton = ({ myRound }) => {
       </div>
     ),
     onAcceptButtonText: 'Leave Chat',
-    onAcceptFunction: () => exitChat(leftChatMutation),
+    onAcceptFunction: () => exitChat(),
     onCloseButtonText: 'Nevermind',
   })
 
