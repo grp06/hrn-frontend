@@ -13,13 +13,6 @@ const useTwilio = () => {
 
   const { participantConnected } = useParticipantConnected()
 
-  const changeSpeakerDevice = async (element) => {
-    const localStoragePreferredSpeakerId = localStorage.getItem('preferredSpeakerId')
-    if (localStoragePreferredSpeakerId) {
-      await element.setSinkId(localStoragePreferredSpeakerId)
-    }
-  }
-
   const startTwilio = (room) => {
     setPartnerNeverConnected(false)
     // check to see if your partner joins within 30 seconds. If not, we assume
@@ -52,10 +45,6 @@ const useTwilio = () => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         participantConnected(remoteParticipant)
-        const remoteVideo = document.getElementById('remote-video')
-        if (remoteVideo) {
-          changeSpeakerDevice(remoteVideo)
-        }
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
