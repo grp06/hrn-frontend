@@ -28,7 +28,6 @@ const UserEventStatusProvider = ({ children }) => {
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
   const { id: userId } = user
-  const { setAppLoading } = useAppContext()
   const history = useHistory()
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {

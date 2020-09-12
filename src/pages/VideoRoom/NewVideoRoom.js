@@ -102,9 +102,6 @@ const NewVideoRoom = ({ match }) => {
     if (eventSet) {
       const { status } = event
 
-      if (!userId) {
-        history.push('/')
-      }
       if (status === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
