@@ -58,7 +58,7 @@ const NewVideoRouter = ({ myRound }) => {
         }
 
         if (partnerDisconnected && hasPartner) {
-          return <PartnerDisconnected />
+          return <PartnerDisconnected myRound={myRound} />
         }
 
         if (partnerNeverConnected) {

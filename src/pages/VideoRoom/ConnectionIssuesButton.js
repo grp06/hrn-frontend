@@ -5,12 +5,12 @@ import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
 import { updateLeftChat } from '../../gql/mutations'
 
-const ConnectionIssuesButton = ({ myRound, setUserEventStatus }) => {
+const ConnectionIssuesButton = ({ myRound }) => {
   const { id: row_id } = myRound
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
-      reason: 'partner never connected',
+      reason: 'connection issues',
     },
   })
 

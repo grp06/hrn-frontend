@@ -263,9 +263,7 @@ const NewVideoRoom = ({ match }) => {
         event={event}
         myRound={myRound}
         userId={userId}
-        ConnectionIssuesButton={
-          <ConnectionIssuesButton myRound={myRound} setUserEventStatus={setUserEventStatus} />
-        }
+        ConnectionIssuesButton={<ConnectionIssuesButton myRound={myRound} />}
       />
       <div className={classes.videoWrapper}>
         {hasPartnerAndIsConnecting && (
