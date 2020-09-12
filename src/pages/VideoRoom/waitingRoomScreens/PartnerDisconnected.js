@@ -22,9 +22,6 @@ const useStyles = makeStyles((theme) => ({
   dancingMan: {
     fontSize: '50px',
   },
-  textContainer: {
-    width: '65%',
-  },
 }))
 
 const PartnerDisconnected = React.memo(({ myRound }) => {
