@@ -76,13 +76,13 @@ const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
             value="sitOut"
             className={sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
           >
-            Sit out a round
+            Sit Out
           </ToggleButton>
           <ToggleButton
             value="joinNext"
             className={!sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
           >
-            Join next round
+            Get Matched
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>

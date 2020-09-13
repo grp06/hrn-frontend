@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
-import { formatDate } from '../../utils'
+import { getBroadcastBoxElement, formatDate } from '../../utils'
 import { EventBreakdownStepper } from '../Event'
 import { FloatCardLarge } from '../../common'
 import { PreEvent } from '../PreEvent'
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BroadcastBox = React.memo(({ event }) => {
+const BroadcastBox = React.memo(({ event, userEventStatus }) => {
   const classes = useStyles()
   const { start_at, description, event_name, host_id, status: eventStatus } = event
 
@@ -53,6 +53,9 @@ const BroadcastBox = React.memo(({ event }) => {
         )
       case 'pre-event':
         return <PreEvent />
+      case 'room-in-progress':
+        console.log('im here')
+        return getBroadcastBoxElement(userEventStatus)
       default:
         return null
     }

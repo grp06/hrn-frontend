@@ -1,5 +1,6 @@
 export { default as constants } from './constants'
 export { default as formatDate } from './formatDate'
+export { default as getBroadcastBoxElement } from './getBroadcastBoxElement'
 export { default as getEventAnalytics } from './getEventAnalytics'
 export { default as GUMErrorMessage } from './GUMErrorMessage'
 export { default as isEventInFuture } from './isEventInFuture'

@@ -56,7 +56,7 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
       className={classes.boxContainer}
     >
       <Grid container direction="column">
-        <Typography variant="subtitle1">Frist Check Your Tech:</Typography>
+        <Typography variant="subtitle1">Check Your Tech:</Typography>
         <SetupMicAndCameraButton permissions={permissions} />
       </Grid>
       {userIsHost && eventStatus === 'not-started' && (

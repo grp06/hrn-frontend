@@ -9,7 +9,7 @@ import { PostChatRating } from '.'
 import {
   PartnerDisconnected,
   PartnerTechnicalIssue,
-  SittingOut,
+  NoPartner,
   ConnectingToSomeone,
   UserJoinedDuringRound,
 } from './waitingRoomScreens'
@@ -36,7 +36,7 @@ const NewVideoRouter = ({ myRound }) => {
   const { event, twilio } = useEventContext()
   const { id: userId } = user
   const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
-  const { status, round_length } = event
+  const { status } = event
   const showControls = useIsUserActive()
 
   const displayVideoMessage = () => {
@@ -48,7 +48,7 @@ const NewVideoRouter = ({ myRound }) => {
     }
 
     if (hasRoundsData && !hasPartner) {
-      return <SittingOut roundLength={round_length} />
+      return <NoPartner />
     }
 
     switch (status) {
