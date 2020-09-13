@@ -11,9 +11,9 @@ const { lastSeenDuration } = constants
 
 const UserEventStatusContext = React.createContext()
 
-// status' could be
+// status could be
 // no partner
-// late
+// came late
 // sitting out
 // left chat
 // waiting for match

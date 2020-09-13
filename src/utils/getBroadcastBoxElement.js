@@ -1,9 +1,13 @@
 import React from 'react'
-import { NoPartner, SittingOut } from '../pages/VideoRoom/waitingRoomScreens'
+import { CameLate, LeftChat, NoPartner, SittingOut } from '../pages/VideoRoom/waitingRoomScreens'
 
 const getBroadcastBoxElement = (userEventStatus) => {
   console.log('getBRoadcastBoxElement getting called')
   switch (userEventStatus) {
+    case 'came late':
+      return <CameLate />
+    case 'left chat':
+      return <LeftChat />
     case 'no partner':
       return <NoPartner />
     case 'sitting out':

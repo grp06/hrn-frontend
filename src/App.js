@@ -17,21 +17,18 @@ import {
   LoginForm,
   MyProfile,
   MyConnections,
-  NewVideoRoom,
+  VideoRoom,
   Onboarding,
   PreEvent,
   PrivacyPolicy,
   SetNewPassword,
   SignUp,
-  VideoRoom,
   Lobby,
 } from './pages'
 import { AppProvider, EventProvider, UserProvider, UserEventStatusProvider } from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
-import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
-// import { UserEventStatusContext } from './context/UserEventStatusProvider'
 
 const App = () => {
   const [client, setClient] = useState(null)
@@ -90,7 +87,7 @@ const App = () => {
                         <Route exact path="/events/:id" component={Event} />
                         <UserEventStatusProvider>
                           <Route exact path="/events/:id/lobby" component={Lobby} />
-                          <Route exact path="/events/:id/video-room" component={NewVideoRoom} />
+                          <Route exact path="/events/:id/video-room" component={VideoRoom} />
                           <Route exact path="/events/:id/pre-event" component={PreEvent} />
                           <Route
                             exact

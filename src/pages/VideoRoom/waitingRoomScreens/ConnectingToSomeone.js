@@ -69,7 +69,7 @@ const ConnectingToSomeone = ({ partnerNeverConnected, myRound }) => {
             </Typography>
             <Typography className={classes.messageText}>
               Stay put and wait for your partner to connect, or click the button below to go back to
-              the lobby and possibly get rematched with someone new
+              the lobby and possibly get rematched with someone new!
             </Typography>
             <Button variant="contained" color="primary" onClick={() => handleReturnToLobby()}>
               Return To Lobby
