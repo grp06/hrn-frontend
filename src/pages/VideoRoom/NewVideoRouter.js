@@ -41,6 +41,7 @@ const NewVideoRouter = ({ myRound }) => {
 
   const displayVideoMessage = () => {
     const hasRoundsData = myRound !== 'no-assignment'
+
     const hasPartner = !hasRoundsData ? false : myRound.partner_id
     if (!hasRoundsData) {
       return <UserJoinedDuringRound />
