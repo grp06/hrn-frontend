@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import Grid from '@material-ui/core/Grid'
-import Rating from '@material-ui/lab/Rating'
 import Typography from '@material-ui/core/Typography'
+import Rating from '@material-ui/lab/Rating'
+import StarBorderIcon from '@material-ui/icons/StarBorder'
 import { makeStyles } from '@material-ui/styles'
 import { updatePartnerRating } from '../../gql/mutations'
 import { sleep } from '../../helpers'
@@ -25,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
       width: '90vw',
     },
   },
+  starsContainer: {
+    margin: theme.spacing(2, 0),
+  },
   underline: {
     textDecoration: 'underline',
   },
@@ -38,7 +42,7 @@ const PostChatRating = ({ myRound }) => {
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
-  const [ratingValue, setRatingValue] = useState(1)
+  const [ratingValue, setRatingValue] = useState(null)
 
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
@@ -80,7 +84,15 @@ const PostChatRating = ({ myRound }) => {
             <Typography variant="h4">
               How would you rate <span className={classes.underline}>this</span> match?
             </Typography>
-            <Rating name="simple-controlled" value={ratingValue} onChange={handleUpdateRating} />
+            <div className={classes.starsContainer}>
+              <Rating
+                name="simple-controlled"
+                value={ratingValue}
+                onChange={handleUpdateRating}
+                size="large"
+                emptyIcon={<StarBorderIcon fontSize="inherit" />}
+              />
+            </div>
           </>
         ) : (
           <>
@@ -104,6 +116,7 @@ const PostChatRating = ({ myRound }) => {
           duration={6000}
           severity="success"
           snackMessage={
+            // eslint-disable-next-line react/jsx-wrap-multilines
             <div>
               Carrier pigeon sent{' '}
               <span role="img" aria-label="dove">
@@ -112,7 +125,6 @@ const PostChatRating = ({ myRound }) => {
             </div>
           }
         />
-        )}
       </Grid>
     </div>
   )

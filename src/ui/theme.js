@@ -319,6 +319,15 @@ const theme = createMuiTheme({
         color: sunray,
       },
     },
+    MuiRating: {
+      sizeLarge: {
+        fontSize: '3.75rem',
+      },
+      iconEmpty: {
+        color: 'inherit',
+        fontSize: '3.75rem',
+      },
+    },
   },
 })
 
