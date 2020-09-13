@@ -1,10 +1,9 @@
 import gql from 'graphql-tag'
 
 const getMyRoundPartner = gql`
-  query getMyRoundPartner($event_id: Int!, $user_id: Int!) {
+  query getMyRoundPartner($round: Int!, $event_id: Int!, $user_id: Int!) {
     partners(
-      where: { user_id: { _eq: $user_id }, event_id: { _eq: $event_id } }
-      order_by: { created_at: desc }
+      where: { round: { _eq: $round }, event_id: { _eq: $event_id }, user_id: { _eq: $user_id } }
     ) {
       event_id
       partner_id

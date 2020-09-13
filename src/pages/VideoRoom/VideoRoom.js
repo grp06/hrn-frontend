@@ -70,6 +70,7 @@ const VideoRoom = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { event, setHasPartnerAndIsConnecting } = useEventContext()
+  const { id: event_id, current_round } = event
   const { setUserEventStatus } = useUserEventStatusContext()
   const { id: userId } = user
   const { startTwilio } = useTwilio()
@@ -91,7 +92,8 @@ const VideoRoom = ({ match }) => {
   } = useQuery(getMyRoundPartner, {
     variables: {
       user_id: userId,
-      event_id: event.id,
+      event_id,
+      round: current_round,
     },
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
@@ -116,6 +118,7 @@ const VideoRoom = ({ match }) => {
 
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
+    console.log('myRoundPartnerData ->', myRoundPartnerData)
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
