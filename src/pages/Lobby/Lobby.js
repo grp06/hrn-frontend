@@ -84,7 +84,7 @@ const Lobby = () => {
           justify="space-around"
           className={classes.broadcastContainer}
         >
-          <BroadcastBox event={event} />
+          <BroadcastBox event={event} userEventStatus={userEventStatus} />
           <BottomControlPanel permissions={permissions} event={event} userId={userId} />
         </Grid>
         <Grid
