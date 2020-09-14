@@ -24,6 +24,9 @@ const useStyles = makeStyles((theme) => ({
   broadcastContainer: {
     width: '75vw',
     height: '100%',
+    [theme.breakpoints.down('md')]: {
+      width: '68vw',
+    },
   },
   eventBanner: {
     position: 'absolute',
@@ -48,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
     width: '20vw',
     height: '100%',
     padding: theme.spacing(2),
+    [theme.breakpoints.down('md')]: {
+      width: '24vw',
+      padding: theme.spacing(0.5),
+    },
   },
 }))
 const Lobby = () => {

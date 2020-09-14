@@ -24,27 +24,6 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   console.log('bottom control panel render')
 
-  const renderResetEvent = TransitionModal({
-    button: {
-      buttonText: 'Reset Event',
-      buttonVariant: 'text',
-      buttonColor: 'default',
-    },
-    modalBody: (
-      <Typography variant="h5">
-        This will reset the event in its entirety. Are you 100% sure?
-      </Typography>
-    ),
-    onAcceptFunction: async () => {
-      window.analytics &&
-        window.analytics.track('Event reset', {
-          eventId,
-          hostId: host_id,
-        })
-      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
-    },
-  })
-
   return (
     <Grid
       container
@@ -63,7 +42,6 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
               timeUntilEvent={timeUntilEvent}
             />
             <PreEventInstructionModal />
-            {renderResetEvent}
           </Grid>
         </Grid>
       )}
@@ -74,7 +52,7 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
           </Grid>
         </Grid>
       )}
-      <Grid direction="column">
+      <Grid>
         <SetupMicAndCameraButton permissions={permissions} />
       </Grid>
     </Grid>

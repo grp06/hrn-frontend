@@ -28,9 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
   toggleUnSelect: {
     color: theme.palette.common.ghostWhite,
-    backgroundColor: theme.palette.common.greyCard,
+    backgroundColor: '#bdbdbd',
     '&:hover': {
-      backgroundColor: theme.palette.common.greyCard,
+      backgroundColor: '#d7d7d7',
     },
   },
   statusText: {
@@ -86,8 +86,8 @@ const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Typography variant="body1" align="center" className={classes.statusText}>
-        {sittingOutToggle ? "You're sitting out rounds." : 'Ready to Join Next Round.'}
+      <Typography variant="subtitle2" align="center" className={classes.statusText}>
+        {sittingOutToggle ? "You're sitting out rounds" : 'Ready to join next round'}
       </Typography>
     </Grid>
   )

@@ -18,14 +18,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.greyCard,
   },
   lobbyAttendeesContainer: {
-    width: '100%',
     height: '10%',
+    margin: theme.spacing(0, 'auto'),
   },
   onlineAttendeesText: {
     color: theme.palette.common.sunray,
+    marginLeft: theme.spacing(0.5),
   },
   totalAttendeesContainer: {
     width: 'auto',
+    marginLeft: theme.spacing(1),
   },
   chatBox: {
     height: '88%',
@@ -41,26 +43,20 @@ const EventChatBox = React.memo(({ event }) => {
         container
         wrap="nowrap"
         alignItems="center"
-        justify="space-around"
+        justify="center"
         className={classes.lobbyAttendeesContainer}
       >
         <Avatar>
           <PersonIcon />
         </Avatar>
-        <Grid container direction="column" className={classes.totalAttendeesContainer}>
-          <Grid container>
-            <Typography variant="body1" className={classes.onlineAttendeesText}>
-              {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
-            </Typography>
-            <Typography variant="body1" className={classes.onlineAttendeesText}>
-              {' '}
-              Atendees Online
-            </Typography>
-          </Grid>
-          {/* <Grid container>
-            <Typography variant="body1">0</Typography>
-            <Typography variant="body1">Atendees in Chatting</Typography>
-          </Grid> */}
+        <Grid container direction="row" className={classes.totalAttendeesContainer}>
+          <Typography variant="body1" className={classes.onlineAttendeesText}>
+            {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
+          </Typography>
+          <Typography variant="body1" className={classes.onlineAttendeesText}>
+            {' '}
+            Attendees Online
+          </Typography>
         </Grid>
       </Grid>
       <Divider />
@@ -71,7 +67,7 @@ const EventChatBox = React.memo(({ event }) => {
         alignItems="center"
         className={classes.chatBox}
       >
-        <Typography variant="h6">
+        <Typography variant="h6" style={{ textAlign: 'center' }}>
           Chat Coming Soon!{' '}
           <span role="img" aria-label="sunGlassSmileingFace">
             😎
