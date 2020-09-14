@@ -142,7 +142,7 @@ const MyEvents = () => {
         eventsData.event_users
           .sort((eventA, eventB) => {
             if (eventA && eventB) {
-              return eventA.event.start_at > eventB.event.start_at
+              return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
             }
           })
           .map(({ event }) => {
