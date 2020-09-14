@@ -286,7 +286,13 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             </Grid>
           </Grid>
         </Grid>
-        {userId ? <EventBreakdownStepper eventRoundLength={round_length} /> : null}
+        {userId ? (
+          <EventBreakdownStepper
+            eventRoundLength={round_length}
+            endMessage="You are all set! If you have already RSVPed, sit tight and wait for the event to
+            start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!"
+          />
+        ) : null}
       </FloatCardLarge>
     </>
   )

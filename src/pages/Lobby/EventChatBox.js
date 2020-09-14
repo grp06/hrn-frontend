@@ -10,7 +10,7 @@ import { useGetOnlineEventAttendees } from '../../hooks'
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
-    height: '70%',
+    height: '80%',
     padding: theme.spacing(1),
     borderRadius: '4px',
     border: '2px solid #3e4042',

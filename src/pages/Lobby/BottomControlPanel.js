@@ -13,7 +13,6 @@ const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
     height: '10vh',
-    padding: theme.spacing(1.5),
   },
 }))
 
@@ -50,18 +49,13 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
     <Grid
       container
       direction="row"
-      justify="space-between"
+      justify="flex-start"
       alignItems="center"
       wrap="nowrap"
       className={classes.boxContainer}
     >
-      <Grid container direction="column">
-        <Typography variant="subtitle1">Check Your Tech:</Typography>
-        <SetupMicAndCameraButton permissions={permissions} />
-      </Grid>
       {userIsHost && eventStatus === 'not-started' && (
         <Grid container direction="column">
-          <Typography variant="subtitle1">Ready?</Typography>
           <Grid container direction="row" alignItems="center">
             <StartPreEventButton
               disabled={micOrCameraIsDisabled}
@@ -75,12 +69,14 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
       )}
       {userIsHost && eventStatus === 'pre-event' && (
         <Grid container direction="column">
-          <Typography variant="subtitle1">Ready?</Typography>
           <Grid container direction="row" alignItems="center">
             <StartEventButton event={event} userId={userId} />
           </Grid>
         </Grid>
       )}
+      <Grid direction="column">
+        <SetupMicAndCameraButton permissions={permissions} />
+      </Grid>
     </Grid>
   )
 })

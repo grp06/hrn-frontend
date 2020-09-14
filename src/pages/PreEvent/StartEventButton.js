@@ -12,6 +12,7 @@ const StartEventButton = ({ event, userId }) => {
         button: {
           buttonText: 'Start Event 🥳',
           buttonVariant: 'contained',
+          buttonSize: 'large',
         },
         modalBody: (
           <Typography variant="h5">

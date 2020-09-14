@@ -5,7 +5,6 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 import { getBroadcastBoxElement, formatDate } from '../../utils'
 import { EventBreakdownStepper } from '../Event'
-import { FloatCardLarge } from '../../common'
 import { PreEvent } from '../PreEvent'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,7 +16,16 @@ const useStyles = makeStyles((theme) => ({
   },
   boxContainer: {
     width: '100%',
-    height: '80vh',
+    height: '84vh',
+  },
+  eventBreakdownContainer: {
+    width: '100%',
+    borderRadius: '4px',
+    height: 'auto',
+    marginRight: 'auto',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
   },
 }))
 
@@ -46,9 +54,9 @@ const BroadcastBox = React.memo(({ event, userEventStatus }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <FloatCardLarge>
-              <EventBreakdownStepper />
-            </FloatCardLarge>
+            <div className={classes.eventBreakdownContainer}>
+              <EventBreakdownStepper endMessage="You are all set, sit back and wait for the host to start the event!" />
+            </div>
           </Grid>
         )
       case 'pre-event':

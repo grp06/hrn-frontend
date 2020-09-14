@@ -77,7 +77,7 @@ const Lobby = () => {
         </div>
       )}
       {eventStatus === 'not-started' && <EventTimerCountdown eventStartTime={eventStartTime} />}
-      <Grid container direction="row" className={classes.gridContainer}>
+      <Grid container direction="row" justify="space-between" className={classes.gridContainer}>
         <Grid
           container
           direction="column"

@@ -16,6 +16,7 @@ const UserEventStatusContext = React.createContext()
 // came late
 // sitting out
 // left chat
+// in chat
 // waiting for match
 // reported
 const defaultState = {

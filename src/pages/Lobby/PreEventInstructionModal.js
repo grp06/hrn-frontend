@@ -27,8 +27,8 @@ const PreEventInstructionModal = () => {
       </div>
     ),
     iconButton: {
-      iconButtonIcon: <HelpOutlineIcon />,
-      iconButtonColor: 'secondary',
+      iconButtonIcon: <HelpOutlineIcon style={{ color: '#f4f6fa' }} />,
+      iconButtonColor: 'inherit',
     },
     onAcceptFunction: () => {},
     onAcceptButtonText: 'Ok, got it',

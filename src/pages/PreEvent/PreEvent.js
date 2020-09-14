@@ -3,7 +3,6 @@ import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { PreEventControlsCard } from '.'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
@@ -217,7 +216,6 @@ const PreEvent = () => {
       <Typography fontWeight={900} className={classes.liveLogo} variant="subtitle1">
         LIVE NOW!
       </Typography>
-      <PreEventControlsCard event={event} user={user} />
     </Grid>
   )
 }
