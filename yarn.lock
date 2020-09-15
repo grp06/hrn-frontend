@@ -1684,10 +1684,10 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-7.2.1.tgz#2ad4e844175a3738cb9e7064be5ea070b8863a1c"
   integrity sha512-oZ0Ib5I4Z2pUEcoo95cT1cr6slco9WY7yiPpG+RGNkj8YcYgJnM7pXmYmorNOReh8MIGcKSqXyeGjxnr8YiZbA==
 
-"@twilio/webrtc@4.2.0":
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/@twilio/webrtc/-/webrtc-4.2.0.tgz#f4978ca807116536b5ffcb5e56b5ff076cb5eebb"
-  integrity sha512-MmxRVuQtKSKqSsspe9cGuhIH+p7EuEhainHXvdys8QdFbBpnRkGuQKNwwiNzwf+9DcTvlw1B32q3TDgyfqopKw==
+"@twilio/webrtc@4.3.2":
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/@twilio/webrtc/-/webrtc-4.3.2.tgz#919520a870fdf8d87f915da47276710828e8fc5b"
+  integrity sha512-3gIq7XDI3vBoikRBchCnocFmlRQt45KC7v0DKkat+TV6WBXYJx+Hub22PR18PAROkwl5dAmIziByjYWWVhCHgA==
 
 "@types/aria-query@^4.2.0":
   version "4.2.0"
@@ -9955,6 +9955,11 @@ react-transition-group@^4.0.0, react-transition-group@^4.4.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-use-intercom@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-use-intercom/-/react-use-intercom-1.1.0.tgz#b375b5ea96008e29382b01f1a900169e4a8e6f30"
+  integrity sha512-QQLLTpRJ6cJNQQ2PIwY7fEiIY8zMv0htDyZIc8/ChYHCBTz5ouOmseJD9Ekkdh0cFr3xxO0WFLXFlSXBn+jJ+w==
+
 react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
@@ -11554,12 +11559,12 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-twilio-video@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/twilio-video/-/twilio-video-2.4.0.tgz#35a61f3a6f95163229410485e2b41549e71183ee"
-  integrity sha512-QiOC/fF29fCfw8IIlDYlBUE/G9wylmAWY2iorLHGhmS2Q53rXbgMlw+oVO8yHJicdboUVVGEmEbibfiuBrcyNQ==
+twilio-video@^2.7.1:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/twilio-video/-/twilio-video-2.7.2.tgz#9211fc85a41a352a32b540d91e07a9c97e862c51"
+  integrity sha512-x9Y7P03uc9xWwAIvKLLWsGRILOcAG88M5qH1p0K6DKGRCzfcX356K0rv25UINAmdq5uOOHlqaCYYUG1aVo7B5w==
   dependencies:
-    "@twilio/webrtc" "4.2.0"
+    "@twilio/webrtc" "4.3.2"
     backoff "^2.5.0"
     ws "^3.3.1"
     xmlhttprequest "^1.8.0"
