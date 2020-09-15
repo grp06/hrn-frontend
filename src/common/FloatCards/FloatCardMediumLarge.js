@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 const createStyles = makeStyles((theme) => ({
   cardContainer: {
     position: 'relative',
-    top: '-40px',
+    // top: '-40px',
     bottom: '0%',
     display: 'block',
     width: '65vw',

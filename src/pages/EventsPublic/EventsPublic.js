@@ -38,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     textAlign: 'center',
   },
+  eventTitleContainer: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: '50%',
+    textAlign: 'center',
+    padding: '0px 0px 35px 0px',
+  },
 }))
 
 const EventsPublic = () => {
@@ -61,6 +68,33 @@ const EventsPublic = () => {
     return <Loading />
   }
 
+  //figure out HRN events and other events
+  let HRNevents, otherEvents
+  const EventPublicRegex = /^Hi\sRight\sNow/
+  if (allPublicEventsData) {
+    HRNevents = allPublicEventsData.events
+      .filter(
+        (event) => event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
+      )
+      .sort((eventA, eventB) => {
+        if (eventA && eventB) {
+          return Date.parse(eventB.start_at) - Date.parse(eventA.start_at)
+        }
+      })
+
+    otherEvents = allPublicEventsData.events
+      .filter(
+        (event) => !event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
+      )
+      .sort((eventA, eventB) => {
+        if (eventA && eventB) {
+          return Date.parse(eventB.start_at) - Date.parse(eventA.start_at)
+        }
+      })
+  }
+  // console.log('all HRNevents>>>', HRNevents)
+  // console.log('others >>>', otherEvents)
+
   return (
     <>
       <div className={classes.pageBanner}>
@@ -76,19 +110,20 @@ const EventsPublic = () => {
           </Grid>
         </Grid>
       </div>
-      {allPublicEventsData &&
-        allPublicEventsData.events
-          .filter((event) => {
-            return isEventInFuture(event.start_at)
-          })
-          .sort((eventA, eventB) => {
-            if (eventA && eventB) {
-              return eventA.start_at > eventB.start_at
-            }
-          })
-          .map((event) => {
-            return <EventCard key={event.id} event={event} />
-          })}
+      <Grid item container direction="column" className={classes.eventTitleContainer}>
+        <Typography variant="h4">Hi Right Now Events</Typography>
+      </Grid>
+      {HRNevents &&
+        HRNevents.map((event) => {
+          return <EventCard key={event.id} event={event} />
+        })}
+      <Grid item container direction="column" className={classes.eventTitleContainer}>
+        <Typography variant="h4">All Events</Typography>
+      </Grid>
+      {otherEvents &&
+        otherEvents.map((event) => {
+          return <EventCard key={event.id} event={event} style="top: 0%" />
+        })}
     </>
   )
 }

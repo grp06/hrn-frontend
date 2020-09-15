@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${bannerBackground5})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
-    marginBottom: '40px',
+    // marginBottom: '40px',
   },
   pageBannerContentContainer: {
     marginLeft: 'auto',
