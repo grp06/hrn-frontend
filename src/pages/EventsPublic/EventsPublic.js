@@ -82,7 +82,7 @@ const EventsPublic = () => {
       )
       .sort((eventA, eventB) => {
         if (eventA && eventB) {
-          return Date.parse(eventB.start_at) - Date.parse(eventA.start_at)
+          return Date.parse(eventB.start_at) < Date.parse(eventA.start_at)
         }
       })
 
@@ -92,7 +92,7 @@ const EventsPublic = () => {
       )
       .sort((eventA, eventB) => {
         if (eventA && eventB) {
-          return Date.parse(eventB.start_at) - Date.parse(eventA.start_at)
+          return Date.parse(eventB.start_at) < Date.parse(eventA.start_at)
         }
       })
   }
