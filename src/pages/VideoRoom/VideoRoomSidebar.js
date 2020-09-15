@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import {
   HostEventControlsCard,
+  MoreActionsButton,
   PartnerTagsList,
   ReportUserButton,
   RoundAndPartnerCard,
@@ -47,7 +48,7 @@ const VideoRoomSidebar = ({ event, myRound, userId, ConnectionIssuesButton }) =>
         <PartnerTagsList myRound={myRound} userId={userId} />
       </Grid>
       <Grid container justify="center" alignItems="center" className={classes.shareMyInfoContainer}>
-        {ConnectionIssuesButton}
+        <MoreActionsButton connectionIssues={ConnectionIssuesButton} />
         <ShareMyInfoButton myRound={myRound} />
       </Grid>
     </>

@@ -1,5 +1,6 @@
 export { default as ConnectionIssuesButton } from './ConnectionIssuesButton'
 export { default as HostEventControlsCard } from './HostEventControlsCard'
+export { default as MoreActionsButton } from './MoreActionsButton'
 export { default as PartnerTagsList } from './PartnerTagsList'
 export { default as PostChatRating } from './PostChatRating'
 export { default as ReportUserButton } from './ReportUserButton'
