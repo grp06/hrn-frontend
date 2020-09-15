@@ -50,6 +50,7 @@
     "react-lottie": "^1.2.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-use-intercom": "^1.1.0",
     "recharts": "^1.8.5",
     "styled-components": "^5.1.0",
     "subscriptions-transport-ws": "^0.9.16",
