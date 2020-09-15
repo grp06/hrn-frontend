@@ -54,6 +54,7 @@ const SignUpForm = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [linkedInUrl, setLinkedInUrl] = useState('')
   const [showErrorSnack, setShowErrorSnack] = useState(false)
   const [showSignupSuccessSnack, setShowSignupSuccessSnack] = useState(false)
   const [error, setError] = useState(null)
@@ -80,7 +81,7 @@ const SignUpForm = () => {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
         },
-        body: JSON.stringify({ name, email, password, role: 'user' }),
+        body: JSON.stringify({ name, email, password, linkedInUrl, role: 'user' }),
       })
       // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
@@ -102,11 +103,15 @@ const SignUpForm = () => {
     window.analytics.identify(id, {
       name,
       email,
+      linkedInUrl,
       role,
     })
     window.analytics.track('Sign up')
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
+    if (!!linkedInUrl) {
+      localStorage.setItem('linkedInUrl', linkedInUrl)
+    }
 
     history.push('/onboarding')
     window.location.reload()
@@ -148,6 +153,16 @@ const SignUpForm = () => {
                   className={classes.input}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  id="linkedInUrl"
+                  label="LinkedIn URL"
+                  fullWidth
+                  className={classes.input}
+                  value={linkedInUrl}
+                  onChange={(e) => setLinkedInUrl(e.target.value)}
                 />
               </Grid>
               <Grid item>

@@ -50,10 +50,22 @@ const Onboarding = () => {
   const [insertUserTagsMutation] = useMutation(insertUserTags)
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
-  const eventIdInLocalStorage = localStorage.getItem('eventId')
-  const eventData = JSON.parse(localStorage.getItem('event'))
-  const { description, start_at: eventStartTime, event_name, host } = eventData
-  const { name: eventHostName } = host
+  let eventIdInLocalStorage, eventData, description, eventStartTime, event_name, host, eventHostName
+
+  if (!!localStorage.getItem('eventId') && !!localStorage.getItem('event')) {
+    eventIdInLocalStorage = localStorage.getItem('eventId')
+    eventData = JSON.parse(localStorage.getItem('event'))
+    description = eventData.description
+    eventStartTime = eventData.start_at
+    event_name = eventData.event_name
+    host = eventData.host
+    eventHostName = host.name
+  }
+
+  let linkedInUrl
+  if (!!localStorage.getItem('linkedInUrl')) {
+    linkedInUrl = localStorage.getItem('linkedInUrl')
+  }
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -74,6 +86,7 @@ const Onboarding = () => {
           name: userName,
           city: values.city,
           short_bio: values.short_bio,
+          linkedIn_url: linkedInUrl,
         },
       })
     } catch (err) {
@@ -112,7 +125,7 @@ const Onboarding = () => {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
 
-    if (eventIdInLocalStorage) {
+    if (!!eventIdInLocalStorage) {
       // RSVP if got event in localStory
 
       let calendarInviteResponse
