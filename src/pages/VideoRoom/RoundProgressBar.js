@@ -97,7 +97,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
       <Snack
         open={showRoundStartedSnack}
         onClose={() => setShowRoundStartedSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         duration={10000}
         severity="success"
         snackIcon={<TimerIcon />}
@@ -106,7 +106,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
       <Snack
         open={show20SecondsLeftSnack}
         onClose={() => setShow20SecondsLeftSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         duration={10000}
         severity="error"
         snackMessage="20 seconds left!"
