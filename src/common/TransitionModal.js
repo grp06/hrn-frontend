@@ -68,6 +68,7 @@ function TransitionModal({
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
   const handleOpen = () => {
     setOpen(true)
+    setAcceptFunctionInFlight(false)
   }
 
   const handleClose = () => {
@@ -138,7 +139,9 @@ function TransitionModal({
                   disabled={acceptFunctionInFlight}
                   color="primary"
                   className={classes.acceptButton}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
+                    // console.log("click me")
                     setAcceptFunctionInFlight(true)
                     // acceptButtonRef.current.setAttribute('disabled', 'disabled')
                     onAcceptFunction()
