@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${bannerBackground5})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
-    marginBottom: '40px',
+    // marginBottom: '40px',
   },
   pageBannerContentContainer: {
     marginLeft: 'auto',
@@ -68,6 +68,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     localStorage.setItem('eventId', '')
+    localStorage.setItem('event', '')
   }, [])
 
   if (!userId) {
@@ -141,7 +142,7 @@ const MyEvents = () => {
         eventsData.event_users
           .sort((eventA, eventB) => {
             if (eventA && eventB) {
-              return eventA.event.start_at > eventB.event.start_at
+              return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
             }
           })
           .map(({ event }) => {

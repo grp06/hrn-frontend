@@ -22,7 +22,7 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   const { user } = useAppContext()
   const { updatedAt } = user
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
-  const [show15SecondsLeftSnack, setShow15SecondsLeftSnack] = useState(false)
+  const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
 
   const getDuration = () => {
@@ -35,13 +35,13 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
   }
 
   const roundEndTime = new Date(event.updated_at).getTime() + getDuration()
-  const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 15000
+  const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 20000
 
   useEffect(() => {
     const { status } = event
 
     if (isLast15Seconds && status === 'room-in-progress') {
-      setShow15SecondsLeftSnack(true)
+      setShow20SecondsLeftSnack(true)
     }
   }, [isLast15Seconds, event])
 
@@ -97,19 +97,19 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
       <Snack
         open={showRoundStartedSnack}
         onClose={() => setShowRoundStartedSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        duration={6000}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={10000}
         severity="success"
         snackIcon={<TimerIcon />}
         snackMessage={`${event.round_length} mintues left`}
       />
       <Snack
-        open={show15SecondsLeftSnack}
-        onClose={() => setShow15SecondsLeftSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        duration={6000}
+        open={show20SecondsLeftSnack}
+        onClose={() => setShow20SecondsLeftSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={10000}
         severity="error"
-        snackMessage="15 seconds left!"
+        snackMessage="20 seconds left!"
       />
       <LinearProgress variant="determinate" value={currentPercentWayThrough} />
     </Grid>

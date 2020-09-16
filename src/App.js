@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react'
 import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
-
 import makeApolloClient from './apollo'
+import { useIntercom } from 'react-use-intercom'
+
 import { EventForm, ErrorBoundary } from './common'
 import {
   Event,
@@ -31,6 +32,7 @@ import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
 
 const App = () => {
+  const { boot } = useIntercom()
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
 
@@ -45,6 +47,10 @@ const App = () => {
 
   useEffect(() => {
     createClient()
+  }, [])
+
+  useEffect(() => {
+    boot()
   }, [])
 
   if (!client) {

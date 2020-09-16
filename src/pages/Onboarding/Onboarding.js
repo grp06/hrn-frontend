@@ -8,7 +8,7 @@ import { Redirect, useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
-import { insertUserTags, updateUser } from '../../gql/mutations'
+import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { useAppContext } from '../../context/useAppContext'
 
@@ -48,7 +48,19 @@ const Onboarding = () => {
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
-  const eventIdInLocalStorage = localStorage.getItem('eventId')
+  const [insertEventUserMutation] = useMutation(insertEventUser)
+
+  let eventIdInLocalStorage, eventData, description, eventStartTime, event_name, host, eventHostName
+
+  if (!!localStorage.getItem('eventId') && !!localStorage.getItem('event')) {
+    eventIdInLocalStorage = localStorage.getItem('eventId')
+    eventData = JSON.parse(localStorage.getItem('event'))
+    description = eventData.description
+    eventStartTime = eventData.start_at
+    event_name = eventData.event_name
+    host = eventData.host
+    eventHostName = host.name
+  }
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -107,7 +119,52 @@ const Onboarding = () => {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
 
-    if (eventIdInLocalStorage) {
+    if (!!eventIdInLocalStorage) {
+      // RSVP if got event in localStory
+
+      let calendarInviteResponse
+      try {
+        await insertEventUserMutation({
+          variables: {
+            eventId: eventIdInLocalStorage,
+            userId,
+          },
+          skip: !userId,
+        })
+
+        window.analytics.track('RSVP made', {
+          eventId: eventIdInLocalStorage,
+          eventName: event_name,
+        })
+
+        calendarInviteResponse = await fetch(
+          `${process.env.REACT_APP_API_URL}/api/email/send-calendar-invite`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Credentials': true,
+            },
+            body: JSON.stringify({
+              userName,
+              email,
+              event_name,
+              event_id: eventIdInLocalStorage,
+              description,
+              event_start_time: eventStartTime,
+              host_name: eventHostName,
+            }),
+          }
+        ).then((response) => response.json())
+
+        if (calendarInviteResponse.error) {
+          throw calendarInviteResponse.error
+        }
+      } catch (error) {
+        console.log('error = ', error)
+      }
+
       history.push(`/events/${eventIdInLocalStorage}`)
     }
   }

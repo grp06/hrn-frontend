@@ -1,14 +1,15 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 
 import { useQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
+import { useIntercom } from 'react-use-intercom'
 
 import { findUserById } from '../gql/queries'
 import { updateLastSeen } from '../gql/mutations'
+import { listenToEvent } from '../gql/subscriptions'
 
 import { constants } from '../utils'
-import { listenToEvent } from '../gql/subscriptions'
 
 const { lastSeenDuration } = constants
 
@@ -46,6 +47,7 @@ const defaultState = {
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
+  const { update } = useIntercom()
   const { event, app } = state
   const { permissions } = app
   const regex = /\/events\/\d+/
@@ -56,6 +58,13 @@ const AppProvider = ({ children }) => {
   const eventId = pathnameArray ? parseInt(pathnameArray[2], 10) : null
   const history = useHistory()
   const { userId } = state.user
+  const updateIntercom = useCallback(
+    (name, email, city) => {
+      console.log('im getting called again')
+      update({ name, email, city })
+    },
+    [userId]
+  )
 
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
@@ -147,6 +156,8 @@ const AppProvider = ({ children }) => {
           linkedIn_url,
           tags_users,
         } = userData.users[0]
+
+        updateIntercom(name, email, city)
         return dispatch((draft) => {
           draft.user.role = role
           draft.user.userId = id

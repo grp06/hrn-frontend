@@ -10,3 +10,9 @@
 [context.branch-deploy]
   command = "yarn build:staging"
 
+
+[[redirects]]
+  from = "https://launch.hirightnow.com"
+  to = "https://launch.hirightnow.co"
+  status = 301
+  force = true
