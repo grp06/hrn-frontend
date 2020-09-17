@@ -2,11 +2,12 @@ import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery, useMutation } from '@apollo/react-hooks'
 
 import { ConnectionIssuesButton, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { Loading } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
+import { updateLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
 import {
   useAppContext,
@@ -68,11 +69,11 @@ const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { event, setHasPartnerAndIsConnecting } = useEventContext()
+  const { user, setUserUpdatedAt } = useUserContext()
+  const { event, hasPartnerAndIsConnecting, setHasPartnerAndIsConnecting } = useEventContext()
   const { id: event_id, current_round } = event
   const { setUserEventStatus } = useUserEventStatusContext()
-  const { id: userId } = user
+  const { id: userId, updated_at: userUpdatedAt } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [myRound, setMyRound] = useState(null)
@@ -85,6 +86,7 @@ const VideoRoom = ({ match }) => {
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
+  const [updateLastSeenMutation] = useMutation(updateLastSeen)
   const {
     data: myRoundPartnerData,
     loading: myRoundPartnerDataLoading,
@@ -118,7 +120,6 @@ const VideoRoom = ({ match }) => {
 
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
-    console.log('myRoundPartnerData ->', myRoundPartnerData)
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
@@ -130,7 +131,6 @@ const VideoRoom = ({ match }) => {
         history.push(`/events/${eventId}/lobby`)
       }
 
-      console.log('VideoRoom -> myRoundPartnerData', myRoundPartnerData)
       if (myRoundPartnerData.partners.length && myRoundPartnerData.partners[0].left_chat) {
         setUserEventStatus('left chat')
         history.push(`/events/${eventId}/lobby`)
@@ -143,7 +143,6 @@ const VideoRoom = ({ match }) => {
   // to get twilio token
   useEffect(() => {
     if (myRound) {
-      console.log(myRound)
       const hasPartner = myRound && myRound.partner_id
 
       const myIdIsSmaller = myRound.partner_id > myRound.user_id
@@ -196,9 +195,28 @@ const VideoRoom = ({ match }) => {
 
   useEffect(() => {
     if (room) {
+      const asyncUpdateLastSeen = async () => {
+        try {
+          const lastSeenUpdated = await updateLastSeenMutation({
+            variables: {
+              now: null,
+              id: userId,
+            },
+          })
+          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          console.log(
+            'updated UserUpdatedAt with ->',
+            lastSeenUpdated.data.update_users.returning[0].updated_at
+          )
+        } catch (err) {
+          console.log(err)
+        }
+      }
+
       console.warn('starting twilio')
       setHasPartnerAndIsConnecting(true)
       startTwilio(room)
+      asyncUpdateLastSeen()
     }
   }, [room])
 
@@ -235,13 +253,13 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-        {/* {myRound !== 'no-assignment' ? (
+        {myRound !== 'no-assignment' ? (
           <RoundProgressBar
-            myRound={myRound}
+            userUpdatedAt={userUpdatedAt}
             event={event}
             hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
           />
-        ) : null} */}
+        ) : null}
       </div>
     </div>
   )

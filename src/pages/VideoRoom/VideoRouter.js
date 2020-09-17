@@ -4,7 +4,6 @@ import { PostChatRating } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 
 const VideoRouter = ({ myRound }) => {
-  console.log('myRound ->', myRound)
   const { event, twilio } = useEventContext()
   const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
   const { status } = event

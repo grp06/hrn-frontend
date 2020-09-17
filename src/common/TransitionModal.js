@@ -77,6 +77,7 @@ function TransitionModal({
 
   const handleOpen = () => {
     setOpen(true)
+    setAcceptFunctionInFlight(false)
   }
 
   const handleClose = () => {
