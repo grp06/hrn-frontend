@@ -28,35 +28,11 @@ const useEventContext = () => {
     })
   }
 
-  // LETS TRY TO GET RID OF THIS
-  const setPartnerDisconnected = (partnerDisconnected) => {
-    dispatch((draft) => {
-      draft.twilio.partnerDisconnected = partnerDisconnected
-    })
-  }
-
-  // LETS TRY TO GET RID OF THIS
-  const setPartnerNeverConnected = (partnerNeverConnected) => {
-    dispatch((draft) => {
-      draft.twilio.partnerNeverConnected = partnerNeverConnected
-    })
-  }
-
-  // LETS TRY TO GET RID OF THIS
-  const setHasPartnerAndIsConnecting = (hasPartnerAndIsConnecting) => {
-    dispatch((draft) => {
-      draft.twilio.hasPartnerAndIsConnecting = hasPartnerAndIsConnecting
-    })
-  }
-
   return {
     ...state,
     resetEvent,
     setCameraAndMicPermissions,
     setEventId,
-    setPartnerDisconnected,
-    setPartnerNeverConnected,
-    setHasPartnerAndIsConnecting,
   }
 }
 

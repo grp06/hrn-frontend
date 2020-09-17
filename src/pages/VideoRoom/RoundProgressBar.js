@@ -25,20 +25,10 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
 
-  console.log('userUpdatedAt ->', userUpdatedAt)
-  console.log('eventUpdatedAt ->', eventUpdatedAt)
   if (hasPartnerAndIsConnecting) {
     hasStartedConnectingToPartner.current = true
   }
 
-  // get the duration of the round
-  // get what time the round ends
-  // get what time the round started at === eventUpdatedAt
-  // get what time you entered the room at === userUpdatedAt(the last seen mutation that updates userUpdatedAt)
-  // get the percentage of the timebar
-  // how much time elapsed in round already === (timeYouEnter - startOfRound)
-  // (timeElapsedInRound)/ (duration of round) * 100
-  // increment time elapsed in round already every one second is useEffect
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
       return round_length * 60000
@@ -89,32 +79,22 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   useEffect(() => {
     let interval = null
-    if (eventStatus === 'room-in-progress') {
-      interval = setInterval(() => {
-        const percentElapsedThroughRound = getPercentElapsedThroughRound()
-        setTimeElapsedInRound((seconds) => seconds + 1000)
-        setProgressBarValue(percentElapsedThroughRound)
-        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-        console.log('timeElapsedInRound ->', timeElapsedInRound)
-      }, 1000)
+    interval = setInterval(() => {
+      const percentElapsedThroughRound = getPercentElapsedThroughRound()
+      setTimeElapsedInRound((seconds) => seconds + 1000)
+      setProgressBarValue(percentElapsedThroughRound)
+      console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
+      console.log('timeElapsedInRound ->', timeElapsedInRound)
+    }, 1000)
 
-      if (timeElapsedInRound > getRoundDuration() - 20000) {
-        setShow20SecondsLeftSnack(true)
-      }
-    } else if (eventStatus === 'in-between-rounds') {
-      interval = setInterval(() => {
-        const percentElapsedThroughRound = getPercentElapsedThroughRound()
-        setTimeElapsedInRound((seconds) => seconds + 1000)
-        setProgressBarValue(percentElapsedThroughRound)
-        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-        console.log('timeElapsedInRound ->', timeElapsedInRound)
-      }, 1000)
+    if (timeElapsedInRound > getRoundDuration() - 20000) {
+      setShow20SecondsLeftSnack(true)
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [timeElapsedInRound, eventStatus])
+  }, [timeElapsedInRound])
 
   return (
     <Grid

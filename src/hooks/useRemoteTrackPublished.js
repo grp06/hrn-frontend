@@ -1,10 +1,10 @@
-import { useEventContext } from '../context'
+import { useTwilioContext } from '../context'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants
 
 const useRemoteTrackPublished = () => {
-  const { setHasPartnerAndIsConnecting } = useEventContext()
+  const { setHasPartnerAndIsConnecting } = useTwilioContext()
 
   const remoteTrackPublished = (publication) => {
     const onPreEvent = window.location.pathname.indexOf('/lobby') > -1

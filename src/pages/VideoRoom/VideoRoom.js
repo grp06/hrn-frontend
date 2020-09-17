@@ -12,6 +12,7 @@ import { getToken } from '../../helpers'
 import {
   useAppContext,
   useEventContext,
+  useTwilioContext,
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
@@ -70,9 +71,10 @@ const VideoRoom = ({ match }) => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user, setUserUpdatedAt } = useUserContext()
-  const { event, hasPartnerAndIsConnecting, setHasPartnerAndIsConnecting } = useEventContext()
-  const { id: event_id, current_round } = event
+  const { event } = useEventContext()
   const { setUserEventStatus } = useUserEventStatusContext()
+  const { hasPartnerAndIsConnecting, setHasPartnerAndIsConnecting } = useTwilioContext()
+  const { id: event_id, current_round, status: eventStatus } = event
   const { id: userId, updated_at: userUpdatedAt } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
@@ -243,7 +245,7 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      <VideoRouter myRound={myRound} />
+      <VideoRouter myRound={myRound} eventStatus={eventStatus} />
       <VideoRoomSidebar
         event={event}
         myRound={myRound}

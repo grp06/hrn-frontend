@@ -1,17 +1,19 @@
 import React from 'react'
-import { useEventContext } from '../../context'
+import { useTwilioContext } from '../../context'
 import { PostChatRating } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 
-const VideoRouter = ({ myRound }) => {
-  const { event, twilio } = useEventContext()
-  const { partnerDisconnected, partnerNeverConnected, hasPartnerAndIsConnecting } = twilio
-  const { status } = event
+const VideoRouter = ({ eventStatus, myRound }) => {
+  const {
+    partnerDisconnected,
+    partnerNeverConnected,
+    hasPartnerAndIsConnecting,
+  } = useTwilioContext()
 
   const displayVideoMessage = () => {
     const hasRoundsData = myRound !== 'no-assignment'
     const hasPartner = !hasRoundsData ? false : myRound.partner_id
-    switch (status) {
+    switch (eventStatus) {
       case 'in-between-rounds':
         return hasPartner ? (
           <PostChatRating myRound={myRound} />
