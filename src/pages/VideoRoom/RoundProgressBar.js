@@ -51,26 +51,25 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
   const getTimeElapsedInRoundAlready = () => {
     const timeUserEnteredRound = new Date(userUpdatedAt).getTime()
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
-    console.log('timeUserEnteredRound ->', timeUserEnteredRound)
-    console.log('timeRoundStarted ->', timeRoundStarted)
     return timeUserEnteredRound - timeRoundStarted
   }
 
   const getPercentElapsedThroughRound = () => {
     const timeElapsedInRoundAlready = timeElapsedInRound || getTimeElapsedInRoundAlready()
     const duration = getRoundDuration()
-    console.log('timeElapsedInRoundAlready ->', timeElapsedInRoundAlready)
     return (timeElapsedInRoundAlready / duration) * 100
   }
 
   useEffect(() => {
     const seconds = getTimeElapsedInRoundAlready()
     const progressPercent = getPercentElapsedThroughRound()
-    console.log('seconds ->', seconds)
-    console.log('progressPerecent ->', progressPercent)
     setTimeElapsedInRound(seconds)
     setProgressBarValue(progressPercent)
   }, [])
+
+  useEffect(() => {
+    setTimeElapsedInRound(0)
+  }, [eventStatus])
 
   useEffect(() => {
     // make sure we've already started the process of connecting, and that the connection has been made, and its within 45sec of round start
@@ -81,7 +80,6 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
       timeElapsedInRound < 45000 &&
       eventStatus === 'room-in-progress'
     ) {
-      console.log('RoundProgressBar -> status', eventStatus)
       // without this, the green banner annoyingly shows up right before the connecting screen
       setTimeout(() => {
         setShowRoundStartedSnack(true)
@@ -104,11 +102,6 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
         setShow20SecondsLeftSnack(true)
       }
     } else if (eventStatus === 'in-between-rounds') {
-      console.log('getting into else if')
-      if (timeElapsedInRound > 20000) {
-        console.log('resetting timeElapsed to 0')
-        setTimeElapsedInRound(0)
-      }
       interval = setInterval(() => {
         const percentElapsedThroughRound = getPercentElapsedThroughRound()
         setTimeElapsedInRound((seconds) => seconds + 1000)
