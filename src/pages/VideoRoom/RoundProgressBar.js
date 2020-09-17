@@ -91,16 +91,31 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   useEffect(() => {
     let interval = null
-    interval = setInterval(() => {
-      const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      setTimeElapsedInRound((seconds) => seconds + 1000)
-      setProgressBarValue(percentElapsedThroughRound)
-      console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-      console.log('timeElapsedInRound ->', timeElapsedInRound)
-    }, 1000)
+    if (eventStatus === 'room-in-progress') {
+      interval = setInterval(() => {
+        const percentElapsedThroughRound = getPercentElapsedThroughRound()
+        setTimeElapsedInRound((seconds) => seconds + 1000)
+        setProgressBarValue(percentElapsedThroughRound)
+        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
+        console.log('timeElapsedInRound ->', timeElapsedInRound)
+      }, 1000)
 
-    if (timeElapsedInRound === getRoundDuration() - 20000) {
-      setShow20SecondsLeftSnack(true)
+      if (timeElapsedInRound > getRoundDuration() - 20000) {
+        setShow20SecondsLeftSnack(true)
+      }
+    } else if (eventStatus === 'in-between-rounds') {
+      console.log('getting into else if')
+      if (timeElapsedInRound > 20000) {
+        console.log('resetting timeElapsed to 0')
+        setTimeElapsedInRound(0)
+      }
+      interval = setInterval(() => {
+        const percentElapsedThroughRound = getPercentElapsedThroughRound()
+        setTimeElapsedInRound((seconds) => seconds + 1000)
+        setProgressBarValue(percentElapsedThroughRound)
+        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
+        console.log('timeElapsedInRound ->', timeElapsedInRound)
+      }, 1000)
     }
 
     return () => {
