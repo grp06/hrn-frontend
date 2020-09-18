@@ -10,6 +10,7 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/logoPurple.svg'
 import { FloatCardMedium, Snack } from '../../common'
+import { ShareMyInfoButton } from '../VideoRoom'
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -65,10 +66,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ConnectionCard = ({ connection }) => {
+const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
   const classes = useStyles()
   const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
+  const myRoundInfo = { event_id: eventId, partner_id: partnerId, user_id: userId }
 
   const renderConnectionsTags = () => {
     return connectionsTags
@@ -164,6 +166,7 @@ const ConnectionCard = ({ connection }) => {
                 LinkedIn
               </Button>
             )}
+            {!i_shared_details && <ShareMyInfoButton myRound={myRoundInfo} />}
           </Grid>
         </Grid>
       </Grid>
