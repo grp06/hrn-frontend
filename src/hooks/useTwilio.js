@@ -1,5 +1,5 @@
 import { useParticipantConnected } from '.'
-import { useTwilioContext } from '../context'
+import { useTwilioContext, useUserEventStatusContext } from '../context'
 import { constants } from '../utils'
 
 const useTwilio = () => {
@@ -8,6 +8,7 @@ const useTwilio = () => {
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
   } = useTwilioContext()
+  const { setUserEventStatus } = useUserEventStatusContext()
   // 45 seconds is way too long
   const { partnerCameraIssueTimeout } = constants
 
@@ -82,6 +83,7 @@ const useTwilio = () => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
+        setUserEventStatus('waiting for match')
         if (error) {
           console.log('Unexpectedly disconnected:', error)
         }
