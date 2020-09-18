@@ -8,6 +8,7 @@ const defaultState = {
   partnerDisconnected: false,
   partnerNeverConnected: false,
   hasPartnerAndIsConnecting: false,
+  myRound: null,
 }
 
 const TwilioProvider = ({ children }) => {

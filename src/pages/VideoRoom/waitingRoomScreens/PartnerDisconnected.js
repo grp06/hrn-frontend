@@ -45,7 +45,15 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
 
   return (
     <div className={classes.waitingRoom}>
-      <Grid container justify="center" alignItems="center" alignContent="center" lg={8} xs={10}>
+      <Grid
+        container
+        item
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+        lg={8}
+        xs={10}
+      >
         <Typography className={classes.messageText}>
           Sorry to break the bad news to you, but your partner disconnected ... something to do with
           squirrels chewing their router{' '}

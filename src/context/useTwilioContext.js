@@ -10,6 +10,7 @@ const useTwilioContext = () => {
   }
 
   const setPartnerDisconnected = (partnerDisconnected) => {
+    console.log('setPartnerDisconnected ->', partnerDisconnected)
     dispatch((draft) => {
       draft.partnerDisconnected = partnerDisconnected
     })
@@ -27,11 +28,18 @@ const useTwilioContext = () => {
     })
   }
 
+  const setMyRound = (myRound) => {
+    dispatch((draft) => {
+      draft.myRound = myRound
+    })
+  }
+
   return {
     ...state,
     setPartnerDisconnected,
     setPartnerNeverConnected,
     setHasPartnerAndIsConnecting,
+    setMyRound,
   }
 }
 
