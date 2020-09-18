@@ -1,14 +1,10 @@
 import React, { useEffect } from 'react'
 
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
-import { useUserContext, useAppContext } from '.'
-import { updateLastSeen } from '../gql/mutations'
+import { useAppContext } from '.'
 import { listenToEvent } from '../gql/subscriptions'
-import { constants } from '../utils'
-
-const { lastSeenDuration } = constants
 
 const EventContext = React.createContext()
 
@@ -22,18 +18,12 @@ const defaultState = {
   // eventId is for event subscriptions
   eventId: null,
   event: {},
-  twilio: {
-    partnerDisconnected: false,
-    hasPartnerAndIsConnecting: false,
-  },
 }
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { user, setUserUpdatedAt } = useUserContext()
   const { setAppLoading } = useAppContext()
-  const { id: userId } = user
-  const { event, permissions } = state
+  const { event } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(window.location.pathname.match(eventRegex))

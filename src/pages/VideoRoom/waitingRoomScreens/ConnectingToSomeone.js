@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ConnectingToSomeone = ({ partnerNeverConnected, myRound }) => {
+const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
   const { id: row_id } = myRound
   console.log('connecting to someone is rerendering')
   const classes = useStyles()
@@ -45,7 +45,15 @@ const ConnectingToSomeone = ({ partnerNeverConnected, myRound }) => {
   }
   return (
     <div className={classes.waitingRoom}>
-      <Grid container justify="center" alignItems="center" alignContent="center" lg={8} xs={10}>
+      <Grid
+        item
+        container
+        justify="center"
+        alignItems="center"
+        alignContent="center"
+        lg={8}
+        xs={10}
+      >
         {!partnerNeverConnected ? (
           <>
             <Typography className={classes.messageText}>
@@ -79,6 +87,6 @@ const ConnectingToSomeone = ({ partnerNeverConnected, myRound }) => {
       </Grid>
     </div>
   )
-}
+})
 
 export default ConnectingToSomeone

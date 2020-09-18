@@ -25,7 +25,13 @@ import {
   SignUp,
   Lobby,
 } from './pages'
-import { AppProvider, EventProvider, UserProvider, UserEventStatusProvider } from './context'
+import {
+  AppProvider,
+  EventProvider,
+  TwilioProvider,
+  UserProvider,
+  UserEventStatusProvider,
+} from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import theme from './ui/theme'
@@ -85,16 +91,18 @@ const App = () => {
                       <EventProvider>
                         <Route exact path="/events" component={EventsPublic} />
                         <Route exact path="/events/:id" component={Event} />
-                        <UserEventStatusProvider>
-                          <Route exact path="/events/:id/lobby" component={Lobby} />
-                          <Route exact path="/events/:id/video-room" component={VideoRoom} />
-                          <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                          <Route
-                            exact
-                            path="/events/:id/event-complete"
-                            component={EventComplete}
-                          />
-                        </UserEventStatusProvider>
+                        <TwilioProvider>
+                          <UserEventStatusProvider>
+                            <Route exact path="/events/:id/lobby" component={Lobby} />
+                            <Route exact path="/events/:id/video-room" component={VideoRoom} />
+                            <Route exact path="/events/:id/pre-event" component={PreEvent} />
+                            <Route
+                              exact
+                              path="/events/:id/event-complete"
+                              component={EventComplete}
+                            />
+                          </UserEventStatusProvider>
+                        </TwilioProvider>
                       </EventProvider>
                       <Route exact path="/privacy-policy" component={PrivacyPolicy} />
                     </MarginLeftAppWrapper>

@@ -23,22 +23,15 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
+  const [alreadyShown20SecondsLeftSnack, setAlreadyShown20SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
 
-  console.log('userUpdatedAt ->', userUpdatedAt)
-  console.log('eventUpdatedAt ->', eventUpdatedAt)
+  // TODO: have to add a last seen mutation somewhere on componentDidMount on VideoRoom
+  // because if we refresh we never send a last seen mutation, so it will be null?
   if (hasPartnerAndIsConnecting) {
     hasStartedConnectingToPartner.current = true
   }
 
-  // get the duration of the round
-  // get what time the round ends
-  // get what time the round started at === eventUpdatedAt
-  // get what time you entered the room at === userUpdatedAt(the last seen mutation that updates userUpdatedAt)
-  // get the percentage of the timebar
-  // how much time elapsed in round already === (timeYouEnter - startOfRound)
-  // (timeElapsedInRound)/ (duration of round) * 100
-  // increment time elapsed in round already every one second is useEffect
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
       return round_length * 60000
@@ -69,6 +62,7 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   useEffect(() => {
     setTimeElapsedInRound(0)
+    setAlreadyShown20SecondsLeftSnack(false)
   }, [eventStatus])
 
   useEffect(() => {
@@ -89,26 +83,19 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   useEffect(() => {
     let interval = null
-    if (eventStatus === 'room-in-progress') {
-      interval = setInterval(() => {
-        const percentElapsedThroughRound = getPercentElapsedThroughRound()
-        setTimeElapsedInRound((seconds) => seconds + 1000)
-        setProgressBarValue(percentElapsedThroughRound)
-        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-        console.log('timeElapsedInRound ->', timeElapsedInRound)
-      }, 1000)
+    interval = setInterval(() => {
+      const percentElapsedThroughRound = getPercentElapsedThroughRound()
+      setTimeElapsedInRound((seconds) => seconds + 1000)
+      setProgressBarValue(percentElapsedThroughRound)
+      console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
+      console.log('timeElapsedInRound ->', timeElapsedInRound)
+    }, 1000)
 
+    if (!alreadyShown20SecondsLeftSnack && eventStatus === 'room-in-progress') {
       if (timeElapsedInRound > getRoundDuration() - 20000) {
         setShow20SecondsLeftSnack(true)
+        setAlreadyShown20SecondsLeftSnack(true)
       }
-    } else if (eventStatus === 'in-between-rounds') {
-      interval = setInterval(() => {
-        const percentElapsedThroughRound = getPercentElapsedThroughRound()
-        setTimeElapsedInRound((seconds) => seconds + 1000)
-        setProgressBarValue(percentElapsedThroughRound)
-        console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-        console.log('timeElapsedInRound ->', timeElapsedInRound)
-      }, 1000)
     }
 
     return () => {

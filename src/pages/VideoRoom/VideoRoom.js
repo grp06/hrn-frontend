@@ -12,6 +12,7 @@ import { getToken } from '../../helpers'
 import {
   useAppContext,
   useEventContext,
+  useTwilioContext,
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
@@ -70,13 +71,18 @@ const VideoRoom = ({ match }) => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user, setUserUpdatedAt } = useUserContext()
-  const { event, hasPartnerAndIsConnecting, setHasPartnerAndIsConnecting } = useEventContext()
-  const { id: event_id, current_round } = event
+  const { event } = useEventContext()
   const { setUserEventStatus } = useUserEventStatusContext()
+  const {
+    hasPartnerAndIsConnecting,
+    setHasPartnerAndIsConnecting,
+    myRound,
+    setMyRound,
+  } = useTwilioContext()
+  const { id: event_id, current_round, status: eventStatus } = event
   const { id: userId, updated_at: userUpdatedAt } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
-  const [myRound, setMyRound] = useState(null)
   const [room, setRoom] = useState(null)
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
@@ -117,6 +123,32 @@ const VideoRoom = ({ match }) => {
       }
     }
   }, [event, userId])
+
+  // call last seen one last time when VideoRoom renders
+  // this ensures when you refresh your userObject gets updated
+  // and the roundProgressBar will be correct
+  useEffect(() => {
+    if (userId) {
+      const asyncUpdateLastSeen = async () => {
+        try {
+          const lastSeenUpdated = await updateLastSeenMutation({
+            variables: {
+              now: null,
+              id: userId,
+            },
+          })
+          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          console.log(
+            'updated UserUpdatedAt with ->',
+            lastSeenUpdated.data.update_users.returning[0].updated_at
+          )
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      asyncUpdateLastSeen()
+    }
+  }, [userId])
 
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
@@ -167,7 +199,7 @@ const VideoRoom = ({ match }) => {
         history.push(`/events/${eventId}/lobby`)
       }
     }
-  }, [myRound, event])
+  }, [myRound])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your room
@@ -195,28 +227,9 @@ const VideoRoom = ({ match }) => {
 
   useEffect(() => {
     if (room) {
-      const asyncUpdateLastSeen = async () => {
-        try {
-          const lastSeenUpdated = await updateLastSeenMutation({
-            variables: {
-              now: null,
-              id: userId,
-            },
-          })
-          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
-          console.log(
-            'updated UserUpdatedAt with ->',
-            lastSeenUpdated.data.update_users.returning[0].updated_at
-          )
-        } catch (err) {
-          console.log(err)
-        }
-      }
-
       console.warn('starting twilio')
       setHasPartnerAndIsConnecting(true)
       startTwilio(room)
-      asyncUpdateLastSeen()
     }
   }, [room])
 
@@ -243,7 +256,7 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      <VideoRouter myRound={myRound} />
+      <VideoRouter myRound={myRound} eventStatus={eventStatus} />
       <VideoRoomSidebar
         event={event}
         myRound={myRound}
@@ -253,13 +266,13 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRound !== 'no-assignment' ? (
+        {/* {myRound !== 'no-assignment' ? (
           <RoundProgressBar
             userUpdatedAt={userUpdatedAt}
             event={event}
             hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
           />
-        ) : null}
+        ) : null} */}
       </div>
     </div>
   )
