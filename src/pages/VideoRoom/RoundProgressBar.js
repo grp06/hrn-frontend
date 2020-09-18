@@ -23,8 +23,11 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
+  const [alreadyShown20SecondsLeftSnack, setAlreadyShown20SecondsLeftSnack] = useState(false)
   const hasStartedConnectingToPartner = useRef()
 
+  // TODO: have to add a last seen mutation somewhere on componentDidMount on VideoRoom
+  // because if we refresh we never send a last seen mutation, so it will be null?
   if (hasPartnerAndIsConnecting) {
     hasStartedConnectingToPartner.current = true
   }
@@ -59,6 +62,7 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   useEffect(() => {
     setTimeElapsedInRound(0)
+    setAlreadyShown20SecondsLeftSnack(false)
   }, [eventStatus])
 
   useEffect(() => {
@@ -87,14 +91,17 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
       console.log('timeElapsedInRound ->', timeElapsedInRound)
     }, 1000)
 
-    if (timeElapsedInRound > getRoundDuration() - 20000) {
-      setShow20SecondsLeftSnack(true)
+    if (!alreadyShown20SecondsLeftSnack && eventStatus === 'room-in-progress') {
+      if (timeElapsedInRound > getRoundDuration() - 20000) {
+        setShow20SecondsLeftSnack(true)
+        setAlreadyShown20SecondsLeftSnack(true)
+      }
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [timeElapsedInRound])
+  }, [timeElapsedInRound, eventStatus])
 
   return (
     <Grid
