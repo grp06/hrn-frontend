@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
 import { ConnectionIssuesButton, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { UserStatusBox } from '../Lobby'
 import { Loading } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateLastSeen } from '../../gql/mutations'
@@ -72,7 +73,7 @@ const VideoRoom = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
-  const { setUserEventStatus } = useUserEventStatusContext()
+  const { userEventStatus, setUserEventStatus } = useUserEventStatusContext()
   const {
     hasPartnerAndIsConnecting,
     setHasPartnerAndIsConnecting,
@@ -123,6 +124,12 @@ const VideoRoom = ({ match }) => {
       }
     }
   }, [event, userId])
+
+  useEffect(() => {
+    if (userEventStatus === 'sitting out') {
+      history.push(`/events/${eventId}/lobby`)
+    }
+  }, [userEventStatus])
 
   // call last seen one last time when VideoRoom renders
   // this ensures when you refresh your userObject gets updated
@@ -256,7 +263,16 @@ const VideoRoom = ({ match }) => {
 
   return (
     <div>
-      <VideoRouter myRound={myRound} eventStatus={eventStatus} />
+      <VideoRouter
+        myRound={myRound}
+        eventStatus={eventStatus}
+        userStatusBox={
+          <UserStatusBox
+            userEventStatus={userEventStatus}
+            setUserEventStatus={setUserEventStatus}
+          />
+        }
+      />
       <VideoRoomSidebar
         event={event}
         myRound={myRound}

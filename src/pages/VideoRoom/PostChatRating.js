@@ -10,6 +10,9 @@ import { sleep } from '../../helpers'
 import { Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  messageText: {
+    ...theme.typography.waitingRoomHeading,
+  },
   pageContainer: {
     width: '100%',
     display: 'flex',
@@ -32,12 +35,18 @@ const useStyles = makeStyles((theme) => ({
   underline: {
     textDecoration: 'underline',
   },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
+  userStatusBoxContainer: {
+    position: 'absolute',
+    top: '5%',
+    right: '1%',
+    bottom: 'auto',
+    left: 'auto',
+    width: 'auto',
+    zIndex: 9999,
   },
 }))
 
-const PostChatRating = ({ myRound }) => {
+const PostChatRating = ({ myRound, userStatusBox }) => {
   const classes = useStyles()
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
@@ -109,6 +118,7 @@ const PostChatRating = ({ myRound }) => {
             </div>
           </>
         )}
+        <div className={classes.userStatusBoxContainer}>{userStatusBox}</div>
         <Snack
           open={showRatingSnack}
           onClose={() => setShowRatingSnack(false)}

@@ -61,11 +61,8 @@ const BroadcastBox = React.memo(({ event, userEventStatus }) => {
         )
       case 'pre-event':
         return <PreEvent />
-      case 'room-in-progress':
-        console.log('im here')
-        return getBroadcastBoxElement(userEventStatus)
       default:
-        return null
+        return getBroadcastBoxElement(userEventStatus)
     }
   }
 
