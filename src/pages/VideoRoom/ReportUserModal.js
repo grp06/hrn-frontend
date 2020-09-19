@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
-import { updateLeftChat } from '../../gql/mutations'
+import { updateLeftChat, reportPartner } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -56,27 +56,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
-  console.log('ccallingConnection issues modal')
-  const { id: row_id } = myRound
+const ReportUserModal = ({ myRound, open, setOpen }) => {
+  const { event_id, id: row_id, user_id, partner_id, created_at: convo_started_at } = myRound
   const classes = useStyles()
-  const [openModal, setModalOpen] = useState(open)
+  const [openModal, setOpenModal] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
-  const [leftChatMutation] = useMutation(updateLeftChat, {
+
+  const [updateLeftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
-      reason: 'connection issues',
+      reason: 'reported my partner',
+    },
+  })
+
+  const [reportPartnerMutation] = useMutation(reportPartner, {
+    variables: {
+      user_id,
+      partner_id,
+      reason: 'default',
+      convo_started_at,
+      event_id,
     },
   })
 
   const closeModal = () => {
-    setModalOpen(false)
+    setOpenModal(false)
     setOpen(false)
   }
 
   const exitChat = async () => {
     try {
-      await leftChatMutation()
+      await updateLeftChatMutation()
+      await reportPartnerMutation()
       closeModal()
       window.location.reload()
     } catch (err) {
@@ -111,19 +122,18 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
         >
           <Grid container justify="center" className={classes.modalBody}>
             <Typography variant="h5" gutterBottom>
-              Having Connection Issues?{' '}
-              <span role="img" aria-label="frowning face">
-                😦
+              Report this user?{' '}
+              <span role="img" aria-label="mad face">
+                🤬
               </span>
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
-              Most of our connection issues can be solved by a simple page refresh, or changing your
-              camera / mic settings by pressing on the gear icon.
+              We take pride in only allowing high-quality, respectful people on our platform and
+              therefore we do not take users being rude lightly. We appreciate you flagging this
+              conversation and we may reach out to you to investigate this report.
             </Typography>
             <Typography variant="subtitle1" gutterBottom>
-              If that doesn&apos;t solve the problem, then click on the &apos;leave chat&apos;
-              button below and we will try to match you with an available user for the duration of
-              the round.
+              Are you sure you would like to report this user?
             </Typography>
           </Grid>
 
@@ -147,7 +157,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
                 closeModal()
               }}
             >
-              Leave Chat
+              Report this user
             </Button>
             <Button variant="outlined" className={classes.cancelButton} onClick={closeModal}>
               Whoops, No Way!
@@ -159,4 +169,4 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
   )
 }
 
-export default ConnectionIssuesModal
+export default ReportUserModal

@@ -20,21 +20,12 @@ const createStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: '0',
   },
-  partnerNameAndReportButton: {
-    position: 'relative',
-  },
-  reportUserButtonContainer: {
-    position: 'absolute',
-    left: 'auto',
-    right: '1%',
-    bottom: '-1%',
-  },
   roundNumberText: {
     textAlign: 'center',
   },
 }))
 
-const RoundAndPartnerCard = ({ event, myRound, reportUser }) => {
+const RoundAndPartnerCard = ({ event, myRound }) => {
   const classes = createStyles()
   const { num_rounds, current_round } = event
 
@@ -66,14 +57,6 @@ const RoundAndPartnerCard = ({ event, myRound, reportUser }) => {
     )
   }
 
-  const getReportUserButton = () => {
-    return (
-      myRound.userByPartnerId && (
-        <div className={classes.reportUserButtonContainer}>{reportUser}</div>
-      )
-    )
-  }
-
   return (
     <Grid
       container
@@ -83,10 +66,7 @@ const RoundAndPartnerCard = ({ event, myRound, reportUser }) => {
       alignItems="center"
     >
       {getCurrentRoundNumber()}
-      <Grid container justify="center" className={classes.partnerNameAndReportButton}>
-        {getPartnerName()}
-        {getReportUserButton()}
-      </Grid>
+      {getPartnerName()}
       {getPartnerCity()}
     </Grid>
   )
