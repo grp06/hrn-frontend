@@ -10,6 +10,9 @@ import { sleep } from '../../helpers'
 import { Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  emoji: {
+    fontSize: '50px',
+  },
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
@@ -88,11 +91,9 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
       >
         {showRatingForm ? (
           <>
-            <Typography variant="h5">Hope you had a great chat!</Typography>
-            <Typography variant="h5">Help us improve your matches in the future!</Typography>
-            <Typography variant="h4">
-              How would you rate <span className={classes.underline}>this</span> match?
-            </Typography>
+            <Typography variant="h4">Hope you had a great chat!</Typography>
+            <Typography variant="h4">Help us improve our matching alogrithm!</Typography>
+            <Typography variant="h4">How good was this match?</Typography>
             <div className={classes.starsContainer}>
               <Rating
                 name="simple-controlled"
@@ -106,11 +107,9 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
         ) : (
           <>
             <Typography className={classes.messageText}>
-              Connecting you to someone awesome!
+              Got it! Thanks for letting us know.
             </Typography>
-            <Typography className={classes.messageText}>
-              Take a 20 second breather before your next match.
-            </Typography>
+            <Typography className={classes.messageText}>Connecting you to someone soon!</Typography>
             <div className={classes.emoji}>
               <span role="img" aria-label="party smiley">
                 🥳

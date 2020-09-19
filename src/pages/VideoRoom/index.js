@@ -1,4 +1,4 @@
-export { default as ConnectionIssuesButton } from './ConnectionIssuesButton'
+export { default as ConnectionIssuesModal } from './ConnectionIssuesModal'
 export { default as HostEventControlsCard } from './HostEventControlsCard'
 export { default as MoreActionsButton } from './MoreActionsButton'
 export { default as PartnerTagsList } from './PartnerTagsList'

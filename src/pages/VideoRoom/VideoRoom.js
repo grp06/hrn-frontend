@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
-import { ConnectionIssuesButton, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { UserStatusBox } from '../Lobby'
 import { Loading } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
@@ -273,12 +273,7 @@ const VideoRoom = ({ match }) => {
           />
         }
       />
-      <VideoRoomSidebar
-        event={event}
-        myRound={myRound}
-        userId={userId}
-        ConnectionIssuesButton={<ConnectionIssuesButton myRound={myRound} />}
-      />
+      <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />

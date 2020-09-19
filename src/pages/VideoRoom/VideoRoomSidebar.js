@@ -47,7 +47,7 @@ const VideoRoomSidebar = React.memo(({ event, myRound, userId, ConnectionIssuesB
         <PartnerTagsList myRound={myRound} userId={userId} />
       </Grid>
       <Grid container justify="center" alignItems="center" className={classes.shareMyInfoContainer}>
-        <MoreActionsButton connectionIssues={ConnectionIssuesButton} />
+        <MoreActionsButton myRound={myRound} />
         <ShareMyInfoButton myRound={myRound} />
       </Grid>
     </>
