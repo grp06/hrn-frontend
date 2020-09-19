@@ -7,7 +7,7 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined'
 import BugReportIcon from '@material-ui/icons/BugReport'
-import { ConnectionIssuesModal, ReportUserModal } from '.'
+import { ConnectionIssuesModal, ReportUserModal, SetupMicAndCameraModal } from '.'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,6 +27,7 @@ const MoreActionsButton = ({ myRound }) => {
   const [open, setOpen] = useState(false)
   const [showConnectionIssuesModal, setShowConnectionIssuesModal] = useState(false)
   const [showReportUserModal, setShowReportUserModal] = useState(false)
+  const [showSetupMicAndCameraModal, setShowSetupMicAndCameraModal] = useState(false)
 
   const handleOpen = () => {
     setOpen(true)
@@ -40,6 +41,7 @@ const MoreActionsButton = ({ myRound }) => {
     {
       icon: <SettingsIcon />,
       name: 'Camera/Mic Settings',
+      onClick: () => setShowSetupMicAndCameraModal(true),
     },
     {
       icon: <BugReportIcon />,
@@ -87,6 +89,12 @@ const MoreActionsButton = ({ myRound }) => {
           myRound={myRound}
           open={showReportUserModal}
           setOpen={setShowReportUserModal}
+        />
+      )}
+      {showSetupMicAndCameraModal && (
+        <SetupMicAndCameraModal
+          open={showSetupMicAndCameraModal}
+          setOpen={setShowSetupMicAndCameraModal}
         />
       )}
     </div>

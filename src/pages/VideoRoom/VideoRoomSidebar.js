@@ -5,7 +5,6 @@ import {
   HostEventControlsCard,
   MoreActionsButton,
   PartnerTagsList,
-  ReportUserButton,
   RoundAndPartnerCard,
   ShareMyInfoButton,
 } from '.'
@@ -31,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoomSidebar = React.memo(({ event, myRound, userId, ConnectionIssuesButton }) => {
+const VideoRoomSidebar = React.memo(({ event, myRound, userId }) => {
   const classes = useStyles()
   const { host_id } = event
   return (
