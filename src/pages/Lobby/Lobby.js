@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+import { useSubscription } from '@apollo/react-hooks'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
+import { listenToPartnersTable } from '../../gql/subscriptions'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { useGetCameraAndMicStatus } from '../../hooks'
 import {
@@ -63,18 +65,42 @@ const Lobby = () => {
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
   const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
-  const { start_at: eventStartTime, status: eventStatus, id: eventId } = event
+  const { start_at: eventStartTime, status: eventStatus, id: eventId, round } = event
   const { id: userId } = user
   const hasCheckedCamera = useRef()
   // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
 
+  // only do this subscription if you came late or left the chat
+  // TODO optimize by not subscribing with less than two minutes
+  const { data: myRoundData } = useSubscription(listenToPartnersTable, {
+    variables: {
+      event_id: eventId,
+      user_id: userId,
+      round,
+    },
+    skip:
+      ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
+        eventStatus === 'room-in-progress') ||
+      eventStatus === 'not-stared',
+  })
+
+  console.log('myRoundData ->', myRoundData)
+
+  // this is for when the event first starts
   useEffect(() => {
     if (eventStatus === 'room-in-progress' && userEventStatus === 'waiting for match') {
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus, userEventStatus])
+
+  // this is only for when you come late or leave a chat and then get rematched
+  useEffect(() => {
+    if (myRoundData && myRoundData.length) {
+      history.push(`/events/${eventId}/video-room`)
+    }
+  }, [myRoundData])
 
   return (
     <div className={classes.pageContainer}>
