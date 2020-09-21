@@ -65,7 +65,7 @@ const Lobby = () => {
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
   const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
-  const { start_at: eventStartTime, status: eventStatus, id: eventId, round } = event
+  const { start_at: eventStartTime, status: eventStatus, id: eventId, round, event_users } = event
   const { id: userId } = user
   const hasCheckedCamera = useRef()
   // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
@@ -86,7 +86,18 @@ const Lobby = () => {
       eventStatus === 'not-stared',
   })
 
-  console.log('myRoundData ->', myRoundData)
+  // some redirecting stuff
+  useEffect(() => {
+    if (event_users && event_users.length && userId) {
+      const alreadyAttending = event_users.find((u) => u.user.id === userId)
+      if (!alreadyAttending) {
+        history.push(`/events/${eventId}`)
+      }
+    }
+    if (eventStatus === 'complete') {
+      history.push(`/events/${eventId}/event-complete`)
+    }
+  }, [event_users, eventStatus, userId])
 
   // this is for when the event first starts
   useEffect(() => {

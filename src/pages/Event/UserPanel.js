@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
@@ -73,8 +72,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   } = eventData
   const { name: eventHostName } = eventHost
 
-  const [waitingForAdmin, setWaitingForAdmin] = useState()
-
   const alreadyAttending = event_users.find((u) => u.user.id === userId)
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
@@ -90,12 +87,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
       userId,
     },
   })
-
-  useEffect(() => {
-    if (timeState === 'go time' && alreadyAttending) {
-      setWaitingForAdmin(true)
-    }
-  }, [timeState, alreadyAttending])
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
@@ -181,47 +172,11 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
         element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       default:
-        element = !userId ? (
-          renderSignupButton()
-        ) : (
-          <>
-            {renderRsvpButton()}
-            <EventCountdown eventStartTime={eventStartTime} subtitle="Event Starts In:" />
-          </>
-        )
+        element = !userId ? renderSignupButton() : <>{renderRsvpButton()}</>
     }
     return element
   }
 
-  const renderWaitingForHost = () =>
-    waitingForAdmin && (
-      <FloatCardLarge>
-        <Grid
-          item
-          container
-          justify="space-around"
-          alignItems="center"
-          className={classes.topDashboard}
-        >
-          <Grid
-            container
-            item
-            md={6}
-            xs={12}
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Typography variant="h5" className={classes.centerText}>
-              The host will begin the event shortly
-            </Typography>
-          </Grid>
-          <div className={classes.root}>
-            <LinearProgress />
-          </div>
-        </Grid>
-      </FloatCardLarge>
-    )
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   if (micOrCameraIsDisabled && timeState !== 'future' && alreadyAttending) {
@@ -243,8 +198,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
           />
         </Grid>
       )}
-      {renderWaitingForHost()}
-
       <FloatCardLarge>
         <Grid
           item
