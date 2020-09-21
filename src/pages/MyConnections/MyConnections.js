@@ -3,6 +3,8 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
@@ -23,7 +25,26 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   pageContainer: {
-    marginTop: '150px',
+    marginTop: '100px',
+    paddingLeft: '25px',
+    paddingRight: '25px',
+  },
+  sectionHeader: {
+    marginBottom: theme.spacing(3),
+  },
+  toggleSelect: {
+    color: theme.palette.common.ghostWhite,
+    borderLeft: 'none',
+    borderTop: 'none',
+    borderRight: 'none',
+    borderBottom: `2px solid ${theme.palette.common.dankPurp}`,
+  },
+  toggleUnSelect: {
+    color: theme.palette.common.ghostWhite,
+    borderLeft: 'none',
+    borderTop: 'none',
+    borderRight: 'none',
+    borderBottom: `2px solid ${theme.palette.common.ghostWhite}`,
   },
 }))
 
@@ -33,6 +54,7 @@ const MyConnections = () => {
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { id: userId } = user
+  const [friendsToggle, setFriendsToggle] = React.useState(true)
   const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useQuery(
     getAllMyConnections,
     {
@@ -55,7 +77,7 @@ const MyConnections = () => {
   }
 
   const renderNullDataText = () => {
-    if (!allMyConnectionsData || !allMyConnectionsData.rounds.length) {
+    if (!allMyConnectionsData || !allMyConnectionsData.partners.length) {
       return (
         <>
           <FloatCardLarge>
@@ -95,34 +117,78 @@ const MyConnections = () => {
   // remove your info, and then make sure we are not returning duplicate connections
   // Ideally this is its own util function that doesnt use the useMutation hook
   // so we dont need to import React
-  const arrayOfUniqueConnectionsIds = []
 
-  const arrayOfMyAllMyUniqueConnections = allMyConnectionsData.rounds
-    .map((round) => {
-      return Object.values(round).filter((person) => person.id !== userId)
-    })
-    .map((personArray) => {
-      const personsId = personArray[0].id
-      if (arrayOfUniqueConnectionsIds.indexOf(personsId) === -1) {
-        arrayOfUniqueConnectionsIds.push(personsId)
-        return personArray[0]
+  let iSharedConnections, notSharedConnections
+  if (allMyConnectionsData && allMyConnectionsData.partners.length > 0) {
+    iSharedConnections = allMyConnectionsData.partners.filter(
+      (partner) => !!partner.i_shared_details
+    )
+    notSharedConnections = allMyConnectionsData.partners.filter(
+      (partner) => !partner.i_shared_details
+    )
+  }
+
+  const renderAllMyConnection = () => {
+    if (allMyConnectionsData && allMyConnectionsData.partners.length > 0) {
+      if (!!friendsToggle) {
+        return iSharedConnections.map((partner) => (
+          <ConnectionCard
+            key={partner.id}
+            connection={partner.userByPartnerId}
+            i_shared_details={partner.i_shared_details}
+            partnerId={partner.partner_id}
+            userId={partner.user_id}
+            eventId={partner.event_id}
+          />
+        ))
+      } else {
+        return notSharedConnections.map((partner) => (
+          <ConnectionCard
+            key={partner.id}
+            connection={partner.userByPartnerId}
+            i_shared_details={partner.i_shared_details}
+            partnerId={partner.partner_id}
+            userId={partner.user_id}
+            eventId={partner.event_id}
+          />
+        ))
       }
-      return null
-    })
-    .filter((el) => el !== null)
+    }
+  }
 
-  const renderConnectionCards = () => {
-    if (arrayOfMyAllMyUniqueConnections.length) {
-      return arrayOfMyAllMyUniqueConnections.map((connection) => {
-        return <ConnectionCard key={connection.id} connection={connection} />
-      })
+  const handleFriendsConnectionToggle = (event) => {
+    if (event.currentTarget.value === 'friends') {
+      setFriendsToggle(true)
+      console.log('selected')
+    } else if (event.currentTarget.value === 'requests') {
+      setFriendsToggle(false)
+      console.log('selected')
     }
   }
 
   return (
     <div className={classes.pageContainer}>
-      {renderNullDataText()}
-      {renderConnectionCards()}
+      <Typography variant="h4" className={classes.sectionHeader}>
+        Connections:
+      </Typography>
+      <ToggleButtonGroup value={friendsToggle} exclusive onChange={handleFriendsConnectionToggle}>
+        <ToggleButton
+          value="friends"
+          className={friendsToggle ? classes.toggleSelect : classes.toggleUnSelect}
+        >
+          Friends
+        </ToggleButton>
+        <ToggleButton
+          value="requests"
+          className={friendsToggle ? classes.toggleSelect : classes.toggleUnSelect}
+        >
+          Requests
+        </ToggleButton>
+      </ToggleButtonGroup>
+      <div className={classes.pageContainer}>
+        {renderNullDataText()}
+        {renderAllMyConnection()}
+      </div>
     </div>
   )
 }
