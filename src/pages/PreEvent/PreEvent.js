@@ -30,14 +30,17 @@ const useStyles = makeStyles((theme) => ({
   },
   liveLogo: {
     position: 'absolute',
-    top: '10%',
+    top: '3%',
     left: '2%',
     bottom: 'auto',
     right: 'auto',
     width: '100px',
     height: 'auto',
-    color: theme.palette.common.red,
+    color: theme.palette.common.ghostWhite,
     fontWeight: 'bold',
+    backgroundColor: theme.palette.common.red,
+    borderRadius: '4px',
+    textAlign: 'center',
   },
 }))
 
@@ -213,8 +216,8 @@ const PreEvent = () => {
         />
       )}
       <div id="host-video" className={classes.hostVid} />
-      <Typography fontWeight={900} className={classes.liveLogo} variant="subtitle1">
-        LIVE NOW!
+      <Typography className={classes.liveLogo} variant="subtitle1">
+        LIVE NOW
       </Typography>
     </Grid>
   )
