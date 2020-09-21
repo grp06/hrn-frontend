@@ -104,6 +104,7 @@ const VideoRoom = ({ match }) => {
       event_id,
       round: current_round,
     },
+    fetchPolicy: 'network-only',
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
   })
@@ -160,6 +161,7 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
+      console.log('myRoundPartnerData ->', myRoundPartnerData)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
@@ -167,11 +169,13 @@ const VideoRoom = ({ match }) => {
       // TODO double check partners.length and not partners[0].length
       if (!myRoundPartnerData.partners.length) {
         setUserEventStatus('came late')
+        setMyRound(null)
         history.push(`/events/${eventId}/lobby`)
       }
 
-      if (myRoundPartnerData.partners.length && myRoundPartnerData.partners[0].left_chat) {
+      if (myRoundPartnerData.partners.length && myRoundPartnerData.partners[0].left_chat !== null) {
         setUserEventStatus('left chat')
+        setMyRound(null)
         history.push(`/events/${eventId}/lobby`)
       }
     }
@@ -203,6 +207,7 @@ const VideoRoom = ({ match }) => {
         setUserEventStatus('in chat')
       } else if (event.status !== 'in-between-rounds') {
         setUserEventStatus('no partner')
+        setMyRound(null)
         history.push(`/events/${eventId}/lobby`)
       }
     }

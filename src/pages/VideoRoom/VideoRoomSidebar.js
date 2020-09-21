@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoomSidebar = React.memo(({ event, myRound, userId }) => {
+const VideoRoomSidebar = ({ event, myRound, userId }) => {
   const classes = useStyles()
   const { host_id } = event
   return (
@@ -46,6 +46,6 @@ const VideoRoomSidebar = React.memo(({ event, myRound, userId }) => {
       </Grid>
     </>
   )
-})
+}
 
 export default VideoRoomSidebar

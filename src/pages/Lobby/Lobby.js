@@ -83,7 +83,7 @@ const Lobby = () => {
     skip:
       ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
         eventStatus === 'room-in-progress') ||
-      eventStatus === 'not-stared',
+      eventStatus === 'not-started',
   })
 
   // some redirecting stuff
@@ -108,10 +108,10 @@ const Lobby = () => {
 
   // this is only for when you come late or leave a chat and then get rematched
   useEffect(() => {
-    if (myRoundData && myRoundData.length) {
+    if (myRoundData && myRoundData.partners.length && eventStatus === 'room-in-progress') {
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [myRoundData])
+  }, [myRoundData, eventStatus])
 
   return (
     <div className={classes.pageContainer}>
