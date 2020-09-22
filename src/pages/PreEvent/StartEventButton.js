@@ -10,7 +10,7 @@ const StartEventButton = ({ event, userId }) => {
   return isEventHost && eventStatus === 'pre-event'
     ? TransitionModal({
         button: {
-          buttonText: 'Start Event 🥳',
+          buttonText: 'Start Event',
           buttonVariant: 'contained',
           buttonSize: 'large',
         },

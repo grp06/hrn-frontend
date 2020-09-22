@@ -328,6 +328,15 @@ const theme = createMuiTheme({
         fontSize: '3.75rem',
       },
     },
+    MuiSpeedDialAction: {
+      staticTooltipLabel: {
+        backgroundColor: greyCard,
+        color: ghostWhite,
+        width: '175px',
+        padding: '8px',
+        textAlign: 'center',
+      },
+    },
   },
 })
 

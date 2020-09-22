@@ -25,7 +25,7 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const RoundAndPartnerCard = ({ event, myRound }) => {
+const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
   const classes = createStyles()
   const { num_rounds, current_round } = event
 
@@ -68,6 +68,7 @@ const RoundAndPartnerCard = ({ event, myRound }) => {
       {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
+      {addFriendButton}
     </Grid>
   )
 }

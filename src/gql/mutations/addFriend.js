@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const updateISharedDetails = gql`
-  mutation UpdateISharedDetails($event_id: Int!, $user_id: Int!, $partner_id: Int!) {
+const addFriend = gql`
+  mutation addFriend($event_id: Int!, $user_id: Int!, $partner_id: Int!) {
     update_partners(
       where: {
         event_id: { _eq: $event_id }
@@ -19,4 +19,4 @@ const updateISharedDetails = gql`
     }
   }
 `
-export default updateISharedDetails
+export default addFriend

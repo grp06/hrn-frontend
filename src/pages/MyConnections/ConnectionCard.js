@@ -10,7 +10,7 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/logoPurple.svg'
 import { FloatCardMedium, Snack } from '../../common'
-import { ShareMyInfoButton } from '../VideoRoom'
+import { AddFriendButton } from '../VideoRoom'
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -166,7 +166,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
                 LinkedIn
               </Button>
             )}
-            {!i_shared_details && <ShareMyInfoButton myRound={myRoundInfo} />}
+            {!i_shared_details && <AddFriendButton myRound={myRoundInfo} />}
           </Grid>
         </Grid>
       </Grid>

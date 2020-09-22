@@ -6,7 +6,7 @@ import {
   MoreActionsButton,
   PartnerTagsList,
   RoundAndPartnerCard,
-  ShareMyInfoButton,
+  AddFriendButton,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -37,12 +37,15 @@ const VideoRoomSidebar = ({ event, myRound, userId }) => {
     <>
       <Grid container direction="column" className={classes.container}>
         {host_id === userId && <HostEventControlsCard event={event} userId={userId} />}
-        <RoundAndPartnerCard event={event} myRound={myRound} userId={userId} />
+        <RoundAndPartnerCard
+          event={event}
+          myRound={myRound}
+          addFriendButton={<AddFriendButton myRound={myRound} />}
+        />
         <PartnerTagsList myRound={myRound} userId={userId} />
       </Grid>
       <Grid container justify="center" alignItems="center" className={classes.shareMyInfoContainer}>
         <MoreActionsButton myRound={myRound} />
-        <ShareMyInfoButton myRound={myRound} />
       </Grid>
     </>
   )

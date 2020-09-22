@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   speedDial: {
     position: 'absolute',
     bottom: theme.spacing(2),
-    right: theme.spacing(2),
   },
 }))
 
@@ -72,6 +71,7 @@ const MoreActionsButton = ({ myRound }) => {
             key={action.name}
             icon={action.icon}
             tooltipTitle={action.name}
+            tooltipPlacement="right"
             tooltipOpen
             onClick={action.onClick || handleClose}
           />

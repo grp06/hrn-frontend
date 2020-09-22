@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     left: '2%',
     bottom: 'auto',
     right: 'auto',
-    width: '100px',
+    width: '60px',
     height: 'auto',
     color: theme.palette.common.ghostWhite,
     fontWeight: 'bold',
@@ -217,7 +217,7 @@ const PreEvent = () => {
       )}
       <div id="host-video" className={classes.hostVid} />
       <Typography className={classes.liveLogo} variant="subtitle1">
-        LIVE NOW
+        LIVE
       </Typography>
     </Grid>
   )
