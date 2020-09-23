@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import PersonAddIcon from '@material-ui/icons/PersonAdd'
@@ -13,7 +13,8 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1, 0),
   },
 }))
-const AddFriendButton = ({ myRound }) => {
+const AddFriendButton = React.memo(({ myRound }) => {
+  console.log('im rendering')
   const classes = useStyles()
   const [addedAsFriend, setAddedAsFriend] = useState(false)
   const [showAddedAsFriendSnack, setShowAddedAsFriendSnack] = useState(false)
@@ -32,6 +33,12 @@ const AddFriendButton = ({ myRound }) => {
       partner_id: user_id,
     },
   })
+
+  useEffect(() => {
+    console.log('its your boy use effect')
+    setAddedAsFriend(false)
+  }, [myRound])
+
   const handleAddFriendPress = async () => {
     try {
       await addFriendMutation()
@@ -65,6 +72,6 @@ const AddFriendButton = ({ myRound }) => {
       />
     </Grid>
   )
-}
+})
 
 export default AddFriendButton

@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     width: '60%',
-    margin: theme.spacing(5, 0),
+    margin: theme.spacing(5, 0, 0, 0),
     [theme.breakpoints.down('md')]: {
       width: '80%',
     },
@@ -124,7 +124,11 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
               alignItems="center"
               className={classes.buttonContainer}
             >
-              <Fab onClick={() => handleUpdateRating(1)} className={classes.fabButton}>
+              <Fab
+                disableRipple
+                onClick={() => handleUpdateRating(1)}
+                className={classes.fabButton}
+              >
                 <Grid
                   container
                   direction="column"
@@ -140,7 +144,11 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                   </Typography>
                 </Grid>
               </Fab>
-              <Fab onClick={() => handleUpdateRating(3)} className={classes.fabButton}>
+              <Fab
+                disableRipple
+                onClick={() => handleUpdateRating(3)}
+                className={classes.fabButton}
+              >
                 <Grid
                   container
                   direction="column"
@@ -156,7 +164,11 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                   </Typography>
                 </Grid>
               </Fab>
-              <Fab onClick={() => handleUpdateRating(5)} className={classes.fabButton}>
+              <Fab
+                disableRipple
+                onClick={() => handleUpdateRating(5)}
+                className={classes.fabButton}
+              >
                 <Grid
                   container
                   direction="column"
