@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
+import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Rating from '@material-ui/lab/Rating'
-import StarBorderIcon from '@material-ui/icons/StarBorder'
 import { makeStyles } from '@material-ui/styles'
 import { updatePartnerRating } from '../../gql/mutations'
 import { sleep } from '../../helpers'
@@ -12,6 +11,7 @@ import { Snack } from '../../common'
 const useStyles = makeStyles((theme) => ({
   emoji: {
     fontSize: '50px',
+    padding: theme.spacing(0, 2),
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
@@ -32,11 +32,30 @@ const useStyles = makeStyles((theme) => ({
       width: '90vw',
     },
   },
-  starsContainer: {
-    margin: theme.spacing(2, 0),
+  buttonContainer: {
+    width: '60%',
+    margin: theme.spacing(5, 0),
+    [theme.breakpoints.down('md')]: {
+      width: '80%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
-  underline: {
-    textDecoration: 'underline',
+  fabButton: {
+    width: '120px',
+    height: '120px',
+    lineHeight: 1.25,
+    '&:hover': {
+      backgroundColor: theme.palette.common.dankPurp,
+      color: theme.palette.common.ghostWhite,
+    },
+    '&:hover .MuiFab-label .MuiGrid-root .makeStyles-fabText-45': {
+      color: theme.palette.common.ghostWhite,
+    },
+  },
+  fabText: {
+    color: theme.palette.common.dankPurp,
   },
   userStatusBoxContainer: {
     position: 'absolute',
@@ -54,13 +73,10 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
-  const [ratingValue, setRatingValue] = useState(null)
 
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
-  const handleUpdateRating = async (event, ratingValue) => {
-    setRatingValue(ratingValue)
-    // console.log('rating=', ratingValue)
+  const handleUpdateRating = async (ratingValue) => {
     try {
       await updatePartnerRatingMutation({
         variables: {
@@ -77,7 +93,6 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
     }
     sleep(300)
     setShowRatingForm(false)
-    // console.log('rating=', ratingValue)
   }
 
   return (
@@ -91,25 +106,61 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
       >
         {showRatingForm ? (
           <>
-            <Typography variant="h4">Hope you had a great chat!</Typography>
-            <Typography variant="h4">Help us improve our matching alogrithm!</Typography>
-            <Typography variant="h4">How good was this match?</Typography>
-            <div className={classes.starsContainer}>
-              <Rating
-                name="simple-controlled"
-                value={ratingValue}
-                onChange={handleUpdateRating}
-                size="large"
-                emptyIcon={<StarBorderIcon fontSize="inherit" />}
-              />
-            </div>
+            <Typography variant="h4" className={classes.messageText}>
+              Hope you had a great chat!
+            </Typography>
+            <Typography variant="h4" className={classes.messageText}>
+              Would you be excited to match with this person in a future event?
+            </Typography>
+            <Typography variant="subtitle1">
+              (Don&apos;t worry, this will stay just between us!)
+            </Typography>
+            <Grid
+              container
+              justify="space-around"
+              alignItems="center"
+              className={classes.buttonContainer}
+            >
+              <Fab onClick={() => handleUpdateRating(1)} className={classes.fabButton}>
+                <Grid container direction="column" justify="center" alignItems="center">
+                  <span className={classes.emoji} role="img" aria-label="yawn face">
+                    🥱
+                  </span>
+                  <Typography variant="subtitle2" className={classes.fabText}>
+                    No..
+                  </Typography>
+                </Grid>
+              </Fab>
+              <Fab onClick={() => handleUpdateRating(3)} className={classes.fabButton}>
+                <Grid container direction="column" justify="center" alignItems="center">
+                  <span className={classes.emoji} role="img" aria-label="woman shrug">
+                    🤷‍♀️
+                  </span>
+                  <Typography variant="subtitle2" className={classes.fabText}>
+                    Maybe?
+                  </Typography>
+                </Grid>
+              </Fab>
+              <Fab onClick={() => handleUpdateRating(5)} className={classes.fabButton}>
+                <Grid container direction="column" justify="center" alignItems="center">
+                  <span className={classes.emoji} role="img" aria-label="hooray face">
+                    🥳
+                  </span>
+                  <Typography variant="subtitle2" className={classes.fabText}>
+                    Yes!
+                  </Typography>
+                </Grid>
+              </Fab>
+            </Grid>
           </>
         ) : (
           <>
             <Typography className={classes.messageText}>
               Got it! Thanks for letting us know.
             </Typography>
-            <Typography className={classes.messageText}>Connecting you to someone soon!</Typography>
+            <Typography className={classes.messageText}>
+              Connecting you to someone new soon!
+            </Typography>
             <div className={classes.emoji}>
               <span role="img" aria-label="party smiley">
                 🥳
