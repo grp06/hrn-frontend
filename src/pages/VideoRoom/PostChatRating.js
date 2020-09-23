@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.ghostWhite,
     },
   },
+  fabButtonGrid: {
+    height: '75%',
+  },
   fabText: {
     color: theme.palette.common.dankPurp,
   },
@@ -122,7 +125,13 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
               className={classes.buttonContainer}
             >
               <Fab onClick={() => handleUpdateRating(1)} className={classes.fabButton}>
-                <Grid container direction="column" justify="center" alignItems="center">
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.fabButtonGrid}
+                >
                   <span className={classes.emoji} role="img" aria-label="yawn face">
                     🥱
                   </span>
@@ -132,7 +141,13 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                 </Grid>
               </Fab>
               <Fab onClick={() => handleUpdateRating(3)} className={classes.fabButton}>
-                <Grid container direction="column" justify="center" alignItems="center">
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.fabButtonGrid}
+                >
                   <span className={classes.emoji} role="img" aria-label="woman shrug">
                     🤷‍♀️
                   </span>
@@ -142,7 +157,13 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                 </Grid>
               </Fab>
               <Fab onClick={() => handleUpdateRating(5)} className={classes.fabButton}>
-                <Grid container direction="column" justify="center" alignItems="center">
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.fabButtonGrid}
+                >
                   <span className={classes.emoji} role="img" aria-label="hooray face">
                     🥳
                   </span>
