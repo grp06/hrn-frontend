@@ -1,6 +1,2 @@
-export { default as CameLate } from './CameLate'
 export { default as ConnectingToSomeone } from './ConnectingToSomeone'
-export { default as LeftChat } from './LeftChat'
-export { default as NoPartner } from './NoPartner'
 export { default as PartnerDisconnected } from './PartnerDisconnected'
-export { default as SittingOut } from './SittingOut'
