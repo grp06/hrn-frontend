@@ -139,6 +139,7 @@ const Lobby = () => {
         >
           <UserStatusBox
             userEventStatus={userEventStatus}
+            eventStatus={eventStatus}
             setUserEventStatus={useCallback(setUserEventStatus, [])}
           />
           <EventChatBox event={event} />

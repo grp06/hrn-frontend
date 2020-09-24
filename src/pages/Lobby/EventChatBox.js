@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/styles'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { useGetOnlineEventAttendees } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +34,23 @@ const useStyles = makeStyles((theme) => ({
   chatBox: {
     height: '88%',
   },
+  toggleButtonInactive: {
+    color: theme.palette.common.ghostWhite,
+  },
+  toggleButtonActive: {
+    color: theme.palette.common.dankPurp,
+  },
 }))
 
 const EventChatBox = React.memo(({ event }) => {
   const classes = useStyles()
   const onlineEventAttendees = useGetOnlineEventAttendees(event)
+  const [chatboxStatus, setChatboxStatus] = useState('onlineUsers')
+
+  const handleChatboxStatusToggle = (e) => {
+    console.log('value', e.currentTarget.value)
+    setChatboxStatus(e.currentTarget.value)
+  }
   return (
     <Grid container direction="column" justify="space-around" className={classes.container}>
       <Grid
@@ -46,18 +60,33 @@ const EventChatBox = React.memo(({ event }) => {
         justify="center"
         className={classes.lobbyAttendeesContainer}
       >
-        <Avatar>
-          <PersonIcon />
-        </Avatar>
-        <Grid container direction="row" className={classes.totalAttendeesContainer}>
-          <Typography variant="body1" className={classes.onlineAttendeesText}>
-            {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
-          </Typography>
-          <Typography variant="body1" className={classes.onlineAttendeesText}>
-            {' '}
-            Attendees Online
-          </Typography>
-        </Grid>
+        <ToggleButtonGroup
+          value={chatboxStatus}
+          exclusive
+          onChange={handleChatboxStatusToggle}
+          aria-label="chatBox Status"
+        >
+          <ToggleButton
+            value="chat"
+            aria-label="chat"
+            className={
+              chatboxStatus === 'chat' ? classes.toggleButtonActive : classes.toggleButtonInactive
+            }
+          >
+            Chat
+          </ToggleButton>
+          <ToggleButton
+            value="onlineUsers"
+            aria-label="online users"
+            className={
+              chatboxStatus === 'onlineUsers'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
+          >
+            Online Users
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Grid>
       <Divider />
       <Grid

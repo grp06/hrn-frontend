@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
+const UserStatusBox = React.memo(({ userEventStatus, eventStatus, setUserEventStatus }) => {
   console.log('userEventStatus ->', userEventStatus)
   const classes = useStyles()
   const [sittingOutToggle, setSittingOutToggle] = useState(userEventStatus === 'sitting out')
@@ -56,7 +56,8 @@ const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
   }
 
   console.log('sittingOutToggle ->', sittingOutToggle)
-  return (
+
+  return eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
     <Grid
       container
       direction="column"
@@ -90,7 +91,7 @@ const UserStatusBox = React.memo(({ userEventStatus, setUserEventStatus }) => {
         {sittingOutToggle ? "You're sitting out rounds" : 'Ready to join next round'}
       </Typography>
     </Grid>
-  )
+  ) : null
 })
 
 export default UserStatusBox
