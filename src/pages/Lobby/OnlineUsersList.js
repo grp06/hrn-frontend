@@ -26,19 +26,21 @@ const OnlineUsersList = ({ onlineUsers }) => {
   return onlineUsers && onlineUsers.online_users ? (
     <Grid container item direction="column" className={classes.attendeesList}>
       <List dense>
-        {onlineUsers.online_users.map((user) => {
-          const firstName = user.name.split(' ')[0]
-          return (
-            <ListItem key={user.id}>
-              <ListItemAvatar>
-                <Avatar>
-                  <PersonIcon />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={firstName} secondary={user.city} />
-            </ListItem>
-          )
-        })}
+        {onlineUsers.online_users
+          .sort((userA, userB) => userA.name.toLowerCase() > userB.name.toLowerCase())
+          .map((user) => {
+            const firstName = user.name.split(' ')[0]
+            return (
+              <ListItem key={user.id}>
+                <ListItemAvatar>
+                  <Avatar>
+                    <PersonIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText primary={firstName} secondary={user.city} />
+              </ListItem>
+            )
+          })}
       </List>
     </Grid>
   ) : (
