@@ -282,13 +282,8 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-        {/* {myRound !== 'no-assignment' ? (
-          <RoundProgressBar
-            userUpdatedAt={userUpdatedAt}
-            event={event}
-            hasPartnerAndIsConnecting={hasPartnerAndIsConnecting}
-          />
-        ) : null} */}
+
+        {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
       </div>
     </div>
   )

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpdatedAt }) => {
+const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const classes = useStyles()
   const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
   const [timeElapsedInRound, setTimeElapsedInRound] = useState(null)
@@ -24,13 +24,9 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
   const [alreadyShown20SecondsLeftSnack, setAlreadyShown20SecondsLeftSnack] = useState(false)
-  const hasStartedConnectingToPartner = useRef()
 
   // TODO: have to add a last seen mutation somewhere on componentDidMount on VideoRoom
   // because if we refresh we never send a last seen mutation, so it will be null?
-  if (hasPartnerAndIsConnecting) {
-    hasStartedConnectingToPartner.current = true
-  }
 
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
@@ -43,65 +39,60 @@ const RoundProgressBar = React.memo(({ event, hasPartnerAndIsConnecting, userUpd
 
   const getTimeElapsedInRoundAlready = () => {
     const timeUserEnteredRound = new Date(userUpdatedAt).getTime()
+
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
+
     return timeUserEnteredRound - timeRoundStarted
   }
 
   const getPercentElapsedThroughRound = () => {
-    const timeElapsedInRoundAlready = timeElapsedInRound || getTimeElapsedInRoundAlready()
+    const timeElapsedInRoundAlready = getTimeElapsedInRoundAlready()
+
     const duration = getRoundDuration()
+
     return (timeElapsedInRoundAlready / duration) * 100
   }
 
   useEffect(() => {
-    const seconds = getTimeElapsedInRoundAlready()
-    const progressPercent = getPercentElapsedThroughRound()
-    setTimeElapsedInRound(seconds)
-    setProgressBarValue(progressPercent)
-  }, [])
+    if (!progressBarValue) {
+      const progressPercent = getPercentElapsedThroughRound()
+
+      console.log('setting progress bar for first time')
+      setProgressBarValue(progressPercent)
+    }
+  }, [userUpdatedAt])
 
   useEffect(() => {
-    setTimeElapsedInRound(0)
+    setProgressBarValue(0)
     setAlreadyShown20SecondsLeftSnack(false)
   }, [eventStatus])
 
   useEffect(() => {
-    // make sure we've already started the process of connecting, and that the connection has been made, and its within 45sec of round start
-    // this way, it won't show up on refresh if they're in the middle of the round
-    if (
-      hasStartedConnectingToPartner &&
-      !hasPartnerAndIsConnecting &&
-      timeElapsedInRound < 45000 &&
-      eventStatus === 'room-in-progress'
-    ) {
-      // without this, the green banner annoyingly shows up right before the connecting screen
-      setTimeout(() => {
-        setShowRoundStartedSnack(true)
-      }, 3000)
-    }
-  }, [hasPartnerAndIsConnecting, event])
-
-  useEffect(() => {
-    let interval = null
-    interval = setInterval(() => {
+    if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      setTimeElapsedInRound((seconds) => seconds + 1000)
       setProgressBarValue(percentElapsedThroughRound)
-      console.log('percentElapsedThroughRound ->', percentElapsedThroughRound)
-      console.log('timeElapsedInRound ->', timeElapsedInRound)
+    }
+    const interval = setInterval(() => {
+      const oneSecondInPct = (1000 / (round_length * 60000)) * 100
+
+      // setTimeElapsedInRound((seconds) => seconds + 1000)
+
+      setProgressBarValue((oldVal) => oldVal + oneSecondInPct)
     }, 1000)
 
-    if (!alreadyShown20SecondsLeftSnack && eventStatus === 'room-in-progress') {
-      if (timeElapsedInRound > getRoundDuration() - 20000) {
-        setShow20SecondsLeftSnack(true)
-        setAlreadyShown20SecondsLeftSnack(true)
-      }
-    }
+    // if (!alreadyShown20SecondsLeftSnack && eventStatus === 'room-in-progress') {
+    //   if (timeElapsedInRound > getRoundDuration() - 20000) {
+    //     setShow20SecondsLeftSnack(true)
+    //     setAlreadyShown20SecondsLeftSnack(true)
+    //   }
+    // }
 
     return () => {
+      console.log('clearing')
+      setProgressBarValue(null)
       clearInterval(interval)
     }
-  }, [timeElapsedInRound, eventStatus])
+  }, [])
 
   return (
     <Grid
