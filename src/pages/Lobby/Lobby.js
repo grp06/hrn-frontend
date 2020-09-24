@@ -14,6 +14,7 @@ import {
   EventChatBox,
   EventTimerCountdown,
   UserStatusBox,
+  OnlineUsersList,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -64,7 +65,7 @@ const Lobby = () => {
   const history = useHistory()
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
-  const { setUserEventStatus, userEventStatus } = useUserEventStatusContext()
+  const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
   const { start_at: eventStartTime, status: eventStatus, id: eventId, round, event_users } = event
   const { id: userId } = user
   const hasCheckedCamera = useRef()
@@ -142,7 +143,7 @@ const Lobby = () => {
             eventStatus={eventStatus}
             setUserEventStatus={useCallback(setUserEventStatus, [])}
           />
-          <EventChatBox event={event} />
+          <EventChatBox onlineUsers={<OnlineUsersList onlineUsers={onlineEventUsers} />} />
         </Grid>
       </Grid>
     </div>

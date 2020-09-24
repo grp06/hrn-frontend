@@ -6,7 +6,12 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
 
-const OnlineUsersList = () => {
+import { useSubscription } from '@apollo/react-hooks'
+import { listenToOnlineEventUsers } from '../../gql/subscriptions'
+
+const OnlineUsersList = ({ onlineUsers }) => {
+  console.log('online event user', onlineUsers)
+
   return (
     <ListItem>
       <ListItemAvatar>
