@@ -13,15 +13,13 @@ const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
     height: '80%',
-    padding: theme.spacing(1),
     borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
   lobbyAttendeesContainer: {
-    height: '10%',
-    margin: theme.spacing(0, 'auto'),
+    width: '100%',
   },
   onlineAttendeesText: {
     color: theme.palette.common.sunray,
@@ -34,23 +32,65 @@ const useStyles = makeStyles((theme) => ({
   chatBox: {
     height: '88%',
   },
+  toggleButtonGroup: {
+    width: '100%',
+  },
   toggleButtonInactive: {
+    padding: theme.spacing(1, 0),
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    width: '50%',
+    border: 'none',
+    borderRadius: 0,
     color: theme.palette.common.ghostWhite,
+    borderBottom: '2px solid #3e4042',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
   toggleButtonActive: {
-    color: theme.palette.common.dankPurp,
+    '&.Mui-selected': {
+      padding: theme.spacing(1, 0),
+      textAlign: 'center',
+      width: '50%',
+      border: 'none',
+      borderRadius: 0,
+      backgroundColor: 'transparent',
+      color: theme.palette.common.sunray,
+      borderBottom: '2px solid #fabb5b',
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
 }))
 
 const EventChatBox = React.memo(({ event }) => {
   const classes = useStyles()
   const onlineEventAttendees = useGetOnlineEventAttendees(event)
-  const [chatboxStatus, setChatboxStatus] = useState('onlineUsers')
+  const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
+  console.log('chatBoxStastus ->', chatBoxStatus)
 
   const handleChatboxStatusToggle = (e) => {
     console.log('value', e.currentTarget.value)
-    setChatboxStatus(e.currentTarget.value)
+    setChatBoxStatus(e.currentTarget.value)
   }
+
+  const renderEventChatBoxContent = () => {
+    return chatBoxStatus === 'chat' ? (
+      <Typography variant="h6" style={{ textAlign: 'center' }}>
+        Chat Coming Soon!{' '}
+        <span role="img" aria-label="sunGlassSmileingFace">
+          😎
+        </span>
+      </Typography>
+    ) : (
+      <Typography variant="h6" style={{ textAlign: 'center' }}>
+        OnlineUsers
+      </Typography>
+    )
+  }
+
   return (
     <Grid container direction="column" justify="space-around" className={classes.container}>
       <Grid
@@ -61,16 +101,18 @@ const EventChatBox = React.memo(({ event }) => {
         className={classes.lobbyAttendeesContainer}
       >
         <ToggleButtonGroup
-          value={chatboxStatus}
+          value={chatBoxStatus}
           exclusive
           onChange={handleChatboxStatusToggle}
           aria-label="chatBox Status"
+          className={classes.toggleButtonGroup}
         >
           <ToggleButton
             value="chat"
             aria-label="chat"
+            disableRipple
             className={
-              chatboxStatus === 'chat' ? classes.toggleButtonActive : classes.toggleButtonInactive
+              chatBoxStatus === 'chat' ? classes.toggleButtonActive : classes.toggleButtonInactive
             }
           >
             Chat
@@ -78,8 +120,9 @@ const EventChatBox = React.memo(({ event }) => {
           <ToggleButton
             value="onlineUsers"
             aria-label="online users"
+            disableRipple
             className={
-              chatboxStatus === 'onlineUsers'
+              chatBoxStatus === 'onlineUsers'
                 ? classes.toggleButtonActive
                 : classes.toggleButtonInactive
             }
@@ -88,7 +131,6 @@ const EventChatBox = React.memo(({ event }) => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Divider />
       <Grid
         container
         direction="column"
@@ -96,12 +138,7 @@ const EventChatBox = React.memo(({ event }) => {
         alignItems="center"
         className={classes.chatBox}
       >
-        <Typography variant="h6" style={{ textAlign: 'center' }}>
-          Chat Coming Soon!{' '}
-          <span role="img" aria-label="sunGlassSmileingFace">
-            😎
-          </span>
-        </Typography>
+        {renderEventChatBoxContent()}
       </Grid>
     </Grid>
   )
