@@ -1,13 +1,11 @@
 import React, { useState } from 'react'
-import Avatar from '@material-ui/core/Avatar'
-import Divider from '@material-ui/core/Divider'
+
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import PersonIcon from '@material-ui/icons/Person'
 import { makeStyles } from '@material-ui/styles'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import { useGetOnlineEventAttendees } from '../../hooks'
+import { OnlineUsersList } from '.'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -18,19 +16,12 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
-  lobbyAttendeesContainer: {
-    width: '100%',
-  },
-  onlineAttendeesText: {
-    color: theme.palette.common.sunray,
-    marginLeft: theme.spacing(0.5),
-  },
-  totalAttendeesContainer: {
-    width: 'auto',
-    marginLeft: theme.spacing(1),
-  },
   chatBox: {
     height: '88%',
+    overflowY: 'auto',
+  },
+  lobbyAttendeesContainer: {
+    width: '100%',
   },
   toggleButtonGroup: {
     width: '100%',
@@ -65,9 +56,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = React.memo(({ event }) => {
+const EventChatBox = React.memo(({ onlineUsers }) => {
   const classes = useStyles()
-  const onlineEventAttendees = useGetOnlineEventAttendees(event)
   const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
   console.log('chatBoxStastus ->', chatBoxStatus)
 
@@ -78,16 +68,16 @@ const EventChatBox = React.memo(({ event }) => {
 
   const renderEventChatBoxContent = () => {
     return chatBoxStatus === 'chat' ? (
-      <Typography variant="h6" style={{ textAlign: 'center' }}>
-        Chat Coming Soon!{' '}
-        <span role="img" aria-label="sunGlassSmileingFace">
-          😎
-        </span>
-      </Typography>
+      <Grid container justify="center" alignItems="center" style={{ height: '100%' }}>
+        <Typography variant="h6" style={{ textAlign: 'center' }}>
+          Chat Coming Soon!{' '}
+          <span role="img" aria-label="sunGlassSmileingFace">
+            😎
+          </span>
+        </Typography>
+      </Grid>
     ) : (
-      <Typography variant="h6" style={{ textAlign: 'center' }}>
-        OnlineUsers
-      </Typography>
+      <div style={{ height: '100%' }}>{onlineUsers}</div>
     )
   }
 
@@ -131,13 +121,7 @@ const EventChatBox = React.memo(({ event }) => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.chatBox}
-      >
+      <Grid container direction="column" className={classes.chatBox}>
         {renderEventChatBoxContent()}
       </Grid>
     </Grid>

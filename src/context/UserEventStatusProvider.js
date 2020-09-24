@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useUserContext, useAppContext, useEventContext } from '.'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
+import { listenToOnlineEventUsers } from '../gql/subscriptions'
 
 const { lastSeenDuration } = constants
 
@@ -21,6 +22,7 @@ const UserEventStatusContext = React.createContext()
 // reported
 const defaultState = {
   userEventStatus: 'waiting for match',
+  onlineEventUsers: [],
 }
 
 const UserEventStatusProvider = ({ children }) => {
@@ -28,6 +30,7 @@ const UserEventStatusProvider = ({ children }) => {
   const { userEventStatus } = state
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
+  const { id: eventId } = event
   const { id: userId } = user
   const history = useHistory()
 
@@ -39,12 +42,28 @@ const UserEventStatusProvider = ({ children }) => {
     skip: !userId,
   })
 
+  const { data: onlineEventUsersData } = useSubscription(listenToOnlineEventUsers, {
+    variables: {
+      event_id: eventId,
+    },
+    skip: !eventId,
+  })
+
   // check if need to push back to lobby
   useEffect(() => {
     if (userEventStatus === 'no partner' || userEventStatus === 'late') {
       history.push(`/events/${event.id}/lobby`)
     }
   }, [userEventStatus])
+
+  // check the online user for events
+  useEffect(() => {
+    if (onlineEventUsersData) {
+      dispatch((draft) => {
+        draft.onlineEventUsers = onlineEventUsersData
+      })
+    }
+  }, [onlineEventUsersData])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
