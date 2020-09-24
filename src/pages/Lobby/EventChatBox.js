@@ -16,19 +16,12 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
-  lobbyAttendeesContainer: {
-    width: '100%',
-  },
-  onlineAttendeesText: {
-    color: theme.palette.common.sunray,
-    marginLeft: theme.spacing(0.5),
-  },
-  totalAttendeesContainer: {
-    width: 'auto',
-    marginLeft: theme.spacing(1),
-  },
   chatBox: {
     height: '88%',
+    overflowY: 'auto',
+  },
+  lobbyAttendeesContainer: {
+    width: '100%',
   },
   toggleButtonGroup: {
     width: '100%',
@@ -75,14 +68,16 @@ const EventChatBox = React.memo(({ onlineUsers }) => {
 
   const renderEventChatBoxContent = () => {
     return chatBoxStatus === 'chat' ? (
-      <Typography variant="h6" style={{ textAlign: 'center' }}>
-        Chat Coming Soon!{' '}
-        <span role="img" aria-label="sunGlassSmileingFace">
-          😎
-        </span>
-      </Typography>
+      <Grid container justify="center" alignItems="center" style={{ height: '100%' }}>
+        <Typography variant="h6" style={{ textAlign: 'center' }}>
+          Chat Coming Soon!{' '}
+          <span role="img" aria-label="sunGlassSmileingFace">
+            😎
+          </span>
+        </Typography>
+      </Grid>
     ) : (
-      <div>{onlineUsers}</div>
+      <div style={{ height: '100%' }}>{onlineUsers}</div>
     )
   }
 
@@ -126,13 +121,7 @@ const EventChatBox = React.memo(({ onlineUsers }) => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.chatBox}
-      >
+      <Grid container direction="column" className={classes.chatBox}>
         {renderEventChatBoxContent()}
       </Grid>
     </Grid>
