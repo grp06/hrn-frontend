@@ -2,10 +2,12 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
+import EditIcon from '@material-ui/icons/Edit'
 import { makeStyles } from '@material-ui/styles'
 import { getBroadcastBoxElement, formatDate } from '../../utils'
 import { EventBreakdownStepper } from '../Event'
 import { PreEvent } from '../PreEvent'
+import { EventForm, TransitionModal } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
@@ -52,9 +54,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BroadcastBox = React.memo(({ event, onlineUsers, userEventStatus }) => {
+const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventStatus }) => {
   const classes = useStyles()
   const { start_at, description, event_name, status: eventStatus, host, event_users } = event
+
+  const editFormModal = TransitionModal({
+    modalBody: <EventForm eventData={event} />,
+    iconButton: {
+      iconButtonIcon: <EditIcon style={{ color: '#f4f6fa', fontSize: '32px' }} />,
+    },
+  })
 
   const renderBroadcastBoxContent = () => {
     switch (eventStatus) {
@@ -63,9 +72,12 @@ const BroadcastBox = React.memo(({ event, onlineUsers, userEventStatus }) => {
           <Grid container justify="flex-end" direction="column" wrap="nowrap">
             <Grid container direction="column" className={classes.eventInfoContainer}>
               <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
-                <Typography variant="h3" className={classes.eventName}>
-                  {event_name}
-                </Typography>
+                <Grid container justify="flex-start" alignItems="center">
+                  <Typography variant="h3" className={classes.eventName}>
+                    {event_name}
+                  </Typography>
+                  {isEventHost && editFormModal}
+                </Grid>
                 <Grid item container direction="row" alignItems="center">
                   <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
                   <Typography variant="subtitle1" style={{ paddingLeft: '8px' }}>

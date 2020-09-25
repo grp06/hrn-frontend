@@ -67,8 +67,16 @@ const Lobby = () => {
   const { event, permissions } = useEventContext()
   const { user } = useUserContext()
   const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
-  const { start_at: eventStartTime, status: eventStatus, id: eventId, round, event_users } = event
+  const {
+    start_at: eventStartTime,
+    status: eventStatus,
+    id: eventId,
+    round,
+    event_users,
+    host_id,
+  } = event
   const { id: userId } = user
+  const isEventHost = host_id === userId
   const hasCheckedCamera = useRef()
   // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   useGetCameraAndMicStatus(hasCheckedCamera.current)
@@ -132,8 +140,9 @@ const Lobby = () => {
         >
           <BroadcastBox
             event={event}
-            userEventStatus={userEventStatus}
+            isEventHost={isEventHost}
             onlineUsers={onlineEventUsers}
+            userEventStatus={userEventStatus}
           />
           <BottomControlPanel permissions={permissions} event={event} userId={userId} />
         </Grid>

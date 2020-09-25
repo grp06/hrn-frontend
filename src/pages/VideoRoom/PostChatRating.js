@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
     right: '1%',
     bottom: 'auto',
     left: 'auto',
-    width: 'auto',
+    width: '225px',
     zIndex: 9999,
   },
 }))
@@ -136,8 +136,8 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                   alignItems="center"
                   className={classes.fabButtonGrid}
                 >
-                  <span className={classes.emoji} role="img" aria-label="yawn face">
-                    🥱
+                  <span className={classes.emoji} role="img" aria-label="bored face">
+                    😑
                   </span>
                   <Typography variant="subtitle2" className={classes.fabText}>
                     No..

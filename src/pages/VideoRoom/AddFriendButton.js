@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
-import PersonAddIcon from '@material-ui/icons/PersonAdd'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from '@apollo/react-hooks'
 import { Snack } from '../../common'
@@ -58,9 +57,8 @@ const AddFriendButton = React.memo(({ myRound }) => {
         color="default"
         onClick={handleAddFriendPress}
         disabled={addedAsFriend}
-        endIcon={<PersonAddIcon />}
       >
-        Add Friend
+        + Add Friend
       </Button>
       <Snack
         open={showAddedAsFriendSnack}
