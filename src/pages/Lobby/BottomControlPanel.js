@@ -1,18 +1,18 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import { getTimeUntilEvent } from '../../utils'
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { StartEventButton } from '../PreEvent'
 import { PreEventInstructionModal } from '.'
-import { TransitionModal } from '../../common'
-import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
     height: '10vh',
+    position: 'absolute',
+    top: 'auto',
+    bottom: '0%',
   },
 }))
 

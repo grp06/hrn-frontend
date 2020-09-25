@@ -5,7 +5,6 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import { OnlineUsersList } from '.'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -59,7 +58,6 @@ const useStyles = makeStyles((theme) => ({
 const EventChatBox = React.memo(({ onlineUsers }) => {
   const classes = useStyles()
   const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
-  console.log('chatBoxStastus ->', chatBoxStatus)
 
   const handleChatboxStatusToggle = (e) => {
     console.log('value', e.currentTarget.value)

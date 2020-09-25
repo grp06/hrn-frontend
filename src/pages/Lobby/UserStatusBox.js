@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { makeStyles } from '@material-ui/styles'
@@ -20,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
   },
   toggleSelect: {
+    width: '50%',
+    lineHeight: '1',
+    padding: theme.spacing(2, 1),
     color: theme.palette.common.ghostWhiteSub,
     backgroundColor: theme.palette.common.dankPurp,
     '&:hover': {
@@ -27,18 +28,14 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleUnSelect: {
+    width: '50%',
+    lineHeight: '1',
+    padding: theme.spacing(2, 1),
     color: theme.palette.common.ghostWhite,
     backgroundColor: '#bdbdbd',
     '&:hover': {
       backgroundColor: '#d7d7d7',
     },
-  },
-  statusText: {
-    width: '100%',
-    height: 'auto',
-    textAlign: 'center',
-    color: theme.palette.common.sunray,
-    marginTop: theme.spacing(0.5),
   },
 }))
 
@@ -72,7 +69,12 @@ const UserStatusBox = React.memo(({ userEventStatus, eventStatus, setUserEventSt
         wrap="nowrap"
         className={classes.toggleButtonsContainer}
       >
-        <ToggleButtonGroup value={sittingOutToggle} exclusive onChange={handleUserStatusChange}>
+        <ToggleButtonGroup
+          value={sittingOutToggle}
+          exclusive
+          onChange={handleUserStatusChange}
+          style={{ width: '100%' }}
+        >
           <ToggleButton
             value="sitOut"
             className={sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
@@ -83,13 +85,10 @@ const UserStatusBox = React.memo(({ userEventStatus, eventStatus, setUserEventSt
             value="joinNext"
             className={!sittingOutToggle ? classes.toggleSelect : classes.toggleUnSelect}
           >
-            Get Matched
+            Match Me
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Typography variant="subtitle2" align="center" className={classes.statusText}>
-        {sittingOutToggle ? "You're sitting out rounds" : 'Ready to join next round'}
-      </Typography>
     </Grid>
   ) : null
 })

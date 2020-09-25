@@ -19,8 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OnlineUsersList = ({ onlineUsers }) => {
-  console.log('online event user', onlineUsers)
+const OnlineUsersList = React.memo(({ onlineUsers }) => {
   const classes = useStyles()
 
   return onlineUsers && onlineUsers.online_users ? (
@@ -53,6 +52,6 @@ const OnlineUsersList = ({ onlineUsers }) => {
       </Typography>
     </Grid>
   )
-}
+})
 
 export default OnlineUsersList

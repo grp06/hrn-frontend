@@ -8,15 +8,14 @@ import { EventBreakdownStepper } from '../Event'
 import { PreEvent } from '../PreEvent'
 
 const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    width: '100%',
-    height: '100%',
-  },
   boxContainer: {
     width: '100%',
-    height: '84vh',
+    maxHeight: '84vh',
+    overflowY: 'auto',
+    overflowX: 'hidden',
+    position: 'absolute',
+    bottom: 'auto',
+    top: '0%',
   },
   eventBreakdownContainer: {
     width: '100%',
@@ -27,30 +26,89 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
+  eventInfoContainer: {
+    paddingTop: '200px',
+  },
+  eventName: {
+    fontSize: '4.5rem',
+    letterSpacing: '0.1rem',
+    marginBottom: theme.spacing(1.5),
+  },
+  hostName: {
+    fontSize: '1.25rem',
+    lineHeight: 1.7,
+  },
+  hostNameAndEventUsersContainer: {
+    margin: theme.spacing(1.5, 0),
+    width: '75%',
+  },
+  pinkNumber: {
+    color: theme.palette.common.orchid,
+    fontSize: '2rem',
+    lineHeight: 1,
+  },
+  subtitle: {
+    color: '#BFBFBF',
+  },
 }))
 
-const BroadcastBox = React.memo(({ event, userEventStatus }) => {
+const BroadcastBox = React.memo(({ event, onlineUsers, userEventStatus }) => {
   const classes = useStyles()
-  const { start_at, description, event_name, host_id, status: eventStatus } = event
+  const { start_at, description, event_name, status: eventStatus, host, event_users } = event
 
   const renderBroadcastBoxContent = () => {
     switch (eventStatus) {
       case 'not-started':
         return (
-          <Grid container justify="flex-end" direction="column" className={classes.bannerGradient}>
-            <Grid container direction="column">
+          <Grid container justify="flex-end" direction="column" wrap="nowrap">
+            <Grid container direction="column" className={classes.eventInfoContainer}>
               <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
-                <Typography variant="h3">{event_name}</Typography>
+                <Typography variant="h3" className={classes.eventName}>
+                  {event_name}
+                </Typography>
                 <Grid item container direction="row" alignItems="center">
                   <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
-                  <Typography variant="subtitle1" className={classes.subtitle}>
+                  <Typography variant="subtitle1" style={{ paddingLeft: '8px' }}>
                     {formatDate(start_at)}
                   </Typography>
                 </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justify="space-between"
+                  alignItems="center"
+                  className={classes.hostNameAndEventUsersContainer}
+                  style={{ width: '75%' }}
+                >
+                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                    <Typography variant="subtitle1" className={classes.subtitle}>
+                      Hosted By /
+                    </Typography>
+                    <Typography variant="h6" className={classes.hostName}>
+                      {host && host.name}
+                    </Typography>
+                  </Grid>
+                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                    <Typography variant="subtitle1" className={classes.subtitle}>
+                      RSVP'ed /
+                    </Typography>
+                    <Typography variant="h6" className={classes.pinkNumber}>
+                      {event_users.length}
+                    </Typography>
+                  </Grid>
+                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                    <Typography variant="subtitle1" className={classes.subtitle}>
+                      Online /
+                    </Typography>
+                    <Typography variant="h6" className={classes.pinkNumber}>
+                      {onlineUsers && onlineUsers.online_users
+                        ? onlineUsers.online_users.length
+                        : '--'}
+                    </Typography>
+                  </Grid>
+                </Grid>
                 <Grid item container direction="row" alignItems="center">
-                  <Typography variant="subtitle1" className={classes.subtitle}>
-                    {description}
-                  </Typography>
+                  <Typography variant="subtitle1">{description}</Typography>
                 </Grid>
               </Grid>
             </Grid>

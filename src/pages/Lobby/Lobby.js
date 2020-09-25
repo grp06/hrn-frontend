@@ -20,11 +20,12 @@ import {
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
     background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 80%, rgba(0,212,255,0) 100%)',
     width: '100vw',
     height: '55vh',
   },
   broadcastContainer: {
+    position: 'relative',
     width: '75vw',
     height: '100%',
     [theme.breakpoints.down('md')]: {
@@ -129,7 +130,11 @@ const Lobby = () => {
           justify="space-around"
           className={classes.broadcastContainer}
         >
-          <BroadcastBox event={event} userEventStatus={userEventStatus} />
+          <BroadcastBox
+            event={event}
+            userEventStatus={userEventStatus}
+            onlineUsers={onlineEventUsers}
+          />
           <BottomControlPanel permissions={permissions} event={event} userId={userId} />
         </Grid>
         <Grid
