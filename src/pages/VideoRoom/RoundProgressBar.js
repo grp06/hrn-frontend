@@ -19,14 +19,10 @@ const useStyles = makeStyles((theme) => ({
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const classes = useStyles()
   const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
-  const [timeElapsedInRound, setTimeElapsedInRound] = useState(null)
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
-  const [alreadyShown20SecondsLeftSnack, setAlreadyShown20SecondsLeftSnack] = useState(false)
-
-  // TODO: have to add a last seen mutation somewhere on componentDidMount on VideoRoom
-  // because if we refresh we never send a last seen mutation, so it will be null?
+  const oneRoundInMs = round_length * 60000
 
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
@@ -38,7 +34,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }
 
   const getTimeElapsedInRoundAlready = () => {
-    const timeUserEnteredRound = new Date(userUpdatedAt).getTime()
+    const timeUserEnteredRound = new Date(userUpdatedAt).getTime() + 50
 
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
 
@@ -54,45 +50,44 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }
 
   useEffect(() => {
-    if (!progressBarValue) {
-      const progressPercent = getPercentElapsedThroughRound()
-
-      console.log('setting progress bar for first time')
-      setProgressBarValue(progressPercent)
-    }
-  }, [userUpdatedAt])
-
-  useEffect(() => {
+    setShow20SecondsLeftSnack(false)
     setProgressBarValue(0)
-    setAlreadyShown20SecondsLeftSnack(false)
   }, [eventStatus])
 
   useEffect(() => {
+    const oneSecondInPct =
+      eventStatus === 'in-between-rounds'
+        ? (1000 / 20000) * 100
+        : (1000 / (round_length * 60000)) * 100
+
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      setProgressBarValue(percentElapsedThroughRound)
+      setProgressBarValue(percentElapsedThroughRound + oneSecondInPct)
+      if (eventStatus === 'room-in-progress') {
+        setShowRoundStartedSnack(true)
+      }
     }
+
     const interval = setInterval(() => {
-      const oneSecondInPct = (1000 / (round_length * 60000)) * 100
-
-      // setTimeElapsedInRound((seconds) => seconds + 1000)
-
-      setProgressBarValue((oldVal) => oldVal + oneSecondInPct)
+      setProgressBarValue((oldVal) => {
+        const newPct = oldVal + oneSecondInPct
+        if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
+          const timeRightNow = (newPct / 100) * oneRoundInMs
+          const isLastTwentySecs = oneRoundInMs - timeRightNow < 20000
+          if (isLastTwentySecs) {
+            setShow20SecondsLeftSnack(true)
+            setShowRoundStartedSnack(false)
+          }
+        }
+        return newPct
+      })
     }, 1000)
-
-    // if (!alreadyShown20SecondsLeftSnack && eventStatus === 'room-in-progress') {
-    //   if (timeElapsedInRound > getRoundDuration() - 20000) {
-    //     setShow20SecondsLeftSnack(true)
-    //     setAlreadyShown20SecondsLeftSnack(true)
-    //   }
-    // }
 
     return () => {
       console.log('clearing')
-      setProgressBarValue(null)
       clearInterval(interval)
     }
-  }, [])
+  }, [eventStatus])
 
   return (
     <Grid
@@ -106,10 +101,10 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         open={showRoundStartedSnack}
         onClose={() => setShowRoundStartedSnack(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        duration={20000}
+        duration={10000}
         severity="success"
         snackIcon={<TimerIcon />}
-        snackMessage={`${event.round_length} mintues left`}
+        snackMessage={`${event.round_length} minutes left`}
       />
       <Snack
         open={show20SecondsLeftSnack}
