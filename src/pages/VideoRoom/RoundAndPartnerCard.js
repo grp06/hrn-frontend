@@ -68,7 +68,7 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
       {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
-      {addFriendButton}
+      <div style={{ width: '60%' }}>{addFriendButton}</div>
     </Grid>
   )
 }

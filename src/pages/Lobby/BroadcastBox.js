@@ -20,13 +20,14 @@ const useStyles = makeStyles((theme) => ({
     top: '0%',
   },
   eventBreakdownContainer: {
-    width: '100%',
+    width: '99%',
     borderRadius: '4px',
     height: 'auto',
     marginRight: 'auto',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
+    marginBottom: theme.spacing(2.5),
   },
   eventInfoContainer: {
     paddingTop: '200px',
@@ -119,7 +120,7 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid item container direction="row" alignItems="center">
+                <Grid item direction="row" alignItems="center" style={{ marginBottom: '24px' }}>
                   <Typography variant="subtitle1">{description}</Typography>
                 </Grid>
               </Grid>

@@ -9,7 +9,7 @@ import copy from 'copy-to-clipboard'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/logoPurple.svg'
-import { FloatCardMedium, Snack } from '../../common'
+import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'flex-start',
     },
   },
+  addFriendsButtonDiv: {
+    width: '60%',
+  },
   button: {
     margin: theme.spacing(0, 1),
     [theme.breakpoints.down('sm')]: {
@@ -47,6 +50,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardContainer: {
+    position: 'relative',
+    top: '-40px',
+    bottom: '0%',
+    display: 'block',
+    width: '500px',
+    height: 'auto',
+    marginBottom: '75px',
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      width: '85vw',
+    },
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(2),
     },
@@ -85,6 +103,39 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
       })
   }
 
+  const renderContactButtons = () => {
+    if (!i_shared_details) {
+      return <AddFriendButton myRound={myRoundInfo} />
+    } else {
+      return (
+        <div>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            className={classes.button}
+            onClick={handleCopyEmailClick}
+          >
+            Copy Email
+          </Button>
+          {linkedIn_url && (
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="small"
+              className={classes.button}
+              href={linkedIn_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </Button>
+          )}
+        </div>
+      )
+    }
+  }
+
   const handleCopyEmailClick = () => {
     window.analytics.track('Copied email')
     copy(email)
@@ -92,7 +143,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
   }
 
   return (
-    <FloatCardMedium>
+    <>
       <Grid
         container
         alignItems="center"
@@ -117,7 +168,6 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           container
           direction="column"
           item
-          md={9}
           xs={12}
           className={classes.connectionContentContainer}
         >
@@ -144,29 +194,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             sm={5}
             xs={8}
           >
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="small"
-              className={classes.button}
-              onClick={handleCopyEmailClick}
-            >
-              Copy Email
-            </Button>
-            {linkedIn_url && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                size="small"
-                className={classes.button}
-                href={linkedIn_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </Button>
-            )}
-            {!i_shared_details && <AddFriendButton myRound={myRoundInfo} />}
+            {renderContactButtons()}
           </Grid>
         </Grid>
       </Grid>
@@ -177,7 +205,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
         duration={1500}
         snackMessage="Copied  💾"
       />
-    </FloatCardMedium>
+    </>
   )
 }
 
