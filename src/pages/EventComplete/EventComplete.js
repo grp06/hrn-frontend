@@ -3,12 +3,12 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useSubscription, useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
 import { useEventContext, useUserContext } from '../../context'
-import { getMyMutualThumbsData, getMyConnectionAfterEvent } from '../../gql/queries'
+import { getMyConnectionAfterEvent } from '../../gql/queries'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
@@ -17,7 +17,7 @@ const { giveFeedbackTypeform, becomeAHostTypeform, linkedInCommunityLink } = con
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '150px',
+    marginTop: '75px',
   },
   topDashboard: {
     width: '100%',
@@ -33,8 +33,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 'auto'),
     textAlign: 'center',
   },
-  cardBodySection: {
-    marginBottom: theme.spacing(3),
+  connectionGrid: {
+    margin: theme.spacing(0, 'auto'),
+    [theme.breakpoints.down('xl')]: {
+      width: '85%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   zoomLink: {
     color: theme.palette.common.sunray,
@@ -71,7 +77,6 @@ const EventComplete = ({ match }) => {
   const { user } = useUserContext()
   const { id: userId } = user
 
-  const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
@@ -85,16 +90,6 @@ const EventComplete = ({ match }) => {
       skip: !userId || !eventId,
     }
   )
-
-  // const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
-  //   getMyMutualThumbsData,
-  //   {
-  //     variables: {
-  //       event_id: eventId || localStorageEventId,
-  //       user_id: userId,
-  //     },
-  //   }
-  // )
 
   useEffect(() => {
     return () => {
@@ -115,9 +110,8 @@ const EventComplete = ({ match }) => {
   const cardHeading = () => {
     if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
       return 'Say Hi Right Now to your new friends 👋'
-    } else {
-      return 'Thanks for joining the event! 🎊'
     }
+    return 'Thanks for joining the event! 🎊'
   }
 
   const renderPostEventZoomLink = () =>
@@ -234,7 +228,7 @@ const EventComplete = ({ match }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item className={classes.cardBodySection}>
+          <Grid container justify="space-between" className={classes.connectionGrid}>
             {renderAllMyEventConnection()}
           </Grid>
         </Grid>

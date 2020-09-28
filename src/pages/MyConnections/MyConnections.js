@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   connectionGrid: {
     margin: theme.spacing(0, 'auto'),
     [theme.breakpoints.down('xl')]: {
-      width: '90%',
+      width: '93%',
     },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
