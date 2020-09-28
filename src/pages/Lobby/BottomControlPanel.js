@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     height: '10vh',
     position: 'absolute',
     top: 'auto',
-    bottom: '0%',
+    bottom: '1.25%',
   },
 }))
 
@@ -29,7 +29,7 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
       container
       direction="row"
       justify="flex-start"
-      alignItems="center"
+      alignItems="flex-end"
       wrap="nowrap"
       className={classes.boxContainer}
     >
