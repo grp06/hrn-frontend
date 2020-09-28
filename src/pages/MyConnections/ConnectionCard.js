@@ -31,9 +31,6 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'flex-start',
     },
   },
-  addFriendsButtonDiv: {
-    width: '60%',
-  },
   button: {
     margin: theme.spacing(0, 1),
     [theme.breakpoints.down('sm')]: {
@@ -65,8 +62,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
+    [theme.breakpoints.down('md')]: {
+      margin: theme.spacing(0, 'auto'),
+      marginBottom: '75px',
     },
   },
   city: {
@@ -105,35 +103,38 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
 
   const renderContactButtons = () => {
     if (!i_shared_details) {
-      return <AddFriendButton myRound={myRoundInfo} />
-    } else {
       return (
-        <div>
+        <div className={classes.button}>
+          <AddFriendButton myRound={myRoundInfo} />
+        </div>
+      )
+    }
+    return (
+      <div>
+        <Button
+          variant="outlined"
+          color="secondary"
+          size="small"
+          className={classes.button}
+          onClick={handleCopyEmailClick}
+        >
+          Copy Email
+        </Button>
+        {linkedIn_url && (
           <Button
             variant="outlined"
             color="secondary"
             size="small"
             className={classes.button}
-            onClick={handleCopyEmailClick}
+            href={linkedIn_url}
+            target="_blank"
+            rel="noopener noreferrer"
           >
-            Copy Email
+            LinkedIn
           </Button>
-          {linkedIn_url && (
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="small"
-              className={classes.button}
-              href={linkedIn_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </Button>
-          )}
-        </div>
-      )
-    }
+        )}
+      </div>
+    )
   }
 
   const handleCopyEmailClick = () => {

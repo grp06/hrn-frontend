@@ -8,7 +8,7 @@ import { addFriend, updatePartnerSharedDetails } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
-    width: '60%',
+    width: 'auto',
     margin: theme.spacing(1, 0),
   },
 }))
@@ -49,7 +49,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
     }
   }
   return (
-    <Grid container justify="center" alignItems="center">
+    <Grid>
       <Button
         className={classes.addFriendButton}
         variant="contained"
