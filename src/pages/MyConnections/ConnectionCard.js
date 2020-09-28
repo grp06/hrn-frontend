@@ -103,6 +103,39 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
       })
   }
 
+  const renderContactButtons = () => {
+    if (!i_shared_details) {
+      return <AddFriendButton myRound={myRoundInfo} />
+    } else {
+      return (
+        <div>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            className={classes.button}
+            onClick={handleCopyEmailClick}
+          >
+            Copy Email
+          </Button>
+          {linkedIn_url && (
+            <Button
+              variant="outlined"
+              color="secondary"
+              size="small"
+              className={classes.button}
+              href={linkedIn_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </Button>
+          )}
+        </div>
+      )
+    }
+  }
+
   const handleCopyEmailClick = () => {
     window.analytics.track('Copied email')
     copy(email)
@@ -161,31 +194,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             sm={5}
             xs={8}
           >
-            <Button
-              variant="outlined"
-              color="secondary"
-              size="small"
-              className={classes.button}
-              onClick={handleCopyEmailClick}
-            >
-              Copy Email
-            </Button>
-            {linkedIn_url && (
-              <Button
-                variant="outlined"
-                color="secondary"
-                size="small"
-                className={classes.button}
-                href={linkedIn_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </Button>
-            )}
-            <div className={classes.addFriendsButtonDiv}>
-              {!i_shared_details && <AddFriendButton myRound={myRoundInfo} />}
-            </div>
+            {renderContactButtons()}
           </Grid>
         </Grid>
       </Grid>
