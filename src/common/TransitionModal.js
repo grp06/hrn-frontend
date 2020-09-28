@@ -6,6 +6,7 @@ import Fade from '@material-ui/core/Fade'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import Fab from '@material-ui/core/Fab'
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -55,19 +56,28 @@ const useStyles = makeStyles((theme) => ({
 function TransitionModal({
   button,
   iconButton,
+  fabButton,
   modalBody,
   onAcceptFunction,
   onAcceptButtonText,
   onCloseFunction,
+  onCloseButtonText,
   hideNoWay,
 }) {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button || {}
   const { iconButtonColor, iconButtonSize, iconButtonIcon } = iconButton || {}
+  const { fabButtonColor, fabButtonSize, fabButtonIcon } = fabButton || {}
   const [open, setOpen] = useState(false)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
+
+  const closeModal = () => {
+    setOpen(false)
+  }
+
   const handleOpen = () => {
     setOpen(true)
+    setAcceptFunctionInFlight(false)
   }
 
   const handleClose = () => {
@@ -77,20 +87,9 @@ function TransitionModal({
     }
   }
 
-  return (
-    <div>
-      {button ? (
-        <Button
-          disableRipple
-          size={buttonSize || 'medium'}
-          variant={buttonVariant || 'contained'}
-          color={buttonColor || 'primary'}
-          onClick={handleOpen}
-          style={buttonStyle}
-        >
-          {buttonText}
-        </Button>
-      ) : (
+  const renderButton = () => {
+    if (iconButton) {
+      return (
         <IconButton
           disableRipple
           size={iconButtonSize || 'medium'}
@@ -99,13 +98,43 @@ function TransitionModal({
         >
           {iconButtonIcon}
         </IconButton>
-      )}
+      )
+    }
+    if (fabButton) {
+      return (
+        <Fab
+          disableRipple
+          color={fabButtonColor || 'primary'}
+          size={fabButtonSize || 'medium'}
+          onClick={handleOpen}
+        >
+          {fabButtonIcon}
+        </Fab>
+      )
+    }
+    return (
+      <Button
+        disableRipple
+        size={buttonSize || 'medium'}
+        variant={buttonVariant || 'contained'}
+        color={buttonColor || 'primary'}
+        onClick={handleOpen}
+        style={buttonStyle}
+      >
+        {buttonText}
+      </Button>
+    )
+  }
+
+  return (
+    <div>
+      {renderButton()}
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={open}
-        onClose={handleClose}
+        onClose={closeModal}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
@@ -149,7 +178,7 @@ function TransitionModal({
                 </Button>
                 {!hideNoWay && (
                   <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
-                    Whoops, No Way!
+                    {onCloseButtonText || 'Whoops, No Way!'}
                   </Button>
                 )}
               </Grid>

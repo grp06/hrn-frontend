@@ -18,17 +18,23 @@ import {
   LoginForm,
   MyProfile,
   MyConnections,
+  VideoRoom,
   Onboarding,
   PreEvent,
   PrivacyPolicy,
   SetNewPassword,
   SignUp,
-  VideoRoom,
+  Lobby,
 } from './pages'
-import { AppProvider } from './context/AppProvider'
+import {
+  AppProvider,
+  EventProvider,
+  TwilioProvider,
+  UserProvider,
+  UserEventStatusProvider,
+} from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
-import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
 
 const App = () => {
@@ -65,39 +71,52 @@ const App = () => {
           <Router>
             <ErrorBoundary>
               <AppProvider>
-                <Switch>
-                  <MarginLeftAppWrapper>
-                    <Route exact path="/" component={LoginForm} />
-                    <Route exact path="/sign-up" component={SignUp} />
-                    <Route exact path="/forgot-password" component={ForgotPassword} />
-                    <Route
-                      exact
-                      path="/set-new-password/:userId/:token"
-                      component={SetNewPassword}
-                    />
-                    <Route exact path="/onboarding" component={Onboarding} />
-                    <Route exact path="/my-profile" component={MyProfile} />
-                    <Route exact path="/my-connections" component={MyConnections} />
-                    <Route exact path="/create-event" component={EventForm} />
-                    <Route exact path="/host-dashboard" component={HostDashboard} />
-                    <Route exact path="/hrn-analytics" component={HRNAnalytics} />
-                    <Route
-                      exact
-                      path="/events/public"
-                      component={() => <Redirect to={{ pathname: '/events' }} />}
-                    />
-                    <Route exact path="/events" component={EventsPublic} />
-                    <Route exact path="/my-events" component={MyEvents} />
-                    <Route exact path="/events/:id" component={Event} />
-                    <Route exact path="/events/:id/video-room" component={VideoRoom} />
-                    <Route exact path="/events/:id/pre-event" component={PreEvent} />
-                    <Route exact path="/events/:id/event-complete" component={EventComplete} />
-                    <Route exact path="/privacy-policy" component={PrivacyPolicy} />
-                  </MarginLeftAppWrapper>
-                  <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
-                </Switch>
-                <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
-                <GetTagsModal />
+                <UserProvider>
+                  <Switch>
+                    <MarginLeftAppWrapper>
+                      <Route exact path="/" component={LoginForm} />
+                      <Route exact path="/sign-up" component={SignUp} />
+                      <Route exact path="/forgot-password" component={ForgotPassword} />
+                      <Route
+                        exact
+                        path="/set-new-password/:userId/:token"
+                        component={SetNewPassword}
+                      />
+                      <Route exact path="/onboarding" component={Onboarding} />
+                      <Route exact path="/my-profile" component={MyProfile} />
+                      <Route exact path="/my-connections" component={MyConnections} />
+                      <Route exact path="/create-event" component={EventForm} />
+                      <Route exact path="/host-dashboard" component={HostDashboard} />
+                      <Route exact path="/hrn-analytics" component={HRNAnalytics} />
+                      <Route
+                        exact
+                        path="/events/public"
+                        component={() => <Redirect to={{ pathname: '/events' }} />}
+                      />
+                      <Route exact path="/my-events" component={MyEvents} />
+                      <EventProvider>
+                        <Route exact path="/events" component={EventsPublic} />
+                        <Route exact path="/events/:id" component={Event} />
+                        <TwilioProvider>
+                          <UserEventStatusProvider>
+                            <Route exact path="/events/:id/lobby" component={Lobby} />
+                            <Route exact path="/events/:id/video-room" component={VideoRoom} />
+                            <Route exact path="/events/:id/pre-event" component={PreEvent} />
+                            <Route
+                              exact
+                              path="/events/:id/event-complete"
+                              component={EventComplete}
+                            />
+                          </UserEventStatusProvider>
+                        </TwilioProvider>
+                      </EventProvider>
+                      <Route exact path="/privacy-policy" component={PrivacyPolicy} />
+                    </MarginLeftAppWrapper>
+                    <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
+                  </Switch>
+                  <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
+                  {/* <GetTagsModal /> */}
+                </UserProvider>
               </AppProvider>
             </ErrorBoundary>
           </Router>

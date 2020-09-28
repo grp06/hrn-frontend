@@ -1,8 +1,8 @@
 import { useParticipantConnected } from '.'
-import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context'
 
 const useSetupUserPreEvent = () => {
-  const { event } = useAppContext()
+  const { event } = useEventContext()
   const { participantConnected } = useParticipantConnected()
   const setupUserPreEvent = (room) => {
     // nothing to loop over for the host

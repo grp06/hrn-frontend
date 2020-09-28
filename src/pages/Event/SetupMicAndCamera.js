@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
 const useStyles = makeStyles((theme) => ({
   permissionsContainer: {
-    minHeight: '50vh',
+    minHeight: '60vh',
   },
   cameraBlocked: {
     position: 'fixed',
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SetupMicAndCamera = () => {
   const classes = useStyles()
-  const { setCameraAndMicPermissions } = useAppContext()
+  const { setCameraAndMicPermissions } = useEventContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
   const [videoDevices, setVideoDevices] = useState([])

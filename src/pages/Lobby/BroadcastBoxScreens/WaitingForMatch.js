@@ -16,41 +16,28 @@ const useStyles = makeStyles((theme) => ({
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
-  dancingMan: {
-    fontSize: '50px',
-  },
   trexContainer: {
     width: '80vw',
     height: 'auto',
   },
 }))
 
-const SittingOut = ({ roundLength }) => {
+const WaitingForMatch = () => {
   const classes = useStyles()
+
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        You are the chosen one{' '}
-        <span role="img" aria-label="crown">
-          👑
-        </span>{' '}
-        !
-      </Typography>
-      <Typography className={classes.messageText}>
-        Sometimes we have an odd number of people and need someone to sit out.
-      </Typography>
-      <Typography className={classes.messageText}>
-        But no worries, you&apos;ll be paired with someone new in {roundLength} minutes.
-      </Typography>
-      <Typography className={classes.messageText}>
-        Get a drink of water. Stretch. Do a little dance{' '}
-        <span role="img" aria-label="dancing man">
-          🕺
+        Glad to have you back{' '}
+        <span role="img" aria-label="hugging hands">
+          🤗
         </span>
-        .
       </Typography>
       <Typography className={classes.messageText}>
-        Or press 'up' on your keyboard to kill some time.
+        We&apos;ve penciled you in and we&apos;ll pair you with someone as soon as we can.
+      </Typography>
+      <Typography className={classes.messageText}>
+        In the meantime, press &apos;up&apos; on your keyboard to kill some time.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
@@ -59,4 +46,4 @@ const SittingOut = ({ roundLength }) => {
   )
 }
 
-export default SittingOut
+export default WaitingForMatch

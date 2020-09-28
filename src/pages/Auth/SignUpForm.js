@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { Link, Redirect, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium, Snack } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
+import { useAppContext } from '../../context'
 import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({

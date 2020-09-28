@@ -3,16 +3,16 @@ import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
 import Typography from '@material-ui/core/Typography'
 
-const StartEventButton = ({ event, user }) => {
+const StartEventButton = ({ event, userId }) => {
   const { id: eventId, round_length, num_rounds, status: eventStatus, host_id } = event
-  const { userId } = user
   const isEventHost = host_id === userId
 
   return isEventHost && eventStatus === 'pre-event'
     ? TransitionModal({
         button: {
-          buttonText: 'Start Event 🥳',
+          buttonText: 'Start Event',
           buttonVariant: 'contained',
+          buttonSize: 'large',
         },
         modalBody: (
           <Typography variant="h5">

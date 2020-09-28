@@ -16,16 +16,13 @@ const useStyles = makeStyles((theme) => ({
   messageText: {
     ...theme.typography.waitingRoomHeading,
   },
-  dancingMan: {
-    fontSize: '50px',
-  },
   trexContainer: {
     width: '80vw',
     height: 'auto',
   },
 }))
 
-const UserJoinedDuringRound = () => {
+const CameLate = () => {
   const classes = useStyles()
 
   return (
@@ -35,18 +32,13 @@ const UserJoinedDuringRound = () => {
         <span role="img" aria-label="blue cap">
           🧢
         </span>
-        .
       </Typography>
       <Typography className={classes.messageText}>
-        But don&apos;t worry! We&apos;ve penciled you in and you&apos;ll join the next round in a
-        few minutes.
+        But don&apos;t worry! We&apos;ve penciled you in and we&apos;ll pair you with someone as
+        soon as we can.
       </Typography>
       <Typography className={classes.messageText}>
-        In the meantime, press &apos;up&apos; on your keyboard to kill some time{' '}
-        <span role="img" aria-label="wink face">
-          😉
-        </span>
-        .
+        In the meantime, press &apos;up&apos; on your keyboard to kill some time.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
@@ -55,4 +47,4 @@ const UserJoinedDuringRound = () => {
   )
 }
 
-export default UserJoinedDuringRound
+export default CameLate

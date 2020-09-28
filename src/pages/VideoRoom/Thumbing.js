@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 import { setPartnerXThumb, setPartnerYThumb } from '../../gql/mutations'
 import { Snack } from '../../common'
 
@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 const Thumbing = ({ myRound, userId }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { event } = useAppContext()
+  const { event } = useEventContext()
   const [showThumbUpButton, setShowThumbUpButton] = useState(true)
   const [userThumbed, setUserThumbed] = useState(false)
   const [showThumbSnack, setShowThumbSnack] = useState(false)

@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
-import { PreEventControlsCard } from '.'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
-import { usePreEventTwilio, useGetCameraAndMicStatus } from '../../hooks'
+import {
+  usePreEventTwilio,
+  useGetCameraAndMicStatus,
+  useGetOnlineEventAttendees,
+} from '../../hooks'
 import { constants } from '../../utils'
 
 const { maxNumUsersPerRoom } = constants
@@ -16,6 +21,7 @@ const { createLocalTracks, connect } = require('twilio-video')
 const useStyles = makeStyles((theme) => ({
   hostVid: {
     width: '100%',
+    height: '100%',
     display: 'flex',
     '& video': {
       width: '100%',
@@ -25,27 +31,50 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   preEventWrapper: {
-    height: '100vh',
+    height: '100%',
+  },
+  liveAndViewersContainer: {
+    position: 'absolute',
+    top: '3%',
+    left: '2%',
+    bottom: 'auto',
+    right: 'auto',
+  },
+  liveLogo: {
+    width: '60px',
+    height: 'auto',
+    color: theme.palette.common.ghostWhite,
+    fontWeight: 'bold',
+    backgroundColor: theme.palette.common.red,
+    borderRadius: '4px',
+    textAlign: 'center',
+  },
+  viewersContainer: {
+    marginTop: theme.spacing(1),
+  },
+  viewersNumber: {
+    color: theme.palette.common.red,
+    marginLeft: theme.spacing(0.5),
   },
 }))
 
-const PreEvent = ({ match }) => {
-  const { id: eventId } = match.params
+const PreEvent = () => {
+  // const { id: eventId } = match.params
   const classes = useStyles()
   const history = useHistory()
-  const { user, event, app, setCameraAndMicPermissions } = useAppContext()
-  const { userId, role } = user
-  const { permissions } = app
-  const [isGUMErrorModalActive, setIsGUMErrorModalActive] = useState(false)
-  const [GUMError, setGUMError] = useState('')
+  const { user } = useUserContext()
+  const { event, permissions, setCameraAndMicPermissions } = useEventContext()
+  const { id: userId, role } = user
+  const { id: eventId } = event
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
-  const { startPreEventTwilio } = usePreEventTwilio()
   const eventSet = Object.keys(event).length > 1
   const [onlineUsers, setOnlineUsers] = useState(null)
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+  const { startPreEventTwilio } = usePreEventTwilio()
+  const onlineEventAttendees = useGetOnlineEventAttendees(event)
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
@@ -200,7 +229,17 @@ const PreEvent = ({ match }) => {
         />
       )}
       <div id="host-video" className={classes.hostVid} />
-      <PreEventControlsCard event={event} user={user} />
+      <Grid container direction="column" className={classes.liveAndViewersContainer}>
+        <Typography className={classes.liveLogo} variant="subtitle1">
+          LIVE
+        </Typography>
+        <Grid container className={classes.viewersContainer}>
+          <VisibilityOutlinedIcon stroke="#ff3333" />
+          <Typography variant="body1" className={classes.viewersNumber}>
+            {onlineEventAttendees ? onlineEventAttendees.length : ' --'} viewers
+          </Typography>
+        </Grid>
+      </Grid>
     </Grid>
   )
 }

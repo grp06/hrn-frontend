@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
@@ -15,7 +14,7 @@ import {
   ShareEventPromptModal,
 } from '.'
 import { FloatCardLarge, CameraDisabledBanner } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext, useUserContext } from '../../context'
 import { insertEventUser, deleteEventUser } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,8 +58,9 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
   const classes = useStyles()
   const history = useHistory()
   const [rsvpInFlight, setRSVPInFlight] = useState(false)
-  const { user, setCameraAndMicPermissions } = useAppContext()
-  const { userId, name, email } = user
+  const { user } = useUserContext()
+  const { setCameraAndMicPermissions } = useEventContext()
+  const { id: userId, name, email } = user
   const {
     id: eventId,
     event_users,
@@ -71,8 +71,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
     round_length,
   } = eventData
   const { name: eventHostName } = eventHost
-
-  const [waitingForAdmin, setWaitingForAdmin] = useState()
 
   const alreadyAttending = event_users.find((u) => u.user.id === userId)
 
@@ -92,12 +90,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
       userId,
     },
   })
-
-  useEffect(() => {
-    if (timeState === 'go time' && alreadyAttending) {
-      setWaitingForAdmin(true)
-    }
-  }, [timeState, alreadyAttending])
 
   const handleSignUpClick = () => {
     localStorage.setItem('eventId', eventId)
@@ -183,47 +175,11 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
         element = !userId ? renderSignupButton() : renderRsvpButton()
         break
       default:
-        element = !userId ? (
-          renderSignupButton()
-        ) : (
-          <>
-            {renderRsvpButton()}
-            <EventCountdown eventStartTime={eventStartTime} subtitle="Event Starts In:" />
-          </>
-        )
+        element = !userId ? renderSignupButton() : <>{renderRsvpButton()}</>
     }
     return element
   }
 
-  const renderWaitingForHost = () =>
-    waitingForAdmin && (
-      <FloatCardLarge>
-        <Grid
-          item
-          container
-          justify="space-around"
-          alignItems="center"
-          className={classes.topDashboard}
-        >
-          <Grid
-            container
-            item
-            md={6}
-            xs={12}
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Typography variant="h5" className={classes.centerText}>
-              The host will begin the event shortly
-            </Typography>
-          </Grid>
-          <div className={classes.root}>
-            <LinearProgress />
-          </div>
-        </Grid>
-      </FloatCardLarge>
-    )
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   if (micOrCameraIsDisabled && timeState !== 'future' && alreadyAttending) {
@@ -245,8 +201,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
           />
         </Grid>
       )}
-      {renderWaitingForHost()}
-
       <FloatCardLarge>
         <Grid
           item
@@ -288,7 +242,13 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
             </Grid>
           </Grid>
         </Grid>
-        {userId ? <EventBreakdownStepper eventRoundLength={round_length} /> : null}
+        {userId ? (
+          <EventBreakdownStepper
+            eventRoundLength={round_length}
+            endMessage="You are all set! If you have already RSVPed, sit tight and wait for the event to
+            start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!"
+          />
+        ) : null}
       </FloatCardLarge>
     </>
   )

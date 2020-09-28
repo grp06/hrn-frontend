@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { ExpansionPanel } from '@material-ui/core'
-import { useAppContext } from '../../context/useAppContext'
+import { useAppContext, useUserContext } from '../../context'
 import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds } from '../../gql/queries'
@@ -41,9 +41,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HostDashboard = () => {
   const classes = useStyles()
-  const { user, app } = useAppContext()
-  const { userId, role } = user
-  const { appLoading } = app
+  const { appLoading } = useAppContext()
+  const { user } = useUserContext()
+  const { id: userId, role } = user
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
   const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)

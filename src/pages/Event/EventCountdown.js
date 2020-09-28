@@ -1,21 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import moment from 'moment-timezone'
-
 import Grid from '@material-ui/core/Grid'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: '20px',
+    padding: theme.spacing(1),
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
+    width: 'auto',
+    position: 'relative',
   },
   time: {
     fontSize: '2rem',
     fontFamily: 'Muli',
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.ghostWhite,
+  },
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+    position: 'absolute',
+    left: 0,
+    bottom: 0,
+    right: 0,
+    top: 'auto',
   },
 }))
 
-const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
+const EventCountdown = ({ eventStartTime }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -34,30 +52,42 @@ const EventCountdown = ({ eventStartTime, onRoundComplete, adminHeader }) => {
 
     if (seconds === 0) {
       setIsTimerActive(false)
-      if (onRoundComplete) {
-        onRoundComplete()
-      }
     }
 
     return () => {
       clearInterval(interval)
     }
-  }, [seconds])
+  }, [seconds, secondsUntilEvent])
 
   const displayTime =
     seconds && seconds >= 0 ? `${minutesToDisplay} : ${secondsToDisplay}` : '-- : --'
 
-  return isTimerActive ? (
+  return (
     <Grid
       container
       direction="column"
       justify="center"
       alignItems="center"
-      className={adminHeader ? null : classes.container}
+      className={classes.container}
     >
-      <div className={classes.time}>{displayTime}</div>
+      {isTimerActive && seconds > 0 ? (
+        <Typography variant="h6">
+          <span className={classes.time}>{displayTime}</span> until event starts
+        </Typography>
+      ) : (
+        <div>
+          <Grid container item direction="column" justify="center" alignItems="center">
+            <Typography variant="h5" className={classes.centerText}>
+              The host will begin the event shortly
+            </Typography>
+          </Grid>
+          <div className={classes.root}>
+            <LinearProgress />
+          </div>
+        </div>
+      )}
     </Grid>
-  ) : null
+  )
 }
 
 export default EventCountdown

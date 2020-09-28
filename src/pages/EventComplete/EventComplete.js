@@ -3,12 +3,12 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useSubscription } from '@apollo/react-hooks'
+import { useSubscription, useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useAppContext } from '../../context/useAppContext'
-import { getMyMutualThumbsData } from '../../gql/queries'
+import { useEventContext, useUserContext } from '../../context'
+import { getMyMutualThumbsData, getMyConnectionAfterEvent } from '../../gql/queries'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
@@ -67,22 +67,34 @@ const useStyles = makeStyles((theme) => ({
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user, event, resetEvent } = useAppContext()
-  const { userId } = user
+  const { event, resetEvent } = useEventContext()
+  const { user } = useUserContext()
+  const { id: userId } = user
 
   const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
-  const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
-    getMyMutualThumbsData,
+  const { data: myConnectionAfterEventData, loading: myConnectionAfterEventLoading } = useQuery(
+    getMyConnectionAfterEvent,
     {
       variables: {
-        event_id: eventId || localStorageEventId,
         user_id: userId,
+        event_id: eventId,
       },
+      skip: !userId || !eventId,
     }
   )
+
+  // const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
+  //   getMyMutualThumbsData,
+  //   {
+  //     variables: {
+  //       event_id: eventId || localStorageEventId,
+  //       user_id: userId,
+  //     },
+  //   }
+  // )
 
   useEffect(() => {
     return () => {
@@ -96,29 +108,60 @@ const EventComplete = ({ match }) => {
     }
   }, [event])
 
-  if (mutualThumbsLoading) {
+  if (myConnectionAfterEventLoading) {
     return <Loading />
   }
 
-  const cardHeading =
-    mutualThumbsData.rounds.length > 0
-      ? 'Say Hi Right Now to your new friends 👋'
-      : 'Thanks for joining the event! 🎊'
+  const cardHeading = () => {
+    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
+      return 'Say Hi Right Now to your new friends 👋'
+    }
+    return 'Thanks for joining the event! 🎊'
+  }
 
-  const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
-    return Object.values(round).filter((person) => person.id !== userId)
-  })
+  const renderPostEventZoomLink = () =>
+    event.post_event_link && (
+      <Grid>
+        <div className={classes.zoomContainer}>
+          <Typography variant="h5">
+            <a
+              href={event.post_event_link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={classes.zoomLink}
+            >
+              Click here to join everyone from the event on a video call!
+            </a>
+          </Typography>
+        </div>
+      </Grid>
+    )
 
-  const renderConnectionCards = () => {
-    return arrayOfMyAllMyUniqueConnections.map((connection) => {
-      return <ConnectionCard key={connection[0].id} connection={connection[0]} />
-    })
+  // const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
+  //   return Object.values(round).filter((person) => person.id !== userId)
+  // })
+
+  console.log(myConnectionAfterEventData)
+
+  const renderAllMyEventConnection = () => {
+    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
+      return myConnectionAfterEventData.partners.map((partner) => (
+        <ConnectionCard
+          key={partner.id}
+          connection={partner.userByPartnerId}
+          i_shared_details={partner.i_shared_details}
+          partnerId={partner.partner_id}
+          userId={partner.user_id}
+          eventId={partner.event_id}
+        />
+      ))
+    }
   }
 
   return (
     <div className={classes.wrapper}>
       <Typography variant="h4" className={classes.categoryHeader}>
-        {cardHeading}
+        {cardHeading()}
       </Typography>
       <Grid container item direction="column" justify="space-around">
         <Grid container direction="column">
@@ -192,7 +235,7 @@ const EventComplete = ({ match }) => {
             </Grid>
           </Grid>
           <Grid item className={classes.cardBodySection}>
-            {renderConnectionCards()}
+            {renderAllMyEventConnection()}
           </Grid>
         </Grid>
       </Grid>

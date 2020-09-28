@@ -9,7 +9,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { insertUserTags } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { OnboardingInterestTagInput } from '../Onboarding'
-import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TagsForm = ({ tags, userId, onClose }) => {
   const classes = useStyles()
-  const { setUsersTags, user } = useAppContext()
+  const { setUsersTags, user } = useUserContext()
   const { tags_users: usersTags } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [insertUserTagsMutation] = useMutation(insertUserTags)

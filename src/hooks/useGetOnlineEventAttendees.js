@@ -5,7 +5,7 @@ import { constants } from '../utils'
 
 const { lastSeenDuration } = constants
 
-export default function useGetOnlineEventAttendees(event, isEventHost) {
+export default function useGetOnlineEventAttendees(event) {
   const { id: eventId } = event
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { data: onlineUsersData, loading: onlineUsersLoading } = useSubscription(
@@ -14,7 +14,7 @@ export default function useGetOnlineEventAttendees(event, isEventHost) {
       variables: {
         event_id: eventId,
       },
-      skip: !eventId || !isEventHost,
+      skip: !eventId,
     }
   )
 
