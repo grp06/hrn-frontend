@@ -31,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'flex-start',
     },
   },
+  addFriendsButtonDiv: {
+    width: '60%',
+  },
   button: {
     margin: theme.spacing(0, 1),
     [theme.breakpoints.down('sm')]: {
@@ -180,7 +183,9 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
                 LinkedIn
               </Button>
             )}
-            {!i_shared_details && <AddFriendButton myRound={myRoundInfo} />}
+            <div className={classes.addFriendsButtonDiv}>
+              {!i_shared_details && <AddFriendButton myRound={myRoundInfo} />}
+            </div>
           </Grid>
         </Grid>
       </Grid>

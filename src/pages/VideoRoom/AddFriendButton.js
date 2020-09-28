@@ -8,7 +8,7 @@ import { addFriend, updatePartnerSharedDetails } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
-    width: '60%',
+    width: '100%',
     margin: theme.spacing(1, 0),
   },
 }))
