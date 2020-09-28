@@ -9,7 +9,7 @@ import copy from 'copy-to-clipboard'
 import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/logoPurple.svg'
-import { FloatCardMedium, Snack } from '../../common'
+import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
 
 const useStyles = makeStyles((theme) => ({
@@ -47,6 +47,21 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   cardContainer: {
+    position: 'relative',
+    top: '-40px',
+    bottom: '0%',
+    display: 'block',
+    width: '500px',
+    height: 'auto',
+    marginBottom: '75px',
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
+    padding: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      width: '85vw',
+    },
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(2),
     },
@@ -92,7 +107,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
   }
 
   return (
-    <FloatCardMedium>
+    <>
       <Grid
         container
         alignItems="center"
@@ -117,7 +132,6 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           container
           direction="column"
           item
-          md={9}
           xs={12}
           className={classes.connectionContentContainer}
         >
@@ -177,7 +191,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
         duration={1500}
         snackMessage="Copied  💾"
       />
-    </FloatCardMedium>
+    </>
   )
 }
 

@@ -14,6 +14,15 @@ import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  connectionGrid: {
+    margin: theme.spacing(0, 'auto'),
+    [theme.breakpoints.down('xl')]: {
+      width: '90%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+  },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
@@ -32,19 +41,25 @@ const useStyles = makeStyles((theme) => ({
   sectionHeader: {
     marginBottom: theme.spacing(3),
   },
-  toggleSelect: {
-    color: theme.palette.common.ghostWhite,
-    borderLeft: 'none',
-    borderTop: 'none',
-    borderRight: 'none',
-    borderBottom: `2px solid ${theme.palette.common.dankPurp}`,
+  toggleButtonActive: {
+    '&.Mui-selected': {
+      color: theme.palette.common.orchid,
+      borderRadius: 0,
+      border: 'none',
+      borderBottom: `2px solid ${theme.palette.common.orchid}`,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
   },
-  toggleUnSelect: {
+  toggleButtonInactive: {
     color: theme.palette.common.ghostWhite,
-    borderLeft: 'none',
-    borderTop: 'none',
-    borderRight: 'none',
-    borderBottom: `2px solid ${theme.palette.common.ghostWhite}`,
+    borderRadius: 0,
+    border: 'none',
+    borderBottom: '2px solid #3e4042',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
   },
 }))
 
@@ -54,7 +69,7 @@ const MyConnections = () => {
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { id: userId } = user
-  const [friendsToggle, setFriendsToggle] = React.useState(true)
+  const [connectionToggleValue, setConnectionToggleValue] = React.useState('friends')
   const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useQuery(
     getAllMyConnections,
     {
@@ -76,73 +91,46 @@ const MyConnections = () => {
     return history.push('/events')
   }
 
-  const renderNullDataText = () => {
-    if (!allMyConnectionsData || !allMyConnectionsData.partners.length) {
-      return (
-        <>
-          <FloatCardLarge>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              className={classes.nullDataContainer}
+  const renderNullDataText = (message) => {
+    return (
+      <>
+        <FloatCardLarge>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.nullDataContainer}
+          >
+            <Typography variant="h4" className={classes.nullDataHeader}>
+              {message}
+            </Typography>
+            <Typography variant="h6" className={classes.nullDataSub}>
+              Join one of our public events and connect with other awesome people!
+            </Typography>
+            <Button
+              onClick={handleGoToPublicEventsClick}
+              color="primary"
+              variant="contained"
+              style={{ marginTop: '20px' }}
             >
-              <Typography variant="h4" className={classes.nullDataHeader}>
-                Looks like you haven&apos;t connected with anyone yet{' '}
-                <span role="img" aria-label="neutral face">
-                  😐
-                </span>
-              </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
-                Join one of our public events and connect with other awesome people!
-              </Typography>
-              <Button
-                onClick={handleGoToPublicEventsClick}
-                color="primary"
-                variant="contained"
-                style={{ marginTop: '20px' }}
-              >
-                Take Me There!
-              </Button>
-            </Grid>
-          </FloatCardLarge>
-        </>
-      )
-    }
-  }
-
-  // TODO: make this its own util function
-  // It looks hairy below  because we need to filter between partnerX and partnerY to
-  // remove your info, and then make sure we are not returning duplicate connections
-  // Ideally this is its own util function that doesnt use the useMutation hook
-  // so we dont need to import React
-
-  let iSharedConnections, notSharedConnections
-  if (allMyConnectionsData && allMyConnectionsData.partners.length > 0) {
-    iSharedConnections = allMyConnectionsData.partners.filter(
-      (partner) => !!partner.i_shared_details
-    )
-    notSharedConnections = allMyConnectionsData.partners.filter(
-      (partner) => !partner.i_shared_details
+              Take Me There!
+            </Button>
+          </Grid>
+        </FloatCardLarge>
+      </>
     )
   }
 
-  const renderAllMyConnection = () => {
-    if (allMyConnectionsData && allMyConnectionsData.partners.length > 0) {
-      if (!!friendsToggle) {
-        return iSharedConnections.map((partner) => (
-          <ConnectionCard
-            key={partner.id}
-            connection={partner.userByPartnerId}
-            i_shared_details={partner.i_shared_details}
-            partnerId={partner.partner_id}
-            userId={partner.user_id}
-            eventId={partner.event_id}
-          />
-        ))
-      } else {
-        return notSharedConnections.map((partner) => (
+  const renderContactCards = (contactGroup, emptyGroupMessage) => {
+    if (allMyConnectionsData && allMyConnectionsData.partners.length) {
+      const group =
+        contactGroup === 'friends'
+          ? allMyConnectionsData.partners.filter((partner) => !!partner.i_shared_details)
+          : allMyConnectionsData.partners.filter((partner) => !partner.i_shared_details)
+
+      if (group.length > 0) {
+        return group.map((partner) => (
           <ConnectionCard
             key={partner.id}
             connection={partner.userByPartnerId}
@@ -153,17 +141,13 @@ const MyConnections = () => {
           />
         ))
       }
+      return renderNullDataText(emptyGroupMessage)
     }
+    return renderNullDataText(emptyGroupMessage)
   }
 
-  const handleFriendsConnectionToggle = (event) => {
-    if (event.currentTarget.value === 'friends') {
-      setFriendsToggle(true)
-      console.log('selected')
-    } else if (event.currentTarget.value === 'requests') {
-      setFriendsToggle(false)
-      console.log('selected')
-    }
+  const handleConnectionToggle = (event) => {
+    setConnectionToggleValue(event.currentTarget.value)
   }
 
   return (
@@ -171,23 +155,36 @@ const MyConnections = () => {
       <Typography variant="h4" className={classes.sectionHeader}>
         Connections:
       </Typography>
-      <ToggleButtonGroup value={friendsToggle} exclusive onChange={handleFriendsConnectionToggle}>
+      <ToggleButtonGroup value={connectionToggleValue} exclusive onChange={handleConnectionToggle}>
         <ToggleButton
           value="friends"
-          className={friendsToggle ? classes.toggleSelect : classes.toggleUnSelect}
+          disableRipple
+          className={
+            connectionToggleValue === 'friends'
+              ? classes.toggleButtonActive
+              : classes.toggleButtonInactive
+          }
         >
           Friends
         </ToggleButton>
         <ToggleButton
           value="requests"
-          className={friendsToggle ? classes.toggleSelect : classes.toggleUnSelect}
+          disableRipple
+          className={
+            connectionToggleValue === 'requests'
+              ? classes.toggleButtonActive
+              : classes.toggleButtonInactive
+          }
         >
           Requests
         </ToggleButton>
       </ToggleButtonGroup>
       <div className={classes.pageContainer}>
-        {renderNullDataText()}
-        {renderAllMyConnection()}
+        <Grid container justify="space-between" className={classes.connectionGrid}>
+          {connectionToggleValue === 'friends'
+            ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
+            : renderContactCards('requests', 'You don\t have any requests to respond to 😎')}
+        </Grid>
       </div>
     </div>
   )
