@@ -23,7 +23,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
   const oneRoundInMs = round_length * 60000
-
+  console.log('hi')
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
       return round_length * 60000
