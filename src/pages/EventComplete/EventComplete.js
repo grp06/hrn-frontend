@@ -17,7 +17,7 @@ const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '75px',
+    marginTop: '100px',
   },
   topDashboard: {
     width: '100%',

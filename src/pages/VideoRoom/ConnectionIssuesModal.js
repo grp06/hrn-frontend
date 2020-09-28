@@ -46,14 +46,6 @@ const useStyles = makeStyles((theme) => ({
   acceptButton: {
     margin: theme.spacing(1.5, 0),
   },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
-  },
 }))
 
 const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
@@ -147,9 +139,6 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
               }}
             >
               Leave Chat
-            </Button>
-            <Button variant="outlined" className={classes.cancelButton} onClick={closeModal}>
-              Whoops, No Way!
             </Button>
           </Grid>
         </Grid>

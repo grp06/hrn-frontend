@@ -45,10 +45,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   myVideo: {
-    width: '150px',
+    width: '200px',
     position: 'absolute',
-    top: '79px',
-    right: '15px',
+    top: '3%',
+    right: '1%',
+    left: 'auto',
+    bottom: 'auto',
     zIndex: 99,
     opacity: 0,
     transition: '.6s',
@@ -58,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '& video': {
       borderRadius: 4,
-      width: '150px',
+      width: '200px',
     },
   },
 

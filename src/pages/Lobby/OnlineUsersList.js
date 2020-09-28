@@ -26,7 +26,7 @@ const OnlineUsersList = React.memo(({ onlineUsers }) => {
     <Grid container item direction="column" className={classes.attendeesList}>
       <List dense>
         {onlineUsers.online_users
-          .sort((userA, userB) => userA.name.toLowerCase() > userB.name.toLowerCase())
+          .sort((userA, userB) => userA.name.toLowerCase().localeCompare(userB.name.toLowerCase()))
           .map((user) => {
             const firstName = user.name.split(' ')[0]
             return (

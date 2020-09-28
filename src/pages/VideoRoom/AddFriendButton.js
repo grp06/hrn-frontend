@@ -8,10 +8,11 @@ import { addFriend, updatePartnerSharedDetails } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
-    width: 'auto',
+    width: '100%',
     margin: theme.spacing(1, 0),
   },
 }))
+
 const AddFriendButton = React.memo(({ myRound }) => {
   console.log('im rendering')
   const classes = useStyles()
@@ -63,7 +64,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
       <Snack
         open={showAddedAsFriendSnack}
         severity="info"
-        snackMessage="Added 👫"
+        snackMessage="Added 👩🏼‍🤝‍👨🏻"
         onClose={() => {
           setShowAddedAsFriendSnack(false)
         }}
