@@ -234,7 +234,7 @@ const PreEvent = () => {
           LIVE
         </Typography>
         <Grid container className={classes.viewersContainer}>
-          <VisibilityOutlinedIcon stroke="#ff3333" color="#ff3333" />
+          <VisibilityOutlinedIcon stroke="#ff3333" style={{ color: '#ff3333' }} />
           <Typography variant="body1" className={classes.viewersNumber}>
             {onlineEventAttendees ? onlineEventAttendees.length : ' --'} viewers
           </Typography>

@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     height: '10vh',
     position: 'absolute',
     top: 'auto',
-    bottom: '0.25%',
+    bottom: '0.5%',
   },
 }))
 
@@ -35,7 +35,7 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
     >
       {userIsHost && eventStatus === 'not-started' && (
         <Grid container direction="column">
-          <Grid container direction="row" alignItems="center">
+          <Grid container direction="row" alignItems="flex-end">
             <StartPreEventButton
               disabled={micOrCameraIsDisabled}
               eventId={eventId}
@@ -47,7 +47,7 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
       )}
       {userIsHost && eventStatus === 'pre-event' && (
         <Grid container direction="column">
-          <Grid container direction="row" alignItems="center">
+          <Grid container direction="row" alignItems="flex-end">
             <StartEventButton event={event} userId={userId} />
           </Grid>
         </Grid>
