@@ -3,12 +3,12 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useQuery } from '@apollo/react-hooks'
+import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
 import { useEventContext, useUserContext } from '../../context'
-import { getMyConnectionAfterEvent } from '../../gql/queries'
+import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
@@ -16,18 +16,11 @@ import { constants } from '../../utils'
 const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    marginTop: '100px',
+  button: {
+    margin: theme.spacing(1, 1),
   },
-  topDashboard: {
-    width: '100%',
-    padding: theme.spacing(5),
-    borderStyle: 'none none solid',
-    borderWidth: '1px',
-    borderColor: theme.palette.common.greyBorder,
-    borderRadius: '4px 4px 0px 0px',
-    backgroundColor: theme.palette.common.greyHighlight,
-    // backgroundColor: '#3a3b3c',
+  buttonContainer: {
+    margin: theme.spacing(3, 'auto', 9, 'auto'),
   },
   categoryHeader: {
     margin: theme.spacing(0, 'auto'),
@@ -42,19 +35,6 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
     },
   },
-  zoomLink: {
-    color: theme.palette.common.sunray,
-    margin: theme.spacing(0, 'auto', 3, 'auto'),
-    '&:hover': {
-      color: '#fcd08c',
-    },
-  },
-  button: {
-    margin: theme.spacing(1, 1),
-  },
-  buttonContainer: {
-    margin: theme.spacing(3, 'auto', 9, 'auto'),
-  },
   upcomingEventsButton: {
     margin: theme.spacing(1, 0),
     backgroundColor: theme.palette.common.ghostWhiteBody,
@@ -63,10 +43,8 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.ghostWhite,
     },
   },
-  zoomContainer: {
-    width: '75%',
-    margin: theme.spacing(4, 'auto', -3, 'auto'),
-    textAlign: 'center',
+  wrapper: {
+    marginTop: '100px',
   },
 }))
 
@@ -80,16 +58,16 @@ const EventComplete = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
-  const { data: myConnectionAfterEventData, loading: myConnectionAfterEventLoading } = useQuery(
-    getMyConnectionAfterEvent,
-    {
-      variables: {
-        user_id: userId,
-        event_id: eventId,
-      },
-      skip: !userId || !eventId,
-    }
-  )
+  const {
+    data: myConnectionAfterEventData,
+    loading: myConnectionAfterEventLoading,
+  } = useSubscription(listenToMyConnectionsAfterEvent, {
+    variables: {
+      user_id: userId,
+      event_id: eventId,
+    },
+    skip: !userId || !eventId,
+  })
 
   useEffect(() => {
     return () => {
@@ -114,42 +92,24 @@ const EventComplete = ({ match }) => {
     return 'Thanks for joining the event! 🎊'
   }
 
-  const renderPostEventZoomLink = () =>
-    event.post_event_link && (
-      <Grid>
-        <div className={classes.zoomContainer}>
-          <Typography variant="h5">
-            <a
-              href={event.post_event_link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={classes.zoomLink}
-            >
-              Click here to join everyone from the event on a video call!
-            </a>
-          </Typography>
-        </div>
-      </Grid>
-    )
-
-  // const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
-  //   return Object.values(round).filter((person) => person.id !== userId)
-  // })
-
-  console.log(myConnectionAfterEventData)
-
   const renderAllMyEventConnection = () => {
     if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
-      return myConnectionAfterEventData.partners.map((partner) => (
-        <ConnectionCard
-          key={partner.id}
-          connection={partner.userByPartnerId}
-          i_shared_details={partner.i_shared_details}
-          partnerId={partner.partner_id}
-          userId={partner.user_id}
-          eventId={partner.event_id}
-        />
-      ))
+      return myConnectionAfterEventData.partners
+        .sort((partnerA, partnerB) =>
+          partnerA.userByPartnerId.name
+            .toLowerCase()
+            .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+        )
+        .map((partner) => (
+          <ConnectionCard
+            key={partner.id}
+            connection={partner.userByPartnerId}
+            i_shared_details={partner.i_shared_details}
+            partnerId={partner.partner_id}
+            userId={partner.user_id}
+            eventId={partner.event_id}
+          />
+        ))
     }
   }
 

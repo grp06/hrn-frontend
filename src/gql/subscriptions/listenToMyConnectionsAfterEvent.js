@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
 const getMyConnectionAfterEvent = gql`
-  query getMyConnectionAfterEvent($user_id: Int!, $event_id: Int!) {
+  subscription getMyConnectionAfterEvent($user_id: Int!, $event_id: Int!) {
     partners(
       where: {
         user_id: { _eq: $user_id }
