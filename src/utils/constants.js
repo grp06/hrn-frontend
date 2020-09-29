@@ -2,6 +2,7 @@ const constants = {
   // change me back to 20000?
   lastSeenDuration: 2500,
   roundLength: 300,
+  betweenRoundsDelay: 20000,
   partnerCameraIssueTimeout: 5000,
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,

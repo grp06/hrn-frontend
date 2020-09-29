@@ -4,8 +4,10 @@ import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import TimerIcon from '@material-ui/icons/Timer'
 import { makeStyles } from '@material-ui/styles'
-
+import { constants } from '../../utils'
 import { Snack } from '../../common'
+
+const { betweenRoundsDelay } = constants
 
 const useStyles = makeStyles((theme) => ({
   roundProgressBarContainer: {
@@ -23,7 +25,6 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
   const oneRoundInMs = round_length * 60000
-  console.log('hi')
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
       return round_length * 60000
@@ -55,14 +56,22 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }, [eventStatus])
 
   useEffect(() => {
-    const oneSecondInPct =
-      eventStatus === 'in-between-rounds'
-        ? (1000 / 20000) * 100
-        : (1000 / (round_length * 60000)) * 100
+    const getOneSecondInPct = () => {
+      if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
+        // ex: one tick of the progress bar is 10%
+
+        return (1000 / (betweenRoundsDelay / 2)) * 100
+      }
+      if (eventStatus === 'in-between-rounds') {
+        // ex: one tick of the progress bar is 5%
+        return (1000 / betweenRoundsDelay) * 100
+      }
+      return (1000 / (round_length * 60000)) * 100
+    }
 
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      setProgressBarValue(percentElapsedThroughRound + oneSecondInPct)
+      setProgressBarValue(percentElapsedThroughRound + getOneSecondInPct())
       if (eventStatus === 'room-in-progress') {
         setShowRoundStartedSnack(true)
       }
@@ -70,7 +79,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
 
     const interval = setInterval(() => {
       setProgressBarValue((oldVal) => {
-        const newPct = oldVal + oneSecondInPct
+        const newPct = oldVal + getOneSecondInPct()
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
           const isLastTwentySecs = oneRoundInMs - timeRightNow < 20000
