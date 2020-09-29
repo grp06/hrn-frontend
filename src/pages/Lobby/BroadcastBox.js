@@ -12,6 +12,7 @@ import { EventForm, TransitionModal } from '../../common'
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
+    height: '100%',
     maxHeight: '84vh',
     overflowY: 'auto',
     overflowX: 'hidden',

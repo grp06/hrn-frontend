@@ -115,7 +115,7 @@ const EventChatBox = React.memo(({ onlineUsers }) => {
                 : classes.toggleButtonInactive
             }
           >
-            Online Users
+            Users in Lobby
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
