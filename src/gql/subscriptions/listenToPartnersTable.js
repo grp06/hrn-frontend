@@ -8,6 +8,7 @@ const listenToPartnersTable = gql`
         user_id: { _eq: $user_id }
         round: { _eq: $round }
         left_chat: { _is_null: true }
+        partner_id: { _is_null: false }
       }
     ) {
       id

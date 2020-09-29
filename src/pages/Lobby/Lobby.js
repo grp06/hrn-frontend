@@ -96,6 +96,8 @@ const Lobby = () => {
       eventStatus === 'not-started',
   })
 
+  console.log('myRoundData ->', myRoundData)
+
   // some redirecting stuff
   useEffect(() => {
     if (event_users && event_users.length && userId) {
@@ -111,17 +113,15 @@ const Lobby = () => {
 
   // this is for when the event first starts
   useEffect(() => {
-    if (eventStatus === 'room-in-progress' && userEventStatus === 'waiting for match') {
+    if (
+      eventStatus === 'room-in-progress' &&
+      userEventStatus !== 'sitting out' &&
+      myRoundData &&
+      myRoundData.partners.length
+    ) {
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [eventStatus, userEventStatus])
-
-  // this is only for when you come late or leave a chat and then get rematched
-  useEffect(() => {
-    if (myRoundData && myRoundData.partners.length && eventStatus === 'room-in-progress') {
-      history.push(`/events/${eventId}/video-room`)
-    }
-  }, [myRoundData, eventStatus])
+  }, [eventStatus, userEventStatus, myRoundData])
 
   return (
     <div className={classes.pageContainer}>
