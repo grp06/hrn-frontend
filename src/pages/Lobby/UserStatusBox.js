@@ -40,19 +40,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const UserStatusBox = React.memo(({ userEventStatus, eventStatus, setUserEventStatus }) => {
-  console.log('userEventStatus ->', userEventStatus)
   const classes = useStyles()
   const [sittingOutToggle, setSittingOutToggle] = useState(userEventStatus === 'sitting out')
   const handleUserStatusChange = (event) => {
     const sittingOutBoolean = event.currentTarget.value === 'sitOut'
     const status = sittingOutBoolean ? 'sitting out' : 'waiting for match'
-    console.log('sittingOutBoolean ->', sittingOutBoolean)
-    console.log('status ->', status)
     setSittingOutToggle(sittingOutBoolean)
     setUserEventStatus(status)
   }
-
-  console.log('sittingOutToggle ->', sittingOutToggle)
 
   return eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
     <Grid
