@@ -67,6 +67,7 @@ const UserEventStatusProvider = ({ children }) => {
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
+    console.log('userEventStatus ->', userEventStatus)
     if (userId && userEventStatus !== 'in chat' && userEventStatus !== 'sitting out') {
       const interval = setInterval(async () => {
         console.log('last seen')

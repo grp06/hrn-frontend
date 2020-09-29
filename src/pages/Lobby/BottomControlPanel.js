@@ -22,7 +22,6 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-  console.log('bottom control panel render')
 
   return (
     <Grid
