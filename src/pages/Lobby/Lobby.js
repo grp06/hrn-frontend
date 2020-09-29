@@ -96,8 +96,6 @@ const Lobby = () => {
       eventStatus === 'not-started',
   })
 
-  console.log('myRoundData ->', myRoundData)
-
   // some redirecting stuff
   useEffect(() => {
     if (event_users && event_users.length && userId) {
@@ -111,7 +109,7 @@ const Lobby = () => {
     }
   }, [event_users, eventStatus, userId])
 
-  // this is for when the event first starts
+  // redirect you when you have a partner
   useEffect(() => {
     if (
       eventStatus === 'room-in-progress' &&
