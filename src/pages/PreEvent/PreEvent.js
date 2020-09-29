@@ -180,16 +180,18 @@ const PreEvent = () => {
       const setupRoom = async () => {
         const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
         const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+        const audioDevice =
+          isEventHost && process.env.NODE_ENV === 'production'
+            ? { deviceId: localStoragePreferredAudioId }
+            : false
 
+        console.log('audioDevice', audioDevice)
         // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
             maxAudioBitrate: 16000,
             video: isEventHost ? { deviceId: localStoragePreferredVideoId } : false,
-            audio:
-              isEventHost && process.env.NODE_ENV === 'production'
-                ? { deviceId: localStoragePreferredAudioId }
-                : false,
+            audio: audioDevice,
           })
           return startPreEventTwilio(myRoom, isEventHost)
         }
