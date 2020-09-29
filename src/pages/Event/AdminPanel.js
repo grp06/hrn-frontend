@@ -2,13 +2,11 @@ import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { makeStyles } from '@material-ui/styles'
 
 import {
   AttendeesList,
   EventCountdown,
-  StartPreEventButton,
   ListOfRSVPs,
   ShareEventPromptModal,
   SetupMicAndCameraButton,
@@ -48,44 +46,7 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
   const { setCameraAndMicPermissions } = useEventContext()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
-  const {
-    event_users,
-    id: eventId,
-    start_at: eventStartTime,
-    description: eventDescription,
-    status,
-  } = eventData
-
-  const instructionModal = TransitionModal({
-    modalBody: (
-      <div>
-        <Typography variant="h5" gutterBottom>
-          Some Tips for hosting:
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          As a host, when you press 'start pre-event speech' you'll have a few minutes to address
-          your audience.
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          It takes a few seconds for everyone to connect to this broadcast room, so we suggest that
-          you wait about 5 - 10 seconds after seeing your own video (you wont see any of your
-          participants' video). This way your speech isn't cut off in the beginning.
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom>
-          When you're ready to start the event after your speech just go ahead and press the 'start
-          event button' that will be on the top left of your screen.
-        </Typography>
-        <Typography variant="h6">Enjoy the event ✨</Typography>
-      </div>
-    ),
-    iconButton: {
-      iconButtonIcon: <HelpOutlineIcon />,
-      iconButtonColor: 'secondary',
-    },
-    onAcceptFunction: () => {},
-    onAcceptButtonText: 'Ok, got it',
-    hideNoWay: {},
-  })
+  const { event_users, id: eventId, start_at: eventStartTime } = eventData
 
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={eventData} />,
@@ -97,83 +58,31 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
     },
   })
 
-  const copyEventPromptModal = <ShareEventPromptModal event={eventData} renderHostMessage />
   const renderOnlineUsers = () => {
-    return timeState === 'go time' || timeState === 'within 30 mins' ? (
+    return timeState === 'within 30 mins' ? (
       <Grid container item md={6} xs={12} direction="column">
         <AttendeesList eventId={eventId} timeState={timeState} />
       </Grid>
     ) : null
   }
 
-  const renderButton = () => {
-    let element
-
-    switch (timeState) {
-      case 'within 30 mins':
-        element = (
-          <Grid
-            className={classes.adminButtons}
-            container
-            direction="column"
-            alignItems="center"
-            justify="space-between"
-          >
-            <Grid container direction="row" alignItems="center" justify="center">
-              <StartPreEventButton
-                disabled={micOrCameraIsDisabled}
-                within30Mins
-                eventStartTime={eventStartTime}
-              />
-              <div>{instructionModal}</div>
-            </Grid>
-            <EventCountdown
-              adminHeader
-              eventStartTime={eventStartTime}
-              subtitle="Event Starts In:"
-            />
-            <div>{editFormModal}</div>
-          </Grid>
-        )
-        break
-      case 'go time':
-        element = (
-          <Grid
-            className={classes.adminButtons}
-            container
-            direction="column"
-            alignItems="center"
-            justify="space-around"
-          >
-            <Grid container direction="row" alignItems="center" justify="center">
-              <StartPreEventButton
-                disabled={micOrCameraIsDisabled}
-                eventId={eventId}
-                status={status}
-              />
-              <div>{instructionModal}</div>
-            </Grid>
-            <div>{editFormModal}</div>
-          </Grid>
-        )
-        break
-      default:
-        element = (
-          <Grid
-            className={classes.adminButtons}
-            container
-            direction="column"
-            alignItems="center"
-            justify="space-around"
-          >
-            <div>{copyEventPromptModal}</div>
-            <div>{editFormModal}</div>
-          </Grid>
-        )
-        break
-    }
-
-    return element
+  const renderTimeUntilEventOrShareEvent = () => {
+    return (
+      <Grid
+        className={classes.adminButtons}
+        container
+        direction="column"
+        alignItems="center"
+        justify="space-around"
+      >
+        {timeState === 'within 30 mins' ? (
+          <EventCountdown adminHeader eventStartTime={eventStartTime} />
+        ) : (
+          <ShareEventPromptModal event={eventData} renderHostMessage />
+        )}
+        <div>{editFormModal}</div>
+      </Grid>
+    )
   }
 
   return (
@@ -216,7 +125,7 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
             justify="center"
             alignItems="center"
           >
-            {renderButton()}
+            {renderTimeUntilEventOrShareEvent()}
           </Grid>
         </Grid>
         <Grid

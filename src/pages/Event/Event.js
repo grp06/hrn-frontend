@@ -70,9 +70,6 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
-  // console.log('user ->', user)
-  // console.log('userId ->', userId)
-
   const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 
   const { host_id, start_at, event_name, description, status: eventStatus } = event
@@ -93,15 +90,12 @@ const Event = ({ match }) => {
   if (eventStatus === 'complete') {
     eventInstruction = <EventNotRSVP />
   } else {
-    if (parseInt(host_id, 10) === parseInt(userId, 10)) {
-      eventInstruction = (
+    eventInstruction =
+      parseInt(host_id, 10) === parseInt(userId, 10) ? (
         <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      )
-    } else {
-      eventInstruction = (
+      ) : (
         <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
       )
-    }
   }
 
   return (
@@ -140,11 +134,6 @@ const Event = ({ match }) => {
         </Grid>
       </div>
       {eventInstruction}
-      {/* {parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      ) : (
-        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      )} */}
     </>
   )
 }

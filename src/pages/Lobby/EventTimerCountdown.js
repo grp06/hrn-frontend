@@ -17,7 +17,7 @@ const EventTimerCountdown = ({ eventStartTime }) => {
   const classes = useStyles()
   return eventStartTime ? (
     <Grid container justify="center" alignItems="center" className={classes.container}>
-      <EventCountdown eventStartTime={eventStartTime} />
+      <EventCountdown displayContainer eventStartTime={eventStartTime} />
     </Grid>
   ) : null
 }

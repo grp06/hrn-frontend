@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventCountdown = ({ eventStartTime }) => {
+const EventCountdown = ({ displayContainer, eventStartTime }) => {
   const classes = useStyles()
   const now = moment()
   const duration = moment.duration(moment(eventStartTime).diff(now))
@@ -68,7 +68,7 @@ const EventCountdown = ({ eventStartTime }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={classes.container}
+      className={displayContainer && classes.container}
     >
       {isTimerActive && seconds > 0 ? (
         <Typography variant="h6">

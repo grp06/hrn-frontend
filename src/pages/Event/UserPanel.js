@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import { useMutation } from '@apollo/react-hooks'
 import Button from '@material-ui/core/Button'
@@ -238,7 +238,11 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
               {renderCTAButton()}
             </Grid>
             <Grid container item direction="column" justify="center" alignItems="center">
-              <ShareEventPromptModal event={eventData} renderHostMessage={false} />
+              {timeState === 'within 30 mins' ? (
+                <EventCountdown adminHeader eventStartTime={eventStartTime} />
+              ) : (
+                <ShareEventPromptModal event={eventData} renderHostMessage />
+              )}
             </Grid>
           </Grid>
         </Grid>
