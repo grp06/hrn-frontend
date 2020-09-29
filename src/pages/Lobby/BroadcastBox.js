@@ -132,7 +132,7 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
         )
       case 'pre-event':
         return <PreEvent />
-      case 'round-in-progress':
+      case 'room-in-progress':
         return getBroadcastBoxElement(userEventStatus)
       case 'in-between-rounds':
         return getBroadcastBoxElement(userEventStatus)
