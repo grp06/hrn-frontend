@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
   lobbyAttendeesContainer: {
     width: '100%',
+    height: '12%',
   },
   toggleButtonGroup: {
     width: '100%',
