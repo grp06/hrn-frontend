@@ -71,7 +71,7 @@ const Lobby = () => {
     start_at: eventStartTime,
     status: eventStatus,
     id: eventId,
-    round,
+    current_round: round,
     event_users,
     host_id,
   } = event

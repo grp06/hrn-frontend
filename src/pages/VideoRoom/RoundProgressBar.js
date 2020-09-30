@@ -93,7 +93,6 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     }, 1000)
 
     return () => {
-      console.log('clearing')
       clearInterval(interval)
     }
   }, [eventStatus])

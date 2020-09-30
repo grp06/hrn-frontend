@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const AddFriendButton = React.memo(({ myRound }) => {
-  console.log('im rendering')
   const classes = useStyles()
   const [addedAsFriend, setAddedAsFriend] = useState(false)
   const [showAddedAsFriendSnack, setShowAddedAsFriendSnack] = useState(false)
@@ -35,7 +34,6 @@ const AddFriendButton = React.memo(({ myRound }) => {
   })
 
   useEffect(() => {
-    console.log('its your boy use effect')
     setAddedAsFriend(false)
   }, [myRound])
 

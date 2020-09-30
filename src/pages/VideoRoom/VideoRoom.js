@@ -148,10 +148,6 @@ const VideoRoom = ({ match }) => {
             },
           })
           setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
-          console.log(
-            'updated UserUpdatedAt with ->',
-            lastSeenUpdated.data.update_users.returning[0].updated_at
-          )
         } catch (err) {
           console.log(err)
         }

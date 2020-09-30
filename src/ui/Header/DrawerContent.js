@@ -49,8 +49,6 @@ const DrawerContent = () => {
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
 
-  console.log('userId ->', userId)
-  console.log('apploading ->', appLoading)
   return (
     !appLoading && (
       <>

@@ -8,7 +8,6 @@ import {
 } from '../pages/Lobby/BroadcastBoxScreens'
 
 const getBroadcastBoxElement = (userEventStatus) => {
-  console.log('getBRoadcastBoxElement getting called')
   switch (userEventStatus) {
     case 'came late':
       return <CameLate />

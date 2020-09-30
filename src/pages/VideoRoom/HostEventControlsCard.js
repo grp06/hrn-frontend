@@ -29,16 +29,11 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const HostEventControlsCard = React.memo(({ event, userId }) => {
-  console.log('event ->', event)
-  console.log('im rendering')
   const classes = useStyles()
   const { host_id, id: eventId, current_round: round } = event
-  console.log('round ->', round)
   const { data: allPartnersData } = useQuery(getAllPartnersForRound, {
     variables: { event_id: eventId, round },
   })
-
-  console.log('allPartnersData ->', allPartnersData)
 
   const renderResetEvent = TransitionModal({
     button: {
