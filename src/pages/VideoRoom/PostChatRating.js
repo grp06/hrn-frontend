@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.dankPurp,
       color: theme.palette.common.ghostWhite,
     },
-    '&:hover .MuiFab-label .MuiGrid-root .makeStyles-fabText-45': {
+    '&:hover .MuiFab-label .MuiGrid-root .MuiTypography-subtitle2': {
       color: theme.palette.common.ghostWhite,
     },
   },
