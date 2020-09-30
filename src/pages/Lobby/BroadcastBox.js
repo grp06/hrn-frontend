@@ -94,7 +94,14 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
                   className={classes.hostNameAndEventUsersContainer}
                   style={{ width: '75%' }}
                 >
-                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                  <Grid
+                    container
+                    item
+                    direction="column"
+                    justify="center"
+                    alignItems="flex-start"
+                    xs={4}
+                  >
                     <Typography variant="subtitle1" className={classes.subtitle}>
                       Hosted By /
                     </Typography>
@@ -102,7 +109,14 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
                       {host && host.name}
                     </Typography>
                   </Grid>
-                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                  <Grid
+                    container
+                    item
+                    direction="column"
+                    justify="center"
+                    alignItems="flex-start"
+                    xs={4}
+                  >
                     <Typography variant="subtitle1" className={classes.subtitle}>
                       RSVP'ed /
                     </Typography>
@@ -110,7 +124,14 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
                       {event_users.length}
                     </Typography>
                   </Grid>
-                  <Grid item direction="column" justify="center" alignItems="flex-start" xs={4}>
+                  <Grid
+                    container
+                    item
+                    direction="column"
+                    justify="center"
+                    alignItems="flex-start"
+                    xs={4}
+                  >
                     <Typography variant="subtitle1" className={classes.subtitle}>
                       Online /
                     </Typography>
@@ -121,7 +142,13 @@ const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventSta
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid item direction="row" alignItems="center" style={{ marginBottom: '24px' }}>
+                <Grid
+                  container
+                  item
+                  direction="row"
+                  alignItems="center"
+                  style={{ marginBottom: '24px' }}
+                >
                   <Typography variant="subtitle1">{description}</Typography>
                 </Grid>
               </Grid>
