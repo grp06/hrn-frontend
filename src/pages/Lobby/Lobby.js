@@ -117,6 +117,9 @@ const Lobby = () => {
       myRoundData &&
       myRoundData.partners.length
     ) {
+      console.log('myRoundData ->', myRoundData)
+      console.log('userEventStatus ->', userEventStatus)
+      debugger
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus, userEventStatus, myRoundData])
