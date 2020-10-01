@@ -132,8 +132,20 @@ const MyConnections = () => {
     if (allMyConnectionsData && allMyConnectionsData.partners.length) {
       const group =
         contactGroup === 'friends'
-          ? allMyConnectionsData.partners.filter((partner) => !!partner.i_shared_details)
-          : allMyConnectionsData.partners.filter((partner) => !partner.i_shared_details)
+          ? allMyConnectionsData.partners
+              .filter((partner) => !!partner.i_shared_details)
+              .sort((partnerA, partnerB) =>
+                partnerA.userByPartnerId.name
+                  .toLowerCase()
+                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+              )
+          : allMyConnectionsData.partners
+              .filter((partner) => !partner.i_shared_details)
+              .sort((partnerA, partnerB) =>
+                partnerA.userByPartnerId.name
+                  .toLowerCase()
+                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+              )
 
       if (group.length > 0) {
         return group.map((partner) => (
