@@ -157,7 +157,7 @@ const ConnectionCard = ({ connection }) => {
                 color="secondary"
                 size="small"
                 className={classes.button}
-                href={linkedIn_url}
+                href={linkedIn_url.includes('http') ? linkedIn_url : `https://${linkedIn_url}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
