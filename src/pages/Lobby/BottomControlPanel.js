@@ -1,10 +1,14 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import Typography from '@material-ui/core/Typography'
 import { getTimeUntilEvent } from '../../utils'
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { StartEventButton } from '../PreEvent'
 import { PreEventInstructionModal } from '.'
+
+import { TransitionModal } from '../../common'
+import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
@@ -22,6 +26,27 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
+
+  const renderResetEvent = TransitionModal({
+    button: {
+      buttonText: 'Reset Event',
+      buttonVariant: 'text',
+      buttonColor: 'link',
+    },
+    modalBody: (
+      <Typography variant="h5">
+        This will reset the event in its entirety. Are you 100% sure?
+      </Typography>
+    ),
+    onAcceptFunction: async () => {
+      window.analytics &&
+        window.analytics.track('Event reset', {
+          eventId,
+          hostId: host_id,
+        })
+      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
+    },
+  })
 
   return (
     <Grid
@@ -48,6 +73,13 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
         <Grid container direction="column">
           <Grid container direction="row" alignItems="flex-end">
             <StartEventButton event={event} userId={userId} />
+          </Grid>
+        </Grid>
+      )}
+      {userIsHost && (eventStatus === 'in-between-rounds' || eventStatus === 'room-in-progress') && (
+        <Grid container direction="column">
+          <Grid container direction="row" alignItems="flex-end">
+            {renderResetEvent}
           </Grid>
         </Grid>
       )}
