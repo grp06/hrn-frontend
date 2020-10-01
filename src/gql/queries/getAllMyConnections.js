@@ -20,6 +20,7 @@ const getAllMyConnections = gql`
       partner_id
       id
       event_id
+      user_id
     }
   }
 `

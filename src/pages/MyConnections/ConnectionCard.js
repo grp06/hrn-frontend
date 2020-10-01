@@ -83,6 +83,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
+  console.log('userId', userId)
   const classes = useStyles()
   const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
@@ -126,7 +127,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             color="secondary"
             size="small"
             className={classes.button}
-            href={`https://${linkedIn_url}`}
+            href={linkedIn_url.includes('http') ? linkedIn_url : `https://${linkedIn_url}`}
             target="_blank"
             rel="noopener noreferrer"
           >
