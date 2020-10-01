@@ -5,10 +5,10 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import ToggleButton from '@material-ui/lab/ToggleButton'
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
-import { useQuery } from 'react-apollo'
+import { useSubscription } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { getAllMyConnections } from '../../gql/queries'
+import { listenToAllMyConnections } from '../../gql/subscriptions'
 import { useAppContext, useUserContext } from '../../context'
 import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
@@ -76,8 +76,8 @@ const MyConnections = () => {
   const { user } = useUserContext()
   const { id: userId } = user
   const [connectionToggleValue, setConnectionToggleValue] = React.useState('friends')
-  const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useQuery(
-    getAllMyConnections,
+  const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useSubscription(
+    listenToAllMyConnections,
     {
       variables: {
         user_id: userId,
