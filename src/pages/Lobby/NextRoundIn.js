@@ -30,16 +30,10 @@ const NextRoundIn = ({ currentRound, eventUpdatedAt, roundLength }) => {
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 
   const calculateMinutesUntilNextRound = () => {
-    console.log('currentRound ->', currentRound)
-    console.log('eventUpdatedAt ->', eventUpdatedAt)
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
     const timeRoundEndsAt = timeRoundStarted + roundLength * 60000
     const secondsUntilNextRound = timeRoundEndsAt - Date.now()
-    console.log('timeRoundStarted ->', timeRoundStarted)
-    console.log('timeRoundEndsAt ->', timeRoundEndsAt)
     const minutesLeft = Math.ceil(secondsUntilNextRound / 60000)
-    console.log(secondsUntilNextRound / 60000)
-    console.log('minutesLeft ->', minutesLeft)
     setMinutesUntilNextRound(`under ${minutesLeft} minute(s)`)
   }
 
