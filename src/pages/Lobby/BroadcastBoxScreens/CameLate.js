@@ -8,10 +8,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    background: '#111',
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
+    marginTop: '2%',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '10%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,

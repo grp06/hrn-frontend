@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     overflowX: 'hidden',
     position: 'absolute',
     bottom: 'auto',
-    top: '0%',
   },
   eventBreakdownContainer: {
     width: '99%',

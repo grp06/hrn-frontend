@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -13,8 +13,9 @@ import {
   BroadcastBox,
   EventChatBox,
   EventTimerCountdown,
-  UserStatusBox,
+  NextRoundIn,
   OnlineUsersList,
+  UserStatusBox,
 } from '.'
 
 const useStyles = makeStyles((theme) => ({
@@ -68,12 +69,14 @@ const Lobby = () => {
   const { user } = useUserContext()
   const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
   const {
-    start_at: eventStartTime,
-    status: eventStatus,
-    id: eventId,
     current_round: round,
     event_users,
     host_id,
+    id: eventId,
+    round_length,
+    start_at: eventStartTime,
+    status: eventStatus,
+    updated_at: eventUpdatedAt,
   } = event
   const { id: userId } = user
   const isEventHost = host_id === userId
@@ -125,13 +128,23 @@ const Lobby = () => {
 
   return (
     <div className={classes.pageContainer}>
-      {eventStatus === 'not-started' && (
+      {eventStatus === 'not-started' ? (
         <div className={classes.eventBanner}>
           <div className={classes.bannerGradient} />
         </div>
-      )}
-      {eventStatus === 'not-started' && <EventTimerCountdown eventStartTime={eventStartTime} />}
+      ) : null}
+      {eventStatus === 'not-started' ? (
+        <EventTimerCountdown eventStartTime={eventStartTime} />
+      ) : null}
+
       <Grid container direction="row" justify="space-between" className={classes.gridContainer}>
+        {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
+          <NextRoundIn
+            currentRound={round}
+            eventUpdatedAt={eventUpdatedAt}
+            roundLength={round_length}
+          />
+        ) : null}
         <Grid
           container
           direction="column"
