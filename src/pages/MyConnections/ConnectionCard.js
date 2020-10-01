@@ -126,7 +126,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             color="secondary"
             size="small"
             className={classes.button}
-            href={linkedIn_url}
+            href={`https://${linkedIn_url}`}
             target="_blank"
             rel="noopener noreferrer"
           >
