@@ -61,10 +61,10 @@ const NextRoundIn = ({ currentRound, eventUpdatedAt, roundLength }) => {
     <div className={classes.container}>
       <Grid container direction="column" justify="center" alignItems="center">
         <Typography variant="h6">
-          <span className={classes.normalText}>Current Round:</span> {currentRound}
+          <span className={classes.normalText}>Current round:</span> {currentRound}
         </Typography>
         <Typography variant="h6">
-          <span className={classes.normalText}>Next Round In:</span> {minutesUntilNextRound}
+          <span className={classes.normalText}>Next round in:</span> {minutesUntilNextRound}
         </Typography>
       </Grid>
     </div>
