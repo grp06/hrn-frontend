@@ -50,7 +50,7 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       setSeconds((seconds) => seconds - 1)
     }, 1000)
 
-    if (seconds === 0) {
+    if (seconds <= 0) {
       setIsTimerActive(false)
     }
 
