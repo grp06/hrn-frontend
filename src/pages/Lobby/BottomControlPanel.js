@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
+const BottomControlPanel = ({ permissions, event, userId }) => {
   const classes = useStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
@@ -88,6 +88,6 @@ const BottomControlPanel = React.memo(({ permissions, event, userId }) => {
       </Grid>
     </Grid>
   )
-})
+}
 
 export default BottomControlPanel
