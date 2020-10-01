@@ -113,12 +113,16 @@ const Lobby = () => {
   }, [event_users, eventStatus, userId])
 
   // redirect you when you have a partner
+  // the round ===1 and waiting for match is to make sure that you get pushed into
+  // videoRoom for round 1 even if you are the odd one out. That way userEventStatus
+  // gets set properly and you get the correct broadcast screen
   useEffect(() => {
     if (
-      eventStatus === 'room-in-progress' &&
-      userEventStatus !== 'sitting out' &&
-      myRoundData &&
-      myRoundData.partners.length
+      (eventStatus === 'room-in-progress' &&
+        userEventStatus !== 'sitting out' &&
+        myRoundData &&
+        myRoundData.partners.length) ||
+      (round === 1 && userEventStatus === 'waiting for match')
     ) {
       console.log('myRoundData ->', myRoundData)
       console.log('userEventStatus ->', userEventStatus)
