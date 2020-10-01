@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: '0.5%',
     left: '1%',
     width: '250px',
-    zIndex: 9999,
+    zIndex: 99,
   },
 }))
 
