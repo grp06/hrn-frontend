@@ -51,9 +51,12 @@ const useStyles = makeStyles((theme) => ({
   },
   viewersContainer: {
     marginTop: theme.spacing(1),
+    backgroundColor: 'rgba(36,37,38,0.7)',
+    borderRadius: '4px',
+    width: '60px',
   },
   viewersNumber: {
-    color: theme.palette.common.red,
+    color: theme.palette.common.ghostWhite,
     marginLeft: theme.spacing(0.5),
   },
 }))
@@ -235,8 +238,8 @@ const PreEvent = () => {
         <Typography className={classes.liveLogo} variant="subtitle1">
           LIVE
         </Typography>
-        <Grid container className={classes.viewersContainer}>
-          <VisibilityOutlinedIcon stroke="#ff3333" style={{ color: '#ff3333' }} />
+        <Grid container justify="center" alignItems="center" className={classes.viewersContainer}>
+          <VisibilityOutlinedIcon stroke="#f4f6fa" style={{ color: '#f4f6fa' }} />
           <Typography variant="body1" className={classes.viewersNumber}>
             {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
           </Typography>

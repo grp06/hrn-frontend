@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 3),
     borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
@@ -16,7 +16,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
   },
   time: {
-    fontSize: '2rem',
     fontFamily: 'Muli',
     color: theme.palette.common.ghostWhite,
   },
@@ -71,7 +70,7 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       className={displayContainer && classes.container}
     >
       {isTimerActive && seconds > 0 ? (
-        <Typography variant="h6">
+        <Typography variant="h5">
           <span className={classes.time}>{displayTime}</span> until event starts
         </Typography>
       ) : (

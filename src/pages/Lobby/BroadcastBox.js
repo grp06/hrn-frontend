@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
     height: '100%',
-    maxHeight: '84vh',
+    maxHeight: '80vh',
     overflowY: 'auto',
     overflowX: 'hidden',
     position: 'absolute',

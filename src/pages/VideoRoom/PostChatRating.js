@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
     '&:hover .MuiFab-label .MuiGrid-root .MuiTypography-subtitle2': {
       color: theme.palette.common.ghostWhite,
+      fontWeight: '700',
     },
   },
   fabButtonGrid: {
@@ -59,14 +60,15 @@ const useStyles = makeStyles((theme) => ({
   },
   fabText: {
     color: theme.palette.common.dankPurp,
+    fontWeight: '700',
   },
   userStatusBoxContainer: {
     position: 'absolute',
-    top: '5%',
+    top: '3%',
     right: '1%',
     bottom: 'auto',
     left: 'auto',
-    width: '225px',
+    width: '25vw',
     zIndex: 9999,
   },
 }))

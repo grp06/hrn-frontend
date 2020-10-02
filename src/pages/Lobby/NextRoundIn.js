@@ -7,17 +7,17 @@ const useStyles = makeStyles((theme) => ({
   container: {
     position: 'absolute',
     zIndex: '999',
-    width: '73vw',
-    height: 'auto',
+    width: '68vw',
+    height: '65px',
     [theme.breakpoints.down('md')]: {
-      width: '68vw',
+      width: '61vw',
     },
     padding: theme.spacing(1),
     borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
-    top: '5.5%',
+    top: '3.5%',
   },
   normalText: {
     fontWeight: '200',

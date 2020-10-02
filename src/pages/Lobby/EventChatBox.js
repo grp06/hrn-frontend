@@ -9,19 +9,19 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
-    height: '80%',
+    height: '82%',
     borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
   chatBox: {
-    height: '88%',
+    height: '90%',
     overflowY: 'auto',
   },
   lobbyAttendeesContainer: {
     width: '100%',
-    height: '12%',
+    height: '10%',
   },
   toggleButtonGroup: {
     width: '100%',

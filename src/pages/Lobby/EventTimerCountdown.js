@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     bottom: 'auto',
     width: '100%',
     height: 'auto',
-    top: '0.5%',
+    top: '1.5%',
   },
 }))
 

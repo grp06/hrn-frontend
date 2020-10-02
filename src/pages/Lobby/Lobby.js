@@ -27,10 +27,10 @@ const useStyles = makeStyles((theme) => ({
   },
   broadcastContainer: {
     position: 'relative',
-    width: '75vw',
+    width: '70vw',
     height: '100%',
     [theme.breakpoints.down('md')]: {
-      width: '68vw',
+      width: '63vw',
     },
   },
   eventBanner: {
@@ -46,19 +46,19 @@ const useStyles = makeStyles((theme) => ({
   gridContainer: {
     width: '100vw',
     height: '100vh',
-    padding: theme.spacing(2),
+    padding: theme.spacing(1, 4),
   },
   pageContainer: {
     overflowX: 'hidden',
     overflowY: 'hidden',
   },
   rightContainer: {
-    width: '20vw',
+    width: '25vw',
     height: '100%',
-    padding: theme.spacing(2),
+    padding: theme.spacing(1, 0, 0, 2),
     [theme.breakpoints.down('md')]: {
-      width: '24vw',
-      padding: theme.spacing(0.5),
+      width: '29vw',
+      padding: theme.spacing(1),
     },
   },
 }))
