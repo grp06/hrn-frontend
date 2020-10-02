@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NextRoundIn = ({ currentRound, eventUpdatedAt, roundLength }) => {
+const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength }) => {
   const classes = useStyles()
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 
@@ -34,7 +34,8 @@ const NextRoundIn = ({ currentRound, eventUpdatedAt, roundLength }) => {
     const timeRoundEndsAt = timeRoundStarted + roundLength * 60000
     const secondsUntilNextRound = timeRoundEndsAt - Date.now()
     const minutesLeft = Math.ceil(secondsUntilNextRound / 60000)
-    setMinutesUntilNextRound(`under ${minutesLeft} minute(s)`)
+    const message = minutesLeft > 1 ? `under ${minutesLeft} minutes` : `under ${minutesLeft} minute`
+    setMinutesUntilNextRound(message)
   }
 
   useEffect(() => {
@@ -51,18 +52,39 @@ const NextRoundIn = ({ currentRound, eventUpdatedAt, roundLength }) => {
     }
   }, [minutesUntilNextRound])
 
-  return (
-    <div className={classes.container}>
-      <Grid container direction="column" justify="center" alignItems="center">
+  const renderMessage = () => {
+    return eventStatus === 'room-in-progress' ? (
+      <>
         <Typography variant="h6">
           <span className={classes.normalText}>Current round:</span> {currentRound}
         </Typography>
         <Typography variant="h6">
           <span className={classes.normalText}>Next round in:</span> {minutesUntilNextRound}
         </Typography>
+      </>
+    ) : (
+      <>
+        <Typography variant="h6">
+          Waking up Alfred, our matching AI{' '}
+          <span role="img" aria-label="robot">
+            🤖
+          </span>
+          <span role="img" aria-label="sleepy zzz">
+            💤
+          </span>
+        </Typography>
+        <Typography variant="h6">Give him 20 seconds to start the next round.</Typography>
+      </>
+    )
+  }
+
+  return eventStatus ? (
+    <div className={classes.container}>
+      <Grid container direction="column" justify="center" alignItems="center">
+        {renderMessage()}
       </Grid>
     </div>
-  )
+  ) : null
 }
 
 export default NextRoundIn

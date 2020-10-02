@@ -8,6 +8,7 @@ import bannerBackground from '../../assets/eventBannerMountain.png'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { useGetCameraAndMicStatus } from '../../hooks'
+import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
   BroadcastBox,
@@ -18,6 +19,7 @@ import {
   UserStatusBox,
 } from '.'
 
+// the overflow hidden in broadcastContainer is to help hide the scrollbar
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
     background:
@@ -32,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '63vw',
     },
+    overflow: 'hidden',
   },
   eventBanner: {
     position: 'absolute',
@@ -99,6 +102,12 @@ const Lobby = () => {
       eventStatus === 'not-started',
   })
 
+  useEffect(() => {
+    if (getTimeUntilEvent(eventStartTime) > 900000) {
+      history.push(`/events/${eventId}`)
+    }
+  }, [eventStartTime])
+
   // some redirecting stuff
   useEffect(() => {
     if (event_users && event_users.length && userId) {
@@ -145,6 +154,7 @@ const Lobby = () => {
         {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
           <NextRoundIn
             currentRound={round}
+            eventStatus={eventStatus}
             eventUpdatedAt={eventUpdatedAt}
             roundLength={round_length}
           />
@@ -174,7 +184,11 @@ const Lobby = () => {
             eventStatus={eventStatus}
             setUserEventStatus={useCallback(setUserEventStatus, [])}
           />
-          <EventChatBox onlineUsers={<OnlineUsersList onlineUsers={onlineEventUsers} />} />
+          <EventChatBox
+            eventStatus={eventStatus}
+            isEventHost={isEventHost}
+            onlineUsers={<OnlineUsersList onlineUsers={onlineEventUsers} />}
+          />
         </Grid>
       </Grid>
     </div>

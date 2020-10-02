@@ -38,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'transparent',
     },
+    '&.Mui-disabled': {
+      color: theme.palette.common.greyBorder,
+    },
   },
   toggleButtonActive: {
     '&.Mui-selected': {
@@ -53,12 +56,15 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'transparent',
       },
     },
+    '&.Mui-disabled': {
+      color: theme.palette.common.greyBorder,
+    },
   },
 }))
 
-const EventChatBox = React.memo(({ onlineUsers }) => {
+const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineUsers }) => {
   const classes = useStyles()
-  const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
+  const [chatBoxStatus, setChatBoxStatus] = useState('chat')
 
   const handleChatboxStatusToggle = (e) => {
     console.log('value', e.currentTarget.value)
@@ -109,6 +115,10 @@ const EventChatBox = React.memo(({ onlineUsers }) => {
           <ToggleButton
             value="onlineUsers"
             aria-label="online users"
+            disabled={
+              !isEventHost &&
+              (eventStatus === 'room-in-progress' || eventStatus === 'in-between-rounds')
+            }
             disableRipple
             className={
               chatBoxStatus === 'onlineUsers'

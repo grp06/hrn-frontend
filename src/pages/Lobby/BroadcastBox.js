@@ -9,14 +9,17 @@ import { EventBreakdownStepper } from '../Event'
 import { PreEvent } from '../PreEvent'
 import { EventForm, TransitionModal } from '../../common'
 
+// the padding right and boxSizing in boxContainer is to help hide scrollbar
 const useStyles = makeStyles((theme) => ({
   boxContainer: {
     width: '100%',
     height: '100%',
     maxHeight: '80vh',
-    overflowY: 'auto',
+    overflowY: 'scroll',
     overflowX: 'hidden',
     position: 'absolute',
+    paddingRight: theme.spacing(2),
+    boxSizing: 'content-box',
     bottom: 'auto',
   },
   eventBreakdownContainer: {
