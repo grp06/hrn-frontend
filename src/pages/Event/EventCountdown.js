@@ -34,14 +34,15 @@ const useStyles = makeStyles((theme) => ({
 
 const EventCountdown = ({ displayContainer, eventStartTime }) => {
   const classes = useStyles()
-  const now = moment()
-  const duration = moment.duration(moment(eventStartTime).diff(now))
-  const secondsUntilEvent = Math.trunc(duration._milliseconds / 1000)
-  const minutesToDisplay = Math.floor(secondsUntilEvent / 60)
-  const secondsToDisplay = secondsUntilEvent - minutesToDisplay * 60
-
-  const [seconds, setSeconds] = useState(secondsUntilEvent)
+  const [seconds, setSeconds] = useState(null)
   const [isTimerActive, setIsTimerActive] = useState(true)
+
+  useEffect(() => {
+    const now = moment()
+    const duration = moment.duration(moment(eventStartTime).diff(now))
+    const secondsUntilEvent = Math.trunc(duration._milliseconds / 1000)
+    setSeconds(secondsUntilEvent)
+  }, [])
 
   useEffect(() => {
     let interval = null
@@ -49,17 +50,19 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       setSeconds((seconds) => seconds - 1)
     }, 1000)
 
-    if (seconds <= 0) {
+    if (Math.sign(seconds) === -1 || 0) {
+      console.log('setting it to false')
       setIsTimerActive(false)
     }
-
     return () => {
       clearInterval(interval)
     }
-  }, [seconds, secondsUntilEvent])
+  }, [seconds])
 
   const displayTime =
-    seconds && seconds >= 0 ? `${minutesToDisplay} : ${secondsToDisplay}` : '-- : --'
+    seconds && seconds >= 0
+      ? `${Math.floor(seconds / 60)} : ${seconds - Math.floor(seconds / 60) * 60}`
+      : '-- : --'
 
   return (
     <Grid
@@ -69,7 +72,7 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       alignItems="center"
       className={displayContainer && classes.container}
     >
-      {isTimerActive && seconds > 0 ? (
+      {isTimerActive ? (
         <Typography variant="h5">
           <span className={classes.time}>{displayTime}</span> until event starts
         </Typography>
