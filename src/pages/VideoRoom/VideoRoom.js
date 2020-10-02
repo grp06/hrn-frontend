@@ -155,7 +155,7 @@ const VideoRoom = ({ match }) => {
       }
       getTwilioToken()
     }
-  }, [myRound, event])
+  }, [myRound])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your room
