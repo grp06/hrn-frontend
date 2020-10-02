@@ -136,8 +136,8 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                   alignItems="center"
                   className={classes.fabButtonGrid}
                 >
-                  <span className={classes.emoji} role="img" aria-label="bored face">
-                    😑
+                  <span className={classes.emoji} role="img" aria-label="woman no">
+                    🙅‍♀️
                   </span>
                   <Typography variant="subtitle2" className={classes.fabText}>
                     No..
@@ -176,8 +176,8 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
                   alignItems="center"
                   className={classes.fabButtonGrid}
                 >
-                  <span className={classes.emoji} role="img" aria-label="hooray face">
-                    🥳
+                  <span className={classes.emoji} role="img" aria-label="woman hand out">
+                    💁‍♀️
                   </span>
                   <Typography variant="subtitle2" className={classes.fabText}>
                     Yes!
