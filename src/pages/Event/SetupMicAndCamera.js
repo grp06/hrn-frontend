@@ -116,6 +116,7 @@ const SetupMicAndCamera = () => {
 
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+        console.log('getMedia -> localMediaStream', localMediaStream)
         const video = document.getElementById('videoElement')
         video.style.maxWidth = '50%'
         setPermissionDenied(false)
@@ -130,6 +131,16 @@ const SetupMicAndCamera = () => {
 
         video.onloadedmetadata = function (e) {
           console.log('video.onloadedmetadata -> e', e)
+          const localVideo = document.getElementsByTagName('video')[0]
+          console.log('video.onloadedmetadata -> localVideo', localVideo)
+          localVideo.srcObject = localMediaStream
+          console.log('video.onloadedmetadata -> localVideo', localVideo)
+          // if (localVideo) {
+          //   localVideo.innerHTML = ''
+          // }
+          // const newVideoElement = document.createElement('video')
+          // newVideoElement.srcObject = localMediaStream
+          // localVideo.append(newVideoElement)
           // Do something with the video here.
         }
       } catch (error) {
