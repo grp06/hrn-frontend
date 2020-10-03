@@ -4,11 +4,13 @@ import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
+import Fab from '@material-ui/core/Fab'
 import Typography from '@material-ui/core/Typography'
 import copy from 'copy-to-clipboard'
-import FeatherIcon from 'feather-icons-react'
+import EmailIcon from '@material-ui/icons/Email'
+import LinkedInIcon from '@material-ui/icons/LinkedIn'
 import { makeStyles } from '@material-ui/core/styles'
-import logo from '../../assets/logoPurple.svg'
+import logo from '../../assets/HRNlogoNoFrame.svg'
 import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
 
@@ -16,59 +18,56 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '100%',
     height: '100%',
+    marginTop: '19px',
     [theme.breakpoints.down('md')]: {
       width: '100%',
       height: '100%',
+      marginTop: '19px',
     },
   },
   avatarContainer: {
-    width: '75px',
-    height: '75px',
+    width: 'auto',
+    height: '100%',
   },
   avatarGridContainer: {
-    [theme.breakpoints.down('sm')]: {
-      display: 'flex',
-      justifyContent: 'flex-start',
-    },
-  },
-  button: {
-    margin: theme.spacing(0, 1),
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(1, 1),
-    },
+    height: '120px',
   },
   buttonContainer: {
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(-1),
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(2, 'auto'),
-      marginBottom: 0,
-      justifyContent: 'space-around',
-    },
+    paddingTop: theme.spacing(1),
   },
   cardContainer: {
     position: 'relative',
     top: '-40px',
     bottom: '0%',
     display: 'block',
-    width: '500px',
+    width: '750px',
     height: 'auto',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     marginBottom: '75px',
     borderRadius: '4px',
     border: '2px solid #3e4042',
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
     [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(0, 'auto'),
-      marginBottom: '75px',
-    },
   },
-  city: {
-    marginLeft: theme.spacing(1),
+  circleButton: {
+    border: `2px solid ${theme.palette.common.orchid}`,
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+    marginRight: theme.spacing(2),
+    width: '35px',
+    height: '35px',
+  },
+  cityNameEmailGrid: {
+    height: '100%',
+    width: 'auto',
+    marginLeft: theme.spacing(3),
   },
   connectionContentContainer: {
     margin: theme.spacing(2, 0),
@@ -96,45 +95,38 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
       })
       .map((tagObject) => {
         const { tag } = tagObject
-        return (
-          <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" size="small" />
-        )
+        return <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" />
       })
   }
 
   const renderContactButtons = () => {
-    if (!i_shared_details) {
-      return (
-        <div className={classes.button}>
-          <AddFriendButton myRound={myRoundInfo} />
-        </div>
-      )
-    }
-    return (
-      <div>
-        <Button
-          variant="outlined"
-          color="secondary"
+    return i_shared_details ? (
+      <div className={classes.buttonContainer}>
+        <Fab
+          color="inherit"
           size="small"
-          className={classes.button}
+          aria-label="email button"
+          className={classes.circleButton}
           onClick={handleCopyEmailClick}
         >
-          Copy Email
-        </Button>
+          <EmailIcon style={{ color: '#e98dd7' }} fontSize="small" />
+        </Fab>
         {linkedIn_url && (
-          <Button
-            variant="outlined"
-            color="secondary"
+          <Fab
+            color="inherit"
             size="small"
-            className={classes.button}
+            aria-label="linkedIn button"
+            className={classes.circleButton}
             href={linkedIn_url.includes('http') ? linkedIn_url : `https://${linkedIn_url}`}
             target="_blank"
             rel="noopener noreferrer"
           >
-            LinkedIn
-          </Button>
+            <LinkedInIcon style={{ color: '#e98dd7' }} fontSize="small" />
+          </Fab>
         )}
       </div>
+    ) : (
+      <AddFriendButton myRound={myRoundInfo} />
     )
   }
 
@@ -157,14 +149,17 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           container
           item
           alignItems="center"
-          justify="center"
-          md={2}
-          xs={12}
+          justify="flex-start"
           className={classes.avatarGridContainer}
         >
           <Avatar className={classes.avatarContainer}>
             <img alt="company-logo" className={classes.avatar} src={logo} />
           </Avatar>
+          <Grid container direction="column" className={classes.cityNameEmailGrid}>
+            <Typography variant="h4">{name}</Typography>
+            <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>
+            {renderContactButtons()}
+          </Grid>
         </Grid>
         <Grid
           container
@@ -173,31 +168,12 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           xs={12}
           className={classes.connectionContentContainer}
         >
-          <Typography variant="h4">{name}</Typography>
           <Grid container wrap="wrap" alignItems="center" className={classes.tagsContainer}>
             {renderConnectionsTags()}
-          </Grid>
-          <Grid container alignItems="center">
-            <FeatherIcon icon="map-pin" stroke="#e98dd7" size="20" />
-            <Typography variant="subtitle1" className={classes.city}>
-              {city || 'Bikini Bottom 🍍'}
-            </Typography>
           </Grid>
           <Typography variant="body1" className={classes.shortBioDesc}>
             {short_bio || 'Your connection seems to have forgotten to write about themselves 😧'}
           </Typography>
-          <Grid
-            container
-            item
-            // justify="space-between"
-            alignItems="center"
-            className={classes.buttonContainer}
-            md={12}
-            sm={5}
-            xs={8}
-          >
-            {renderContactButtons()}
-          </Grid>
         </Grid>
       </Grid>
       <Snack

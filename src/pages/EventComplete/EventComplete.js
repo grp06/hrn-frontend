@@ -189,7 +189,7 @@ const EventComplete = ({ match }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid container justify="space-between" className={classes.connectionGrid}>
+          <Grid container justify="center" className={classes.connectionGrid}>
             {renderAllMyEventConnection()}
           </Grid>
         </Grid>

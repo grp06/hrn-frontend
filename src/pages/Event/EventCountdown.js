@@ -51,7 +51,6 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
     }, 1000)
 
     if (Math.sign(seconds) === -1 || 0) {
-      console.log('setting it to false')
       setIsTimerActive(false)
     }
     return () => {
