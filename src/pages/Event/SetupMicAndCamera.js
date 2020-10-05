@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import Video from 'twilio-video'
 import { useEventContext } from '../../context'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
@@ -56,6 +57,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+function detachTracks(tracks) {
+  tracks.forEach(function (track) {
+    if (track) {
+      track.detach().forEach(function (detachedElement) {
+        detachedElement.remove()
+      })
+    }
+  })
+}
+
 const SetupMicAndCamera = () => {
   const classes = useStyles()
   const { setCameraAndMicPermissions } = useEventContext()
@@ -68,7 +79,6 @@ const SetupMicAndCamera = () => {
 
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
-    console.log(devices)
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
     setVideoDevices(availableVideoDevices)
@@ -103,6 +113,7 @@ const SetupMicAndCamera = () => {
   }
 
   navigator.mediaDevices.ondevicechange = () => {
+    console.log('on device change')
     getDevices()
   }
 
@@ -128,24 +139,23 @@ const SetupMicAndCamera = () => {
           isWebcamAlreadyCaptured: true,
         })
         video.srcObject = localMediaStream
+        const localVideo = document.getElementsByTagName('video')[0]
 
+        localVideo.srcObject = localMediaStream
+
+        if (localVideo) {
+          localVideo.innerHTML = ''
+          const newVideoElement = document.createElement('video')
+          newVideoElement.srcObject = localMediaStream
+          console.log('getMedia -> localMediaStream', localMediaStream)
+          localVideo.append(newVideoElement)
+        }
         video.onloadedmetadata = function (e) {
-          // console.log('video.onloadedmetadata -> e', e)
-          // const localVideo = document.getElementsByTagName('video')[0]
-          // console.log('video.onloadedmetadata -> localVideo', localVideo)
-          // localVideo.srcObject = localMediaStream
-          // console.log('video.onloadedmetadata -> localVideo', localVideo)
-          // // if (localVideo) {
-          //   localVideo.innerHTML = ''
-          // }
-          // const newVideoElement = document.createElement('video')
-          // newVideoElement.srcObject = localMediaStream
-          // localVideo.append(newVideoElement)
           // Do something with the video here.
         }
       } catch (error) {
         console.warn('error - ', error)
-        setPermissionDenied(true)
+        // setPermissionDenied(true)
         setPermissionNotYetAllowed(false)
         // if (err === 'PERMISSION_DENIED') {
         //   // Explain why you need permission and how to update the permission setting
@@ -153,12 +163,14 @@ const SetupMicAndCamera = () => {
       }
     }
 
-    console.log('SetupMicAndCamera -> currentVideoDeviceId', currentVideoDeviceId)
-    console.log('SetupMicAndCamera -> currentAudioDeviceId', currentAudioDeviceId)
-    getMedia({
-      video: { deviceId: currentVideoDeviceId },
-      audio: { deviceId: currentAudioDeviceId },
-    })
+    if (currentVideoDeviceId && currentAudioDeviceId) {
+      console.log('got eeeem')
+
+      getMedia({
+        video: { deviceId: currentVideoDeviceId },
+        audio: { deviceId: currentAudioDeviceId },
+      })
+    }
   }, [currentVideoDeviceId, currentAudioDeviceId])
 
   const getPermissionDenied = () => {
@@ -205,6 +217,28 @@ const SetupMicAndCamera = () => {
   const handleVideoDeviceChange = (event) => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
+    if (window.room) {
+      const { localParticipant } = window.room
+      const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      console.log('unpublish = ', tracks)
+      localParticipant.unpublishTracks(tracks)
+
+      console.log(`${localParticipant.identity}   " removed track: "   ${tracks[0].kind}`)
+      // detachTracks(tracks)
+      Video.createLocalVideoTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localVideoTrack) {
+        console.log('publish ', localVideoTrack)
+        localParticipant.publishTrack(localVideoTrack)
+        console.log(`${localParticipant.identity}   " added track: "   ${localVideoTrack.kind}`)
+        // const previewContainer = document.getElementById('local-media')
+        // attachTracks([localVideoTrack], previewContainer)
+      })
+    }
   }
 
   const handleAudioDeviceChange = (event) => {
