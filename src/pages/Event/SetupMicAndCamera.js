@@ -147,7 +147,6 @@ const SetupMicAndCamera = () => {
           localVideo.innerHTML = ''
           const newVideoElement = document.createElement('video')
           newVideoElement.srcObject = localMediaStream
-          console.log('getMedia -> localMediaStream', localMediaStream)
           localVideo.append(newVideoElement)
         }
         video.onloadedmetadata = function (e) {
@@ -155,7 +154,7 @@ const SetupMicAndCamera = () => {
         }
       } catch (error) {
         console.warn('error - ', error)
-        // setPermissionDenied(true)
+        setPermissionDenied(true)
         setPermissionNotYetAllowed(false)
         // if (err === 'PERMISSION_DENIED') {
         //   // Explain why you need permission and how to update the permission setting
@@ -164,8 +163,6 @@ const SetupMicAndCamera = () => {
     }
 
     if (currentVideoDeviceId && currentAudioDeviceId) {
-      console.log('got eeeem')
-
       getMedia({
         video: { deviceId: currentVideoDeviceId },
         audio: { deviceId: currentAudioDeviceId },
@@ -224,19 +221,13 @@ const SetupMicAndCamera = () => {
       ) {
         return trackPublication.track
       })
-      console.log('unpublish = ', tracks)
       localParticipant.unpublishTracks(tracks)
 
-      console.log(`${localParticipant.identity}   " removed track: "   ${tracks[0].kind}`)
-      // detachTracks(tracks)
       Video.createLocalVideoTrack({
         deviceId: { exact: event.target.value },
       }).then(function (localVideoTrack) {
         console.log('publish ', localVideoTrack)
         localParticipant.publishTrack(localVideoTrack)
-        console.log(`${localParticipant.identity}   " added track: "   ${localVideoTrack.kind}`)
-        // const previewContainer = document.getElementById('local-media')
-        // attachTracks([localVideoTrack], previewContainer)
       })
     }
   }
