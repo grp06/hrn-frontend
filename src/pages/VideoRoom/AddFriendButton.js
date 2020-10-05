@@ -15,9 +15,12 @@ const useStyles = makeStyles((theme) => ({
 
 const AddFriendButton = React.memo(({ myRound }) => {
   const classes = useStyles()
+  const { event_id, partner_id, user_id, i_shared_details } = myRound
+  console.log('i share detials', i_shared_details)
+  console.log('myround->>>>>>>>', myRound)
+
   const [addedAsFriend, setAddedAsFriend] = useState(false)
   const [showAddedAsFriendSnack, setShowAddedAsFriendSnack] = useState(false)
-  const { event_id, partner_id, user_id } = myRound
   const [addFriendMutation] = useMutation(addFriend, {
     variables: {
       event_id,
@@ -36,6 +39,10 @@ const AddFriendButton = React.memo(({ myRound }) => {
   useEffect(() => {
     setAddedAsFriend(false)
   }, [myRound])
+
+  useEffect(() => {
+    setAddedAsFriend(!i_shared_details ? false : true)
+  }, [i_shared_details])
 
   const handleAddFriendPress = async () => {
     try {
@@ -57,7 +64,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
         onClick={handleAddFriendPress}
         disabled={addedAsFriend}
       >
-        Share My Info
+        {!addedAsFriend ? 'Share My Info' : 'Info Shared'}
       </Button>
       <Snack
         open={showAddedAsFriendSnack}
