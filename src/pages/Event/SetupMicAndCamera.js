@@ -152,6 +152,9 @@ const SetupMicAndCamera = () => {
         // }
       }
     }
+
+    console.log('SetupMicAndCamera -> currentVideoDeviceId', currentVideoDeviceId)
+    console.log('SetupMicAndCamera -> currentAudioDeviceId', currentAudioDeviceId)
     getMedia({
       video: { deviceId: currentVideoDeviceId },
       audio: { deviceId: currentAudioDeviceId },
