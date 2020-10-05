@@ -15,9 +15,12 @@ const useParticipantConnected = () => {
       remoteTrackPublished(publication)
     })
 
-    // participant.on('trackUnpublished', (publication) => {
-
-    // })
+    participant.on('trackUnpublished', (publication) => {
+      const remoteVideo = document.getElementById('remote-video')
+      if (remoteVideo) {
+        remoteVideo.innerHTML = ''
+      }
+    })
 
     // participant.on('trackSubscriptionFailed', (error, publication) => {
 

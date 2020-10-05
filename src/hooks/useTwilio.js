@@ -9,12 +9,12 @@ const useTwilio = () => {
     setHasPartnerAndIsConnecting,
   } = useTwilioContext()
   const { setUserEventStatus } = useUserEventStatusContext()
-  // 45 seconds is way too long
   const { partnerCameraIssueTimeout } = constants
 
   const { participantConnected } = useParticipantConnected()
 
   const startTwilio = (room) => {
+    window.room = room
     setPartnerNeverConnected(false)
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
@@ -73,12 +73,8 @@ const useTwilio = () => {
         }
       })
 
-      // local participant reconnects to the room
-      // room.on('reconnected', () => {
-      //   console.log('Reconnected!');
-      // });
-
       // local participant disconnects
+
       room.on('disconnected', (rum, error) => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
