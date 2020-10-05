@@ -1,9 +1,9 @@
 const constants = {
   // change me back to 20000?
-  lastSeenDuration: 1500,
+  lastSeenDuration: 750,
   roundLength: 300,
   betweenRoundsDelay: 20000,
-  partnerCameraIssueTimeout: 5000,
+  partnerCameraIssueTimeout: 25000,
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,
   drawerWidth: 150,
