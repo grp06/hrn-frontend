@@ -271,12 +271,7 @@ const VideoRoom = ({ match }) => {
       <VideoRouter
         myRound={myRound}
         eventStatus={eventStatus}
-        userStatusBox={
-          <UserStatusBox
-            userEventStatus={userEventStatus}
-            setUserEventStatus={setUserEventStatus}
-          />
-        }
+        setUserEventStatus={setUserEventStatus}
       />
       <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
       <div className={classes.videoWrapper}>

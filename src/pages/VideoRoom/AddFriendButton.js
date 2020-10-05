@@ -57,12 +57,12 @@ const AddFriendButton = React.memo(({ myRound }) => {
         onClick={handleAddFriendPress}
         disabled={addedAsFriend}
       >
-        + Add Friend
+        Share My Info
       </Button>
       <Snack
         open={showAddedAsFriendSnack}
         severity="info"
-        snackMessage="Added 👩🏼‍🤝‍👨🏻"
+        snackMessage="Info shared! 📫"
         onClose={() => {
           setShowAddedAsFriendSnack(false)
         }}

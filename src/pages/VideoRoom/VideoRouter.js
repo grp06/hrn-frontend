@@ -3,7 +3,7 @@ import { useTwilioContext } from '../../context'
 import { PostChatRating } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 
-const VideoRouter = ({ eventStatus, myRound, userStatusBox }) => {
+const VideoRouter = ({ eventStatus, myRound, setUserEventStatus }) => {
   const {
     partnerDisconnected,
     partnerNeverConnected,
@@ -16,7 +16,7 @@ const VideoRouter = ({ eventStatus, myRound, userStatusBox }) => {
     switch (eventStatus) {
       case 'in-between-rounds':
         return hasPartner ? (
-          <PostChatRating myRound={myRound} userStatusBox={userStatusBox} />
+          <PostChatRating myRound={myRound} setUserEventStatus={setUserEventStatus} />
         ) : (
           <ConnectingToSomeone myRound={myRound} />
         )

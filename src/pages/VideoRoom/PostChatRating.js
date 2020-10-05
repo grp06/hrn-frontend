@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
+import Button from '@material-ui/core/Button'
 import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -62,18 +63,9 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.dankPurp,
     fontWeight: '700',
   },
-  userStatusBoxContainer: {
-    position: 'absolute',
-    top: '3%',
-    right: '1%',
-    bottom: 'auto',
-    left: 'auto',
-    width: '25vw',
-    zIndex: 9999,
-  },
 }))
 
-const PostChatRating = ({ myRound, userStatusBox }) => {
+const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const classes = useStyles()
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
@@ -98,6 +90,11 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
     }
     sleep(300)
     setShowRatingForm(false)
+  }
+
+  const handleTakeABreak = () => {
+    console.log('hello from handle take a break')
+    setUserEventStatus('sitting out')
   }
 
   return (
@@ -191,19 +188,19 @@ const PostChatRating = ({ myRound, userStatusBox }) => {
         ) : (
           <>
             <Typography className={classes.messageText}>
-              Got it! Thanks for letting us know.
+              Awesome! Hold tight as we&apos;re matching you with someone awesome really soon{' '}
+              <span role="img" aria-label="sunglass smiley">
+                😎
+              </span>
             </Typography>
             <Typography className={classes.messageText}>
-              Connecting you to someone new soon!
+              If you need a break, just press the button below!
             </Typography>
-            <div className={classes.emoji}>
-              <span role="img" aria-label="party smiley">
-                🥳
-              </span>
-            </div>
+            <Button variant="contained" color="primary" onClick={handleTakeABreak}>
+              Take a break
+            </Button>
           </>
         )}
-        <div className={classes.userStatusBoxContainer}>{userStatusBox}</div>
         <Snack
           open={showRatingSnack}
           onClose={() => setShowRatingSnack(false)}
