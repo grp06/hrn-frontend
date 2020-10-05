@@ -6,10 +6,10 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
-import { AdminPanel, UserPanel, EventStatusRedirect } from '.'
+import { AdminPanel, UserPanel, EventStatusRedirect, EventNotRSVP } from '.'
 import { Loading } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
-import formatDate from '../../utils/formatDate'
+import { useAppContext, useEventContext, useUserContext } from '../../context'
+import { formatDate, getTimeUntilEvent } from '../../utils'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
@@ -46,9 +46,10 @@ const useStyles = makeStyles((theme) => ({
 const Event = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { app, user, event, setEventId, resetEvent } = useAppContext()
-  const { appLoading, permissions } = app
-  const { userId } = user
+  const { appLoading } = useAppContext()
+  const { user } = useUserContext()
+  const { permissions, event, setEventId } = useEventContext()
+  const { id: userId } = user
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
@@ -71,19 +72,30 @@ const Event = ({ match }) => {
 
   const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 
-  const { host_id, start_at, event_name, description } = event
+  const { host_id, start_at, event_name, description, status: eventStatus } = event
   const startTime = new Date(start_at).getTime()
-  const now = Date.now()
-  const diff = startTime - now
+  const timeUntilEvent = getTimeUntilEvent(start_at)
 
   const timeState = () => {
-    if (diff > 1800000) {
+    if (timeUntilEvent > 1800000) {
       return 'future'
     }
-    if (diff < 0) {
+    if (timeUntilEvent < 0) {
       return 'go time'
     }
     return 'within 30 mins'
+  }
+
+  let eventInstruction
+  if (eventStatus === 'complete') {
+    eventInstruction = <EventNotRSVP />
+  } else {
+    eventInstruction =
+      parseInt(host_id, 10) === parseInt(userId, 10) ? (
+        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
+      ) : (
+        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
+      )
   }
 
   return (
@@ -121,11 +133,7 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
       </div>
-      {parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      ) : (
-        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
-      )}
+      {eventInstruction}
     </>
   )
 }

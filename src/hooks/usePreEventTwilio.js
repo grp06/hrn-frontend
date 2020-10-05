@@ -1,10 +1,10 @@
 import { useSetupUserPreEvent } from '.'
 import { setupHostPreEvent } from '../helpers'
-import { useAppContext } from '../context/useAppContext'
+import { useEventContext } from '../context'
 
 const usePreEventTwilio = () => {
   const { setupUserPreEvent } = useSetupUserPreEvent()
-  const { setCameraAndMicPermissions } = useAppContext()
+  const { setCameraAndMicPermissions } = useEventContext()
 
   const startPreEventTwilio = (room, isEventHost) => {
     if (room) {

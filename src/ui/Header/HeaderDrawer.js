@@ -7,7 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import { DrawerContent } from '.'
-import { useAppContext } from '../../context/useAppContext'
+import { useUserContext } from '../../context'
 import { constants } from '../../utils'
 
 const { drawerWidth } = constants
@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderDrawer = () => {
   const classes = useStyles()
-  const { user } = useAppContext()
-  const { userId } = user
+  const { user } = useUserContext()
+  const { id: userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
   const { pathname } = window.location
   const container = window !== undefined ? () => window.document.body : undefined
@@ -55,7 +55,7 @@ const HeaderDrawer = () => {
       pathname.includes('onboarding')
   )
 
-  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('pre-event'))
+  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)

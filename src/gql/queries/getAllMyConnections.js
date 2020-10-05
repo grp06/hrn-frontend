@@ -2,43 +2,25 @@ import gql from 'graphql-tag'
 
 const getAllMyConnections = gql`
   query getAllMyConnections($user_id: Int!) {
-    rounds(
-      where: {
-        _or: [{ partnerY_id: { _eq: $user_id } }, { partnerX_id: { _eq: $user_id } }]
-        _and: [{ partnerY_thumb: { _eq: true } }, { partnerX_thumb: { _eq: true } }]
-      }
-      order_by: { round_number: asc }
-    ) {
-      partnerY {
-        id
+    partners(where: { user_id: { _eq: $user_id }, partner_shared_details: { _eq: true } }) {
+      userByPartnerId {
         name
-        email
         city
-        short_bio
+        email
         linkedIn_url
+        short_bio
         tags_users {
           tag {
             name
-            tag_id
-            category
           }
+          user_id
         }
       }
-      partnerX {
-        id
-        name
-        email
-        city
-        short_bio
-        linkedIn_url
-        tags_users {
-          tag {
-            tag_id
-            name
-            category
-          }
-        }
-      }
+      i_shared_details
+      partner_id
+      id
+      event_id
+      user_id
     }
   }
 `

@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { useAppContext } from '../../context/useAppContext'
+import { useAppContext, useUserContext } from '../../context'
 
 import { HostDrawerContent, UserDrawerContent, SettingsDrawerContent } from '.'
 import logo from '../../assets/logoWhite.svg'
@@ -45,13 +45,9 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerContent = () => {
   const classes = useStyles()
-  const { user, event, resetUser, app } = useAppContext()
-  const { appLoading } = app
-  const { name, role, userId } = user
-  const { host_id, status: eventStatus } = event
-  const regex = /\/events\/\d+/
-  const eventIdInUrl = Boolean(window.location.pathname.match(regex))
-  const isEventHost = host_id === userId
+  const { appLoading } = useAppContext()
+  const { user, resetUser } = useUserContext()
+  const { name, role, id: userId } = user
 
   return (
     !appLoading && (

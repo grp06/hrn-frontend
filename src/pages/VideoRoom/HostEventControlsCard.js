@@ -2,10 +2,11 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+import { useQuery } from '@apollo/react-hooks'
 
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
-import { useGetOnlineEventAttendees } from '../../hooks'
+import { getAllPartnersForRound } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -27,11 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostEventControlsCard = ({ event, userId }) => {
+const HostEventControlsCard = React.memo(({ event, userId }) => {
   const classes = useStyles()
-  const { host_id, id: eventId } = event
-  const isEventHost = host_id === userId
-  const onlineEventAttendees = useGetOnlineEventAttendees(event, isEventHost)
+  const { host_id, id: eventId, current_round: round } = event
+  const { data: allPartnersData } = useQuery(getAllPartnersForRound, {
+    variables: { event_id: eventId, round },
+  })
 
   const renderResetEvent = TransitionModal({
     button: {
@@ -63,11 +65,14 @@ const HostEventControlsCard = ({ event, userId }) => {
       className={classes.container}
     >
       <Typography variant="subtitle1" className={classes.onlineUsersText}>
-        Online Users: {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
+        Online Users:{' '}
+        {allPartnersData && allPartnersData.partners.length
+          ? allPartnersData.partners.length
+          : ' --'}
       </Typography>
       {renderResetEvent}
     </Grid>
   )
-}
+})
 
 export default HostEventControlsCard

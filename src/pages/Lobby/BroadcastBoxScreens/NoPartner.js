@@ -6,12 +6,15 @@ import ChromeDinoGame from 'react-chrome-dino'
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
     width: '100%',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
-    background: '#111',
-    height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
+    marginTop: '2%',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '10%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
@@ -20,33 +23,36 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '50px',
   },
   trexContainer: {
-    width: '80vw',
+    width: '100%',
     height: 'auto',
   },
 }))
 
-const UserJoinedDuringRound = () => {
+const NoPartner = () => {
   const classes = useStyles()
-
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        Awh shucks, we just missed throwing your name into the hat for this round{' '}
-        <span role="img" aria-label="blue cap">
-          🧢
+        You are the chosen one{' '}
+        <span role="img" aria-label="crown">
+          👑
+        </span>
+      </Typography>
+      <Typography className={classes.messageText}>
+        Sometimes we have an odd number of people and need someone to sit out.
+      </Typography>
+      <Typography className={classes.messageText}>
+        But no worries, we&apos;ll pair you with someone as soon as we can.
+      </Typography>
+      <Typography className={classes.messageText}>
+        Get a drink of water. Stretch. Do a little dance{' '}
+        <span role="img" aria-label="dancing man">
+          🕺
         </span>
         .
       </Typography>
       <Typography className={classes.messageText}>
-        But don&apos;t worry! We&apos;ve penciled you in and you&apos;ll join the next round in a
-        few minutes.
-      </Typography>
-      <Typography className={classes.messageText}>
-        In the meantime, press &apos;up&apos; on your keyboard to kill some time{' '}
-        <span role="img" aria-label="wink face">
-          😉
-        </span>
-        .
+        Or press &apos;up&apos; on your keyboard to kill some time.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
@@ -55,4 +61,4 @@ const UserJoinedDuringRound = () => {
   )
 }
 
-export default UserJoinedDuringRound
+export default NoPartner

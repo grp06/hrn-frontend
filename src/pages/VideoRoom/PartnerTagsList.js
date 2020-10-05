@@ -16,16 +16,10 @@ const useStyles = makeStyles((theme) => ({
 
 const PartnerTagsList = ({ myRound, userId }) => {
   const classes = useStyles()
-  const myPartnerId = myRound.partnerX_id === userId ? myRound.partnerY_id : myRound.partnerX_id
   const remoteVideoDiv = document.getElementById('remote-video')
   const partnerVideoDivExists = remoteVideoDiv && remoteVideoDiv.innerHTML
 
-  const { data: tagsData, loading: tagsDataLoading } = useQuery(getTagsByUserId, {
-    variables: {
-      user_id: myPartnerId,
-    },
-  })
-  return partnerVideoDivExists && !tagsDataLoading && tagsData && tagsData.tags_users.length > 0 ? (
+  return partnerVideoDivExists && myRound.userByPartnerId.tags_users.length > 0 ? (
     <Grid
       container
       direction="row"
@@ -34,7 +28,7 @@ const PartnerTagsList = ({ myRound, userId }) => {
       wrap="wrap"
       className={classes.tagsContainer}
     >
-      {tagsData.tags_users
+      {myRound.userByPartnerId.tags_users
         .sort((tagA, tagB) => {
           return tagA.tag.name.length < tagB.tag.name.length
         })

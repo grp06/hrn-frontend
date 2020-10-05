@@ -4,6 +4,10 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 const createStyles = makeStyles((theme) => ({
+  addFriendButtonContainer: {
+    width: '60%',
+    margin: theme.spacing(0, 'auto'),
+  },
   cardContainer: {
     position: 'relative',
     bottom: '0%',
@@ -25,15 +29,9 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const RoundAndPartnerCard = ({ event, myRound, userId }) => {
+const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
   const classes = createStyles()
   const { num_rounds, current_round } = event
-
-  let userIsPartnerX = false
-
-  if (parseInt(userId, 10) === parseInt(myRound.partnerX_id, 10)) {
-    userIsPartnerX = true
-  }
 
   const getCurrentRoundNumber = () => (
     <Typography className={classes.roundNumberText} variant="subtitle2">
@@ -42,27 +40,22 @@ const RoundAndPartnerCard = ({ event, myRound, userId }) => {
   )
 
   const getPartnerCity = () => {
-    if (!myRound.partnerY || !myRound.partnerX) {
-      return null
-    }
-
-    const city =
-      userIsPartnerX && myRound.partnerY.city ? myRound.partnerY.city : myRound.partnerX.city
     return (
-      <Typography variant="subtitle1" className={classes.partnerName}>
-        {city}
-      </Typography>
+      myRound.userByPartnerId &&
+      myRound.userByPartnerId.city && (
+        <Typography variant="subtitle1" className={classes.partnerName}>
+          {myRound.userByPartnerId.city}
+        </Typography>
+      )
     )
   }
 
   const getPartnerName = () => {
-    const { partnerY, partnerX } = myRound
     return (
-      myRound &&
-      partnerY &&
-      partnerX && (
+      myRound.userByPartnerId &&
+      myRound.userByPartnerId.name && (
         <Typography variant="h5" className={classes.partnerName}>
-          {userIsPartnerX ? myRound.partnerY.name : myRound.partnerX.name}
+          {myRound.userByPartnerId.name}
         </Typography>
       )
     )
@@ -79,6 +72,7 @@ const RoundAndPartnerCard = ({ event, myRound, userId }) => {
       {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
+      <div className={classes.addFriendButtonContainer}>{addFriendButton}</div>
     </Grid>
   )
 }

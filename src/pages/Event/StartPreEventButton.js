@@ -2,12 +2,12 @@ import React from 'react'
 import Button from '@material-ui/core/Button'
 import { startPreEvent } from '../../helpers'
 
-const StartPreEventButton = ({ eventId, within30Mins, disabled }) => {
+const StartPreEventButton = ({ eventId, timeUntilEvent, disabled }) => {
   return (
     <Button
       size="large"
       variant="contained"
-      disabled={within30Mins || disabled}
+      disabled={timeUntilEvent !== 0 || disabled}
       color="primary"
       onClick={() => startPreEvent(eventId)}
     >

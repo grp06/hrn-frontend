@@ -3,11 +3,13 @@ import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useQuery } from 'react-apollo'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
+import { useSubscription } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { getAllMyConnections } from '../../gql/queries'
-import { useAppContext } from '../../context/useAppContext'
+import { listenToAllMyConnections } from '../../gql/subscriptions'
+import { useAppContext, useUserContext } from '../../context'
 import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 
@@ -23,18 +25,48 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   pageContainer: {
-    marginTop: '150px',
+    marginTop: '100px',
+    paddingLeft: '25px',
+    paddingRight: '25px',
+  },
+  sectionHeader: {
+    textAlign: 'center',
+    margin: theme.spacing(0, 'auto', 3, 'auto'),
+  },
+  toggleButtonActive: {
+    '&.Mui-selected': {
+      color: theme.palette.common.orchid,
+      borderRadius: 0,
+      border: 'none',
+      borderBottom: `2px solid ${theme.palette.common.orchid}`,
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
+  toggleButtonInactive: {
+    color: theme.palette.common.ghostWhite,
+    borderRadius: 0,
+    border: 'none',
+    borderBottom: '2px solid #3e4042',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  toggleButtonGroup: {
+    marginBottom: theme.spacing(8),
   },
 }))
 
 const MyConnections = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { app, user } = useAppContext()
-  const { userId } = user
-  const { appLoading } = app
-  const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useQuery(
-    getAllMyConnections,
+  const { appLoading } = useAppContext()
+  const { user } = useUserContext()
+  const { id: userId } = user
+  const [connectionToggleValue, setConnectionToggleValue] = React.useState('friends')
+  const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useSubscription(
+    listenToAllMyConnections,
     {
       variables: {
         user_id: userId,
@@ -54,75 +86,118 @@ const MyConnections = () => {
     return history.push('/events')
   }
 
-  const renderNullDataText = () => {
-    if (!allMyConnectionsData || !allMyConnectionsData.rounds.length) {
-      return (
-        <>
-          <FloatCardLarge>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              className={classes.nullDataContainer}
+  const renderNullDataText = (message) => {
+    return (
+      <>
+        <FloatCardLarge>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.nullDataContainer}
+          >
+            <Typography variant="h4" className={classes.nullDataHeader}>
+              {message}
+            </Typography>
+            <Typography variant="h6" className={classes.nullDataSub}>
+              Join one of our public events and connect with other awesome people!
+            </Typography>
+            <Button
+              onClick={handleGoToPublicEventsClick}
+              color="primary"
+              variant="contained"
+              style={{ marginTop: '20px' }}
             >
-              <Typography variant="h4" className={classes.nullDataHeader}>
-                Looks like you haven&apos;t connected with anyone yet{' '}
-                <span role="img" aria-label="neutral face">
-                  😐
-                </span>
-              </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
-                Join one of our public events and connect with other awesome people!
-              </Typography>
-              <Button
-                onClick={handleGoToPublicEventsClick}
-                color="primary"
-                variant="contained"
-                style={{ marginTop: '20px' }}
-              >
-                Take Me There!
-              </Button>
-            </Grid>
-          </FloatCardLarge>
-        </>
-      )
-    }
+              Take Me There!
+            </Button>
+          </Grid>
+        </FloatCardLarge>
+      </>
+    )
   }
 
-  // TODO: make this its own util function
-  // It looks hairy below  because we need to filter between partnerX and partnerY to
-  // remove your info, and then make sure we are not returning duplicate connections
-  // Ideally this is its own util function that doesnt use the useMutation hook
-  // so we dont need to import React
-  const arrayOfUniqueConnectionsIds = []
+  const renderContactCards = (contactGroup, emptyGroupMessage) => {
+    if (allMyConnectionsData && allMyConnectionsData.partners.length) {
+      const group =
+        contactGroup === 'friends'
+          ? allMyConnectionsData.partners
+              .filter((partner) => !!partner.i_shared_details)
+              .sort((partnerA, partnerB) =>
+                partnerA.userByPartnerId.name
+                  .toLowerCase()
+                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+              )
+          : allMyConnectionsData.partners
+              .filter((partner) => !partner.i_shared_details)
+              .sort((partnerA, partnerB) =>
+                partnerA.userByPartnerId.name
+                  .toLowerCase()
+                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+              )
 
-  const arrayOfMyAllMyUniqueConnections = allMyConnectionsData.rounds
-    .map((round) => {
-      return Object.values(round).filter((person) => person.id !== userId)
-    })
-    .map((personArray) => {
-      const personsId = personArray[0].id
-      if (arrayOfUniqueConnectionsIds.indexOf(personsId) === -1) {
-        arrayOfUniqueConnectionsIds.push(personsId)
-        return personArray[0]
+      if (group.length > 0) {
+        return group.map((partner) => (
+          <ConnectionCard
+            key={partner.id}
+            connection={partner.userByPartnerId}
+            i_shared_details={partner.i_shared_details}
+            partnerId={partner.partner_id}
+            userId={partner.user_id}
+            eventId={partner.event_id}
+          />
+        ))
       }
-      return null
-    })
-    .filter((el) => el !== null)
-
-  const renderConnectionCards = () => {
-    if (arrayOfMyAllMyUniqueConnections.length) {
-      return arrayOfMyAllMyUniqueConnections.map((connection) => {
-        return <ConnectionCard key={connection.id} connection={connection} />
-      })
+      return renderNullDataText(emptyGroupMessage)
     }
+    return renderNullDataText(emptyGroupMessage)
+  }
+
+  const handleConnectionToggle = (event) => {
+    setConnectionToggleValue(event.currentTarget.value)
   }
 
   return (
     <div className={classes.pageContainer}>
-      {renderNullDataText()}
-      {renderConnectionCards()}
+      <Typography variant="h3" className={classes.sectionHeader}>
+        Connections
+      </Typography>
+      <div className={classes.pageContainer}>
+        <ToggleButtonGroup
+          value={connectionToggleValue}
+          exclusive
+          onChange={handleConnectionToggle}
+          className={classes.toggleButtonGroup}
+        >
+          <ToggleButton
+            value="friends"
+            disableRipple
+            className={
+              connectionToggleValue === 'friends'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
+          >
+            Friends
+          </ToggleButton>
+          <ToggleButton
+            value="requests"
+            disableRipple
+            className={
+              connectionToggleValue === 'requests'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
+          >
+            Requests
+          </ToggleButton>
+        </ToggleButtonGroup>
+        <Grid container justify="center" alignItems="center">
+          {connectionToggleValue === 'friends'
+            ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
+            : renderContactCards('requests', 'You don\t have any requests to respond to 😎')}
+        </Grid>
+      </div>
     </div>
   )
 }

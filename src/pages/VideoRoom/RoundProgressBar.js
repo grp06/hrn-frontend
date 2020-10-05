@@ -4,9 +4,10 @@ import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import TimerIcon from '@material-ui/icons/Timer'
 import { makeStyles } from '@material-ui/styles'
-
-import { useAppContext } from '../../context/useAppContext'
+import { constants } from '../../utils'
 import { Snack } from '../../common'
+
+const { betweenRoundsDelay } = constants
 
 const useStyles = makeStyles((theme) => ({
   roundProgressBarContainer: {
@@ -17,74 +18,84 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
+const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const classes = useStyles()
-  const { user } = useAppContext()
-  const { updatedAt } = user
+  const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
+  const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
-  const hasStartedConnectingToPartner = useRef()
-
-  const getDuration = () => {
-    const { status } = event
-    if (status === 'room-in-progress') {
-      return event.round_length * 60000
+  const oneRoundInMs = round_length * 60000
+  const getRoundDuration = () => {
+    if (eventStatus === 'room-in-progress') {
+      return round_length * 60000
     }
     // needs to match round_interval on the backend
+    // this is for in-between-rounds
     return 20000
   }
 
-  const roundEndTime = new Date(event.updated_at).getTime() + getDuration()
-  const isLast15Seconds = roundEndTime - new Date(updatedAt).getTime() < 20000
+  const getTimeElapsedInRoundAlready = () => {
+    const timeUserEnteredRound = new Date(userUpdatedAt).getTime() + 50
 
-  useEffect(() => {
-    const { status } = event
+    const timeRoundStarted = new Date(eventUpdatedAt).getTime()
 
-    if (isLast15Seconds && status === 'room-in-progress') {
-      setShow20SecondsLeftSnack(true)
-    }
-  }, [isLast15Seconds, event])
-
-  const getMsFromRoundStart = () => {
-    const { status, updated_at } = event
-
-    const latestUpdateFromServer = new Date(updatedAt).getTime()
-
-    if (status === 'room-in-progress') {
-      const roundStartTime = new Date(event.updated_at).getTime()
-
-      return latestUpdateFromServer - roundStartTime
-    }
-    const roundStartTime = new Date(updated_at).getTime()
-    return latestUpdateFromServer - roundStartTime
+    return timeUserEnteredRound - timeRoundStarted
   }
 
-  const msFromStart = getMsFromRoundStart()
-  const duration = getDuration()
-  const currentPercentWayThrough = (msFromStart / duration) * 100
+  const getPercentElapsedThroughRound = () => {
+    const timeElapsedInRoundAlready = getTimeElapsedInRoundAlready()
 
-  if (hasPartnerAndIsConnecting) {
-    hasStartedConnectingToPartner.current = true
+    const duration = getRoundDuration()
+
+    return (timeElapsedInRoundAlready / duration) * 100
   }
 
   useEffect(() => {
-    const { status } = event
+    setShow20SecondsLeftSnack(false)
+    setProgressBarValue(0)
+  }, [eventStatus])
 
-    // make sure we've already started the process of connecting, and that the connection has been made, and its within 45sec of round start
-    // this way, it won't show up on refresh if they're in the middle of the round
-    if (
-      hasStartedConnectingToPartner &&
-      !hasPartnerAndIsConnecting &&
-      msFromStart < 45000 &&
-      status === 'room-in-progress'
-    ) {
-      console.log('RoundProgressBar -> status', status)
-      // without this, the green banner annoyingly shows up right before the connecting screen
-      setTimeout(() => {
+  useEffect(() => {
+    const getOneSecondInPct = () => {
+      if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
+        // ex: one tick of the progress bar is 10%
+
+        return (1000 / (betweenRoundsDelay / 2)) * 100
+      }
+      if (eventStatus === 'in-between-rounds') {
+        // ex: one tick of the progress bar is 5%
+        return (1000 / betweenRoundsDelay) * 100
+      }
+      return (1000 / (round_length * 60000)) * 100
+    }
+
+    if (!progressBarValue) {
+      const percentElapsedThroughRound = getPercentElapsedThroughRound()
+      setProgressBarValue(percentElapsedThroughRound + getOneSecondInPct())
+      if (eventStatus === 'room-in-progress') {
         setShowRoundStartedSnack(true)
-      }, 3000)
+      }
     }
-  }, [hasPartnerAndIsConnecting, event])
+
+    const interval = setInterval(() => {
+      setProgressBarValue((oldVal) => {
+        const newPct = oldVal + getOneSecondInPct()
+        if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
+          const timeRightNow = (newPct / 100) * oneRoundInMs
+          const isLastTwentySecs = oneRoundInMs - timeRightNow < 20000
+          if (isLastTwentySecs) {
+            setShow20SecondsLeftSnack(true)
+            setShowRoundStartedSnack(false)
+          }
+        }
+        return newPct
+      })
+    }, 1000)
+
+    return () => {
+      clearInterval(interval)
+    }
+  }, [eventStatus])
 
   return (
     <Grid
@@ -101,19 +112,19 @@ const RoundProgressBar = ({ myRound, event, hasPartnerAndIsConnecting }) => {
         duration={10000}
         severity="success"
         snackIcon={<TimerIcon />}
-        snackMessage={`${event.round_length} mintues left`}
+        snackMessage={`${event.round_length} minutes left`}
       />
       <Snack
         open={show20SecondsLeftSnack}
         onClose={() => setShow20SecondsLeftSnack(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        duration={10000}
+        duration={20000}
         severity="error"
         snackMessage="20 seconds left!"
       />
-      <LinearProgress variant="determinate" value={currentPercentWayThrough} />
+      <LinearProgress variant="determinate" value={progressBarValue} />
     </Grid>
   )
-}
+})
 
 export default RoundProgressBar

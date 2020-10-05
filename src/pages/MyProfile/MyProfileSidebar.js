@@ -50,7 +50,7 @@ const createStyles = makeStyles((theme) => ({
 const MyProfileSidebar = ({ user, databaseTags }) => {
   const classes = createStyles()
   const history = useHistory()
-  const { userId, name, city, tags_users: usersTags, short_bio, linkedIn_url } = user
+  const { id: userId, name, city, tags_users: usersTags, short_bio, linkedIn_url } = user
   const [showEditSidebarForm, setShowEditSidebarForm] = useState(false)
 
   const eventIdInLS = localStorage.getItem('eventId')

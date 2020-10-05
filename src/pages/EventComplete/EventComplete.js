@@ -7,8 +7,8 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useAppContext } from '../../context/useAppContext'
-import { getMyMutualThumbsData } from '../../gql/queries'
+import { useEventContext, useUserContext } from '../../context'
+import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
@@ -16,38 +16,24 @@ import { constants } from '../../utils'
 const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    marginTop: '50px',
-  },
-  topDashboard: {
-    width: '100%',
-    padding: theme.spacing(5),
-    borderStyle: 'none none solid',
-    borderWidth: '1px',
-    borderColor: theme.palette.common.greyBorder,
-    borderRadius: '4px 4px 0px 0px',
-    backgroundColor: theme.palette.common.greyHighlight,
-    // backgroundColor: '#3a3b3c',
-  },
-  categoryHeader: {
-    margin: theme.spacing(0, 'auto'),
-    textAlign: 'center',
-  },
-  cardBodySection: {
-    marginBottom: theme.spacing(3),
-  },
-  zoomLink: {
-    color: theme.palette.common.sunray,
-    margin: theme.spacing(0, 'auto', 3, 'auto'),
-    '&:hover': {
-      color: '#fcd08c',
-    },
-  },
   button: {
     margin: theme.spacing(1, 1),
   },
   buttonContainer: {
     margin: theme.spacing(3, 'auto', 9, 'auto'),
+  },
+  categoryHeader: {
+    margin: theme.spacing(0, 'auto'),
+    textAlign: 'center',
+  },
+  connectionGrid: {
+    margin: theme.spacing(0, 'auto'),
+    [theme.breakpoints.down('xl')]: {
+      width: '85%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   upcomingEventsButton: {
     margin: theme.spacing(1, 0),
@@ -57,32 +43,31 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.ghostWhite,
     },
   },
-  zoomContainer: {
-    width: '75%',
-    margin: theme.spacing(4, 'auto', -3, 'auto'),
-    textAlign: 'center',
+  wrapper: {
+    marginTop: '100px',
   },
 }))
 
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
-  const { user, event, resetEvent } = useAppContext()
-  const { userId } = user
+  const { event, resetEvent } = useEventContext()
+  const { user } = useUserContext()
+  const { id: userId } = user
 
-  const localStorageEventId = localStorage.getItem('eventId')
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
 
-  const { data: mutualThumbsData, loading: mutualThumbsLoading } = useSubscription(
-    getMyMutualThumbsData,
-    {
-      variables: {
-        event_id: eventId || localStorageEventId,
-        user_id: userId,
-      },
-    }
-  )
+  const {
+    data: myConnectionAfterEventData,
+    loading: myConnectionAfterEventLoading,
+  } = useSubscription(listenToMyConnectionsAfterEvent, {
+    variables: {
+      user_id: userId,
+      event_id: eventId,
+    },
+    skip: !userId || !eventId,
+  })
 
   useEffect(() => {
     return () => {
@@ -96,29 +81,42 @@ const EventComplete = ({ match }) => {
     }
   }, [event])
 
-  if (mutualThumbsLoading) {
+  if (myConnectionAfterEventLoading) {
     return <Loading />
   }
 
-  const cardHeading =
-    mutualThumbsData.rounds.length > 0
-      ? 'Say Hi Right Now to your new friends 👋'
-      : 'Thanks for joining the event! 🎊'
+  const cardHeading = () => {
+    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
+      return 'Say Hi Right Now to your new friends 👋'
+    }
+    return 'Thanks for joining the event! 🎊'
+  }
 
-  const arrayOfMyAllMyUniqueConnections = mutualThumbsData.rounds.map((round) => {
-    return Object.values(round).filter((person) => person.id !== userId)
-  })
-
-  const renderConnectionCards = () => {
-    return arrayOfMyAllMyUniqueConnections.map((connection) => {
-      return <ConnectionCard key={connection[0].id} connection={connection[0]} />
-    })
+  const renderAllMyEventConnection = () => {
+    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
+      return myConnectionAfterEventData.partners
+        .sort((partnerA, partnerB) =>
+          partnerA.userByPartnerId.name
+            .toLowerCase()
+            .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+        )
+        .map((partner) => (
+          <ConnectionCard
+            key={partner.id}
+            connection={partner.userByPartnerId}
+            i_shared_details={partner.i_shared_details}
+            partnerId={partner.partner_id}
+            userId={partner.user_id}
+            eventId={partner.event_id}
+          />
+        ))
+    }
   }
 
   return (
     <div className={classes.wrapper}>
       <Typography variant="h4" className={classes.categoryHeader}>
-        {cardHeading}
+        {cardHeading()}
       </Typography>
       <Grid container item direction="column" justify="space-around">
         <Grid container direction="column">
@@ -191,8 +189,8 @@ const EventComplete = ({ match }) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item className={classes.cardBodySection}>
-            {renderConnectionCards()}
+          <Grid container justify="center" className={classes.connectionGrid}>
+            {renderAllMyEventConnection()}
           </Grid>
         </Grid>
       </Grid>

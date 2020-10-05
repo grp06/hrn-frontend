@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
 const useStyles = makeStyles((theme) => ({
   permissionsContainer: {
-    minHeight: '50vh',
+    minHeight: '60vh',
   },
   cameraBlocked: {
     position: 'fixed',
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SetupMicAndCamera = () => {
   const classes = useStyles()
-  const { setCameraAndMicPermissions } = useAppContext()
+  const { setCameraAndMicPermissions } = useEventContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
   const [videoDevices, setVideoDevices] = useState([])
@@ -116,6 +116,7 @@ const SetupMicAndCamera = () => {
 
       try {
         localMediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+        console.log('getMedia -> localMediaStream', localMediaStream)
         const video = document.getElementById('videoElement')
         video.style.maxWidth = '50%'
         setPermissionDenied(false)
@@ -130,6 +131,16 @@ const SetupMicAndCamera = () => {
 
         video.onloadedmetadata = function (e) {
           console.log('video.onloadedmetadata -> e', e)
+          const localVideo = document.getElementsByTagName('video')[0]
+          console.log('video.onloadedmetadata -> localVideo', localVideo)
+          localVideo.srcObject = localMediaStream
+          console.log('video.onloadedmetadata -> localVideo', localVideo)
+          // if (localVideo) {
+          //   localVideo.innerHTML = ''
+          // }
+          // const newVideoElement = document.createElement('video')
+          // newVideoElement.srcObject = localMediaStream
+          // localVideo.append(newVideoElement)
           // Do something with the video here.
         }
       } catch (error) {

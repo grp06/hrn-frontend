@@ -16,10 +16,10 @@ import TableCell from '@material-ui/core/TableCell'
 import TableContainer from '@material-ui/core/TableContainer'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow'
-import { EventExpansionPanelAdmin } from '.'
+import { useUserContext } from '../../context'
 import { Loading } from '../../common'
-import { useAppContext } from '../../context/useAppContext'
-import { getAllUsers, getAllEvents, getAllRounds, getRsvpsByDateRange } from '../../gql/queries'
+import { EventExpansionPanelAdmin } from '.'
+import { getAllUsers, getAllEvents, getAllRounds } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
   expansionPanelsContainer: {
@@ -37,9 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const HRNAnalytics = () => {
   const classes = useStyles()
-  const { user } = useAppContext()
-  const { userId } = user
-
+  const { user } = useUserContext()
+  const { id: userId } = user
   const { data: allDBUsers, loading: allDBUsersLoading } = useQuery(getAllUsers)
   const { data: allDBEventsAndRounds, loading: allDBEventsAndRoundsLoading } = useQuery(
     getAllEvents

@@ -8,16 +8,16 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    background: '#111',
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
+    marginTop: '2%',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '10%',
+    },
   },
   messageText: {
     ...theme.typography.waitingRoomHeading,
-  },
-  dancingMan: {
-    fontSize: '50px',
   },
   trexContainer: {
     width: '80vw',
@@ -25,32 +25,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SittingOut = ({ roundLength }) => {
+const CameLate = () => {
   const classes = useStyles()
+
   return (
     <div className={classes.waitingRoom}>
       <Typography className={classes.messageText}>
-        You are the chosen one{' '}
-        <span role="img" aria-label="crown">
-          👑
-        </span>{' '}
-        !
-      </Typography>
-      <Typography className={classes.messageText}>
-        Sometimes we have an odd number of people and need someone to sit out.
-      </Typography>
-      <Typography className={classes.messageText}>
-        But no worries, you&apos;ll be paired with someone new in {roundLength} minutes.
-      </Typography>
-      <Typography className={classes.messageText}>
-        Get a drink of water. Stretch. Do a little dance{' '}
-        <span role="img" aria-label="dancing man">
-          🕺
+        Awh shucks, we just missed throwing your name into the hat for this round{' '}
+        <span role="img" aria-label="blue cap">
+          🧢
         </span>
-        .
       </Typography>
       <Typography className={classes.messageText}>
-        Or press 'up' on your keyboard to kill some time.
+        But don&apos;t worry! We&apos;ve penciled you in and we&apos;ll pair you with someone as
+        soon as we can.
+      </Typography>
+      <Typography className={classes.messageText}>
+        In the meantime, press &apos;up&apos; on your keyboard to kill some time.
       </Typography>
       <div className={classes.trexContainer}>
         <ChromeDinoGame />
@@ -59,4 +50,4 @@ const SittingOut = ({ roundLength }) => {
   )
 }
 
-export default SittingOut
+export default CameLate

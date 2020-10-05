@@ -9,10 +9,10 @@ import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
 
-import { useAppContext } from '../../context/useAppContext'
+import { useEventContext } from '../../context'
 
 const ListOfRSVPs = () => {
-  const { event } = useAppContext()
+  const { event } = useEventContext()
   const { event_users } = event
 
   return (

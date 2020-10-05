@@ -1,13 +1,13 @@
-import { useAppContext } from '../context/useAppContext'
+import { useTwilioContext } from '../context'
 import { constants } from '../utils'
 
 const { hasPartnerAndIsConnectingBreathingRoom } = constants
 
 const useRemoteTrackPublished = () => {
-  const { setHasPartnerAndIsConnecting } = useAppContext()
+  const { setHasPartnerAndIsConnecting } = useTwilioContext()
 
   const remoteTrackPublished = (publication) => {
-    const onPreEvent = window.location.pathname.indexOf('/pre-event') > -1
+    const onPreEvent = window.location.pathname.indexOf('/lobby') > -1
 
     if (publication.isSubscribed) {
       console.log('remoteTrackPublished -> publication.isSubscribed', publication.isSubscribed)

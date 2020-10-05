@@ -35,12 +35,13 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     width: '75%',
     margin: theme.spacing(0, 'auto'),
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(2),
   },
   whatToExpect: {
     color: theme.palette.common.ghostWhite,
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
+    marginLeft: theme.spacing(3),
   },
   eventFormatStepper: {
     paddingTop: 0,
@@ -64,7 +65,7 @@ function getStepContent(step, eventRoundLength) {
   }
 }
 
-const EventBreakdownStepper = ({ eventRoundLength }) => {
+const EventBreakdownStepper = ({ eventRoundLength, endMessage }) => {
   const classes = useStyles()
   const [activeStep, setActiveStep] = useState(0)
   const steps = getSteps(eventRoundLength)
@@ -83,7 +84,7 @@ const EventBreakdownStepper = ({ eventRoundLength }) => {
 
   return (
     <div className={classes.root}>
-      <Grid container justify="center" align="center" className={classes.whatToExpect}>
+      <Grid container alignItems="center" className={classes.whatToExpect}>
         <Typography variant="h5">What to expect</Typography>
       </Grid>
       <Stepper
@@ -121,9 +122,8 @@ const EventBreakdownStepper = ({ eventRoundLength }) => {
       </Stepper>
       {activeStep === steps.length && (
         <Grid conatiner className={classes.resetContainer} justify="center" alignItems="center">
-          <Typography variant="h6" className={classes.endMessage}>
-            You&apos;re all set! If you have already RSVPed, sit tight and wait for the event to
-            start. If you have not RSVPed, scroll up and click the Sign Up / RSVP button!
+          <Typography variant="body1" className={classes.endMessage}>
+            {endMessage}
           </Typography>
           <Button onClick={handleReset} variant="contained" color="primary">
             Reset Steps
