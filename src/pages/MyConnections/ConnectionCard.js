@@ -26,8 +26,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   avatarContainer: {
-    width: 'auto',
-    height: '100%',
+    width: '120px',
+    height: '120px',
   },
   avatarGridContainer: {
     height: '120px',

@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 'auto', 3, 'auto'),
   },
   toggleButtonActive: {
+    width: '125px',
     '&.Mui-selected': {
       color: theme.palette.common.orchid,
       borderRadius: 0,
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonInactive: {
+    width: '125px',
     color: theme.palette.common.ghostWhite,
     borderRadius: 0,
     border: 'none',
@@ -54,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonGroup: {
-    marginBottom: theme.spacing(8),
+    margin: theme.spacing(0, 'auto', 12, 'auto'),
   },
 }))
 
@@ -163,35 +165,37 @@ const MyConnections = () => {
         Connections
       </Typography>
       <div className={classes.pageContainer}>
-        <ToggleButtonGroup
-          value={connectionToggleValue}
-          exclusive
-          onChange={handleConnectionToggle}
-          className={classes.toggleButtonGroup}
-        >
-          <ToggleButton
-            value="friends"
-            disableRipple
-            className={
-              connectionToggleValue === 'friends'
-                ? classes.toggleButtonActive
-                : classes.toggleButtonInactive
-            }
+        <Grid container justify="center" alignItems="center">
+          <ToggleButtonGroup
+            value={connectionToggleValue}
+            exclusive
+            onChange={handleConnectionToggle}
+            className={classes.toggleButtonGroup}
           >
-            Friends
-          </ToggleButton>
-          <ToggleButton
-            value="requests"
-            disableRipple
-            className={
-              connectionToggleValue === 'requests'
-                ? classes.toggleButtonActive
-                : classes.toggleButtonInactive
-            }
-          >
-            Requests
-          </ToggleButton>
-        </ToggleButtonGroup>
+            <ToggleButton
+              value="friends"
+              disableRipple
+              className={
+                connectionToggleValue === 'friends'
+                  ? classes.toggleButtonActive
+                  : classes.toggleButtonInactive
+              }
+            >
+              Friends
+            </ToggleButton>
+            <ToggleButton
+              value="requests"
+              disableRipple
+              className={
+                connectionToggleValue === 'requests'
+                  ? classes.toggleButtonActive
+                  : classes.toggleButtonInactive
+              }
+            >
+              Requests
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
         <Grid container justify="center" alignItems="center">
           {connectionToggleValue === 'friends'
             ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
