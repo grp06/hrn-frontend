@@ -9,7 +9,7 @@ import { ExpansionPanel } from '@material-ui/core'
 import { useAppContext, useUserContext } from '../../context'
 import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
 import { FloatCardLarge, Loading } from '../../common'
-import { getHostEventsAndRounds } from '../../gql/queries'
+import { getHostEventsAndRounds, getHostEventsAndPartners } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
   expansionPanelContent: {
@@ -57,6 +57,17 @@ const HostDashboard = () => {
       skip: !userId || (role && role !== 'host'),
     }
   )
+  const { data: eventsAndPartnersData, loading: eventsAndPartnersLoading } = useQuery(
+    getHostEventsAndPartners,
+    {
+      variables: {
+        user_id: userId,
+      },
+      skip: !userId || (role && role !== 'host'),
+    }
+  )
+
+  // console.log('event partner data', eventsAndPartnersData)
 
   useEffect(() => {
     window.analytics.page('/host-dashbaord')
@@ -65,18 +76,22 @@ const HostDashboard = () => {
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables
     // totalRSVP, totalThumbs, avgThumbs
-    if (eventsAndRoundsData && !eventsAndRoundsLoading) {
+    if (eventsAndPartnersData && !eventsAndPartnersLoading) {
       // calculate all the RSVPed people in all your events
-      const totalRSVP = eventsAndRoundsData.events.reduce((total, event) => {
+      const totalRSVP = eventsAndPartnersData.events.reduce((total, event) => {
         total += event.event_users.length
         return total
       }, 0)
 
       // calcuate all the Mutual Thumbs in all your events
-      const totalThumbs = eventsAndRoundsData.events.reduce((total, event) => {
-        const mutualThumbsInEvent = event.rounds.reduce((thumbTotal, round) => {
-          if (round.partnerY_thumb && round.partnerX_thumb) {
-            thumbTotal += 1
+      const totalThumbs = eventsAndPartnersData.events.reduce((total, event) => {
+        var partnerPairs = new Set()
+        const mutualThumbsInEvent = event.partners.reduce((thumbTotal, userRow) => {
+          if (!partnerPairs.has(`${userRow.user_id},${userRow.partner_id}`)) {
+            if (userRow.i_shared_details && userRow.partner_shared_details) {
+              thumbTotal += 1
+            }
+            partnerPairs.add(`${userRow.partner_id},${userRow.user_id}`)
           }
           return thumbTotal
         }, 0)
@@ -85,24 +100,24 @@ const HostDashboard = () => {
       }, 0)
 
       // calculate average connections per event
-      const averageThumbs = (totalThumbs / eventsAndRoundsData.events.length).toFixed(1)
+      const averageThumbs = (totalThumbs / eventsAndPartnersData.events.length).toFixed(1)
 
       setAllTimeRSVPed(totalRSVP)
       setAllTimeMutualThumbs(totalThumbs)
       setAvgThumbsPerEvent(averageThumbs)
     }
-  }, [eventsAndRoundsData, eventsAndRoundsLoading])
+  }, [eventsAndPartnersData, eventsAndPartnersLoading])
 
   if (role && role !== 'host') {
     return <Redirect to="/events" />
   }
 
-  if (eventsAndRoundsLoading || appLoading) {
+  if (eventsAndPartnersLoading || appLoading) {
     return <Loading />
   }
 
-  const hostHasEvents = eventsAndRoundsData && eventsAndRoundsData.events.length
-  const hostHasCompletedEvents = eventsAndRoundsData.events.some(
+  const hostHasEvents = eventsAndPartnersData && eventsAndPartnersData.events.length
+  const hostHasCompletedEvents = eventsAndPartnersData.events.some(
     (event) => event.status === 'complete'
   )
 
@@ -135,7 +150,10 @@ const HostDashboard = () => {
         Your Past Events:
       </Typography>
       <div className={classes.expansionPanelContent}>
-        <HostEventsExpansionPanel eventsAndRoundsData={eventsAndRoundsData} />
+        <HostEventsExpansionPanel
+          eventsAndRoundsData={eventsAndRoundsData}
+          eventsAndPartnersData={eventsAndPartnersData}
+        />
       </div>
     </div>
   )

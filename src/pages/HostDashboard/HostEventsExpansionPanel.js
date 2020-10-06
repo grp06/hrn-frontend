@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
+const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }) => {
   const classes = useStyles()
 
   const [sortedEvents, setSortedEvents] = useState(null)
@@ -73,14 +73,14 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
   }
 
   useEffect(() => {
-    const sorted = eventsAndRoundsData.events.sort((a, b) => {
+    const sorted = eventsAndPartnersData.events.sort((a, b) => {
       return new Date(b.start_at).getTime() - new Date(a.start_at).getTime()
     })
     setSortedEvents(sorted)
     setEventPanelExpanded(sorted[0].id)
-  }, [eventsAndRoundsData])
+  }, [eventsAndPartnersData])
 
-  if (!eventsAndRoundsData) {
+  if (!eventsAndPartnersData) {
     return (
       <div>
         No events to see here{' '}
