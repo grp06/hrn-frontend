@@ -29,10 +29,11 @@ const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { userEventStatus } = state
   const { user, setUserUpdatedAt } = useUserContext()
-  const { event } = useEventContext()
+  const { event, permissions } = useEventContext()
   const { id: eventId } = event
   const { id: userId } = user
   const history = useHistory()
+  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const [updateLastSeenMutation] = useMutation(updateLastSeen, {
     variables: {
@@ -68,7 +69,12 @@ const UserEventStatusProvider = ({ children }) => {
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
     console.log('userEventStatus ->', userEventStatus)
-    if (userId && userEventStatus !== 'in chat' && userEventStatus !== 'sitting out') {
+    if (
+      userId &&
+      userEventStatus !== 'in chat' &&
+      userEventStatus !== 'sitting out' &&
+      !micOrCameraIsDisabled
+    ) {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
