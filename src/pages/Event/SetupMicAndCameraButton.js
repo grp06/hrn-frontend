@@ -3,18 +3,18 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import { SetupMicAndCamera } from '.'
 import { TransitionModal } from '../../common'
 
-const SetupMicAndCameraButton = ({ permissions, textButtonSetMicCam }) => {
+const SetupMicAndCameraButton = ({ permissions }) => {
   const button =
-    permissions && permissions.isWebcamAlreadyCaptured && !!textButtonSetMicCam
+    permissions && !permissions.isWebcamAlreadyCaptured
       ? {
-          buttonText: 'Test Your Camera and Mic 🎥',
+          buttonText: 'Enable camera and mic 🎥',
           buttonVariant: 'contained',
           buttonSize: 'large',
         }
       : null
 
   const fabButton =
-    permissions && permissions.isWebcamAlreadyCaptured && !textButtonSetMicCam
+    permissions && permissions.isWebcamAlreadyCaptured
       ? {
           fabButtonIcon: <SettingsIcon style={{ color: '#6327bb' }} />,
           fabButtonSize: 'small',

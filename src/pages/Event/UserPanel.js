@@ -198,7 +198,6 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
           <SetupMicAndCameraButton
             permissions={permissions}
             setCameraAndMicPermissions={setCameraAndMicPermissions}
-            textButtonSetMicCam={true}
           />
         </Grid>
       )}

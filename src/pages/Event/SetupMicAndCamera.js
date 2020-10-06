@@ -162,12 +162,11 @@ const SetupMicAndCamera = () => {
       }
     }
 
-    if (currentVideoDeviceId && currentAudioDeviceId) {
-      getMedia({
-        video: { deviceId: currentVideoDeviceId },
-        audio: { deviceId: currentAudioDeviceId },
-      })
-    }
+    // if (currentVideoDeviceId && currentAudioDeviceId) {
+    getMedia({
+      video: { deviceId: currentVideoDeviceId },
+      audio: { deviceId: currentAudioDeviceId },
+    })
   }, [currentVideoDeviceId, currentAudioDeviceId])
 
   const getPermissionDenied = () => {
