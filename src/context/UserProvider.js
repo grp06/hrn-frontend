@@ -18,8 +18,10 @@ const UserProvider = ({ children }) => {
   const { userId } = state.user
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
+  const setNewPasswordPageRegex = /set-new-password/
   const userOnSpecificEventPage = Boolean(window.location.pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(window.location.pathname.match(eventsPageRegex))
+  const userOnSetNewPasswordPage = Boolean(window.location.pathname.match(setNewPasswordPageRegex))
 
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
@@ -46,7 +48,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
     if (!localStorageUserId) {
-      if (!(userOnEventsPage || userOnSpecificEventPage)) {
+      if (!(userOnEventsPage || userOnSpecificEventPage || userOnSetNewPasswordPage)) {
         history.push('/')
       }
     } else {
