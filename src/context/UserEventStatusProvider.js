@@ -8,7 +8,7 @@ import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToOnlineEventUsers } from '../gql/subscriptions'
 
-const { lastSeenDuration } = constants
+const { lastSeenDuration, bannedUserIds } = constants
 
 const UserEventStatusContext = React.createContext()
 
@@ -72,8 +72,10 @@ const UserEventStatusProvider = ({ children }) => {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
-          const lastSeenUpdated = await updateLastSeenMutation()
-          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          if (!bannedUserIds.includes(userId)) {
+            const lastSeenUpdated = await updateLastSeenMutation()
+            setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          }
         } catch (error) {
           console.log('interval -> error', error)
         }
