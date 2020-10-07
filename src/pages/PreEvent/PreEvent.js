@@ -137,7 +137,9 @@ const PreEvent = () => {
       const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
 
       setMyRoomNumber(roomNumber)
+      console.log('PreEvent -> roomNumber', roomNumber)
       setNumRooms(numberOfRooms)
+      console.log('PreEvent -> numberOfRooms', numberOfRooms)
     }
   }, [onlineUsers])
 
