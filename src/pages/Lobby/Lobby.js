@@ -82,7 +82,7 @@ const Lobby = () => {
     updated_at: eventUpdatedAt,
   } = event
   const { id: userId } = user
-  const isEventHost = host_id === userId
+  const isEventHost = host_id && host_id === userId
   const hasCheckedCamera = useRef()
   // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   useGetCameraAndMicStatus(hasCheckedCamera.current)
@@ -188,6 +188,7 @@ const Lobby = () => {
             eventStatus={eventStatus}
             setUserEventStatus={useCallback(setUserEventStatus, [])}
           />
+
           <EventChatBox
             eventStatus={eventStatus}
             isEventHost={isEventHost}

@@ -15,6 +15,15 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
   },
+  hideForUsers: {
+    width: '100%',
+    height: '82%',
+    borderRadius: '4px',
+    border: '2px solid #3e4042',
+    boxShadow: '5px 5px 0 #3e4042',
+    backgroundColor: theme.palette.common.greyCard,
+    visibility: 'hidden',
+  },
   chatBox: {
     height: '90%',
     overflowY: 'auto',
@@ -87,7 +96,12 @@ const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineUsers }) => {
   }
 
   return (
-    <Grid container direction="column" justify="space-around" className={classes.container}>
+    <Grid
+      container
+      direction="column"
+      justify="space-around"
+      className={isEventHost ? classes.container : classes.hideForUsers}
+    >
       <Grid
         container
         wrap="nowrap"
