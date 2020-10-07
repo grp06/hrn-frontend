@@ -2,7 +2,10 @@ import gql from 'graphql-tag'
 
 const getAllMyConnections = gql`
   subscription getAllMyConnections($user_id: Int!) {
-    partners(where: { user_id: { _eq: $user_id }, partner_shared_details: { _eq: true } }) {
+    partners(
+      where: { user_id: { _eq: $user_id }, partner_shared_details: { _eq: true } }
+      distinct_on: partner_id
+    ) {
       userByPartnerId {
         name
         city
