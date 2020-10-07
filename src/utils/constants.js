@@ -17,7 +17,7 @@ const constants = {
     'https://support.google.com/chrome/answer/2693767?co=GENIE.Platform%3DDesktop&hl=en',
   safariCameraPermissionHowTo:
     'https://support.apple.com/guide/safari/customize-settings-per-website-ibrw7f78f7fe/13.0/mac/10.15',
-  bannedUserIds: [3744, 2329],
+  bannedUserIds: [3477, 2329],
 }
 
 export default constants
