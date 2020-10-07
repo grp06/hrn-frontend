@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineUsers }) => {
   const classes = useStyles()
-  const [chatBoxStatus, setChatBoxStatus] = useState('chat')
+  const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
 
   const handleChatboxStatusToggle = (e) => {
     console.log('value', e.currentTarget.value)
