@@ -35,6 +35,12 @@ const useUserContext = () => {
     })
   }
 
+  const setUserInEvent = (boolean) => {
+    dispatch((draft) => {
+      draft.userInEvent = boolean
+    })
+  }
+
   const updateUserObject = (userObject) => {
     dispatch((draft) => {
       draft.user.name = userObject.name
@@ -50,6 +56,7 @@ const useUserContext = () => {
     setUsersTags,
     setUserUpdatedAt,
     updateUserObject,
+    setUserInEvent,
   }
 }
 

@@ -9,6 +9,7 @@ const UserContext = React.createContext()
 
 const defaultState = {
   user: {},
+  userInEvent: false,
 }
 
 const UserProvider = ({ children }) => {
@@ -16,12 +17,16 @@ const UserProvider = ({ children }) => {
   const { setAppLoading } = useAppContext()
   const history = useHistory()
   const { userId } = state.user
+  const { pathname } = window.location
+
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
   const setNewPasswordPageRegex = /set-new-password/
-  const userOnSpecificEventPage = Boolean(window.location.pathname.match(specificEventPageRegex))
-  const userOnEventsPage = Boolean(window.location.pathname.match(eventsPageRegex))
-  const userOnSetNewPasswordPage = Boolean(window.location.pathname.match(setNewPasswordPageRegex))
+
+  const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
+  const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
+  const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
+  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
 
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
@@ -34,6 +39,7 @@ const UserProvider = ({ children }) => {
       if (userData.users.length) {
         dispatch((draft) => {
           draft.user = userData.users[0]
+          draft.userInEvent = userInEvent
         })
         return setAppLoading(false)
       }

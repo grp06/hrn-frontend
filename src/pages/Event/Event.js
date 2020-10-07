@@ -53,7 +53,6 @@ const Event = ({ match }) => {
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
   // used as a safety check for when we get thumbs up data

@@ -12,8 +12,8 @@ const EventStatusRedirect = ({
   const now = Date.now()
   const startTime = new Date(start_at).getTime()
   const diff = startTime - now
+
   if (eventSet && userId && isEventParticipant && !micOrCameraIsDisabled) {
-    console.log('micOrCameraIsDisabled', micOrCameraIsDisabled)
     // push user to lobby if time is less than 15 mins.
     if (diff < 900000) {
       return <Redirect to={`/events/${event.id}/lobby`} />

@@ -69,7 +69,7 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { event, permissions } = useEventContext()
-  const { user } = useUserContext()
+  const { user, userInEvent, setUserInEvent } = useUserContext()
   const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
   const {
     current_round: round,
@@ -101,6 +101,10 @@ const Lobby = () => {
         eventStatus === 'room-in-progress') ||
       eventStatus === 'not-started',
   })
+
+  useEffect(() => {
+    setUserInEvent(true)
+  }, [])
 
   useEffect(() => {
     if (getTimeUntilEvent(eventStartTime) > 900000) {

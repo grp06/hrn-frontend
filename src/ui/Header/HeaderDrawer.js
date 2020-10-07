@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderDrawer = () => {
   const classes = useStyles()
-  const { user } = useUserContext()
+  const { user, userInEvent } = useUserContext()
   const { id: userId } = user
   const [openDrawer, setOpenDrawer] = useState(false)
   const { pathname } = window.location
@@ -54,8 +54,6 @@ const HeaderDrawer = () => {
       pathname.includes('set-new-password') ||
       pathname.includes('onboarding')
   )
-
-  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
