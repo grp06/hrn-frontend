@@ -31,7 +31,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     }
     // needs to match round_interval on the backend
     // this is for in-between-rounds
-    return 15000
+    return 20000
   }
 
   const getTimeElapsedInRoundAlready = () => {
@@ -82,8 +82,8 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         const newPct = oldVal + getOneSecondInPct()
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
-          const isLastTwentySecs = oneRoundInMs - timeRightNow < 20000
-          if (isLastTwentySecs) {
+          const isLast15Seconds = oneRoundInMs - timeRightNow < 15000
+          if (isLast15Seconds) {
             setShow20SecondsLeftSnack(true)
             setShowRoundStartedSnack(false)
           }
@@ -118,9 +118,9 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         open={show20SecondsLeftSnack}
         onClose={() => setShow20SecondsLeftSnack(false)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        duration={20000}
+        duration={15000}
         severity="error"
-        snackMessage="20 seconds left!"
+        snackMessage="15 seconds left!"
       />
       <LinearProgress variant="determinate" value={progressBarValue} />
     </Grid>
