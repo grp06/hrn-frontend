@@ -52,7 +52,7 @@ const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { event, resetEvent } = useEventContext()
-  const { user } = useUserContext()
+  const { user, setUserInEvent } = useUserContext()
   const { id: userId } = user
 
   const history = useHistory()
@@ -70,6 +70,7 @@ const EventComplete = ({ match }) => {
   })
 
   useEffect(() => {
+    setUserInEvent(false)
     return () => {
       resetEvent()
     }
