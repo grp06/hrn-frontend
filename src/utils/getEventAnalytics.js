@@ -14,7 +14,7 @@ const getMutualThumbsInEvent = (event) => {
 
 const getTotalDropOffsInEvent = (event) => {
   if (!event.partners || !event.partners.length) {
-    return null
+    return 0
   }
   // const numberOfRounds = event.rounds[event.rounds.length - 1].round_number
   // const firstRound = event.rounds.filter((round) => round.round_number === 1)

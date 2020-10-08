@@ -133,8 +133,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.detailsHeading}>
-              Drop Offs:
-              {numberOfDropOffsInEvent}
+              Drop Offs: {numberOfDropOffsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
