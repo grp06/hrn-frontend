@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 import { updatePartnerRating } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { Snack } from '../../common'
+import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   emoji: {
@@ -67,10 +68,11 @@ const useStyles = makeStyles((theme) => ({
 
 const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const classes = useStyles()
+  const { event } = useEventContext()
+  const { current_round, num_rounds } = event
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
-
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
   const handleUpdateRating = async (ratingValue) => {
@@ -97,6 +99,121 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     setUserEventStatus('sitting out')
   }
 
+  const renderRating = () => {
+    return (
+      <>
+        <Typography variant="h4" className={classes.messageText}>
+          Hope you had a great chat!
+        </Typography>
+        <Typography variant="h4" className={classes.messageText}>
+          Would you be excited to match with this person in a future event?
+        </Typography>
+        <Typography variant="subtitle1">
+          (Don&apos;t worry, this will stay just between us!)
+        </Typography>
+        <Grid
+          container
+          justify="space-around"
+          alignItems="center"
+          className={classes.buttonContainer}
+        >
+          <Fab disableRipple onClick={() => handleUpdateRating(1)} className={classes.fabButton}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.fabButtonGrid}
+            >
+              <span className={classes.emoji} role="img" aria-label="woman no">
+                🙅‍♀️
+              </span>
+              <Typography variant="subtitle2" className={classes.fabText}>
+                No..
+              </Typography>
+            </Grid>
+          </Fab>
+          <Fab disableRipple onClick={() => handleUpdateRating(3)} className={classes.fabButton}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.fabButtonGrid}
+            >
+              <span className={classes.emoji} role="img" aria-label="woman shrug">
+                🤷‍♀️
+              </span>
+              <Typography variant="subtitle2" className={classes.fabText}>
+                Maybe?
+              </Typography>
+            </Grid>
+          </Fab>
+          <Fab disableRipple onClick={() => handleUpdateRating(5)} className={classes.fabButton}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.fabButtonGrid}
+            >
+              <span className={classes.emoji} role="img" aria-label="woman hand out">
+                💁‍♀️
+              </span>
+              <Typography variant="subtitle2" className={classes.fabText}>
+                Yes!
+              </Typography>
+            </Grid>
+          </Fab>
+        </Grid>
+      </>
+    )
+  }
+
+  const renderBreak = () => {
+    return (
+      <>
+        <Typography className={classes.messageText}>
+          Awesome! Hold tight as we&apos;re matching you with someone awesome really soon{' '}
+          <span role="img" aria-label="sunglass smiley">
+            😎
+          </span>
+        </Typography>
+        <Typography className={classes.messageText}>
+          If you need a break, just press the button below!
+        </Typography>
+        <Button variant="contained" color="primary" onClick={handleTakeABreak}>
+          Take a break
+        </Button>
+      </>
+    )
+  }
+
+  const renderEventFinish = () => {
+    return (
+      <>
+        <Typography className={classes.messageText}>
+          Awesome! Thanks for joining the event!{' '}
+          <span role="img" aria-label="sunglass smiley">
+            😎
+          </span>
+        </Typography>
+      </>
+    )
+  }
+
+  const renderPostChatRating = () => {
+    if (!!showRatingForm) {
+      return renderRating()
+    } else {
+      if (current_round == num_rounds) {
+        return renderEventFinish()
+      } else {
+        return renderBreak()
+      }
+    }
+  }
+
   return (
     <div className={classes.pageContainer}>
       <Grid
@@ -106,101 +223,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
         alignItems="center"
         className={classes.ratingContainer}
       >
-        {showRatingForm ? (
-          <>
-            <Typography variant="h4" className={classes.messageText}>
-              Hope you had a great chat!
-            </Typography>
-            <Typography variant="h4" className={classes.messageText}>
-              Would you be excited to match with this person in a future event?
-            </Typography>
-            <Typography variant="subtitle1">
-              (Don&apos;t worry, this will stay just between us!)
-            </Typography>
-            <Grid
-              container
-              justify="space-around"
-              alignItems="center"
-              className={classes.buttonContainer}
-            >
-              <Fab
-                disableRipple
-                onClick={() => handleUpdateRating(1)}
-                className={classes.fabButton}
-              >
-                <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.fabButtonGrid}
-                >
-                  <span className={classes.emoji} role="img" aria-label="woman no">
-                    🙅‍♀️
-                  </span>
-                  <Typography variant="subtitle2" className={classes.fabText}>
-                    No..
-                  </Typography>
-                </Grid>
-              </Fab>
-              <Fab
-                disableRipple
-                onClick={() => handleUpdateRating(3)}
-                className={classes.fabButton}
-              >
-                <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.fabButtonGrid}
-                >
-                  <span className={classes.emoji} role="img" aria-label="woman shrug">
-                    🤷‍♀️
-                  </span>
-                  <Typography variant="subtitle2" className={classes.fabText}>
-                    Maybe?
-                  </Typography>
-                </Grid>
-              </Fab>
-              <Fab
-                disableRipple
-                onClick={() => handleUpdateRating(5)}
-                className={classes.fabButton}
-              >
-                <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.fabButtonGrid}
-                >
-                  <span className={classes.emoji} role="img" aria-label="woman hand out">
-                    💁‍♀️
-                  </span>
-                  <Typography variant="subtitle2" className={classes.fabText}>
-                    Yes!
-                  </Typography>
-                </Grid>
-              </Fab>
-            </Grid>
-          </>
-        ) : (
-          <>
-            <Typography className={classes.messageText}>
-              Awesome! Hold tight as we&apos;re matching you with someone awesome really soon{' '}
-              <span role="img" aria-label="sunglass smiley">
-                😎
-              </span>
-            </Typography>
-            <Typography className={classes.messageText}>
-              If you need a break, just press the button below!
-            </Typography>
-            <Button variant="contained" color="primary" onClick={handleTakeABreak}>
-              Take a break
-            </Button>
-          </>
-        )}
+        {renderPostChatRating()}
         <Snack
           open={showRatingSnack}
           onClose={() => setShowRatingSnack(false)}

@@ -31,7 +31,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     }
     // needs to match round_interval on the backend
     // this is for in-between-rounds
-    return 20000
+    return 15000
   }
 
   const getTimeElapsedInRoundAlready = () => {
