@@ -39,6 +39,13 @@ const EventProvider = ({ children }) => {
   })
 
   useEffect(() => {
+    if (event.status === 'in-between-rounds' && window.room) {
+      console.log('disconnecting from rooM!!!!')
+      window.room.disconnect()
+    }
+  }, [event.status])
+
+  useEffect(() => {
     // if on event page and its a valid event
     if (userOnEventPage && eventData) {
       // event doesn't exist - redirect user
