@@ -4,9 +4,9 @@ import { constants } from '../utils'
 
 const useTwilio = () => {
   const {
+    setHasPartnerAndIsConnecting,
     setPartnerDisconnected,
     setPartnerNeverConnected,
-    setHasPartnerAndIsConnecting,
   } = useTwilioContext()
   const { setUserEventStatus } = useUserEventStatusContext()
   const { partnerCameraIssueTimeout } = constants

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
-import { useUserContext, useAppContext, useEventContext } from '.'
+import { useUserContext, useEventContext } from '.'
 import { updateLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToOnlineEventUsers } from '../gql/subscriptions'
@@ -28,7 +28,7 @@ const defaultState = {
 const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { userEventStatus } = state
-  const { user, setUserUpdatedAt } = useUserContext()
+  const { user, setUserUpdatedAt, userInEvent } = useUserContext()
   const { event, permissions } = useEventContext()
   const { id: eventId } = event
   const { id: userId } = user
@@ -73,6 +73,7 @@ const UserEventStatusProvider = ({ children }) => {
       userId &&
       userEventStatus !== 'in chat' &&
       userEventStatus !== 'sitting out' &&
+      userInEvent &&
       !micOrCameraIsDisabled
     ) {
       const interval = setInterval(async () => {
@@ -90,7 +91,7 @@ const UserEventStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId, userEventStatus])
+  }, [userId, userEventStatus, userInEvent])
 
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>

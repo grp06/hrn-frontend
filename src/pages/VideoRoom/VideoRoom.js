@@ -76,12 +76,7 @@ const VideoRoom = ({ match }) => {
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
   const { userEventStatus, setUserEventStatus } = useUserEventStatusContext()
-  const {
-    hasPartnerAndIsConnecting,
-    setHasPartnerAndIsConnecting,
-    myRound,
-    setMyRound,
-  } = useTwilioContext()
+  const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
   const { id: userId, updated_at: userUpdatedAt } = user
   const { startTwilio } = useTwilio()
@@ -147,6 +142,7 @@ const VideoRoom = ({ match }) => {
               id: userId,
             },
           })
+          console.log('i sent the last seen mutation')
           setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
         } catch (err) {
           console.log(err)
