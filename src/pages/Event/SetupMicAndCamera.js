@@ -130,6 +130,7 @@ const SetupMicAndCamera = () => {
         console.log('getMedia -> localMediaStream', localMediaStream)
         const video = document.getElementById('videoElement')
         video.style.maxWidth = '50%'
+        video.style.transform = 'scale(-1, 1)'
         setPermissionDenied(false)
         setPermissionNotYetAllowed(false)
         setCameraAndMicPermissions({
@@ -139,16 +140,7 @@ const SetupMicAndCamera = () => {
           isWebcamAlreadyCaptured: true,
         })
         video.srcObject = localMediaStream
-        const localVideo = document.getElementsByTagName('video')[0]
 
-        localVideo.srcObject = localMediaStream
-
-        if (localVideo) {
-          localVideo.innerHTML = ''
-          const newVideoElement = document.createElement('video')
-          newVideoElement.srcObject = localMediaStream
-          localVideo.append(newVideoElement)
-        }
         video.onloadedmetadata = function (e) {
           // Do something with the video here.
         }
@@ -213,6 +205,8 @@ const SetupMicAndCamera = () => {
   const handleVideoDeviceChange = (event) => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
+    console.log('device change, update the local video')
+
     if (window.room) {
       const { localParticipant } = window.room
       const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
@@ -220,12 +214,17 @@ const SetupMicAndCamera = () => {
       ) {
         return trackPublication.track
       })
+      console.log('handleVideoDeviceChange -> tracks', tracks)
       localParticipant.unpublishTracks(tracks)
 
       Video.createLocalVideoTrack({
         deviceId: { exact: event.target.value },
       }).then(function (localVideoTrack) {
-        console.log('publish ', localVideoTrack)
+        const localDiv = document.getElementById('local-video')
+        localDiv.innerHTML = ''
+        const attachedTrack = localVideoTrack.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
+        localDiv.appendChild(attachedTrack)
         localParticipant.publishTrack(localVideoTrack)
       })
     }
