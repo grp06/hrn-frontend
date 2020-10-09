@@ -1,7 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Typography } from '@material-ui/core'
-import ChromeDinoGame from 'react-chrome-dino'
 
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
@@ -21,10 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
   dancingMan: {
     fontSize: '50px',
-  },
-  trexContainer: {
-    width: '100%',
-    height: 'auto',
   },
 }))
 
@@ -51,12 +46,6 @@ const NoPartner = () => {
         </span>
         .
       </Typography>
-      <Typography className={classes.messageText}>
-        Or press &apos;up&apos; on your keyboard to kill some time.
-      </Typography>
-      <div className={classes.trexContainer}>
-        <ChromeDinoGame />
-      </div>
     </div>
   )
 }
