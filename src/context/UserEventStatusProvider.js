@@ -41,7 +41,7 @@ const UserEventStatusProvider = ({ children }) => {
       user_id: userId,
       event_id: eventId,
     },
-    skip: !userId,
+    skip: !userId || !eventId,
   })
 
   const { data: onlineEventUsersData } = useSubscription(listenToOnlineEventUsers, {
