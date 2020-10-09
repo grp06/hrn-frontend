@@ -88,7 +88,6 @@ const VideoRoom = ({ match }) => {
   const showControls = useIsUserActive()
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
-  console.log('userEventStatus ->', userEventStatus)
   hasCheckedCamera.current = true
   const [updateLastSeenMutation] = useMutation(updateLastSeen)
   const {
@@ -155,7 +154,6 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
-      console.log('myRoundPartnerData ->', myRoundPartnerData)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
