@@ -61,7 +61,6 @@ const UserEventStatusProvider = ({ children }) => {
   // check the online user for events
   useEffect(() => {
     if (onlineEventUsersData) {
-      console.log('onlineEventUsersData ->', onlineEventUsersData)
       dispatch((draft) => {
         draft.onlineEventUsers = onlineEventUsersData
       })

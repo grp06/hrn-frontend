@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 const OnlineEventUsersList = React.memo(({ onlineEventUsers }) => {
   const classes = useStyles()
-  console.log('onlineEventUsers ->', onlineEventUsers)
 
   return onlineEventUsers && onlineEventUsers.online_event_users ? (
     <Grid container item direction="column" className={classes.attendeesList}>
