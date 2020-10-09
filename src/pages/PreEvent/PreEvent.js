@@ -7,11 +7,7 @@ import { useHistory } from 'react-router-dom'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
-import {
-  usePreEventTwilio,
-  useGetCameraAndMicStatus,
-  useGetOnlineEventAttendees,
-} from '../../hooks'
+import { usePreEventTwilio, useGetCameraAndMicStatus } from '../../hooks'
 import { constants } from '../../utils'
 
 const { maxNumUsersPerRoom } = constants
@@ -61,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const PreEvent = () => {
+const PreEvent = ({ onlineEventUsers }) => {
   // const { id: eventId } = match.params
   const classes = useStyles()
   const history = useHistory()
@@ -77,7 +73,6 @@ const PreEvent = () => {
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   const { startPreEventTwilio } = usePreEventTwilio()
-  const onlineEventAttendees = useGetOnlineEventAttendees(event)
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
@@ -243,7 +238,9 @@ const PreEvent = () => {
         <Grid container justify="center" alignItems="center" className={classes.viewersContainer}>
           <VisibilityOutlinedIcon stroke="#f4f6fa" style={{ color: '#f4f6fa' }} />
           <Typography variant="body1" className={classes.viewersNumber}>
-            {onlineEventAttendees ? onlineEventAttendees.length : ' --'}
+            {onlineEventUsers && onlineEventUsers.online_event_users
+              ? onlineEventUsers.online_event_users.length
+              : '--'}
           </Typography>
         </Grid>
       </Grid>
