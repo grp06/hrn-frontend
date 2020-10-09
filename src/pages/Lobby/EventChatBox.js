@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineUsers }) => {
+const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineEventUsers }) => {
   const classes = useStyles()
   const [chatBoxStatus, setChatBoxStatus] = useState('onlineUsers')
 
@@ -91,7 +91,7 @@ const EventChatBox = React.memo(({ eventStatus, isEventHost, onlineUsers }) => {
         </Typography>
       </Grid>
     ) : (
-      <div style={{ height: '100%' }}>{onlineUsers}</div>
+      <div style={{ height: '100%' }}>{onlineEventUsers}</div>
     )
   }
 

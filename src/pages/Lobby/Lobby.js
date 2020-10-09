@@ -15,7 +15,7 @@ import {
   EventChatBox,
   EventTimerCountdown,
   NextRoundIn,
-  OnlineUsersList,
+  OnlineEventUsersList,
 } from '.'
 
 // the overflow hidden in broadcastContainer is to help hide the scrollbar
@@ -171,7 +171,7 @@ const Lobby = () => {
           <BroadcastBox
             event={event}
             isEventHost={isEventHost}
-            onlineUsers={onlineEventUsers}
+            onlineEventUsers={onlineEventUsers}
             setUserEventStatus={useCallback(setUserEventStatus, [])}
             userEventStatus={userEventStatus}
           />
@@ -186,7 +186,7 @@ const Lobby = () => {
           <EventChatBox
             eventStatus={eventStatus}
             isEventHost={isEventHost}
-            onlineUsers={<OnlineUsersList onlineUsers={onlineEventUsers} />}
+            onlineEventUsers={<OnlineEventUsersList onlineEventUsers={onlineEventUsers} />}
           />
         </Grid>
       </Grid>

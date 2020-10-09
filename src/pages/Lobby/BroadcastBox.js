@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const BroadcastBox = React.memo(
-  ({ event, isEventHost, onlineUsers, setUserEventStatus, userEventStatus }) => {
+  ({ event, isEventHost, onlineEventUsers, setUserEventStatus, userEventStatus }) => {
     const classes = useStyles()
     const { start_at, description, event_name, status: eventStatus, host, event_users } = event
 
@@ -139,8 +139,8 @@ const BroadcastBox = React.memo(
                         Online /
                       </Typography>
                       <Typography variant="h6" className={classes.pinkNumber}>
-                        {onlineUsers && onlineUsers.online_users
-                          ? onlineUsers.online_users.length
+                        {onlineEventUsers && onlineEventUsers.online_event_users
+                          ? onlineEventUsers.online_event_users.length
                           : '--'}
                       </Typography>
                     </Grid>

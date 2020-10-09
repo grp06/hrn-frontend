@@ -4,7 +4,7 @@ import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 import { useUserContext, useEventContext } from '.'
-import { updateLastSeen } from '../gql/mutations'
+import { updateEventUsersLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToOnlineEventUsers } from '../gql/subscriptions'
 
@@ -35,10 +35,11 @@ const UserEventStatusProvider = ({ children }) => {
   const history = useHistory()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
-  const [updateLastSeenMutation] = useMutation(updateLastSeen, {
+  const [updateEventUsersLastSeenMutation] = useMutation(updateEventUsersLastSeen, {
     variables: {
       now: new Date().toISOString(),
-      id: userId,
+      user_id: userId,
+      event_id: eventId,
     },
     skip: !userId,
   })
@@ -60,6 +61,7 @@ const UserEventStatusProvider = ({ children }) => {
   // check the online user for events
   useEffect(() => {
     if (onlineEventUsersData) {
+      console.log('onlineEventUsersData ->', onlineEventUsersData)
       dispatch((draft) => {
         draft.onlineEventUsers = onlineEventUsersData
       })
@@ -68,7 +70,6 @@ const UserEventStatusProvider = ({ children }) => {
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
-    console.log('userEventStatus ->', userEventStatus)
     if (
       userId &&
       userEventStatus !== 'in chat' &&
@@ -78,11 +79,10 @@ const UserEventStatusProvider = ({ children }) => {
     ) {
       const interval = setInterval(async () => {
         console.log('last seen')
-        console.log('userEventStatus ->', userEventStatus)
         try {
           if (!bannedUserIds.includes(userId)) {
-            const lastSeenUpdated = await updateLastSeenMutation()
-            setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+            const lastSeenUpdated = await updateEventUsersLastSeenMutation()
+            setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].last_seen)
           }
         } catch (error) {
           console.log('interval -> error', error)

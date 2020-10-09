@@ -19,16 +19,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const OnlineUsersList = React.memo(({ onlineUsers }) => {
+const OnlineEventUsersList = React.memo(({ onlineEventUsers }) => {
   const classes = useStyles()
+  console.log('onlineEventUsers ->', onlineEventUsers)
 
-  return onlineUsers && onlineUsers.online_users ? (
+  return onlineEventUsers && onlineEventUsers.online_event_users ? (
     <Grid container item direction="column" className={classes.attendeesList}>
       <List dense>
-        {onlineUsers.online_users
-          .sort((userA, userB) => userA.name.toLowerCase().localeCompare(userB.name.toLowerCase()))
+        {onlineEventUsers.online_event_users
+          .sort((userA, userB) => {
+            return userA.user[0].name.toLowerCase().localeCompare(userB.user[0].name.toLowerCase())
+          })
           .map((user) => {
-            const firstName = user.name.split(' ')[0]
+            const firstName = user.user[0].name.split(' ')[0]
             return (
               <ListItem key={user.id}>
                 <ListItemAvatar>
@@ -54,4 +57,4 @@ const OnlineUsersList = React.memo(({ onlineUsers }) => {
   )
 })
 
-export default OnlineUsersList
+export default OnlineEventUsersList
