@@ -5,12 +5,13 @@ import { Typography } from '@material-ui/core'
 const useStyles = makeStyles((theme) => ({
   waitingRoom: {
     width: '100%',
-    height: '100%',
+    height: '90%',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
     marginTop: '2%',
+    overflowY: 'hidden',
     [theme.breakpoints.down('md')]: {
       marginTop: '10%',
     },

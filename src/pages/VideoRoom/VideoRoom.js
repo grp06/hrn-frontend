@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
 import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
-import { UserStatusBox } from '../Lobby'
 import { Loading } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateLastSeen } from '../../gql/mutations'

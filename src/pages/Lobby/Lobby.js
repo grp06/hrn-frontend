@@ -16,7 +16,6 @@ import {
   EventTimerCountdown,
   NextRoundIn,
   OnlineUsersList,
-  UserStatusBox,
 } from '.'
 
 // the overflow hidden in broadcastContainer is to help hide the scrollbar
@@ -173,6 +172,7 @@ const Lobby = () => {
             event={event}
             isEventHost={isEventHost}
             onlineUsers={onlineEventUsers}
+            setUserEventStatus={useCallback(setUserEventStatus, [])}
             userEventStatus={userEventStatus}
           />
           <BottomControlPanel permissions={permissions} event={event} userId={userId} />
@@ -183,12 +183,6 @@ const Lobby = () => {
           justify="space-around"
           className={classes.rightContainer}
         >
-          <UserStatusBox
-            userEventStatus={userEventStatus}
-            eventStatus={eventStatus}
-            setUserEventStatus={useCallback(setUserEventStatus, [])}
-          />
-
           <EventChatBox
             eventStatus={eventStatus}
             isEventHost={isEventHost}

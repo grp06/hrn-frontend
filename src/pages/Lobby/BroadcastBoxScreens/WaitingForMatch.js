@@ -7,12 +7,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    height: '100vh',
+    height: '90%',
     alignItems: 'center',
     flexDirection: 'column',
     marginTop: '2%',
+    overflowY: 'hidden',
     [theme.breakpoints.down('md')]: {
-      marginTop: '5%',
+      marginTop: '10%',
     },
   },
   messageText: {

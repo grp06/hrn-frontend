@@ -58,120 +58,122 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BroadcastBox = React.memo(({ event, isEventHost, onlineUsers, userEventStatus }) => {
-  const classes = useStyles()
-  const { start_at, description, event_name, status: eventStatus, host, event_users } = event
+const BroadcastBox = React.memo(
+  ({ event, isEventHost, onlineUsers, setUserEventStatus, userEventStatus }) => {
+    const classes = useStyles()
+    const { start_at, description, event_name, status: eventStatus, host, event_users } = event
 
-  const editFormModal = TransitionModal({
-    modalBody: <EventForm eventData={event} />,
-    iconButton: {
-      iconButtonIcon: <EditIcon style={{ color: '#f4f6fa', fontSize: '32px' }} />,
-    },
-  })
+    const editFormModal = TransitionModal({
+      modalBody: <EventForm eventData={event} />,
+      iconButton: {
+        iconButtonIcon: <EditIcon style={{ color: '#f4f6fa', fontSize: '32px' }} />,
+      },
+    })
 
-  const renderBroadcastBoxContent = () => {
-    switch (eventStatus) {
-      case 'not-started':
-        return (
-          <Grid container justify="flex-end" direction="column" wrap="nowrap">
-            <Grid container direction="column" className={classes.eventInfoContainer}>
-              <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
-                <Grid container justify="flex-start" alignItems="center">
-                  <Typography variant="h3" className={classes.eventName}>
-                    {event_name}
-                  </Typography>
-                  {isEventHost && editFormModal}
-                </Grid>
-                <Grid item container direction="row" alignItems="center">
-                  <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
-                  <Typography variant="subtitle1" style={{ paddingLeft: '8px' }}>
-                    {formatDate(start_at)}
-                  </Typography>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  alignItems="center"
-                  className={classes.hostNameAndEventUsersContainer}
-                  style={{ width: '75%' }}
-                >
-                  <Grid
-                    container
-                    item
-                    direction="column"
-                    justify="center"
-                    alignItems="flex-start"
-                    xs={4}
-                  >
-                    <Typography variant="subtitle1" className={classes.subtitle}>
-                      Hosted By /
+    const renderBroadcastBoxContent = () => {
+      switch (eventStatus) {
+        case 'not-started':
+          return (
+            <Grid container justify="flex-end" direction="column" wrap="nowrap">
+              <Grid container direction="column" className={classes.eventInfoContainer}>
+                <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
+                  <Grid container justify="flex-start" alignItems="center">
+                    <Typography variant="h3" className={classes.eventName}>
+                      {event_name}
                     </Typography>
-                    <Typography variant="h6" className={classes.hostName}>
-                      {host && host.name}
+                    {isEventHost && editFormModal}
+                  </Grid>
+                  <Grid item container direction="row" alignItems="center">
+                    <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
+                    <Typography variant="subtitle1" style={{ paddingLeft: '8px' }}>
+                      {formatDate(start_at)}
                     </Typography>
                   </Grid>
                   <Grid
                     container
-                    item
-                    direction="column"
-                    justify="center"
-                    alignItems="flex-start"
-                    xs={4}
+                    direction="row"
+                    justify="space-between"
+                    alignItems="center"
+                    className={classes.hostNameAndEventUsersContainer}
+                    style={{ width: '75%' }}
                   >
-                    <Typography variant="subtitle1" className={classes.subtitle}>
-                      RSVP'ed /
-                    </Typography>
-                    <Typography variant="h6" className={classes.pinkNumber}>
-                      {event_users.length}
-                    </Typography>
+                    <Grid
+                      container
+                      item
+                      direction="column"
+                      justify="center"
+                      alignItems="flex-start"
+                      xs={4}
+                    >
+                      <Typography variant="subtitle1" className={classes.subtitle}>
+                        Hosted By /
+                      </Typography>
+                      <Typography variant="h6" className={classes.hostName}>
+                        {host && host.name}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      container
+                      item
+                      direction="column"
+                      justify="center"
+                      alignItems="flex-start"
+                      xs={4}
+                    >
+                      <Typography variant="subtitle1" className={classes.subtitle}>
+                        RSVP'ed /
+                      </Typography>
+                      <Typography variant="h6" className={classes.pinkNumber}>
+                        {event_users.length}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      container
+                      item
+                      direction="column"
+                      justify="center"
+                      alignItems="flex-start"
+                      xs={4}
+                    >
+                      <Typography variant="subtitle1" className={classes.subtitle}>
+                        Online /
+                      </Typography>
+                      <Typography variant="h6" className={classes.pinkNumber}>
+                        {onlineUsers && onlineUsers.online_users
+                          ? onlineUsers.online_users.length
+                          : '--'}
+                      </Typography>
+                    </Grid>
                   </Grid>
                   <Grid
                     container
                     item
-                    direction="column"
-                    justify="center"
-                    alignItems="flex-start"
-                    xs={4}
+                    direction="row"
+                    alignItems="center"
+                    style={{ marginBottom: '24px' }}
                   >
-                    <Typography variant="subtitle1" className={classes.subtitle}>
-                      Online /
-                    </Typography>
-                    <Typography variant="h6" className={classes.pinkNumber}>
-                      {onlineUsers && onlineUsers.online_users
-                        ? onlineUsers.online_users.length
-                        : '--'}
-                    </Typography>
+                    <Typography variant="subtitle1">{description}</Typography>
                   </Grid>
-                </Grid>
-                <Grid
-                  container
-                  item
-                  direction="row"
-                  alignItems="center"
-                  style={{ marginBottom: '24px' }}
-                >
-                  <Typography variant="subtitle1">{description}</Typography>
                 </Grid>
               </Grid>
+              <div className={classes.eventBreakdownContainer}>
+                <EventBreakdownStepper endMessage="You are all set, sit back and wait for the host to start the event!" />
+              </div>
             </Grid>
-            <div className={classes.eventBreakdownContainer}>
-              <EventBreakdownStepper endMessage="You are all set, sit back and wait for the host to start the event!" />
-            </div>
-          </Grid>
-        )
-      case 'pre-event':
-        return <PreEvent />
-      case 'room-in-progress':
-        return getBroadcastBoxElement(userEventStatus)
-      case 'in-between-rounds':
-        return getBroadcastBoxElement(userEventStatus)
-      default:
-        return null
+          )
+        case 'pre-event':
+          return <PreEvent />
+        case 'room-in-progress':
+          return getBroadcastBoxElement(setUserEventStatus, userEventStatus)
+        case 'in-between-rounds':
+          return getBroadcastBoxElement(setUserEventStatus, userEventStatus)
+        default:
+          return null
+      }
     }
-  }
 
-  return <div className={classes.boxContainer}>{renderBroadcastBoxContent()}</div>
-})
+    return <div className={classes.boxContainer}>{renderBroadcastBoxContent()}</div>
+  }
+)
 
 export default BroadcastBox
