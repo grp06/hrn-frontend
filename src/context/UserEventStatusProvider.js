@@ -78,6 +78,7 @@ const UserEventStatusProvider = ({ children }) => {
     ) {
       const interval = setInterval(async () => {
         console.log('last seen')
+        console.log('userEventStatus ->', userEventStatus)
         try {
           if (!bannedUserIds.includes(userId)) {
             const lastSeenUpdated = await updateLastSeenMutation()

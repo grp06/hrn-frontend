@@ -88,6 +88,7 @@ const VideoRoom = ({ match }) => {
   const showControls = useIsUserActive()
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
+  console.log('userEventStatus ->', userEventStatus)
   hasCheckedCamera.current = true
   const [updateLastSeenMutation] = useMutation(updateLastSeen)
   const {
