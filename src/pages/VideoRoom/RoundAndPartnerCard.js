@@ -41,10 +41,10 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
 
   const getPartnerCity = () => {
     return (
-      myRound.userByPartnerId &&
-      myRound.userByPartnerId.city && (
+      myRound.partner &&
+      myRound.partner.city && (
         <Typography variant="subtitle1" className={classes.partnerName}>
-          {myRound.userByPartnerId.city}
+          {myRound.partner.city}
         </Typography>
       )
     )
@@ -52,10 +52,10 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
 
   const getPartnerName = () => {
     return (
-      myRound.userByPartnerId &&
-      myRound.userByPartnerId.name && (
+      myRound.partner &&
+      myRound.partner.name && (
         <Typography variant="h5" className={classes.partnerName}>
-          {myRound.userByPartnerId.name}
+          {myRound.partner.name}
         </Typography>
       )
     )
