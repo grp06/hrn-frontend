@@ -50,7 +50,7 @@ const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
 
   const { user } = useUserContext()
-  const { id: userId, role } = user
+  const { id: user_id, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState(
@@ -69,7 +69,7 @@ const EventForm = ({ eventData, match }) => {
       description,
       event_name: title,
       start_at: selectedDate,
-      host_id: userId,
+      host_id: user_id,
       public_event: isEventPublic,
       round_length: roundLength,
       num_rounds: numRounds,
@@ -103,11 +103,11 @@ const EventForm = ({ eventData, match }) => {
   }, [eventData])
 
   // REDIRECTS
-  if (userId && role !== 'host') {
+  if (user_id && role !== 'host') {
     return <Redirect to="/events" />
   }
 
-  if (!userId) {
+  if (!user_id) {
     return <Redirect to="/" />
   }
 
@@ -153,8 +153,8 @@ const EventForm = ({ eventData, match }) => {
       try {
         await insertEventUserMutation({
           variables: {
-            eventId: id,
-            userId,
+            event_id: id,
+            user_id,
           },
         })
       } catch (error) {

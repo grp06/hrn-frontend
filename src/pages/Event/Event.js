@@ -2,22 +2,25 @@ import React, { useEffect, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
-import { AdminPanel, UserPanel, EventStatusRedirect, EventNotRSVP } from '.'
+import { AdminPanel, UserPanel, EventStatusRedirect, EventCantRSVP, EventTitleAndCTACard } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
-import { formatDate, getTimeUntilEvent } from '../../utils'
+import { getTimeUntilEvent } from '../../utils'
 import { useGetCameraAndMicStatus } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
     background:
       'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+    height: 'auto',
+    minHeight: '55vh',
     width: '100%',
-    height: '100%',
+    position: 'absolute',
+    top: '0%',
+    bottom: 'auto',
   },
   eventBanner: {
     width: '100%',
@@ -29,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
     zIndex: '-3',
     marginBottom: '80px',
   },
-  eventBannerContentContainer: {
-    paddingTop: '40vh',
-    marginLeft: '30px',
+  eventContentContainer: {
+    width: '75vw',
+    maxWidth: '1560px',
+    margin: theme.spacing(0, 'auto'),
   },
   subtitle: {
     margin: theme.spacing(1),
@@ -50,6 +54,7 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { permissions, event, setEventId } = useEventContext()
   const { id: userId } = user
+  const { host_id, start_at, description, status: eventStatus } = event
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
@@ -71,8 +76,6 @@ const Event = ({ match }) => {
 
   const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
 
-  const { host_id, start_at, event_name, description, status: eventStatus } = event
-  const startTime = new Date(start_at).getTime()
   const timeUntilEvent = getTimeUntilEvent(start_at)
 
   const timeState = () => {
@@ -87,7 +90,7 @@ const Event = ({ match }) => {
 
   let eventInstruction
   if (eventStatus === 'complete') {
-    eventInstruction = <EventNotRSVP />
+    eventInstruction = <EventCantRSVP />
   } else {
     eventInstruction =
       parseInt(host_id, 10) === parseInt(userId, 10) ? (
@@ -106,32 +109,21 @@ const Event = ({ match }) => {
         eventSet={eventSet}
         event={event}
       />
-      <div className={classes.eventBanner}>
-        <Grid container direction="column" justify="flex-end" className={classes.bannerGradient}>
-          <Grid
-            item
-            container
-            direction="column"
-            justify="flex-start"
-            md={12}
-            xs={12}
-            className={classes.eventBannerContentContainer}
-          >
-            <Typography variant="h3">{event_name}</Typography>
-            <Grid item container direction="row" alignItems="center">
-              <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
-              <Typography variant="subtitle1" className={classes.subtitle}>
-                {formatDate(startTime)}
-              </Typography>
-            </Grid>
-            <Grid item container direction="row" alignItems="center">
-              <Typography variant="subtitle1" className={classes.subtitle}>
-                {description}
-              </Typography>
-            </Grid>
-          </Grid>
+      <div className={classes.eventBanner} />
+      <div className={classes.bannerGradient} />
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        className={classes.eventContentContainer}
+      >
+        <EventTitleAndCTACard event={event} user={user} />
+        <Grid item container direction="row" alignItems="center">
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            {description}
+          </Typography>
         </Grid>
-      </div>
+      </Grid>
       {eventInstruction}
     </>
   )

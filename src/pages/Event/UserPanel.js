@@ -84,6 +84,7 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
     },
     skip: !userId || !eventId,
   })
+
   const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
       eventId,
