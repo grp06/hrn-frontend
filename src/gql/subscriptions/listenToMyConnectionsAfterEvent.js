@@ -13,7 +13,7 @@ const getMyConnectionAfterEvent = gql`
       partner_shared_details
       partner_id
       user_id
-      userByPartnerId {
+      partner {
         city
         email
         linkedIn_url

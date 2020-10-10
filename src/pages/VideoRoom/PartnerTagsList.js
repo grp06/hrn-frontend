@@ -19,7 +19,7 @@ const PartnerTagsList = ({ myRound, userId }) => {
   const remoteVideoDiv = document.getElementById('remote-video')
   const partnerVideoDivExists = remoteVideoDiv && remoteVideoDiv.innerHTML
 
-  return partnerVideoDivExists && myRound.userByPartnerId.tags_users.length > 0 ? (
+  return partnerVideoDivExists && myRound.partner.tags_users.length > 0 ? (
     <Grid
       container
       direction="row"
@@ -28,7 +28,7 @@ const PartnerTagsList = ({ myRound, userId }) => {
       wrap="wrap"
       className={classes.tagsContainer}
     >
-      {myRound.userByPartnerId.tags_users
+      {myRound.partner.tags_users
         .sort((tagA, tagB) => {
           return tagA.tag.name.length < tagB.tag.name.length
         })
