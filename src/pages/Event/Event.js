@@ -5,7 +5,14 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
-import { AdminPanel, UserPanel, EventStatusRedirect, EventCantRSVP, EventTitleAndCTACard } from '.'
+import {
+  AdminPanel,
+  UserPanel,
+  EventStatusRedirect,
+  EventCantRSVP,
+  EventTitleAndCTACard,
+  HostAndEventDescCard,
+} from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { getTimeUntilEvent } from '../../utils'
@@ -14,7 +21,7 @@ import { useGetCameraAndMicStatus } from '../../hooks'
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
     background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
     height: 'auto',
     minHeight: '55vh',
     width: '100%',
@@ -33,9 +40,11 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '80px',
   },
   eventContentContainer: {
+    position: 'relative',
+    zIndex: '99',
     width: '75vw',
     maxWidth: '1560px',
-    margin: theme.spacing(0, 'auto'),
+    margin: theme.spacing(-20, 'auto', 0, 'auto'),
   },
   subtitle: {
     margin: theme.spacing(1),
@@ -118,11 +127,7 @@ const Event = ({ match }) => {
         className={classes.eventContentContainer}
       >
         <EventTitleAndCTACard event={event} user={user} />
-        <Grid item container direction="row" alignItems="center">
-          <Typography variant="subtitle1" className={classes.subtitle}>
-            {description}
-          </Typography>
-        </Grid>
+        <HostAndEventDescCard event={event} />
       </Grid>
       {eventInstruction}
     </>

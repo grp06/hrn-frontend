@@ -10,8 +10,10 @@ const ghostWhite = '#f4f6fa'
 const ghostWhiteSub = '#E2E8F2'
 const ghostWhiteBody = '#D1D9EA'
 const ghostWhiteDark = '#BFCBE2'
-const bodyBlack = '#191919'
+const bodyBlack = '#000000'
+const grey5 = '#191919'
 const greyBorder = '#3e4042'
+const greySubtitle = '#BFBFBF'
 const greyCard = '#242526'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
@@ -47,12 +49,14 @@ const theme = createMuiTheme({
       ghostWhiteDark,
       independence,
       bodyBlack,
+      grey5,
       greyCard,
       greyBorder,
       greyBoxShadow,
       greyHighlight,
       greyButton,
       greyButtonHover,
+      greySubtitle,
       red,
     },
     primary: {
@@ -120,7 +124,7 @@ const theme = createMuiTheme({
     // 1REM
     subtitle1: {
       fontFamily: 'Muli',
-      color: ghostWhiteSub,
+      color: greySubtitle,
       fontWeight: '300',
     },
     subtitle2: {

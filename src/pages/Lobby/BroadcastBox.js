@@ -53,9 +53,6 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '2rem',
     lineHeight: 1,
   },
-  subtitle: {
-    color: '#BFBFBF',
-  },
 }))
 
 const BroadcastBox = React.memo(
@@ -105,9 +102,7 @@ const BroadcastBox = React.memo(
                       alignItems="flex-start"
                       xs={4}
                     >
-                      <Typography variant="subtitle1" className={classes.subtitle}>
-                        Hosted By /
-                      </Typography>
+                      <Typography variant="subtitle1">Hosted By /</Typography>
                       <Typography variant="h6" className={classes.hostName}>
                         {host && host.name}
                       </Typography>
@@ -120,9 +115,7 @@ const BroadcastBox = React.memo(
                       alignItems="flex-start"
                       xs={4}
                     >
-                      <Typography variant="subtitle1" className={classes.subtitle}>
-                        RSVP'ed /
-                      </Typography>
+                      <Typography variant="subtitle1">RSVP'ed /</Typography>
                       <Typography variant="h6" className={classes.pinkNumber}>
                         {event_users.length}
                       </Typography>
@@ -135,9 +128,7 @@ const BroadcastBox = React.memo(
                       alignItems="flex-start"
                       xs={4}
                     >
-                      <Typography variant="subtitle1" className={classes.subtitle}>
-                        Online /
-                      </Typography>
+                      <Typography variant="subtitle1">Online /</Typography>
                       <Typography variant="h6" className={classes.pinkNumber}>
                         {onlineEventUsers && onlineEventUsers.online_event_users
                           ? onlineEventUsers.online_event_users.length
