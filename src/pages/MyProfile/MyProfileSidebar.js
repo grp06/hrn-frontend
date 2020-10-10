@@ -9,16 +9,18 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn'
 import { makeStyles } from '@material-ui/styles'
 
 import { FloatCardNarrow } from '../../common'
-import logo from '../../assets/logoPurple.svg'
+import logo from '../../assets/HRNlogoNoFrame.svg'
 import { SidebarTags, EditProfileSidebarForm } from '.'
 
 const createStyles = makeStyles((theme) => ({
   avatar: {
-    width: '145px',
-    height: '145px',
+    width: '100%',
+    height: '100%',
+    marginTop: '19px',
     [theme.breakpoints.down('md')]: {
-      width: '150px',
-      height: '150px',
+      marginTop: '19px',
+      width: '100%',
+      height: '100%',
     },
   },
   avatarContainer: {
