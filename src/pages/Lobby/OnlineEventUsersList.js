@@ -22,10 +22,10 @@ const useStyles = makeStyles((theme) => ({
 const OnlineEventUsersList = React.memo(({ onlineEventUsers }) => {
   const classes = useStyles()
 
-  return onlineEventUsers && onlineEventUsers.online_event_users ? (
+  return onlineEventUsers && onlineEventUsers.length ? (
     <Grid container item direction="column" className={classes.attendeesList}>
       <List dense>
-        {onlineEventUsers.online_event_users
+        {onlineEventUsers
           .sort((userA, userB) => {
             return userA.user[0].name.toLowerCase().localeCompare(userB.user[0].name.toLowerCase())
           })
