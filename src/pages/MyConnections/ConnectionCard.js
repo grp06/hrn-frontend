@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 
 import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
 import Chip from '@material-ui/core/Chip'
 import Grid from '@material-ui/core/Grid'
 import Fab from '@material-ui/core/Fab'
@@ -15,6 +14,9 @@ import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
 
 const useStyles = makeStyles((theme) => ({
+  addFriendButtonContainer: {
+    width: '160px',
+  },
   avatar: {
     width: '100%',
     height: '100%',
@@ -82,11 +84,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
-  console.log('userId', userId)
   const classes = useStyles()
   const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
   const myRoundInfo = { event_id: eventId, partner_id: partnerId, user_id: userId }
+
+  const handleCopyEmailClick = () => {
+    window.analytics.track('Copied email')
+    copy(email)
+    return setShowCopyEmailSnack(true)
+  }
 
   const renderConnectionsTags = () => {
     return connectionsTags
@@ -126,14 +133,10 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
         )}
       </div>
     ) : (
-      <AddFriendButton myRound={myRoundInfo} />
+      <div className={classes.addFriendButtonContainer}>
+        <AddFriendButton myRound={myRoundInfo} />
+      </div>
     )
-  }
-
-  const handleCopyEmailClick = () => {
-    window.analytics.track('Copied email')
-    copy(email)
-    return setShowCopyEmailSnack(true)
   }
 
   return (

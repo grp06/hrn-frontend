@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
-import { useMutation } from '@apollo/react-hooks'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Snack } from '../../common'
 import { addFriend, updatePartnerSharedDetails } from '../../gql/mutations'
+import { didIShareDetailsInPrevEvent } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
@@ -15,12 +16,21 @@ const useStyles = makeStyles((theme) => ({
 
 const AddFriendButton = React.memo(({ myRound }) => {
   const classes = useStyles()
-  const { event_id, partner_id, user_id, i_shared_details } = myRound
-  console.log('i share detials', i_shared_details)
-  console.log('myround->>>>>>>>', myRound)
+  const { event_id, partner_id, user_id } = myRound
 
   const [addedAsFriend, setAddedAsFriend] = useState(false)
   const [showAddedAsFriendSnack, setShowAddedAsFriendSnack] = useState(false)
+
+  const [getSharedDetailsInPrevEventData, { data: sharedDetailsInPrevEventData }] = useLazyQuery(
+    didIShareDetailsInPrevEvent,
+    {
+      variables: {
+        partner_id,
+        user_id,
+      },
+    }
+  )
+
   const [addFriendMutation] = useMutation(addFriend, {
     variables: {
       event_id,
@@ -28,6 +38,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
       partner_id,
     },
   })
+
   const [partnerSharedDetailsMutation] = useMutation(updatePartnerSharedDetails, {
     variables: {
       event_id,
@@ -37,12 +48,18 @@ const AddFriendButton = React.memo(({ myRound }) => {
   })
 
   useEffect(() => {
-    setAddedAsFriend(false)
-  }, [myRound])
+    if (partner_id && user_id) {
+      getSharedDetailsInPrevEventData()
+    }
+  }, [partner_id, user_id])
 
   useEffect(() => {
-    setAddedAsFriend(!i_shared_details ? false : true)
-  }, [i_shared_details])
+    if (sharedDetailsInPrevEventData && sharedDetailsInPrevEventData.partners.length) {
+      setAddedAsFriend(true)
+    } else {
+      setAddedAsFriend(false)
+    }
+  }, [sharedDetailsInPrevEventData])
 
   const handleAddFriendPress = async () => {
     try {

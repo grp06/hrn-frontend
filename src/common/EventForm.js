@@ -54,7 +54,7 @@ const EventForm = ({ eventData, match }) => {
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState(
-    'Have a series of quick 1 on 1 video conversations with genuine doers, builders, movers and shakers from around the world!'
+    "Welcome to Hi Right Now 🎉 ! We'll go through a series of 6 min, 1 on 1 chats to expand your network with growth-minded and entrepreneurial professionals. This could be professional or casual or anything in between! Keep it fun and let's meet some new people. 💃"
   )
   const [isEventPublic, setIsEventPublic] = useState(false)
   const [roundLength, setRoundLength] = useState(5)

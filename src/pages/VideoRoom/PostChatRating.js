@@ -5,7 +5,7 @@ import Fab from '@material-ui/core/Fab'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
-import { updatePartnerRating } from '../../gql/mutations'
+import { addFriend, updatePartnerRating, updatePartnerSharedDetails } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { Snack } from '../../common'
 import { useEventContext } from '../../context'
@@ -75,6 +75,22 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const [showRatingSnack, setShowRatingSnack] = useState(false)
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
+  const [addFriendMutation] = useMutation(addFriend, {
+    variables: {
+      event_id,
+      user_id,
+      partner_id,
+    },
+  })
+
+  const [partnerSharedDetailsMutation] = useMutation(updatePartnerSharedDetails, {
+    variables: {
+      event_id,
+      user_id: partner_id,
+      partner_id: user_id,
+    },
+  })
+
   const handleUpdateRating = async (ratingValue) => {
     try {
       await updatePartnerRatingMutation({
@@ -86,6 +102,12 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
         },
         skip: !ratingValue,
       })
+
+      if (ratingValue === 5) {
+        await addFriendMutation()
+        await partnerSharedDetailsMutation()
+      }
+
       setShowRatingSnack(true)
     } catch (err) {
       console.log(err)

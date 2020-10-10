@@ -70,7 +70,7 @@ const GetTagsModal = () => {
   const showGetTagsModal =
     userId &&
     usersTags &&
-    usersTags.length === 0 &&
+    usersTags.length < 3 &&
     (onEventsPage || onEventHomePage) &&
     !onEventInProgressPage
 
@@ -113,18 +113,20 @@ const GetTagsModal = () => {
           >
             <Grid container justify="center" className={classes.modalBody}>
               <Typography variant="h5" className={classes.modalHeader}>
-                We&apos;ve made something cool just for you!{' '}
+                We want to get to know you a bit more{' '}
                 <span role="img" aria-label="excited smiley">
                   🤗
                 </span>
               </Typography>
               <Typography variant="subtitle1">
-                We&apos;re so excited to be introducing{' '}
-                <span className={classes.highlightText}>tags</span> , a way for you to show off your
-                personality and help make more relevant matches.{' '}
+                We&apos;re so excited to be introducing our new matching algorithm that makes
+                matches even more relevant to you!
               </Typography>
               <Typography variant="subtitle1">
-                Go and fill out yours before the event starts!
+                However, we see that you don&apos;t have enough tags to properly feed our algorithm.
+              </Typography>
+              <Typography variant="subtitle1">
+                Please go and choose a few more tags before the event starts!
               </Typography>
             </Grid>
             <Grid
