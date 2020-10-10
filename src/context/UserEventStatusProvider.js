@@ -62,7 +62,7 @@ const UserEventStatusProvider = ({ children }) => {
   useEffect(() => {
     if (onlineEventUsersData) {
       dispatch((draft) => {
-        draft.onlineEventUsers = onlineEventUsersData
+        draft.onlineEventUsers = onlineEventUsersData.online_event_users
       })
     }
   }, [onlineEventUsersData])

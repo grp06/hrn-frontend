@@ -97,14 +97,12 @@ const EventComplete = ({ match }) => {
     if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
       return myConnectionAfterEventData.partners
         .sort((partnerA, partnerB) =>
-          partnerA.userByPartnerId.name
-            .toLowerCase()
-            .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+          partnerA.partner.name.toLowerCase().localeCompare(partnerB.partner.name.toLowerCase())
         )
         .map((partner) => (
           <ConnectionCard
             key={partner.id}
-            connection={partner.userByPartnerId}
+            connection={partner.partner}
             i_shared_details={partner.i_shared_details}
             partnerId={partner.partner_id}
             userId={partner.user_id}

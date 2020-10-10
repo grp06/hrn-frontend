@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useEventContext, useUserContext } from '../../context'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
 import { CameraDisabledBanner } from '../../common'
 import { usePreEventTwilio, useGetCameraAndMicStatus } from '../../hooks'
@@ -12,7 +12,7 @@ import { constants } from '../../utils'
 
 const { maxNumUsersPerRoom } = constants
 
-const { createLocalTracks, connect } = require('twilio-video')
+const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
   hostVid: {
@@ -62,6 +62,7 @@ const PreEvent = ({ onlineEventUsers }) => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useUserContext()
+
   const { event, permissions, setCameraAndMicPermissions } = useEventContext()
   const { id: userId, role } = user
   const { id: eventId } = event
@@ -69,13 +70,13 @@ const PreEvent = ({ onlineEventUsers }) => {
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
   const eventSet = Object.keys(event).length > 1
-  const [onlineUsers, setOnlineUsers] = useState(null)
   const hasCheckedCamera = useRef()
   const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   const { startPreEventTwilio } = usePreEventTwilio()
 
   useGetCameraAndMicStatus(hasCheckedCamera.current)
   hasCheckedCamera.current = true
+
   useEffect(() => {
     if (eventSet) {
       const { status } = event
@@ -96,39 +97,21 @@ const PreEvent = ({ onlineEventUsers }) => {
   }, [event])
 
   useEffect(() => {
-    if (eventSet && userId && !onlineUsers) {
-      const getOnlineUsers = async () => {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/rooms/get-online-event-users/${eventId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Credentials': true,
-            },
-          }
-        )
-        const response = await res.json()
-        console.warn('ONLINE USERS = ', onlineUsers)
-        setOnlineUsers(response.data)
-      }
-      getOnlineUsers()
-    }
-  }, [event, userId, onlineUsers])
-
-  useEffect(() => {
-    if (onlineUsers) {
-      const numOnlineUsers = onlineUsers.length
+    if (onlineEventUsers && onlineEventUsers.length) {
+      const numOnlineUsers = onlineEventUsers.length
 
       if (numOnlineUsers < maxNumUsersPerRoom) {
         setMyRoomNumber(1)
         return setNumRooms(1)
       }
+
+      // only get down here with more than 50 online users
       // get online users, divide by 50 and round up = number of rooms
       const numberOfRooms = Math.ceil(numOnlineUsers / maxNumUsersPerRoom)
       const usersPerRoom = Math.ceil(numOnlineUsers / numberOfRooms)
-      const currentUserIndex = onlineUsers.indexOf(userId)
+
+      const userIdsArray = onlineEventUsers.map((u) => u.user[0].id).sort()
+      const currentUserIndex = userIdsArray.indexOf(userId)
       const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
 
       setMyRoomNumber(roomNumber)
@@ -136,13 +119,14 @@ const PreEvent = ({ onlineEventUsers }) => {
       setNumRooms(numberOfRooms)
       console.log('PreEvent -> numberOfRooms', numberOfRooms)
     }
-  }, [onlineUsers])
+  }, [onlineEventUsers])
 
   useEffect(() => {
     if (userId && myRoomNumber !== null) {
       const setupTokens = async () => {
         const isEventHost = event.host_id === userId
         if (!isEventHost) {
+          console.log('getting pre-event token')
           const tokenResp = await getToken(`${eventId}-pre-event-${myRoomNumber}`, userId)
           const tokenJson = await tokenResp.json()
           return setRoomTokens([tokenJson.token])
@@ -177,6 +161,7 @@ const PreEvent = ({ onlineEventUsers }) => {
   useEffect(() => {
     if (roomTokens.length) {
       const isEventHost = event.host_id === userId
+
       const setupRoom = async () => {
         const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
         const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
@@ -238,9 +223,7 @@ const PreEvent = ({ onlineEventUsers }) => {
         <Grid container justify="center" alignItems="center" className={classes.viewersContainer}>
           <VisibilityOutlinedIcon stroke="#f4f6fa" style={{ color: '#f4f6fa' }} />
           <Typography variant="body1" className={classes.viewersNumber}>
-            {onlineEventUsers && onlineEventUsers.online_event_users
-              ? onlineEventUsers.online_event_users.length
-              : '--'}
+            {onlineEventUsers && onlineEventUsers.length ? onlineEventUsers.length : '--'}
           </Typography>
         </Grid>
       </Grid>

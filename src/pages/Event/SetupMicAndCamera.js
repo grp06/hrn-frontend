@@ -146,6 +146,7 @@ const SetupMicAndCamera = () => {
         }
       } catch (error) {
         console.warn('error - ', error)
+        alert(error.message)
         setPermissionDenied(true)
         setPermissionNotYetAllowed(false)
         // if (err === 'PERMISSION_DENIED') {

@@ -126,23 +126,23 @@ const MyConnections = () => {
           ? allMyConnectionsData.partners
               .filter((partner) => !!partner.i_shared_details)
               .sort((partnerA, partnerB) =>
-                partnerA.userByPartnerId.name
+                partnerA.partner.name
                   .toLowerCase()
-                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+                  .localeCompare(partnerB.partner.name.toLowerCase())
               )
           : allMyConnectionsData.partners
               .filter((partner) => !partner.i_shared_details)
               .sort((partnerA, partnerB) =>
-                partnerA.userByPartnerId.name
+                partnerA.partner.name
                   .toLowerCase()
-                  .localeCompare(partnerB.userByPartnerId.name.toLowerCase())
+                  .localeCompare(partnerB.partner.name.toLowerCase())
               )
 
       if (group.length > 0) {
         return group.map((partner) => (
           <ConnectionCard
             key={partner.id}
-            connection={partner.userByPartnerId}
+            connection={partner.partner}
             i_shared_details={partner.i_shared_details}
             partnerId={partner.partner_id}
             userId={partner.user_id}

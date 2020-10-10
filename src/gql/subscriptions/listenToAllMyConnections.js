@@ -6,7 +6,7 @@ const getAllMyConnections = gql`
       where: { user_id: { _eq: $user_id }, partner_shared_details: { _eq: true } }
       distinct_on: partner_id
     ) {
-      userByPartnerId {
+      partner {
         name
         city
         email
