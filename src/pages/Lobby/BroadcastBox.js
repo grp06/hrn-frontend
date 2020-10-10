@@ -139,8 +139,8 @@ const BroadcastBox = React.memo(
                         Online /
                       </Typography>
                       <Typography variant="h6" className={classes.pinkNumber}>
-                        {onlineEventUsers && onlineEventUsers.online_event_users
-                          ? onlineEventUsers.online_event_users.length
+                        {onlineEventUsers && onlineEventUsers.length
+                          ? onlineEventUsers.length
                           : '--'}
                       </Typography>
                     </Grid>
