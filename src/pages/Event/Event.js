@@ -13,6 +13,7 @@ import {
   EventTitleAndCTACard,
   HostAndEventDescCard,
   PodcastCard,
+  WhatToExpect,
 } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
@@ -47,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
   },
+  podcastContainer: {
+    width: '44%',
+  },
   subtitle: {
     margin: theme.spacing(1),
     marginBottom: '10px',
@@ -54,6 +58,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '90%',
     },
+  },
+  whatToExpectContainer: {
+    width: '55%',
   },
   whatToExpectAndPodcastContainer: {
     marginTop: theme.spacing(2),
@@ -66,7 +73,7 @@ const Event = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { permissions, event, setEventId } = useEventContext()
-  const { id: userId } = user
+  const { id: user_id } = user
   const { host_id, start_at, description, status: eventStatus } = event
   const eventSet = Object.keys(event).length > 1
   const hasCheckedCamera = useRef()
@@ -87,7 +94,8 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
-  const isEventParticipant = event.event_users.find((u) => u.user.id === userId)
+  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
 
   const timeUntilEvent = getTimeUntilEvent(start_at)
 
@@ -106,7 +114,7 @@ const Event = ({ match }) => {
     eventInstruction = <EventCantRSVP />
   } else {
     eventInstruction =
-      parseInt(host_id, 10) === parseInt(userId, 10) ? (
+      parseInt(host_id, 10) === parseInt(user_id, 10) ? (
         <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
       ) : (
         <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
@@ -118,7 +126,7 @@ const Event = ({ match }) => {
       <EventStatusRedirect
         isEventParticipant={isEventParticipant}
         micOrCameraIsDisabled={micOrCameraIsDisabled}
-        userId={userId}
+        userId={user_id}
         eventSet={eventSet}
         event={event}
       />
@@ -138,7 +146,10 @@ const Event = ({ match }) => {
           justify="space-between"
           className={classes.whatToExpectAndPodcastContainer}
         >
-          <Grid item md={5}>
+          <Grid className={classes.whatToExpectContainer}>
+            <WhatToExpect userIsHost={userIsHost} />
+          </Grid>
+          <Grid className={classes.podcastContainer}>
             <PodcastCard />
           </Grid>
         </Grid>

@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     backgroundColor: theme.palette.common.grey5,
     borderRadius: '4px',
-    height: 'auto',
+    height: '100%',
     padding: theme.spacing(3, 5),
   },
   cardTitle: {
@@ -29,8 +29,8 @@ const PodcastCard = () => {
       <iframe
         title="hi right now podcast"
         src="https://open.spotify.com/embed-podcast/show/1Pxse9ZJjcXZLa9EkW1jSl"
-        width="100%"
-        height="232"
+        width="99%"
+        height="170"
         frameBorder="0"
         allowtransparency="true"
         allow="encrypted-media"

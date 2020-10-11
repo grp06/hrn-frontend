@@ -105,7 +105,7 @@ const HostAndEventDescCard = React.memo(({ event }) => {
         </Grid>
       </Grid>
       <Grid container item direction="row" justify="flex-start" md={11}>
-        <Typography variant="subtitle1">{eventDescription}</Typography>
+        <Typography variant="body1">{eventDescription}</Typography>
       </Grid>
     </Grid>
   )

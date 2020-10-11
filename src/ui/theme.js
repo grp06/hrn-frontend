@@ -341,6 +341,14 @@ const theme = createMuiTheme({
         textAlign: 'center',
       },
     },
+    MuiMobileStepper: {
+      root: {
+        background: 'transparent',
+      },
+      dot: {
+        backgroundColor: greyButton,
+      },
+    },
   },
 })
 
