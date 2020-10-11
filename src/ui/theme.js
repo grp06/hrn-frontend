@@ -93,7 +93,7 @@ const theme = createMuiTheme({
     // for very large numbers
     h2: {
       fontFamily: 'Muli',
-      fontSize: '4.5rem',
+      fontSize: '4rem',
       color: orchid,
     },
     // Event Title

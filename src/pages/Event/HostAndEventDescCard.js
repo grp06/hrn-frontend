@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.grey5,
     borderRadius: '4px',
     height: 'auto',
-    padding: theme.spacing(3, 4),
+    padding: theme.spacing(3, 5),
   },
   hostAndRSVPContainer: {
     marginBottom: theme.spacing(4),
@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   hostName: {
     margin: '0',
   },
+  rsvpedNumberContainer: {
+    width: 'auto',
+  },
   subtitle: {
     marginBottom: theme.spacing(1),
   },
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HostAndEventDescCard = React.memo(({ event }) => {
   const classes = useStyles()
-  const { description: eventDescription, host } = event
+  const { description: eventDescription, event_users, host } = event
   const { name: hostName } = host
 
   return (
@@ -59,7 +62,7 @@ const HostAndEventDescCard = React.memo(({ event }) => {
         justify="space-between"
         className={classes.hostAndRSVPContainer}
       >
-        <Grid container item direction="column" md={6}>
+        <Grid item direction="column" md={6}>
           <Typography variant="subtitle1" className={classes.subtitle}>
             Hosted By /
           </Typography>
@@ -84,6 +87,20 @@ const HostAndEventDescCard = React.memo(({ event }) => {
               </Typography>
               <Typography variant="subtitle1">European Gigaloo</Typography>
             </Grid>
+          </Grid>
+        </Grid>
+        <Grid container item md={6} direction="row" justify="flex-end">
+          <Grid
+            container
+            direction="column"
+            justify="space-between"
+            alignItems="center"
+            className={classes.rsvpedNumberContainer}
+          >
+            <Typography variant="subtitle1" className={classes.subtitle}>
+              RSVP&apos;ed /
+            </Typography>
+            <Typography variant="h2">{event_users.length}</Typography>
           </Grid>
         </Grid>
       </Grid>
