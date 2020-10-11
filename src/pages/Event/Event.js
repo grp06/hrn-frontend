@@ -12,6 +12,7 @@ import {
   EventCantRSVP,
   EventTitleAndCTACard,
   HostAndEventDescCard,
+  PodcastCard,
 } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
@@ -53,6 +54,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '90%',
     },
+  },
+  whatToExpectAndPodcastContainer: {
+    marginTop: theme.spacing(2),
   },
 }))
 
@@ -128,6 +132,16 @@ const Event = ({ match }) => {
       >
         <EventTitleAndCTACard event={event} user={user} />
         <HostAndEventDescCard event={event} />
+        <Grid
+          container
+          direction="row"
+          justify="space-between"
+          className={classes.whatToExpectAndPodcastContainer}
+        >
+          <Grid item md={5}>
+            <PodcastCard />
+          </Grid>
+        </Grid>
       </Grid>
       {eventInstruction}
     </>
