@@ -8,7 +8,6 @@ import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { getAllPublicEvents } from '../../gql/queries'
-import bannerBackground5 from '../../assets/purpleOil.jpg'
 import blurryBackground from '../../assets/blurryBackground.png'
 import { isEventInFuture } from '../../utils'
 import { FloatCardLarge, EventCard, Loading } from '../../common'
@@ -39,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   pageBannerContentContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '65%',
+    width: '70%',
     // textAlign: 'center',
   },
   toggleGrid: {},
