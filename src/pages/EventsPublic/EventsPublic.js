@@ -9,6 +9,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { getAllPublicEvents } from '../../gql/queries'
 import bannerBackground5 from '../../assets/purpleOil.jpg'
+import blurryBackground from '../../assets/blurryBackground.png'
 import { isEventInFuture } from '../../utils'
 import { FloatCardLarge, EventCard, Loading } from '../../common'
 import { useEventContext } from '../../context'
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   pageBanner: {
     width: '100%',
     height: '30vh',
-    backgroundImage: `url(${bannerBackground5})`,
+    backgroundImage: `url(${blurryBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     marginBottom: '40px',
@@ -38,9 +39,10 @@ const useStyles = makeStyles((theme) => ({
   pageBannerContentContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '50%',
-    textAlign: 'center',
+    width: '65%',
+    // textAlign: 'center',
   },
+  toggleGrid: {},
   toggleButtonActive: {
     width: '200px',
     '&.Mui-selected': {
@@ -59,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     borderRadius: 0,
     border: 'none',
-    borderBottom: '2px solid #3e4042',
+    // borderBottom: '2px solid #3e4042',
     '&:hover': {
       backgroundColor: 'transparent',
     },
@@ -167,7 +169,7 @@ const EventsPublic = () => {
         <Grid
           container
           direction="column"
-          justify="center"
+          justify="flex-end"
           alignItems="center"
           className={classes.bannerGradient}
         >
@@ -177,7 +179,7 @@ const EventsPublic = () => {
         </Grid>
       </div>
 
-      <Grid container justify="center" alignItems="center">
+      <Grid container justify="center" alignItems="center" className={classes.toggleGrid}>
         <ToggleButtonGroup
           value={eventToggleValue}
           groupedTextHorizontal
