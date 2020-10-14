@@ -35,6 +35,7 @@ import {
 } from './context'
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
+import GetTagsModal from './ui/Subheader/GetTagsModal'
 import theme from './ui/theme'
 
 const App = () => {
@@ -115,7 +116,7 @@ const App = () => {
                     <Route component={() => <Redirect to={{ pathname: '/events' }} />} />
                   </Switch>
                   <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
-                  {/* <GetTagsModal /> */}
+                  <GetTagsModal />
                 </UserProvider>
               </AppProvider>
             </ErrorBoundary>

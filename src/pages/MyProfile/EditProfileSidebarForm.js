@@ -71,8 +71,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const handleFormSubmit = async (values) => {
     let updateUserMutationResponse
     let insertTagMutationResponse
-    if (!values.name || !values.city || !values.selectedTags) {
-      setSubmitErrorSnackMessage('something seems to be empty 🧐')
+    if (!values.name || !values.city || !values.selectedTags || values.selectedTags.length < 3) {
+      setSubmitErrorSnackMessage('something seems to be empty or not enough tags  🧐')
       return setShowSubmitErrorSnack(true)
     }
     if (values.linkedIn_url) {

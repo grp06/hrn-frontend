@@ -12,7 +12,7 @@ const getMyRoundPartner = gql`
       created_at
       left_chat
       i_shared_details
-      userByPartnerId {
+      partner {
         city
         name
         tags_users {

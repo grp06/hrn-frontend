@@ -14,7 +14,7 @@ const listenToPartnersTable = gql`
       id
       event_id
       created_at
-      userByPartnerId {
+      partner {
         city
         name
         tags_users {

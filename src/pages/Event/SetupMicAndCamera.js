@@ -206,24 +206,26 @@ const SetupMicAndCamera = () => {
   const handleVideoDeviceChange = (event) => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
-    console.log('device change, update the local video')
+    console.warn('device change, update the local video')
 
     if (window.room) {
       const { localParticipant } = window.room
+      console.log('handleVideoDeviceChange -> localParticipant', localParticipant)
       const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
         trackPublication
       ) {
         return trackPublication.track
       })
-      console.log('handleVideoDeviceChange -> tracks', tracks)
       localParticipant.unpublishTracks(tracks)
 
       Video.createLocalVideoTrack({
         deviceId: { exact: event.target.value },
       }).then(function (localVideoTrack) {
+        console.log('handleVideoDeviceChange -> localVideoTrack', localVideoTrack)
         const localDiv = document.getElementById('local-video')
         localDiv.innerHTML = ''
         const attachedTrack = localVideoTrack.attach()
+        console.log('handleVideoDeviceChange -> attachedTrack', attachedTrack)
         attachedTrack.style.transform = 'scale(-1, 1)'
         localDiv.appendChild(attachedTrack)
         localParticipant.publishTrack(localVideoTrack)
@@ -234,6 +236,26 @@ const SetupMicAndCamera = () => {
   const handleAudioDeviceChange = (event) => {
     localStorage.setItem('preferredAudioId', event.target.value)
     setCurrentAudioDeviceId(event.target.value)
+    console.warn('device change, update the local audio')
+
+    if (window.room) {
+      const { localParticipant } = window.room
+      console.log('handleAudioDeviceChange -> localParticipant', localParticipant)
+      const tracks = Array.from(localParticipant.audioTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      console.log('handleAudioDeviceChange -> tracks', tracks)
+      localParticipant.unpublishTracks(tracks)
+
+      Video.createLocalAudioTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localAudioTrack) {
+        console.log('handleAudioDeviceChange -> localAudioTrack', localAudioTrack)
+        localParticipant.publishTrack(localAudioTrack)
+      })
+    }
   }
 
   const getMediaControl = () => {
