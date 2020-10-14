@@ -4,12 +4,17 @@ import { Grid, Typography, FormControl, InputLabel, Select } from '@material-ui/
 import { makeStyles } from '@material-ui/core/styles'
 
 import Video from 'twilio-video'
-import { useEventContext } from '../../context'
+import { useEventContext, useUserEventStatusContext } from '../../context'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
 const useStyles = makeStyles((theme) => ({
   permissionsContainer: {
-    minHeight: '60vh',
+    width: '90%',
+    margin: 'auto',
+  },
+  permissionsContent: {
+    width: '90%',
+    margin: 'auto',
   },
   cameraBlocked: {
     position: 'fixed',
@@ -48,10 +53,6 @@ const useStyles = makeStyles((theme) => ({
       opacity: 1,
     },
   },
-  selectWrapper: {
-    width: '50%',
-    margin: '0 auto',
-  },
   selectBox: {
     margin: theme.spacing(0.5, 0),
   },
@@ -67,22 +68,28 @@ function detachTracks(tracks) {
   })
 }
 
-const SetupMicAndCamera = () => {
+const NewSetupCameraAndMic = () => {
   const classes = useStyles()
   const { setCameraAndMicPermissions } = useEventContext()
+  const {
+    usersListOfAudioDevices,
+    usersListOfVideoDevices,
+    usersPreferredAudioDevice,
+    usersPreferredVideoDevice,
+    setUsersListOfAudioDevices,
+    setUsersListOfVideoDevices,
+    setUsersPreferredAudioDevice,
+    setUsersPreferredVideoDevice,
+  } = useUserEventStatusContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
-  const [videoDevices, setVideoDevices] = useState([])
-  const [audioDevices, setAudioDevices] = useState([])
-  const [currentVideoDeviceId, setCurrentVideoDeviceId] = useState('')
-  const [currentAudioDeviceId, setCurrentAudioDeviceId] = useState('')
 
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
-    setVideoDevices(availableVideoDevices)
-    setAudioDevices(availableAudioDevices)
+    setUsersListOfVideoDevices(availableVideoDevices)
+    setUsersListOfAudioDevices(availableAudioDevices)
 
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
@@ -92,10 +99,10 @@ const SetupMicAndCamera = () => {
         !localStoragePreferredVideoId ||
         !availableVideoDevices.find((device) => device.deviceId === localStoragePreferredVideoId)
       ) {
-        localStorage.setItem('preferredVideoId', availableVideoDevices[0].deviceId)
-        setCurrentVideoDeviceId(availableVideoDevices[0].deviceId)
+        console.log('getting into here')
+        setUsersPreferredVideoDevice(availableVideoDevices[0].deviceId)
       } else {
-        setCurrentVideoDeviceId(localStoragePreferredVideoId)
+        setUsersPreferredVideoDevice(localStoragePreferredVideoId)
       }
     }
 
@@ -104,10 +111,9 @@ const SetupMicAndCamera = () => {
         !localStoragePreferredAudioId ||
         !availableAudioDevices.find((device) => device.deviceId === localStoragePreferredAudioId)
       ) {
-        localStorage.setItem('preferredAudioId', availableAudioDevices[0].deviceId)
-        setCurrentAudioDeviceId(availableAudioDevices[0].deviceId)
+        setUsersPreferredAudioDevice(availableAudioDevices[0].deviceId)
       } else {
-        setCurrentAudioDeviceId(localStoragePreferredAudioId)
+        setUsersPreferredAudioDevice(localStoragePreferredAudioId)
       }
     }
   }
@@ -118,39 +124,33 @@ const SetupMicAndCamera = () => {
   }
 
   // useEffect(() => {
+  //   console.log('getting the devices')
   //   getDevices()
   // }, [])
 
   useEffect(() => {
-    const getMedia = async () => {
+    const getMedia = async (constraints) => {
       let localMediaStream = null
-      let constraints
-      const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-      const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-      if (localStoragePreferredAudioId || localStoragePreferredVideoId) {
-        constraints = {
-          video: { deviceId: currentVideoDeviceId },
-          audio: { deviceId: currentAudioDeviceId },
-        }
-      }
+
       try {
         console.log('constraints ->', constraints)
-        localMediaStream = await navigator.mediaDevices.getUserMedia(
-          constraints || { audio: true, video: true }
-        )
-
-        console.log('getMedia -> localMediaStream', localMediaStream.getSources())
+        localMediaStream = await navigator.mediaDevices.getUserMedia(constraints)
+        getDevices()
+        console.log('getMedia -> localMediaStream', localMediaStream)
         const video = document.getElementById('videoElement')
-        video.style.maxWidth = '50%'
-        video.style.transform = 'scale(-1, 1)'
         setPermissionDenied(false)
         setPermissionNotYetAllowed(false)
+        setCameraAndMicPermissions({
+          hasWebcam: true,
+          hasMicrophone: true,
+          isMicrophoneAlreadyCaptured: true,
+          isWebcamAlreadyCaptured: true,
+        })
         video.srcObject = localMediaStream
-        getDevices()
 
-        // video.onloadedmetadata = function (e) {
-        //   // Do something with the video here.
-        // }
+        video.onloadedmetadata = function (e) {
+          // Do something with the video here.
+        }
       } catch (error) {
         console.warn('error - ', error)
         alert(error.message)
@@ -162,9 +162,14 @@ const SetupMicAndCamera = () => {
       }
     }
 
-    // if (currentVideoDeviceId && currentAudioDeviceId) {
-    getMedia()
-  }, [])
+    // if (usersPreferredVideoDevice && usersPreferredAudioDevice) {
+    console.log('usersPreferredVideoDevice ->', usersPreferredVideoDevice)
+    console.log('usersPreferredAudioDevice ->', usersPreferredAudioDevice)
+    getMedia({
+      video: { deviceId: usersPreferredVideoDevice },
+      audio: { deviceId: usersPreferredAudioDevice },
+    })
+  }, [usersPreferredVideoDevice, usersPreferredAudioDevice])
 
   const getPermissionDenied = () => {
     if (permissionDenied) {
@@ -208,43 +213,19 @@ const SetupMicAndCamera = () => {
   }
 
   const handleVideoDeviceChange = (event) => {
+    console.log('event.target.value ->', event.target.value)
     localStorage.setItem('preferredVideoId', event.target.value)
-    setCurrentVideoDeviceId(event.target.value)
+    setUsersPreferredVideoDevice(event.target.value)
     console.log('device change, update the local video')
-
-    // if (window.room) {
-    //   const { localParticipant } = window.room
-    //   const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
-    //     trackPublication
-    //   ) {
-    //     return trackPublication.track
-    //   })
-    //   console.log('handleVideoDeviceChange -> tracks', tracks)
-    //   localParticipant.unpublishTracks(tracks)
-
-    //   Video.createLocalVideoTrack({
-    //     deviceId: { exact: event.target.value },
-    //   }).then(function (localVideoTrack) {
-    //     const localDiv = document.getElementById('local-video')
-    //     localDiv.innerHTML = ''
-    //     const attachedTrack = localVideoTrack.attach()
-    //     attachedTrack.style.transform = 'scale(-1, 1)'
-    //     localDiv.appendChild(attachedTrack)
-    //     localParticipant.publishTrack(localVideoTrack)
-    //   })
-    // }
   }
 
   const handleAudioDeviceChange = (event) => {
+    console.log('event.target.value -> ', event.target.value)
     localStorage.setItem('preferredAudioId', event.target.value)
-    setCurrentAudioDeviceId(event.target.value)
+    setUsersPreferredAudioDevice(event.target.value)
   }
 
   const getMediaControl = () => {
-    console.log('currentVideoDeviceId ->', currentVideoDeviceId)
-    console.log('currentAudioDeviceId ->', currentAudioDeviceId)
-    console.log('videoDevices ->', videoDevices)
-    console.log('audioDevices ->', audioDevices)
     return (
       !permissionNotYetAllowed &&
       !permissionDenied && (
@@ -257,22 +238,28 @@ const SetupMicAndCamera = () => {
         >
           <FormControl fullWidth className={classes.selectBox}>
             <InputLabel>Camera</InputLabel>
-            <Select native value={currentVideoDeviceId} onChange={handleVideoDeviceChange}>
-              {videoDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
+            <Select native value={usersPreferredVideoDevice} onChange={handleVideoDeviceChange}>
+              {usersListOfVideoDevices
+                .sort((device) =>
+                  device.deviceId === localStorage.getItem('preferredVideoId') ? -1 : 1
+                )
+                .map((device) => (
+                  <option key={device.deviceId} value={device.deviceId}>
+                    {device.label}
+                  </option>
+                ))}
             </Select>
           </FormControl>
           <FormControl fullWidth className={classes.selectBox}>
             <InputLabel>Microphone</InputLabel>
-            <Select native value={currentAudioDeviceId} onChange={handleAudioDeviceChange}>
-              {audioDevices.map((device) => (
-                <option key={device.deviceId} value={device.deviceId}>
-                  {device.label}
-                </option>
-              ))}
+            <Select native value={usersPreferredAudioDevice} onChange={handleAudioDeviceChange}>
+              {usersListOfAudioDevices
+                .sort((device) => (device.deviceId === usersPreferredAudioDevice ? -1 : 1))
+                .map((device) => (
+                  <option key={device.deviceId} value={device.deviceId}>
+                    {device.label}
+                  </option>
+                ))}
             </Select>
           </FormControl>
         </Grid>
@@ -285,9 +272,10 @@ const SetupMicAndCamera = () => {
       className={classes.permissionsContainer}
       container
       direction="column"
-      justify="flex-start"
+      justify="center"
+      alignItems="center"
     >
-      <Grid item>
+      <Grid container className={classes.permissionsContent} justify="center" alignItems="center">
         {getDamnYouLookGood()}
         {getMediaControl()}
         {getPermissionDenied()}
@@ -296,4 +284,4 @@ const SetupMicAndCamera = () => {
     </Grid>
   )
 }
-export default SetupMicAndCamera
+export default NewSetupCameraAndMic

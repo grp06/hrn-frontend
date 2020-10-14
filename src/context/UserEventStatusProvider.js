@@ -23,6 +23,11 @@ const UserEventStatusContext = React.createContext()
 const defaultState = {
   userEventStatus: 'waiting for match',
   onlineEventUsers: [],
+  userHasEnabledCameraAndMic: false,
+  usersListOfAudioDevices: [],
+  usersListOfVideoDevices: [],
+  usersPreferredAudioDevice: '',
+  usersPreferredVideoDevice: '',
 }
 
 const UserEventStatusProvider = ({ children }) => {

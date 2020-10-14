@@ -12,6 +12,7 @@ import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
   BroadcastBox,
+  CameraAndMicSetupScreen,
   EventChatBox,
   EventTimerCountdown,
   NextRoundIn,
@@ -69,7 +70,12 @@ const Lobby = () => {
   const history = useHistory()
   const { event, permissions } = useEventContext()
   const { user, userInEvent, setUserInEvent } = useUserContext()
-  const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
+  const {
+    setUserEventStatus,
+    userEventStatus,
+    onlineEventUsers,
+    userHasEnabledCameraAndMic,
+  } = useUserEventStatusContext()
   const {
     current_round: round,
     event_users,
@@ -142,6 +148,10 @@ const Lobby = () => {
     }
   }, [eventStatus, userEventStatus, myRoundData])
 
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen />
+  }
+
   return (
     <div className={classes.pageContainer}>
       {eventStatus === 'not-started' ? (
@@ -172,7 +182,7 @@ const Lobby = () => {
             event={event}
             isEventHost={isEventHost}
             onlineEventUsers={onlineEventUsers}
-            setUserEventStatus={useCallback(setUserEventStatus, [])}
+            setUserEventStatus={setUserEventStatus}
             userEventStatus={userEventStatus}
           />
           <BottomControlPanel permissions={permissions} event={event} userId={userId} />
