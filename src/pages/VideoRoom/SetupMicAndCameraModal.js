@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { SetupMicAndCamera } from '../Event'
+import { SetupMicAndCamera } from '../Lobby'
 
 const useStyles = makeStyles((theme) => ({
   modal: {

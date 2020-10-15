@@ -1,30 +1,17 @@
 import React from 'react'
 import SettingsIcon from '@material-ui/icons/Settings'
-import { SetupMicAndCamera } from '.'
+import { SetupMicAndCamera } from '../Lobby'
 import { TransitionModal } from '../../common'
 
-const SetupMicAndCameraButton = ({ permissions }) => {
-  const button =
-    permissions && !permissions.isWebcamAlreadyCaptured
-      ? {
-          buttonText: 'Enable camera and mic 🎥',
-          buttonVariant: 'contained',
-          buttonSize: 'large',
-        }
-      : null
-
-  const fabButton =
-    permissions && permissions.isWebcamAlreadyCaptured
-      ? {
-          fabButtonIcon: <SettingsIcon style={{ color: '#6327bb' }} />,
-          fabButtonSize: 'small',
-          fabButtonColor: 'inherit',
-        }
-      : null
+const SetupMicAndCameraButton = () => {
+  const fabButton = {
+    fabButtonIcon: <SettingsIcon style={{ color: '#6327bb' }} />,
+    fabButtonSize: 'small',
+    fabButtonColor: 'inherit',
+  }
 
   return TransitionModal({
     fabButton,
-    button,
     modalBody: <SetupMicAndCamera />,
     onAcceptButtonText: 'Done',
     onAcceptFunction: async () => {

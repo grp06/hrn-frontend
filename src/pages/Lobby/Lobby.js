@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -7,7 +7,6 @@ import { useSubscription } from '@apollo/react-hooks'
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
-import { useGetCameraAndMicStatus } from '../../hooks'
 import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
@@ -68,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
 const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { event, permissions } = useEventContext()
-  const { user, userInEvent, setUserInEvent } = useUserContext()
+  const { event } = useEventContext()
+  const { user, setUserInEvent } = useUserContext()
   const {
     setUserEventStatus,
     userEventStatus,
@@ -88,10 +87,6 @@ const Lobby = () => {
   } = event
   const { id: userId, name: usersName } = user
   const isEventHost = host_id && host_id === userId
-  const hasCheckedCamera = useRef()
-  // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-  useGetCameraAndMicStatus(hasCheckedCamera.current)
-  hasCheckedCamera.current = true
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -185,7 +180,11 @@ const Lobby = () => {
             setUserEventStatus={setUserEventStatus}
             userEventStatus={userEventStatus}
           />
-          <BottomControlPanel permissions={permissions} event={event} userId={userId} />
+          <BottomControlPanel
+            event={event}
+            userId={userId}
+            userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
+          />
         </Grid>
         <Grid
           container

@@ -7,20 +7,12 @@ import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
-import {
-  EventBreakdownStepper,
-  EventCountdown,
-  SetupMicAndCameraButton,
-  ShareEventPromptModal,
-} from '.'
-import { FloatCardLarge, CameraDisabledBanner } from '../../common'
-import { useEventContext, useUserContext } from '../../context'
+import { EventBreakdownStepper, EventCountdown, ShareEventPromptModal } from '.'
+import { FloatCardLarge } from '../../common'
+import { useUserContext } from '../../context'
 import { insertEventUser, deleteEventUser } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
-  cameraTest: {
-    marginBottom: theme.spacing(4),
-  },
   centerText: {
     textAlign: 'center',
   },
@@ -54,12 +46,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserPanel = ({ timeState, eventData, permissions }) => {
+const UserPanel = ({ timeState, eventData }) => {
   const classes = useStyles()
   const history = useHistory()
   const [rsvpInFlight, setRSVPInFlight] = useState(false)
   const { user } = useUserContext()
-  const { setCameraAndMicPermissions } = useEventContext()
   const { id: userId, name, email } = user
   const {
     id: eventId,
@@ -180,27 +171,8 @@ const UserPanel = ({ timeState, eventData, permissions }) => {
     return element
   }
 
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-
-  if (micOrCameraIsDisabled && timeState !== 'future' && alreadyAttending) {
-    return (
-      <CameraDisabledBanner
-        permissions={permissions}
-        setCameraAndMicPermissions={setCameraAndMicPermissions}
-      />
-    )
-  }
-
   return (
     <>
-      {alreadyAttending && (
-        <Grid container direction="row" justify="center" className={classes.cameraTest}>
-          <SetupMicAndCameraButton
-            permissions={permissions}
-            setCameraAndMicPermissions={setCameraAndMicPermissions}
-          />
-        </Grid>
-      )}
       <FloatCardLarge>
         <Grid
           item

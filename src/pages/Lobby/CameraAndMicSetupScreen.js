@@ -3,7 +3,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
-import { SetupMicAndCamera } from '../Event'
+import { SetupMicAndCamera } from '.'
 
 const useStyles = makeStyles((theme) => ({
   previewVideo: {
