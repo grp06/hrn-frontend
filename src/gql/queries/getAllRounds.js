@@ -2,11 +2,11 @@ import gql from 'graphql-tag'
 
 const getAllRounds = gql`
   query getAllRounds {
-    rounds {
-      partnerX {
+    partners {
+      user {
         name
       }
-      partnerY {
+      partner {
         name
       }
       event {
