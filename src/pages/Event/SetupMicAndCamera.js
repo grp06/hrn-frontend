@@ -76,6 +76,7 @@ const SetupMicAndCamera = () => {
   const [audioDevices, setAudioDevices] = useState([])
   const [currentVideoDeviceId, setCurrentVideoDeviceId] = useState('')
   const [currentAudioDeviceId, setCurrentAudioDeviceId] = useState('')
+  const [videoStreamLabel, setVideoStreamLabel] = useState('')
 
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
@@ -86,14 +87,18 @@ const SetupMicAndCamera = () => {
 
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+    const deviceSelectedFromGetUserMedia = availableVideoDevices.find(
+      (device) => device.label === videoStreamLabel
+    ).deviceId
 
     if (availableVideoDevices.length) {
       if (
         !localStoragePreferredVideoId ||
-        !availableVideoDevices.find((device) => device.deviceId === localStoragePreferredVideoId)
+        !availableVideoDevices.find((device) => device.deviceId === localStoragePreferredVideoId) ||
+        deviceSelectedFromGetUserMedia !== localStoragePreferredVideoId
       ) {
-        localStorage.setItem('preferredVideoId', availableVideoDevices[0].deviceId)
-        setCurrentVideoDeviceId(availableVideoDevices[0].deviceId)
+        localStorage.setItem('preferredVideoId', deviceSelectedFromGetUserMedia)
+        setCurrentVideoDeviceId(deviceSelectedFromGetUserMedia)
       } else {
         setCurrentVideoDeviceId(localStoragePreferredVideoId)
       }
@@ -112,56 +117,59 @@ const SetupMicAndCamera = () => {
     }
   }
 
+  const getMedia = async () => {
+    let localMediaStream = null
+    let constraints
+    const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+    const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+    if (localStoragePreferredAudioId || localStoragePreferredVideoId) {
+      constraints = {
+        video: { deviceId: currentVideoDeviceId },
+        audio: { deviceId: currentAudioDeviceId },
+      }
+    }
+    try {
+      console.log('constraints ->', constraints)
+      localMediaStream = await navigator.mediaDevices.getUserMedia(
+        constraints || { audio: true, video: true }
+      )
+
+      console.log('getMedia -> localMediaStream', localMediaStream.getVideoTracks())
+      const label = localMediaStream.getVideoTracks()[0].label
+      setVideoStreamLabel(label)
+      const video = document.getElementById('videoElement')
+      video.style.maxWidth = '50%'
+      video.style.transform = 'scale(-1, 1)'
+      setPermissionDenied(false)
+      setPermissionNotYetAllowed(false)
+      video.srcObject = localMediaStream
+
+      // video.onloadedmetadata = function (e) {
+      //   // Do something with the video here.
+      // }
+    } catch (error) {
+      console.warn('error - ', error)
+      alert(error.message)
+      setPermissionDenied(true)
+      setPermissionNotYetAllowed(false)
+      // if (err === 'PERMISSION_DENIED') {
+      //   // Explain why you need permission and how to update the permission setting
+      // }
+    }
+  }
+
   navigator.mediaDevices.ondevicechange = () => {
     console.log('on device change')
     getDevices()
   }
 
-  // useEffect(() => {
-  //   getDevices()
-  // }, [])
+  useEffect(() => {
+    if (videoStreamLabel) {
+      getDevices()
+    }
+  }, [videoStreamLabel])
 
   useEffect(() => {
-    const getMedia = async () => {
-      let localMediaStream = null
-      let constraints
-      const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-      const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-      if (localStoragePreferredAudioId || localStoragePreferredVideoId) {
-        constraints = {
-          video: { deviceId: currentVideoDeviceId },
-          audio: { deviceId: currentAudioDeviceId },
-        }
-      }
-      try {
-        console.log('constraints ->', constraints)
-        localMediaStream = await navigator.mediaDevices.getUserMedia(
-          constraints || { audio: true, video: true }
-        )
-
-        console.log('getMedia -> localMediaStream', localMediaStream.getSources())
-        const video = document.getElementById('videoElement')
-        video.style.maxWidth = '50%'
-        video.style.transform = 'scale(-1, 1)'
-        setPermissionDenied(false)
-        setPermissionNotYetAllowed(false)
-        video.srcObject = localMediaStream
-        getDevices()
-
-        // video.onloadedmetadata = function (e) {
-        //   // Do something with the video here.
-        // }
-      } catch (error) {
-        console.warn('error - ', error)
-        alert(error.message)
-        setPermissionDenied(true)
-        setPermissionNotYetAllowed(false)
-        // if (err === 'PERMISSION_DENIED') {
-        //   // Explain why you need permission and how to update the permission setting
-        // }
-      }
-    }
-
     // if (currentVideoDeviceId && currentAudioDeviceId) {
     getMedia()
   }, [])
@@ -211,6 +219,7 @@ const SetupMicAndCamera = () => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
     console.log('device change, update the local video')
+    getMedia({ videoId: event.target.value })
 
     // if (window.room) {
     //   const { localParticipant } = window.room
@@ -280,7 +289,7 @@ const SetupMicAndCamera = () => {
     )
   }
 
-  return (
+  return videoStreamLabel ? (
     <Grid
       className={classes.permissionsContainer}
       container
@@ -294,6 +303,6 @@ const SetupMicAndCamera = () => {
         {getPermissionNotYetAllowed()}
       </Grid>
     </Grid>
-  )
+  ) : null
 }
 export default SetupMicAndCamera
