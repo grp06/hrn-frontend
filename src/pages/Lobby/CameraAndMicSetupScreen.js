@@ -1,30 +1,34 @@
 import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
+import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { SetupMicAndCamera } from '../Event'
 
 const useStyles = makeStyles((theme) => ({
   previewVideo: {
     width: '100%',
-    height: '500px',
+    height: 'auto',
     backgroundColor: 'black',
+    borderRadius: '4px',
   },
   screenContainer: {
     height: '100vh',
     width: '100vw',
     position: 'absolute',
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundImage: `url(${confettiDoodles})`,
   },
   videoAndSelectionContainer: {
     width: '85%',
-    height: '100%',
+    height: 'auto',
     margin: 'auto',
+    borderRadius: '4px',
+    padding: theme.spacing(3),
+    backgroundColor: theme.palette.common.grey10,
   },
 }))
 
-const CameraAndMicSetupScreen = () => {
+const CameraAndMicSetupScreen = ({ usersName }) => {
   const classes = useStyles()
   return (
     <Grid container justify="center" alignItems="center" className={classes.screenContainer}>
@@ -35,11 +39,11 @@ const CameraAndMicSetupScreen = () => {
         alignItems="center"
         className={classes.videoAndSelectionContainer}
       >
-        <Grid item md={5}>
+        <Grid item md={6}>
           <video autoPlay id="videoElement" muted className={classes.previewVideo} />
         </Grid>
-        <Grid item md={7}>
-          <SetupMicAndCamera />
+        <Grid item md={6}>
+          <SetupMicAndCamera usersName={usersName} />
         </Grid>
       </Grid>
     </Grid>

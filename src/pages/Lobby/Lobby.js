@@ -86,7 +86,7 @@ const Lobby = () => {
     status: eventStatus,
     updated_at: eventUpdatedAt,
   } = event
-  const { id: userId } = user
+  const { id: userId, name: usersName } = user
   const isEventHost = host_id && host_id === userId
   const hasCheckedCamera = useRef()
   // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
@@ -149,7 +149,7 @@ const Lobby = () => {
   }, [eventStatus, userEventStatus, myRoundData])
 
   if (!userHasEnabledCameraAndMic) {
-    return <CameraAndMicSetupScreen />
+    return <CameraAndMicSetupScreen usersName={usersName} />
   }
 
   return (

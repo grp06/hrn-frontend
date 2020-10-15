@@ -24,21 +24,16 @@ const defaultState = {
   userEventStatus: 'waiting for match',
   onlineEventUsers: [],
   userHasEnabledCameraAndMic: false,
-  usersListOfAudioDevices: [],
-  usersListOfVideoDevices: [],
-  usersPreferredAudioDevice: '',
-  usersPreferredVideoDevice: '',
 }
 
 const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { userEventStatus } = state
+  const { userEventStatus, userHasEnabledCameraAndMic } = state
   const { user, setUserUpdatedAt, userInEvent } = useUserContext()
-  const { event, permissions } = useEventContext()
+  const { event } = useEventContext()
   const { id: eventId } = event
   const { id: userId } = user
   const history = useHistory()
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const [updateEventUsersLastSeenMutation] = useMutation(updateEventUsersLastSeen, {
     variables: {
@@ -79,7 +74,7 @@ const UserEventStatusProvider = ({ children }) => {
       userEventStatus !== 'in chat' &&
       userEventStatus !== 'sitting out' &&
       userInEvent &&
-      !micOrCameraIsDisabled
+      userHasEnabledCameraAndMic
     ) {
       const interval = setInterval(async () => {
         console.log('last seen')
@@ -96,7 +91,7 @@ const UserEventStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId, userEventStatus, userInEvent])
+  }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic])
 
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>
