@@ -66,6 +66,7 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
     variables: {
       row_id,
       reason: 'reported my partner',
+      rating: 0,
     },
   })
 
