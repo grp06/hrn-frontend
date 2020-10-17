@@ -1,10 +1,8 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const lightPurple = '#723EBD'
-const dankPurp = '#6327bb'
-const orchid = '#e98dd7'
+const basePurple = '#8C57DB'
+const basePink = '#FF99AD'
 const sunray = '#fabb5b'
-const independence = '#3a405a'
 const white = '#fff'
 const ghostWhite = '#f4f6fa'
 const ghostWhiteSub = '#E2E8F2'
@@ -14,41 +12,25 @@ const bodyBlack = '#000000'
 const grey5 = '#191919'
 const greyBorder = '#3e4042'
 const greySubtitle = '#BFBFBF'
-const greyCard = '#242526'
+const greyCard = '#191919'
 const grey10 = '#262626'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
-// const black1dp = '#1d1d1d'
 const black2dp = '#212121'
 const red = '#ff3333'
-// const black3dp = '#232323'
-// const black6dp = '#2c2c2c'
-
-// HRN Lab Colors
-// const softPurp = '#d2b6e5'
-// const softOrchid = '#e3b6e5'
-// const cottonCandy = '#8dd7e9'
-// const lightSalmon = '#e99f8d'
-// const sandDune = '#e9cd8d'
-// const vanilla = '#fffce1'
-// const vomit = '#7fbb27'
-// const hiSky = '#5b9afa'
-// const banana = '#ffdd43'
 
 const theme = createMuiTheme({
   palette: {
     common: {
-      dankPurp,
-      lightPurple,
-      orchid,
+      basePurple,
+      basePink,
       sunray,
       ghostWhite,
       ghostWhiteSub,
       ghostWhiteBody,
       ghostWhiteDark,
-      independence,
       bodyBlack,
       grey5,
       greyCard,
@@ -62,10 +44,10 @@ const theme = createMuiTheme({
       grey10,
     },
     primary: {
-      main: dankPurp,
+      main: basePurple,
     },
     secondary: {
-      main: orchid,
+      main: basePink,
     },
     default: {
       main: sunray,
@@ -85,24 +67,28 @@ const theme = createMuiTheme({
       textTransform: 'none',
       color: ghostWhite,
     },
+    // Event title on event page/lobby
     h1: {
       fontFamily: 'Muli',
-      fontSize: '2.3rem',
-      fontWeight: '700',
+      fontSize: '2.25rem',
+      fontWeight: '600',
       lineHeight: '2.9rem',
-      color: ghostWhite,
+      color: white,
     },
-    // for very large numbers
+    // Event titlle on event thumbnail, Modals, Transitional Page, Card Header
     h2: {
       fontFamily: 'Muli',
-      fontSize: '4rem',
-      color: orchid,
+      fontSize: '1.5rem',
+      lineHeight: '2rem',
+      color: white,
     },
     // Event Title
-    // 3REM
+    // Buttons
     h3: {
       fontFamily: 'Muli',
-      color: ghostWhite,
+      fontSize: '1.125rem',
+      lineHeight: '1.45rem',
+      color: white,
       fontWeight: '600',
     },
     // Card Headers (login / signup form)
@@ -152,6 +138,11 @@ const theme = createMuiTheme({
       lineHeight: '2.3rem',
       fontWeight: '500',
       textAlign: 'center',
+    },
+    largeNumber: {
+      fontFamily: 'Muli',
+      fontSize: '4rem',
+      color: basePink,
     },
   },
   overrides: {
@@ -204,7 +195,7 @@ const theme = createMuiTheme({
       root: {
         color: ghostWhiteSub,
         '&.Mui-focused': {
-          color: orchid,
+          color: basePink,
         },
       },
     },
@@ -214,7 +205,7 @@ const theme = createMuiTheme({
         fontSize: '1rem',
       },
       shrink: {
-        color: orchid,
+        color: basePink,
       },
     },
     MuiInput: {
@@ -287,7 +278,7 @@ const theme = createMuiTheme({
         color: bodyBlack,
       },
       filledSuccess: {
-        backgroundColor: dankPurp,
+        backgroundColor: basePurple,
       },
     },
     MuiStepLabel: {

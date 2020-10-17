@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     height: '120px',
     lineHeight: 1.25,
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
       color: theme.palette.common.ghostWhite,
     },
     '&:hover .MuiFab-label .MuiGrid-root .MuiTypography-subtitle2': {
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75%',
   },
   fabText: {
-    color: theme.palette.common.dankPurp,
+    color: theme.palette.common.basePurple,
     fontWeight: '700',
   },
 }))
@@ -124,10 +124,10 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderRating = () => {
     return (
       <>
-        <Typography variant="h4" className={classes.messageText}>
+        <Typography variant="h1" className={classes.messageText}>
           Hope you had a great chat!
         </Typography>
-        <Typography variant="h4" className={classes.messageText}>
+        <Typography variant="h1" className={classes.messageText}>
           Would you be excited to match with this person in a future event?
         </Typography>
         <Typography variant="subtitle1">

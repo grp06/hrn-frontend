@@ -1,7 +1,7 @@
 {
   "cSpell.words": ["get", "get twilio token", "token", "twilio"],
   "workbench.colorCustomizations": {
-    "terminalCursor.foreground": "#e98dd7",
+    "terminalCursor.foreground": "#FF99AD",
     "editorCursor.foreground": "#fabb5b"
   },
   "terminal.integrated.cursorBlinking": true

@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   listItem: {
     padding: theme.spacing(1.75, 0),
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
     },
   },
   listItemText: {

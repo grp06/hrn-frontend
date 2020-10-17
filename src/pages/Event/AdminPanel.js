@@ -8,6 +8,9 @@ import { AttendeesList, EventCountdown, ListOfRSVPs, ShareEventPromptModal } fro
 import { EventForm, FloatCardLarge, TransitionModal } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  largeNumber: {
+    ...theme.typography.largeNumber,
+  },
   topDashboard: {
     width: '100%',
     padding: theme.spacing(5, 0),
@@ -86,8 +89,8 @@ const AdminPanel = ({ eventData, timeState }) => {
             justify="center"
             alignItems="center"
           >
-            <Typography variant="h5">Participants Signed Up</Typography>
-            <Typography variant="h2">{event_users.length}</Typography>
+            <Typography variant="h2">Participants Signed Up</Typography>
+            <Typography className={classes.largeNumber}>{event_users.length}</Typography>
           </Grid>
           <Grid
             container

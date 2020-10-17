@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2.5),
   },
   pinkText: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
   },
   shortBioDesc: {
     marginBottom: theme.spacing(3.5),

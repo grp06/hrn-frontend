@@ -45,7 +45,7 @@ const GUMErrorMessage = (errorName) => {
     case 'NotAllowedError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h1" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔
@@ -93,7 +93,7 @@ const GUMErrorMessage = (errorName) => {
     case 'NotFoundError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h1" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔
@@ -113,7 +113,7 @@ const GUMErrorMessage = (errorName) => {
     case 'NotReadableError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h1" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔

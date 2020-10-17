@@ -15,7 +15,7 @@ const StartEventButton = ({ event, userId }) => {
           buttonSize: 'large',
         },
         modalBody: (
-          <Typography variant="h5">
+          <Typography variant="h2">
             Starting the event will stop your current broadcast. Are you sure you want to start the
             event?
           </Typography>

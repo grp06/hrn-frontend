@@ -29,7 +29,7 @@ const EventCantRSVP = () => {
         alignItems="center"
         className={classes.topDashboard}
       >
-        <Typography variant="h4">Sorry, this event is over.</Typography>
+        <Typography variant="h1">Sorry, this event is over.</Typography>
       </Grid>
     </FloatCardLarge>
   )

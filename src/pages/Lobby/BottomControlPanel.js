@@ -38,7 +38,7 @@ const BottomControlPanel = ({
       buttonColor: 'link',
     },
     modalBody: (
-      <Typography variant="h5">
+      <Typography variant="h2">
         This will reset the event in its entirety. Are you 100% sure?
       </Typography>
     ),

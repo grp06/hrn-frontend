@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
   highlightText: {
     color: theme.palette.common.ghostWhite,
     fontWeight: '300',
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundColor: theme.palette.common.basePurple,
     borderRadius: '4px',
     padding: theme.spacing(0.2, 1),
   },
@@ -112,7 +112,7 @@ const GetTagsModal = () => {
             className={classes.paper}
           >
             <Grid container justify="center" className={classes.modalBody}>
-              <Typography variant="h5" className={classes.modalHeader}>
+              <Typography variant="h2" className={classes.modalHeader}>
                 We want to get to know you a bit more{' '}
                 <span role="img" aria-label="excited smiley">
                   🤗

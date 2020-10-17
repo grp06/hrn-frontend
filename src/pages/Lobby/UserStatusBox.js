@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1',
     padding: theme.spacing(2, 1),
     color: theme.palette.common.ghostWhiteSub,
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundColor: theme.palette.common.basePurple,
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
     },
   },
   toggleUnSelect: {

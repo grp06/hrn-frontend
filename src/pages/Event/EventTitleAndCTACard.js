@@ -110,9 +110,9 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   return (
     <Grid container direction="row" justify="space-between" alignItems="center">
       <Grid container item xs={12} md={9} direction="column">
-        <Typography variant="h3">{event_name}</Typography>
+        <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
-          <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
+          <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
           <Typography variant="subtitle1" className={classes.subtitle}>
             {formatDate(startTime)}
           </Typography>

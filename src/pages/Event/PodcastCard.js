@@ -22,7 +22,7 @@ const PodcastCard = () => {
   const classes = useStyles()
   return (
     <Grid container direction="column" justify="flex-start" className={classes.cardContainer}>
-      <Typography variant="h5" className={classes.cardTitle}>
+      <Typography variant="h2" className={classes.cardTitle}>
         About Hi Right Now
       </Typography>
       <Typography variant="body1">Listen to our podcast.</Typography>

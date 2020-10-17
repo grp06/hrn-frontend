@@ -114,7 +114,7 @@ const EventComplete = ({ match }) => {
 
   return (
     <div className={classes.wrapper}>
-      <Typography variant="h4" className={classes.categoryHeader}>
+      <Typography variant="h1" className={classes.categoryHeader}>
         {cardHeading()}
       </Typography>
       <Grid container item direction="column" justify="space-around">

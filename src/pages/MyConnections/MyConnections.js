@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
   toggleButtonActive: {
     width: '125px',
     '&.Mui-selected': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
       borderRadius: 0,
       border: 'none',
-      borderBottom: `2px solid ${theme.palette.common.orchid}`,
+      borderBottom: `2px solid ${theme.palette.common.basePink}`,
       '&:hover': {
         backgroundColor: 'transparent',
       },
@@ -99,7 +99,7 @@ const MyConnections = () => {
             alignItems="center"
             className={classes.nullDataContainer}
           >
-            <Typography variant="h4" className={classes.nullDataHeader}>
+            <Typography variant="h1" className={classes.nullDataHeader}>
               {message}
             </Typography>
             <Typography variant="h6" className={classes.nullDataSub}>
@@ -161,7 +161,7 @@ const MyConnections = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <Typography variant="h3" className={classes.sectionHeader}>
+      <Typography variant="h1" className={classes.sectionHeader}>
         Connections
       </Typography>
       <div className={classes.pageContainer}>

@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   circleButton: {
-    border: `2px solid ${theme.palette.common.orchid}`,
+    border: `2px solid ${theme.palette.common.basePink}`,
     backgroundColor: 'transparent',
     '&:hover': {
       backgroundColor: 'transparent',
@@ -116,7 +116,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           className={classes.circleButton}
           onClick={handleCopyEmailClick}
         >
-          <EmailIcon style={{ color: '#e98dd7' }} fontSize="small" />
+          <EmailIcon style={{ color: '#FF99AD' }} fontSize="small" />
         </Fab>
         {linkedIn_url && (
           <Fab
@@ -128,7 +128,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             target="_blank"
             rel="noopener noreferrer"
           >
-            <LinkedInIcon style={{ color: '#e98dd7' }} fontSize="small" />
+            <LinkedInIcon style={{ color: '#FF99AD' }} fontSize="small" />
           </Fab>
         )}
       </div>
@@ -159,7 +159,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             <img alt="company-logo" className={classes.avatar} src={logo} />
           </Avatar>
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
-            <Typography variant="h4">{name}</Typography>
+            <Typography variant="h1">{name}</Typography>
             <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>
             {renderContactButtons()}
           </Grid>

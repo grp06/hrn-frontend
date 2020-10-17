@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: 'Muli',
     textDecoration: 'none',
     '&:hover': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
     },
   },
   errorMessage: {
@@ -100,7 +100,7 @@ const SetNewPasswordForm = ({ match }) => {
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" style={{ lineHeight: 1 }}>
+                <Typography variant="h1" style={{ lineHeight: 1 }}>
                   Set a new password
                 </Typography>
               </Grid>

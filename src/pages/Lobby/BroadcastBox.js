@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
     width: '75%',
   },
   pinkNumber: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
     fontSize: '2rem',
     lineHeight: 1,
   },
@@ -75,13 +75,13 @@ const BroadcastBox = React.memo(
               <Grid container direction="column" className={classes.eventInfoContainer}>
                 <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
                   <Grid container justify="flex-start" alignItems="center">
-                    <Typography variant="h3" className={classes.eventName}>
+                    <Typography variant="h1" className={classes.eventName}>
                       {event_name}
                     </Typography>
                     {isEventHost && editFormModal}
                   </Grid>
                   <Grid item container direction="row" alignItems="center">
-                    <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
+                    <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
                     <Typography variant="subtitle1" style={{ paddingLeft: '8px' }}>
                       {formatDate(start_at)}
                     </Typography>

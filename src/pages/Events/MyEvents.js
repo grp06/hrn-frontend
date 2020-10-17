@@ -95,7 +95,7 @@ const MyEvents = () => {
               alignItems="center"
               className={classes.nullDataContainer}
             >
-              <Typography variant="h4" className={classes.nullDataHeader}>
+              <Typography variant="h1" className={classes.nullDataHeader}>
                 Sorry, we are currently mostly hosting invite-only events{' '}
                 <span role="img" aria-label="neutral face">
                   😐
@@ -133,7 +133,7 @@ const MyEvents = () => {
           className={classes.bannerGradient}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">My Events</Typography>
+            <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
       </div>

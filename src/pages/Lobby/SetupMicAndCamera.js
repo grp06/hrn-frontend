@@ -171,11 +171,11 @@ const SetupMicAndCamera = ({ usersName }) => {
       return (
         <div className={classes.cameraBlocked}>
           <Grid container justify="center" direction="column" className={classes.blockedText}>
-            <Typography variant="h5">Your camera or mic is blocked</Typography>
-            <Typography variant="h5">
+            <Typography variant="h2">Your camera or mic is blocked</Typography>
+            <Typography variant="h2">
               To unblock - click the &quot;camera blocked&quot; icon in the address bar
             </Typography>
-            <Typography variant="h5">Allow access, then refresh the page</Typography>
+            <Typography variant="h2">Allow access, then refresh the page</Typography>
           </Grid>
         </div>
       )
@@ -195,7 +195,7 @@ const SetupMicAndCamera = ({ usersName }) => {
         >
           {usersName ? (
             <>
-              <Typography variant="h4" style={{ marginBottom: '12px' }}>
+              <Typography variant="h1" style={{ marginBottom: '12px' }}>
                 Damn. You look good{' '}
                 {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}
                 {''}
@@ -207,10 +207,10 @@ const SetupMicAndCamera = ({ usersName }) => {
                   🤩
                 </span>
               </Typography>
-              <Typography variant="h5">You&apos;re all set to join the event!</Typography>
+              <Typography variant="h2">You&apos;re all set to join the event!</Typography>
             </>
           ) : (
-            <Typography variant="h5" className={classes.modalText}>
+            <Typography variant="h2" className={classes.modalText}>
               Select the video/audio source you would like to use
             </Typography>
           )}
@@ -294,7 +294,7 @@ const SetupMicAndCamera = ({ usersName }) => {
         </Grid>
       ) : (
         <>
-          <Typography variant="h5" style={{ textAlign: 'center' }}>
+          <Typography variant="h2" style={{ textAlign: 'center' }}>
             Please select your preferred camera and mic and press &apos;allow&apos;
           </Typography>
         </>

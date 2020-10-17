@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '125px',
     height: 'auto',
   },
+  largeNumber: {
+    ...theme.typography.largeNumber,
+  },
   partyEmoji: {
     marginLeft: theme.spacing(1),
   },
@@ -193,8 +196,8 @@ const UserPanel = ({ timeState, eventData }) => {
               justify="center"
               alignItems="center"
             >
-              <Typography variant="h5">Participants Signed Up</Typography>
-              <Typography variant="h2">{event_users.length}</Typography>
+              <Typography variant="h2">Participants Signed Up</Typography>
+              <Typography className={classes.largeNumber}>{event_users.length}</Typography>
             </Grid>
           )}
           <Grid

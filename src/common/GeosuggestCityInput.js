@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   geosuggestLabel: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
     fontWeight: '300',
   },
   geosuggestInput: {

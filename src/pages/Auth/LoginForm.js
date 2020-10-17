@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     marginTop: theme.spacing(2.5),
     '&:hover': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
     },
   },
   privacyPolicyText: {
@@ -106,7 +106,7 @@ const LoginForm = () => {
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" className={classes.formHeader}>
+                <Typography variant="h1" className={classes.formHeader}>
                   Welcome{' '}
                   <span role="img" aria-label="hand wave">
                     👋

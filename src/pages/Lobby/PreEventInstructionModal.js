@@ -7,7 +7,7 @@ const PreEventInstructionModal = () => {
   return TransitionModal({
     modalBody: (
       <div>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h2" gutterBottom>
           Some Tips for hosting:
         </Typography>
         <Typography variant="subtitle1" gutterBottom>

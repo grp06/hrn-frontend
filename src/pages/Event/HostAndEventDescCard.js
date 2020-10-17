@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
   hostName: {
     margin: '0',
   },
+  largeNumber: {
+    ...theme.typography.largeNumber,
+  },
   rsvpedNumberContainer: {
     width: 'auto',
   },
@@ -82,7 +85,7 @@ const HostAndEventDescCard = React.memo(({ event }) => {
               justify="space-between"
               className={classes.hostNameAndTitleContainer}
             >
-              <Typography variant="h5" className={classes.hostName}>
+              <Typography variant="h2" className={classes.hostName}>
                 {hostName}
               </Typography>
               <Typography variant="subtitle1">European Gigaloo</Typography>
@@ -100,7 +103,7 @@ const HostAndEventDescCard = React.memo(({ event }) => {
             <Typography variant="subtitle1" className={classes.subtitle}>
               RSVP&apos;ed /
             </Typography>
-            <Typography variant="h2">{event_users.length}</Typography>
+            <Typography className={classes.largeNumber}>{event_users.length}</Typography>
           </Grid>
         </Grid>
       </Grid>

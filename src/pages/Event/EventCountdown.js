@@ -72,13 +72,13 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       className={displayContainer && classes.container}
     >
       {isTimerActive ? (
-        <Typography variant="h5">
+        <Typography variant="h2">
           <span className={classes.time}>{displayTime}</span> until event starts
         </Typography>
       ) : (
         <div>
           <Grid container item direction="column" justify="center" alignItems="center">
-            <Typography variant="h5" className={classes.centerText}>
+            <Typography variant="h2" className={classes.centerText}>
               The host will begin the event shortly
             </Typography>
           </Grid>

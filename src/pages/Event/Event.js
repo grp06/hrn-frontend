@@ -108,7 +108,7 @@ const Event = ({ match }) => {
     eventInstruction = <EventCantRSVP />
   } else {
     eventInstruction =
-      parseInt(host_id, 10) === parseInt(userId, 10) ? (
+      parseInt(host_id, 10) === parseInt(user_id, 10) ? (
         <AdminPanel timeState={timeState()} eventData={event} />
       ) : (
         <UserPanel timeState={timeState()} eventData={event} />
@@ -123,8 +123,10 @@ const Event = ({ match }) => {
         eventSet={eventSet}
         event={event}
       />
-      <div className={classes.eventBanner} />
-      <div className={classes.bannerGradient} />
+      <Grid container>
+        <div className={classes.eventBanner} />
+        <div className={classes.bannerGradient} />
+      </Grid>
       <Grid
         container
         direction="column"

@@ -85,7 +85,7 @@ const EventBreakdownStepper = ({ eventRoundLength, endMessage }) => {
   return (
     <div className={classes.root}>
       <Grid container alignItems="center" className={classes.whatToExpect}>
-        <Typography variant="h5">What to expect</Typography>
+        <Typography variant="h2">What to expect</Typography>
       </Grid>
       <Stepper
         activeStep={activeStep}

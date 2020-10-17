@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   purpleUnderline: {
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundColor: theme.palette.common.basePurple,
     height: '5px',
     width: '20%',
     margin: theme.spacing(1, 'auto'),
@@ -114,12 +114,12 @@ const EventsPublic = () => {
           className={classes.bannerGradient}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">Join the Party!</Typography>
+            <Typography variant="h1">Join the Party!</Typography>
           </Grid>
         </Grid>
       </div>
       <Grid item container direction="column" className={classes.eventTitleContainer}>
-        <Typography variant="h4">Hi Right Now Events</Typography>
+        <Typography variant="h1">Hi Right Now Events</Typography>
         <div className={classes.purpleUnderline} />
       </Grid>
       {HRNevents &&
@@ -127,7 +127,7 @@ const EventsPublic = () => {
           return <EventCard key={event.id} event={event} />
         })}
       <Grid item container direction="column" className={classes.eventTitleContainer}>
-        <Typography variant="h4">All Events</Typography>
+        <Typography variant="h1">All Events</Typography>
         <div className={classes.purpleUnderline} />
       </Grid>
       {otherEvents &&

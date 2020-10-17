@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
   subtitle: {
     marginLeft: theme.spacing(0.5),
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
     fontWeight: '500',
   },
   eventOverButton: {
@@ -99,7 +99,7 @@ const EventCard = ({ event }) => {
           alignItems="flex-start"
           className={classes.eventContentContainer}
         >
-          <Typography gutterBottom variant="h4">
+          <Typography gutterBottom variant="h1">
             {event_name}
           </Typography>
           <Typography variant="body1" component="p">

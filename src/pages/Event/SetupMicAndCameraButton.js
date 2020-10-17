@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const SetupMicAndCameraButton = ({ setUserHasEnabledCameraAndMic }) => {
   const classes = useStyles()
   const fabButton = {
-    fabButtonIcon: <SettingsIcon style={{ color: '#6327bb' }} />,
+    fabButtonIcon: <SettingsIcon style={{ color: '#8C57DB' }} />,
     fabButtonSize: 'small',
     fabButtonColor: 'inherit',
   }

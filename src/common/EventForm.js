@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   publicEventLabel: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
     fontSize: '0.75rem',
     fontWeight: '300',
     letterSpacing: '0.00938em',
@@ -181,7 +181,7 @@ const EventForm = ({ eventData, match }) => {
             <form onSubmit={handleSubmit}>
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
-                  <Typography variant="h4">
+                  <Typography variant="h1">
                     {eventData ? 'Edit ' : 'Create '}
                     Your Event
                   </Typography>
