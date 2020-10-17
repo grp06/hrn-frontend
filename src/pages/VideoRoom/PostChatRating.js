@@ -196,7 +196,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     return (
       <>
         <Typography className={classes.messageText}>
-          Awesome! Hold tight as we&apos;re matching you with someone awesome really soon{' '}
+          Awesome! Hang tight as we&apos;re matching you with someone awesome really soon{' '}
           <span role="img" aria-label="sunglass smiley">
             😎
           </span>

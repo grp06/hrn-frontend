@@ -4,10 +4,9 @@ import Typography from '@material-ui/core/Typography'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
+import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
-import { CameraDisabledBanner } from '../../common'
-import { usePreEventTwilio, useGetCameraAndMicStatus } from '../../hooks'
+import { usePreEventTwilio } from '../../hooks'
 import { constants } from '../../utils'
 
 const { maxNumUsersPerRoom } = constants
@@ -63,27 +62,18 @@ const PreEvent = ({ onlineEventUsers }) => {
   const history = useHistory()
   const { user } = useUserContext()
 
-  const { event, permissions, setCameraAndMicPermissions } = useEventContext()
+  const { event } = useEventContext()
   const { id: userId, role } = user
   const { id: eventId } = event
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
   const eventSet = Object.keys(event).length > 1
-  const hasCheckedCamera = useRef()
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
   const { startPreEventTwilio } = usePreEventTwilio()
-
-  useGetCameraAndMicStatus(hasCheckedCamera.current)
-  hasCheckedCamera.current = true
 
   useEffect(() => {
     if (eventSet) {
       const { status } = event
-
-      if (micOrCameraIsDisabled) {
-        return history.push(`/events/${eventId}`)
-      }
 
       if (status === 'in-between-rounds') {
         console.log('force to video room')
@@ -209,12 +199,6 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   return (
     <Grid className={classes.preEventWrapper} container direction="column" justify="center">
-      {micOrCameraIsDisabled && (
-        <CameraDisabledBanner
-          permissions={permissions}
-          setCameraAndMicPermissions={setCameraAndMicPermissions}
-        />
-      )}
       <div id="host-video" className={classes.hostVid} />
       <Grid container direction="column" className={classes.liveAndViewersContainer}>
         <Typography className={classes.liveLogo} variant="subtitle1">

@@ -10,7 +10,6 @@ import { AdminPanel, UserPanel, EventStatusRedirect, EventNotRSVP } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { formatDate, getTimeUntilEvent } from '../../utils'
-import { useGetCameraAndMicStatus } from '../../hooks'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
@@ -48,13 +47,9 @@ const Event = ({ match }) => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { permissions, event, setEventId } = useEventContext()
+  const { event, setEventId } = useEventContext()
   const { id: userId } = user
   const eventSet = Object.keys(event).length > 1
-  const hasCheckedCamera = useRef()
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-  useGetCameraAndMicStatus(hasCheckedCamera.current)
-  hasCheckedCamera.current = true
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', eventId)
 
@@ -91,9 +86,9 @@ const Event = ({ match }) => {
   } else {
     eventInstruction =
       parseInt(host_id, 10) === parseInt(userId, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} permissions={permissions} />
+        <AdminPanel timeState={timeState()} eventData={event} />
       ) : (
-        <UserPanel timeState={timeState()} eventData={event} permissions={permissions} />
+        <UserPanel timeState={timeState()} eventData={event} />
       )
   }
 
@@ -101,7 +96,6 @@ const Event = ({ match }) => {
     <>
       <EventStatusRedirect
         isEventParticipant={isEventParticipant}
-        micOrCameraIsDisabled={micOrCameraIsDisabled}
         userId={userId}
         eventSet={eventSet}
         event={event}

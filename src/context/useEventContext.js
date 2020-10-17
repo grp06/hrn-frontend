@@ -15,12 +15,6 @@ const useEventContext = () => {
     })
   }
 
-  const setCameraAndMicPermissions = (permissions) => {
-    dispatch((draft) => {
-      draft.permissions = permissions
-    })
-  }
-
   // LETS TRY TO GET RID OF THIS
   const setEventId = (eventId) => {
     dispatch((draft) => {
@@ -31,7 +25,6 @@ const useEventContext = () => {
   return {
     ...state,
     resetEvent,
-    setCameraAndMicPermissions,
     setEventId,
   }
 }

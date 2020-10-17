@@ -16,9 +16,16 @@ const useUserEventStatusContext = () => {
     })
   }
 
+  const setUserHasEnabledCameraAndMic = (userHasEnabledCameraAndMic) => {
+    dispatch((draft) => {
+      draft.userHasEnabledCameraAndMic = userHasEnabledCameraAndMic
+    })
+  }
+
   return {
     ...state,
     setUserEventStatus,
+    setUserHasEnabledCameraAndMic,
   }
 }
 

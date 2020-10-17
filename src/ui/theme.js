@@ -13,6 +13,7 @@ const ghostWhiteDark = '#BFCBE2'
 const bodyBlack = '#191919'
 const greyBorder = '#3e4042'
 const greyCard = '#242526'
+const grey10 = '#262626'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
@@ -54,6 +55,7 @@ const theme = createMuiTheme({
       greyButton,
       greyButtonHover,
       red,
+      grey10,
     },
     primary: {
       main: dankPurp,
@@ -335,6 +337,11 @@ const theme = createMuiTheme({
         width: '175px',
         padding: '8px',
         textAlign: 'center',
+      },
+    },
+    MuiSelect: {
+      icon: {
+        color: ghostWhite,
       },
     },
   },
