@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     backgroundColor: theme.palette.common.grey5,
     borderRadius: '4px',
-    height: '100%',
+    height: 'auto',
     padding: theme.spacing(3, 5),
   },
   stepBodyText: {

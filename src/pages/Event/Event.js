@@ -7,8 +7,9 @@ import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
   AdminPanel,
   UserPanel,
-  EventStatusRedirect,
+  EventAttendeesCard,
   EventCantRSVP,
+  EventStatusRedirect,
   EventTitleAndCTACard,
   HostAndEventDescCard,
   PodcastCard,
@@ -48,6 +49,10 @@ const useStyles = makeStyles((theme) => ({
   },
   podcastContainer: {
     width: '44%',
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   subtitle: {
     margin: theme.spacing(1),
@@ -59,6 +64,10 @@ const useStyles = makeStyles((theme) => ({
   },
   whatToExpectContainer: {
     width: '55%',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    marginBottom: theme.spacing(2),
   },
   whatToExpectAndPodcastContainer: {
     marginTop: theme.spacing(2),
@@ -72,7 +81,7 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { event, setEventId } = useEventContext()
   const { id: user_id } = user
-  const { host_id, start_at, description, status: eventStatus } = event
+  const { event_users, host_id, start_at } = event
   const eventSet = Object.keys(event).length > 1
   // used as a safety check for when we get thumbs up data
   localStorage.setItem('eventId', eventId)
@@ -92,28 +101,6 @@ const Event = ({ match }) => {
   const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
 
   const timeUntilEvent = getTimeUntilEvent(start_at)
-
-  const timeState = () => {
-    if (timeUntilEvent > 1800000) {
-      return 'future'
-    }
-    if (timeUntilEvent < 0) {
-      return 'go time'
-    }
-    return 'within 30 mins'
-  }
-
-  let eventInstruction
-  if (eventStatus === 'complete') {
-    eventInstruction = <EventCantRSVP />
-  } else {
-    eventInstruction =
-      parseInt(host_id, 10) === parseInt(user_id, 10) ? (
-        <AdminPanel timeState={timeState()} eventData={event} />
-      ) : (
-        <UserPanel timeState={timeState()} eventData={event} />
-      )
-  }
 
   return (
     <>
@@ -145,11 +132,17 @@ const Event = ({ match }) => {
             <WhatToExpect userIsHost={userIsHost} />
           </Grid>
           <Grid className={classes.podcastContainer}>
-            <PodcastCard />
+            {userIsHost ? <EventAttendeesCard eventUsers={event_users} /> : <PodcastCard />}
           </Grid>
         </Grid>
+        {userIsHost ? (
+          <Grid container direction="row" justify="flex-end">
+            <div className={classes.podcastContainer}>
+              <PodcastCard />
+            </div>
+          </Grid>
+        ) : null}
       </Grid>
-      {eventInstruction}
     </>
   )
 }
