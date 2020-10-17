@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -7,11 +7,11 @@ import { useSubscription } from '@apollo/react-hooks'
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
-import { useGetCameraAndMicStatus } from '../../hooks'
 import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
   BroadcastBox,
+  CameraAndMicSetupScreen,
   EventChatBox,
   EventTimerCountdown,
   NextRoundIn,
@@ -67,9 +67,15 @@ const useStyles = makeStyles((theme) => ({
 const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { event, permissions } = useEventContext()
-  const { user, userInEvent, setUserInEvent } = useUserContext()
-  const { setUserEventStatus, userEventStatus, onlineEventUsers } = useUserEventStatusContext()
+  const { event } = useEventContext()
+  const { user, setUserInEvent } = useUserContext()
+  const {
+    onlineEventUsers,
+    setUserEventStatus,
+    setUserHasEnabledCameraAndMic,
+    userEventStatus,
+    userHasEnabledCameraAndMic,
+  } = useUserEventStatusContext()
   const {
     current_round: round,
     event_users,
@@ -80,12 +86,8 @@ const Lobby = () => {
     status: eventStatus,
     updated_at: eventUpdatedAt,
   } = event
-  const { id: userId } = user
+  const { id: userId, name: usersName } = user
   const isEventHost = host_id && host_id === userId
-  const hasCheckedCamera = useRef()
-  // const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
-  useGetCameraAndMicStatus(hasCheckedCamera.current)
-  hasCheckedCamera.current = true
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -133,7 +135,8 @@ const Lobby = () => {
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
         myRoundData &&
-        myRoundData.partners.length) ||
+        myRoundData.partners.length &&
+        userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
       console.log('myRoundData ->', myRoundData)
@@ -141,6 +144,10 @@ const Lobby = () => {
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus, userEventStatus, myRoundData])
+
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen usersName={usersName} />
+  }
 
   return (
     <div className={classes.pageContainer}>
@@ -172,10 +179,15 @@ const Lobby = () => {
             event={event}
             isEventHost={isEventHost}
             onlineEventUsers={onlineEventUsers}
-            setUserEventStatus={useCallback(setUserEventStatus, [])}
+            setUserEventStatus={setUserEventStatus}
             userEventStatus={userEventStatus}
           />
-          <BottomControlPanel permissions={permissions} event={event} userId={userId} />
+          <BottomControlPanel
+            event={event}
+            setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
+            userId={userId}
+            userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
+          />
         </Grid>
         <Grid
           container

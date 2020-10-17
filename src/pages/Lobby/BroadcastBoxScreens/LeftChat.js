@@ -32,9 +32,6 @@ const LeftChat = () => {
         </span>
       </Typography>
       <Typography className={classes.messageText}>
-        We&apos;ve got our coder monkeys working hard to fix your issues.
-      </Typography>
-      <Typography className={classes.messageText}>
         We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as soon as
         we can.
       </Typography>

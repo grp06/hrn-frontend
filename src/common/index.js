@@ -1,5 +1,4 @@
 // FIXME LIKE THIS: https://spin.atomicobject.com/2018/06/25/circular-dependencies-javascript/
-export { default as CameraDisabledBanner } from './CameraDisabledBanner'
 export { default as ErrorBoundary } from './ErrorBoundary'
 export { default as EventCard } from './EventCard'
 export { default as EventForm } from './EventForm'

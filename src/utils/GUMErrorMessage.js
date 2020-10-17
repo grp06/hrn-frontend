@@ -39,6 +39,9 @@ const useStyles = makeStyles((theme) => ({
 const GUMErrorMessage = (errorName) => {
   const classes = useStyles()
   switch (errorName) {
+    // when its blocked
+    // or they didn't allow
+    // google chrome its 'permission denied'
     case 'NotAllowedError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
@@ -58,7 +61,7 @@ const GUMErrorMessage = (errorName) => {
           </Typography>
           <Typography variant="h6" className={classes.modalBody}>
             You can follow the links below to help troubleshoot. When you&apos;re done with the
-            changes make sure to come back here and refresh!
+            changes make sure to refresh the page!
           </Typography>
           <a
             className={classes.aTag}

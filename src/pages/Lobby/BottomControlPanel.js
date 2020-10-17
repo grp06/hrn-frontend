@@ -20,12 +20,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = ({ permissions, event, userId }) => {
+const BottomControlPanel = ({
+  event,
+  setUserHasEnabledCameraAndMic,
+  userId,
+  userHasEnabledCameraAndMic,
+}) => {
   const classes = useStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const renderResetEvent = TransitionModal({
     button: {
@@ -61,7 +65,7 @@ const BottomControlPanel = ({ permissions, event, userId }) => {
         <Grid container direction="column">
           <Grid container direction="row" alignItems="flex-end">
             <StartPreEventButton
-              disabled={micOrCameraIsDisabled}
+              disabled={!userHasEnabledCameraAndMic}
               eventId={eventId}
               timeUntilEvent={timeUntilEvent}
             />
@@ -84,7 +88,7 @@ const BottomControlPanel = ({ permissions, event, userId }) => {
         </Grid>
       )}
       <Grid>
-        <SetupMicAndCameraButton permissions={permissions} />
+        <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
       </Grid>
     </Grid>
   )
