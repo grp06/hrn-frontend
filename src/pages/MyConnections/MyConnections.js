@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 0,
       border: 'none',
       borderBottom: `2px solid ${theme.palette.common.basePink}`,
+      backgroundColor: 'transparent',
       '&:hover': {
         backgroundColor: 'transparent',
       },
@@ -196,7 +197,7 @@ const MyConnections = () => {
             </ToggleButton>
           </ToggleButtonGroup>
         </Grid>
-        <Grid container justify="center" alignItems="center">
+        <Grid container direction="column" justify="center" alignItems="center">
           {connectionToggleValue === 'friends'
             ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
             : renderContactCards('requests', 'You don\t have any requests to respond to 😎')}

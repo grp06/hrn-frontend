@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { EventCard, Loading, FloatCardLarge } from '../../common'
 import { useAppContext, useUserContext } from '../../context'
 import { getEventsByUserId } from '../../gql/queries'
-import bannerBackground5 from '../../assets/purpleOil.jpg'
+import blurryBackground from '../../assets/blurryBackground.png'
 
 const useStyles = makeStyles((theme) => ({
   eventsContainer: {
@@ -20,25 +20,19 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     maxWidth: 500,
   },
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    width: '100%',
-    height: '100%',
-  },
   pageBanner: {
     width: '100%',
     height: '30vh',
-    backgroundImage: `url(${bannerBackground5})`,
+    backgroundImage: `url(${blurryBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
-    // marginBottom: '40px',
+    marginBottom: '40px',
   },
   pageBannerContentContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '50%',
-    textAlign: 'center',
+    width: '70%',
+    // textAlign: 'center',
   },
   nullDataContainer: {
     padding: theme.spacing(5),
@@ -124,19 +118,19 @@ const MyEvents = () => {
 
   return (
     <>
-      <div className={classes.pageBanner}>
+      <Grid container>
         <Grid
           container
           direction="column"
-          justify="center"
+          justify="flex-end"
           alignItems="center"
-          className={classes.bannerGradient}
+          className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
             <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
-      </div>
+      </Grid>
       {renderNullDataText()}
       {eventsData &&
         eventsData.event_users

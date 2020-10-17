@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.lightPurple,
   },
   pinkText: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
   },
   yellowText: {
     color: theme.palette.common.sunray,

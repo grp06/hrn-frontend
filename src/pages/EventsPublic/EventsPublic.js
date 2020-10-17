@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react'
+
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import ToggleButton from '@material-ui/lab/ToggleButton'
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { getAllPublicEvents } from '../../gql/queries'
-import bannerBackground5 from '../../assets/purpleOil.jpg'
+import blurryBackground from '../../assets/blurryBackground.png'
 import { isEventInFuture } from '../../utils'
-import { EventCard, Loading } from '../../common'
+import { FloatCardLarge, EventCard, Loading } from '../../common'
 import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
@@ -17,23 +21,10 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     maxWidth: 500,
   },
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    width: '100%',
-    height: '100%',
-  },
-  eventTitleContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: '50%',
-    textAlign: 'center',
-    padding: '0px 0px 35px 0px',
-  },
   pageBanner: {
     width: '100%',
     height: '30vh',
-    backgroundImage: `url(${bannerBackground5})`,
+    backgroundImage: `url(${blurryBackground})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     marginBottom: '40px',
@@ -41,20 +32,53 @@ const useStyles = makeStyles((theme) => ({
   pageBannerContentContainer: {
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '50%',
-    textAlign: 'center',
+    width: '70%',
+    // textAlign: 'center',
   },
-  purpleUnderline: {
-    backgroundColor: theme.palette.common.basePurple,
-    height: '5px',
-    width: '20%',
-    margin: theme.spacing(1, 'auto'),
+  toggleGrid: {
+    width: '70%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  toggleButtonActive: {
+    width: '200px',
+    '&.Mui-selected': {
+      color: theme.palette.common.basePink,
+      borderRadius: 0,
+      border: 'none',
+      borderBottom: `2px solid ${theme.palette.common.basePink}`,
+      backgroundColor: 'transparent',
+      '&:hover': {
+        backgroundColor: 'transparent',
+      },
+    },
+  },
+  toggleButtonInactive: {
+    width: '200px',
+    color: theme.palette.common.ghostWhite,
+    borderRadius: 0,
+    border: 'none',
+    // borderBottom: '2px solid #3e4042',
+    '&:hover': {
+      backgroundColor: 'transparent',
+    },
+  },
+  toggleButtonGroup: {
+    margin: theme.spacing(0, 0, 12, 0),
+  },
+  nullDataContainer: {
+    padding: theme.spacing(5),
+  },
+  nullDataHeader: {
+    marginBottom: theme.spacing(4),
+    textAlign: 'center',
   },
 }))
 
 const EventsPublic = () => {
   const classes = useStyles()
   const { setEventId, resetEvent } = useEventContext()
+  const [eventToggleValue, setEventToggleValue] = React.useState('HRN')
 
   const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
     getAllPublicEvents,
@@ -72,68 +96,121 @@ const EventsPublic = () => {
     return <Loading />
   }
 
-  let HRNevents
-  let otherEvents
-  const EventPublicRegex = /^Hi\sRight\sNow/
-  if (allPublicEventsData) {
-    HRNevents = allPublicEventsData.events
-      .filter(
-        (event) => event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
-      )
-      .sort((eventA, eventB) => {
-        if (eventA && eventB) {
-          if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
-            return 1
-          }
-          return -1
-        }
-      })
+  const renderNullDataText = (message) => {
+    return (
+      <>
+        <FloatCardLarge>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.nullDataContainer}
+          >
+            <Typography variant="h4" className={classes.nullDataHeader}>
+              {message}
+            </Typography>
+          </Grid>
+        </FloatCardLarge>
+      </>
+    )
+  }
 
-    otherEvents = allPublicEventsData.events
-      .filter(
-        (event) => !event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
-      )
-      .sort((eventA, eventB) => {
-        if (eventA && eventB) {
-          if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
-            return 1
-          }
-          return -1
-        }
-      })
+  const EventPublicRegex = /^Hi\sRight\sNow/
+  const renderEventsCards = (eventGroup, emptyGroupMessage) => {
+    if (allPublicEventsData && allPublicEventsData.events.length) {
+      const group =
+        eventGroup === 'HRN'
+          ? allPublicEventsData.events
+              .filter(
+                (event) =>
+                  event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
+              )
+              .sort((eventA, eventB) => {
+                if (eventA && eventB) {
+                  if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
+                    return 1
+                  }
+                  return -1
+                }
+              })
+          : allPublicEventsData.events
+              .filter(
+                (event) =>
+                  !event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
+              )
+              .sort((eventA, eventB) => {
+                if (eventA && eventB) {
+                  if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
+                    return 1
+                  }
+                  return -1
+                }
+              })
+
+      if (group.length > 0) {
+        return group.map((event) => <EventCard key={event.id} event={event} />)
+      }
+      return renderNullDataText(emptyGroupMessage)
+    }
+    return renderNullDataText(emptyGroupMessage)
+  }
+
+  const handleEventToggle = (event) => {
+    setEventToggleValue(event.currentTarget.value)
   }
 
   return (
     <>
-      <div className={classes.pageBanner}>
+      <Grid container>
         <Grid
           container
           direction="column"
-          justify="center"
+          justify="flex-end"
           alignItems="center"
-          className={classes.bannerGradient}
+          className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h1">Join the Party!</Typography>
+            <Typography variant="h1">All Events</Typography>
           </Grid>
         </Grid>
-      </div>
-      <Grid item container direction="column" className={classes.eventTitleContainer}>
-        <Typography variant="h1">Hi Right Now Events</Typography>
-        <div className={classes.purpleUnderline} />
       </Grid>
-      {HRNevents &&
-        HRNevents.map((event) => {
-          return <EventCard key={event.id} event={event} />
-        })}
-      <Grid item container direction="column" className={classes.eventTitleContainer}>
-        <Typography variant="h1">All Events</Typography>
-        <div className={classes.purpleUnderline} />
+
+      <Grid container justify="flex-start" alignItems="center" className={classes.toggleGrid}>
+        <ToggleButtonGroup
+          value={eventToggleValue}
+          groupedTextHorizontal
+          exclusive
+          onChange={handleEventToggle}
+          className={classes.toggleButtonGroup}
+        >
+          <ToggleButton
+            value="HRN"
+            disableRipple
+            className={
+              eventToggleValue === 'HRN' ? classes.toggleButtonActive : classes.toggleButtonInactive
+            }
+          >
+            Hi Right Now Events
+          </ToggleButton>
+          <ToggleButton
+            value="OthersEvent"
+            disableRipple
+            className={
+              eventToggleValue === 'OthersEvent'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
+          >
+            All Events
+          </ToggleButton>
+        </ToggleButtonGroup>
       </Grid>
-      {otherEvents &&
-        otherEvents.map((event) => {
-          return <EventCard key={event.id} event={event} style={{ top: '0%' }} />
-        })}
+      <Grid container direction="column" justify="center" alignItems="center">
+        {eventToggleValue === 'HRN'
+          ? renderEventsCards('HRN', 'Looks like No Hi Right Now Events yet 😢')
+          : renderEventsCards('OthersEvent', 'Looks like No Events yet 😢')}
+      </Grid>
     </>
   )
 }
