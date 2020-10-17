@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     height: '70px',
   },
   cardContainer: {
-    backgroundColor: theme.palette.common.grey5,
+    backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
     height: 'auto',
     padding: theme.spacing(3, 5),

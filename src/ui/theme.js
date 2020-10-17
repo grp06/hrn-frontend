@@ -9,10 +9,10 @@ const ghostWhiteSub = '#E2E8F2'
 const ghostWhiteBody = '#D1D9EA'
 const ghostWhiteDark = '#BFCBE2'
 const bodyBlack = '#000000'
-const grey5 = '#191919'
 const greyBorder = '#3e4042'
 const greySubtitle = '#BFBFBF'
 const greyCard = '#191919'
+const greyNav = '#1c1c1c'
 const grey10 = '#262626'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
@@ -32,8 +32,8 @@ const theme = createMuiTheme({
       ghostWhiteBody,
       ghostWhiteDark,
       bodyBlack,
-      grey5,
       greyCard,
+      greyNav,
       greyBorder,
       greyBoxShadow,
       greyHighlight,

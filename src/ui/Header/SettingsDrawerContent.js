@@ -9,20 +9,18 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  drawerTitle: {
-    textAlign: 'center',
-    color: '#818588',
-  },
   listItem: {
-    padding: theme.spacing(1.75, 0),
+    padding: theme.spacing(1.5, 0, 1.5, 2.25),
     '&:hover': {
       backgroundColor: theme.palette.common.basePurple,
     },
   },
   listItemText: {
     fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhiteBody,
+    color: 'white',
     fontSize: '1rem',
+    fontWeight: '300',
+    marginLeft: theme.spacing(1),
   },
 }))
 
@@ -40,18 +38,18 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
   const renderLoginOrLogout = () => {
     return userId ? (
       <ListItem button disableRipple onClick={() => handleLogout()} className={classes.listItem}>
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="x-circle" stroke="#D1D9EA" size="26" />
+            <FeatherIcon icon="log-out" stroke="#FFFFFF" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
         </Grid>
       </ListItem>
     ) : (
       <ListItem button disableRipple onClick={() => history.push('/')} className={classes.listItem}>
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="log-in" stroke="#D1D9EA" size="26" />
+            <FeatherIcon icon="log-in" stroke="#FFFFFF" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="Login" className={classes.listItemText} />
         </Grid>
