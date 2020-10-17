@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useUserEventStatusContext } from '../../context'
+import { GUMErrorModal } from '../../common'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
   joinEventButton: {
     marginTop: theme.spacing(4),
     width: '100%',
+  },
+  modalText: {
+    width: 'auto',
+    margin: theme.spacing(2, 'auto', 0, 'auto'),
+    textAlign: 'center',
   },
   permissionsContainer: {
     width: '90%',
@@ -60,6 +66,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   const [audioStreamLabel, setAudioStreamLabel] = useState('')
   const [videoStreamLabel, setVideoStreamLabel] = useState('')
   const [usersLocalMediaStream, setUsersLocalMediaStream] = useState(null)
+  const [gumErrorName, setGumErrorName] = useState('')
 
   const getDevices = async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
@@ -138,16 +145,16 @@ const SetupMicAndCamera = ({ usersName }) => {
       video.srcObject = localMediaStream
     } catch (error) {
       console.warn('error - ', error)
-      alert(error.message)
       setPermissionDenied(true)
       setPermissionNotYetAllowed(false)
+      setGumErrorName(error.name)
     }
   }
 
-  navigator.mediaDevices.ondevicechange = () => {
-    console.log('on device change')
-    getDevices()
-  }
+  // navigator.mediaDevices.ondevicechange = () => {
+  //   console.log('on device change')
+  //   getDevices()
+  // }
 
   useEffect(() => {
     if (videoStreamLabel || audioStreamLabel) {
@@ -186,19 +193,27 @@ const SetupMicAndCamera = ({ usersName }) => {
           justify="flex-start"
           className={classes.youLookGoodContainer}
         >
-          <Typography variant="h4" style={{ marginBottom: '12px' }}>
-            Damn. You look good{' '}
-            {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}
-            {''}
-            <span
-              style={{ margin: '0px 10px', fontSize: 30 }}
-              role="img"
-              aria-label="woozy face emoji"
-            >
-              🤩
-            </span>
-          </Typography>
-          <Typography variant="h5">You&apos;re all set to join the event!</Typography>
+          {usersName ? (
+            <>
+              <Typography variant="h4" style={{ marginBottom: '12px' }}>
+                Damn. You look good{' '}
+                {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}
+                {''}
+                <span
+                  style={{ margin: '0px 10px', fontSize: 30 }}
+                  role="img"
+                  aria-label="woozy face emoji"
+                >
+                  🤩
+                </span>
+              </Typography>
+              <Typography variant="h5">You&apos;re all set to join the event!</Typography>
+            </>
+          ) : (
+            <Typography variant="h5" className={classes.modalText}>
+              Select the video/audio source you would like to use
+            </Typography>
+          )}
         </Grid>
       )
     )
@@ -265,14 +280,17 @@ const SetupMicAndCamera = ({ usersName }) => {
           {getDamnYouLookGood()}
           {getDeviceDropdownMenu()}
           {getPermissionDenied()}
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.joinEventButton}
-            onClick={handleJoinEventClick}
-          >
-            Join the event
-          </Button>
+          {usersName && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.joinEventButton}
+              onClick={handleJoinEventClick}
+              disableRipple
+            >
+              Join the event
+            </Button>
+          )}
         </Grid>
       ) : (
         <>
@@ -281,6 +299,9 @@ const SetupMicAndCamera = ({ usersName }) => {
           </Typography>
         </>
       )}
+      {gumErrorName ? (
+        <GUMErrorModal errorName={gumErrorName} onComplete={() => setGumErrorName('')} />
+      ) : null}
     </Grid>
   )
 }

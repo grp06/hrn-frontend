@@ -70,9 +70,10 @@ const Lobby = () => {
   const { event } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const {
-    setUserEventStatus,
-    userEventStatus,
     onlineEventUsers,
+    setUserEventStatus,
+    setUserHasEnabledCameraAndMic,
+    userEventStatus,
     userHasEnabledCameraAndMic,
   } = useUserEventStatusContext()
   const {
@@ -134,7 +135,8 @@ const Lobby = () => {
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
         myRoundData &&
-        myRoundData.partners.length) ||
+        myRoundData.partners.length &&
+        userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
       console.log('myRoundData ->', myRoundData)
@@ -182,6 +184,7 @@ const Lobby = () => {
           />
           <BottomControlPanel
             event={event}
+            setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
             userId={userId}
             userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
           />

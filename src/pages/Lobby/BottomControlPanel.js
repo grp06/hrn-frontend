@@ -20,7 +20,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const BottomControlPanel = ({ event, userId, userHasEnabledCameraAndMic }) => {
+const BottomControlPanel = ({
+  event,
+  setUserHasEnabledCameraAndMic,
+  userId,
+  userHasEnabledCameraAndMic,
+}) => {
   const classes = useStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
@@ -83,7 +88,7 @@ const BottomControlPanel = ({ event, userId, userHasEnabledCameraAndMic }) => {
         </Grid>
       )}
       <Grid>
-        <SetupMicAndCameraButton />
+        <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
       </Grid>
     </Grid>
   )
