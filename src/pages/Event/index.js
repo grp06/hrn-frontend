@@ -1,6 +1,6 @@
 export { default as AttendeesList } from './AttendeesList'
 export { default as Event } from './Event'
-export { default as EventAttendeesCard } from './EventAttendeesCard'
+export { default as EventRSVPsCard } from './EventRSVPsCard'
 export { default as EventBreakdownStepper } from './EventBreakdownStepper'
 export { default as EventCantRSVP } from './EventCantRSVP'
 export { default as EventCountdown } from './EventCountdown'

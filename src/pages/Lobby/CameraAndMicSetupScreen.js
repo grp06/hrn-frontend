@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     borderRadius: '4px',
     padding: theme.spacing(3),
-    backgroundColor: theme.palette.common.grey10,
+    backgroundColor: theme.palette.common.greyCard,
   },
 }))
 

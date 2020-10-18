@@ -7,7 +7,7 @@ import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
   AdminPanel,
   UserPanel,
-  EventAttendeesCard,
+  EventRSVPsCard,
   EventCantRSVP,
   EventStatusRedirect,
   EventTitleAndCTACard,
@@ -132,7 +132,7 @@ const Event = ({ match }) => {
             <WhatToExpect userIsHost={userIsHost} />
           </Grid>
           <Grid className={classes.podcastContainer}>
-            {userIsHost ? <EventAttendeesCard eventUsers={event_users} /> : <PodcastCard />}
+            {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : <PodcastCard />}
           </Grid>
         </Grid>
         {userIsHost ? (

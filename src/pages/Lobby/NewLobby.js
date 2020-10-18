@@ -6,37 +6,44 @@ import { useSubscription } from '@apollo/react-hooks'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { listenToPartnersTable } from '../../gql/subscriptions'
-import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
+import {
+  useAppContext,
+  useEventContext,
+  useUserContext,
+  useUserEventStatusContext,
+} from '../../context'
 import { getTimeUntilEvent } from '../../utils'
+import { Loading } from '../../common'
 import {
   BottomControlPanel,
   BroadcastBox,
   CameraAndMicSetupScreen,
   EventChatBox,
-  EventTimerCountdown,
   NextRoundIn,
-  OnlineEventUsersList,
+  OnlineAttendeesCard,
 } from '.'
+import {
+  EventRSVPsCard,
+  EventCountdown,
+  EventTitleAndCTACard,
+  HostAndEventDescCard,
+  PodcastCard,
+  WhatToExpect,
+} from '../Event'
 
 // the overflow hidden in broadcastContainer is to help hide the scrollbar
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
     background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 80%, rgba(0,212,255,0) 100%)',
-    width: '100vw',
-    height: '55vh',
-  },
-  broadcastContainer: {
-    position: 'relative',
-    width: '70vw',
-    height: '100%',
-    [theme.breakpoints.down('md')]: {
-      width: '63vw',
-    },
-    overflow: 'hidden',
+      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
+    height: 'auto',
+    minHeight: '55vh',
+    width: '100%',
+    position: 'absolute',
+    top: '0%',
+    bottom: 'auto',
   },
   eventBanner: {
-    position: 'absolute',
     width: '100%',
     height: 'auto',
     minHeight: '55vh',
@@ -45,14 +52,23 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     zIndex: '-3',
   },
-  gridContainer: {
-    width: '100vw',
-    height: '100vh',
-    padding: theme.spacing(1, 4),
+  eventContentContainer: {
+    position: 'relative',
+    zIndex: '99',
+    width: '90%',
+    maxWidth: '1560px',
+    margin: theme.spacing(-20, 'auto', 0, 'auto'),
   },
   pageContainer: {
     overflowX: 'hidden',
     overflowY: 'hidden',
+  },
+  podcastContainer: {
+    width: '44%',
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
   rightContainer: {
     width: '25vw',
@@ -63,10 +79,21 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1),
     },
   },
+  whatToExpectContainer: {
+    width: '55%',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+    marginBottom: theme.spacing(2),
+  },
+  whatToExpectAndPodcastContainer: {
+    marginTop: theme.spacing(2),
+  },
 }))
-const Lobby = () => {
+const NewLobby = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const {
@@ -86,15 +113,17 @@ const Lobby = () => {
     status: eventStatus,
     updated_at: eventUpdatedAt,
   } = event
-  const { id: userId, name: usersName } = user
-  const isEventHost = host_id && host_id === userId
+  const { id: user_id, name: usersName } = user
+  const eventSet = Object.keys(event).length > 1
+  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const isEventHost = host_id && host_id === user_id
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
       event_id: eventId,
-      user_id: userId,
+      user_id: user_id,
       round,
     },
     skip:
@@ -115,8 +144,8 @@ const Lobby = () => {
 
   // some redirecting stuff
   useEffect(() => {
-    if (event_users && event_users.length && userId) {
-      const alreadyAttending = event_users.find((u) => u.user.id === userId)
+    if (event_users && event_users.length && user_id) {
+      const alreadyAttending = event_users.find((u) => u.user.id === user_id)
       if (!alreadyAttending) {
         history.push(`/events/${eventId}`)
       }
@@ -124,7 +153,7 @@ const Lobby = () => {
     if (eventStatus === 'complete') {
       history.push(`/events/${eventId}/event-complete`)
     }
-  }, [event_users, eventStatus, userId])
+  }, [event_users, eventStatus, user_id])
 
   // redirect you when you have a partner
   // the round ===1 and waiting for match is to make sure that you get pushed into
@@ -145,6 +174,10 @@ const Lobby = () => {
     }
   }, [eventStatus, userEventStatus, myRoundData])
 
+  if (appLoading || Object.keys(event).length < 2) {
+    return <Loading />
+  }
+
   // if (!userHasEnabledCameraAndMic) {
   //   return <CameraAndMicSetupScreen usersName={usersName} />
   // }
@@ -152,15 +185,15 @@ const Lobby = () => {
   return (
     <div className={classes.pageContainer}>
       {eventStatus === 'not-started' ? (
-        <div className={classes.eventBanner}>
+        <Grid container>
+          <div className={classes.eventBanner} />
           <div className={classes.bannerGradient} />
-        </div>
-      ) : null}
-      {eventStatus === 'not-started' ? (
-        <EventTimerCountdown eventStartTime={eventStartTime} />
+        </Grid>
       ) : null}
 
-      <Grid container direction="row" justify="space-between" className={classes.gridContainer}>
+      {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
+
+      <Grid container direction="row" justify="space-between">
         {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
           <NextRoundIn
             currentRound={round}
@@ -172,24 +205,50 @@ const Lobby = () => {
         <Grid
           container
           direction="column"
-          justify="space-around"
-          className={classes.broadcastContainer}
+          justify="flex-start"
+          className={classes.eventContentContainer}
         >
-          <BroadcastBox
+          <EventTitleAndCTACard event={event} user={user} />
+          <HostAndEventDescCard event={event} />
+          <Grid
+            container
+            direction="row"
+            justify="space-between"
+            className={classes.whatToExpectAndPodcastContainer}
+          >
+            <Grid className={classes.whatToExpectContainer}>
+              <WhatToExpect userIsHost={userIsHost} />
+            </Grid>
+            <Grid className={classes.podcastContainer}>
+              {userIsHost ? (
+                <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
+              ) : (
+                <PodcastCard />
+              )}
+            </Grid>
+          </Grid>
+          {userIsHost ? (
+            <Grid container direction="row" justify="flex-end">
+              <div className={classes.podcastContainer}>
+                <PodcastCard />
+              </div>
+            </Grid>
+          ) : null}
+          {/* <BroadcastBox
             event={event}
             isEventHost={isEventHost}
             onlineEventUsers={onlineEventUsers}
             setUserEventStatus={setUserEventStatus}
             userEventStatus={userEventStatus}
-          />
+          /> */}
           <BottomControlPanel
             event={event}
             setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-            userId={userId}
+            userId={user_id}
             userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
           />
         </Grid>
-        <Grid
+        {/* <Grid
           container
           direction="column"
           justify="space-around"
@@ -198,12 +257,12 @@ const Lobby = () => {
           <EventChatBox
             eventStatus={eventStatus}
             isEventHost={isEventHost}
-            onlineEventUsers={<OnlineEventUsersList onlineEventUsers={onlineEventUsers} />}
+            onlineEventUsers={<OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />}
           />
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   )
 }
 
-export default Lobby
+export default NewLobby

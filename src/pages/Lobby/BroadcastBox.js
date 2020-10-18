@@ -32,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.greyCard,
     marginBottom: theme.spacing(2.5),
   },
-  eventInfoContainer: {
-    paddingTop: '200px',
-  },
   eventName: {
     fontSize: '4.5rem',
     letterSpacing: '0.1rem',
@@ -72,7 +69,7 @@ const BroadcastBox = React.memo(
         case 'not-started':
           return (
             <Grid container justify="flex-end" direction="column" wrap="nowrap">
-              <Grid container direction="column" className={classes.eventInfoContainer}>
+              <Grid container direction="column">
                 <Grid item container direction="column" justify="flex-start" md={12} xs={12}>
                   <Grid container justify="flex-start" alignItems="center">
                     <Typography variant="h1" className={classes.eventName}>

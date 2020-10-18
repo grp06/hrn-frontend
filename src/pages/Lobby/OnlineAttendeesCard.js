@@ -27,9 +27,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventAttendeesCard = React.memo(({ eventUsers }) => {
+const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
   const [seeMore, setSeeMore] = useState(false)
-  console.log('eventUsers ->', eventUsers)
   const classes = useStyles()
   return (
     <Grid
@@ -39,31 +38,36 @@ const EventAttendeesCard = React.memo(({ eventUsers }) => {
       alignItems="flex-start"
       className={classes.cardContainer}
     >
-      {eventUsers && eventUsers.length ? (
+      {onlineEventUsers && onlineEventUsers.length ? (
         <>
-          <Typography variant="h2">Attendees {`(${eventUsers.length})`}</Typography>
+          <Typography variant="h2">Online Attendees {`(${onlineEventUsers.length})`}</Typography>
           <List dense>
-            {eventUsers.map(({ user }, idx) => {
-              if (idx >= 4 && !seeMore) return null
-              console.log(user)
-              return (
-                <ListItem key={user.id}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <PersonIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText disableTypography>
-                    <Grid container direction="row" alignItems="center" justify="flex-start">
-                      <Typography variant="body1" style={{ fontWeight: 500 }}>
-                        {user.name}
-                      </Typography>
-                      <Typography variant="subtitle1">, {user.city}</Typography>
-                    </Grid>
-                  </ListItemText>
-                </ListItem>
-              )
-            })}
+            {onlineEventUsers
+              .sort((userA, userB) => {
+                return userA.user[0].name
+                  .toLowerCase()
+                  .localeCompare(userB.user[0].name.toLowerCase())
+              })
+              .map(({ user }, idx) => {
+                if (idx >= 4 && !seeMore) return null
+                return (
+                  <ListItem key={user.id}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <PersonIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText disableTypography>
+                      <Grid container direction="row" alignItems="center" justify="flex-start">
+                        <Typography variant="body1" style={{ fontWeight: 500 }}>
+                          {user[0].name}
+                        </Typography>
+                        <Typography variant="subtitle1">, {user[0].city}</Typography>
+                      </Grid>
+                    </ListItemText>
+                  </ListItem>
+                )
+              })}
           </List>
           <Button
             variant="text"
@@ -75,7 +79,7 @@ const EventAttendeesCard = React.memo(({ eventUsers }) => {
             <Grid container direction="row" alignItems="center" justify="space-around">
               {!seeMore ? (
                 <>
-                  <Typography variant="body">See All{`  (${eventUsers.length})`}</Typography>
+                  <Typography variant="body">See All{`  (${onlineEventUsers.length})`}</Typography>
                   <ArrowDropDownIcon fontSize="large" />
                 </>
               ) : (
@@ -88,10 +92,10 @@ const EventAttendeesCard = React.memo(({ eventUsers }) => {
           </Button>
         </>
       ) : (
-        <Typography variant="body1">No one has signed up yet!</Typography>
+        <Typography variant="body1">No one is online yet</Typography>
       )}
     </Grid>
   )
 })
 
-export default EventAttendeesCard
+export default OnlineAttendeesCard

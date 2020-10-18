@@ -25,6 +25,7 @@ import {
   SetNewPassword,
   SignUp,
   Lobby,
+  NewLobby,
 } from './pages'
 import {
   AppProvider,
@@ -100,7 +101,7 @@ const App = () => {
                         <Route exact path="/events/:id" component={Event} />
                         <TwilioProvider>
                           <UserEventStatusProvider>
-                            <Route exact path="/events/:id/lobby" component={Lobby} />
+                            <Route exact path="/events/:id/lobby" component={NewLobby} />
                             <Route exact path="/events/:id/video-room" component={VideoRoom} />
                             <Route
                               exact
