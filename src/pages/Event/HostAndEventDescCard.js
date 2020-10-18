@@ -47,12 +47,16 @@ const useStyles = makeStyles((theme) => ({
   rsvpedNumberContainer: {
     width: 'auto',
   },
+  onlineAttendeesNumberContainer: {
+    width: 'auto',
+    marginLeft: theme.spacing(8),
+  },
   subtitle: {
     marginBottom: theme.spacing(1),
   },
 }))
 
-const HostAndEventDescCard = React.memo(({ event }) => {
+const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
   const classes = useStyles()
   const { description: eventDescription, event_users, host } = event
   const { name: hostName } = host
@@ -105,6 +109,20 @@ const HostAndEventDescCard = React.memo(({ event }) => {
             </Typography>
             <Typography className={classes.largeNumber}>{event_users.length}</Typography>
           </Grid>
+          {showOnlineAttendees ? (
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
+              className={classes.onlineAttendeesNumberContainer}
+            >
+              <Typography variant="subtitle1" className={classes.subtitle}>
+                Online Now /
+              </Typography>
+              <Typography className={classes.largeNumber}>{showOnlineAttendees}</Typography>
+            </Grid>
+          ) : null}
         </Grid>
       </Grid>
       <Grid container item direction="row" justify="flex-start" md={11}>

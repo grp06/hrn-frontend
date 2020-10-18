@@ -69,27 +69,31 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
                 )
               })}
           </List>
-          <Button
-            variant="text"
-            size="small"
-            disableRipple
-            className={classes.seeAllButton}
-            onClick={() => setSeeMore((prevValue) => !prevValue)}
-          >
-            <Grid container direction="row" alignItems="center" justify="space-around">
-              {!seeMore ? (
-                <>
-                  <Typography variant="body">See All{`  (${onlineEventUsers.length})`}</Typography>
-                  <ArrowDropDownIcon fontSize="large" />
-                </>
-              ) : (
-                <>
-                  <Typography variant="body">See Less</Typography>
-                  <ArrowDropUpIcon fontSize="large" />
-                </>
-              )}
-            </Grid>
-          </Button>
+          {onlineEventUsers.length > 4 ? (
+            <Button
+              variant="text"
+              size="small"
+              disableRipple
+              className={classes.seeAllButton}
+              onClick={() => setSeeMore((prevValue) => !prevValue)}
+            >
+              <Grid container direction="row" alignItems="center" justify="space-around">
+                {!seeMore ? (
+                  <>
+                    <Typography variant="body">
+                      See All{`  (${onlineEventUsers.length})`}
+                    </Typography>
+                    <ArrowDropDownIcon fontSize="large" />
+                  </>
+                ) : (
+                  <>
+                    <Typography variant="body">See Less</Typography>
+                    <ArrowDropUpIcon fontSize="large" />
+                  </>
+                )}
+              </Grid>
+            </Button>
+          ) : null}
         </>
       ) : (
         <Typography variant="body1">No one is online yet</Typography>

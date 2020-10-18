@@ -196,9 +196,8 @@ const SetupMicAndCamera = ({ usersName }) => {
           {usersName ? (
             <>
               <Typography variant="h1" style={{ marginBottom: '12px' }}>
-                Damn. You look good{' '}
-                {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}
-                {''}
+                Damn, {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}.
+                You look good{''}
                 <span
                   style={{ margin: '0px 10px', fontSize: 30 }}
                   role="img"

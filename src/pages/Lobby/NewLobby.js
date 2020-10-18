@@ -62,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
   pageContainer: {
     overflowX: 'hidden',
     overflowY: 'hidden',
+    paddingBottom: '100px',
   },
   podcastContainer: {
     width: '44%',
@@ -114,9 +115,7 @@ const NewLobby = () => {
     updated_at: eventUpdatedAt,
   } = event
   const { id: user_id, name: usersName } = user
-  const eventSet = Object.keys(event).length > 1
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const isEventHost = host_id && host_id === user_id
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -178,89 +177,76 @@ const NewLobby = () => {
     return <Loading />
   }
 
-  // if (!userHasEnabledCameraAndMic) {
-  //   return <CameraAndMicSetupScreen usersName={usersName} />
-  // }
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen usersName={usersName} />
+  }
 
   return (
     <div className={classes.pageContainer}>
-      {eventStatus === 'not-started' ? (
-        <Grid container>
-          <div className={classes.eventBanner} />
-          <div className={classes.bannerGradient} />
-        </Grid>
+      {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
+      {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
+        <NextRoundIn
+          currentRound={round}
+          eventStatus={eventStatus}
+          eventUpdatedAt={eventUpdatedAt}
+          roundLength={round_length}
+        />
       ) : null}
 
-      {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
-
-      <Grid container direction="row" justify="space-between">
-        {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
-          <NextRoundIn
-            currentRound={round}
-            eventStatus={eventStatus}
-            eventUpdatedAt={eventUpdatedAt}
-            roundLength={round_length}
-          />
-        ) : null}
+      <Grid container>
+        <div className={classes.eventBanner} />
+        <div className={classes.bannerGradient} />
+      </Grid>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        className={classes.eventContentContainer}
+      >
+        <EventTitleAndCTACard event={event} user={user} />
+        <HostAndEventDescCard event={event} showOnlineAttendees={onlineEventUsers.length} />
         <Grid
           container
-          direction="column"
-          justify="flex-start"
-          className={classes.eventContentContainer}
+          direction="row"
+          justify="space-between"
+          className={classes.whatToExpectAndPodcastContainer}
         >
-          <EventTitleAndCTACard event={event} user={user} />
-          <HostAndEventDescCard event={event} />
-          <Grid
-            container
-            direction="row"
-            justify="space-between"
-            className={classes.whatToExpectAndPodcastContainer}
-          >
-            <Grid className={classes.whatToExpectContainer}>
-              <WhatToExpect userIsHost={userIsHost} />
-            </Grid>
-            <Grid className={classes.podcastContainer}>
-              {userIsHost ? (
-                <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
-              ) : (
-                <PodcastCard />
-              )}
-            </Grid>
+          <Grid className={classes.whatToExpectContainer}>
+            <WhatToExpect userIsHost={userIsHost} />
           </Grid>
-          {userIsHost ? (
-            <Grid container direction="row" justify="flex-end">
-              <div className={classes.podcastContainer}>
-                <PodcastCard />
-              </div>
-            </Grid>
-          ) : null}
-          {/* <BroadcastBox
+          <Grid className={classes.podcastContainer}>
+            {userIsHost ? (
+              <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
+            ) : (
+              <PodcastCard />
+            )}
+          </Grid>
+        </Grid>
+        {userIsHost ? (
+          <Grid container direction="row" justify="flex-end">
+            <div className={classes.podcastContainer}>
+              <PodcastCard />
+            </div>
+          </Grid>
+        ) : null}
+
+        {/* <BroadcastBox
             event={event}
-            isEventHost={isEventHost}
             onlineEventUsers={onlineEventUsers}
             setUserEventStatus={setUserEventStatus}
             userEventStatus={userEventStatus}
           /> */}
-          <BottomControlPanel
-            event={event}
-            setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-            userId={user_id}
-            userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
-          />
-        </Grid>
-        {/* <Grid
-          container
-          direction="column"
-          justify="space-around"
-          className={classes.rightContainer}
-        >
-          <EventChatBox
-            eventStatus={eventStatus}
-            isEventHost={isEventHost}
-            onlineEventUsers={<OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />}
-          />
-        </Grid> */}
       </Grid>
+      {/* <EventChatBox
+            eventStatus={eventStatus}
+            onlineEventUsers={<OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />}
+          /> */}
+      <BottomControlPanel
+        event={event}
+        setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
+        userId={user_id}
+        userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
+      />
     </div>
   )
 }
