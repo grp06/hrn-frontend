@@ -219,7 +219,7 @@ const VideoRoom = ({ match }) => {
         const myRoom = await connect(token, {
           maxAudioBitrate: 16000,
           video: { deviceId: localStoragePreferredVideoId },
-          audio: audioDevice,
+          audio: { deviceId: localStoragePreferredAudioId },
         })
         console.log('setting room')
         setRoom(myRoom)

@@ -12,11 +12,10 @@ const useRemoteTrackPublished = () => {
     if (publication.isSubscribed) {
       console.log('remoteTrackPublished -> publication.isSubscribed', publication.isSubscribed)
       const remoteDiv = document.getElementById('remote-video')
-      if (remoteDiv) {
+      if (publication.kind === 'video' && remoteDiv) {
         const attachedTrack = publication.track.attach()
-        if (publication.kind === 'video') {
-          attachedTrack.muted = true
-        }
+        attachedTrack.muted = true
+
         remoteDiv.appendChild(attachedTrack)
 
         setTimeout(() => {
@@ -30,12 +29,12 @@ const useRemoteTrackPublished = () => {
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {
         attachedTrack.muted = true
-      }
-      if (onPreEvent) {
-        document.getElementById('host-video').appendChild(attachedTrack)
-      } else {
-        console.log('subscribed, attaching track')
-        document.getElementById('remote-video').appendChild(attachedTrack)
+        if (onPreEvent) {
+          document.getElementById('host-video').appendChild(attachedTrack)
+        } else {
+          console.log('subscribed, attaching track')
+          document.getElementById('remote-video').appendChild(attachedTrack)
+        }
       }
 
       setTimeout(() => {

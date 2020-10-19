@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import Video from 'twilio-video'
 
 import { useUserEventStatusContext } from '../../context'
 import { GUMErrorModal } from '../../common'
@@ -69,6 +70,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   const [gumErrorName, setGumErrorName] = useState('')
 
   const getDevices = async () => {
+    console.log('getDevices')
     const devices = await navigator.mediaDevices.enumerateDevices()
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
@@ -117,7 +119,9 @@ const SetupMicAndCamera = ({ usersName }) => {
   }
 
   const getMedia = async () => {
+    console.log('getMedia')
     if (usersLocalMediaStream && usersLocalMediaStream.active) {
+      console.log('getMedia -> usersLocalMediaStream', usersLocalMediaStream)
       await stopUsersCurrentTracks()
     }
     let localMediaStream = null
@@ -158,6 +162,8 @@ const SetupMicAndCamera = ({ usersName }) => {
 
   useEffect(() => {
     if (videoStreamLabel || audioStreamLabel) {
+      console.log('SetupMicAndCamera -> audioStreamLabel', audioStreamLabel)
+      console.log('SetupMicAndCamera -> videoStreamLabel', videoStreamLabel)
       getDevices()
     }
   }, [videoStreamLabel, audioStreamLabel])
@@ -224,6 +230,27 @@ const SetupMicAndCamera = ({ usersName }) => {
     setCurrentAudioDeviceId(event.target.value)
     console.log('audio device change, update the local video')
     getMedia()
+    if (window.room) {
+      const { localParticipant } = window.room
+      const tracks = Array.from(localParticipant.audioTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      console.log('handleVideoDeviceChange -> tracks', tracks)
+      localParticipant.unpublishTracks(tracks)
+
+      Video.createLocalAudioTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localAudioTrack) {
+        // const localDiv = document.getElementById('local-video')
+        // localDiv.innerHTML = ''
+        // const attachedTrack = localVideoTrack.attach()
+        // attachedTrack.style.transform = 'scale(-1, 1)'
+        // localDiv.appendChild(attachedTrack)
+        localParticipant.publishTrack(localAudioTrack)
+      })
+    }
   }
 
   const handleVideoDeviceChange = (event) => {
@@ -231,6 +258,27 @@ const SetupMicAndCamera = ({ usersName }) => {
     setCurrentVideoDeviceId(event.target.value)
     console.log('video device change, update the local video')
     getMedia()
+    if (window.room) {
+      const { localParticipant } = window.room
+      const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      console.log('handleVideoDeviceChange -> tracks', tracks)
+      localParticipant.unpublishTracks(tracks)
+
+      Video.createLocalVideoTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localVideoTrack) {
+        const localDiv = document.getElementById('local-video')
+        localDiv.innerHTML = ''
+        const attachedTrack = localVideoTrack.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
+        localDiv.appendChild(attachedTrack)
+        localParticipant.publishTrack(localVideoTrack)
+      })
+    }
   }
 
   const handleJoinEventClick = () => {

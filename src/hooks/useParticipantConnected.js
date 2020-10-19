@@ -10,6 +10,7 @@ const useParticipantConnected = () => {
     })
     // when other people join after we're already there
     participant.on('trackPublished', (publication) => {
+      console.log('participantConnected -> publication', publication)
       console.log('trackPublished')
 
       remoteTrackPublished(publication)
@@ -17,7 +18,8 @@ const useParticipantConnected = () => {
 
     participant.on('trackUnpublished', (publication) => {
       const remoteVideo = document.getElementById('remote-video')
-      if (remoteVideo) {
+      if (publication.kind === 'video' && remoteVideo) {
+        console.log('removing video')
         remoteVideo.innerHTML = ''
       }
     })
