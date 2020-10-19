@@ -4,15 +4,40 @@ import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
-
 import { makeStyles } from '@material-ui/core/styles'
-import { SetupMicAndCamera } from '../Event'
+
+import { SetupMicAndCamera } from '../Lobby'
+import { useUserEventStatusContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
+  acceptButton: {
+    margin: theme.spacing(1.5, 0),
+  },
+  buttonContainer: {
+    width: '50%',
+    [theme.breakpoints.down('md')]: {
+      width: '80%',
+    },
+  },
+  cancelButton: {
+    margin: theme.spacing(1.5, 0),
+    backgroundColor: theme.palette.common.greyButton,
+    color: theme.palette.common.ghostWhite,
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
+  },
   modal: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  modalBody: {
+    ...theme.typography.modalBody,
+    marginBottom: '20px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    textAlign: 'center',
   },
   paper: {
     backgroundColor: theme.palette.common.greyCard,
@@ -27,34 +52,17 @@ const useStyles = makeStyles((theme) => ({
       width: '90vw',
     },
   },
-  modalBody: {
-    ...theme.typography.modalBody,
-    marginBottom: '20px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    width: '50%',
-    [theme.breakpoints.down('md')]: {
-      width: '80%',
-    },
-  },
-  acceptButton: {
-    margin: theme.spacing(1.5, 0),
-  },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
+  previewVideo: {
+    width: '400px',
+    height: 'auto',
+    backgroundColor: 'black',
+    borderRadius: '4px',
   },
 }))
 
 const SetupMicAndCameraModal = ({ open, setOpen }) => {
   const classes = useStyles()
+  const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const [openModal, setOpenModal] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
 
@@ -66,6 +74,7 @@ const SetupMicAndCameraModal = ({ open, setOpen }) => {
   const onAcceptClick = () => {
     window.analytics.track('Opened test camera')
     const video = document.getElementById('videoElement')
+    setUserHasEnabledCameraAndMic()
     if (video) {
       video.remove()
     }
@@ -93,6 +102,7 @@ const SetupMicAndCameraModal = ({ open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
+            <video autoPlay id="videoElement" muted className={classes.previewVideo} />
             <SetupMicAndCamera />
           </Grid>
           <Grid

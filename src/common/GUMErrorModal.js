@@ -45,11 +45,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InfoModal = ({ onComplete, errorName, modalBody }) => {
+const GUMErrorModal = ({ onComplete, errorName }) => {
   const classes = useStyles()
   const [open, setOpen] = useState(true)
   const errorMessage = GUMErrorMessage(errorName)
 
+  console.log('im getting called')
   const handleClose = () => {
     setOpen(false)
     onComplete()
@@ -97,4 +98,4 @@ const InfoModal = ({ onComplete, errorName, modalBody }) => {
   )
 }
 
-export default InfoModal
+export default GUMErrorModal

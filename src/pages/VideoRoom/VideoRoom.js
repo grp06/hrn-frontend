@@ -16,7 +16,7 @@ import {
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
-import { useTwilio, useGetCameraAndMicStatus, useIsUserActive } from '../../hooks'
+import { useTwilio, useIsUserActive } from '../../hooks'
 
 const { connect } = require('twilio-video')
 
@@ -84,11 +84,8 @@ const VideoRoom = ({ match }) => {
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
-  const hasCheckedCamera = useRef()
   const showControls = useIsUserActive()
 
-  useGetCameraAndMicStatus(hasCheckedCamera.current)
-  hasCheckedCamera.current = true
   const [updateLastSeenMutation] = useMutation(updateLastSeen)
   const {
     data: myRoundPartnerData,

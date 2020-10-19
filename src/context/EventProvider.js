@@ -9,12 +9,6 @@ import { listenToEvent } from '../gql/subscriptions'
 const EventContext = React.createContext()
 
 const defaultState = {
-  permissions: {
-    hasWebCam: false,
-    hasMicrophone: false,
-    isWebcamAlreadyCaptured: false,
-    isMicrophoneAlreadyCaptured: false,
-  },
   // eventId is for event subscriptions
   eventId: null,
   event: {},

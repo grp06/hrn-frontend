@@ -4,15 +4,8 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import {
-  AttendeesList,
-  EventCountdown,
-  ListOfRSVPs,
-  ShareEventPromptModal,
-  SetupMicAndCameraButton,
-} from '.'
-import { EventForm, FloatCardLarge, TransitionModal, CameraDisabledBanner } from '../../common'
-import { useEventContext } from '../../context'
+import { AttendeesList, EventCountdown, ListOfRSVPs, ShareEventPromptModal } from '.'
+import { EventForm, FloatCardLarge, TransitionModal } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   topDashboard: {
@@ -36,15 +29,10 @@ const useStyles = makeStyles((theme) => ({
   adminButtons: {
     height: 160,
   },
-  cameraTest: {
-    marginBottom: theme.spacing(4),
-  },
 }))
 
-const AdminPanel = ({ eventData, timeState, permissions }) => {
+const AdminPanel = ({ eventData, timeState }) => {
   const classes = useStyles()
-  const { setCameraAndMicPermissions } = useEventContext()
-  const micOrCameraIsDisabled = Object.values(permissions).indexOf(false) > -1
 
   const { event_users, id: eventId, start_at: eventStartTime } = eventData
 
@@ -87,21 +75,6 @@ const AdminPanel = ({ eventData, timeState, permissions }) => {
 
   return (
     <>
-      {micOrCameraIsDisabled ? (
-        <CameraDisabledBanner
-          permissions={permissions}
-          setCameraAndMicPermissions={setCameraAndMicPermissions}
-          admin
-        />
-      ) : (
-        <Grid container direction="row" justify="center" className={classes.cameraTest}>
-          <SetupMicAndCameraButton
-            permissions={permissions}
-            setCameraAndMicPermissions={setCameraAndMicPermissions}
-          />
-        </Grid>
-      )}
-
       <FloatCardLarge>
         <Grid container justify="space-around" alignItems="center" className={classes.topDashboard}>
           <Grid
