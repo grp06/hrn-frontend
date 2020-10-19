@@ -80,6 +80,7 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1.5rem',
       lineHeight: '2rem',
+      fontWeight: '400',
       color: white,
     },
     // Event Title
@@ -88,8 +89,8 @@ const theme = createMuiTheme({
       fontFamily: 'Muli',
       fontSize: '1.125rem',
       lineHeight: '1.45rem',
+      fontWeight: '200',
       color: white,
-      fontWeight: '600',
     },
     // Card Headers (login / signup form)
     // 2.12REM

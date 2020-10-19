@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import EditIcon from '@material-ui/icons/Edit'
 import { makeStyles } from '@material-ui/styles'
-import { getBroadcastBoxElement, formatDate } from '../../utils'
+import { getUserEventStatusMessage, formatDate } from '../../utils'
 import { EventBreakdownStepper } from '../Event'
 import { PreEvent } from '../PreEvent'
 import { EventForm, TransitionModal } from '../../common'
@@ -152,9 +152,9 @@ const BroadcastBox = React.memo(
         case 'pre-event':
           return <PreEvent onlineEventUsers={onlineEventUsers} />
         case 'room-in-progress':
-          return getBroadcastBoxElement(setUserEventStatus, userEventStatus)
+          return getUserEventStatusMessage(setUserEventStatus, userEventStatus)
         case 'in-between-rounds':
-          return getBroadcastBoxElement(setUserEventStatus, userEventStatus)
+          return getUserEventStatusMessage(setUserEventStatus, userEventStatus)
         default:
           return null
       }

@@ -7,7 +7,7 @@ import {
   WaitingForMatch,
 } from '../pages/Lobby/BroadcastBoxScreens'
 
-const getBroadcastBoxElement = (setUserEventStatus, userEventStatus) => {
+const getUserEventStatusMessage = (setUserEventStatus, userEventStatus) => {
   switch (userEventStatus) {
     case 'came late':
       return <CameLate />
@@ -24,4 +24,4 @@ const getBroadcastBoxElement = (setUserEventStatus, userEventStatus) => {
   }
 }
 
-export default getBroadcastBoxElement
+export default getUserEventStatusMessage
