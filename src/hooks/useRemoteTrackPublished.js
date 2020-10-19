@@ -10,7 +10,6 @@ const useRemoteTrackPublished = () => {
     const onPreEvent = window.location.pathname.indexOf('/lobby') > -1
 
     if (publication.isSubscribed) {
-      console.log('remoteTrackPublished -> publication.isSubscribed', publication.isSubscribed)
       const remoteDiv = document.getElementById('remote-video')
       if (publication.kind === 'video' && remoteDiv) {
         const attachedTrack = publication.track.attach()
@@ -25,7 +24,6 @@ const useRemoteTrackPublished = () => {
     }
 
     publication.on('subscribed', async (track) => {
-      console.log('remoteTrackPublished -> publication.on subscribed', track)
       const attachedTrack = track.attach()
       if (publication.kind === 'video') {
         attachedTrack.muted = true

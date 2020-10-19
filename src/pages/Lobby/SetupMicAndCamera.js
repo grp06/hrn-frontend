@@ -70,7 +70,6 @@ const SetupMicAndCamera = ({ usersName }) => {
   const [gumErrorName, setGumErrorName] = useState('')
 
   const getDevices = async () => {
-    console.log('getDevices')
     const devices = await navigator.mediaDevices.enumerateDevices()
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
@@ -114,14 +113,11 @@ const SetupMicAndCamera = ({ usersName }) => {
 
   const stopUsersCurrentTracks = async () => {
     usersLocalMediaStream.getTracks().forEach((track) => track.stop())
-    console.log('successfully stopped users tracks')
     setUsersLocalMediaStream(null)
   }
 
   const getMedia = async () => {
-    console.log('getMedia')
     if (usersLocalMediaStream && usersLocalMediaStream.active) {
-      console.log('getMedia -> usersLocalMediaStream', usersLocalMediaStream)
       await stopUsersCurrentTracks()
     }
     let localMediaStream = null
@@ -162,8 +158,6 @@ const SetupMicAndCamera = ({ usersName }) => {
 
   useEffect(() => {
     if (videoStreamLabel || audioStreamLabel) {
-      console.log('SetupMicAndCamera -> audioStreamLabel', audioStreamLabel)
-      console.log('SetupMicAndCamera -> videoStreamLabel', videoStreamLabel)
       getDevices()
     }
   }, [videoStreamLabel, audioStreamLabel])
@@ -228,7 +222,6 @@ const SetupMicAndCamera = ({ usersName }) => {
   const handleAudioDeviceChange = (event) => {
     localStorage.setItem('preferredAudioId', event.target.value)
     setCurrentAudioDeviceId(event.target.value)
-    console.log('audio device change, update the local video')
     getMedia()
     if (window.room) {
       const { localParticipant } = window.room
@@ -243,11 +236,6 @@ const SetupMicAndCamera = ({ usersName }) => {
       Video.createLocalAudioTrack({
         deviceId: { exact: event.target.value },
       }).then(function (localAudioTrack) {
-        // const localDiv = document.getElementById('local-video')
-        // localDiv.innerHTML = ''
-        // const attachedTrack = localVideoTrack.attach()
-        // attachedTrack.style.transform = 'scale(-1, 1)'
-        // localDiv.appendChild(attachedTrack)
         localParticipant.publishTrack(localAudioTrack)
       })
     }
@@ -256,7 +244,6 @@ const SetupMicAndCamera = ({ usersName }) => {
   const handleVideoDeviceChange = (event) => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
-    console.log('video device change, update the local video')
     getMedia()
     if (window.room) {
       const { localParticipant } = window.room
@@ -265,7 +252,6 @@ const SetupMicAndCamera = ({ usersName }) => {
       ) {
         return trackPublication.track
       })
-      console.log('handleVideoDeviceChange -> tracks', tracks)
       localParticipant.unpublishTracks(tracks)
 
       Video.createLocalVideoTrack({
