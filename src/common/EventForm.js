@@ -14,7 +14,7 @@ import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '200px',
+    marginTop: '100px',
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),
@@ -181,7 +181,7 @@ const EventForm = ({ eventData, match }) => {
             <form onSubmit={handleSubmit}>
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
-                  <Typography variant="h1">
+                  <Typography variant="h2">
                     {eventData ? 'Edit ' : 'Create '}
                     Your Event
                   </Typography>

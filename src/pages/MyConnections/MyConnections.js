@@ -9,6 +9,7 @@ import { useSubscription } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { listenToAllMyConnections } from '../../gql/subscriptions'
+import blurryBackground from '../../assets/blurryBackground.png'
 import { useAppContext, useUserContext } from '../../context'
 import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
@@ -24,10 +25,17 @@ const useStyles = makeStyles((theme) => ({
   nullDataSub: {
     textAlign: 'center',
   },
-  pageContainer: {
-    marginTop: '100px',
-    paddingLeft: '25px',
-    paddingRight: '25px',
+  pageBanner: {
+    width: '100%',
+    height: '30vh',
+    backgroundImage: `url(${blurryBackground})`,
+    backgroundPosition: '50% 50%',
+    backgroundSize: 'cover',
+    marginBottom: '40px',
+  },
+  pageBannerContentContainer: {
+    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
+    width: '70%',
   },
   sectionHeader: {
     textAlign: 'center',
@@ -57,7 +65,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonGroup: {
-    margin: theme.spacing(0, 'auto', 12, 'auto'),
+    margin: theme.spacing(0, 0, 12, 0),
+  },
+  toggleGrid: {
+    width: '70%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
 }))
 
@@ -162,49 +175,57 @@ const MyConnections = () => {
   }
 
   return (
-    <div className={classes.pageContainer}>
-      <Typography variant="h1" className={classes.sectionHeader}>
-        Connections
-      </Typography>
-      <div className={classes.pageContainer}>
-        <Grid container justify="center" alignItems="center">
-          <ToggleButtonGroup
-            value={connectionToggleValue}
-            exclusive
-            onChange={handleConnectionToggle}
-            className={classes.toggleButtonGroup}
+    <>
+      <Grid container>
+        <Grid
+          container
+          direction="column"
+          justify="flex-end"
+          alignItems="center"
+          className={classes.pageBanner}
+        >
+          <Grid item container direction="column" className={classes.pageBannerContentContainer}>
+            <Typography variant="h1">My Connections</Typography>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container justify="flex-start" alignItems="center" className={classes.toggleGrid}>
+        <ToggleButtonGroup
+          value={connectionToggleValue}
+          exclusive
+          onChange={handleConnectionToggle}
+          className={classes.toggleButtonGroup}
+        >
+          <ToggleButton
+            value="friends"
+            disableRipple
+            className={
+              connectionToggleValue === 'friends'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
           >
-            <ToggleButton
-              value="friends"
-              disableRipple
-              className={
-                connectionToggleValue === 'friends'
-                  ? classes.toggleButtonActive
-                  : classes.toggleButtonInactive
-              }
-            >
-              Friends
-            </ToggleButton>
-            <ToggleButton
-              value="requests"
-              disableRipple
-              className={
-                connectionToggleValue === 'requests'
-                  ? classes.toggleButtonActive
-                  : classes.toggleButtonInactive
-              }
-            >
-              Requests
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
-        <Grid container direction="column" justify="center" alignItems="center">
-          {connectionToggleValue === 'friends'
-            ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
-            : renderContactCards('requests', "You don't have any requests to respond to 😎")}
-        </Grid>
-      </div>
-    </div>
+            Friends
+          </ToggleButton>
+          <ToggleButton
+            value="requests"
+            disableRipple
+            className={
+              connectionToggleValue === 'requests'
+                ? classes.toggleButtonActive
+                : classes.toggleButtonInactive
+            }
+          >
+            Requests
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      <Grid container direction="column" justify="center" alignItems="center">
+        {connectionToggleValue === 'friends'
+          ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
+          : renderContactCards('requests', "You don't have any requests to respond to 😎")}
+      </Grid>
+    </>
   )
 }
 
