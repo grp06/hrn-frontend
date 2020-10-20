@@ -49,8 +49,8 @@ const useStyles = makeStyles((theme) => ({
   },
   podcastContainer: {
     width: '44%',
-    marginBottom: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
   },
@@ -63,14 +63,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   whatToExpectContainer: {
-    width: '55%',
-    [theme.breakpoints.down('sm')]: {
+    width: '54%',
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
-    marginBottom: theme.spacing(2),
-  },
-  whatToExpectAndPodcastContainer: {
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(3),
   },
 }))
 

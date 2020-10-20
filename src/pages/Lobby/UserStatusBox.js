@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
     width: '50%',
     lineHeight: '1',
     padding: theme.spacing(2, 1),
-    color: theme.palette.common.ghostWhiteSub,
+    color: theme.palette.common.ghostWhiteBody,
     backgroundColor: theme.palette.common.basePurple,
     '&:hover': {
       backgroundColor: theme.palette.common.basePurple,

@@ -13,13 +13,22 @@ import { formatDate, rsvpForEvent } from '../../utils'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  rsvpOrEditButton: {
-    width: '70%',
+  buttonContainer: {
+    marginBottom: theme.spacing(1),
+  },
+  cardContainer: {
+    marginBottom: theme.spacing(2),
   },
   shareEventButton: {
+    width: '50px !important',
+    height: '50px !important',
     backgroundColor: theme.palette.common.greyButton,
     '&:hover': {
       backgroundColor: theme.palette.common.greyHighlight,
+    },
+    marginRight: theme.spacing(1.5),
+    [theme.breakpoints.down('md')]: {
+      marginRight: theme.spacing(1.5),
     },
   },
   subtitle: {
@@ -92,14 +101,13 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
 
   const renderRSVPOrEditButton = () => {
     if (userIsHost) {
-      return <div className={classes.rsvpOrEditButton}>{editFormModal}</div>
+      return <div>{editFormModal}</div>
     }
     return (
       <Button
         variant="contained"
         size="large"
         color="primary"
-        className={classes.rsvpOrEditButton}
         onClick={userAlreadyRSVPed ? handleCancelRSVPClick : handleRSVPClick}
       >
         {userAlreadyRSVPed ? 'Cancel RSVP' : 'RSVP'}
@@ -108,12 +116,18 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   }
 
   return (
-    <Grid container direction="row" justify="space-between" alignItems="center">
-      <Grid container item xs={12} md={9} direction="column">
+    <Grid
+      container
+      direction="row"
+      justify="space-between"
+      alignItems="flex-end"
+      className={classes.cardContainer}
+    >
+      <Grid container item xs={12} md={8} direction="column">
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
           <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
-          <Typography variant="subtitle1" className={classes.subtitle}>
+          <Typography variant="body1" className={classes.subtitle}>
             {formatDate(startTime)}
           </Typography>
         </Grid>
@@ -122,13 +136,14 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         container
         item
         xs={12}
-        md={3}
+        md={4}
         direction="row"
-        justify="space-between"
+        justify="flex-end"
         alignItems="flex-end"
+        className={classes.buttonContainer}
       >
         <Button
-          variant="contained"
+          variant="outlined"
           size="large"
           className={classes.shareEventButton}
           onClick={handleShareEventClick}

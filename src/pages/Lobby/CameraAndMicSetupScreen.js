@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100vw',
     position: 'absolute',
     backgroundImage: `url(${confettiDoodles})`,
+    backgroundSize: 'auto',
+    backgroundRepeat: 'repeat',
   },
   videoAndSelectionContainer: {
     width: '85%',

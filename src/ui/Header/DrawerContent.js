@@ -21,10 +21,9 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   logo: {
-    padding: theme.spacing(1.75, 0),
-    height: '4.25em',
+    height: '3.5em',
     [theme.breakpoints.down('md')]: {
-      height: '3.5em',
+      height: '3em',
     },
   },
   privacyPolicyLink: {
@@ -42,7 +41,11 @@ const useStyles = makeStyles((theme) => ({
   },
   toolbar: theme.mixins.toolbar,
   topOfDrawer: {
-    height: '100%',
+    padding: theme.spacing(2.75, 0),
+    height: 'auto',
+    [theme.breakpoints.down('md')]: {
+      padding: theme.spacing(1.75, 0),
+    },
   },
   topHalfOfDrawer: {
     height: 'auto',

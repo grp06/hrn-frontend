@@ -122,18 +122,18 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h3" gutterBottom>
+            <Typography variant="h3" gutterBottom style={{ marginBottom: '20px' }}>
               Report this user?{' '}
               <span role="img" aria-label="mad face">
                 🤬
               </span>
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               We take pride in only allowing high-quality, respectful people on our platform and
               therefore we do not take users being rude lightly. We appreciate you flagging this
               conversation and we may reach out to you to investigate this report.
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               Are you sure you would like to report this user?
             </Typography>
           </Grid>

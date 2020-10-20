@@ -7,8 +7,11 @@ import Typography from '@material-ui/core/Typography'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
-  centeredText: {
-    textAlign: 'center',
+  CTAButton: {
+    marginTop: theme.spacing(1.5),
+  },
+  inEventScreenText: {
+    ...theme.typography.inEventScreenText,
   },
   waitingRoom: {
     width: '100%',
@@ -54,7 +57,7 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
         lg={8}
         xs={10}
       >
-        <Typography variant="h2" className={classes.centeredText}>
+        <Typography className={classes.inEventScreenText}>
           Sorry to break the bad news to you, but your partner disconnected ... something to do with
           squirrels chewing their router{' '}
           <span role="img" aria-label="woman shrugging">
@@ -62,13 +65,15 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
           </span>
           .
         </Typography>
-        <Typography variant="h3" className={classes.centeredText}>
+        <Typography className={classes.inEventScreenText}>
           Click the button below and we&apos;ll try to get you a new partner, or stay put and we
           will match you with someone at the end of this round.
         </Typography>
         <Button
           variant="contained"
           color="primary"
+          size="large"
+          className={classes.CTAButton}
           onClick={() => handleReturnToLobby(leftChatMutation)}
         >
           Return To Lobby

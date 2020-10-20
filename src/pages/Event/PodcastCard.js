@@ -30,7 +30,7 @@ const PodcastCard = () => {
         title="hi right now podcast"
         src="https://open.spotify.com/embed-podcast/show/1Pxse9ZJjcXZLa9EkW1jSl"
         width="99%"
-        height="170"
+        height="159"
         frameBorder="0"
         allowtransparency="true"
         allow="encrypted-media"

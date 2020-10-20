@@ -7,8 +7,11 @@ import { useMutation } from '@apollo/react-hooks'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
-  centeredText: {
-    textAlign: 'center',
+  CTAButton: {
+    marginTop: theme.spacing(1.5),
+  },
+  inEventScreenText: {
+    ...theme.typography.inEventScreenText,
   },
   waitingRoom: {
     width: '100%',
@@ -56,10 +59,10 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       >
         {!partnerNeverConnected ? (
           <>
-            <Typography variant="h2" className={classes.centeredText}>
+            <Typography className={classes.inEventScreenText}>
               Connecting you to someone awesome!
             </Typography>
-            <Typography variant="h2" className={classes.centeredText}>
+            <Typography className={classes.inEventScreenText}>
               Give us a few seconds to roll out your red carpet{' '}
               <span role="img" aria-label="woman dancing">
                 💃
@@ -69,17 +72,23 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
           </>
         ) : (
           <>
-            <Typography variant="h2" className={classes.centeredText}>
+            <Typography className={classes.inEventScreenText}>
               Seems like things are taking a bit too long{' '}
               <span role="img" aria-label="inquisitive face">
                 🧐
               </span>
             </Typography>
-            <Typography variant="h4" className={classes.centeredText}>
+            <Typography className={classes.inEventScreenText}>
               Stay put and wait for your partner to connect, or click the button below to go back to
               the lobby and possibly get rematched with someone new!
             </Typography>
-            <Button variant="contained" color="primary" onClick={() => handleReturnToLobby()}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.CTAButton}
+              onClick={() => handleReturnToLobby()}
+            >
               Return To Lobby
             </Button>
           </>

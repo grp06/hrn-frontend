@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   messageGrid: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(3),
   },
 }))
 

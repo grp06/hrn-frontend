@@ -25,9 +25,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: 'auto',
     padding: theme.spacing(3, 5),
+    marginBottom: theme.spacing(3),
   },
   hostAndRSVPContainer: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(2),
   },
   hostContainer: {
     height: '70px',
@@ -69,7 +70,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
         justify="space-between"
         className={classes.hostAndRSVPContainer}
       >
-        <Grid item direction="column" md={6}>
+        <Grid container item direction="column" md={6}>
           <Typography variant="subtitle1" className={classes.subtitle}>
             Hosted By /
           </Typography>
@@ -86,14 +87,14 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
             <Grid
               container
               direction="column"
-              justify="space-between"
+              justify="center"
               wrap="nowrap"
               className={classes.hostNameAndTitleContainer}
             >
-              <Typography variant="h2" className={classes.hostName}>
+              <Typography variant="h3" className={classes.hostName}>
                 {hostName}
               </Typography>
-              <Typography variant="subtitle1">European Gigaloo</Typography>
+              {/* <Typography variant="subtitle1">European Gigaloo</Typography> */}
             </Grid>
           </Grid>
         </Grid>

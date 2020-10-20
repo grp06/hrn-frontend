@@ -4,10 +4,6 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 
 const createStyles = makeStyles((theme) => ({
-  addFriendButtonContainer: {
-    width: '60%',
-    margin: theme.spacing(0, 'auto'),
-  },
   cardContainer: {
     position: 'relative',
     bottom: '0%',
@@ -72,7 +68,9 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
       {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
-      <div className={classes.addFriendButtonContainer}>{addFriendButton}</div>
+      <Grid container justify="center" alignItems="center">
+        {addFriendButton}
+      </Grid>
     </Grid>
   )
 }

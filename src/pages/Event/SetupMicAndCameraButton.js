@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
 const SetupMicAndCameraButton = ({ setUserHasEnabledCameraAndMic }) => {
   const classes = useStyles()
   const iconButton = {
-    iconButtonIcon: <SettingsIcon style={{ color: 'white', fontSize: '2rem' }} />,
+    iconButtonIcon: <SettingsIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />,
     iconButtonColor: 'inherit',
     iconButtonSize: 'small',
   }

@@ -25,7 +25,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div
           style={{
-            color: 'white',
+            color: 'ghostWhite',
             display: 'flex',
             fontFamily: 'Muli',
             width: '50%',

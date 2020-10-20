@@ -11,8 +11,11 @@ import { Snack } from '../../common'
 import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
-  centeredText: {
-    textAlign: 'center',
+  CTAButton: {
+    marginTop: theme.spacing(1.5),
+  },
+  inEventScreenText: {
+    ...theme.typography.inEventScreenText,
   },
   emoji: {
     fontSize: '50px',
@@ -124,10 +127,8 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderRating = () => {
     return (
       <>
-        <Typography variant="h2" className={classes.centeredText}>
-          Hope you had a great chat!
-        </Typography>
-        <Typography variant="h4" className={classes.centeredText}>
+        <Typography className={classes.inEventScreenText}>Hope you had a great chat!</Typography>
+        <Typography className={classes.inEventScreenText}>
           Would you be excited to match with this person in a future event?
         </Typography>
         <Typography variant="subtitle1">
@@ -195,16 +196,21 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderBreak = () => {
     return (
       <>
-        <Typography variant="h2" className={classes.centeredText}>
+        <Typography className={classes.inEventScreenText}>
           Awesome! Hang tight as we&apos;re matching you with someone awesome really soon{' '}
           <span role="img" aria-label="sunglass smiley">
             😎
           </span>
         </Typography>
-        <Typography variant="h4" className={classes.centeredText}>
+        <Typography className={classes.inEventScreenText}>
           If you need a break, just press the button below!
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleTakeABreak}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.CTAButton}
+          onClick={handleTakeABreak}
+        >
           Take a break
         </Button>
       </>
@@ -214,7 +220,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderEventFinish = () => {
     return (
       <>
-        <Typography variant="h2">
+        <Typography className={classes.inEventScreenText}>
           Awesome! Thanks for joining the event!{' '}
           <span role="img" aria-label="sunglass smiley">
             😎

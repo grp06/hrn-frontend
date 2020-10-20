@@ -32,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   eventContentContainer: {
     position: 'relative',
     zIndex: '99',
-    width: '90%',
+    width: '85%',
     maxWidth: '1560px',
-    margin: theme.spacing(-20, 'auto', 0, 'auto'),
+    margin: theme.spacing(-20, 'auto', 12, 'auto'),
   },
   pageContainer: {
     overflowX: 'hidden',
@@ -43,20 +43,25 @@ const useStyles = makeStyles((theme) => ({
   },
   podcastContainer: {
     width: '44%',
-    marginBottom: theme.spacing(2),
-    [theme.breakpoints.down('sm')]: {
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('md')]: {
       width: '100%',
+    },
+  },
+  subtitle: {
+    margin: theme.spacing(1),
+    marginBottom: '10px',
+    width: '75%',
+    [theme.breakpoints.down('sm')]: {
+      width: '90%',
     },
   },
   whatToExpectContainer: {
-    width: '55%',
-    [theme.breakpoints.down('sm')]: {
+    width: '54%',
+    [theme.breakpoints.down('md')]: {
       width: '100%',
     },
-    marginBottom: theme.spacing(2),
-  },
-  whatToExpectAndPodcastContainer: {
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(3),
   },
 }))
 

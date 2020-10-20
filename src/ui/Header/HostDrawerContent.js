@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   listItemText: {
     fontFamily: 'Muli',
-    color: 'white',
+    color: 'ghostWhite',
     fontSize: '1rem',
     fontWeight: '300',
     marginLeft: theme.spacing(1),
