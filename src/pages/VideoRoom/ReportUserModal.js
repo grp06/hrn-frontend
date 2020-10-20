@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
+import { useHistory } from 'react-router-dom'
+import { useUserEventStatusContext } from '../../context'
 import { updateLeftChat, reportPartner } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
 const ReportUserModal = ({ myRound, open, setOpen }) => {
   const { event_id, id: row_id, user_id, partner_id, created_at: convo_started_at } = myRound
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [openModal, setOpenModal] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
 
@@ -89,8 +93,9 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
     try {
       await updateLeftChatMutation()
       await reportPartnerMutation()
+      setUserEventStatus('left chat')
       closeModal()
-      window.location.reload()
+      history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
     }

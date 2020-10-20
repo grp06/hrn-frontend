@@ -4,6 +4,8 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { useMutation } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
+import { useUserEventStatusContext } from '../../../context'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -28,9 +30,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
-  const { id: row_id } = myRound
-  console.log('connecting to someone is rerendering')
+  const { event_id, id: row_id } = myRound
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
@@ -41,7 +44,8 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
   const handleReturnToLobby = async () => {
     try {
       await leftChatMutation()
-      window.location.reload()
+      setUserEventStatus('left chat')
+      history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
     }
