@@ -95,6 +95,9 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   })
 
   const handleUpdateRating = async (ratingValue) => {
+    window.analytics.track('gave rating', {
+      rating: ratingValue,
+    })
     try {
       await updatePartnerRatingMutation({
         variables: {

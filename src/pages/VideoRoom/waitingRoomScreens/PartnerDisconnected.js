@@ -46,6 +46,7 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
       await mutation()
       await window.room.disconnect()
       setUserEventStatus('left chat')
+      window.analytics.track('left chat - partner disconnected')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)

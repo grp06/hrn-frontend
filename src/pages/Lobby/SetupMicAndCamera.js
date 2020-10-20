@@ -7,6 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import Video from 'twilio-video'
 
 import { useUserEventStatusContext } from '../../context'
 import { GUMErrorModal } from '../../common'
@@ -112,7 +113,6 @@ const SetupMicAndCamera = ({ usersName }) => {
 
   const stopUsersCurrentTracks = async () => {
     usersLocalMediaStream.getTracks().forEach((track) => track.stop())
-    console.log('successfully stopped users tracks')
     setUsersLocalMediaStream(null)
   }
 
@@ -221,15 +221,49 @@ const SetupMicAndCamera = ({ usersName }) => {
   const handleAudioDeviceChange = (event) => {
     localStorage.setItem('preferredAudioId', event.target.value)
     setCurrentAudioDeviceId(event.target.value)
-    console.log('audio device change, update the local video')
     getMedia()
+    if (window.room) {
+      const { localParticipant } = window.room
+      const tracks = Array.from(localParticipant.audioTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      console.log('handleVideoDeviceChange -> tracks', tracks)
+      localParticipant.unpublishTracks(tracks)
+
+      Video.createLocalAudioTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localAudioTrack) {
+        localParticipant.publishTrack(localAudioTrack)
+      })
+    }
   }
 
   const handleVideoDeviceChange = (event) => {
     localStorage.setItem('preferredVideoId', event.target.value)
     setCurrentVideoDeviceId(event.target.value)
-    console.log('video device change, update the local video')
     getMedia()
+    if (window.room) {
+      const { localParticipant } = window.room
+      const tracks = Array.from(localParticipant.videoTracks.values()).map(function (
+        trackPublication
+      ) {
+        return trackPublication.track
+      })
+      localParticipant.unpublishTracks(tracks)
+
+      Video.createLocalVideoTrack({
+        deviceId: { exact: event.target.value },
+      }).then(function (localVideoTrack) {
+        const localDiv = document.getElementById('local-video')
+        localDiv.innerHTML = ''
+        const attachedTrack = localVideoTrack.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
+        localDiv.appendChild(attachedTrack)
+        localParticipant.publishTrack(localVideoTrack)
+      })
+    }
   }
 
   const handleJoinEventClick = () => {
