@@ -72,8 +72,9 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
   const exitChat = async () => {
     try {
       await leftChatMutation()
-      setUserEventStatus('left chat')
       closeModal()
+      await window.room.disconnect()
+      setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)

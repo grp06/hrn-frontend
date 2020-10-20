@@ -44,6 +44,7 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
   const handleReturnToLobby = async (mutation) => {
     try {
       await mutation()
+      await window.room.disconnect()
       setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {

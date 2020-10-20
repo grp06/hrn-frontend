@@ -48,7 +48,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
-  const { event_name, event_users, host_id, id: event_id, start_at } = event
+  const { event_name, event_users, host_id, id: event_id, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
@@ -134,26 +134,28 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid
-        container
-        item
-        xs={12}
-        lg={4}
-        direction="row"
-        justify="flex-end"
-        alignItems="flex-end"
-        className={classes.buttonContainer}
-      >
-        <Button
-          variant="outlined"
-          size="large"
-          className={classes.shareEventButton}
-          onClick={handleShareEventClick}
+      {event_status === 'not-started' ? (
+        <Grid
+          container
+          item
+          xs={12}
+          lg={4}
+          direction="row"
+          justify="flex-end"
+          alignItems="flex-end"
+          className={classes.buttonContainer}
         >
-          <FeatherIcon icon="share-2" stroke="#f4f6fa" size="30" />
-        </Button>
-        {renderRSVPOrEditButton()}
-      </Grid>
+          <Button
+            variant="outlined"
+            size="large"
+            className={classes.shareEventButton}
+            onClick={handleShareEventClick}
+          >
+            <FeatherIcon icon="share-2" stroke="#f4f6fa" size="30" />
+          </Button>
+          {renderRSVPOrEditButton()}
+        </Grid>
+      ) : null}
       <Snack
         open={showCopyURLSnack}
         duration={1800}
