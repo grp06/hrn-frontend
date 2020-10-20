@@ -62,6 +62,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
   }, [sharedDetailsInPrevEventData])
 
   const handleAddFriendPress = async () => {
+    window.analytics.track('shared contact info')
     try {
       await addFriendMutation()
       await partnerSharedDetailsMutation()

@@ -153,6 +153,7 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
               color="primary"
               className={classes.acceptButton}
               onClick={() => {
+                window.analytics.track('reported partner')
                 setAcceptFunctionInFlight(true)
                 onAcceptClick()
                 closeModal()

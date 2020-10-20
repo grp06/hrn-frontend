@@ -36,6 +36,7 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
   })
 
   const handleReturnToLobby = async () => {
+    window.analytics.track('left chat - partner took too long')
     try {
       await leftChatMutation()
       window.location.reload()
