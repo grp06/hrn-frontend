@@ -1,72 +1,38 @@
 import React, { useEffect } from 'react'
-import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useSubscription } from '@apollo/react-hooks'
 
-import bannerBackground from '../../assets/eventBannerMountain.png'
-import { listenToPartnersTable } from '../../gql/subscriptions'
-import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
-import { getTimeUntilEvent } from '../../utils'
 import {
   BottomControlPanel,
-  BroadcastBox,
   CameraAndMicSetupScreen,
   EventChatBox,
-  EventTimerCountdown,
   NextRoundIn,
-  OnlineEventUsersList,
+  LobbyContent,
 } from '.'
+import {
+  useAppContext,
+  useEventContext,
+  useUserContext,
+  useUserEventStatusContext,
+} from '../../context'
+import { Loading } from '../../common'
+import { EventCountdown } from '../Event'
+import { listenToPartnersTable } from '../../gql/subscriptions'
+import { getTimeUntilEvent } from '../../utils'
 
 // the overflow hidden in broadcastContainer is to help hide the scrollbar
 const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 80%, rgba(0,212,255,0) 100%)',
-    width: '100vw',
-    height: '55vh',
-  },
-  broadcastContainer: {
-    position: 'relative',
-    width: '70vw',
-    height: '100%',
-    [theme.breakpoints.down('md')]: {
-      width: '63vw',
-    },
-    overflow: 'hidden',
-  },
-  eventBanner: {
-    position: 'absolute',
-    width: '100%',
-    height: 'auto',
-    minHeight: '55vh',
-    backgroundImage: `url(${bannerBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    zIndex: '-3',
-  },
-  gridContainer: {
-    width: '100vw',
-    height: '100vh',
-    padding: theme.spacing(1, 4),
-  },
   pageContainer: {
     overflowX: 'hidden',
     overflowY: 'hidden',
   },
-  rightContainer: {
-    width: '25vw',
-    height: '100%',
-    padding: theme.spacing(1, 0, 0, 2),
-    [theme.breakpoints.down('md')]: {
-      width: '29vw',
-      padding: theme.spacing(1),
-    },
-  },
 }))
+
 const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const {
@@ -79,22 +45,20 @@ const Lobby = () => {
   const {
     current_round: round,
     event_users,
-    host_id,
     id: eventId,
     round_length,
     start_at: eventStartTime,
     status: eventStatus,
     updated_at: eventUpdatedAt,
   } = event
-  const { id: userId, name: usersName } = user
-  const isEventHost = host_id && host_id === userId
+  const { id: user_id, name: usersName } = user
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
       event_id: eventId,
-      user_id: userId,
+      user_id: user_id,
       round,
     },
     skip:
@@ -115,8 +79,8 @@ const Lobby = () => {
 
   // some redirecting stuff
   useEffect(() => {
-    if (event_users && event_users.length && userId) {
-      const alreadyAttending = event_users.find((u) => u.user.id === userId)
+    if (event_users && event_users.length && user_id) {
+      const alreadyAttending = event_users.find((u) => u.user.id === user_id)
       if (!alreadyAttending) {
         history.push(`/events/${eventId}`)
       }
@@ -124,7 +88,7 @@ const Lobby = () => {
     if (eventStatus === 'complete') {
       history.push(`/events/${eventId}/event-complete`)
     }
-  }, [event_users, eventStatus, userId])
+  }, [event_users, eventStatus, user_id])
 
   // redirect you when you have a partner
   // the round ===1 and waiting for match is to make sure that you get pushed into
@@ -145,63 +109,42 @@ const Lobby = () => {
     }
   }, [eventStatus, userEventStatus, myRoundData])
 
-  // if (!userHasEnabledCameraAndMic) {
-  //   return <CameraAndMicSetupScreen usersName={usersName} />
-  // }
+  if (appLoading || Object.keys(event).length < 2) {
+    return <Loading />
+  }
+
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen usersName={usersName} />
+  }
 
   return (
     <div className={classes.pageContainer}>
-      {eventStatus === 'not-started' ? (
-        <div className={classes.eventBanner}>
-          <div className={classes.bannerGradient} />
-        </div>
+      {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
+      {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
+        <NextRoundIn
+          currentRound={round}
+          eventStatus={eventStatus}
+          eventUpdatedAt={eventUpdatedAt}
+          roundLength={round_length}
+        />
       ) : null}
-      {eventStatus === 'not-started' ? (
-        <EventTimerCountdown eventStartTime={eventStartTime} />
-      ) : null}
-
-      <Grid container direction="row" justify="space-between" className={classes.gridContainer}>
-        {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
-          <NextRoundIn
-            currentRound={round}
+      <LobbyContent
+        event={event}
+        onlineEventUsers={onlineEventUsers}
+        setUserEventStatus={setUserEventStatus}
+        userEventStatus={userEventStatus}
+        user={user}
+      />
+      {/* <EventChatBox
             eventStatus={eventStatus}
-            eventUpdatedAt={eventUpdatedAt}
-            roundLength={round_length}
-          />
-        ) : null}
-        <Grid
-          container
-          direction="column"
-          justify="space-around"
-          className={classes.broadcastContainer}
-        >
-          <BroadcastBox
-            event={event}
-            isEventHost={isEventHost}
-            onlineEventUsers={onlineEventUsers}
-            setUserEventStatus={setUserEventStatus}
-            userEventStatus={userEventStatus}
-          />
-          <BottomControlPanel
-            event={event}
-            setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-            userId={userId}
-            userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
-          />
-        </Grid>
-        <Grid
-          container
-          direction="column"
-          justify="space-around"
-          className={classes.rightContainer}
-        >
-          <EventChatBox
-            eventStatus={eventStatus}
-            isEventHost={isEventHost}
-            onlineEventUsers={<OnlineEventUsersList onlineEventUsers={onlineEventUsers} />}
-          />
-        </Grid>
-      </Grid>
+            onlineEventUsers={<OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />}
+          /> */}
+      <BottomControlPanel
+        event={event}
+        setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
+        userId={user_id}
+        userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
+      />
     </div>
   )
 }

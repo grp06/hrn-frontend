@@ -5,10 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
-  AdminPanel,
-  UserPanel,
   EventRSVPsCard,
-  EventCantRSVP,
   EventStatusRedirect,
   EventTitleAndCTACard,
   HostAndEventDescCard,
