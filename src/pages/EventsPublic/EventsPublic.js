@@ -30,10 +30,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   pageBannerContentContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
     width: '70%',
-    // textAlign: 'center',
   },
   toggleGrid: {
     width: '70%',
@@ -70,7 +68,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
     textAlign: 'center',
   },
 }))

@@ -7,10 +7,13 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
 import { FloatCardMedium, Snack } from '../../common'
+import confettiDoodles from '../../assets/confettiDoodles.svg'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '200px',
+    width: '100vw',
+    height: '100vh',
+    backgroundImage: `url(${confettiDoodles})`,
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),
@@ -68,13 +71,13 @@ const ForgotPasswordForm = () => {
   }
 
   return (
-    <div className={classes.wrapper}>
+    <Grid container justidy="center" alignItems="center" className={classes.wrapper}>
       <FloatCardMedium>
         <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h1" className={classes.formHeader}>
+                <Typography variant="h2" className={classes.formHeader}>
                   Reset Password
                 </Typography>
               </Grid>
@@ -112,7 +115,7 @@ const ForgotPasswordForm = () => {
           />
         </Grid>
       </FloatCardMedium>
-    </div>
+    </Grid>
   )
 }
 

@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
   nullDataSub: {
@@ -100,15 +100,16 @@ const MyConnections = () => {
             alignItems="center"
             className={classes.nullDataContainer}
           >
-            <Typography variant="h1" className={classes.nullDataHeader}>
+            <Typography variant="h4" className={classes.nullDataHeader}>
               {message}
             </Typography>
-            <Typography variant="h6" className={classes.nullDataSub}>
+            <Typography variant="h4" className={classes.nullDataSub}>
               Join one of our public events and connect with other awesome people!
             </Typography>
             <Button
               onClick={handleGoToPublicEventsClick}
               color="primary"
+              size="large"
               variant="contained"
               style={{ marginTop: '20px' }}
             >
@@ -200,7 +201,7 @@ const MyConnections = () => {
         <Grid container direction="column" justify="center" alignItems="center">
           {connectionToggleValue === 'friends'
             ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
-            : renderContactCards('requests', 'You don\t have any requests to respond to 😎')}
+            : renderContactCards('requests', "You don't have any requests to respond to 😎")}
         </Grid>
       </div>
     </div>

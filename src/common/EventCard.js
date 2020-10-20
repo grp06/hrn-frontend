@@ -99,7 +99,7 @@ const EventCard = ({ event }) => {
           alignItems="flex-start"
           className={classes.eventContentContainer}
         >
-          <Typography gutterBottom variant="h1">
+          <Typography gutterBottom variant="h2">
             {event_name}
           </Typography>
           <Typography variant="body1" component="p">

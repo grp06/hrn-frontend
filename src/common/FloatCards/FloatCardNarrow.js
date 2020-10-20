@@ -12,8 +12,6 @@ const createStyles = makeStyles((theme) => ({
     height: 'auto',
     padding: theme.spacing(3),
     borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
     [theme.breakpoints.down('md')]: {
       width: '50vw',

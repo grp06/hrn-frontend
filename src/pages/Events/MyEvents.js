@@ -29,10 +29,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   pageBannerContentContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
     width: '70%',
-    // textAlign: 'center',
   },
   nullDataContainer: {
     padding: theme.spacing(5),
