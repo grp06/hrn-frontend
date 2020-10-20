@@ -28,16 +28,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   avatarContainer: {
-    width: '120px',
-    height: '120px',
+    width: '100px',
+    height: '100px',
   },
   avatarGridContainer: {
-    height: '120px',
+    height: '110px',
   },
   buttonContainer: {
     paddingTop: theme.spacing(1),
   },
   cardContainer: {
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    padding: theme.spacing(3, 5),
     position: 'relative',
     top: '-40px',
     bottom: '0%',
@@ -47,17 +50,12 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     marginBottom: '75px',
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(4),
     [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
   },
   circleButton: {
-    border: `2px solid ${theme.palette.common.orchid}`,
+    border: `2px solid ${theme.palette.common.basePink}`,
     backgroundColor: 'transparent',
     '&:hover': {
       backgroundColor: 'transparent',
@@ -116,7 +114,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           className={classes.circleButton}
           onClick={handleCopyEmailClick}
         >
-          <EmailIcon style={{ color: '#e98dd7' }} fontSize="small" />
+          <EmailIcon style={{ color: '#FF99AD' }} fontSize="small" />
         </Fab>
         {linkedIn_url && (
           <Fab
@@ -128,7 +126,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             target="_blank"
             rel="noopener noreferrer"
           >
-            <LinkedInIcon style={{ color: '#e98dd7' }} fontSize="small" />
+            <LinkedInIcon style={{ color: '#FF99AD' }} fontSize="small" />
           </Fab>
         )}
       </div>
@@ -159,7 +157,7 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
             <img alt="company-logo" className={classes.avatar} src={logo} />
           </Avatar>
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
-            <Typography variant="h4">{name}</Typography>
+            <Typography variant="h3">{name}</Typography>
             <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>
             {renderContactButtons()}
           </Grid>

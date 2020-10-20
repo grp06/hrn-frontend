@@ -38,17 +38,17 @@ const MoreActionsButton = ({ myRound }) => {
 
   const actions = [
     {
-      icon: <SettingsIcon style={{ color: '#6327bb' }} />,
+      icon: <SettingsIcon style={{ color: '#8C57DB' }} />,
       name: 'Camera/Mic Settings',
       onClick: () => setShowSetupMicAndCameraModal(true),
     },
     {
-      icon: <BugReportIcon style={{ color: '#6327bb' }} />,
+      icon: <BugReportIcon style={{ color: '#8C57DB' }} />,
       name: 'Having Issues',
       onClick: () => setShowConnectionIssuesModal(true),
     },
     {
-      icon: <ReportOutlinedIcon style={{ color: '#6327bb' }} />,
+      icon: <ReportOutlinedIcon style={{ color: '#8C57DB' }} />,
       name: 'Report User',
       onClick: () => setShowReportUserModal(true),
     },

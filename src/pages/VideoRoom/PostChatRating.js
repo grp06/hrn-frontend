@@ -11,12 +11,15 @@ import { Snack } from '../../common'
 import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
+  CTAButton: {
+    marginTop: theme.spacing(1.5),
+  },
+  inEventScreenText: {
+    ...theme.typography.inEventScreenText,
+  },
   emoji: {
     fontSize: '50px',
     padding: theme.spacing(0, 2),
-  },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
   },
   pageContainer: {
     width: '100%',
@@ -49,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     height: '120px',
     lineHeight: 1.25,
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
       color: theme.palette.common.ghostWhite,
     },
     '&:hover .MuiFab-label .MuiGrid-root .MuiTypography-subtitle2': {
@@ -61,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     height: '75%',
   },
   fabText: {
-    color: theme.palette.common.dankPurp,
+    color: theme.palette.common.basePurple,
     fontWeight: '700',
   },
 }))
@@ -127,10 +130,8 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderRating = () => {
     return (
       <>
-        <Typography variant="h4" className={classes.messageText}>
-          Hope you had a great chat!
-        </Typography>
-        <Typography variant="h4" className={classes.messageText}>
+        <Typography className={classes.inEventScreenText}>Hope you had a great chat!</Typography>
+        <Typography className={classes.inEventScreenText}>
           Would you be excited to match with this person in a future event?
         </Typography>
         <Typography variant="subtitle1">
@@ -198,16 +199,21 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderBreak = () => {
     return (
       <>
-        <Typography className={classes.messageText}>
+        <Typography className={classes.inEventScreenText}>
           Awesome! Hang tight as we&apos;re matching you with someone awesome really soon{' '}
           <span role="img" aria-label="sunglass smiley">
             😎
           </span>
         </Typography>
-        <Typography className={classes.messageText}>
+        <Typography className={classes.inEventScreenText}>
           If you need a break, just press the button below!
         </Typography>
-        <Button variant="contained" color="primary" onClick={handleTakeABreak}>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.CTAButton}
+          onClick={handleTakeABreak}
+        >
           Take a break
         </Button>
       </>
@@ -217,7 +223,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderEventFinish = () => {
     return (
       <>
-        <Typography className={classes.messageText}>
+        <Typography className={classes.inEventScreenText}>
           Awesome! Thanks for joining the event!{' '}
           <span role="img" aria-label="sunglass smiley">
             😎

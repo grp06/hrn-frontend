@@ -20,6 +20,7 @@ const listenToEvent = gql`
         user {
           email
           name
+          city
           id
         }
       }

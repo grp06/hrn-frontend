@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: theme.palette.common.greyCard,
+    backgroundColor: theme.palette.common.greyNav,
   },
   menuButton: {
     marginRight: theme.spacing(2),

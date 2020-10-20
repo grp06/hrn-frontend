@@ -10,20 +10,18 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  drawerTitle: {
-    textAlign: 'center',
-    color: '#818588',
-  },
   listItem: {
-    padding: theme.spacing(1.75, 0),
+    padding: theme.spacing(1.5, 0, 1.5, 2.25),
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
     },
   },
   listItemText: {
     fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhiteBody,
+    color: 'ghostWhite',
     fontSize: '1rem',
+    fontWeight: '300',
+    marginLeft: theme.spacing(1),
   },
 }))
 
@@ -34,10 +32,11 @@ const UserDrawerContent = ({ userId, userName }) => {
     window.location.pathname.includes('pre-event') ||
       window.location.pathname.includes('video-room')
   )
+  const usersFirstName = userName && userName.split(' ')[0]
 
   const userDrawerRoutes = [
     {
-      label: userName,
+      label: usersFirstName,
       url: '/my-profile',
       icon: 'user',
     },
@@ -68,11 +67,11 @@ const UserDrawerContent = ({ userId, userName }) => {
         key={route.label}
         onClick={() => history.push(route.url)}
       >
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon={route.icon} stroke="#D1D9EA" size="26" />
+            <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
           </ListItemIcon>
-          <ListItemText disableTypography primary={route.label} className={classes.listItemText} />
+          <ListItemText primary={route.label} className={classes.listItemText} />
         </Grid>
       </ListItem>
     ))
@@ -89,9 +88,9 @@ const UserDrawerContent = ({ userId, userName }) => {
         onClick={() => history.push('/events')}
         className={classes.listItem}
       >
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="globe" stroke="#D1D9EA" size="26" />
+            <FeatherIcon icon="globe" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="All Events" className={classes.listItemText} />
         </Grid>

@@ -9,7 +9,6 @@ import { didIShareDetailsInPrevEvent } from '../../gql/queries'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
-    width: '100%',
     margin: theme.spacing(1, 0),
   },
 }))

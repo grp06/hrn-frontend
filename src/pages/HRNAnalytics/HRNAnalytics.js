@@ -26,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
     width: '75vw',
     margin: theme.spacing(0, 'auto'),
   },
+  largeNumber: {
+    ...theme.typography.largeNumber,
+  },
   pageContainer: {
     marginTop: '200px',
   },
@@ -197,11 +200,13 @@ const HRNAnalytics = () => {
           <>
             <Grid container item direction="column" justify="center" alignItems="center" md={6}>
               <Typography variant="subtitle1">Number of total users:</Typography>
-              <Typography variant="h2">{allDBUsers.users.length}</Typography>
+              <Typography className={classes.largeNumber}>{allDBUsers.users.length}</Typography>
             </Grid>
             <Grid container item direction="column" justify="center" alignItems="center" md={6}>
               <Typography variant="subtitle1">Number of total events:</Typography>
-              <Typography variant="h2">{allDBEventsAndRounds.events.length}</Typography>
+              <Typography className={classes.largeNumber}>
+                {allDBEventsAndRounds.events.length}
+              </Typography>
             </Grid>
 
             <Grid container justify="space-between" item>

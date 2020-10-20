@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
   },
   pinkHighlight: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
   },
 }))
 

@@ -5,19 +5,14 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    position: 'absolute',
-    zIndex: '999',
-    width: '68vw',
-    height: '65px',
-    [theme.breakpoints.down('md')]: {
-      width: '61vw',
-    },
-    padding: theme.spacing(1),
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
-    backgroundColor: theme.palette.common.greyCard,
-    top: '3.5%',
+    position: 'fixed',
+    zIndex: 999,
+    bottom: 'auto',
+    width: '100%',
+    height: 'auto',
+    top: '0',
+    backgroundColor: 'rgb(36,37,38,0.7)',
+    padding: theme.spacing(2),
   },
   normalText: {
     fontWeight: '200',

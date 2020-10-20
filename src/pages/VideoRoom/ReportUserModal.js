@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
+import { useHistory } from 'react-router-dom'
+import { useUserEventStatusContext } from '../../context'
 import { updateLeftChat, reportPartner } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +61,8 @@ const useStyles = makeStyles((theme) => ({
 const ReportUserModal = ({ myRound, open, setOpen }) => {
   const { event_id, id: row_id, user_id, partner_id, created_at: convo_started_at } = myRound
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [openModal, setOpenModal] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
 
@@ -90,7 +94,9 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
       await updateLeftChatMutation()
       await reportPartnerMutation()
       closeModal()
-      window.location.reload()
+      await window.room.disconnect()
+      setUserEventStatus('left chat')
+      history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
     }
@@ -122,18 +128,18 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h3" gutterBottom style={{ marginBottom: '20px' }}>
               Report this user?{' '}
               <span role="img" aria-label="mad face">
                 🤬
               </span>
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               We take pride in only allowing high-quality, respectful people on our platform and
               therefore we do not take users being rude lightly. We appreciate you flagging this
               conversation and we may reach out to you to investigate this report.
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               Are you sure you would like to report this user?
             </Typography>
           </Grid>

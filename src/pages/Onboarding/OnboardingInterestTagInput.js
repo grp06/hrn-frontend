@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme) => ({
   toggleTagActive: {
     '&.MuiChip-clickable:focus': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
     },
   },
   container: {

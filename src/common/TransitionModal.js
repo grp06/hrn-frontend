@@ -35,9 +35,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
   },
   buttonContainer: {
-    width: '50%',
+    width: '75%',
     [theme.breakpoints.down('md')]: {
-      width: '80%',
+      width: '90%',
     },
   },
   acceptButton: {
@@ -115,7 +115,7 @@ function TransitionModal({
     return (
       <Button
         disableRipple
-        size={buttonSize || 'medium'}
+        size={buttonSize || 'large'}
         variant={buttonVariant || 'contained'}
         color={buttonColor || 'primary'}
         onClick={handleOpen}
@@ -165,6 +165,7 @@ function TransitionModal({
                 <Button
                   variant="contained"
                   disabled={acceptFunctionInFlight}
+                  size="large"
                   color="primary"
                   className={classes.acceptButton}
                   onClick={() => {
@@ -177,7 +178,12 @@ function TransitionModal({
                   {onAcceptButtonText || 'Yes, I am Sure'}
                 </Button>
                 {!hideNoWay && (
-                  <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
+                  <Button
+                    variant="contained"
+                    size="large"
+                    className={classes.cancelButton}
+                    onClick={handleClose}
+                  >
                     {onCloseButtonText || 'Whoops, No Way!'}
                   </Button>
                 )}

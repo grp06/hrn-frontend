@@ -7,7 +7,7 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useEventContext, useUserContext } from '../../context'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { Loading } from '../../common'
 import { ConnectionCard } from '../MyConnections'
@@ -53,6 +53,7 @@ const EventComplete = ({ match }) => {
   const classes = useStyles()
   const { event, resetEvent } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
+  const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId } = user
 
   const history = useHistory()
@@ -71,6 +72,9 @@ const EventComplete = ({ match }) => {
 
   useEffect(() => {
     setUserInEvent(false)
+    setUserHasEnabledCameraAndMic(false)
+    localStorage.setItem('preferredVideoId', '')
+    localStorage.setItem('preferredAudioId', '')
     return () => {
       resetEvent()
     }
@@ -114,7 +118,7 @@ const EventComplete = ({ match }) => {
 
   return (
     <div className={classes.wrapper}>
-      <Typography variant="h4" className={classes.categoryHeader}>
+      <Typography variant="h1" className={classes.categoryHeader}>
         {cardHeading()}
       </Typography>
       <Grid container item direction="column" justify="space-around">

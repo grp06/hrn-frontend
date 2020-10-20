@@ -1,67 +1,50 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 
-const lightPurple = '#723EBD'
-const dankPurp = '#6327bb'
-const orchid = '#e98dd7'
+const basePurple = '#8C57DB'
+const basePink = '#FF99AD'
 const sunray = '#fabb5b'
-const independence = '#3a405a'
-const white = '#fff'
 const ghostWhite = '#f4f6fa'
-const ghostWhiteSub = '#E2E8F2'
-const ghostWhiteBody = '#D1D9EA'
+const ghostWhiteBody = '#E2E8F2'
 const ghostWhiteDark = '#BFCBE2'
-const bodyBlack = '#191919'
+const bodyBlack = '#000000'
 const greyBorder = '#3e4042'
-const greyCard = '#242526'
+const greySubtitle = '#BFBFBF'
+const greyCard = '#191919'
+const greyNav = '#1c1c1c'
 const grey10 = '#262626'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
-// const black1dp = '#1d1d1d'
 const black2dp = '#212121'
 const red = '#ff3333'
-// const black3dp = '#232323'
-// const black6dp = '#2c2c2c'
-
-// HRN Lab Colors
-// const softPurp = '#d2b6e5'
-// const softOrchid = '#e3b6e5'
-// const cottonCandy = '#8dd7e9'
-// const lightSalmon = '#e99f8d'
-// const sandDune = '#e9cd8d'
-// const vanilla = '#fffce1'
-// const vomit = '#7fbb27'
-// const hiSky = '#5b9afa'
-// const banana = '#ffdd43'
 
 const theme = createMuiTheme({
   palette: {
     common: {
-      dankPurp,
-      lightPurple,
-      orchid,
+      basePurple,
+      basePink,
       sunray,
       ghostWhite,
-      ghostWhiteSub,
       ghostWhiteBody,
       ghostWhiteDark,
-      independence,
       bodyBlack,
       greyCard,
+      greyNav,
       greyBorder,
       greyBoxShadow,
       greyHighlight,
       greyButton,
       greyButtonHover,
+      greySubtitle,
       red,
       grey10,
     },
     primary: {
-      main: dankPurp,
+      main: basePurple,
     },
     secondary: {
-      main: orchid,
+      main: basePink,
     },
     default: {
       main: sunray,
@@ -81,53 +64,60 @@ const theme = createMuiTheme({
       textTransform: 'none',
       color: ghostWhite,
     },
+    // Event title on event page/lobby
     h1: {
       fontFamily: 'Muli',
-      fontSize: '2.3rem',
-      fontWeight: '700',
-      lineHeight: '2.9rem',
+      fontSize: '3rem',
+      fontWeight: '600',
+      lineHeight: 1.167,
+      letterSpacing: '0em',
       color: ghostWhite,
     },
-    // for very large numbers
+    // Event titlle on event thumbnail, Modals, Transitional Page, Card Header
     h2: {
       fontFamily: 'Muli',
-      fontSize: '4.5rem',
-      color: orchid,
+      fontSize: '2.125rem',
+      fontWeight: '400',
+      lineHeight: 1.235,
+      letterSpacing: '0.00735em',
+      color: ghostWhite,
     },
     // Event Title
-    // 3REM
+    // Buttons
     h3: {
       fontFamily: 'Muli',
+      fontSize: '1.5rem',
+      fontWeight: '700',
+      lineHeight: 1.334,
+      letterSpacing: '0em',
       color: ghostWhite,
-      fontWeight: '600',
     },
     // Card Headers (login / signup form)
     // 2.12REM
     h4: {
+      fontFamily: 'Muli',
+      fontSize: '1.25rem',
+      fontWeight: '500',
+      lineHeight: 1.6,
+      letterSpacing: '0.0075em',
       color: ghostWhite,
-      fontFamily: 'Muli',
     },
-    // Section Headers (Participants Signed Up)
-    // 1.5REM
-    h5: {
-      fontFamily: 'Muli',
-      color: ghostWhiteSub,
-      marginBottom: '8px',
-    },
-    // 1.25REM
     h6: {
+      color: 'ghostWhite',
       fontFamily: 'Muli',
-      color: ghostWhiteSub,
     },
     // 1REM
     subtitle1: {
       fontFamily: 'Muli',
-      color: ghostWhiteSub,
+      color: greySubtitle,
       fontWeight: '300',
+    },
+    paragraph1: {
+      fontSize: '50px',
     },
     subtitle2: {
       fontFamily: 'Muli',
-      color: ghostWhiteSub,
+      color: ghostWhiteBody,
       fontSize: '0.8rem',
       fontWeight: '300',
     },
@@ -136,18 +126,21 @@ const theme = createMuiTheme({
       color: ghostWhiteBody,
       fontWeight: '300',
     },
-    p: {
-      color: white,
-    },
-    waitingRoomHeading: {
+    inEventScreenText: {
       fontFamily: 'Muli',
-      fontSize: '1.8rem',
-      color: ghostWhiteSub,
-      marginBottom: '24px',
-      width: '100%',
-      lineHeight: '2.3rem',
-      fontWeight: '500',
+      fontSize: '1.75rem',
+      fontWeight: 400,
+      lineHeight: 1.3,
+      letterSpacing: '0.003em',
+      color: ghostWhite,
       textAlign: 'center',
+      marginBottom: '8px',
+    },
+    largeNumber: {
+      fontFamily: 'Muli',
+      fontSize: '3rem',
+      fontWeight: 500,
+      color: basePink,
     },
   },
   overrides: {
@@ -198,19 +191,19 @@ const theme = createMuiTheme({
     },
     MuiFormLabel: {
       root: {
-        color: ghostWhiteSub,
+        color: ghostWhiteBody,
         '&.Mui-focused': {
-          color: orchid,
+          color: basePink,
         },
       },
     },
     MuiInputLabel: {
       root: {
-        color: ghostWhiteSub,
+        color: ghostWhiteBody,
         fontSize: '1rem',
       },
       shrink: {
-        color: orchid,
+        color: basePink,
       },
     },
     MuiInput: {
@@ -233,17 +226,21 @@ const theme = createMuiTheme({
     },
     MuiButton: {
       root: {
-        color: 'inherit',
-        fontWeight: 'inherit',
+        color: ghostWhite,
+        fontSize: '1rem',
+        fontWeight: 700,
+        maxHeight: '50px',
       },
       text: {
         color: ghostWhite,
+        fontSize: '1rem',
       },
       containedSizeLarge: {
         padding: '11px 11px',
         fontSize: '1.1rem',
       },
       contained: {
+        minWidth: '200px',
         backgroundColor: sunray,
         '&:hover': {
           backgroundColor: '#FCD08C',
@@ -262,7 +259,7 @@ const theme = createMuiTheme({
     },
     MuiListItemText: {
       primary: {
-        color: ghostWhiteSub,
+        color: ghostWhiteBody,
       },
       secondary: {
         color: ghostWhiteDark,
@@ -283,7 +280,7 @@ const theme = createMuiTheme({
         color: bodyBlack,
       },
       filledSuccess: {
-        backgroundColor: dankPurp,
+        backgroundColor: basePurple,
       },
     },
     MuiStepLabel: {
@@ -337,6 +334,14 @@ const theme = createMuiTheme({
         width: '175px',
         padding: '8px',
         textAlign: 'center',
+      },
+    },
+    MuiMobileStepper: {
+      root: {
+        background: 'transparent',
+      },
+      dot: {
+        backgroundColor: greyButton,
       },
     },
     MuiSelect: {

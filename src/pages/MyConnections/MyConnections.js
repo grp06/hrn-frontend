@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
   nullDataSub: {
@@ -36,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
   toggleButtonActive: {
     width: '125px',
     '&.Mui-selected': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
       borderRadius: 0,
       border: 'none',
-      borderBottom: `2px solid ${theme.palette.common.orchid}`,
+      borderBottom: `2px solid ${theme.palette.common.basePink}`,
       backgroundColor: 'transparent',
       '&:hover': {
         backgroundColor: 'transparent',
@@ -103,12 +103,13 @@ const MyConnections = () => {
             <Typography variant="h4" className={classes.nullDataHeader}>
               {message}
             </Typography>
-            <Typography variant="h6" className={classes.nullDataSub}>
+            <Typography variant="h4" className={classes.nullDataSub}>
               Join one of our public events and connect with other awesome people!
             </Typography>
             <Button
               onClick={handleGoToPublicEventsClick}
               color="primary"
+              size="large"
               variant="contained"
               style={{ marginTop: '20px' }}
             >
@@ -162,7 +163,7 @@ const MyConnections = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <Typography variant="h3" className={classes.sectionHeader}>
+      <Typography variant="h1" className={classes.sectionHeader}>
         Connections
       </Typography>
       <div className={classes.pageContainer}>
@@ -200,7 +201,7 @@ const MyConnections = () => {
         <Grid container direction="column" justify="center" alignItems="center">
           {connectionToggleValue === 'friends'
             ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
-            : renderContactCards('requests', 'You don\t have any requests to respond to 😎')}
+            : renderContactCards('requests', "You don't have any requests to respond to 😎")}
         </Grid>
       </div>
     </div>

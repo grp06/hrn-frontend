@@ -9,21 +9,18 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  drawerTitle: {
-    textAlign: 'center',
-    color: '#818588',
-    marginBottom: theme.spacing(0.5),
-  },
   listItem: {
-    padding: theme.spacing(1.75, 0),
+    padding: theme.spacing(1.5, 0, 1.5, 2.25),
     '&:hover': {
-      backgroundColor: theme.palette.common.dankPurp,
+      backgroundColor: theme.palette.common.basePurple,
     },
   },
   listItemText: {
     fontFamily: 'Muli',
-    color: theme.palette.common.ghostWhiteBody,
+    color: 'ghostWhite',
     fontSize: '1rem',
+    fontWeight: '300',
+    marginLeft: theme.spacing(1),
   },
 }))
 
@@ -37,7 +34,7 @@ const HostDrawerContent = () => {
 
   const hostDrawerRoutes = [
     {
-      label: 'Host An Event',
+      label: 'Create Event',
       url: '/create-event',
       icon: 'plus-circle',
     },
@@ -60,15 +57,11 @@ const HostDrawerContent = () => {
             onClick={() => history.push(route.url)}
             className={classes.listItem}
           >
-            <Grid container direction="column" justify="center" alignItems="center">
+            <Grid container direction="row" justify="flex-start" alignItems="center">
               <ListItemIcon>
-                <FeatherIcon icon={route.icon} stroke="#D1D9EA" size="26" />
+                <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
               </ListItemIcon>
-              <ListItemText
-                disableTypography
-                primary={route.label}
-                className={classes.listItemText}
-              />
+              <ListItemText primary={route.label} className={classes.listItemText} />
             </Grid>
           </ListItem>
         ))}

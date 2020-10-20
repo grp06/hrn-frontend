@@ -7,17 +7,21 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    padding: theme.spacing(1, 3),
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
-    backgroundColor: theme.palette.common.greyCard,
-    width: 'auto',
-    position: 'relative',
+    position: 'fixed',
+    zIndex: 999,
+    bottom: 'auto',
+    width: '100%',
+    height: 'auto',
+    top: '0',
+    backgroundColor: 'rgb(36,37,38,0.7)',
+    padding: theme.spacing(2),
   },
   time: {
     fontFamily: 'Muli',
     color: theme.palette.common.ghostWhite,
+    fontWeight: '700',
+    fontSize: '2.25rem',
+    marginRight: theme.spacing(1),
   },
   root: {
     width: '100%',
@@ -32,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventCountdown = ({ displayContainer, eventStartTime }) => {
+const EventCountdown = ({ eventStartTime }) => {
   const classes = useStyles()
   const [seconds, setSeconds] = useState(null)
   const [isTimerActive, setIsTimerActive] = useState(true)
@@ -69,16 +73,16 @@ const EventCountdown = ({ displayContainer, eventStartTime }) => {
       direction="column"
       justify="center"
       alignItems="center"
-      className={displayContainer && classes.container}
+      className={classes.container}
     >
       {isTimerActive ? (
-        <Typography variant="h5">
+        <Typography variant="h3">
           <span className={classes.time}>{displayTime}</span> until event starts
         </Typography>
       ) : (
         <div>
           <Grid container item direction="column" justify="center" alignItems="center">
-            <Typography variant="h5" className={classes.centerText}>
+            <Typography variant="h3" className={classes.centerText}>
               The host will begin the event shortly
             </Typography>
           </Grid>

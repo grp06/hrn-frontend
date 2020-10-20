@@ -21,12 +21,6 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     maxWidth: 500,
   },
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    width: '100%',
-    height: '100%',
-  },
   pageBanner: {
     width: '100%',
     height: '30vh',
@@ -36,19 +30,21 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   pageBannerContentContainer: {
+    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
+    width: '70%',
+  },
+  toggleGrid: {
+    width: '70%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    width: '70%',
-    // textAlign: 'center',
   },
-  toggleGrid: {},
   toggleButtonActive: {
     width: '200px',
     '&.Mui-selected': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
       borderRadius: 0,
       border: 'none',
-      borderBottom: `2px solid ${theme.palette.common.orchid}`,
+      borderBottom: `2px solid ${theme.palette.common.basePink}`,
       backgroundColor: 'transparent',
       '&:hover': {
         backgroundColor: 'transparent',
@@ -66,13 +62,12 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonGroup: {
-    margin: theme.spacing(0, 'auto', 12, 'auto'),
+    margin: theme.spacing(0, 0, 12, 0),
   },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
     textAlign: 'center',
   },
 }))
@@ -164,21 +159,21 @@ const EventsPublic = () => {
 
   return (
     <>
-      <div className={classes.pageBanner}>
+      <Grid container>
         <Grid
           container
           direction="column"
           justify="flex-end"
           alignItems="center"
-          className={classes.bannerGradient}
+          className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">All Events</Typography>
+            <Typography variant="h1">All Events</Typography>
           </Grid>
         </Grid>
-      </div>
+      </Grid>
 
-      <Grid container justify="center" alignItems="center" className={classes.toggleGrid}>
+      <Grid container justify="flex-start" alignItems="center" className={classes.toggleGrid}>
         <ToggleButtonGroup
           value={eventToggleValue}
           groupedTextHorizontal

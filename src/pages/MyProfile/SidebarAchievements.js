@@ -26,11 +26,11 @@ const SidebarAchievements = () => {
       <Typography variant="subtitle2">ACHIEVEMENTS</Typography>
       <Grid container className={classes.numbersContainer}>
         <Grid container item direction="column" alignItems="center" justify="center" xs={12} md={6}>
-          <Typography variant="h3">173</Typography>
+          <Typography variant="h1">173</Typography>
           <Typography variant="subtitle1">Connections</Typography>
         </Grid>
         <Grid container item direction="column" alignItems="center" justify="center" xs={12} md={6}>
-          <Typography variant="h3">3</Typography>
+          <Typography variant="h1">3</Typography>
           <Typography variant="subtitle1">Events Attended</Typography>
         </Grid>
       </Grid>

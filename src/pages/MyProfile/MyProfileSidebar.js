@@ -66,7 +66,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
   const renderSidebarContent = () => {
     return !showEditSidebarForm ? (
       <Grid container direction="column" alignItems="center" justify="center">
-        <Typography variant="h5">{name}</Typography>
+        <Typography variant="h3">{name}</Typography>
         <Typography variant="subtitle1">{city}</Typography>
         {linkedIn_url && (
           <Button href={linkedIn_url} target="_blank" rel="noopener noreferrer">

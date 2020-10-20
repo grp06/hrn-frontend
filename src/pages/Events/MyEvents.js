@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     maxWidth: 500,
   },
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(25,25,25,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    width: '100%',
-    height: '100%',
-  },
   pageBanner: {
     width: '100%',
     height: '30vh',
@@ -35,16 +29,14 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   pageBannerContentContainer: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
     width: '70%',
-    // textAlign: 'center',
   },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
   nullDataSub: {
@@ -95,16 +87,16 @@ const MyEvents = () => {
               alignItems="center"
               className={classes.nullDataContainer}
             >
-              <Typography variant="h4" className={classes.nullDataHeader}>
+              <Typography variant="h3" className={classes.nullDataHeader}>
                 Sorry, we are currently mostly hosting invite-only events{' '}
                 <span role="img" aria-label="neutral face">
                   😐
                 </span>
               </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
+              <Typography variant="body1" className={classes.nullDataSub}>
                 If you know someone who is hosting an event they can give you their shareable link!
               </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
+              <Typography variant="body1" className={classes.nullDataSub}>
                 Or take a gander through our limited public events.
               </Typography>
               <Button
@@ -124,19 +116,19 @@ const MyEvents = () => {
 
   return (
     <>
-      <div className={classes.pageBanner}>
+      <Grid container>
         <Grid
           container
           direction="column"
           justify="flex-end"
           alignItems="center"
-          className={classes.bannerGradient}
+          className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h3">My Events</Typography>
+            <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
-      </div>
+      </Grid>
       {renderNullDataText()}
       {eventsData &&
         eventsData.event_users
