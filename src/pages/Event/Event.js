@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import { AdminPanel, UserPanel, EventStatusRedirect, EventNotRSVP } from '.'
-import { Loading } from '../../common'
+import { Loading, CalendarIconIcs } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { formatDate, getTimeUntilEvent } from '../../utils'
 
@@ -113,7 +113,7 @@ const Event = ({ match }) => {
           >
             <Typography variant="h3">{event_name}</Typography>
             <Grid item container direction="row" alignItems="center">
-              <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
+              <CalendarIconIcs event={event} />
               <Typography variant="subtitle1" className={classes.subtitle}>
                 {formatDate(startTime)}
               </Typography>
