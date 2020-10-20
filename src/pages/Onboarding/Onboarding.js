@@ -125,18 +125,13 @@ const Onboarding = () => {
 
     if (eventIdInLocalStorage) {
       // RSVP if there is an event in localStorage
-
-      rsvpForEvent(
-        event,
-        insertEventUserMutation({
-          variables: {
-            event_id: event.id,
-            user_id,
-          },
-        }),
-        usersEmail,
-        usersName
-      )
+      const insertEventUserMutationFunc = insertEventUserMutation({
+        variables: {
+          event_id: event.id,
+          user_id,
+        },
+      })
+      rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, usersName)
       history.push(`/events/${eventIdInLocalStorage}`)
     }
   }

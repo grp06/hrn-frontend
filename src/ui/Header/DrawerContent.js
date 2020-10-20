@@ -67,12 +67,7 @@ const DrawerContent = () => {
   return (
     !appLoading && (
       <>
-        <Grid
-          container
-          alignItems="space-between"
-          justify="flex-start"
-          className={classes.container}
-        >
+        <Grid container justify="flex-start" className={classes.container}>
           <Grid container direction="column" className={classes.topHalfOfDrawer}>
             <div className={classes.toolbar}>
               <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>

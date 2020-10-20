@@ -15,6 +15,11 @@ import { makeStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     marginBottom: theme.spacing(1),
+    [theme.breakpoints.down('md')]: {
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      marginTop: theme.spacing(1),
+    },
   },
   cardContainer: {
     marginBottom: theme.spacing(2),
@@ -27,9 +32,6 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.greyHighlight,
     },
     marginRight: theme.spacing(1.5),
-    [theme.breakpoints.down('md')]: {
-      marginRight: theme.spacing(1.5),
-    },
   },
   subtitle: {
     margin: theme.spacing(1),
@@ -123,7 +125,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       alignItems="flex-end"
       className={classes.cardContainer}
     >
-      <Grid container item xs={12} md={8} direction="column">
+      <Grid container item xs={12} lg={8} direction="column">
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
           <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
@@ -136,7 +138,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         container
         item
         xs={12}
-        md={4}
+        lg={4}
         direction="row"
         justify="flex-end"
         alignItems="flex-end"

@@ -80,8 +80,6 @@ const Event = ({ match }) => {
   const { id: user_id } = user
   const { event_users, host_id, start_at } = event
   const eventSet = Object.keys(event).length > 1
-  // used as a safety check for when we get thumbs up data
-  localStorage.setItem('eventId', eventId)
 
   useEffect(() => {
     if (!Object.keys(event).length && eventId) {
@@ -94,6 +92,8 @@ const Event = ({ match }) => {
     return <Loading />
   }
 
+  localStorage.setItem('eventId', eventId)
+  localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
 
