@@ -133,6 +133,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
               color="primary"
               className={classes.acceptButton}
               onClick={() => {
+                window.analytics.track('left chat - connection issues')
                 setAcceptFunctionInFlight(true)
                 onAcceptClick()
                 closeModal()

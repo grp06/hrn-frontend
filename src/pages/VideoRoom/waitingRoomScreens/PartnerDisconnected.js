@@ -69,7 +69,10 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleReturnToLobby(leftChatMutation)}
+          onClick={() => {
+            window.analytics.track('left chat - partner disconnected')
+            handleReturnToLobby(leftChatMutation)
+          }}
         >
           Return To Lobby
         </Button>
