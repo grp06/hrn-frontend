@@ -59,7 +59,7 @@ const HostDrawerContent = () => {
           >
             <Grid container direction="row" justify="flex-start" alignItems="center">
               <ListItemIcon>
-                <FeatherIcon icon={route.icon} stroke="#FFFFFF" size="24" />
+                <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
               </ListItemIcon>
               <ListItemText primary={route.label} className={classes.listItemText} />
             </Grid>

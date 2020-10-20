@@ -69,7 +69,7 @@ const UserDrawerContent = ({ userId, userName }) => {
       >
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon={route.icon} stroke="#FFFFFF" size="24" />
+            <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText primary={route.label} className={classes.listItemText} />
         </Grid>
@@ -88,9 +88,9 @@ const UserDrawerContent = ({ userId, userName }) => {
         onClick={() => history.push('/events')}
         className={classes.listItem}
       >
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="globe" stroke="#D1D9EA" size="26" />
+            <FeatherIcon icon="globe" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="All Events" className={classes.listItemText} />
         </Grid>

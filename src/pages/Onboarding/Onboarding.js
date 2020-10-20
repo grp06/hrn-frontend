@@ -64,12 +64,7 @@ const Onboarding = () => {
     }
   }
 
-  const [insertEventUserMutation] = useMutation(insertEventUser, {
-    variables: {
-      event_id: event.id,
-      user_id,
-    },
-  })
+  const [insertEventUserMutation] = useMutation(insertEventUser)
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -130,7 +125,18 @@ const Onboarding = () => {
 
     if (eventIdInLocalStorage) {
       // RSVP if there is an event in localStorage
-      rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+
+      rsvpForEvent(
+        event,
+        insertEventUserMutation({
+          variables: {
+            event_id: event.id,
+            user_id,
+          },
+        }),
+        usersEmail,
+        usersName
+      )
       history.push(`/events/${eventIdInLocalStorage}`)
     }
   }

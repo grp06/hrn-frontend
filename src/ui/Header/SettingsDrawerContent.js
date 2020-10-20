@@ -40,7 +40,7 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
       <ListItem button disableRipple onClick={() => handleLogout()} className={classes.listItem}>
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="log-out" stroke="#FFFFFF" size="24" />
+            <FeatherIcon icon="log-out" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="Logout" className={classes.listItemText} />
         </Grid>
@@ -49,7 +49,7 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
       <ListItem button disableRipple onClick={() => history.push('/')} className={classes.listItem}>
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
-            <FeatherIcon icon="log-in" stroke="#FFFFFF" size="24" />
+            <FeatherIcon icon="log-in" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
           <ListItemText disableTypography primary="Login" className={classes.listItemText} />
         </Grid>

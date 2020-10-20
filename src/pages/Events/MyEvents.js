@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
   },
   nullDataHeader: {
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(1),
     textAlign: 'center',
   },
   nullDataSub: {
@@ -87,16 +87,16 @@ const MyEvents = () => {
               alignItems="center"
               className={classes.nullDataContainer}
             >
-              <Typography variant="h1" className={classes.nullDataHeader}>
+              <Typography variant="h3" className={classes.nullDataHeader}>
                 Sorry, we are currently mostly hosting invite-only events{' '}
                 <span role="img" aria-label="neutral face">
                   😐
                 </span>
               </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
+              <Typography variant="body1" className={classes.nullDataSub}>
                 If you know someone who is hosting an event they can give you their shareable link!
               </Typography>
-              <Typography variant="h6" className={classes.nullDataSub}>
+              <Typography variant="body1" className={classes.nullDataSub}>
                 Or take a gander through our limited public events.
               </Typography>
               <Button
