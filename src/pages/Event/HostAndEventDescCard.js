@@ -87,6 +87,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
               container
               direction="column"
               justify="space-between"
+              wrap="nowrap"
               className={classes.hostNameAndTitleContainer}
             >
               <Typography variant="h2" className={classes.hostName}>

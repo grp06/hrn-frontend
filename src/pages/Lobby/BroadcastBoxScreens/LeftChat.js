@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 5),
     width: '100%',
   },
+  messageGrid: {
+    marginTop: theme.spacing(4),
+  },
 }))
 
 const LeftChat = () => {
@@ -23,16 +26,18 @@ const LeftChat = () => {
       alignItems="flex-start"
       className={classes.cardContainer}
     >
-      <Typography variant="h2">
+      <Typography variant="h3">
         Sorry you had to leave the chat{' '}
         <span role="img" aria-label="really crying">
           😭
         </span>
       </Typography>
-      <Typography variant="h3">
-        We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as soon as
-        we can.
-      </Typography>
+      <Grid className={classes.messageGrid}>
+        <Typography variant="body1">
+          We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as soon as
+          we can.
+        </Typography>
+      </Grid>
     </Grid>
   )
 }

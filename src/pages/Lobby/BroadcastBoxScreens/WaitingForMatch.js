@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 5),
     width: '100%',
   },
+  messageGrid: {
+    marginTop: theme.spacing(4),
+  },
 }))
 
 const WaitingForMatch = () => {
@@ -24,15 +27,17 @@ const WaitingForMatch = () => {
       alignItems="flex-start"
       className={classes.cardContainer}
     >
-      <Typography variant="h2">
+      <Typography variant="h3">
         Glad to have you back{' '}
         <span role="img" aria-label="hugging hands">
           🤗
         </span>
       </Typography>
-      <Typography variant="h2">
-        We&apos;ve penciled you in and we&apos;ll pair you with someone as soon as we can.
-      </Typography>
+      <Grid className={classes.messageGrid}>
+        <Typography variant="body1">
+          We&apos;ve penciled you in and we&apos;ll pair you with someone as soon as we can.
+        </Typography>
+      </Grid>
     </Grid>
   )
 }

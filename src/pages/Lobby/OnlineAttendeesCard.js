@@ -40,7 +40,7 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
     >
       {onlineEventUsers && onlineEventUsers.length ? (
         <>
-          <Typography variant="h2">Online Attendees {`(${onlineEventUsers.length})`}</Typography>
+          <Typography variant="h3">Online Attendees {`(${onlineEventUsers.length})`}</Typography>
           <List dense>
             {onlineEventUsers
               .sort((userA, userB) => {

@@ -112,7 +112,7 @@ const GetTagsModal = () => {
             className={classes.paper}
           >
             <Grid container justify="center" className={classes.modalBody}>
-              <Typography variant="h2" className={classes.modalHeader}>
+              <Typography variant="h3" className={classes.modalHeader}>
                 We want to get to know you a bit more{' '}
                 <span role="img" aria-label="excited smiley">
                   🤗

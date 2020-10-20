@@ -41,7 +41,7 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
     >
       {eventUsers && eventUsers.length ? (
         <>
-          <Typography variant="h2">RSVPs {`(${eventUsers.length})`}</Typography>
+          <Typography variant="h3">RSVPs {`(${eventUsers.length})`}</Typography>
           <List dense>
             {eventUsers.map(({ user }, idx) => {
               if (idx >= 4 && !seeMore) return null

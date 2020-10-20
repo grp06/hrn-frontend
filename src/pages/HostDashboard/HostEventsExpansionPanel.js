@@ -168,7 +168,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData }) => {
           aria-controls={`${id}-content`}
           id={`${id}-header`}
         >
-          <Typography variant="h2" className={classes.eventPanelHeading}>
+          <Typography variant="h3" className={classes.eventPanelHeading}>
             {event.event_name}
           </Typography>
           <Typography variant="h6">{startTime}</Typography>

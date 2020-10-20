@@ -101,7 +101,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h3" gutterBottom>
               Having Connection Issues?{' '}
               <span role="img" aria-label="frowning face">
                 😦

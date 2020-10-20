@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 5),
     width: '100%',
   },
+  messageGrid: {
+    marginTop: theme.spacing(4),
+  },
 }))
 
 const SittingOut = ({ setUserEventStatus }) => {
@@ -28,20 +31,24 @@ const SittingOut = ({ setUserEventStatus }) => {
       alignItems="flex-start"
       className={classes.cardContainer}
     >
-      <Typography variant="h2">
+      <Typography variant="h3">
         You are sitting out of the event{' '}
         <span role="img" aria-label="sad face">
           😢
         </span>
       </Typography>
-      <Typography variant="h3">
-        Your name won&apos;t be thrown in the hat for the matching algorithm. Whenever you&apos;re
-        ready to join again, just hit the button below.
-      </Typography>
-      <Typography variant="h3">We can&apos;t wait until you&apos;re back in the event!</Typography>
-      <Button variant="contained" size="large" color="primary" onClick={handleRejoinEventClick}>
-        Rejoin Event
-      </Button>
+      <Grid className={classes.messageGrid}>
+        <Typography variant="body1">
+          Your name won&apos;t be thrown in the hat for the matching algorithm. Whenever you&apos;re
+          ready to join again, just hit the button below.
+        </Typography>
+        <Typography variant="body1">
+          We can&apos;t wait until you&apos;re back in the event!
+        </Typography>
+        <Button variant="contained" size="large" color="primary" onClick={handleRejoinEventClick}>
+          Rejoin Event
+        </Button>
+      </Grid>
     </Grid>
   )
 }

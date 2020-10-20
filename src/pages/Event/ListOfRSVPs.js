@@ -17,7 +17,7 @@ const ListOfRSVPs = () => {
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Typography variant="h2" style={{ textAlign: 'center' }}>
+      <Typography variant="h3" style={{ textAlign: 'center' }}>
         People who&apos;ve signed up
       </Typography>
       {event_users && event_users.length ? (

@@ -54,7 +54,7 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
     return (
       myRound.partner &&
       myRound.partner.name && (
-        <Typography variant="h2" className={classes.partnerName}>
+        <Typography variant="h3" className={classes.partnerName}>
           {myRound.partner.name}
         </Typography>
       )

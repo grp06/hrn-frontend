@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 5),
     width: '100%',
   },
+  messageGrid: {
+    marginTop: theme.spacing(4),
+  },
 }))
 
 const CameLate = () => {
@@ -24,16 +27,18 @@ const CameLate = () => {
       alignItems="flex-start"
       className={classes.cardContainer}
     >
-      <Typography variant="h2">
+      <Typography variant="h3">
         Awh shucks, we just missed throwing your name into the hat for this round{' '}
         <span role="img" aria-label="blue cap">
           🧢
         </span>
       </Typography>
-      <Typography variant="h2">
-        But don&apos;t worry! We&apos;ve penciled you in and we&apos;ll pair you with someone as
-        soon as we can.
-      </Typography>
+      <Grid className={classes.messageGrid}>
+        <Typography variant="body1">
+          But don&apos;t worry! We&apos;ve penciled you in and we&apos;ll pair you with someone as
+          soon as we can.
+        </Typography>
+      </Grid>
     </Grid>
   )
 }

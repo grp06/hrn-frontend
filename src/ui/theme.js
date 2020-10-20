@@ -70,51 +70,53 @@ const theme = createMuiTheme({
     // Event title on event page/lobby
     h1: {
       fontFamily: 'Muli',
-      fontSize: '2.25rem',
+      fontSize: '3rem',
       fontWeight: '600',
-      lineHeight: '2.9rem',
+      lineHeight: 1.167,
+      letterSpacing: '0em',
       color: white,
     },
     // Event titlle on event thumbnail, Modals, Transitional Page, Card Header
     h2: {
       fontFamily: 'Muli',
-      fontSize: '1.5rem',
-      lineHeight: '2rem',
+      fontSize: '2.125rem',
       fontWeight: '400',
+      lineHeight: 1.235,
+      letterSpacing: '0.00735em',
       color: white,
     },
     // Event Title
     // Buttons
     h3: {
       fontFamily: 'Muli',
-      fontSize: '1.125rem',
-      lineHeight: '1.45rem',
-      fontWeight: '200',
+      fontSize: '1.5rem',
+      fontWeight: '300',
+      lineHeight: 1.334,
+      letterSpacing: '0em',
       color: white,
     },
     // Card Headers (login / signup form)
     // 2.12REM
     h4: {
-      color: ghostWhite,
       fontFamily: 'Muli',
+      fontSize: '1.25rem',
+      fontWeight: '500',
+      lineHeight: 1.6,
+      letterSpacing: '0.0075em',
+      color: white,
     },
-    // Section Headers (Participants Signed Up)
-    // 1.5REM
-    h5: {
-      fontFamily: 'Muli',
-      color: ghostWhiteSub,
-      marginBottom: '8px',
-    },
-    // 1.25REM
     h6: {
+      color: 'white',
       fontFamily: 'Muli',
-      color: ghostWhiteSub,
     },
     // 1REM
     subtitle1: {
       fontFamily: 'Muli',
       color: greySubtitle,
       fontWeight: '300',
+    },
+    paragraph1: {
+      fontSize: '50px',
     },
     subtitle2: {
       fontFamily: 'Muli',
@@ -124,21 +126,8 @@ const theme = createMuiTheme({
     },
     body1: {
       fontFamily: 'Muli',
-      color: ghostWhiteBody,
-      fontWeight: '300',
-    },
-    p: {
-      color: white,
-    },
-    waitingRoomHeading: {
-      fontFamily: 'Muli',
-      fontSize: '1.8rem',
       color: ghostWhiteSub,
-      marginBottom: '24px',
-      width: '100%',
-      lineHeight: '2.3rem',
-      fontWeight: '500',
-      textAlign: 'center',
+      fontWeight: '300',
     },
     largeNumber: {
       fontFamily: 'Muli',

@@ -15,11 +15,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     zIndex: 999,
     width: '100%',
-    height: 'auto',
+    height: '80px',
     top: 'auto',
     bottom: '0%',
     padding: theme.spacing(2, 4),
     backgroundColor: theme.palette.common.grey10,
+  },
+  settingsAndChatGrid: {
+    paddingRight: '6vw',
   },
 }))
 
@@ -41,7 +44,7 @@ const BottomControlPanel = ({
       buttonColor: 'link',
     },
     modalBody: (
-      <Typography variant="h2">
+      <Typography variant="h3">
         This will reset the event in its entirety. Are you 100% sure?
       </Typography>
     ),
@@ -90,7 +93,12 @@ const BottomControlPanel = ({
           </Grid>
         </Grid>
       )}
-      <Grid container>
+      <Grid
+        container
+        justify="flex-end"
+        alignItems="center"
+        className={classes.settingsAndChatGrid}
+      >
         <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
       </Grid>
     </Grid>

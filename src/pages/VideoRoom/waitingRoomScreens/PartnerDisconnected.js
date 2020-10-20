@@ -7,6 +7,9 @@ import Typography from '@material-ui/core/Typography'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  centeredText: {
+    textAlign: 'center',
+  },
   waitingRoom: {
     width: '100%',
     display: 'flex',
@@ -15,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
-  },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
   },
   dancingMan: {
     fontSize: '50px',
@@ -54,7 +54,7 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
         lg={8}
         xs={10}
       >
-        <Typography className={classes.messageText}>
+        <Typography variant="h2" className={classes.centeredText}>
           Sorry to break the bad news to you, but your partner disconnected ... something to do with
           squirrels chewing their router{' '}
           <span role="img" aria-label="woman shrugging">
@@ -62,7 +62,7 @@ const PartnerDisconnected = React.memo(({ myRound }) => {
           </span>
           .
         </Typography>
-        <Typography className={classes.messageText}>
+        <Typography variant="h3" className={classes.centeredText}>
           Click the button below and we&apos;ll try to get you a new partner, or stay put and we
           will match you with someone at the end of this round.
         </Typography>

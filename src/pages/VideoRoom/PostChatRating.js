@@ -11,12 +11,12 @@ import { Snack } from '../../common'
 import { useEventContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
+  centeredText: {
+    textAlign: 'center',
+  },
   emoji: {
     fontSize: '50px',
     padding: theme.spacing(0, 2),
-  },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
   },
   pageContainer: {
     width: '100%',
@@ -124,10 +124,10 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderRating = () => {
     return (
       <>
-        <Typography variant="h1" className={classes.messageText}>
+        <Typography variant="h2" className={classes.centeredText}>
           Hope you had a great chat!
         </Typography>
-        <Typography variant="h1" className={classes.messageText}>
+        <Typography variant="h4" className={classes.centeredText}>
           Would you be excited to match with this person in a future event?
         </Typography>
         <Typography variant="subtitle1">
@@ -195,13 +195,13 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderBreak = () => {
     return (
       <>
-        <Typography className={classes.messageText}>
+        <Typography variant="h2" className={classes.centeredText}>
           Awesome! Hang tight as we&apos;re matching you with someone awesome really soon{' '}
           <span role="img" aria-label="sunglass smiley">
             😎
           </span>
         </Typography>
-        <Typography className={classes.messageText}>
+        <Typography variant="h4" className={classes.centeredText}>
           If you need a break, just press the button below!
         </Typography>
         <Button variant="contained" color="primary" onClick={handleTakeABreak}>
@@ -214,7 +214,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const renderEventFinish = () => {
     return (
       <>
-        <Typography className={classes.messageText}>
+        <Typography variant="h2">
           Awesome! Thanks for joining the event!{' '}
           <span role="img" aria-label="sunglass smiley">
             😎

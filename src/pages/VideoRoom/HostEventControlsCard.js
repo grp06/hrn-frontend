@@ -42,7 +42,7 @@ const HostEventControlsCard = React.memo(({ event, userId }) => {
       buttonColor: 'link',
     },
     modalBody: (
-      <Typography variant="h2">
+      <Typography variant="h3">
         This will reset the event in its entirety. Are you 100% sure?
       </Typography>
     ),

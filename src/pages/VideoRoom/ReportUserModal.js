@@ -122,7 +122,7 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h2" gutterBottom>
+            <Typography variant="h3" gutterBottom>
               Report this user?{' '}
               <span role="img" aria-label="mad face">
                 🤬

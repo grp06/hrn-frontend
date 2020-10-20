@@ -7,6 +7,9 @@ import { useMutation } from '@apollo/react-hooks'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  centeredText: {
+    textAlign: 'center',
+  },
   waitingRoom: {
     width: '100%',
     display: 'flex',
@@ -15,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
-  },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
   },
   dancingMan: {
     fontSize: '50px',
@@ -56,10 +56,10 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       >
         {!partnerNeverConnected ? (
           <>
-            <Typography className={classes.messageText}>
+            <Typography variant="h2" className={classes.centeredText}>
               Connecting you to someone awesome!
             </Typography>
-            <Typography className={classes.messageText}>
+            <Typography variant="h2" className={classes.centeredText}>
               Give us a few seconds to roll out your red carpet{' '}
               <span role="img" aria-label="woman dancing">
                 💃
@@ -69,13 +69,13 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
           </>
         ) : (
           <>
-            <Typography className={classes.messageText}>
+            <Typography variant="h2" className={classes.centeredText}>
               Seems like things are taking a bit too long{' '}
               <span role="img" aria-label="inquisitive face">
                 🧐
               </span>
             </Typography>
-            <Typography className={classes.messageText}>
+            <Typography variant="h4" className={classes.centeredText}>
               Stay put and wait for your partner to connect, or click the button below to go back to
               the lobby and possibly get rematched with someone new!
             </Typography>

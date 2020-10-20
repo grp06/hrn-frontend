@@ -43,7 +43,6 @@ const App = () => {
   const { boot } = useIntercom()
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
-
   async function createClient() {
     try {
       const apolloClient = await makeApolloClient()
