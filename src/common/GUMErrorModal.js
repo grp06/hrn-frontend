@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
-    border: '2px solid #fabb5b',
-    boxShadow: '4px 4px 0 #fabb5b',
+    border: '2px solid #8C57DB',
+    boxShadow: '4px 4px 0 #8C57DB',
     // padding: theme.spacing(2, 4, 3),
     width: 'auto',
     minWidth: '20vw',
@@ -36,12 +36,8 @@ const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     width: '100%',
   },
-  cancelButton: {
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-  },
   pinkHighlight: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
   },
 }))
 
@@ -88,7 +84,7 @@ const GUMErrorModal = ({ onComplete, errorName }) => {
             alignItems="center"
             className={classes.buttonContainer}
           >
-            <Button variant="outlined" className={classes.cancelButton} onClick={handleClose}>
+            <Button variant="contained" color="primary" size="large" onClick={handleClose}>
               Alright, got it!
             </Button>
           </Grid>

@@ -45,13 +45,13 @@ const GUMErrorMessage = (errorName) => {
     case 'NotAllowedError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h2" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔
             </span>
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             It seems that we{' '}
             <span className={classes.pinkHighlight}>
               could not get permission to use your camera or microphone.{' '}
@@ -59,7 +59,7 @@ const GUMErrorMessage = (errorName) => {
             We need access to your camera and microphone so other people can see your face and hear
             your story.
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             You can follow the links below to help troubleshoot. When you&apos;re done with the
             changes make sure to refresh the page!
           </Typography>
@@ -93,13 +93,13 @@ const GUMErrorMessage = (errorName) => {
     case 'NotFoundError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h2" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔
             </span>
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             It seems that we{' '}
             <span className={classes.pinkHighlight}>could not find an audio or video source. </span>
             Hi Right Now requires both a video and an audio source for you and the other
@@ -113,20 +113,20 @@ const GUMErrorMessage = (errorName) => {
     case 'NotReadableError':
       return (
         <Grid container direction="column" justify="center" alignItems="center">
-          <Typography variant="h4" className={classes.header}>
+          <Typography variant="h2" className={classes.header}>
             Hmmm somethings off{' '}
             <span role="img" aria-label="hmm smiley">
               🤔
             </span>
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             It seems that we{' '}
             <span className={classes.pinkHighlight}>
               could not read your audio or video source.{' '}
             </span>
             This is a weird one, but it happens sometimes.
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             You get this error when a browser window or tab you&apos;re currently on hogs up your
             permissions and doesn&apos;t want to share{' '}
             <span role="img" aria-label="dissapointed smiley">
@@ -135,7 +135,7 @@ const GUMErrorMessage = (errorName) => {
             . Unfortunately, you&apos;ve got to choose us or them. Don&apos;t worry, we won&apos;t
             tell.
           </Typography>
-          <Typography variant="h6" className={classes.modalBody}>
+          <Typography variant="body1" className={classes.modalBody}>
             <span className={classes.pinkHighlight}>
               Make sure to come back to the event page and refresh once you&apos;re back.
             </span>{' '}

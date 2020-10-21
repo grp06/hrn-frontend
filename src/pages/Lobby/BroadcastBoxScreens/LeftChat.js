@@ -1,41 +1,44 @@
 import React from 'react'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import { Typography } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
-  waitingRoom: {
+  cardContainer: {
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    height: 'auto',
+    padding: theme.spacing(3, 5),
     width: '100%',
-    height: '90%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'column',
-    marginTop: '2%',
-    overflowY: 'hidden',
-    [theme.breakpoints.down('md')]: {
-      marginTop: '10%',
-    },
   },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
+  messageGrid: {
+    marginTop: theme.spacing(3),
   },
 }))
 
 const LeftChat = () => {
   const classes = useStyles()
   return (
-    <div className={classes.waitingRoom}>
-      <Typography className={classes.messageText}>
+    <Grid
+      container
+      direction="column"
+      justify="flex-start"
+      alignItems="flex-start"
+      className={classes.cardContainer}
+    >
+      <Typography variant="h3">
         Sorry you had to leave the chat{' '}
         <span role="img" aria-label="really crying">
           😭
         </span>
       </Typography>
-      <Typography className={classes.messageText}>
-        We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as soon as
-        we can.
-      </Typography>
-    </div>
+      <Grid className={classes.messageGrid}>
+        <Typography variant="body1">
+          We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as soon as
+          we can.
+        </Typography>
+      </Grid>
+    </Grid>
   )
 }
 

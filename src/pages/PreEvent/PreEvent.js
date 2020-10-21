@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   preEventWrapper: {
-    height: '100%',
+    height: '94vh',
   },
   liveAndViewersContainer: {
     position: 'absolute',

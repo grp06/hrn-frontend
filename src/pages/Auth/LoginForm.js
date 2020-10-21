@@ -7,11 +7,14 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '../../common'
+import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '200px',
+    width: '100vw',
+    height: '100vh',
+    backgroundImage: `url(${confettiDoodles})`,
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),
@@ -32,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     marginTop: theme.spacing(2.5),
     '&:hover': {
-      color: theme.palette.common.orchid,
+      color: theme.palette.common.basePink,
     },
   },
   privacyPolicyText: {
@@ -100,13 +103,13 @@ const LoginForm = () => {
   }
 
   return (
-    <div className={classes.wrapper}>
+    <Grid container justidy="center" alignItems="center" className={classes.wrapper}>
       <FloatCardMedium>
         <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
               <Grid item>
-                <Typography variant="h4" className={classes.formHeader}>
+                <Typography variant="h2" className={classes.formHeader}>
                   Welcome{' '}
                   <span role="img" aria-label="hand wave">
                     👋
@@ -181,7 +184,7 @@ const LoginForm = () => {
           </form>
         </Grid>
       </FloatCardMedium>
-    </div>
+    </Grid>
   )
 }
 

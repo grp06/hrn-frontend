@@ -112,7 +112,7 @@ const ShareEventPromptModal = ({ event, renderHostMessage }) => {
     modalBody: (
       <Grid container direction="column" justify="center" alignItems="center">
         <Grid item>
-          <Typography variant="h5" className={classes.eventPromptHeader}>
+          <Typography variant="h3" className={classes.eventPromptHeader}>
             We&apos;ve curated a message for you to easily share the event!
           </Typography>
         </Grid>

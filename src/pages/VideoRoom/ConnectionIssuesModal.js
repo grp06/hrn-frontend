@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid'
 
 import { makeStyles } from '@material-ui/core/styles'
 
+import { useHistory } from 'react-router-dom'
+import { useUserEventStatusContext } from '../../context'
 import { updateLeftChat } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -49,8 +51,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
-  const { id: row_id } = myRound
+  const { event_id, id: row_id } = myRound
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [openModal, setModalOpen] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
   const [leftChatMutation] = useMutation(updateLeftChat, {
@@ -69,7 +73,9 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
     try {
       await leftChatMutation()
       closeModal()
-      window.location.reload()
+      await window.room.disconnect()
+      setUserEventStatus('left chat')
+      history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
     }
@@ -101,17 +107,17 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
           className={classes.paper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h3" gutterBottom style={{ marginBottom: '20px' }}>
               Having Connection Issues?{' '}
               <span role="img" aria-label="frowning face">
                 😦
               </span>
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               Most of our connection issues can be solved by a simple page refresh, or changing your
               camera / mic settings by pressing on the gear icon.
             </Typography>
-            <Typography variant="subtitle1" gutterBottom>
+            <Typography variant="body1" gutterBottom>
               If that doesn&apos;t solve the problem, then click on the &apos;leave chat&apos;
               button below and we will try to match you with an available user for the duration of
               the round.

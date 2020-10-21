@@ -4,9 +4,17 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { useMutation } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
+import { useUserEventStatusContext } from '../../../context'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  CTAButton: {
+    marginTop: theme.spacing(1.5),
+  },
+  inEventScreenText: {
+    ...theme.typography.inEventScreenText,
+  },
   waitingRoom: {
     width: '100%',
     display: 'flex',
@@ -16,18 +24,16 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
   },
-  messageText: {
-    ...theme.typography.waitingRoomHeading,
-  },
   dancingMan: {
     fontSize: '50px',
   },
 }))
 
 const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
-  const { id: row_id } = myRound
-  console.log('connecting to someone is rerendering')
+  const { event_id, id: row_id } = myRound
   const classes = useStyles()
+  const history = useHistory()
+  const { setUserEventStatus } = useUserEventStatusContext()
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
@@ -39,7 +45,9 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
     window.analytics.track('left chat - partner took too long')
     try {
       await leftChatMutation()
-      window.location.reload()
+      await window.room.disconnect()
+      setUserEventStatus('left chat')
+      history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
     }
@@ -57,10 +65,10 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       >
         {!partnerNeverConnected ? (
           <>
-            <Typography className={classes.messageText}>
+            <Typography className={classes.inEventScreenText}>
               Connecting you to someone awesome!
             </Typography>
-            <Typography className={classes.messageText}>
+            <Typography className={classes.inEventScreenText}>
               Give us a few seconds to roll out your red carpet{' '}
               <span role="img" aria-label="woman dancing">
                 💃
@@ -70,17 +78,23 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
           </>
         ) : (
           <>
-            <Typography className={classes.messageText}>
+            <Typography className={classes.inEventScreenText}>
               Seems like things are taking a bit too long{' '}
               <span role="img" aria-label="inquisitive face">
                 🧐
               </span>
             </Typography>
-            <Typography className={classes.messageText}>
+            <Typography className={classes.inEventScreenText}>
               Stay put and wait for your partner to connect, or click the button below to go back to
               the lobby and possibly get rematched with someone new!
             </Typography>
-            <Button variant="contained" color="primary" onClick={() => handleReturnToLobby()}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.CTAButton}
+              onClick={() => handleReturnToLobby()}
+            >
               Return To Lobby
             </Button>
           </>

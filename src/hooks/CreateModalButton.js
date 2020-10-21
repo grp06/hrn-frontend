@@ -34,10 +34,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  modalTitle: {
-    ...theme.typography.h2,
-    marginBottom: '0px',
-  },
   modalDescription: {
     ...theme.typography.body,
   },

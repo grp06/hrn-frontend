@@ -17,14 +17,14 @@ const useStyles = makeStyles((theme) => ({
 
 const SetupMicAndCameraButton = ({ setUserHasEnabledCameraAndMic }) => {
   const classes = useStyles()
-  const fabButton = {
-    fabButtonIcon: <SettingsIcon style={{ color: '#6327bb' }} />,
-    fabButtonSize: 'small',
-    fabButtonColor: 'inherit',
+  const iconButton = {
+    iconButtonIcon: <SettingsIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />,
+    iconButtonColor: 'inherit',
+    iconButtonSize: 'small',
   }
 
   return TransitionModal({
-    fabButton,
+    iconButton,
     modalBody: (
       <Grid container direction="column" justify="center" alignItems="center">
         <video autoPlay id="videoElement" muted className={classes.previewVideo} />

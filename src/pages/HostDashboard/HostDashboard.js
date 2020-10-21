@@ -125,10 +125,10 @@ const HostDashboard = () => {
     return (
       <div className={classes.noEventsContainer}>
         <FloatCardLarge>
-          <Typography variant="h4" className={classes.noEventsMessage}>
+          <Typography variant="h1" className={classes.noEventsMessage}>
             Once you host some events we&rsquo;ll show you some data!
           </Typography>
-          <Typography variant="h4" className={classes.noEventsMessage}>
+          <Typography variant="h1" className={classes.noEventsMessage}>
             Come back when you have created and finished an event!
           </Typography>
         </FloatCardLarge>
@@ -140,13 +140,13 @@ const HostDashboard = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <Typography variant="h4" className={classes.sectionHeader}>
+      <Typography variant="h1" className={classes.sectionHeader}>
         Your Progress as a Host:
       </Typography>
       <FloatCardLarge>
         <HostMetricsSnapshot totalMetrics={totalMetrics} />
       </FloatCardLarge>
-      <Typography variant="h4" className={classes.sectionHeader}>
+      <Typography variant="h1" className={classes.sectionHeader}>
         Your Past Events:
       </Typography>
       <div className={classes.expansionPanelContent}>

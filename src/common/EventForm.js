@@ -14,7 +14,7 @@ import { createEvent, updateEvent, insertEventUser } from '../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
-    marginTop: '200px',
+    marginTop: '100px',
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   publicEventLabel: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
     fontSize: '0.75rem',
     fontWeight: '300',
     letterSpacing: '0.00938em',
@@ -50,7 +50,7 @@ const EventForm = ({ eventData, match }) => {
   const classes = useStyles()
 
   const { user } = useUserContext()
-  const { id: userId, role } = user
+  const { id: user_id, role } = user
   const history = useHistory()
   const [title, setTitle] = useState('My Awesome Event 🔥')
   const [description, setDescription] = useState(
@@ -69,7 +69,7 @@ const EventForm = ({ eventData, match }) => {
       description,
       event_name: title,
       start_at: selectedDate,
-      host_id: userId,
+      host_id: user_id,
       public_event: isEventPublic,
       round_length: roundLength,
       num_rounds: numRounds,
@@ -103,11 +103,11 @@ const EventForm = ({ eventData, match }) => {
   }, [eventData])
 
   // REDIRECTS
-  if (userId && role !== 'host') {
+  if (user_id && role !== 'host') {
     return <Redirect to="/events" />
   }
 
-  if (!userId) {
+  if (!user_id) {
     return <Redirect to="/" />
   }
 
@@ -153,8 +153,8 @@ const EventForm = ({ eventData, match }) => {
       try {
         await insertEventUserMutation({
           variables: {
-            eventId: id,
-            userId,
+            event_id: id,
+            user_id,
           },
         })
       } catch (error) {
@@ -181,7 +181,7 @@ const EventForm = ({ eventData, match }) => {
             <form onSubmit={handleSubmit}>
               <Grid item container direction="column" alignItems="center">
                 <Grid item>
-                  <Typography variant="h4">
+                  <Typography variant="h2">
                     {eventData ? 'Edit ' : 'Create '}
                     Your Event
                   </Typography>

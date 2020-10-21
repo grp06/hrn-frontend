@@ -11,12 +11,18 @@ import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
-  boxContainer: {
+  container: {
+    position: 'fixed',
+    zIndex: 999,
     width: '100%',
-    height: '10vh',
-    position: 'absolute',
+    height: '80px',
     top: 'auto',
-    bottom: '0.5%',
+    bottom: '0%',
+    padding: theme.spacing(2, 4),
+    backgroundColor: theme.palette.common.grey10,
+  },
+  settingsAndChatGrid: {
+    paddingRight: '6vw',
   },
 }))
 
@@ -38,7 +44,7 @@ const BottomControlPanel = ({
       buttonColor: 'link',
     },
     modalBody: (
-      <Typography variant="h5">
+      <Typography variant="h3">
         This will reset the event in its entirety. Are you 100% sure?
       </Typography>
     ),
@@ -57,9 +63,9 @@ const BottomControlPanel = ({
       container
       direction="row"
       justify="flex-start"
-      alignItems="flex-end"
+      alignItems="center"
       wrap="nowrap"
-      className={classes.boxContainer}
+      className={classes.container}
     >
       {userIsHost && eventStatus === 'not-started' && (
         <Grid container direction="column">
@@ -87,7 +93,12 @@ const BottomControlPanel = ({
           </Grid>
         </Grid>
       )}
-      <Grid>
+      <Grid
+        container
+        justify="flex-end"
+        alignItems="center"
+        className={classes.settingsAndChatGrid}
+      >
         <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
       </Grid>
     </Grid>

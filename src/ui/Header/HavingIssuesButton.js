@@ -26,14 +26,14 @@ const HavingIssuesButton = ({ event }) => {
         },
         modalBody: (
           <div>
-            <Typography variant="h5" style={{ marginBottom: '20px' }}>
+            <Typography variant="h3" style={{ marginBottom: '20px' }}>
               We&apos;re really sorry to hear you&apos;re having issues{' '}
               <span role="img" aria-label="crying face">
                 😭
               </span>
               .
             </Typography>
-            <Typography variant="h5">
+            <Typography variant="body1">
               Most problems can be solved by just refreshing this page (don&apos;t worry, you wont
               get kicked out of the event!). If problems still persist then feel free to email us at
               info@hirightnow.com.

@@ -81,6 +81,10 @@ const useTwilio = () => {
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
         setUserEventStatus('waiting for match')
+        rum.localParticipant.tracks.forEach(function (track) {
+          console.log('ya boi is unpublishing')
+          track.unpublish()
+        })
         if (error) {
           console.log('Unexpectedly disconnected:', error)
         }

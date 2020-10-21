@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
   downloadButton: {
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundColor: theme.palette.common.basePurple,
     color: theme.palette.common.ghostWhite,
     padding: '8px 20px',
     margin: `0 8px 8px 8px`,
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   downloadAttendees: {
-    backgroundColor: theme.palette.common.dankPurp,
+    backgroundColor: theme.palette.common.basePurple,
     color: theme.palette.common.ghostWhite,
     padding: theme.spacing(1, 2.5),
     margin: theme.spacing(0, 1, 1, 1),
@@ -167,7 +167,7 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }
           aria-controls={`${id}-content`}
           id={`${id}-header`}
         >
-          <Typography variant="h5" className={classes.eventPanelHeading}>
+          <Typography variant="h3" className={classes.eventPanelHeading}>
             {event.event_name}
           </Typography>
           <Typography variant="h6">{startTime}</Typography>

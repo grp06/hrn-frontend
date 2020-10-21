@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
     width: '100vw',
     position: 'absolute',
     backgroundImage: `url(${confettiDoodles})`,
+    backgroundSize: 'auto',
+    backgroundRepeat: 'repeat',
   },
   videoAndSelectionContainer: {
     width: '85%',
@@ -24,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 'auto',
     borderRadius: '4px',
     padding: theme.spacing(3),
-    backgroundColor: theme.palette.common.grey10,
+    backgroundColor: theme.palette.common.greyCard,
   },
 }))
 

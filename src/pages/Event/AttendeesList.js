@@ -64,7 +64,7 @@ const AttendeesList = ({ eventId, timeState }) => {
 
   return (
     <Grid container item direction="column" alignItems="center" className={classes.attendeesList}>
-      <Typography variant="h5">Online Attendees</Typography>
+      <Typography variant="h3">Online Attendees</Typography>
       <List dense>
         {oldOnlineUsers.map(({ user }) => {
           // const formattedDate = user.updated_at.slice(0, 10)

@@ -42,7 +42,6 @@ const App = () => {
   const { boot } = useIntercom()
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
-
   async function createClient() {
     try {
       const apolloClient = await makeApolloClient()
@@ -89,13 +88,13 @@ const App = () => {
                       <Route exact path="/create-event" component={EventForm} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
-                      <Route
-                        exact
-                        path="/events/public"
-                        component={() => <Redirect to={{ pathname: '/events' }} />}
-                      />
-                      <Route exact path="/my-events" component={MyEvents} />
                       <EventProvider>
+                        <Route
+                          exact
+                          path="/events/public"
+                          component={() => <Redirect to={{ pathname: '/events' }} />}
+                        />
+                        <Route exact path="/my-events" component={MyEvents} />
                         <Route exact path="/events" component={EventsPublic} />
                         <Route exact path="/events/:id" component={Event} />
                         <TwilioProvider>

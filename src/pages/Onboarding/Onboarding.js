@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
+import { rsvpForEvent } from '../../utils'
 import { sleep } from '../../helpers'
 import { useAppContext, useUserContext } from '../../context'
 
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2.5),
   },
   pinkText: {
-    color: theme.palette.common.orchid,
+    color: theme.palette.common.basePink,
   },
   shortBioDesc: {
     marginBottom: theme.spacing(3.5),
@@ -37,30 +38,33 @@ const Onboarding = () => {
   const { appLoading } = useAppContext()
   const { updateUserObject, setUsersTags, user } = useUserContext()
   const {
-    id: userId,
+    id: user_id,
     city: usersCityInContext,
     tags_users: usersTagsInContext,
-    name: userName,
-    email,
+    name: usersName,
+    email: usersEmail,
     role,
   } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
-  const [insertEventUserMutation] = useMutation(insertEventUser)
 
-  let eventIdInLocalStorage, eventData, description, eventStartTime, event_name, host, eventHostName
+  let eventIdInLocalStorage, eventData, event
 
-  if (!!localStorage.getItem('eventId') && !!localStorage.getItem('event')) {
+  if (localStorage.getItem('eventId') && localStorage.getItem('event')) {
     eventIdInLocalStorage = localStorage.getItem('eventId')
     eventData = JSON.parse(localStorage.getItem('event'))
-    description = eventData.description
-    eventStartTime = eventData.start_at
-    event_name = eventData.event_name
-    host = eventData.host
-    eventHostName = host.name
+    event = {
+      description: eventData.description,
+      event_name: eventData.event_name,
+      host: eventData.host,
+      id: eventIdInLocalStorage,
+      start_at: eventData.start_at,
+    }
   }
+
+  const [insertEventUserMutation] = useMutation(insertEventUser)
 
   if (appLoading || tagsLoading) {
     return <Loading />
@@ -77,8 +81,8 @@ const Onboarding = () => {
     try {
       updateUserMutationResponse = await updateUserMutation({
         variables: {
-          id: userId,
-          name: userName,
+          id: user_id,
+          name: usersName,
           city: values.city,
           short_bio: values.short_bio,
         },
@@ -93,9 +97,9 @@ const Onboarding = () => {
           objects: values.interests,
         },
       })
-      window.analytics.identify(userId, {
-        name: userName,
-        email,
+      window.analytics.identify(user_id, {
+        name: usersName,
+        email: usersEmail,
         role,
         city: values.city,
       })
@@ -119,52 +123,15 @@ const Onboarding = () => {
       setUsersTags(insertTagMutationResponse.data.insert_tags_users.returning[0].user.tags_users)
     }
 
-    if (!!eventIdInLocalStorage) {
-      // RSVP if got event in localStory
-
-      let calendarInviteResponse
-      try {
-        await insertEventUserMutation({
-          variables: {
-            eventId: eventIdInLocalStorage,
-            userId,
-          },
-          skip: !userId,
-        })
-
-        window.analytics.track('RSVP made', {
-          eventId: eventIdInLocalStorage,
-          eventName: event_name,
-        })
-
-        calendarInviteResponse = await fetch(
-          `${process.env.REACT_APP_API_URL}/api/email/send-calendar-invite`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Credentials': true,
-            },
-            body: JSON.stringify({
-              userName,
-              email,
-              event_name,
-              event_id: eventIdInLocalStorage,
-              description,
-              event_start_time: eventStartTime,
-              host_name: eventHostName,
-            }),
-          }
-        ).then((response) => response.json())
-
-        if (calendarInviteResponse.error) {
-          throw calendarInviteResponse.error
-        }
-      } catch (error) {
-        console.log('error = ', error)
-      }
-
+    if (eventIdInLocalStorage) {
+      // RSVP if there is an event in localStorage
+      const insertEventUserMutationFunc = insertEventUserMutation({
+        variables: {
+          event_id: event.id,
+          user_id,
+        },
+      })
+      rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, usersName)
       history.push(`/events/${eventIdInLocalStorage}`)
     }
   }
@@ -200,7 +167,7 @@ const Onboarding = () => {
               {({ field, form }) => (
                 <OnboardingInterestTagInput
                   tagsData={tagsData.tags}
-                  userId={userId}
+                  userId={user_id}
                   value={field.value}
                   onChange={(interests) => {
                     form.setFieldValue('interests', interests)
