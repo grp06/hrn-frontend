@@ -8,7 +8,7 @@ import { Redirect, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 
 import { EventCard, Loading, FloatCardLarge } from '../../common'
-import { useAppContext, useUserContext } from '../../context'
+import { useAppContext, useEventContext, useUserContext } from '../../context'
 import { getEventsByUserId } from '../../gql/queries'
 import blurryBackground from '../../assets/blurryBackground.png'
 
@@ -49,6 +49,7 @@ const MyEvents = () => {
   const history = useHistory()
   const { user } = useUserContext()
   const { appLoading } = useAppContext()
+  const { resetEvent, setEventId } = useEventContext()
   const { id: userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
@@ -59,6 +60,8 @@ const MyEvents = () => {
   })
 
   useEffect(() => {
+    resetEvent()
+    setEventId(null)
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')
   }, [])
