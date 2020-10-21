@@ -85,7 +85,6 @@ const useTwilio = () => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
-        setMyRound(null)
         setUserEventStatus('waiting for match')
         rum.localParticipant.tracks.forEach(function (track) {
           console.log('ya boi is unpublishing')
