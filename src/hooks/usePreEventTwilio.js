@@ -15,6 +15,8 @@ const usePreEventTwilio = () => {
 
       window.addEventListener('beforeunload', () => {
         room.disconnect()
+        console.log('disconnected')
+        window.room = null
       })
       room.on('disconnected', function (rum) {
         console.log('disconnected')

@@ -95,6 +95,8 @@ const ReportUserModal = ({ myRound, open, setOpen }) => {
       await reportPartnerMutation()
       closeModal()
       await window.room.disconnect()
+      console.log('disconnecting from room')
+      window.room = null
       setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {

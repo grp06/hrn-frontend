@@ -1,3 +1,4 @@
+import { GraphQLNonNull } from 'graphql'
 import { useParticipantConnected } from '.'
 import { useTwilioContext, useUserEventStatusContext } from '../context'
 import { constants } from '../utils'
@@ -61,6 +62,8 @@ const useTwilio = () => {
 
       window.addEventListener('beforeunload', () => {
         room.disconnect()
+        console.log('disconnecting from room')
+        window.room = null
       })
 
       room.on('reconnecting', (error) => {

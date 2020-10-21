@@ -46,6 +46,8 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
     try {
       await leftChatMutation()
       await window.room.disconnect()
+      console.log('disconnecting from room')
+      window.room = null
       setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
