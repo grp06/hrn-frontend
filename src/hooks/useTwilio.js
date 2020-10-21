@@ -6,6 +6,7 @@ import { constants } from '../utils'
 const useTwilio = () => {
   const {
     setHasPartnerAndIsConnecting,
+    setMyRound,
     setPartnerDisconnected,
     setPartnerNeverConnected,
   } = useTwilioContext()
@@ -62,6 +63,7 @@ const useTwilio = () => {
 
       window.addEventListener('beforeunload', () => {
         room.disconnect()
+        setMyRound(null)
         console.log('disconnecting from room')
         window.room = null
       })
@@ -83,6 +85,7 @@ const useTwilio = () => {
         setPartnerNeverConnected(false)
         setPartnerDisconnected(false)
         setHasPartnerAndIsConnecting(false)
+        setMyRound(null)
         setUserEventStatus('waiting for match')
         rum.localParticipant.tracks.forEach(function (track) {
           console.log('ya boi is unpublishing')

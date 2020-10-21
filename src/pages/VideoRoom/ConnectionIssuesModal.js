@@ -10,7 +10,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { useHistory } from 'react-router-dom'
-import { useUserEventStatusContext } from '../../context'
+import { useTwilioContext, useUserEventStatusContext } from '../../context'
 import { updateLeftChat } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -55,6 +55,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
   const classes = useStyles()
   const history = useHistory()
   const { setUserEventStatus } = useUserEventStatusContext()
+  const { setMyRound } = useTwilioContext()
   const [openModal, setModalOpen] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)
   const [leftChatMutation] = useMutation(updateLeftChat, {
@@ -74,6 +75,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
       await leftChatMutation()
       closeModal()
       await window.room.disconnect()
+      setMyRound(null)
       console.log('disconnecting from room')
       window.room = null
       setUserEventStatus('left chat')

@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
-import { useUserEventStatusContext } from '../../../context'
+import { useTwilioContext, useUserEventStatusContext } from '../../../context'
 import { updateLeftChat } from '../../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +34,7 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
   const classes = useStyles()
   const history = useHistory()
   const { setUserEventStatus } = useUserEventStatusContext()
+  const { setMyRound } = useTwilioContext()
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
@@ -47,6 +48,7 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       await leftChatMutation()
       await window.room.disconnect()
       console.log('disconnecting from room')
+      setMyRound(null)
       window.room = null
       setUserEventStatus('left chat')
       history.push(`/events/${event_id}/lobby`)
