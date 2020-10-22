@@ -6,7 +6,7 @@ import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-d
 import makeApolloClient from './apollo'
 import { useIntercom } from 'react-use-intercom'
 
-import { EventForm, ErrorBoundary } from './common'
+import { NewEventForm, EventForm, ErrorBoundary } from './common'
 import {
   Event,
   MyEvents,
@@ -85,7 +85,7 @@ const App = () => {
                       <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
-                      <Route exact path="/create-event" component={EventForm} />
+                      <Route exact path="/create-event" component={NewEventForm} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <EventProvider>
