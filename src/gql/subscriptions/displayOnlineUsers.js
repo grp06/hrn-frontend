@@ -7,6 +7,7 @@ const displayOnlineUsers = gql`
         id
         updated_at
         name
+        profile_pic_url
       }
     }
   }

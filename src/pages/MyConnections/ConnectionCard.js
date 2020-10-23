@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
+import PersonIcon from '@material-ui/icons/Person'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButtonContainer: {
@@ -79,11 +80,23 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(0.5),
     marginLeft: '-5px',
   },
+  avatarContainer: {
+    width: '125px',
+    height: '125px',
+  },
 }))
 
 const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
   const classes = useStyles()
-  const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
+  const {
+    name,
+    city,
+    tags_users: connectionsTags,
+    short_bio,
+    linkedIn_url,
+    email,
+    profile_pic_url,
+  } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
   const myRoundInfo = { event_id: eventId, partner_id: partnerId, user_id: userId }
 
@@ -153,9 +166,11 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           justify="flex-start"
           className={classes.avatarGridContainer}
         >
-          <Avatar className={classes.avatarContainer}>
-            <img alt="company-logo" className={classes.avatar} src={logo} />
-          </Avatar>
+          {profile_pic_url ? (
+            <Avatar src={profile_pic_url} className={classes.avatarContainer} />
+          ) : (
+            <PersonIcon />
+          )}
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
             <Typography variant="h3">{name}</Typography>
             <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>
