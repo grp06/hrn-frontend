@@ -10,6 +10,7 @@ const findUserById = gql`
       city
       short_bio
       linkedIn_url
+      profile_pic_url
       tags_users {
         tag {
           name
