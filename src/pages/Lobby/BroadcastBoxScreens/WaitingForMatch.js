@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
     backgroundColor: theme.palette.common.greyCard,
+    border: '1px solid #fabb5b',
     borderRadius: '4px',
     height: 'auto',
     padding: theme.spacing(3, 5),

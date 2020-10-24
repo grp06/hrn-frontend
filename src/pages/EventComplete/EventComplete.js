@@ -37,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
   },
   upcomingEventsButton: {
     margin: theme.spacing(1, 0),
-    backgroundColor: theme.palette.common.ghostWhiteBody,
-    color: theme.palette.common.blackBody,
+    backgroundColor: theme.palette.common.ghostWhite,
+    color: theme.palette.common.bodyBlack,
     '&:hover': {
-      backgroundColor: theme.palette.common.ghostWhite,
+      backgroundColor: theme.palette.common.ghostWhiteBody,
     },
   },
   wrapper: {
