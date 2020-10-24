@@ -240,10 +240,11 @@ const theme = createMuiTheme({
         fontSize: '1.1rem',
       },
       contained: {
+        color: ghostWhite,
         minWidth: '200px',
-        backgroundColor: sunray,
+        backgroundColor: greyButton,
         '&:hover': {
-          backgroundColor: '#FCD08C',
+          backgroundColor: greyHighlight,
         },
         '&.Mui-disabled': {
           backgroundColor: 'rgba(36,37,38,0.70)',

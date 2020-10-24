@@ -10,6 +10,10 @@ import { didIShareDetailsInPrevEvent } from '../../gql/queries'
 const useStyles = makeStyles((theme) => ({
   addFriendButton: {
     margin: theme.spacing(1, 0),
+    backgroundColor: theme.palette.common.sunray,
+    '&:hover': {
+      backgroundColor: '#FCD08C',
+    },
   },
 }))
 

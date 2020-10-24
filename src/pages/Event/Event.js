@@ -9,6 +9,7 @@ import {
   EventStatusRedirect,
   EventTitleAndCTACard,
   HostAndEventDescCard,
+  JoinEventBanner,
   PodcastCard,
   WhatToExpect,
 } from '.'
@@ -75,7 +76,7 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { event, setEventId } = useEventContext()
   const { id: user_id } = user
-  const { event_users, host_id, start_at } = event
+  const { event_users, host_id, start_at, status: event_status } = event
   const eventSet = Object.keys(event).length > 1
 
   useEffect(() => {
@@ -104,6 +105,9 @@ const Event = ({ match }) => {
         eventSet={eventSet}
         event={event}
       />
+      {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
+        <JoinEventBanner />
+      ) : null}
       <Grid container>
         <div className={classes.eventBanner} />
         <div className={classes.bannerGradient} />
@@ -115,7 +119,7 @@ const Event = ({ match }) => {
         className={classes.eventContentContainer}
       >
         <EventTitleAndCTACard event={event} user={user} />
-        <HostAndEventDescCard event={event} />
+        <HostAndEventDescCard event={event} userIsHost={userIsHost} />
         <Grid
           container
           direction="row"

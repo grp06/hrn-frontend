@@ -7,6 +7,7 @@ import {
   BottomControlPanel,
   CameraAndMicSetupScreen,
   EventChatBox,
+  EventCountdown,
   NextRoundIn,
   LobbyContent,
 } from '.'
@@ -17,7 +18,6 @@ import {
   useUserEventStatusContext,
 } from '../../context'
 import { Loading } from '../../common'
-import { EventCountdown } from '../Event'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
 

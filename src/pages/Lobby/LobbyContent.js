@@ -88,7 +88,11 @@ const LobbyContent = React.memo(
                 className={classes.eventContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
-                <HostAndEventDescCard event={event} showOnlineAttendees={onlineEventUsers.length} />
+                <HostAndEventDescCard
+                  event={event}
+                  showOnlineAttendees={onlineEventUsers.length}
+                  userIsHost={userIsHost}
+                />
                 <Grid
                   container
                   direction="row"
