@@ -52,6 +52,9 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
+  const { pathname } = window.location
+  const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
+  const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
@@ -70,13 +73,20 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const editFormModal = TransitionModal({
     modalBody: <EventForm eventData={event} />,
     button: {
-      buttonColor: 'primary',
+      buttonColor: editFormButtonColor,
       buttonVariant: 'contained',
       buttonSize: 'large',
       buttonStyle: { width: '100%' },
       buttonText: 'Edit Event',
     },
   })
+
+  const getUserCTAButtonText = () => {
+    if (userAlreadyRSVPed && event_status === 'not-started') return 'Cancel RSVP'
+    else if (!userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete')
+      return 'Join Event'
+    else return 'RSVP'
+  }
 
   const handleCancelRSVPClick = async () => {
     try {
@@ -112,7 +122,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         color="primary"
         onClick={userAlreadyRSVPed ? handleCancelRSVPClick : handleRSVPClick}
       >
-        {userAlreadyRSVPed ? 'Cancel RSVP' : 'RSVP'}
+        {getUserCTAButtonText()}
       </Button>
     )
   }
@@ -134,7 +144,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           </Typography>
         </Grid>
       </Grid>
-      {event_status === 'not-started' ? (
+      {userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete' ? null : (
         <Grid
           container
           item
@@ -155,7 +165,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           </Button>
           {renderRSVPOrEditButton()}
         </Grid>
-      ) : null}
+      )}
       <Snack
         open={showCopyURLSnack}
         duration={1800}

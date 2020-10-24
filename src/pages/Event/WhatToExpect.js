@@ -71,6 +71,9 @@ const useStyles = makeStyles((theme) => ({
   stepperBody: {
     height: '130px',
     width: '90%',
+    [theme.breakpoints.down('md')]: {
+      height: 'auto',
+    },
     margin: theme.spacing(2, 'auto', 0, 'auto'),
   },
   stepperBar: {
