@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import { TextField, Button } from '@material-ui/core'
 
 import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
@@ -31,11 +32,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     minHeight: '55vh',
-    backgroundImage: `url(${bannerBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
     zIndex: '-3',
     marginBottom: '80px',
+    backgroundPosition: '50% 50% !important',
+    backgroundSize: 'cover !important',
   },
   eventContentContainer: {
     position: 'relative',
@@ -66,6 +66,24 @@ const useStyles = makeStyles((theme) => ({
     },
     marginBottom: theme.spacing(3),
   },
+  changeBanner: {
+    position: 'absolute',
+    top: 15,
+    left: 15,
+    textTransform: 'lowercase',
+    cursor: 'pointer',
+    zIndex: 999,
+  },
+  input: {
+    marginTop: theme.spacing(6),
+    marginLeft: theme.spacing(2),
+  },
+  bannerSearchContainer: {
+    background: 'rgba(0,0,0,.3)',
+    position: 'absolute',
+    zIndex: 999,
+    width: '50%',
+  },
 }))
 
 const Event = ({ match }) => {
@@ -77,6 +95,9 @@ const Event = ({ match }) => {
   const { id: user_id } = user
   const { event_users, host_id, start_at } = event
   const eventSet = Object.keys(event).length > 1
+  const [showBannerSearch, setShowBannerSearch] = useState(null)
+  const [bannerSearchTerm, setBannerSearchTerm] = useState(null)
+  const [randomImage, setRandomImage] = useState(null)
 
   useEffect(() => {
     if (!Object.keys(event).length && eventId) {
@@ -96,6 +117,25 @@ const Event = ({ match }) => {
 
   const timeUntilEvent = getTimeUntilEvent(start_at)
 
+  const searchUnsplash = async (keyword) => {
+    try {
+      await fetch(`${process.env.REACT_APP_API_URL}/get-unsplash-image`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ keyword }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setRandomImage(data.image)
+          console.log('Event -> data', data.image.urls.full)
+        })
+    } catch (error) {
+      alert('error seraching for image')
+    }
+  }
+
   return (
     <>
       <EventStatusRedirect
@@ -104,8 +144,39 @@ const Event = ({ match }) => {
         eventSet={eventSet}
         event={event}
       />
-      <Grid container>
-        <div className={classes.eventBanner} />
+      <Grid container style={{ position: 'relative' }}>
+        <Button
+          className={classes.changeBanner}
+          size="small"
+          variant="primary"
+          onClick={() => setShowBannerSearch(true)}
+        >
+          change banner
+        </Button>
+        {showBannerSearch && (
+          <Grid direction="column" justify="flex-start" className={classes.bannerSearchContainer}>
+            <TextField
+              id="banner search term"
+              label="banner search term"
+              required
+              fullWidth
+              className={classes.input}
+              value={bannerSearchTerm}
+              onChange={(e) => setBannerSearchTerm(e.target.value)}
+            />
+            <Button size="small" variant="primary" onClick={() => searchUnsplash(bannerSearchTerm)}>
+              {randomImage ? 'serach again' : 'search'}
+            </Button>
+          </Grid>
+        )}
+        <div
+          className={classes.eventBanner}
+          style={{
+            background: randomImage
+              ? `url("${randomImage.urls.full}")`
+              : `url("${bannerBackground}")`,
+          }}
+        />
         <div className={classes.bannerGradient} />
       </Grid>
       <Grid
