@@ -11,6 +11,7 @@ import {
   Event,
   MyEvents,
   EventComplete,
+  EventGroupVideoChat,
   EventsPublic,
   ForgotPassword,
   HostDashboard,
@@ -101,6 +102,11 @@ const App = () => {
                           <UserEventStatusProvider>
                             <Route exact path="/events/:id/lobby" component={Lobby} />
                             <Route exact path="/events/:id/video-room" component={VideoRoom} />
+                            <Route
+                              exact
+                              path="/events/:id/group-video-chat"
+                              component={EventGroupVideoChat}
+                            />
                             <Route
                               exact
                               path="/events/:id/event-complete"
