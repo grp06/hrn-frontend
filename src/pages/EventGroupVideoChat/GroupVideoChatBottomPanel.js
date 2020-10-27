@@ -1,7 +1,13 @@
 import React from 'react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import MicIcon from '@material-ui/icons/Mic'
+import MicOffIcon from '@material-ui/icons/MicOff'
+import PeopleIcon from '@material-ui/icons/People'
+import VideocamIcon from '@material-ui/icons/Videocam'
+import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import { makeStyles } from '@material-ui/styles'
 
 import { SetupMicAndCameraButton } from '../Event'
@@ -16,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
     bottom: '0%',
     padding: theme.spacing(2, 4),
     backgroundColor: theme.palette.common.grey10,
+  },
+  filledIconButton: {
+    backgroundColor: theme.palette.common.basePurple,
+    '&:hover': {
+      backgroundColor: 'rgb(98, 60, 153)',
+    },
+    margin: theme.spacing(0, 1),
   },
   settingsAndChatGrid: {
     paddingRight: '6vw',
@@ -36,15 +49,27 @@ const GroupVideoChatBottomPanel = ({ event, setUserHasEnabledCameraAndMic, userI
       wrap="nowrap"
       className={classes.container}
     >
-      {userIsHost && (
-        <Grid container direction="column">
-          <Grid container direction="row" alignItems="flex-end">
+      <Grid container direction="column">
+        <Grid container direction="row" alignItems="flex-end">
+          {userIsHost ? (
             <Button variant="contained" color="primary">
               End Event
             </Button>
-          </Grid>
+          ) : (
+            <Button variant="contained" color="primary">
+              Leave Event
+            </Button>
+          )}
         </Grid>
-      )}
+      </Grid>
+      <Grid container justify="center" alignItems="center">
+        <IconButton disableRipple className={classes.filledIconButton}>
+          <VideocamIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+        </IconButton>
+        <IconButton disableRipple color="primary" className={classes.filledIconButton}>
+          <MicIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+        </IconButton>
+      </Grid>
       <Grid
         container
         justify="flex-end"
@@ -52,6 +77,9 @@ const GroupVideoChatBottomPanel = ({ event, setUserHasEnabledCameraAndMic, userI
         className={classes.settingsAndChatGrid}
       >
         <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
+        <IconButton disableRipple>
+          <PeopleIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+        </IconButton>
       </Grid>
     </Grid>
   )

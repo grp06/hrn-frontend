@@ -12,12 +12,13 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   videoBox: {
-    width: '100%',
-    height: '85vh',
+    width: '95%',
+    height: '90vh',
     backgroundColor: 'blue',
     borderRadius: '4px',
     padding: theme.spacing(3),
     overflowY: 'scroll',
+    margin: theme.spacing(0, 'auto'),
   },
   box: {
     backgroundColor: 'yellow',
@@ -32,26 +33,18 @@ const EventGroupVideoChat = () => {
   const { user } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: user_id } = user
+
   const getNumRowsAndCols = (numberOfVideos) => {
-    let width
-    let height
-    if (numberOfVideos <= 4) {
-      width = '50%'
-      height = '50%'
-    } else {
-      width = '33%'
-      height = '33%'
-    }
+    const width = numberOfVideos <= 4 ? '49%' : '32%'
+    const height = numberOfVideos <= 6 ? '49%' : '32%'
     return { width, height }
   }
 
-  const { width, height } = getNumRowsAndCols(5)
+  const { width, height } = getNumRowsAndCols(9)
 
   return (
     <>
       <Grid container justify="space-around" className={classes.videoBox}>
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
         <div className={classes.box} style={{ width, height }} />
         <div className={classes.box} style={{ width, height }} />
         <div className={classes.box} style={{ width, height }} />
