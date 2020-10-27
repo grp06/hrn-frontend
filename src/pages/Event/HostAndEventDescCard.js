@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
+const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHost }) => {
   const classes = useStyles()
   const { description: eventDescription, event_users, host } = event
   const { name: hostName } = host
@@ -70,7 +70,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
         justify="space-between"
         className={classes.hostAndRSVPContainer}
       >
-        <Grid container item direction="column" md={6}>
+        <Grid container item direction="column" xs={6}>
           <Typography variant="subtitle1" className={classes.subtitle}>
             Hosted By /
           </Typography>
@@ -98,20 +98,22 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees }) => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item md={6} direction="row" justify="flex-end">
-          <Grid
-            container
-            direction="column"
-            justify="space-between"
-            alignItems="center"
-            className={classes.rsvpedNumberContainer}
-          >
-            <Typography variant="subtitle1" className={classes.subtitle}>
-              RSVP&apos;ed /
-            </Typography>
-            <Typography className={classes.largeNumber}>{event_users.length}</Typography>
-          </Grid>
-          {showOnlineAttendees ? (
+        <Grid container item xs={6} direction="row" justify="flex-end">
+          {userIsHost || (!userIsHost && event_users.length > 9) ? (
+            <Grid
+              container
+              direction="column"
+              justify="space-between"
+              alignItems="center"
+              className={classes.rsvpedNumberContainer}
+            >
+              <Typography variant="subtitle1" className={classes.subtitle}>
+                RSVP&apos;ed /
+              </Typography>
+              <Typography className={classes.largeNumber}>{event_users.length}</Typography>
+            </Grid>
+          ) : null}
+          {showOnlineAttendees && userIsHost ? (
             <Grid
               container
               direction="column"

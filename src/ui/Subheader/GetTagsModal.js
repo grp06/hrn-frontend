@@ -10,6 +10,12 @@ import { useHistory } from 'react-router-dom'
 import { useAppContext, useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
+  acceptButton: {
+    backgroundColor: theme.palette.common.sunray,
+    '&:hover': {
+      backgroundColor: '#FCD08C',
+    },
+  },
   modal: {
     display: 'flex',
     alignItems: 'center',

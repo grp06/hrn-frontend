@@ -88,13 +88,12 @@ const LobbyContent = React.memo(
                 className={classes.eventContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
-                <HostAndEventDescCard event={event} showOnlineAttendees={onlineEventUsers.length} />
-                <Grid
-                  container
-                  direction="row"
-                  justify="space-between"
-                  className={classes.whatToExpectAndPodcastContainer}
-                >
+                <HostAndEventDescCard
+                  event={event}
+                  showOnlineAttendees={onlineEventUsers.length}
+                  userIsHost={userIsHost}
+                />
+                <Grid container direction="row" justify="space-between">
                   <Grid className={classes.whatToExpectContainer}>
                     <WhatToExpect userIsHost={userIsHost} />
                   </Grid>
@@ -133,7 +132,15 @@ const LobbyContent = React.memo(
                 className={classes.eventContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
-                {getUserEventStatusMessage(setUserEventStatus, userEventStatus)}
+
+                <Grid container direction="row" justify="space-between">
+                  <Grid className={classes.whatToExpectContainer}>
+                    {getUserEventStatusMessage(setUserEventStatus, userEventStatus)}
+                  </Grid>
+                  <Grid className={classes.podcastContainer}>
+                    <PodcastCard />
+                  </Grid>
+                </Grid>
               </Grid>
             </>
           )
