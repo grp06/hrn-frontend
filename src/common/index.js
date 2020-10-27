@@ -2,6 +2,7 @@
 export { default as ErrorBoundary } from './ErrorBoundary'
 export { default as EventCard } from './EventCard'
 export { default as EventForm } from './EventForm'
+export { default as NewEventForm } from './NewEventForm'
 export { default as FloatCardLarge } from './FloatCards/FloatCardLarge'
 export { default as FloatCardMedium } from './FloatCards/FloatCardMedium'
 export { default as FloatCardMediumLarge } from './FloatCards/FloatCardMediumLarge'
