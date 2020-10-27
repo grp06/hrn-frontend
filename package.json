@@ -33,6 +33,7 @@
     "formik": "^2.1.4",
     "formik-material-ui": "^2.0.1",
     "formik-material-ui-pickers": "^0.0.11",
+    "framer-motion": "^2.9.4",
     "graphql": "^15.0.0",
     "graphql-tag": "^2.10.3",
     "jstz": "^2.1.1",
