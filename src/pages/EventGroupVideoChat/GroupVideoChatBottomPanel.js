@@ -11,6 +11,7 @@ import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import { makeStyles } from '@material-ui/styles'
 
 import { SetupMicAndCameraButton } from '../Event'
+import { endEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -37,8 +38,12 @@ const useStyles = makeStyles((theme) => ({
 
 const GroupVideoChatBottomPanel = ({ event, setUserHasEnabledCameraAndMic, userId }) => {
   const classes = useStyles()
-  const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
+  const { start_at: eventStartTime, id: event_id, host_id, status: eventStatus } = event
   const userIsHost = host_id === userId
+
+  const handleEndEvent = () => {
+    endEvent(event_id)
+  }
 
   return (
     <Grid
@@ -52,7 +57,7 @@ const GroupVideoChatBottomPanel = ({ event, setUserHasEnabledCameraAndMic, userI
       <Grid container direction="column">
         <Grid container direction="row" alignItems="flex-end">
           {userIsHost ? (
-            <Button variant="contained" color="primary">
+            <Button variant="outlined" color="primary" onClick={handleEndEvent}>
               End Event
             </Button>
           ) : (
