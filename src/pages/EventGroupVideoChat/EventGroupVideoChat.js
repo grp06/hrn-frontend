@@ -10,7 +10,7 @@ import {
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
-import { useTwilio } from '../../hooks'
+import { useGroupVideoChatTwilio } from '../../hooks'
 
 const { connect } = require('twilio-video')
 
@@ -27,6 +27,11 @@ const useStyles = makeStyles((theme) => ({
   box: {
     backgroundColor: 'yellow',
     borderRadius: '4px',
+    '& video': {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    },
   },
 }))
 
@@ -35,12 +40,12 @@ const EventGroupVideoChat = () => {
   const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user } = useUserContext()
-  const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
-  const { startTwilio } = useTwilio()
+  const { setUserHasEnabledCameraAndMic, onlineEventUsers } = useUserEventStatusContext()
+  const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
   const { id: event_id } = event
-  const { id: user_id } = user
+  const { id: userId } = user
 
   const getNumRowsAndCols = (numberOfVideos) => {
     const width = numberOfVideos <= 4 ? '49%' : '32%'
@@ -48,71 +53,92 @@ const EventGroupVideoChat = () => {
     return { width, height }
   }
 
-  const { width, height } = getNumRowsAndCols(4)
+  const createIndividualVideoDiv = () => {
+    const { width, height } = getNumRowsAndCols(onlineEventUsers.length)
+    const videoGrid = document.getElementById('videoBox')
+    const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
 
-  // get the token
+    onlineEventUsers.forEach((eventUser) => {
+      const usersId = eventUser.user[0].id
+      console.log('usersId ->', usersId)
+      const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
+        (divElement) => parseInt(divElement.id, 10) === usersId
+      )
+      if (divElementWithUsersId.length) {
+        return
+      }
+      const newDivElement = document.createElement('div')
+      newDivElement.setAttribute('id', usersId)
+      newDivElement.setAttribute('class', classes.box)
+      newDivElement.style.height = height
+      newDivElement.style.width = width
+      videoGrid.appendChild(newDivElement)
+    })
+  }
 
   useEffect(() => {
-    const getTwilioToken = async () => {
-      const res = await getToken(`${event_id}-post-event`, user_id).then((response) =>
-        response.json()
-      )
-      console.log('getTwilioToken res ->', res)
-      setGroupChatToken(res.token)
+    if (onlineEventUsers && onlineEventUsers.length) {
+      createIndividualVideoDiv()
     }
-    getTwilioToken()
-  }, [])
+    console.log('onlineEventUsers ->', onlineEventUsers)
+  }, [onlineEventUsers])
+  // get the token
+  // useEffect(() => {
+  //   const getTwilioToken = async () => {
+  //     const res = await getToken(`${event_id}-post-event`, userId).then((response) =>
+  //       response.json()
+  //     )
+  //     console.log('getTwilioToken res ->', res)
+  //     setGroupChatToken(res.token)
+  //   }
+
+  //   if (onlineEventUsers && onlineEventUsers.length) {
+  //     getTwilioToken()
+  //   }
+  // }, [onlineEventUsers])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
-  useEffect(() => {
-    if (groupChatToken) {
-      const connectToGroupVideoChatRoom = async () => {
-        console.log('calling CONNECT')
-        const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-        const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-        const audioDevice =
-          process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
+  // useEffect(() => {
+  //   if (groupChatToken) {
+  //     const connectToGroupVideoChatRoom = async () => {
+  //       console.log('calling CONNECT')
+  //       const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+  //       const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+  //       const audioDevice =
+  //         process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
 
-        console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-        console.log('audioDevice', audioDevice)
+  //       console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+  //       console.log('audioDevice', audioDevice)
+  //       console.log('groupChatToken ->', groupChatToken)
 
-        const myRoom = await connect(groupChatToken, {
-          maxAudioBitrate: 16000,
-          video: { deviceId: localStoragePreferredVideoId },
-          audio: audioDevice,
-        })
-        console.log('setting groupChatRoom')
-        setGroupChatRoom(myRoom)
-      }
-      connectToGroupVideoChatRoom()
-    }
-  }, [groupChatToken])
+  //       const myRoom = await connect(groupChatToken, {
+  //         maxAudioBitrate: 16000,
+  //         video: { deviceId: localStoragePreferredVideoId },
+  //         audio: audioDevice,
+  //       })
+  //       console.log('myRoom ->', myRoom)
+  //       console.log('setting groupChatRoom')
+  //       setGroupChatRoom(myRoom)
+  //     }
+  //     connectToGroupVideoChatRoom()
+  //   }
+  // }, [groupChatToken])
 
-  useEffect(() => {
-    if (groupChatRoom) {
-      console.warn('starting twilio')
-      startTwilio(groupChatRoom)
-    }
-  }, [groupChatRoom])
+  // useEffect(() => {
+  //   if (groupChatRoom) {
+  //     console.warn('starting twilio')
+  //     startGroupVideoChatTwilio(groupChatRoom)
+  //   }
+  // }, [groupChatRoom])
 
   return (
     <>
-      <Grid container justify="space-around" className={classes.videoBox}>
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-        <div className={classes.box} style={{ width, height }} />
-      </Grid>
+      <Grid id="videoBox" container justify="space-around" className={classes.videoBox} />
       <GroupVideoChatBottomPanel
         event={event}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-        userId={user_id}
+        userId={userId}
       />
     </>
   )
