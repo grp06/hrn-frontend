@@ -56,7 +56,7 @@
     "recharts": "^1.8.5",
     "styled-components": "^5.1.0",
     "subscriptions-transport-ws": "^0.9.16",
-    "twilio-video": "^2.7.1",
+    "twilio-video": "^2.7.3",
     "use-immer": "^0.4.0"
   },
   "scripts": {
