@@ -32,6 +32,16 @@ const useGroupVideoChatTwilio = () => {
         console.log('participantConnected', remoteParticipant)
         participantConnectedToGroupVideoChat(remoteParticipant)
       })
+
+      room.on('participantDisconnected', (remoteParticipant) => {
+        console.log('participantDisconnected', remoteParticipant)
+
+        const participantsVideoDiv = document.getElementById(remoteParticipant.identity)
+        // instead of modifying the innerHTML, detatch instead
+        if (participantsVideoDiv) {
+          participantsVideoDiv.innerHTML = ''
+        }
+      })
     }
   }
 

@@ -92,9 +92,10 @@ const EventGroupVideoChat = () => {
       console.log('getTwilioToken res ->', res)
       setGroupChatToken(res.token)
     }
-
-    getTwilioToken()
-  }, [])
+    if (event_id && userId) {
+      getTwilioToken()
+    }
+  }, [event_id, userId])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
@@ -144,6 +145,7 @@ const EventGroupVideoChat = () => {
         event={event}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userId={userId}
+        twilioGroupChatRoom={groupChatRoom}
       />
     </>
   )
