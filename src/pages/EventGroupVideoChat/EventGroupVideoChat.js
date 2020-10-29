@@ -104,17 +104,17 @@ const EventGroupVideoChat = () => {
       console.log('calling CONNECT')
       const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
       const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-      const audioDevice =
-        process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
+      // const audioDevice =
+      //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
 
       console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-      console.log('audioDevice', audioDevice)
+      // console.log('audioDevice', audioDevice)
       console.log('groupChatToken ->', groupChatToken)
 
       const myRoom = await connect(groupChatToken, {
         maxAudioBitrate: 16000,
         video: { deviceId: localStoragePreferredVideoId },
-        audio: audioDevice,
+        audio: { deviceId: localStoragePreferredAudioId },
       })
       console.log('myRoom ->', myRoom)
       console.log('setting groupChatRoom')

@@ -42,6 +42,8 @@ const GroupVideoChatBottomPanel = React.memo(
     const { start_at: eventStartTime, id: event_id, host_id, status: eventStatus } = event
     const userIsHost = host_id === userId
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
+    const [participantsVideoIsOn, setParticipantsVideoIsOn] = useState(true)
+    const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(true)
 
     const handleEndEvent = () => {
       endEvent(event_id)
@@ -55,12 +57,15 @@ const GroupVideoChatBottomPanel = React.memo(
       // unpublish if we have video tracks
       if (videoTracks.size) {
         videoTracks.forEach((localTrackPublication) => {
+          // we want to save our video tracks because they will go away
+          // after unpublishing
           setParticipantsVideoTracks(localTrackPublication.track)
           // remove video from other peoples screens
           localTrackPublication.unpublish()
           // remove video from your screen
           const mediaElements = localTrackPublication.track.detach()
           mediaElements.forEach((mediaElement) => mediaElement.remove())
+          setParticipantsVideoIsOn(false)
         })
       } else {
         // publish our video track and add it to our screen
@@ -68,7 +73,17 @@ const GroupVideoChatBottomPanel = React.memo(
         const attachedTrack = participantsVideoTracks.attach()
         attachedTrack.style.transform = 'scale(-1, 1)'
         localParticipantsVideoDiv.appendChild(attachedTrack)
+        setParticipantsVideoIsOn(true)
       }
+    }
+
+    const handleAudioToggle = () => {
+      const { audioTracks } = twilioGroupChatRoom.localParticipant
+      audioTracks.forEach((localTrackPublication) => {
+        const { isEnabled } = localTrackPublication.track
+        localTrackPublication.track.enable(!isEnabled)
+        setParticipantsAudioIsOn(!isEnabled)
+      })
     }
 
     return (
@@ -100,10 +115,24 @@ const GroupVideoChatBottomPanel = React.memo(
             className={classes.filledIconButton}
             onClick={handleVideoToggle}
           >
-            <VideocamIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            {participantsVideoIsOn ? (
+              <VideocamIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            ) : (
+              <VideocamOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            )}
           </IconButton>
-          <IconButton disableRipple color="primary" className={classes.filledIconButton}>
-            <MicIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+          <IconButton
+            disabled={!twilioGroupChatRoom}
+            disableRipple
+            color="primary"
+            className={classes.filledIconButton}
+            onClick={handleAudioToggle}
+          >
+            {participantsAudioIsOn ? (
+              <MicIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            ) : (
+              <MicOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            )}
           </IconButton>
         </Grid>
         <Grid
