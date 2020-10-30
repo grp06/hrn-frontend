@@ -8,6 +8,7 @@ import MicOffIcon from '@material-ui/icons/MicOff'
 import PeopleIcon from '@material-ui/icons/People'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import VideocamOffIcon from '@material-ui/icons/VideocamOff'
+import { Redirect, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { SetupMicAndCameraButton } from '../Event'
@@ -39,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 const GroupVideoChatBottomPanel = React.memo(
   ({ event, setUserHasEnabledCameraAndMic, twilioGroupChatRoom, userId }) => {
     const classes = useStyles()
+    const history = useHistory()
     const { start_at: eventStartTime, id: event_id, host_id, status: eventStatus } = event
     const userIsHost = host_id === userId
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
@@ -47,6 +49,17 @@ const GroupVideoChatBottomPanel = React.memo(
 
     const handleEndEvent = () => {
       endEvent(event_id)
+    }
+
+    const handleLeaveEvent = async () => {
+      try {
+        await window.room.disconnect()
+        // window.room = null
+        history.push(`/events/${event_id}/event-complete`)
+        // return <Redirect to={`/events/${event_id}/event-complete`} />
+      } catch (err) {
+        console.log(err)
+      }
     }
 
     const handleVideoToggle = () => {
@@ -102,7 +115,7 @@ const GroupVideoChatBottomPanel = React.memo(
                 End Event
               </Button>
             ) : (
-              <Button variant="contained" color="primary">
+              <Button variant="contained" color="primary" onClick={handleLeaveEvent}>
                 Leave Event
               </Button>
             )}

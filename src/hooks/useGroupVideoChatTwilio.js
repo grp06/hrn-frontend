@@ -42,6 +42,23 @@ const useGroupVideoChatTwilio = () => {
           participantsVideoDiv.innerHTML = ''
         }
       })
+
+      window.addEventListener('beforeunload', () => {
+        room.disconnect()
+        console.log('disconnecting from room')
+        window.room = null
+      })
+
+      room.on('disconnected', (rum, error) => {
+        window.room = null
+        rum.localParticipant.tracks.forEach(function (track) {
+          console.log('ya boi is unpublishing')
+          track.unpublish()
+        })
+        if (error) {
+          console.log('Unexpectedly disconnected:', error)
+        }
+      })
     }
   }
 

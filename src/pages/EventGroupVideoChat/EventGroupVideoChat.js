@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
-import { getToken } from '../../helpers'
+import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
+import { getToken } from '../../helpers'
 import { GroupVideoChatBottomPanel } from '.'
 import {
   useAppContext,
@@ -56,14 +57,16 @@ const useStyles = makeStyles((theme) => ({
 
 const EventGroupVideoChat = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user } = useUserContext()
   const { setUserHasEnabledCameraAndMic, onlineEventUsers } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
+  const arrayOfOnlineUserIds = useRef([])
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
-  const { id: event_id } = event
+  const { id: event_id, status: event_status } = event
   const { id: userId } = user
 
   const getNumRowsAndCols = (numberOfVideos) => {
@@ -95,14 +98,46 @@ const EventGroupVideoChat = () => {
       newDivElement.setAttribute('class', classes.box)
       newDivElement.style.height = height
       newDivElement.style.width = width
-      newDivElement.appendChild(usersNameDiv)
+      // newDivElement.appendChild(usersNameDiv)
       videoGrid.appendChild(newDivElement)
     })
   }
 
+  const cleanupEmptyVideoDivs = () => {
+    if (onlineEventUsers.length > arrayOfOnlineUserIds.current.length) {
+      // since this func gets called after making divs, we already made the div
+      // and just need to update arrayOfOnlineUserIds
+      const userIds = onlineEventUsers.map((eventUser) => eventUser.user[0].id)
+      console.log('userIds ->', userIds)
+      arrayOfOnlineUserIds.current = userIds
+    } else if (onlineEventUsers.length < arrayOfOnlineUserIds.current.length) {
+      const userIds = onlineEventUsers.map((eventUser) => eventUser.user[0].id)
+      arrayOfOnlineUserIds.current.forEach((id) => {
+        if (userIds.indexOf(id) < 0) {
+          const usersOldVideoDiv = document.getElementById(id)
+          usersOldVideoDiv.parentNode.removeChild(usersOldVideoDiv)
+        }
+      })
+      arrayOfOnlineUserIds.current = userIds
+    }
+  }
+
+  useEffect(() => {
+    if (event && event_id) {
+      if (event_status === 'complete') {
+        return history.push(`/events/${event_id}/event-complete`)
+      }
+      if (event_status === 'group-video-chat') {
+        return null
+      }
+      return history.push(`/events/${event_id}/lobby`)
+    }
+  }, [event_status])
+
   useEffect(() => {
     if (onlineEventUsers && onlineEventUsers.length) {
       createIndividualVideoDiv()
+      cleanupEmptyVideoDivs()
     }
     console.log('onlineEventUsers ->', onlineEventUsers)
   }, [onlineEventUsers])
@@ -137,10 +172,10 @@ const EventGroupVideoChat = () => {
 
       const myRoom = await connect(groupChatToken, {
         maxAudioBitrate: 16000,
-        // video: { deviceId: localStoragePreferredVideoId },
-        // audio: { deviceId: localStoragePreferredAudioId },
-        audio: false,
-        video: false,
+        video: { deviceId: localStoragePreferredVideoId },
+        audio: { deviceId: localStoragePreferredAudioId },
+        // audio: false,
+        // video: false,
       })
       console.log('myRoom ->', myRoom)
       console.log('setting groupChatRoom')

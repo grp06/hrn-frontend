@@ -12,10 +12,11 @@ const useRemoteTrackPublishedToGroupVideoChat = () => {
 
     publication.on('subscribed', async (track) => {
       const attachedTrack = track.attach()
-      if (publication.kind === 'video') {
+      const participantsVideoDiv = document.getElementById(participantsId)
+      if (publication.kind === 'video' && participantsVideoDiv) {
         attachedTrack.muted = true
         console.log('subscribed, attaching track')
-        document.getElementById(participantsId).appendChild(attachedTrack)
+        participantsVideoDiv.appendChild(attachedTrack)
       }
     })
 
