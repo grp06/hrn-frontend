@@ -11,10 +11,38 @@ import {
   useUserEventStatusContext,
 } from '../../context'
 import { useGroupVideoChatTwilio } from '../../hooks'
+import PersonIcon from '../../assets/greyPerson.svg'
 
 const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
+  box: {
+    position: 'relative',
+    backgroundImage: `url(${PersonIcon})`,
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    '& video': {
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+    },
+  },
+  usersNameInVideo: {
+    position: 'absolute',
+    zIndex: 99999,
+    top: 'auto',
+    left: 'auto',
+    right: 'auto',
+    bottom: '1%',
+    fontFamily: 'Muli',
+    fontSize: '1.75rem',
+    fontWeight: '600',
+    color: theme.palette.common.basePurple,
+    textAlign: 'center',
+    width: '100%',
+  },
   videoBox: {
     width: '95%',
     height: '90vh',
@@ -23,15 +51,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     overflowY: 'scroll',
     margin: theme.spacing(0, 'auto'),
-  },
-  box: {
-    backgroundColor: 'green',
-    borderRadius: '4px',
-    '& video': {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    },
   },
 }))
 
@@ -60,7 +79,7 @@ const EventGroupVideoChat = () => {
 
     onlineEventUsers.forEach((eventUser) => {
       const usersId = eventUser.user[0].id
-      console.log('usersId ->', usersId)
+      const usersName = eventUser.user[0].name
       const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
         (divElement) => parseInt(divElement.id, 10) === usersId
       )
@@ -68,10 +87,15 @@ const EventGroupVideoChat = () => {
         return
       }
       const newDivElement = document.createElement('div')
+      const usersNameDiv = document.createElement('p')
+      const usersNameNode = document.createTextNode(usersName)
+      usersNameDiv.appendChild(usersNameNode)
+      usersNameDiv.setAttribute('class', classes.usersNameInVideo)
       newDivElement.setAttribute('id', usersId)
       newDivElement.setAttribute('class', classes.box)
       newDivElement.style.height = height
       newDivElement.style.width = width
+      newDivElement.appendChild(usersNameDiv)
       videoGrid.appendChild(newDivElement)
     })
   }
@@ -113,8 +137,10 @@ const EventGroupVideoChat = () => {
 
       const myRoom = await connect(groupChatToken, {
         maxAudioBitrate: 16000,
-        video: { deviceId: localStoragePreferredVideoId },
-        audio: { deviceId: localStoragePreferredAudioId },
+        // video: { deviceId: localStoragePreferredVideoId },
+        // audio: { deviceId: localStoragePreferredAudioId },
+        audio: false,
+        video: false,
       })
       console.log('myRoom ->', myRoom)
       console.log('setting groupChatRoom')
