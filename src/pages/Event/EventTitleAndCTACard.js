@@ -7,7 +7,7 @@ import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
-import { EventForm, Snack, TransitionModal } from '../../common'
+import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
 import { insertEventUser, deleteEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
 import { makeStyles } from '@material-ui/styles'
@@ -138,7 +138,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       <Grid container item xs={12} lg={8} direction="column">
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
-          <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
+          <CalendarIconIcs event={event} />
           <Typography variant="body1" className={classes.subtitle}>
             {formatDate(startTime)}
           </Typography>
