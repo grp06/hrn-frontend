@@ -47,7 +47,6 @@ const useStyles = makeStyles((theme) => ({
   videoBox: {
     width: '95%',
     height: '90vh',
-    backgroundColor: 'blue',
     borderRadius: '4px',
     padding: theme.spacing(3),
     overflowY: 'scroll',
@@ -98,7 +97,7 @@ const EventGroupVideoChat = () => {
       newDivElement.setAttribute('class', classes.box)
       newDivElement.style.height = height
       newDivElement.style.width = width
-      // newDivElement.appendChild(usersNameDiv)
+      newDivElement.appendChild(usersNameDiv)
       videoGrid.appendChild(newDivElement)
     })
   }
@@ -201,7 +200,13 @@ const EventGroupVideoChat = () => {
 
   return (
     <>
-      <Grid id="videoBox" container justify="space-around" className={classes.videoBox} />
+      <Grid
+        id="videoBox"
+        container
+        justify="space-around"
+        alignItems="center"
+        className={classes.videoBox}
+      />
       <GroupVideoChatBottomPanel
         event={event}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}

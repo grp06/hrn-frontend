@@ -14,9 +14,9 @@ const useParticipantConnectedToGroupVideoChat = () => {
     })
 
     participant.on('trackUnpublished', (publication) => {
-      const participantsVideoDiv = document.getElementById(participant.identity)
+      const participantsVideoDiv = document.getElementById(`${participant.identity}-video`)
       if (publication.kind === 'video' && participantsVideoDiv) {
-        participantsVideoDiv.innerHTML = ''
+        participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)
       }
     })
 

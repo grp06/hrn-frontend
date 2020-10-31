@@ -12,13 +12,11 @@ const useGroupVideoChatTwilio = () => {
       // publish our own tracks
       localParticipant.tracks.forEach((publication) => {
         const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        if (
-          localParticipantsVideoDiv &&
-          !localParticipantsVideoDiv.children.length &&
-          publication.track.kind === 'video'
-        ) {
+        console.log('localParticipantsVideoDiv ->', localParticipantsVideoDiv)
+        if (localParticipantsVideoDiv && publication.track.kind === 'video') {
           const attachedTrack = publication.track.attach()
           attachedTrack.style.transform = 'scale(-1, 1)'
+          attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
           localParticipantsVideoDiv.appendChild(attachedTrack)
         }
       })
@@ -36,10 +34,10 @@ const useGroupVideoChatTwilio = () => {
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('participantDisconnected', remoteParticipant)
 
-        const participantsVideoDiv = document.getElementById(remoteParticipant.identity)
+        const participantsVideoDiv = document.getElementById(`${remoteParticipant.identity}-video`)
         // instead of modifying the innerHTML, detatch instead
         if (participantsVideoDiv) {
-          participantsVideoDiv.innerHTML = ''
+          participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)
         }
       })
 

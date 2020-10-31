@@ -4,6 +4,7 @@ const useRemoteTrackPublishedToGroupVideoChat = () => {
       const participantsVideoDiv = document.getElementById(participantsId)
       if (publication.kind === 'video' && participantsVideoDiv) {
         const attachedTrack = publication.track.attach()
+        attachedTrack.setAttribute('id', `${participantsId}-video`)
         attachedTrack.muted = true
 
         participantsVideoDiv.appendChild(attachedTrack)
@@ -15,6 +16,7 @@ const useRemoteTrackPublishedToGroupVideoChat = () => {
       const participantsVideoDiv = document.getElementById(participantsId)
       if (publication.kind === 'video' && participantsVideoDiv) {
         attachedTrack.muted = true
+        attachedTrack.setAttribute('id', `${participantsId}-video`)
         console.log('subscribed, attaching track')
         participantsVideoDiv.appendChild(attachedTrack)
       }
