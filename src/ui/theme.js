@@ -264,6 +264,21 @@ const theme = createMuiTheme({
           color: 'rgba(191, 203, 226, 0.7)',
         },
       },
+      outlinedSizeLarge: {
+        padding: '11px 11px',
+        fontSize: '1.1rem',
+      },
+      outlined: {
+        color: ghostWhite,
+        minWidth: '200px',
+        '&:hover': {
+          backgroundColor: greyHighlight,
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(36,37,38,0.70)',
+          color: 'rgba(191, 203, 226, 0.7)',
+        },
+      },
     },
     MuiFab: {
       extended: {

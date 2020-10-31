@@ -12,7 +12,6 @@ const useGroupVideoChatTwilio = () => {
       // publish our own tracks
       localParticipant.tracks.forEach((publication) => {
         const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        console.log('localParticipantsVideoDiv ->', localParticipantsVideoDiv)
         if (localParticipantsVideoDiv && publication.track.kind === 'video') {
           const attachedTrack = publication.track.attach()
           attachedTrack.style.transform = 'scale(-1, 1)'
