@@ -91,11 +91,19 @@ const GroupVideoChatBottomPanel = React.memo(
     }
 
     const handleAudioToggle = () => {
-      const { audioTracks } = twilioGroupChatRoom.localParticipant
+      const { audioTracks, identity } = twilioGroupChatRoom.localParticipant
+      console.log('identity ->', identity)
+      const usersMicOffIconDiv = document.getElementById(`${identity}-mic-off-icon-div`)
+      console.log('usersMicOffIconDiv ->', usersMicOffIconDiv)
       audioTracks.forEach((localTrackPublication) => {
         const { isEnabled } = localTrackPublication.track
         localTrackPublication.track.enable(!isEnabled)
         setParticipantsAudioIsOn(!isEnabled)
+        if (isEnabled) {
+          usersMicOffIconDiv.setStyle({ display: 'none' })
+        } else {
+          usersMicOffIconDiv.setStyle({ display: 'inline' })
+        }
       })
     }
 

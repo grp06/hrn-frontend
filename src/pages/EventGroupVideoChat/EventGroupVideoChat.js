@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { getToken } from '../../helpers'
-import { GroupVideoChatBottomPanel, MiniContactCardSidebar } from '.'
+import { GroupVideoChatBottomPanel } from '.'
 import {
   useAppContext,
   useEventContext,
@@ -13,6 +13,7 @@ import {
 } from '../../context'
 import { useGroupVideoChatTwilio } from '../../hooks'
 import PersonIcon from '../../assets/greyPerson.svg'
+import MicOffIcon from '../../assets/micOff.svg'
 
 const { connect } = require('twilio-video')
 
@@ -30,19 +31,23 @@ const useStyles = makeStyles((theme) => ({
       objectFit: 'cover',
     },
   },
-  usersNameInVideo: {
+  usersNameContainer: {
     position: 'absolute',
+    display: 'flex',
+    alignItems: 'center',
     zIndex: 99999,
     top: 'auto',
-    left: 'auto',
+    left: '2%',
     right: 'auto',
-    bottom: '1%',
-    fontFamily: 'Muli',
-    fontSize: '1.75rem',
-    fontWeight: '600',
-    color: theme.palette.common.basePurple,
-    textAlign: 'center',
+    bottom: '2%',
     width: '100%',
+  },
+  usersNameInVideo: {
+    fontFamily: 'Muli',
+    fontSize: '2rem',
+    fontWeight: '600',
+    color: theme.palette.common.ghostWhite,
+    margin: 0,
   },
   videoBox: {
     width: '95%',
@@ -51,6 +56,15 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     overflowY: 'scroll',
     margin: theme.spacing(0, 'auto'),
+  },
+  micOffIconDiv: {
+    backgroundImage: `url(${MicOffIcon})`,
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    width: '30px',
+    height: '30px',
+    marginLeft: '8px',
+    display: 'none',
   },
 }))
 
@@ -89,10 +103,18 @@ const EventGroupVideoChat = () => {
         return
       }
       const newDivElement = document.createElement('div')
-      const usersNameDiv = document.createElement('p')
+      const usersNameDiv = document.createElement('div')
+      const usersNamePTag = document.createElement('p')
       const usersNameNode = document.createTextNode(usersName)
-      usersNameDiv.appendChild(usersNameNode)
-      usersNameDiv.setAttribute('class', classes.usersNameInVideo)
+      const usersMicOffDiv = document.createElement('div')
+      usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
+      usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
+      usersNamePTag.appendChild(usersNameNode)
+      usersNamePTag.setAttribute('class', classes.usersNameInVideo)
+      usersNameDiv.appendChild(usersNamePTag)
+      usersNameDiv.appendChild(usersMicOffDiv)
+      usersNameDiv.setAttribute('class', classes.usersNameContainer)
+      usersNameDiv.setAttribute('id', `${usersId}-name-container`)
       newDivElement.setAttribute('id', usersId)
       newDivElement.setAttribute('class', classes.box)
       newDivElement.style.height = height
@@ -142,61 +164,61 @@ const EventGroupVideoChat = () => {
   }, [onlineEventUsers])
 
   // get the token
-  // useEffect(() => {
-  //   const getTwilioToken = async () => {
-  //     const res = await getToken(`${event_id}-post-event`, userId).then((response) =>
-  //       response.json()
-  //     )
-  //     console.log('getTwilioToken res ->', res)
-  //     setGroupChatToken(res.token)
-  //   }
-  //   if (event_id && userId) {
-  //     getTwilioToken()
-  //   }
-  // }, [event_id, userId])
+  useEffect(() => {
+    const getTwilioToken = async () => {
+      const res = await getToken(`${event_id}-post-event`, userId).then((response) =>
+        response.json()
+      )
+      console.log('getTwilioToken res ->', res)
+      setGroupChatToken(res.token)
+    }
+    if (event_id && userId) {
+      getTwilioToken()
+    }
+  }, [event_id, userId])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
-  // useEffect(() => {
-  //   const connectToGroupVideoChatRoom = async () => {
-  //     console.log('calling CONNECT')
-  //     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-  //     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-  //     // const audioDevice =
-  //     //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
+  useEffect(() => {
+    const connectToGroupVideoChatRoom = async () => {
+      console.log('calling CONNECT')
+      const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+      const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+      // const audioDevice =
+      //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
 
-  //     console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-  //     // console.log('audioDevice', audioDevice)
-  //     console.log('groupChatToken ->', groupChatToken)
+      console.log('process.env.NODE_ENV', process.env.NODE_ENV)
+      // console.log('audioDevice', audioDevice)
+      console.log('groupChatToken ->', groupChatToken)
 
-  //     const myRoom = await connect(groupChatToken, {
-  //       maxAudioBitrate: 16000,
-  //       // video: { deviceId: localStoragePreferredVideoId },
-  //       // audio: { deviceId: localStoragePreferredAudioId },
-  //       audio: false,
-  //       video: false,
-  //     })
-  //     console.log('myRoom ->', myRoom)
-  //     console.log('setting groupChatRoom')
-  //     setGroupChatRoom(myRoom)
-  //   }
+      const myRoom = await connect(groupChatToken, {
+        maxAudioBitrate: 16000,
+        video: { deviceId: localStoragePreferredVideoId },
+        audio: { deviceId: localStoragePreferredAudioId },
+        // audio: false,
+        // video: false,
+      })
+      console.log('myRoom ->', myRoom)
+      console.log('setting groupChatRoom')
+      setGroupChatRoom(myRoom)
+    }
 
-  //   if (groupChatToken) {
-  //     connectToGroupVideoChatRoom()
-  //   }
-  // }, [groupChatToken])
+    if (groupChatToken) {
+      connectToGroupVideoChatRoom()
+    }
+  }, [groupChatToken])
 
-  // useEffect(() => {
-  //   if (groupChatRoom) {
-  //     const videoGrid = document.getElementById('videoBox')
-  //     const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
-  //     console.log('arrayOfDivElementsInVideoGrid ->', arrayOfDivElementsInVideoGrid)
-  //     if (arrayOfDivElementsInVideoGrid.length) {
-  //       console.warn('starting twilio')
-  //       startGroupVideoChatTwilio(groupChatRoom)
-  //     }
-  //   }
-  // }, [groupChatRoom])
+  useEffect(() => {
+    if (groupChatRoom) {
+      const videoGrid = document.getElementById('videoBox')
+      const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
+      console.log('arrayOfDivElementsInVideoGrid ->', arrayOfDivElementsInVideoGrid)
+      if (arrayOfDivElementsInVideoGrid.length) {
+        console.warn('starting twilio')
+        startGroupVideoChatTwilio(groupChatRoom)
+      }
+    }
+  }, [groupChatRoom])
 
   return (
     <>
@@ -213,7 +235,6 @@ const EventGroupVideoChat = () => {
         userId={userId}
         twilioGroupChatRoom={groupChatRoom}
       />
-      <MiniContactCardSidebar onlineEventUsers={onlineEventUsers} />
     </>
   )
 }

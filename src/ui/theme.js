@@ -270,7 +270,7 @@ const theme = createMuiTheme({
       },
       outlined: {
         color: ghostWhite,
-        minWidth: '200px',
+        width: '200px',
         '&:hover': {
           backgroundColor: greyHighlight,
         },
