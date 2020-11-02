@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
@@ -78,13 +78,14 @@ const EventGroupVideoChat = () => {
   const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user } = useUserContext()
-  const { setUserHasEnabledCameraAndMic, onlineEventUsers } = useUserEventStatusContext()
+  const { onlineEventUsers, setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
   const arrayOfOnlineUserIds = useRef([])
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
-  const { id: event_id, status: event_status } = event
-  const { id: userId } = user
+  const { host_id, id: event_id, status: event_status } = event
+  const { id: user_id } = user
+  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
   const getNumRowsAndCols = (numberOfVideos) => {
     const width = numberOfVideos <= 4 ? '49%' : '32%'
@@ -147,6 +148,33 @@ const EventGroupVideoChat = () => {
     }
   }
 
+  const connectToGroupVideoChatRoom = async () => {
+    console.log('calling CONNECT')
+    const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+    const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+    // const audioDevice =
+    //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
+
+    const audioDevice = userIsHost ? { deviceId: localStoragePreferredAudioId } : false
+    const videoDevice = userIsHost ? { deviceId: localStoragePreferredVideoId } : false
+    const myRoom = await connect(groupChatToken, {
+      maxAudioBitrate: 16000,
+      audio: audioDevice,
+      video: videoDevice,
+    })
+    console.log('myRoom ->', myRoom)
+    console.log('setting groupChatRoom')
+    setGroupChatRoom(myRoom)
+  }
+
+  const getTwilioToken = async () => {
+    const res = await getToken(`${event_id}-post-event`, user_id).then((response) =>
+      response.json()
+    )
+    console.log('getTwilioToken res ->', res)
+    setGroupChatToken(res.token)
+  }
+
   useEffect(() => {
     if (event && event_id) {
       if (event_status === 'complete') {
@@ -165,44 +193,14 @@ const EventGroupVideoChat = () => {
 
   // get the token
   useEffect(() => {
-    const getTwilioToken = async () => {
-      const res = await getToken(`${event_id}-post-event`, userId).then((response) =>
-        response.json()
-      )
-      console.log('getTwilioToken res ->', res)
-      setGroupChatToken(res.token)
-    }
-    if (event_id && userId) {
+    if (event_id && user_id) {
       getTwilioToken()
     }
-  }, [event_id, userId])
+  }, [event_id, user_id])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
   useEffect(() => {
-    const connectToGroupVideoChatRoom = async () => {
-      console.log('calling CONNECT')
-      const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-      const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-      // const audioDevice =
-      //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
-
-      console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-      // console.log('audioDevice', audioDevice)
-      console.log('groupChatToken ->', groupChatToken)
-
-      const myRoom = await connect(groupChatToken, {
-        maxAudioBitrate: 16000,
-        video: { deviceId: localStoragePreferredVideoId },
-        audio: { deviceId: localStoragePreferredAudioId },
-        // audio: false,
-        // video: false,
-      })
-      console.log('myRoom ->', myRoom)
-      console.log('setting groupChatRoom')
-      setGroupChatRoom(myRoom)
-    }
-
     if (groupChatToken) {
       connectToGroupVideoChatRoom()
     }
@@ -230,9 +228,11 @@ const EventGroupVideoChat = () => {
         className={classes.videoBox}
       />
       <GroupVideoChatBottomPanel
-        event={event}
-        setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-        userId={userId}
+        event_id={event_id}
+        setUserHasEnabledCameraAndMic={useCallback(() => {
+          setUserHasEnabledCameraAndMic()
+        }, [])}
+        userIsHost={userIsHost}
         twilioGroupChatRoom={groupChatRoom}
       />
     </>

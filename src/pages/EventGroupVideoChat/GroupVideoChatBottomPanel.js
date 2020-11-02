@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
-import PeopleIcon from '@material-ui/icons/People'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import { makeStyles } from '@material-ui/styles'
+import Video from 'twilio-video'
 
 import { EndEventButton, LeaveEventButton } from '.'
 import { SetupMicAndCameraButton } from '../Event'
@@ -36,13 +36,53 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const GroupVideoChatBottomPanel = React.memo(
-  ({ event, setUserHasEnabledCameraAndMic, twilioGroupChatRoom, userId }) => {
+  ({ event_id, setUserHasEnabledCameraAndMic, twilioGroupChatRoom, userIsHost }) => {
     const classes = useStyles()
-    const { start_at: eventStartTime, id: event_id, host_id, status: eventStatus } = event
-    const userIsHost = host_id === userId
+    const [participantHasEnabledAudio, setParticipantHasEnabledAudio] = useState(false)
+    const [participantHasEnabledVideo, setParticipantHasEnabledVideo] = useState(false)
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
-    const [participantsVideoIsOn, setParticipantsVideoIsOn] = useState(true)
-    const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(true)
+    const [participantsVideoIsOn, setParticipantsVideoIsOn] = useState(false)
+    const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(false)
+
+    useEffect(() => {
+      if (userIsHost) {
+        setParticipantHasEnabledVideo(true)
+        setParticipantsVideoIsOn(true)
+        setParticipantHasEnabledAudio(true)
+        setParticipantsAudioIsOn(true)
+      }
+    }, [userIsHost])
+
+    const handleEnableVideo = () => {
+      const { localParticipant } = twilioGroupChatRoom
+      const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+      const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
+
+      Video.createLocalVideoTrack({
+        deviceId: { exact: localStoragePreferredVideoId },
+      }).then((localVideoTrack) => {
+        localParticipant.publishTrack(localVideoTrack)
+        const attachedTrack = localVideoTrack.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
+        attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
+        localParticipantsVideoDiv.appendChild(attachedTrack)
+        setParticipantHasEnabledVideo(true)
+        setParticipantsVideoIsOn(true)
+      })
+    }
+
+    const handleEnableAudio = () => {
+      const { localParticipant } = twilioGroupChatRoom
+      const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+
+      Video.createLocalAudioTrack({
+        deviceId: { exact: localStoragePreferredAudioId },
+      }).then((localAudioTrack) => {
+        localParticipant.publishTrack(localAudioTrack)
+        setParticipantHasEnabledAudio(true)
+        setParticipantsAudioIsOn(true)
+      })
+    }
 
     const handleVideoToggle = () => {
       const { localParticipant } = twilioGroupChatRoom
@@ -112,9 +152,9 @@ const GroupVideoChatBottomPanel = React.memo(
             disabled={!twilioGroupChatRoom}
             disableRipple
             className={classes.greySquareIconButton}
-            onClick={handleVideoToggle}
+            onClick={participantHasEnabledVideo ? handleVideoToggle : handleEnableVideo}
           >
-            {participantsVideoIsOn ? (
+            {participantHasEnabledVideo && participantsVideoIsOn ? (
               <VideocamIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
             ) : (
               <VideocamOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
@@ -125,9 +165,9 @@ const GroupVideoChatBottomPanel = React.memo(
             disableRipple
             color="primary"
             className={classes.greySquareIconButton}
-            onClick={handleAudioToggle}
+            onClick={participantHasEnabledAudio ? handleAudioToggle : handleEnableAudio}
           >
-            {participantsAudioIsOn ? (
+            {participantHasEnabledAudio && participantsAudioIsOn ? (
               <MicIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
             ) : (
               <MicOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
@@ -140,10 +180,7 @@ const GroupVideoChatBottomPanel = React.memo(
           alignItems="center"
           className={classes.settingsAndChatGrid}
         >
-          <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
-          <IconButton disableRipple>
-            <PeopleIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
-          </IconButton>
+          {/* <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} /> */}
         </Grid>
       </Grid>
     )

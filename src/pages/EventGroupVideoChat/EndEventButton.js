@@ -7,7 +7,7 @@ const EndEventButton = ({ event_id }) => {
   return TransitionModal({
     button: {
       buttonText: 'End Event',
-      buttonVariant: 'contained',
+      buttonVariant: 'outlined',
       buttonSize: 'large',
     },
     modalBody: (
