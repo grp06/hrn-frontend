@@ -25,10 +25,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4),
     backgroundColor: theme.palette.common.grey10,
   },
-  filledIconButton: {
-    backgroundColor: theme.palette.common.basePurple,
+  greySquareIconButton: {
+    borderRadius: '4px',
+    backgroundColor: 'none',
     '&:hover': {
-      backgroundColor: 'rgb(98, 60, 153)',
+      backgroundColor: theme.palette.common.greyHover,
     },
     margin: theme.spacing(0, 1),
   },
@@ -100,9 +101,9 @@ const GroupVideoChatBottomPanel = React.memo(
         localTrackPublication.track.enable(!isEnabled)
         setParticipantsAudioIsOn(!isEnabled)
         if (isEnabled) {
-          usersMicOffIconDiv.setStyle({ display: 'none' })
+          usersMicOffIconDiv.style.display = 'inline'
         } else {
-          usersMicOffIconDiv.setStyle({ display: 'inline' })
+          usersMicOffIconDiv.style.display = 'none'
         }
       })
     }
@@ -133,7 +134,7 @@ const GroupVideoChatBottomPanel = React.memo(
           <IconButton
             disabled={!twilioGroupChatRoom}
             disableRipple
-            className={classes.filledIconButton}
+            className={classes.greySquareIconButton}
             onClick={handleVideoToggle}
           >
             {participantsVideoIsOn ? (
@@ -146,7 +147,7 @@ const GroupVideoChatBottomPanel = React.memo(
             disabled={!twilioGroupChatRoom}
             disableRipple
             color="primary"
-            className={classes.filledIconButton}
+            className={classes.greySquareIconButton}
             onClick={handleAudioToggle}
           >
             {participantsAudioIsOn ? (

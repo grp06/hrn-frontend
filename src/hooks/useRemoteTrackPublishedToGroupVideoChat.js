@@ -6,7 +6,6 @@ const useRemoteTrackPublishedToGroupVideoChat = () => {
         const attachedTrack = publication.track.attach()
         attachedTrack.setAttribute('id', `${participantsId}-video`)
         attachedTrack.muted = true
-
         participantsVideoDiv.appendChild(attachedTrack)
       }
     }

@@ -20,6 +20,25 @@ const useParticipantConnectedToGroupVideoChat = () => {
       }
     })
 
+    // we only disable and enable audio tracks
+    participant.on('trackDisabled', (publication) => {
+      const participantsMicOffIconDiv = document.getElementById(
+        `${participant.identity}-mic-off-icon-div`
+      )
+      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
+        participantsMicOffIconDiv.style.display = 'inline'
+      }
+    })
+
+    participant.on('trackEnabled', (publication) => {
+      const participantsMicOffIconDiv = document.getElementById(
+        `${participant.identity}-mic-off-icon-div`
+      )
+      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
+        participantsMicOffIconDiv.style.display = 'none'
+      }
+    })
+
     // participant.on('trackSubscriptionFailed', (error, publication) => {
 
     // })

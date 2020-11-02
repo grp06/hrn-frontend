@@ -12,6 +12,7 @@ const greySubtitle = '#BFBFBF'
 const greyCard = '#191919'
 const greyNav = '#1c1c1c'
 const grey10 = '#262626'
+const greyHover = '#424242'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
@@ -34,6 +35,7 @@ const theme = createMuiTheme({
       greyBorder,
       greyBoxShadow,
       greyHighlight,
+      greyHover,
       greyButton,
       greyButtonHover,
       greySubtitle,
