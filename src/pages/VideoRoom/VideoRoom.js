@@ -111,6 +111,9 @@ const VideoRoom = ({ match }) => {
         return history.push(`/events/${eventId}`)
       }
 
+      if (status === 'group-video-chat') {
+        return history.push(`/events/${eventId}/group-video-chat`)
+      }
       // we will hit this when the user is on the Thumbing screen, then new assignments are made
       // and there are no new pairings left, and we end the event
       if (status === 'complete') {

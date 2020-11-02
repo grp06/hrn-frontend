@@ -77,7 +77,7 @@ const UserEventStatusProvider = ({ children }) => {
       userHasEnabledCameraAndMic
     ) {
       const interval = setInterval(async () => {
-        console.log('last seen')
+        // console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
             const lastSeenUpdated = await updateEventUsersLastSeenMutation()

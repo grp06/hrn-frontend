@@ -1,4 +1,3 @@
-import { GraphQLNonNull } from 'graphql'
 import { useParticipantConnected } from '.'
 import { useTwilioContext, useUserEventStatusContext } from '../context'
 import { constants } from '../utils'

@@ -51,8 +51,7 @@ const HeaderDrawer = () => {
     pathname === '/' ||
       pathname.includes('sign-up') ||
       pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password') ||
-      pathname.includes('onboarding')
+      pathname.includes('set-new-password')
   )
 
   const handleDrawerToggle = () => {

@@ -220,14 +220,17 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     )
   }
 
-  const renderEventFinish = () => {
+  const renderTakingYouToGroupChat = () => {
     return (
       <>
         <Typography className={classes.inEventScreenText}>
-          Awesome! Thanks for joining the event!{' '}
-          <span role="img" aria-label="sunglass smiley">
-            😎
+          And the party continues{' '}
+          <span role="img" aria-label="party smiley">
+            🥳
           </span>
+        </Typography>
+        <Typography className={classes.inEventScreenText}>
+          Ushering you to the group chat in a few seconds!
         </Typography>
       </>
     )
@@ -238,7 +241,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
       return renderRating()
     } else {
       if (current_round == num_rounds) {
-        return renderEventFinish()
+        return renderTakingYouToGroupChat()
       } else {
         return renderBreak()
       }

@@ -19,6 +19,8 @@ const EventStatusRedirect = ({ isEventParticipant, event, eventSet, userId }) =>
         return <Redirect to={`/events/${event.id}/video-room`} />
       case 'room-in-progress':
         return <Redirect to={`/events/${event.id}/video-room`} />
+      case 'group-video-chat':
+        return <Redirect to={`/events/${event.id}/group-video-chat`} />
       case 'complete':
         return <Redirect to={`/events/${event.id}/event-complete`} />
       default:
