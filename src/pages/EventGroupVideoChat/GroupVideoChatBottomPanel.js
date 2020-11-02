@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
 import PeopleIcon from '@material-ui/icons/People'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import VideocamOffIcon from '@material-ui/icons/VideocamOff'
-import { Redirect, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
+import { EndEventButton, LeaveEventButton } from '.'
 import { SetupMicAndCameraButton } from '../Event'
-import { endEvent } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,27 +38,11 @@ const useStyles = makeStyles((theme) => ({
 const GroupVideoChatBottomPanel = React.memo(
   ({ event, setUserHasEnabledCameraAndMic, twilioGroupChatRoom, userId }) => {
     const classes = useStyles()
-    const history = useHistory()
     const { start_at: eventStartTime, id: event_id, host_id, status: eventStatus } = event
     const userIsHost = host_id === userId
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
     const [participantsVideoIsOn, setParticipantsVideoIsOn] = useState(true)
     const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(true)
-
-    const handleEndEvent = () => {
-      endEvent(event_id)
-    }
-
-    const handleLeaveEvent = async () => {
-      try {
-        await window.room.disconnect()
-        // window.room = null
-        history.push(`/events/${event_id}/event-complete`)
-        // return <Redirect to={`/events/${event_id}/event-complete`} />
-      } catch (err) {
-        console.log(err)
-      }
-    }
 
     const handleVideoToggle = () => {
       const { localParticipant } = twilioGroupChatRoom
@@ -120,13 +101,9 @@ const GroupVideoChatBottomPanel = React.memo(
         <Grid container direction="column">
           <Grid container direction="row" alignItems="flex-end">
             {userIsHost ? (
-              <Button variant="outlined" color="primary" onClick={handleEndEvent}>
-                End Event
-              </Button>
+              <EndEventButton event_id={event_id} />
             ) : (
-              <Button variant="contained" color="primary" onClick={handleLeaveEvent}>
-                Leave Event
-              </Button>
+              <LeaveEventButton event_id={event_id} />
             )}
           </Grid>
         </Grid>

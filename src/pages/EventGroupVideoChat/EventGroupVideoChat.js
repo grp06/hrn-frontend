@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    zIndex: 99999,
+    zIndex: 9,
     top: 'auto',
     left: '0%',
     right: 'auto',
