@@ -147,17 +147,13 @@ const EventGroupVideoChat = () => {
     }
   }
 
-  // useEffect(() => {
-  //   if (event && event_id) {
-  //     if (event_status === 'complete') {
-  //       return history.push(`/events/${event_id}/event-complete`)
-  //     }
-  //     if (event_status === 'group-video-chat') {
-  //       return null
-  //     }
-  //     return history.push(`/events/${event_id}/lobby`)
-  //   }
-  // }, [event_status])
+  useEffect(() => {
+    if (event && event_id) {
+      if (event_status === 'complete') {
+        return history.push(`/events/${event_id}/event-complete`)
+      }
+    }
+  }, [event_status])
 
   useEffect(() => {
     if (onlineEventUsers && onlineEventUsers.length) {
