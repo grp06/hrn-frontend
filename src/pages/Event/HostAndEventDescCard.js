@@ -70,7 +70,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
         justify="space-between"
         className={classes.hostAndRSVPContainer}
       >
-        <Grid container item direction="column" xs={6}>
+        <Grid container item direction="column" xs={12} md={6}>
           <Typography variant="subtitle1" className={classes.subtitle}>
             Hosted By /
           </Typography>
