@@ -47,6 +47,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const classes = useStyles()
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
+  const [showComeBackSnack, setShowComeBackSnack] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
   const { event_name, event_users, host_id, id: event_id, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
@@ -82,7 +83,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   })
 
   const getUserCTAButtonText = () => {
-    if (userAlreadyRSVPed && event_status === 'not-started') return 'Cancel RSVP'
+    if (userAlreadyRSVPed && event_status === 'not-started') return "You're all set!"
     else if (!userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete')
       return 'Join Event'
     else return 'RSVP'
@@ -106,6 +107,10 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
     }
   }
 
+  const handleAllSetClick = () => {
+    setShowComeBackSnack(true)
+  }
+
   const handleShareEventClick = () => {
     copy(window.location.href)
     setCopyURLSnack(true)
@@ -119,8 +124,9 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       <Button
         variant="contained"
         size="large"
-        color="primary"
-        onClick={userAlreadyRSVPed ? handleCancelRSVPClick : handleRSVPClick}
+        color={userAlreadyRSVPed ? 'secondary' : 'primary'}
+        disableRipple
+        onClick={userAlreadyRSVPed ? handleAllSetClick : handleRSVPClick}
       >
         {getUserCTAButtonText()}
       </Button>
@@ -169,7 +175,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       <Snack
         open={showCopyURLSnack}
         duration={1800}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setCopyURLSnack(false)}
         severity="info"
         snackMessage={
@@ -177,6 +183,21 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
             Event URL Copied{' '}
             <span role="img" aria-label="floppy disk">
               💾
+            </span>
+          </div>
+        }
+      />
+      <Snack
+        open={showComeBackSnack}
+        duration={5000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setShowComeBackSnack(false)}
+        severity="info"
+        snackMessage={
+          <div>
+            To attend this event, come back to this page 5 minutes before the event starts{' '}
+            <span role="img" aria-label="alarm clock">
+              ⏰
             </span>
           </div>
         }

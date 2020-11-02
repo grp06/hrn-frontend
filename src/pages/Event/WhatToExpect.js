@@ -32,6 +32,11 @@ const hostSteps = [
 
 const attendeeSteps = [
   {
+    title: 'Attending the event',
+    text:
+      'Come back to this page a few minutes before the event is slated to start. You will see a countdown clock and the event will go live shortly after the clock expires.',
+  },
+  {
     title: 'Welcome Remarks from the Host',
     text:
       'Before the event starts, the event host will share a few words with you via a live stream to get you hyped for the event!',

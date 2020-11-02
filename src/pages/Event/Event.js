@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     width: '75vw',
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
+    paddingBottom: '40px',
   },
   podcastContainer: {
     width: '44%',
