@@ -55,6 +55,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
+  const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
   const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
@@ -117,8 +118,11 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   }
 
   const renderRSVPOrEditButton = () => {
-    if (userIsHost) {
+    if (userIsHost && event_status === 'not-started') {
       return <div>{editFormModal}</div>
+    }
+    if (userIsOnLobbyPage && userAlreadyRSVPed) {
+      return null
     }
     return (
       <Button
@@ -150,7 +154,8 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           </Typography>
         </Grid>
       </Grid>
-      {userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete' ? null : (
+      {(userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete') ||
+      userIsOnEventCompletePage ? null : (
         <Grid
           container
           item
