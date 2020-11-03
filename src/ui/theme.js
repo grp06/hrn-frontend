@@ -256,7 +256,7 @@ const theme = createMuiTheme({
       },
       contained: {
         color: ghostWhite,
-        minWidth: '200px',
+        width: '200px',
         backgroundColor: greyButton,
         '&:hover': {
           backgroundColor: greyHighlight,

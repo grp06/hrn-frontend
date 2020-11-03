@@ -103,7 +103,7 @@ function WhatToExpect({ userIsHost }) {
 
   return (
     <Grid container direction="column" justify="flex-start" className={classes.cardContainer}>
-      <Typography variant="h3" className={classes.cardTitle}>
+      <Typography variant="h3">
         {userIsHost ? 'What to expect as a host' : 'What to expect from the event'}
       </Typography>
       <div>
