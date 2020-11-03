@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
 const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const classes = useStyles()
   const { event } = useEventContext()
-  const { current_round, num_rounds } = event
+  const { current_round, group_video_chat, num_rounds } = event
   const { event_id, partner_id, user_id } = myRound
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
@@ -220,8 +220,8 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     )
   }
 
-  const renderTakingYouToGroupChat = () => {
-    return (
+  const renderGroupChatOrEndEvent = () => {
+    return group_video_chat ? (
       <>
         <Typography className={classes.inEventScreenText}>
           And the party continues{' '}
@@ -233,6 +233,15 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
           Ushering you to the group chat in a few seconds!
         </Typography>
       </>
+    ) : (
+      <>
+        <Typography className={classes.inEventScreenText}>
+          Thanks for coming to the event{' '}
+          <span role="img" aria-label="cowboy smiley">
+            🤠
+          </span>
+        </Typography>
+      </>
     )
   }
 
@@ -240,8 +249,8 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     if (!!showRatingForm) {
       return renderRating()
     } else {
-      if (current_round == num_rounds) {
-        return renderTakingYouToGroupChat()
+      if (current_round === num_rounds) {
+        return renderGroupChatOrEndEvent()
       } else {
         return renderBreak()
       }

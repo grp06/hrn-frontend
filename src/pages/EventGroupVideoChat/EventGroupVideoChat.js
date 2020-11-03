@@ -1,19 +1,21 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
-import { getToken } from '../../helpers'
 import { GroupVideoChatBottomPanel } from '.'
+import PersonIcon from '../../assets/greyPerson.svg'
+import MicOffIcon from '../../assets/micOff.svg'
+import { Loading } from '../../common'
 import {
   useAppContext,
   useEventContext,
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
+import { getToken } from '../../helpers'
 import { useGroupVideoChatTwilio } from '../../hooks'
-import PersonIcon from '../../assets/greyPerson.svg'
-import MicOffIcon from '../../assets/micOff.svg'
+import { CameraAndMicSetupScreen } from '../Lobby'
 
 const { connect } = require('twilio-video')
 
@@ -78,13 +80,17 @@ const EventGroupVideoChat = () => {
   const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user } = useUserContext()
-  const { onlineEventUsers, setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
+  const {
+    onlineEventUsers,
+    setUserHasEnabledCameraAndMic,
+    userHasEnabledCameraAndMic,
+  } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
   const arrayOfOnlineUserIds = useRef([])
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
   const { host_id, id: event_id, status: event_status } = event
-  const { id: user_id } = user
+  const { id: user_id, name: usersName } = user
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
   const getNumRowsAndCols = (numberOfVideos) => {
@@ -97,10 +103,9 @@ const EventGroupVideoChat = () => {
     const { width, height } = getNumRowsAndCols(onlineEventUsers.length)
     const videoGrid = document.getElementById('videoBox')
     const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
-
     onlineEventUsers.forEach((eventUser) => {
       const usersId = eventUser.user[0].id
-      const usersName = eventUser.user[0].name
+      const usersFirstName = eventUser.user[0].name.split(' ')[0]
       const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
         (divElement) => parseInt(divElement.id, 10) === usersId
       )
@@ -110,7 +115,7 @@ const EventGroupVideoChat = () => {
       const newDivElement = document.createElement('div')
       const usersNameDiv = document.createElement('div')
       const usersNamePTag = document.createElement('p')
-      const usersNameNode = document.createTextNode(usersName)
+      const usersNameNode = document.createTextNode(usersFirstName)
       const usersMicOffDiv = document.createElement('div')
       usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
       usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
@@ -152,9 +157,6 @@ const EventGroupVideoChat = () => {
     console.log('calling CONNECT')
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-    // const audioDevice =
-    //   process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
-
     const audioDevice = userIsHost ? { deviceId: localStoragePreferredAudioId } : false
     const videoDevice = userIsHost ? { deviceId: localStoragePreferredVideoId } : false
     const myRoom = await connect(groupChatToken, {
@@ -162,8 +164,6 @@ const EventGroupVideoChat = () => {
       audio: audioDevice,
       video: videoDevice,
     })
-    console.log('myRoom ->', myRoom)
-    console.log('setting groupChatRoom')
     setGroupChatRoom(myRoom)
   }
 
@@ -184,19 +184,19 @@ const EventGroupVideoChat = () => {
   }, [event_status])
 
   useEffect(() => {
-    if (onlineEventUsers && onlineEventUsers.length) {
+    if (onlineEventUsers && onlineEventUsers.length && userHasEnabledCameraAndMic) {
       createIndividualVideoDiv()
       cleanupEmptyVideoDivs()
     }
     console.log('onlineEventUsers ->', onlineEventUsers)
-  }, [onlineEventUsers])
+  }, [onlineEventUsers, userHasEnabledCameraAndMic])
 
   // get the token
   useEffect(() => {
-    if (event_id && user_id) {
+    if (event_id && user_id && userHasEnabledCameraAndMic) {
       getTwilioToken()
     }
-  }, [event_id, user_id])
+  }, [event_id, user_id, userHasEnabledCameraAndMic])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
@@ -210,13 +210,20 @@ const EventGroupVideoChat = () => {
     if (groupChatRoom) {
       const videoGrid = document.getElementById('videoBox')
       const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
-      console.log('arrayOfDivElementsInVideoGrid ->', arrayOfDivElementsInVideoGrid)
       if (arrayOfDivElementsInVideoGrid.length) {
         console.warn('starting twilio')
         startGroupVideoChatTwilio(groupChatRoom)
       }
     }
   }, [groupChatRoom])
+
+  if (appLoading || Object.keys(event).length < 2) {
+    return <Loading />
+  }
+
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen usersName={usersName} />
+  }
 
   return (
     <>
@@ -229,9 +236,7 @@ const EventGroupVideoChat = () => {
       />
       <GroupVideoChatBottomPanel
         event_id={event_id}
-        setUserHasEnabledCameraAndMic={useCallback(() => {
-          setUserHasEnabledCameraAndMic()
-        }, [])}
+        setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userIsHost={userIsHost}
         twilioGroupChatRoom={groupChatRoom}
       />
