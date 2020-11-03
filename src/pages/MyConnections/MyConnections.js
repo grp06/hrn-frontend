@@ -15,6 +15,16 @@ import { ConnectionCard } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
+  connectionsContainer: {
+    margin: theme.spacing(0, 'auto'),
+    width: '800px',
+    [theme.breakpoints.down('sm')]: {
+      width: '500px',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '85vw',
+    },
+  },
   nullDataContainer: {
     padding: theme.spacing(5),
   },
@@ -220,7 +230,13 @@ const MyConnections = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
-      <Grid container direction="column" justify="center" alignItems="center">
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        className={classes.connectionsContainer}
+      >
         {connectionToggleValue === 'friends'
           ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
           : renderContactCards('requests', "You don't have any requests to respond to 😎")}
