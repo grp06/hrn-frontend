@@ -12,6 +12,7 @@ const greySubtitle = '#BFBFBF'
 const greyCard = '#191919'
 const greyNav = '#1c1c1c'
 const grey10 = '#262626'
+const greyHover = '#424242'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
@@ -34,6 +35,7 @@ const theme = createMuiTheme({
       greyBorder,
       greyBoxShadow,
       greyHighlight,
+      greyHover,
       greyButton,
       greyButtonHover,
       greySubtitle,
@@ -97,7 +99,7 @@ const theme = createMuiTheme({
     h4: {
       fontFamily: 'Muli',
       fontSize: '1.25rem',
-      fontWeight: '500',
+      fontWeight: '400',
       lineHeight: 1.6,
       letterSpacing: '0.0075em',
       color: ghostWhite,
@@ -202,8 +204,11 @@ const theme = createMuiTheme({
         color: ghostWhiteBody,
         fontSize: '1rem',
       },
-      shrink: {
+      asterisk: {
         color: basePink,
+      },
+      formControl: {
+        zIndex: 999,
       },
     },
     MuiInput: {
@@ -218,10 +223,20 @@ const theme = createMuiTheme({
           borderBottom: `2px solid ${ghostWhiteDark}`,
         },
       },
+      formControl: {
+        marginTop: '20px',
+      },
     },
     MuiInputBase: {
       input: {
         color: ghostWhiteBody,
+        backgroundColor: grey10,
+        borderRadius: '4px',
+        padding: '8px 16px',
+        marginTop: '8px',
+      },
+      inputMultiline: {
+        padding: '8px 16px',
       },
     },
     MuiButton: {
@@ -240,10 +255,27 @@ const theme = createMuiTheme({
         fontSize: '1.1rem',
       },
       contained: {
+        color: ghostWhite,
         minWidth: '200px',
-        backgroundColor: sunray,
+        backgroundColor: greyButton,
         '&:hover': {
-          backgroundColor: '#FCD08C',
+          backgroundColor: greyHighlight,
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(36,37,38,0.70)',
+          color: 'rgba(191, 203, 226, 0.7)',
+        },
+      },
+      outlinedSizeLarge: {
+        padding: '11px 11px',
+        fontSize: '1.1rem',
+      },
+      outlined: {
+        color: ghostWhite,
+        borderWidth: '2px',
+        width: '200px',
+        '&:hover': {
+          backgroundColor: greyHighlight,
         },
         '&.Mui-disabled': {
           backgroundColor: 'rgba(36,37,38,0.70)',
@@ -347,6 +379,11 @@ const theme = createMuiTheme({
     MuiSelect: {
       icon: {
         color: ghostWhite,
+      },
+    },
+    MuiRadio: {
+      root: {
+        color: grey10,
       },
     },
   },

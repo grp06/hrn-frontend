@@ -1,5 +1,6 @@
 export { default as Event } from './Event/Event'
 export { default as EventComplete } from './EventComplete/EventComplete'
+export { default as EventGroupVideoChat } from './EventGroupVideoChat/EventGroupVideoChat'
 export { default as EventsPublic } from './EventsPublic/EventsPublic'
 export { default as ForgotPassword } from './Auth/ForgotPassword'
 export { default as HostDashboard } from './HostDashboard/HostDashboard'

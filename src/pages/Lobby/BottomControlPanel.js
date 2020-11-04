@@ -86,6 +86,18 @@ const BottomControlPanel = ({
           </Grid>
         </Grid>
       )}
+      {!userIsHost && eventStatus === 'pre-event' && (
+        <Grid container direction="column">
+          <Grid container direction="row" alignItems="flex-end">
+            <Typography variant="body1">
+              Welcome Remarks from the Host. We will match you shortly.{' '}
+              <span role="img" aria-label="celebrating face">
+                🥳
+              </span>
+            </Typography>
+          </Grid>
+        </Grid>
+      )}
       {userIsHost && (eventStatus === 'in-between-rounds' || eventStatus === 'room-in-progress') && (
         <Grid container direction="column">
           <Grid container direction="row" alignItems="flex-end">

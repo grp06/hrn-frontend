@@ -39,20 +39,19 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
   },
   cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
+    backgroundColor: theme.palette.common.grey10,
     borderRadius: '4px',
     padding: theme.spacing(3, 5),
     position: 'relative',
-    top: '-40px',
     bottom: '0%',
     display: 'block',
-    width: '750px',
+    width: '100%',
     height: 'auto',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: '75px',
-    [theme.breakpoints.down('xs')]: {
-      width: '85vw',
+    marginBottom: '40px',
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1.5),
     },
   },
   circleButton: {
@@ -86,7 +85,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
+const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, userId }) => {
   const classes = useStyles()
   const {
     name,

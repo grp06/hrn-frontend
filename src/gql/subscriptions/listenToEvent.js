@@ -16,6 +16,7 @@ const listenToEvent = gql`
       num_rounds
       post_event_link
       public_event
+      group_video_chat
       event_users(order_by: { user: { name: asc } }) {
         user {
           email

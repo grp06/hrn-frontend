@@ -23,7 +23,7 @@ const PodcastCard = () => {
   return (
     <Grid container direction="column" justify="flex-start" className={classes.cardContainer}>
       <Typography variant="h3" className={classes.cardTitle}>
-        About Hi Right Now
+        Hi Right Now unfiltered
       </Typography>
       <Typography variant="body1">Listen to our podcast.</Typography>
       <iframe

@@ -2,14 +2,46 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import Typography from '@material-ui/core/Typography'
 import TimerIcon from '@material-ui/icons/Timer'
 import { makeStyles } from '@material-ui/styles'
+import { motion } from 'framer-motion'
 import { constants } from '../../utils'
 import { Snack } from '../../common'
 
 const { betweenRoundsDelay } = constants
 
 const useStyles = makeStyles((theme) => ({
+  animatedCountdown: {
+    position: 'fixed',
+    zIndex: 9999999,
+    height: '500px',
+    width: '500px',
+    borderRadius: 360,
+    backgroundColor: theme.palette.common.basePurple,
+    margin: 'auto',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+  },
+  animatedBackdrop: {
+    position: 'fixed',
+    zIndex: 9999988,
+    height: '100vh',
+    width: '100vw',
+    top: 0,
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: 'black',
+    opacity: 0,
+  },
+  countdownNumber: {
+    fontSize: '20rem',
+    textAlign: 'center',
+    color: theme.palette.common.ghostWhite,
+  },
   roundProgressBarContainer: {
     width: '100%',
     height: 20,
@@ -24,6 +56,8 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
+  const [countdown321, setCountdown321] = useState(null)
+  const [animateBackdrop, setAnimateBackdrop] = useState(false)
   const oneRoundInMs = round_length * 60000
   const getRoundDuration = () => {
     if (eventStatus === 'room-in-progress') {
@@ -52,6 +86,8 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
 
   useEffect(() => {
     setShow20SecondsLeftSnack(false)
+    setAnimateBackdrop(false)
+    setCountdown321(null)
     setProgressBarValue(0)
   }, [eventStatus])
 
@@ -83,6 +119,13 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
           const isLast15Seconds = oneRoundInMs - timeRightNow < 15000
+          const isLast3Seconds = oneRoundInMs - timeRightNow < 3000
+          if (isLast3Seconds) {
+            setCountdown321(Math.ceil((oneRoundInMs - timeRightNow) / 1000))
+            if (!animateBackdrop) {
+              setAnimateBackdrop(true)
+            }
+          }
           if (isLast15Seconds) {
             setShow20SecondsLeftSnack(true)
             setShowRoundStartedSnack(false)
@@ -98,32 +141,52 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }, [eventStatus])
 
   return (
-    <Grid
-      container
-      direction="row"
-      justify="center"
-      alignItems="center"
-      className={classes.roundProgressBarContainer}
-    >
-      <Snack
-        open={showRoundStartedSnack}
-        onClose={() => setShowRoundStartedSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        duration={10000}
-        severity="success"
-        snackIcon={<TimerIcon />}
-        snackMessage={`${event.round_length} minutes left`}
-      />
-      <Snack
-        open={show20SecondsLeftSnack}
-        onClose={() => setShow20SecondsLeftSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        duration={15000}
-        severity="error"
-        snackMessage="15 seconds left!"
-      />
-      <LinearProgress variant="determinate" value={progressBarValue} />
-    </Grid>
+    <>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.roundProgressBarContainer}
+      >
+        {countdown321 ? (
+          <motion.div
+            animate={{ scale: 0, rotate: 360 }}
+            transition={{ duration: 2.9 }}
+            className={classes.animatedCountdown}
+          >
+            <Grid container justify="center" alignItems="center">
+              <Typography className={classes.countdownNumber}>{countdown321}</Typography>
+            </Grid>
+          </motion.div>
+        ) : null}
+        {animateBackdrop ? (
+          <motion.div
+            animate={{ opacity: 1 }}
+            transition={{ duration: 2.9 }}
+            className={classes.animatedBackdrop}
+          />
+        ) : null}
+        <Snack
+          open={showRoundStartedSnack}
+          onClose={() => setShowRoundStartedSnack(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          duration={10000}
+          severity="success"
+          snackIcon={<TimerIcon />}
+          snackMessage={`${event.round_length} minutes left`}
+        />
+        <Snack
+          open={show20SecondsLeftSnack}
+          onClose={() => setShow20SecondsLeftSnack(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          duration={15000}
+          severity="error"
+          snackMessage="15 seconds left!"
+        />
+        <LinearProgress variant="determinate" value={progressBarValue} />
+      </Grid>
+    </>
   )
 })
 

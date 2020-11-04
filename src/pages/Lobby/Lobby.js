@@ -7,6 +7,7 @@ import {
   BottomControlPanel,
   CameraAndMicSetupScreen,
   EventChatBox,
+  EventCountdown,
   NextRoundIn,
   LobbyContent,
 } from '.'
@@ -17,7 +18,6 @@ import {
   useUserEventStatusContext,
 } from '../../context'
 import { Loading } from '../../common'
-import { EventCountdown } from '../Event'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
 
@@ -84,6 +84,9 @@ const Lobby = () => {
       if (!alreadyAttending) {
         history.push(`/events/${eventId}`)
       }
+    }
+    if (eventStatus === 'group-video-chat') {
+      return history.push(`/events/${eventId}/group-video-chat`)
     }
     if (eventStatus === 'complete') {
       history.push(`/events/${eventId}/event-complete`)

@@ -10,6 +10,7 @@ import {
   EventStatusRedirect,
   EventTitleAndCTACard,
   HostAndEventDescCard,
+  JoinEventBanner,
   PodcastCard,
   WhatToExpect,
 } from '.'
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     width: '75vw',
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
+    paddingBottom: '40px',
   },
   podcastContainer: {
     width: '44%',
@@ -93,7 +95,7 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { event, setEventId } = useEventContext()
   const { id: user_id } = user
-  const { event_users, host_id, start_at } = event
+  const { event_users, host_id, start_at, status: event_status } = event
   const eventSet = Object.keys(event).length > 1
   const [showBannerSearch, setShowBannerSearch] = useState(null)
   const [bannerSearchTerm, setBannerSearchTerm] = useState(null)
@@ -144,6 +146,9 @@ const Event = ({ match }) => {
         eventSet={eventSet}
         event={event}
       />
+      {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
+        <JoinEventBanner />
+      ) : null}
       <Grid container style={{ position: 'relative' }}>
         <Button
           className={classes.changeBanner}
@@ -179,6 +184,9 @@ const Event = ({ match }) => {
         />
         <div className={classes.bannerGradient} />
       </Grid>
+      {/* <Grid container>
+        <div className={classes.eventBanner} />
+      </Grid> */}
       <Grid
         container
         direction="column"
@@ -186,7 +194,7 @@ const Event = ({ match }) => {
         className={classes.eventContentContainer}
       >
         <EventTitleAndCTACard event={event} user={user} />
-        <HostAndEventDescCard event={event} />
+        <HostAndEventDescCard event={event} userIsHost={userIsHost} />
         <Grid
           container
           direction="row"
