@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
+import debounce from 'lodash.debounce'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { EventForm, Snack, TransitionModal } from '../../common'
@@ -104,7 +105,9 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       localStorage.setItem('eventId', event_id)
       history.push('/sign-up')
     } else {
-      rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+      if (!userAlreadyRSVPed) {
+        rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+      }
     }
   }
 
@@ -130,7 +133,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         size="large"
         color={userAlreadyRSVPed ? 'secondary' : 'primary'}
         disableRipple
-        onClick={userAlreadyRSVPed ? handleAllSetClick : handleRSVPClick}
+        onClick={userAlreadyRSVPed ? handleAllSetClick : debounce(handleRSVPClick, 250)}
       >
         {getUserCTAButtonText()}
       </Button>
