@@ -9,7 +9,7 @@ const EventStatusRedirect = ({ isEventParticipant, event, eventSet, userId }) =>
 
   if (eventSet && userId && isEventParticipant) {
     // push user to lobby if time is less than 15 mins.
-    if (diff < 900000) {
+    if (diff < 900000 && event.status === 'not-started') {
       return <Redirect to={`/events/${event.id}/lobby`} />
     }
     switch (event.status) {
