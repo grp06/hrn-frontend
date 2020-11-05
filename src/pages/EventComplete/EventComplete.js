@@ -7,7 +7,12 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
+import {
+  useAppContext,
+  useEventContext,
+  useUserContext,
+  useUserEventStatusContext,
+} from '../../context'
 import { Loading } from '../../common'
 import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { ConnectionCard } from '../MyConnections'
@@ -72,6 +77,7 @@ const useStyles = makeStyles((theme) => ({
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+  const { appLoading } = useAppContext()
   const { event, resetEvent } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
@@ -108,7 +114,7 @@ const EventComplete = ({ match }) => {
     }
   }, [event])
 
-  if (myConnectionAfterEventLoading) {
+  if (appLoading || Object.keys(event).length < 2 || myConnectionAfterEventLoading) {
     return <Loading />
   }
 
