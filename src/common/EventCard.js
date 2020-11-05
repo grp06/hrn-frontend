@@ -69,7 +69,7 @@ const EventCard = ({ event }) => {
   const eventTime = formatDate(start_at)
 
   const handleEventOverButtonClick = () => {
-    history.push(`/events/${id}/event-complete`)
+    history.push(`/events/${id}`)
   }
 
   return (
