@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { GroupVideoChatBottomPanel } from '.'
+import BeachAccessIcon from '../../assets/beachAccess.svg'
 import PersonIcon from '../../assets/greyPerson.svg'
 import MicOffIcon from '../../assets/micOff.svg'
 import { Loading } from '../../common'
@@ -32,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
       objectFit: 'cover',
     },
+    margin: theme.spacing(0.5),
   },
   usersNameContainer: {
     position: 'absolute',
@@ -47,13 +49,18 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'rgb(36,37,38,0.7)',
     padding: theme.spacing(0.75, 0),
   },
+  usersNameDiv: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginLeft: '12px',
+  },
   usersNameInVideo: {
     fontFamily: 'Muli',
     fontSize: '1.25rem',
     fontWeight: '400',
     color: theme.palette.common.ghostWhite,
     margin: 0,
-    marginLeft: '12px',
   },
   videoBox: {
     width: '95%',
@@ -71,6 +78,15 @@ const useStyles = makeStyles((theme) => ({
     height: '25px',
     marginRight: '10px',
     display: 'none',
+  },
+  beachAccessIconDiv: {
+    backgroundImage: `url(${BeachAccessIcon})`,
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    width: '25px',
+    height: '25px',
+    marginRight: '5px',
+    display: 'inline',
   },
 }))
 
@@ -105,6 +121,8 @@ const EventGroupVideoChat = () => {
     const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
     onlineEventUsers.forEach((eventUser) => {
       const usersId = eventUser.user[0].id
+      const thisIsHostDiv = parseInt(host_id, 10) === parseInt(usersId, 10)
+      console.log('thisIsHostDiv ->', thisIsHostDiv)
       const usersFirstName = eventUser.user[0].name.split(' ')[0]
       const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
         (divElement) => parseInt(divElement.id, 10) === usersId
@@ -113,23 +131,31 @@ const EventGroupVideoChat = () => {
         return
       }
       const newDivElement = document.createElement('div')
+      const usersNameContainer = document.createElement('div')
       const usersNameDiv = document.createElement('div')
       const usersNamePTag = document.createElement('p')
       const usersNameNode = document.createTextNode(usersFirstName)
       const usersMicOffDiv = document.createElement('div')
-      usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
-      usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
       usersNamePTag.appendChild(usersNameNode)
       usersNamePTag.setAttribute('class', classes.usersNameInVideo)
+      usersNameDiv.setAttribute('class', classes.usersNameDiv)
+      if (thisIsHostDiv) {
+        const beachAccessDiv = thisIsHostDiv && document.createElement('div')
+        beachAccessDiv.setAttribute('class', classes.beachAccessIconDiv)
+        usersNameDiv.appendChild(beachAccessDiv)
+      }
       usersNameDiv.appendChild(usersNamePTag)
-      usersNameDiv.appendChild(usersMicOffDiv)
-      usersNameDiv.setAttribute('class', classes.usersNameContainer)
-      usersNameDiv.setAttribute('id', `${usersId}-name-container`)
+      usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
+      usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
+      usersNameContainer.appendChild(usersNameDiv)
+      usersNameContainer.appendChild(usersMicOffDiv)
+      usersNameContainer.setAttribute('class', classes.usersNameContainer)
+      usersNameContainer.setAttribute('id', `${usersId}-name-container`)
       newDivElement.setAttribute('id', usersId)
       newDivElement.setAttribute('class', classes.box)
       newDivElement.style.height = height
       newDivElement.style.width = width
-      newDivElement.appendChild(usersNameDiv)
+      newDivElement.appendChild(usersNameContainer)
       videoGrid.appendChild(newDivElement)
     })
   }
@@ -163,6 +189,7 @@ const EventGroupVideoChat = () => {
       maxAudioBitrate: 16000,
       audio: audioDevice,
       video: videoDevice,
+      dominantSpeaker: true,
     })
     setGroupChatRoom(myRoom)
   }

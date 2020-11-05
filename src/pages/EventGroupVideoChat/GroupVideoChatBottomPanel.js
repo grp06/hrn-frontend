@@ -155,9 +155,9 @@ const GroupVideoChatBottomPanel = React.memo(
             onClick={participantHasEnabledVideo ? handleVideoToggle : handleEnableVideo}
           >
             {participantHasEnabledVideo && participantsVideoIsOn ? (
-              <VideocamIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+              <VideocamIcon style={{ color: '#f4f6fa', fontSize: '2rem' }} />
             ) : (
-              <VideocamOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+              <VideocamOffIcon style={{ color: '#ff3333', fontSize: '2rem' }} />
             )}
           </IconButton>
           <IconButton
@@ -168,9 +168,9 @@ const GroupVideoChatBottomPanel = React.memo(
             onClick={participantHasEnabledAudio ? handleAudioToggle : handleEnableAudio}
           >
             {participantHasEnabledAudio && participantsAudioIsOn ? (
-              <MicIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+              <MicIcon style={{ color: '#f4f6fa', fontSize: '2rem' }} />
             ) : (
-              <MicOffIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+              <MicOffIcon style={{ color: '#ff3333', fontSize: '2rem' }} />
             )}
           </IconButton>
         </Grid>

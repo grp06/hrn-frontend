@@ -4,6 +4,7 @@ const useGroupVideoChatTwilio = () => {
   const { participantConnectedToGroupVideoChat } = useParticipantConnectedToGroupVideoChat()
 
   const startGroupVideoChatTwilio = (room) => {
+    let dominantSpeakerId
     window.room = room
     if (room) {
       console.log('room ->', room)
@@ -32,18 +33,11 @@ const useGroupVideoChatTwilio = () => {
 
       room.on('participantDisconnected', (remoteParticipant) => {
         console.log('participantDisconnected', remoteParticipant)
-
         const participantsVideoDiv = document.getElementById(`${remoteParticipant.identity}-video`)
         // instead of modifying the innerHTML, detatch instead
         if (participantsVideoDiv) {
           participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)
         }
-      })
-
-      window.addEventListener('beforeunload', () => {
-        room.disconnect()
-        console.log('disconnecting from room')
-        window.room = null
       })
 
       room.on('disconnected', (rum, error) => {
@@ -55,6 +49,32 @@ const useGroupVideoChatTwilio = () => {
         if (error) {
           console.log('Unexpectedly disconnected:', error)
         }
+      })
+
+      room.on('dominantSpeakerChanged', (dominantSpeaker) => {
+        console.log('dominantSpeaker changes')
+        console.log('dominantSpeaker ->', dominantSpeaker)
+        const newDominantSpeakerId = dominantSpeaker.identity
+        if (newDominantSpeakerId !== dominantSpeakerId) {
+          const oldDominantSpeakersDiv =
+            dominantSpeakerId && document.getElementById(dominantSpeakerId)
+          const participantsDiv = document.getElementById(`${dominantSpeaker.identity}`)
+          if (oldDominantSpeakersDiv) {
+            oldDominantSpeakersDiv.style.border = ''
+            oldDominantSpeakersDiv.style.boxShadow = ''
+          }
+          if (participantsDiv) {
+            participantsDiv.style.border = '1.5px solid #fabb5b'
+            participantsDiv.style.boxShadow = '0px 0px 4px 3px #FABB5B'
+          }
+          dominantSpeakerId = newDominantSpeakerId
+        }
+      })
+
+      window.addEventListener('beforeunload', () => {
+        room.disconnect()
+        console.log('disconnecting from room')
+        window.room = null
       })
     }
   }
