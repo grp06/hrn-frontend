@@ -128,15 +128,17 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
     const terms = ['art', 'architecture', 'community', 'forest', 'space', 'tech']
     return terms.map((term) => {
       return (
-        <Button
-          variant="outlined"
-          color="primary"
-          size="small"
-          className={classes.suggestedSearchTermButton}
-          onClick={() => handleSuggestedSearchTermClick(term)}
-        >
-          {term}
-        </Button>
+        <div key={term}>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            className={classes.suggestedSearchTermButton}
+            onClick={() => handleSuggestedSearchTermClick(term)}
+          >
+            {term}
+          </Button>
+        </div>
       )
     })
   }

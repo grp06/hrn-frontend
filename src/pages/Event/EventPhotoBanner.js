@@ -26,32 +26,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: '50% 50% !important',
     backgroundSize: 'cover !important',
   },
-  changeBannerButton: {
-    position: 'absolute',
-    backgroundColor: 'rgb(36,37,38,0.5)',
-    '&:hover': {
-      backgroundColor: 'rgb(36,37,38,1)',
-    },
-    top: 15,
-    right: '7.5vw',
-    left: 'auto',
-    zIndex: 999,
-  },
-  bannerSearchContainer: {
-    position: 'absolute',
-    zIndex: 999,
-    width: '100%',
-  },
-  bannerSearchForm: {
-    background: 'rgba(0,0,0,.7)',
-    width: '50%',
-    margin: theme.spacing(0, 'auto'),
-    borderRadius: '4px',
-    padding: theme.spacing(2),
-  },
-  searchInput: {
-    margin: theme.spacing(2, 0),
-  },
 }))
 
 const EventPhotoBanner = ({ bannerPhotoURL, event_id, userIsHost }) => {
@@ -59,10 +33,14 @@ const EventPhotoBanner = ({ bannerPhotoURL, event_id, userIsHost }) => {
   const [bannerBackground, setBannerBackground] = useState(
     bannerPhotoURL ? `url("${bannerPhotoURL}")` : `url("${mountainBanner}")`
   )
+  const { pathname } = window.location
+  const userInLobbyOrEventComplete = Boolean(
+    pathname.includes('lobby') || pathname.includes('event-complete')
+  )
 
   return (
     <Grid container style={{ position: 'relative' }}>
-      {userIsHost ? (
+      {userIsHost && !userInLobbyOrEventComplete ? (
         <ChangeEventPhotoBanner
           event_id={event_id}
           setBannerBackground={(photo_url) => setBannerBackground(photo_url)}

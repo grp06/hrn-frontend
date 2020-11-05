@@ -1,34 +1,20 @@
 import React from 'react'
 
 import Grid from '@material-ui/core/Grid'
-import bannerBackground from '../../assets/eventBannerMountain.png'
 import { makeStyles } from '@material-ui/styles'
 
 import { OnlineAttendeesCard } from '.'
-import { EventTitleAndCTACard, HostAndEventDescCard, PodcastCard, WhatToExpect } from '../Event'
+import {
+  EventPhotoBanner,
+  EventTitleAndCTACard,
+  HostAndEventDescCard,
+  PodcastCard,
+  WhatToExpect,
+} from '../Event'
 import { PreEvent } from '../PreEvent'
 import { getUserEventStatusMessage } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    height: 'auto',
-    minHeight: '55vh',
-    width: '100%',
-    position: 'absolute',
-    top: '0%',
-    bottom: 'auto',
-  },
-  eventBanner: {
-    width: '100%',
-    height: 'auto',
-    minHeight: '55vh',
-    backgroundImage: `url(${bannerBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    zIndex: '-3',
-  },
   eventContentContainer: {
     position: 'relative',
     zIndex: '99',
@@ -68,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
 const LobbyContent = React.memo(
   ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user }) => {
     const classes = useStyles()
-    const { host_id, status: eventStatus } = event
+    const { banner_photo_url, host_id, id: event_id, status: eventStatus } = event
     const { id: user_id } = user
     const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
@@ -77,10 +63,11 @@ const LobbyContent = React.memo(
         case 'not-started':
           return (
             <>
-              <Grid container>
-                <div className={classes.eventBanner} />
-                <div className={classes.bannerGradient} />
-              </Grid>
+              <EventPhotoBanner
+                bannerPhotoURL={banner_photo_url}
+                event_id={event_id}
+                userIsHost={userIsHost}
+              />
               <Grid
                 container
                 direction="column"
