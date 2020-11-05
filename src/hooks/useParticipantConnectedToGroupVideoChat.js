@@ -14,9 +14,12 @@ const useParticipantConnectedToGroupVideoChat = () => {
     })
 
     participant.on('trackUnpublished', (publication) => {
+      const videoGrid = document.getElementById('videoBox')
+      const participantsDiv = document.getElementById(participant.identity)
       const participantsVideoDiv = document.getElementById(`${participant.identity}-video`)
       if (publication.kind === 'video' && participantsVideoDiv) {
         participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)
+        videoGrid.insertBefore(participantsDiv, videoGrid.lastChild.nextSibling)
       }
     })
 

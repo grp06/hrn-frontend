@@ -122,7 +122,6 @@ const EventGroupVideoChat = () => {
     onlineEventUsers.forEach((eventUser) => {
       const usersId = eventUser.user[0].id
       const thisIsHostDiv = parseInt(host_id, 10) === parseInt(usersId, 10)
-      console.log('thisIsHostDiv ->', thisIsHostDiv)
       const usersFirstName = eventUser.user[0].name.split(' ')[0]
       const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
         (divElement) => parseInt(divElement.id, 10) === usersId
@@ -156,7 +155,11 @@ const EventGroupVideoChat = () => {
       newDivElement.style.height = height
       newDivElement.style.width = width
       newDivElement.appendChild(usersNameContainer)
-      videoGrid.appendChild(newDivElement)
+      if (thisIsHostDiv) {
+        videoGrid.insertBefore(newDivElement, videoGrid.firstChild)
+      } else {
+        videoGrid.appendChild(newDivElement)
+      }
     })
   }
 

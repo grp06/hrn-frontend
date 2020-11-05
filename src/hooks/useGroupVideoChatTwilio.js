@@ -52,9 +52,16 @@ const useGroupVideoChatTwilio = () => {
       })
 
       room.on('dominantSpeakerChanged', (dominantSpeaker) => {
-        console.log('dominantSpeaker changes')
-        console.log('dominantSpeaker ->', dominantSpeaker)
-        const newDominantSpeakerId = dominantSpeaker.identity
+        const newDominantSpeakerId = dominantSpeaker && dominantSpeaker.identity
+        if (!dominantSpeaker) {
+          // the old dominantSpeaker muted
+          const oldDominantSpeakersDiv =
+            dominantSpeakerId && document.getElementById(dominantSpeakerId)
+          if (oldDominantSpeakersDiv) {
+            oldDominantSpeakersDiv.style.border = ''
+            oldDominantSpeakersDiv.style.boxShadow = ''
+          }
+        }
         if (newDominantSpeakerId !== dominantSpeakerId) {
           const oldDominantSpeakersDiv =
             dominantSpeakerId && document.getElementById(dominantSpeakerId)
