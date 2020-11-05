@@ -110,6 +110,9 @@ const EventGroupVideoChat = () => {
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
   const getNumRowsAndCols = (numberOfVideos) => {
+    if (numberOfVideos > 9) {
+      return { width: '24%', height: '24%' }
+    }
     const width = numberOfVideos <= 4 ? '49%' : '32%'
     const height = numberOfVideos <= 6 ? '49%' : '32%'
     return { width, height }
@@ -205,6 +208,18 @@ const EventGroupVideoChat = () => {
     setGroupChatToken(res.token)
   }
 
+  const resizeActiveVideoDivs = (numberOfActiveVideoDivs) => {
+    const { width, height } = getNumRowsAndCols(numberOfActiveVideoDivs)
+    console.log('width ->', width)
+    console.log('height ->', height)
+    const videoGrid = document.getElementById('videoBox')
+    const arrayOfDivElementsInVideoGrid = Array.from(videoGrid.children)
+    arrayOfDivElementsInVideoGrid.forEach((divElement) => {
+      divElement.style.height = height
+      divElement.style.width = width
+    })
+  }
+
   useEffect(() => {
     if (event && event_id) {
       if (event_status === 'complete') {
@@ -217,6 +232,7 @@ const EventGroupVideoChat = () => {
     if (onlineEventUsers && onlineEventUsers.length && userHasEnabledCameraAndMic) {
       createIndividualVideoDiv()
       cleanupEmptyVideoDivs()
+      resizeActiveVideoDivs(onlineEventUsers.length)
     }
     console.log('onlineEventUsers ->', onlineEventUsers)
   }, [onlineEventUsers, userHasEnabledCameraAndMic])
