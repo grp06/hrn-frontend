@@ -165,6 +165,7 @@ const EventComplete = ({ match }) => {
                 variant="contained"
                 color="primary"
                 size="large"
+                disableRipple
                 href={becomeAHostTypeform}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -187,6 +188,7 @@ const EventComplete = ({ match }) => {
                 variant="contained"
                 color="default"
                 size="large"
+                disableRipple
                 href={giveFeedbackTypeform}
                 target="_blank"
                 rel="noopener noreferrer"

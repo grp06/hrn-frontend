@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   },
   changeBannerButton: {
     position: 'absolute',
-    backgroundColor: 'rgb(36,37,38,0.5)',
+    background: 'rgba(0,0,0,.5)',
     '&:hover': {
-      backgroundColor: 'rgb(36,37,38,1)',
+      background: 'rgba(0,0,0,.7)',
     },
     top: 15,
     right: '7vw',
@@ -46,18 +46,18 @@ const useStyles = makeStyles((theme) => ({
   },
   closeSearchFormButton: {
     position: 'absolute',
-    top: '0%',
-    right: '0%',
+    fontWeight: '300',
+    top: '2%',
+    right: '2%',
     left: 'auto',
     width: '25px',
     height: 'auto',
-    textTransform: 'lowercase',
     '&:hover': {
       backgroundColor: 'transparent',
     },
   },
   searchInput: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(0, 0, 2, 0),
   },
   suggestedSearchTermButton: {
     width: 'auto',
@@ -174,7 +174,7 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
         >
           <Button
             variant="text"
-            size="small"
+            size="medium"
             onClick={closeBannerSearchForm}
             className={classes.closeSearchFormButton}
           >
@@ -192,7 +192,6 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
           </Typography>
           <TextField
             id="banner search term"
-            label="banner search term"
             required
             fullWidth
             value={bannerSearchTerm}
@@ -218,7 +217,7 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
                 style={{ marginRight: '8px', width: '100px' }}
                 onClick={saveEventBannerPhoto}
               >
-                Save this
+                Save
               </Button>
             ) : null}
             <Button
