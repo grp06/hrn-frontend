@@ -75,12 +75,12 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
             <Grid container direction="row" alignItems="center" justify="space-around">
               {!seeMore ? (
                 <>
-                  <Typography variant="body">See All{`  (${eventUsers.length})`}</Typography>
+                  <Typography variant="body1">See All{`  (${eventUsers.length})`}</Typography>
                   <ArrowDropDownIcon fontSize="large" />
                 </>
               ) : (
                 <>
-                  <Typography variant="body">See Less</Typography>
+                  <Typography variant="body1">See Less</Typography>
                   <ArrowDropUpIcon fontSize="large" />
                 </>
               )}
