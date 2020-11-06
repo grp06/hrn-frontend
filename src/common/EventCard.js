@@ -17,6 +17,20 @@ import { formatDate, truncateText } from '../utils'
 import { FloatCardMediumLarge } from '.'
 
 const useStyles = makeStyles((theme) => ({
+  avatar: {
+    width: '100%',
+    height: '100%',
+    marginTop: '14px',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      height: '100%',
+      marginTop: '14px',
+    },
+  },
+  avatarContainer: {
+    width: '55px',
+    height: '55px',
+  },
   eventContainer: {
     width: '100%',
     position: 'relative',
