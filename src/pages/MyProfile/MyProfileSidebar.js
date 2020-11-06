@@ -7,9 +7,11 @@ import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import LinkedInIcon from '@material-ui/icons/LinkedIn'
 import { makeStyles } from '@material-ui/styles'
-import { useAppContext } from '../../context'
+
+import { motion } from 'framer-motion'
 
 import { FloatCardNarrow } from '../../common'
+import { useAppContext } from '../../context'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { SidebarTags, EditProfileSidebarForm } from '.'
 
@@ -22,6 +24,21 @@ const createStyles = makeStyles((theme) => ({
       height: '100%',
     },
   },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    background: 'rgba(0, 0, 0, .7)',
+    color: '#fff',
+    opacity: 0,
+    // transition: '.2s',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    cursor: 'pointer',
+  },
   wrap: {
     position: 'relative',
     width: '125px',
@@ -33,21 +50,6 @@ const createStyles = makeStyles((theme) => ({
   avatarContainer: {
     width: '125px',
     height: '125px',
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: 'rgba(0, 0, 0, .25)',
-    color: '#fff',
-    opacity: 1,
-    transition: '.2s',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
   },
 
   buttonContainer: {
@@ -206,7 +208,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
           <Avatar className={classes.avatarContainer}>
             <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
 
-            <div className={classes.overlay}>
+            <motion.div className={classes.overlay} whileHover={{ opacity: 1 }}>
               <form onSubmit={submitFile} className={classes.fileForm}>
                 <input
                   type="file"
@@ -216,9 +218,9 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
                   className={classes.uploadPhotoTarget}
                 />
 
-                <span className={classes.uploadImageText}>choose image</span>
+                <span className={classes.uploadImageText}>edit profile picture</span>
               </form>
-            </div>
+            </motion.div>
           </Avatar>
         </div>
         {renderSidebarContent()}

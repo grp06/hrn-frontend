@@ -107,7 +107,7 @@ const EventCard = ({ event }) => {
   }
 
   return (
-    <motion.div whileHover={{ scale: 1.075 }}>
+    <motion.div whileHover={{ scale: 1.02 }}>
       <FloatCardMediumLarge>
         <Grid
           container
