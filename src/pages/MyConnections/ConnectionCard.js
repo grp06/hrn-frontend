@@ -168,7 +168,9 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
           {profile_pic_url ? (
             <Avatar src={profile_pic_url} className={classes.avatarContainer} />
           ) : (
-            <PersonIcon />
+            <Avatar className={classes.avatarContainer}>
+              <img alt="company-logo" className={classes.avatar} src={logo} />
+            </Avatar>
           )}
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
             <Typography variant="h3">{name}</Typography>

@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
+    [theme.breakpoints.down('md')]: {
+      height: '200px',
+    },
   },
   eventContentContainer: {
     cursor: 'pointer',
@@ -68,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '10px',
     width: '75%',
     [theme.breakpoints.down('sm')]: {
-      width: '90%',
+      width: '80%',
     },
   },
   eventOverButton: {
@@ -130,14 +133,13 @@ const EventCard = ({ event }) => {
             <Typography gutterBottom variant="h2" style={{ marginBottom: 0 }}>
               {event_name}
             </Typography>
-            <Grid item container direction="row" alignItems="center">
+            <Grid container direction="row" alignItems="center">
               <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
               <Typography variant="body1" className={classes.subtitle}>
                 {formatDate(startTime)}
               </Typography>
             </Grid>
             <Grid
-              container
               item
               direction="column"
               xs={12}
@@ -178,12 +180,12 @@ const EventCard = ({ event }) => {
                   View My Connections
                 </Button>
               ) : (
-                <>
+                <Grid>
                   <Typography variant="subtitle1">Description /</Typography>
                   <Typography variant="body1" component="p">
                     {truncateText(description, 350)}
                   </Typography>
-                </>
+                </Grid>
               )}
             </Grid>
           </Grid>
