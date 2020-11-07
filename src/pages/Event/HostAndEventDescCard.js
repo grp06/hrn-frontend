@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHost }) => {
   const classes = useStyles()
   const { description: eventDescription, event_users, host } = event
-  const { name: hostName } = host
+  const { name: hostName, profile_pic_url } = host
 
   return (
     <Grid container direction="column" className={classes.cardContainer}>
@@ -82,7 +82,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
             className={classes.hostContainer}
           >
             <Avatar className={classes.avatarContainer}>
-              <img alt="company-logo" className={classes.avatar} src={logo} />
+              <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
             </Avatar>
             <Grid
               container

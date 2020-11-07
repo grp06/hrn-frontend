@@ -73,7 +73,11 @@ const AttendeesList = ({ eventId, timeState }) => {
             <ListItem key={user.id}>
               <ListItemAvatar>
                 <Avatar>
-                  <PersonIcon />
+                  {user.profile_pic_url ? (
+                    <img alt="profile picture" src={user.profile_pic_url} />
+                  ) : (
+                    <PersonIcon />
+                  )}
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={user.name} />

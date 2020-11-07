@@ -30,6 +30,8 @@ const getHostEventsAndPartners = gql`
       public_event
       num_rounds
       round_length
+      group_video_chat
+      banner_photo_url
     }
   }
 `

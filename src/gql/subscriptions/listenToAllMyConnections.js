@@ -12,6 +12,7 @@ const getAllMyConnections = gql`
         email
         linkedIn_url
         short_bio
+        profile_pic_url
         tags_users {
           tag {
             name

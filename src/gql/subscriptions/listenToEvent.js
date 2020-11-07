@@ -17,6 +17,7 @@ const listenToEvent = gql`
       post_event_link
       public_event
       group_video_chat
+      banner_photo_url
       event_users(order_by: { user: { name: asc } }) {
         user {
           email
@@ -27,6 +28,7 @@ const listenToEvent = gql`
       }
       host {
         name
+        profile_pic_url
       }
     }
   }
