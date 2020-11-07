@@ -8,7 +8,6 @@ const getAllPublicEvents = gql`
       ended_at
       event_name
       host_id
-      host
       id
       public_event
       start_at
