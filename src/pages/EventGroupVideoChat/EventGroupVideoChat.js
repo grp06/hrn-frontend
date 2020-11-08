@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { GroupVideoChatBottomPanel } from '.'
 import BeachAccessIcon from '../../assets/beachAccess.svg'
+import BabyBottleIcon from '../../assets/babyBottle.svg'
 import PersonIcon from '../../assets/greyPerson.svg'
 import MicOffIcon from '../../assets/micOff.svg'
 import { Loading } from '../../common'
@@ -79,8 +80,8 @@ const useStyles = makeStyles((theme) => ({
     marginRight: '10px',
     display: 'none',
   },
-  beachAccessIconDiv: {
-    backgroundImage: `url(${BeachAccessIcon})`,
+  babyBottleIconDiv: {
+    backgroundImage: `url(${BabyBottleIcon})`,
     backgroundPosition: '50% 50%',
     backgroundRepeat: 'no-repeat',
     width: '25px',
@@ -143,7 +144,7 @@ const EventGroupVideoChat = () => {
       usersNameDiv.setAttribute('class', classes.usersNameDiv)
       if (thisIsHostDiv) {
         const beachAccessDiv = thisIsHostDiv && document.createElement('div')
-        beachAccessDiv.setAttribute('class', classes.beachAccessIconDiv)
+        beachAccessDiv.setAttribute('class', classes.babyBottleIconDiv)
         usersNameDiv.appendChild(beachAccessDiv)
       }
       usersNameDiv.appendChild(usersNamePTag)

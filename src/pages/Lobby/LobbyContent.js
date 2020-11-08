@@ -108,10 +108,11 @@ const LobbyContent = React.memo(
         case 'in-between-rounds':
           return (
             <>
-              <Grid container>
-                <div className={classes.eventBanner} />
-                <div className={classes.bannerGradient} />
-              </Grid>
+              <EventPhotoBanner
+                bannerPhotoURL={banner_photo_url}
+                event_id={event_id}
+                userIsHost={userIsHost}
+              />
               <Grid
                 container
                 direction="column"
