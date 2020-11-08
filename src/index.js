@@ -7,6 +7,11 @@ import { constants } from './utils'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
+if (process.env.NODE_ENV === 'test') {
+  const { server } = require('./mocks/server')
+  server.start()
+}
+
 const { intercomAppId } = constants
 
 ReactDOM.render(

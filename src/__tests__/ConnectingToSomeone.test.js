@@ -1,9 +1,27 @@
 import React from 'react'
-import { render, fireEvent } from '@testing-library/react'
-import { ConnectingToSomeone } from '../common/waitingRoomScreens'
+import { render, screen } from 'test/test-utils'
+import { ConnectingToSomeone } from '../pages/VideoRoom/waitingRoomScreens'
 
-test('return connecting to someone text on the screen', () => {
-  const { getByText } = render(<ConnectingToSomeone />)
-  const connectingToSomeoneDiv = getByText('Connecting you to someone awesome!')
+const mockMyRound = {
+  id: 1,
+  event_id: 1,
+  created_at: '2020-10-28T00:00:00.000+00:00',
+  partner: {
+    city: 'New York',
+    name: 'Gary',
+  },
+  user_id: 1,
+  round: 1,
+  partner_id: 2,
+}
+
+test('return connecting to someone text on the screen if partner is connecting', () => {
+  render(<ConnectingToSomeone partnerNeverConnected={false} myRound={mockMyRound} />)
+  const connectingToSomeoneDiv = screen.getByText('Connecting you to someone awesome!')
   expect(connectingToSomeoneDiv).toBeTruthy()
+})
+
+test('return button to go back to lobby if partner has not connected', () => {
+  render(<ConnectingToSomeone partnerNeverConnected myRound={mockMyRound} />)
+  expect(screen.getByRole('button', { name: /lobby/i })).toBeTruthy()
 })
