@@ -176,7 +176,7 @@ const EventsPublic = () => {
       <Grid container justify="flex-start" alignItems="center" className={classes.toggleGrid}>
         <ToggleButtonGroup
           value={eventToggleValue}
-          groupedTextHorizontal
+          orientation="horizontal"
           exclusive
           onChange={handleEventToggle}
           className={classes.toggleButtonGroup}
