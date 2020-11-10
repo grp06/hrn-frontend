@@ -17,10 +17,10 @@ const mockMyRound = {
 
 test('return connecting to someone text on the screen if partner is connecting', () => {
   render(<ConnectingToSomeone partnerNeverConnected={false} myRound={mockMyRound} />)
-  expect(screen.getByText('Connecting you to someone awesome!')).toBeTruthy()
+  expect(screen.getByText('Connecting you to someone awesome!'))
 })
 
 test('return button to go back to lobby if partner has not connected', () => {
   render(<ConnectingToSomeone partnerNeverConnected myRound={mockMyRound} />)
-  expect(screen.getByRole('button', { name: /lobby/i })).toBeTruthy()
+  expect(screen.getByRole('button', { name: /lobby/i }))
 })

@@ -7,14 +7,14 @@ import { getAllPublicEventsMock } from '../test/mocks'
 it('shows only one event for HRN Events based off Mock Data', async () => {
   render(<EventsPublic />, { apolloMocks: getAllPublicEventsMock })
   const HRNEventCard = await waitFor(() => screen.getByText(/hi right now not started event/i))
-  expect(HRNEventCard).toBeTruthy()
+  expect(HRNEventCard)
 })
 
 it('shows only one event for All Events based off Mock Data', async () => {
   render(<EventsPublic />, { apolloMocks: getAllPublicEventsMock })
   await waitFor(() => screen.getByText(/hi right now not started event/i))
   userEvent.click(screen.getByRole('button', { name: /all events/i }))
-  expect(screen.getByText(/some random event/i)).toBeTruthy()
+  expect(screen.getByText(/some random event/i))
 })
 
 it('does not show the completed event', async () => {

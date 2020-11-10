@@ -31,9 +31,9 @@ beforeEach(() => {
 
 test('it should render a login button', () => {
   render(<LoginForm />)
-  expect(screen.getByLabelText(/email */i)).toBeTruthy()
-  expect(screen.getByLabelText(/password */i)).toBeTruthy()
-  expect(screen.getByRole('button', { name: /log in/i })).toBeTruthy()
+  expect(screen.getByLabelText(/email */i))
+  expect(screen.getByLabelText(/password */i))
+  expect(screen.getByRole('button', { name: /log in/i }))
 })
 
 test('it should display error snack when user not in db', async () => {
