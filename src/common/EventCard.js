@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '100%',
     height: '100%',
-    marginTop: '14px',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      height: '100%',
-      marginTop: '14px',
-    },
   },
   avatarContainer: {
     width: '55px',
@@ -117,7 +111,7 @@ const useStyles = makeStyles((theme) => ({
 const liveEventVariants = {
   glow: {
     scale: 1.02,
-    boxShadow: '0px 0px 10px 10px #8C57DB',
+    boxShadow: '0px 0px 7px 7px #8C57DB',
     transition: {
       duration: 2.0,
       yoyo: Infinity,
@@ -183,38 +177,38 @@ const EventCard = ({ event }) => {
           alignItems="flex-start"
           className={classes.eventContentContainer}
         >
-          <Typography gutterBottom variant="h2" style={{ marginBottom: 0 }}>
-            {event_name}
-          </Typography>
-          <Grid container direction="row" alignItems="center">
-            <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
-            <Typography variant="body1" className={classes.subtitle}>
-              {formatDate(startTime)}
+          <Grid container item direction="column" style={{ marginTop: '8px', marginBottom: '8px' }}>
+            <Typography gutterBottom variant="h2" style={{ marginBottom: 0 }}>
+              {event_name}
             </Typography>
-          </Grid>
-          <Grid
-            item
-            direction="column"
-            xs={12}
-            md={6}
-            style={{ marginTop: '8px', marginBottom: '8px' }}
-          >
-            <Typography variant="subtitle1">Hosted By /</Typography>
-            <Grid container direction="row" alignItems="center" justify="flex-start">
-              <Avatar className={classes.avatarContainer}>
-                <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
-              </Avatar>
-              <Grid
-                container
-                direction="column"
-                justify="center"
-                wrap="nowrap"
-                className={classes.hostNameAndTitleContainer}
-              >
-                <Typography variant="h4" className={classes.hostName}>
-                  {hostName}
-                </Typography>
-                {/* <Typography variant="subtitle1">European Gigaloo</Typography> */}
+            <Grid container direction="row" alignItems="center">
+              <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
+              <Typography variant="body1" className={classes.subtitle}>
+                {formatDate(startTime)}
+              </Typography>
+            </Grid>
+            <Grid item direction="column" style={{ marginTop: '8px', marginBottom: '8px' }}>
+              <Typography variant="subtitle1">Hosted By /</Typography>
+              <Grid container direction="row" alignItems="center" justify="flex-start">
+                <Avatar className={classes.avatarContainer}>
+                  <img
+                    alt="company-logo"
+                    className={classes.avatar}
+                    src={profile_pic_url || logo}
+                  />
+                </Avatar>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  wrap="nowrap"
+                  className={classes.hostNameAndTitleContainer}
+                >
+                  <Typography variant="h4" className={classes.hostName}>
+                    {hostName}
+                  </Typography>
+                  {/* <Typography variant="subtitle1">European Gigaloo</Typography> */}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>

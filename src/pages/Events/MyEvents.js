@@ -66,12 +66,12 @@ const MyEvents = () => {
     localStorage.setItem('event', '')
   }, [])
 
-  if (!userId) {
-    return <Redirect to="/" />
-  }
-
   if (appLoading || eventsLoading) {
     return <Loading />
+  }
+
+  if (!userId) {
+    return <Redirect to="/" />
   }
 
   const handleGoToPublicEventsClick = () => {

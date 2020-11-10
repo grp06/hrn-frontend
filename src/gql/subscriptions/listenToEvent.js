@@ -24,6 +24,7 @@ const listenToEvent = gql`
           name
           city
           id
+          profile_pic_url
         }
       }
       host {
