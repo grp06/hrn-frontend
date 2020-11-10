@@ -12,7 +12,6 @@ import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
-import PersonIcon from '@material-ui/icons/Person'
 
 const useStyles = makeStyles((theme) => ({
   addFriendButtonContainer: {
@@ -21,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '100%',
     height: '100%',
-    marginTop: '19px',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      height: '100%',
-      marginTop: '19px',
-    },
   },
   avatarContainer: {
     width: '100px',
@@ -78,10 +71,6 @@ const useStyles = makeStyles((theme) => ({
   tagsContainer: {
     marginTop: theme.spacing(0.5),
     marginLeft: '-5px',
-  },
-  avatarContainer: {
-    width: '125px',
-    height: '125px',
   },
 }))
 
