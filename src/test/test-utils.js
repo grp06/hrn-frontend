@@ -13,11 +13,12 @@ import {
 import theme from '../ui/theme'
 
 const renderWithAllProviders = (ui, options) => {
+  const { apolloMocks } = options || []
   const AllTheProviders = ({ children }) => {
     return (
       <ThemeProvider theme={theme}>
         <StylesProvider injectFirst>
-          <MockedProvider>
+          <MockedProvider mocks={apolloMocks} addTypename={false}>
             <Router>
               <AppProvider>
                 <UserProvider>

@@ -2,7 +2,6 @@ import { rest } from 'msw'
 
 export const handlers = [
   rest.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, async (req, res, ctx) => {
-    console.log(req)
     if (!req.body.password) {
       return res(ctx.status(400), ctx.json({ error: 'Missing password in request body' }))
     }

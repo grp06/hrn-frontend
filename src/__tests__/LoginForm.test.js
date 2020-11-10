@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, cleanup, render, screen, waitFor } from 'test/test-utils'
+import { render, screen, waitFor } from 'test/test-utils'
 import { setupServer } from 'msw/node'
 import { rest } from 'msw'
 import { handlers } from 'test/server-handlers'
