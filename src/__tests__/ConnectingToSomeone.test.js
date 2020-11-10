@@ -17,8 +17,7 @@ const mockMyRound = {
 
 test('return connecting to someone text on the screen if partner is connecting', () => {
   render(<ConnectingToSomeone partnerNeverConnected={false} myRound={mockMyRound} />)
-  const connectingToSomeoneDiv = screen.getByText('Connecting you to someone awesome!')
-  expect(connectingToSomeoneDiv).toBeTruthy()
+  expect(screen.getByText('Connecting you to someone awesome!')).toBeTruthy()
 })
 
 test('return button to go back to lobby if partner has not connected', () => {
