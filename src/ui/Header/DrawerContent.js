@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 
 import { HostDrawerContent, UserDrawerContent, SettingsDrawerContent } from '.'
 import logo from '../../assets/logoWhite.svg'
@@ -60,41 +60,38 @@ const useStyles = makeStyles((theme) => ({
 
 const DrawerContent = () => {
   const classes = useStyles()
-  const { appLoading } = useAppContext()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
 
   return (
-    !appLoading && (
-      <>
-        <Grid container justify="flex-start" className={classes.container}>
-          <Grid container direction="column" className={classes.topHalfOfDrawer}>
-            <div className={classes.toolbar}>
-              <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>
-                <Button component={Link} to="/" disableRipple>
-                  <img alt="company-logo" className={classes.logo} src={logo} />
-                </Button>
-              </Grid>
-            </div>
-            <Divider />
-            <UserDrawerContent userId={userId} userName={name} />
-            {role === 'host' && <HostDrawerContent />}
-          </Grid>
-          <Grid
-            container
-            direction="column"
-            justify="flex-end"
-            alignItems="flex-start"
-            className={classes.bottomHalfOfDrawer}
-          >
-            <SettingsDrawerContent resetUser={resetUser} userId={userId} />
-            <Link to="/privacy-policy" className={classes.privacyPolicyLink}>
-              Privacy Policy
-            </Link>
-          </Grid>
+    <>
+      <Grid container justify="flex-start" className={classes.container}>
+        <Grid container direction="column" className={classes.topHalfOfDrawer}>
+          <div className={classes.toolbar}>
+            <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>
+              <Button component={Link} to="/" disableRipple>
+                <img alt="company-logo" className={classes.logo} src={logo} />
+              </Button>
+            </Grid>
+          </div>
+          <Divider />
+          <UserDrawerContent userId={userId} userName={name} />
+          {role === 'host' && <HostDrawerContent />}
         </Grid>
-      </>
-    )
+        <Grid
+          container
+          direction="column"
+          justify="flex-end"
+          alignItems="flex-start"
+          className={classes.bottomHalfOfDrawer}
+        >
+          <SettingsDrawerContent resetUser={resetUser} userId={userId} />
+          <Link to="/privacy-policy" className={classes.privacyPolicyLink}>
+            Privacy Policy
+          </Link>
+        </Grid>
+      </Grid>
+    </>
   )
 }
 

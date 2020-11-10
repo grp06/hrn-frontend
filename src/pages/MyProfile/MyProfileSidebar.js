@@ -20,10 +20,6 @@ const createStyles = makeStyles((theme) => ({
   avatar: {
     width: '100%',
     height: '100%',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      height: '100%',
-    },
   },
   avatarContainer: {
     width: '125px',
@@ -169,7 +165,6 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
               acceptedFiles={['image/*']}
               dropzoneText={'Drag and drop your favorite selfie 🤳. Or click to choose'}
               filesLimit={1}
-              maxFileSize={500000}
               onChange={(file) => submitProfilePicture(file)}
             />
             <Button
