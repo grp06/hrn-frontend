@@ -123,23 +123,40 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         if (!file) {
           throw new Error('Select a file first!')
         }
-        const formData = new FormData()
-        formData.append('file', file[0])
-        formData.append('userId', userId)
-        await fetch(`${process.env.REACT_APP_API_URL}/test-upload`, {
-          method: 'POST',
+
+        const data = await (
+          await fetch(`${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`, {
+            method: 'POST',
+            body: JSON.stringify({ file, userId }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
+        ).json()
+
+        const res = await fetch(data.url, {
+          method: 'PUT',
+          body: data.data,
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true,
+            'Content-Type': file[0].type,
           },
-          body: formData,
         })
-        window.location.reload()
-        // handle success
+        const url = res.url.split('?')[0]
+
+        await fetch(`${process.env.REACT_APP_API_URL}/api/upload/save-profile-pic-url`, {
+          method: 'POST',
+          body: JSON.stringify({ userId, url }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        // window.location.reload()
       } catch (error) {
-        window.location.reload()
         console.log('submitFile -> error', error)
-        // handle error
+        window.location.reload()
       }
     }
   }
@@ -167,9 +184,9 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
                 anchorOrigin: { vertical: 'top', horizontal: 'center' },
               }}
               acceptedFiles={['image/*']}
-              dropzoneText={'Drag and drop your favorite selfie 🤳. Or click to choose'}
+              dropzoneText="Drag and drop your favorite selfie 🤳. Or click to choose"
               filesLimit={1}
-              maxFileSize={500000}
+              maxFileSize={5000000}
               onChange={(file) => submitProfilePicture(file)}
             />
             <Button
