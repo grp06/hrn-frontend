@@ -26,7 +26,11 @@ const UserProvider = ({ children }) => {
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
-  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
+  const userInEvent = Boolean(
+    pathname.includes('video-room') ||
+      pathname.includes('lobby') ||
+      pathname.includes('group-video-chat')
+  )
 
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },

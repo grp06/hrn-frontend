@@ -16,16 +16,20 @@ const listenToEvent = gql`
       num_rounds
       post_event_link
       public_event
+      group_video_chat
+      banner_photo_url
       event_users(order_by: { user: { name: asc } }) {
         user {
           email
           name
           city
           id
+          profile_pic_url
         }
       }
       host {
         name
+        profile_pic_url
       }
     }
   }

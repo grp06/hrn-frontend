@@ -8,12 +8,16 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 
+import logo from '../../assets/HRNlogoNoFrame.svg'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  avatar: {
+    width: '100%',
+    height: '100%',
+  },
   cardContainer: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
@@ -50,7 +54,11 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
                 <ListItem key={user.id}>
                   <ListItemAvatar>
                     <Avatar>
-                      <PersonIcon />
+                      <img
+                        alt="company-logo"
+                        className={classes.avatar}
+                        src={user.profile_pic_url || logo}
+                      />
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText disableTypography>
@@ -75,12 +83,12 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
             <Grid container direction="row" alignItems="center" justify="space-around">
               {!seeMore ? (
                 <>
-                  <Typography variant="body">See All{`  (${eventUsers.length})`}</Typography>
+                  <Typography variant="body1">See All{`  (${eventUsers.length})`}</Typography>
                   <ArrowDropDownIcon fontSize="large" />
                 </>
               ) : (
                 <>
-                  <Typography variant="body">See Less</Typography>
+                  <Typography variant="body1">See Less</Typography>
                   <ArrowDropUpIcon fontSize="large" />
                 </>
               )}

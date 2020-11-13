@@ -119,10 +119,7 @@ const EventsPublic = () => {
       const group =
         eventGroup === 'HRN'
           ? allPublicEventsData.events
-              .filter(
-                (event) =>
-                  event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
-              )
+              .filter((event) => event.event_name.match(EventPublicRegex) && !event.ended_at)
               .sort((eventA, eventB) => {
                 if (eventA && eventB) {
                   if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
@@ -132,10 +129,7 @@ const EventsPublic = () => {
                 }
               })
           : allPublicEventsData.events
-              .filter(
-                (event) =>
-                  !event.event_name.match(EventPublicRegex) && isEventInFuture(event.start_at)
-              )
+              .filter((event) => !event.event_name.match(EventPublicRegex) && !event.ended_at)
               .sort((eventA, eventB) => {
                 if (eventA && eventB) {
                   if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
@@ -146,7 +140,11 @@ const EventsPublic = () => {
               })
 
       if (group.length > 0) {
-        return group.map((event) => <EventCard key={event.id} event={event} />)
+        return group.map((event) => (
+          <div style={{ marginBottom: '75px' }}>
+            <EventCard key={event.id} event={event} />
+          </div>
+        ))
       }
       return renderNullDataText(emptyGroupMessage)
     }

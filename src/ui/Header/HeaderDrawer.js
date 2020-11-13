@@ -30,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
     backgroundColor: theme.palette.common.greyNav,
+    borderRight: '1.25px solid #3e4042',
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -51,8 +52,7 @@ const HeaderDrawer = () => {
     pathname === '/' ||
       pathname.includes('sign-up') ||
       pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password') ||
-      pathname.includes('onboarding')
+      pathname.includes('set-new-password')
   )
 
   const handleDrawerToggle = () => {

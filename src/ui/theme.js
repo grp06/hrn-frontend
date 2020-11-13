@@ -12,6 +12,7 @@ const greySubtitle = '#BFBFBF'
 const greyCard = '#191919'
 const greyNav = '#1c1c1c'
 const grey10 = '#262626'
+const greyHover = '#424242'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
@@ -34,6 +35,7 @@ const theme = createMuiTheme({
       greyBorder,
       greyBoxShadow,
       greyHighlight,
+      greyHover,
       greyButton,
       greyButtonHover,
       greySubtitle,
@@ -264,6 +266,22 @@ const theme = createMuiTheme({
           color: 'rgba(191, 203, 226, 0.7)',
         },
       },
+      outlinedSizeLarge: {
+        padding: '11px 11px',
+        fontSize: '1.1rem',
+      },
+      outlined: {
+        color: ghostWhite,
+        borderWidth: '2px',
+        width: '200px',
+        '&:hover': {
+          backgroundColor: greyHighlight,
+        },
+        '&.Mui-disabled': {
+          backgroundColor: 'rgba(36,37,38,0.70)',
+          color: 'rgba(191, 203, 226, 0.7)',
+        },
+      },
     },
     MuiFab: {
       extended: {
@@ -284,10 +302,25 @@ const theme = createMuiTheme({
         minWidth: '0',
       },
     },
-    // MuiSnackbar: {
-    //   bottom: 'none',
-    //   top: '20px',
-    // },
+    MuiDropzoneSnackbar: {
+      successAlert: {
+        backgroundColor: basePurple,
+      },
+    },
+    MuiDropzoneArea: {
+      root: {
+        backgroundColor: grey10,
+        borderColor: basePurple,
+        color: ghostWhite,
+        fontFamily: 'Muli',
+        width: '75%',
+        margin: '15px auto',
+        padding: '10px',
+      },
+      icon: {
+        color: ghostWhite,
+      },
+    },
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,

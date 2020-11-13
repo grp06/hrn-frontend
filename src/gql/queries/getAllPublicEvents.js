@@ -12,8 +12,11 @@ const getAllPublicEvents = gql`
       public_event
       start_at
       status
+      group_video_chat
+      banner_photo_url
       host {
         name
+        profile_pic_url
       }
     }
   }

@@ -46,7 +46,13 @@ const SittingOut = ({ setUserEventStatus }) => {
         <Typography variant="body1">
           We can&apos;t wait until you&apos;re back in the event!
         </Typography>
-        <Button variant="contained" size="large" color="primary" onClick={handleRejoinEventClick}>
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          onClick={handleRejoinEventClick}
+          style={{ marginTop: '16px' }}
+        >
           Rejoin Event
         </Button>
       </Grid>

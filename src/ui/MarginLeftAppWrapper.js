@@ -24,7 +24,11 @@ const MarginLeftAppWrapper = ({ children }) => {
       pathname.includes('onboarding')
   )
 
-  const userInEvent = Boolean(pathname.includes('video-room') || pathname.includes('lobby'))
+  const userInEvent = Boolean(
+    pathname.includes('video-room') ||
+      pathname.includes('lobby') ||
+      pathname.includes('group-video-chat')
+  )
 
   return (
     <div className={!userNotLoggedIn && !userInEvent ? classes.pageWrapper : ''}>{children}</div>

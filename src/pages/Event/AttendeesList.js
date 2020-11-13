@@ -6,11 +6,11 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import PersonIcon from '@material-ui/icons/Person'
 import Typography from '@material-ui/core/Typography'
 import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 
+import logo from '../../assets/HRNlogoNoFrame.svg'
 import { displayOnlineUsers } from '../../gql/subscriptions'
 import { constants } from '../../utils'
 import { useEventContext } from '../../context'
@@ -20,6 +20,10 @@ const { lastSeenDuration } = constants
 const useStyles = makeStyles((theme) => ({
   attendeesList: {
     alignSelf: 'flex-start',
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
   },
 }))
 
@@ -73,7 +77,11 @@ const AttendeesList = ({ eventId, timeState }) => {
             <ListItem key={user.id}>
               <ListItemAvatar>
                 <Avatar>
-                  <PersonIcon />
+                  <img
+                    alt="company-logo"
+                    className={classes.avatar}
+                    src={user.profile_pic_url || logo}
+                  />
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={user.name} />

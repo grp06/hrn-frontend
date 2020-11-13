@@ -40,7 +40,7 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
     >
       {onlineEventUsers && onlineEventUsers.length ? (
         <>
-          <Typography variant="h3">Online Attendees {`(${onlineEventUsers.length})`}</Typography>
+          <Typography variant="h3">Online Attendeess {`(${onlineEventUsers.length})`}</Typography>
           <List dense>
             {onlineEventUsers
               .sort((userA, userB) => {
@@ -53,9 +53,14 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
                 return (
                   <ListItem key={user.id}>
                     <ListItemAvatar>
-                      <Avatar>
+                      {user[0].profile_pic_url ? (
+                        <Avatar
+                          src={user[0].profile_pic_url}
+                          className={classes.avatarBackground}
+                        />
+                      ) : (
                         <PersonIcon />
-                      </Avatar>
+                      )}
                     </ListItemAvatar>
                     <ListItemText disableTypography>
                       <Grid container direction="row" alignItems="center" justify="flex-start">
@@ -80,14 +85,14 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
               <Grid container direction="row" alignItems="center" justify="space-around">
                 {!seeMore ? (
                   <>
-                    <Typography variant="body">
+                    <Typography variant="body1">
                       See All{`  (${onlineEventUsers.length})`}
                     </Typography>
                     <ArrowDropDownIcon fontSize="large" />
                   </>
                 ) : (
                   <>
-                    <Typography variant="body">See Less</Typography>
+                    <Typography variant="body1">See Less</Typography>
                     <ArrowDropUpIcon fontSize="large" />
                   </>
                 )}

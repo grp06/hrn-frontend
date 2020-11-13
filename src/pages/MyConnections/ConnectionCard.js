@@ -20,12 +20,6 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     width: '100%',
     height: '100%',
-    marginTop: '19px',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-      height: '100%',
-      marginTop: '19px',
-    },
   },
   avatarContainer: {
     width: '100px',
@@ -38,20 +32,19 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
   },
   cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
+    backgroundColor: theme.palette.common.grey10,
     borderRadius: '4px',
     padding: theme.spacing(3, 5),
     position: 'relative',
-    top: '-40px',
     bottom: '0%',
     display: 'block',
-    width: '750px',
+    width: '100%',
     height: 'auto',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginBottom: '75px',
-    [theme.breakpoints.down('xs')]: {
-      width: '85vw',
+    marginBottom: '40px',
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1.5),
     },
   },
   circleButton: {
@@ -81,9 +74,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, eventId }) => {
+const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, userId }) => {
   const classes = useStyles()
-  const { name, city, tags_users: connectionsTags, short_bio, linkedIn_url, email } = connection
+  const {
+    name,
+    city,
+    tags_users: connectionsTags,
+    short_bio,
+    linkedIn_url,
+    email,
+    profile_pic_url,
+  } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
   const myRoundInfo = { event_id: eventId, partner_id: partnerId, user_id: userId }
 
@@ -153,9 +154,13 @@ const ConnectionCard = ({ connection, i_shared_details, partnerId, userId, event
           justify="flex-start"
           className={classes.avatarGridContainer}
         >
-          <Avatar className={classes.avatarContainer}>
-            <img alt="company-logo" className={classes.avatar} src={logo} />
-          </Avatar>
+          {profile_pic_url ? (
+            <Avatar src={profile_pic_url} className={classes.avatarContainer} />
+          ) : (
+            <Avatar className={classes.avatarContainer}>
+              <img alt="company-logo" className={classes.avatar} src={logo} />
+            </Avatar>
+          )}
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
             <Typography variant="h3">{name}</Typography>
             <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>

@@ -85,6 +85,9 @@ const Lobby = () => {
         history.push(`/events/${eventId}`)
       }
     }
+    if (eventStatus === 'group-video-chat') {
+      return history.push(`/events/${eventId}/group-video-chat`)
+    }
     if (eventStatus === 'complete') {
       history.push(`/events/${eventId}/event-complete`)
     }

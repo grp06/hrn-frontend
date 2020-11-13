@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
+import debounce from 'lodash.debounce'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
@@ -47,6 +48,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const classes = useStyles()
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
+  const [showComeBackSnack, setShowComeBackSnack] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
   const { event_name, event_users, host_id, id: event_id, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
@@ -54,6 +56,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
+  const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
   const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
@@ -82,7 +85,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   })
 
   const getUserCTAButtonText = () => {
-    if (userAlreadyRSVPed && event_status === 'not-started') return 'Cancel RSVP'
+    if (userAlreadyRSVPed && event_status === 'not-started') return "You're all set!"
     else if (!userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete')
       return 'Join Event'
     else return 'RSVP'
@@ -102,8 +105,14 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       localStorage.setItem('eventId', event_id)
       history.push('/sign-up')
     } else {
-      rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+      if (!userAlreadyRSVPed) {
+        rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+      }
     }
+  }
+
+  const handleAllSetClick = () => {
+    setShowComeBackSnack(true)
   }
 
   const handleShareEventClick = () => {
@@ -112,15 +121,19 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   }
 
   const renderRSVPOrEditButton = () => {
-    if (userIsHost) {
+    if (userIsHost && event_status === 'not-started') {
       return <div>{editFormModal}</div>
+    }
+    if (userIsOnLobbyPage && userAlreadyRSVPed) {
+      return null
     }
     return (
       <Button
         variant="contained"
         size="large"
-        color="primary"
-        onClick={userAlreadyRSVPed ? handleCancelRSVPClick : handleRSVPClick}
+        color={userAlreadyRSVPed ? 'secondary' : 'primary'}
+        disableRipple
+        onClick={userAlreadyRSVPed ? handleAllSetClick : debounce(handleRSVPClick, 250)}
       >
         {getUserCTAButtonText()}
       </Button>
@@ -144,7 +157,8 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           </Typography>
         </Grid>
       </Grid>
-      {userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete' ? null : (
+      {(userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete') ||
+      userIsOnEventCompletePage ? null : (
         <Grid
           container
           item
@@ -169,7 +183,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       <Snack
         open={showCopyURLSnack}
         duration={1800}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setCopyURLSnack(false)}
         severity="info"
         snackMessage={
@@ -177,6 +191,21 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
             Event URL Copied{' '}
             <span role="img" aria-label="floppy disk">
               💾
+            </span>
+          </div>
+        }
+      />
+      <Snack
+        open={showComeBackSnack}
+        duration={5000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setShowComeBackSnack(false)}
+        severity="info"
+        snackMessage={
+          <div>
+            To attend this event, come back to this page 5 minutes before the event starts{' '}
+            <span role="img" aria-label="alarm clock">
+              ⏰
             </span>
           </div>
         }

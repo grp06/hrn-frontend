@@ -7,54 +7,82 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
-import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
+import {
+  useAppContext,
+  useEventContext,
+  useUserContext,
+  useUserEventStatusContext,
+} from '../../context'
 import { Loading } from '../../common'
+import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
+import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
 
 const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
-  button: {
-    margin: theme.spacing(1, 1),
+  buttonCard: {
+    backgroundColor: theme.palette.common.greyCard,
+    padding: theme.spacing(3, 5),
+    borderRadius: '4px',
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2),
+    },
   },
   buttonContainer: {
-    margin: theme.spacing(3, 'auto', 9, 'auto'),
-  },
-  categoryHeader: {
-    margin: theme.spacing(0, 'auto'),
-    textAlign: 'center',
-  },
-  connectionGrid: {
-    margin: theme.spacing(0, 'auto'),
-    [theme.breakpoints.down('xl')]: {
-      width: '85%',
+    width: '44%',
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('md')]: {
+      width: '34%',
     },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
   },
-  upcomingEventsButton: {
-    margin: theme.spacing(1, 0),
-    backgroundColor: theme.palette.common.ghostWhite,
-    color: theme.palette.common.bodyBlack,
-    '&:hover': {
-      backgroundColor: theme.palette.common.ghostWhiteBody,
+  cardTitle: {
+    marginBottom: theme.spacing(3),
+  },
+  connectionsContainer: {
+    padding: theme.spacing(3, 5),
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    width: '54%',
+    [theme.breakpoints.down('md')]: {
+      width: '64%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+      padding: theme.spacing(2),
+    },
+    marginBottom: theme.spacing(3),
+  },
+  contentContainer: {
+    position: 'relative',
+    zIndex: '99',
+    width: '75vw',
+    maxWidth: '1560px',
+    margin: theme.spacing(-20, 'auto', 0, 'auto'),
+    paddingBottom: '40px',
+    [theme.breakpoints.down('xs')]: {
+      width: '85vw',
     },
   },
-  wrapper: {
-    marginTop: '100px',
+  sideButton: {
+    width: '100%',
   },
 }))
 
 const EventComplete = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
+  const { appLoading } = useAppContext()
   const { event, resetEvent } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId } = user
+  const { banner_photo_url, id: event_id } = event
 
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
@@ -86,15 +114,8 @@ const EventComplete = ({ match }) => {
     }
   }, [event])
 
-  if (myConnectionAfterEventLoading) {
+  if (appLoading || Object.keys(event).length < 2 || myConnectionAfterEventLoading) {
     return <Loading />
-  }
-
-  const cardHeading = () => {
-    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
-      return 'Say Hi Right Now to your new friends 👋'
-    }
-    return 'Thanks for joining the event! 🎊'
   }
 
   const renderAllMyEventConnection = () => {
@@ -107,93 +128,75 @@ const EventComplete = ({ match }) => {
           <ConnectionCard
             key={partner.id}
             connection={partner.partner}
+            eventId={partner.event_id}
             i_shared_details={partner.i_shared_details}
             partnerId={partner.partner_id}
+            smallSize
             userId={partner.user_id}
-            eventId={partner.event_id}
           />
         ))
     }
   }
 
   return (
-    <div className={classes.wrapper}>
-      <Typography variant="h1" className={classes.categoryHeader}>
-        {cardHeading()}
-      </Typography>
-      <Grid container item direction="column" justify="space-around">
-        <Grid container direction="column">
-          <Grid item className={classes.buttonContainer}>
+    <div>
+      <EventPhotoBanner bannerPhotoURL={banner_photo_url} event_id={event_id} />
+      <Grid container direction="column" justify="flex-start" className={classes.contentContainer}>
+        <EventTitleAndCTACard event={event} user={user} />
+        <Grid container direction="row" justify="space-between">
+          <Grid item direction="column" className={classes.connectionsContainer}>
+            <Typography variant="h3" className={classes.cardTitle}>
+              Connections
+            </Typography>
+            {renderAllMyEventConnection()}
+          </Grid>
+          <Grid item direction="column" className={classes.buttonContainer}>
             <Grid
               container
-              item
               direction="column"
-              justify="space-around"
-              alignItems="center"
-              md={12}
-              xs={12}
+              justify="flex-start"
+              alignItems="flex-start"
+              className={classes.buttonCard}
             >
-              <Grid container direction="row" justify="space-around" alignItems="center">
-                <Button
-                  variant="contained"
-                  color="primary"
-                  href={giveFeedbackTypeform}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Give Feedback{' '}
-                  <span role="img" aria-label="woman hand out">
-                    💭
-                  </span>
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  href={becomeAHostTypeform}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Become a Host
-                  <span role="img" aria-label="woman hand out">
-                    💁‍♀️
-                  </span>
-                </Button>
-              </Grid>
-              {event.post_event_link && (
-                <Grid>
-                  <Button
-                    variant="contained"
-                    href={event.post_event_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={classes.button}
-                  >
-                    Join everyone on Zoom now!
-                    <span role="img" aria-label="movie camera">
-                      🎥
-                    </span>
-                  </Button>
-                </Grid>
-              )}
-              <Grid>
-                <Button
-                  variant="contained"
-                  className={classes.upcomingEventsButton}
-                  onClick={() => history.push('/events')}
-                  target="_blank"
-                >
-                  Join our Upcoming Events
-                  <span role="img" aria-label="red balloon">
-                    🎈
-                  </span>
-                </Button>
-              </Grid>
+              <Typography variant="h3" className={classes.cardTitle}>
+                Want to Host An Event?
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                disableRipple
+                href={becomeAHostTypeform}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={classes.sideButton}
+              >
+                Become a Host
+              </Button>
             </Grid>
-          </Grid>
-          <Grid container justify="center" className={classes.connectionGrid}>
-            {renderAllMyEventConnection()}
+            <Grid
+              container
+              direction="column"
+              justify="flex-start"
+              alignItems="flex-start"
+              className={classes.buttonCard}
+            >
+              <Typography variant="h3" className={classes.cardTitle}>
+                Leave Us a Tip!
+              </Typography>
+              <Button
+                variant="contained"
+                color="default"
+                size="large"
+                disableRipple
+                href={giveFeedbackTypeform}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={classes.sideButton}
+              >
+                Give Feedback
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

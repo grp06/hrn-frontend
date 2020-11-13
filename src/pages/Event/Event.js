@@ -3,8 +3,8 @@ import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
-import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
+  EventPhotoBanner,
   EventRSVPsCard,
   EventStatusRedirect,
   EventTitleAndCTACard,
@@ -15,7 +15,6 @@ import {
 } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventContext, useUserContext } from '../../context'
-import { getTimeUntilEvent } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   bannerGradient: {
@@ -32,11 +31,10 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: 'auto',
     minHeight: '55vh',
-    backgroundImage: `url(${bannerBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
     zIndex: '-3',
     marginBottom: '80px',
+    backgroundPosition: '50% 50% !important',
+    backgroundSize: 'cover !important',
   },
   eventContentContainer: {
     position: 'relative',
@@ -44,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     width: '75vw',
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
+    paddingBottom: '40px',
   },
   podcastContainer: {
     width: '44%',
@@ -76,7 +75,14 @@ const Event = ({ match }) => {
   const { user } = useUserContext()
   const { event, setEventId } = useEventContext()
   const { id: user_id } = user
-  const { event_users, host_id, start_at, status: event_status } = event
+  const {
+    banner_photo_url,
+    event_users,
+    host_id,
+    id: event_id,
+    start_at,
+    status: event_status,
+  } = event
   const eventSet = Object.keys(event).length > 1
 
   useEffect(() => {
@@ -95,8 +101,6 @@ const Event = ({ match }) => {
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
 
-  const timeUntilEvent = getTimeUntilEvent(start_at)
-
   return (
     <>
       <EventStatusRedirect
@@ -108,10 +112,11 @@ const Event = ({ match }) => {
       {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
         <JoinEventBanner />
       ) : null}
-      <Grid container>
-        <div className={classes.eventBanner} />
-        <div className={classes.bannerGradient} />
-      </Grid>
+      <EventPhotoBanner
+        bannerPhotoURL={banner_photo_url}
+        event_id={event_id}
+        userIsHost={userIsHost}
+      />
       <Grid
         container
         direction="column"
