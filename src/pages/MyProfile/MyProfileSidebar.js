@@ -123,26 +123,30 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         if (!file) {
           throw new Error('Select a file first!')
         }
+        const formData = new FormData()
+        formData.append('file', file[0])
+        formData.append('userId', userId)
 
-        const data = await (
-          await fetch(`${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`, {
+        const urlAndFile = await await fetch(
+          `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
+          {
             method: 'POST',
-            body: JSON.stringify({ file, userId }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-        ).json()
+            body: formData,
+          }
+        ).then((res) => res.json())
 
-        const res = await fetch(data.url, {
+        const newFile = new Blob([new Uint8Array(urlAndFile.data.data)], { type: 'image/jpeg' })
+
+        const res = await fetch(urlAndFile.url, {
           method: 'PUT',
-          body: data.data,
+          body: newFile,
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true,
             'Content-Type': file[0].type,
           },
         })
+
         const url = res.url.split('?')[0]
 
         await fetch(`${process.env.REACT_APP_API_URL}/api/upload/save-profile-pic-url`, {
@@ -153,7 +157,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
           },
         })
 
-        // window.location.reload()
+        window.location.reload()
       } catch (error) {
         console.log('submitFile -> error', error)
         window.location.reload()
