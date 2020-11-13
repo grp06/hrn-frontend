@@ -122,7 +122,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         const formData = new FormData()
         formData.append('file', file[0])
         formData.append('userId', userId)
-
+        console.log('hitting ', `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`)
         const urlAndFile = await await fetch(
           `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
           {
