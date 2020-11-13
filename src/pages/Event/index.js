@@ -1,5 +1,7 @@
 export { default as AttendeesList } from './AttendeesList'
+export { default as ChangeEventPhotoBanner } from './ChangeEventPhotoBanner'
 export { default as Event } from './Event'
+export { default as EventPhotoBanner } from './EventPhotoBanner'
 export { default as EventRSVPsCard } from './EventRSVPsCard'
 export { default as EventStatusRedirect } from './EventStatusRedirect'
 export { default as EventTitleAndCTACard } from './EventTitleAndCTACard'

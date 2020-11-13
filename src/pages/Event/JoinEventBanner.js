@@ -3,7 +3,6 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import LinearProgress from '@material-ui/core/LinearProgress'
 import Typography from '@material-ui/core/Typography'
-import ConfettiDoodlesSmallScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { makeStyles } from '@material-ui/styles'
 import { constants } from '../../utils'
 
@@ -17,8 +16,6 @@ const useStyles = makeStyles((theme) => ({
     width: containerWidth,
     height: 'auto',
     top: '0',
-    // backgroundImage: `url(${ConfettiDoodlesSmallScale})`,
-    // backgroundRepeat: 'repeat',
     backgroundColor: 'rgb(36,37,38,0.7)',
     padding: theme.spacing(2),
   },

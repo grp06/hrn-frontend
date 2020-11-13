@@ -8,7 +8,7 @@ const LeaveEventButton = ({ event_id }) => {
   return TransitionModal({
     button: {
       buttonText: 'Leave Event',
-      buttonVariant: 'outlined',
+      buttonVariant: 'contained',
       buttonSize: 'large',
     },
     modalBody: <Typography variant="h3">Are you sure you want to leave the event?</Typography>,

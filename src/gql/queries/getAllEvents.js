@@ -38,6 +38,8 @@ const getAllEvents = gql`
       host_id
       id
       round_length
+      group_video_chat
+      banner_photo_url
     }
   }
 `

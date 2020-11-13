@@ -8,6 +8,7 @@ const getEventsByUserId = gql`
         ended_at
         id
         description
+        status
         event_name
         host_id
         current_round
@@ -16,11 +17,17 @@ const getEventsByUserId = gql`
         num_rounds
         post_event_link
         public_event
+        group_video_chat
+        banner_photo_url
         event_users {
           user {
             id
             name
           }
+        }
+        host {
+          name
+          profile_pic_url
         }
       }
     }

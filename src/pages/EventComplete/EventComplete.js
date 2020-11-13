@@ -7,7 +7,6 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
-import bannerBackground from '../../assets/eventBannerMountain.png'
 import {
   useAppContext,
   useEventContext,
@@ -18,21 +17,11 @@ import { Loading } from '../../common'
 import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
-import { EventTitleAndCTACard } from '../Event'
+import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
 
 const { giveFeedbackTypeform, becomeAHostTypeform } = constants
 
 const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    height: 'auto',
-    minHeight: '55vh',
-    width: '100%',
-    position: 'absolute',
-    top: '0%',
-    bottom: 'auto',
-  },
   buttonCard: {
     backgroundColor: theme.palette.common.greyCard,
     padding: theme.spacing(3, 5),
@@ -80,16 +69,6 @@ const useStyles = makeStyles((theme) => ({
       width: '85vw',
     },
   },
-  eventBanner: {
-    width: '100%',
-    height: 'auto',
-    minHeight: '55vh',
-    backgroundImage: `url(${bannerBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    zIndex: '-3',
-    marginBottom: '80px',
-  },
   sideButton: {
     width: '100%',
   },
@@ -103,6 +82,7 @@ const EventComplete = ({ match }) => {
   const { user, setUserInEvent } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId } = user
+  const { banner_photo_url, id: event_id } = event
 
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
@@ -160,10 +140,7 @@ const EventComplete = ({ match }) => {
 
   return (
     <div>
-      <Grid container>
-        <div className={classes.eventBanner} />
-        <div className={classes.bannerGradient} />
-      </Grid>
+      <EventPhotoBanner bannerPhotoURL={banner_photo_url} event_id={event_id} />
       <Grid container direction="column" justify="flex-start" className={classes.contentContainer}>
         <EventTitleAndCTACard event={event} user={user} />
         <Grid container direction="row" justify="space-between">
@@ -188,6 +165,7 @@ const EventComplete = ({ match }) => {
                 variant="contained"
                 color="primary"
                 size="large"
+                disableRipple
                 href={becomeAHostTypeform}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -210,6 +188,7 @@ const EventComplete = ({ match }) => {
                 variant="contained"
                 color="default"
                 size="large"
+                disableRipple
                 href={giveFeedbackTypeform}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -218,22 +197,6 @@ const EventComplete = ({ match }) => {
                 Give Feedback
               </Button>
             </Grid>
-            {/* {event.post_event_link && (
-              <Grid>
-                <Button
-                  variant="contained"
-                  href={event.post_event_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.button}
-                >
-                  Join everyone on Zoom now!
-                  <span role="img" aria-label="movie camera">
-                    🎥
-                  </span>
-                </Button>
-              </Grid>
-            )} */}
           </Grid>
         </Grid>
       </Grid>

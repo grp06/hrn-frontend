@@ -302,10 +302,25 @@ const theme = createMuiTheme({
         minWidth: '0',
       },
     },
-    // MuiSnackbar: {
-    //   bottom: 'none',
-    //   top: '20px',
-    // },
+    MuiDropzoneSnackbar: {
+      successAlert: {
+        backgroundColor: basePurple,
+      },
+    },
+    MuiDropzoneArea: {
+      root: {
+        backgroundColor: grey10,
+        borderColor: basePurple,
+        color: ghostWhite,
+        fontFamily: 'Muli',
+        width: '75%',
+        margin: '15px auto',
+        padding: '10px',
+      },
+      icon: {
+        color: ghostWhite,
+      },
+    },
     MuiAlert: {
       filledInfo: {
         backgroundColor: sunray,

@@ -19,6 +19,7 @@ const getMyConnectionAfterEvent = gql`
         linkedIn_url
         name
         short_bio
+        profile_pic_url
         tags_users {
           tag {
             name

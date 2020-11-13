@@ -7,6 +7,7 @@ const listenToOnlineEventUsers = gql`
         id
         city
         name
+        profile_pic_url
       }
     }
   }

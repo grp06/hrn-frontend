@@ -95,8 +95,8 @@ const NewEventForm = () => {
               "Welcome to Hi Right Now 🎉 ! We'll go through a series of 6 min, 1 on 1 chats to expand your network with growth-minded and entrepreneurial professionals. This could be professional or casual or anything in between! Keep it fun and let's meet some new people. 💃",
             post_event_link: '',
             public_event: 'private',
-            round_length: 5,
-            num_rounds: 10,
+            round_length: 6,
+            num_rounds: 9,
           }}
           onSubmit={async (values, { setSubmitting }) => {
             const {
