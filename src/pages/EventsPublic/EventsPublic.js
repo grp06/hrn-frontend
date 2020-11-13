@@ -9,7 +9,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { getAllPublicEvents } from '../../gql/queries'
 import blurryBackground from '../../assets/blurryBackground.png'
-import { isEventInFuture } from '../../utils'
+import { isEventInFuture, getEventStartedOver24HoursAgo } from '../../utils'
 import { FloatCardLarge, EventCard, Loading } from '../../common'
 import { useEventContext } from '../../context'
 
@@ -119,7 +119,14 @@ const EventsPublic = () => {
       const group =
         eventGroup === 'HRN'
           ? allPublicEventsData.events
-              .filter((event) => event.event_name.match(EventPublicRegex) && !event.ended_at)
+              .filter((event) => {
+                const eventStartedOver24HoursAgo = getEventStartedOver24HoursAgo(event.start_at)
+                return (
+                  event.event_name.match(EventPublicRegex) &&
+                  !event.ended_at &&
+                  !eventStartedOver24HoursAgo
+                )
+              })
               .sort((eventA, eventB) => {
                 if (eventA && eventB) {
                   if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
@@ -129,7 +136,14 @@ const EventsPublic = () => {
                 }
               })
           : allPublicEventsData.events
-              .filter((event) => !event.event_name.match(EventPublicRegex) && !event.ended_at)
+              .filter((event) => {
+                const eventStartedOver24HoursAgo = getEventStartedOver24HoursAgo(event.start_at)
+                return (
+                  !event.event_name.match(EventPublicRegex) &&
+                  !event.ended_at &&
+                  !eventStartedOver24HoursAgo
+                )
+              })
               .sort((eventA, eventB) => {
                 if (eventA && eventB) {
                   if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
