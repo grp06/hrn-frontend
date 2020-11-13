@@ -3,8 +3,7 @@ import moment from 'moment'
 import FeatherIcon from 'feather-icons-react'
 import ICalendarLink from 'react-icalendar-link'
 
-const CalendarIconIcs = (props) => {
-  const { event } = props
+const CalendarIconIcs = ({ event }) => {
   const { id, start_at, event_name, description } = event
 
   const startFormatted = moment.utc(start_at).format('YYYY-MM-DDTHH:mm:ssZ')
@@ -21,7 +20,7 @@ const CalendarIconIcs = (props) => {
 
   return (
     <ICalendarLink event={eventShort}>
-      <FeatherIcon icon="calendar" stroke="#e98dd7" size="24" />
+      <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
     </ICalendarLink>
   )
 }
