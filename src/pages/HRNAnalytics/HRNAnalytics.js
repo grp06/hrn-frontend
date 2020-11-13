@@ -48,7 +48,6 @@ const HRNAnalytics = () => {
   )
   const { data: roundsData, loading: roundsDataLoading } = useQuery(getAllRounds)
 
-  console.log('HRNAnalytics -> roundsData', roundsData)
   const [value, setValue] = React.useState(0)
   const handleChange = (event, newValue) => {
     console.log('handleChange -> newValue', newValue)
@@ -56,7 +55,13 @@ const HRNAnalytics = () => {
   }
 
   const userIsAdmin =
-    userId === 8 || userId === 12 || userId === 115 || userId === 513 || userId === 1628
+    userId === 8 ||
+    userId === 12 ||
+    userId === 115 ||
+    userId === 513 ||
+    userId === 1628 ||
+    userId === 2567 ||
+    userId === 1
 
   if (allDBUsersLoading || allDBEventsAndRoundsLoading || roundsDataLoading) {
     return <Loading />
@@ -97,7 +102,7 @@ const HRNAnalytics = () => {
   const rows = () => {
     return (
       roundsData &&
-      roundsData.rounds.reduce((all, item, index) => {
+      roundsData.partners.reduce((all, item, index) => {
         const currentWeek = getCurrentWeek(item.event.start_at)
         const dateString = `${new Date(currentWeek).toLocaleDateString('en-US', {
           month: 'long',
@@ -110,18 +115,18 @@ const HRNAnalytics = () => {
         if (!dateAlreadySet) {
           all.push({
             [dateString]: {
-              attendees: [item.partnerX && item.partnerX.name, item.partnerY && item.partnerY.name],
+              attendees: [item.user && item.user.name, item.partner && item.partner.name],
               repeatAttendees: [],
             },
           })
         } else {
           const currentWeeksObj = all.find((item) => item[dateString])
-          if (item.partnerX) {
+          if (item.user) {
             // if partnerX is not in attendees
-            if (currentWeeksObj[dateString].attendees.indexOf(item.partnerX.name) === -1) {
+            if (currentWeeksObj[dateString].attendees.indexOf(item.user.name) === -1) {
               // push him into it
 
-              currentWeeksObj[dateString].attendees.push(item.partnerX.name)
+              currentWeeksObj[dateString].attendees.push(item.user.name)
               // look through all everything we've accumulated so far
               all.forEach((currentItem) => {
                 // check to see that we arent looking at the week we just pushed our name to
@@ -132,13 +137,13 @@ const HRNAnalytics = () => {
 
                   if (
                     currentItem[Object.keys(currentItem)[0]].attendees.find(
-                      (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.partnerX.name
+                      (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.user.name
                     )
                   ) {
                     if (
-                      currentWeeksObj[dateString].repeatAttendees.indexOf(item.partnerX.name) === -1
+                      currentWeeksObj[dateString].repeatAttendees.indexOf(item.user.name) === -1
                     ) {
-                      currentWeeksObj[dateString].repeatAttendees.push(item.partnerX.name)
+                      currentWeeksObj[dateString].repeatAttendees.push(item.user.name)
                     }
                   }
                 }
@@ -146,20 +151,20 @@ const HRNAnalytics = () => {
             }
           }
 
-          if (item.partnerY) {
-            if (currentWeeksObj[dateString].attendees.indexOf(item.partnerY.name) === -1) {
-              currentWeeksObj[dateString].attendees.push(item.partnerY.name)
+          if (item.partner) {
+            if (currentWeeksObj[dateString].attendees.indexOf(item.partner.name) === -1) {
+              currentWeeksObj[dateString].attendees.push(item.partner.name)
               all.forEach((currentItem) => {
                 if (Object.keys(currentItem)[0] !== dateString) {
                   if (
                     currentItem[Object.keys(currentItem)[0]].attendees.find(
-                      (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.partnerY.name
+                      (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.partner.name
                     )
                   ) {
                     if (
-                      currentWeeksObj[dateString].repeatAttendees.indexOf(item.partnerY.name) === -1
+                      currentWeeksObj[dateString].repeatAttendees.indexOf(item.partner.name) === -1
                     ) {
-                      currentWeeksObj[dateString].repeatAttendees.push(item.partnerY.name)
+                      currentWeeksObj[dateString].repeatAttendees.push(item.partner.name)
                     }
                   }
                 }
