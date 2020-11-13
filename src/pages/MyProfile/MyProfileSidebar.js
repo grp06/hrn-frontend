@@ -122,20 +122,41 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         const formData = new FormData()
         formData.append('file', file[0])
         formData.append('userId', userId)
-        await fetch(`${process.env.REACT_APP_API_URL}/test-upload`, {
-          method: 'POST',
+
+        const urlAndFile = await await fetch(
+          `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
+          {
+            method: 'POST',
+            body: formData,
+          }
+        ).then((res) => res.json())
+
+        const newFile = new Blob([new Uint8Array(urlAndFile.data.data)], { type: 'image/jpeg' })
+
+        const res = await fetch(urlAndFile.url, {
+          method: 'PUT',
+          body: newFile,
           headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Credentials': true,
+            'Content-Type': file[0].type,
           },
-          body: formData,
         })
+
+        const url = res.url.split('?')[0]
+
+        await fetch(`${process.env.REACT_APP_API_URL}/api/upload/save-profile-pic-url`, {
+          method: 'POST',
+          body: JSON.stringify({ userId, url }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
         window.location.reload()
-        // handle success
       } catch (error) {
-        window.location.reload()
         console.log('submitFile -> error', error)
-        // handle error
+        window.location.reload()
       }
     }
   }
@@ -163,8 +184,9 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
                 anchorOrigin: { vertical: 'top', horizontal: 'center' },
               }}
               acceptedFiles={['image/*']}
-              dropzoneText={'Drag and drop your favorite selfie 🤳. Or click to choose'}
+              dropzoneText="Drag and drop your favorite selfie 🤳. Or click to choose"
               filesLimit={1}
+              maxFileSize={5000000}
               onChange={(file) => submitProfilePicture(file)}
             />
             <Button
