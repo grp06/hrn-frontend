@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { usePreEventTwilio } from '../../hooks'
@@ -27,6 +28,27 @@ const useStyles = makeStyles((theme) => ({
   },
   preEventWrapper: {
     height: '94vh',
+  },
+  hostEmojiiContainer: {
+    height: '100%',
+    backgroundColor: theme.palette.common.greyCard,
+    padding: theme.spacing(1),
+  },
+  hostNameCard: {
+    position: 'absolute',
+    top: 'auto',
+    bottom: '90px',
+    left: 'auto',
+    right: '0',
+    borderRadius: '4px',
+    width: 'auto',
+    minWidth: '300px',
+    height: '80px',
+  },
+  hostNameContainer: {
+    height: '100%',
+    backgroundColor: theme.palette.common.basePurple,
+    padding: theme.spacing(1),
   },
   liveAndViewersContainer: {
     position: 'absolute',
@@ -64,7 +86,8 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   const { event } = useEventContext()
   const { id: userId, role } = user
-  const { id: eventId } = event
+  const { id: eventId, host } = event
+  const { name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
@@ -211,6 +234,38 @@ const PreEvent = ({ onlineEventUsers }) => {
           </Typography>
         </Grid>
       </Grid>
+      <motion.div
+        initial={{ x: 500, y: 40 }}
+        animate={{ x: 0, y: 40 }}
+        transition={{ delay: 3, ease: 'easeOut', duration: 2 }}
+      >
+        <Grid container alignItems="center" className={classes.hostNameCard}>
+          <Grid
+            container
+            item
+            justify="center"
+            alignItems="center"
+            xs={3}
+            className={classes.hostEmojiiContainer}
+          >
+            <Typography variant="h2">
+              <span role="img" aria-label="champage bottle" style={{ fontSize: '3rem' }}>
+                🍾
+              </span>
+            </Typography>
+          </Grid>
+          <Grid
+            container
+            item
+            xs={9}
+            justify="center"
+            alignItems="center"
+            className={classes.hostNameContainer}
+          >
+            <Typography variant="h2">{hostName}</Typography>
+          </Grid>
+        </Grid>
+      </motion.div>
     </Grid>
   )
 }
