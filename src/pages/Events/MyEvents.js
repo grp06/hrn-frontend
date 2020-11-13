@@ -133,16 +133,22 @@ const MyEvents = () => {
         </Grid>
       </Grid>
       {renderNullDataText()}
-      {eventsData &&
-        eventsData.event_users
-          .sort((eventA, eventB) => {
-            if (eventA && eventB) {
-              return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
-            }
-          })
-          .map(({ event }) => {
-            return <EventCard key={event.id} event={event} />
-          })}
+      <Grid container direction="column" justify="center" alignItems="center">
+        {eventsData &&
+          eventsData.event_users
+            .sort((eventA, eventB) => {
+              if (eventA && eventB) {
+                return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
+              }
+            })
+            .map(({ event }) => {
+              return (
+                <div style={{ marginBottom: '75px' }}>
+                  <EventCard key={event.id} event={event} />
+                </div>
+              )
+            })}
+      </Grid>
     </>
   )
 }
