@@ -18,9 +18,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '2em',
     marginBottom: '2em',
   },
-  cardContainer: {
-    maxWidth: 500,
-  },
   pageBanner: {
     width: '100%',
     height: '30vh',
