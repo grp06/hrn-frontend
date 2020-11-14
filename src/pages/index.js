@@ -1,3 +1,4 @@
+export { default as CheckoutForm } from './Checkout/CheckoutForm'
 export { default as Event } from './Event/Event'
 export { default as EventComplete } from './EventComplete/EventComplete'
 export { default as EventGroupVideoChat } from './EventGroupVideoChat/EventGroupVideoChat'

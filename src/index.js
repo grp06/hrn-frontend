@@ -2,16 +2,21 @@ import React from 'react'
 
 import ReactDOM from 'react-dom'
 import { IntercomProvider } from 'react-use-intercom'
+import { loadStripe } from '@stripe/stripe-js'
+import { Elements } from '@stripe/react-stripe-js'
 import { constants } from './utils'
 
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
 const { intercomAppId } = constants
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
 
 ReactDOM.render(
   <IntercomProvider appId={intercomAppId}>
-    <App />
+    <Elements stripe={stripePromise}>
+      <App />
+    </Elements>
   </IntercomProvider>,
   document.getElementById('root')
 )
