@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { PricingPlanCard } from '.'
+import { PricingHero, PricingPlanCard } from '.'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -63,16 +63,7 @@ const Pricing = () => {
   const classes = useStyles()
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <Grid container direction="column">
-        <Typography variant="h2">Host your own events </Typography>
-        <Typography variant="body1">
-          Create events for your community or tap into the Hi Right Now community
-        </Typography>
-        <Typography variant="body1">Try our Basic Plan for free!y</Typography>
-        <Button variant="contained" size="large" color="primary">
-          Join Basic
-        </Button>
-      </Grid>
+      <PricingHero />
       <Divider className={classes.divider} />
       <Grid container>
         <Typography variant="h2">Choose the right plan for your community!</Typography>
