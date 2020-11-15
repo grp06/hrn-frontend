@@ -67,7 +67,7 @@ const PricingHero = () => {
           color="primary"
           className={classes.becomeAHostButton}
         >
-          Become a Host
+          Become a Host Now
         </Button>
       </Grid>
     </Grid>

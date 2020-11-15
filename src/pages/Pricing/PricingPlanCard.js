@@ -60,8 +60,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
     width: '32%',
-    margin: theme.spacing(7.5, 0),
-    padding: theme.spacing(3, 5),
+    margin: theme.spacing(2, 0),
+    padding: theme.spacing(3, 2),
     [theme.breakpoints.down('md')]: {
       width: '90%',
       margin: theme.spacing(2, 'auto'),

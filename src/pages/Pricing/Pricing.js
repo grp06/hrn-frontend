@@ -10,9 +10,12 @@ import { PricingHero, PricingPlanCard } from '.'
 const useStyles = makeStyles((theme) => ({
   divider: {
     margin: theme.spacing(10, 0),
+    [theme.breakpoints.down('md')]: {
+      margin: theme.spacing(5, 0),
+    },
   },
   pageContainer: {
-    width: '75vw',
+    width: '80vw',
     margin: theme.spacing(10, 'auto'),
     [theme.breakpoints.down('md')]: {
       width: '90%',
@@ -21,6 +24,18 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       width: '90%',
       margin: theme.spacing(2, 'auto'),
+    },
+  },
+  sectionHeading: {
+    marginBottom: theme.spacing(4),
+    [theme.breakpoints.down('md')]: {
+      marginBottom: theme.spacing(2),
+    },
+  },
+  sectionPadding: {
+    padding: theme.spacing(0, 5),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(0, 2),
     },
   },
 }))
@@ -63,10 +78,14 @@ const Pricing = () => {
   const classes = useStyles()
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <PricingHero />
+      <div className={classes.sectionPadding}>
+        <PricingHero />
+      </div>
       <Divider className={classes.divider} />
-      <Grid container>
-        <Typography variant="h2">Choose the right plan for your community!</Typography>
+      <Grid container className={classes.sectionPadding}>
+        <Typography variant="h2" className={classes.sectionHeading}>
+          Choose the right plan for your community!
+        </Typography>
         <Grid container direction="row" justify="space-between">
           <PricingPlanCard plan={basicPlan} />
           <PricingPlanCard plan={proPlan} />
