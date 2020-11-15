@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const PricingPlanCard = ({ plan }) => {
+const PricingPlanCard = ({ plan, onSelect }) => {
   const classes = useStyles()
   const { name, subtitle, price, prevPlanHighlights, highlights, maxAttendees } = plan
   const renderHighlights = () => {
@@ -137,6 +137,7 @@ const PricingPlanCard = ({ plan }) => {
             color="primary"
             disableRipple
             className={classes.getStartedButton}
+            onClick={onSelect}
           >
             Get Started
           </Button>

@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 
-import { PricingHero, PricingPlanCard } from '.'
+import { CheckoutForm, PricingHero, PricingPlanCard } from '.'
 
 const useStyles = makeStyles((theme) => ({
+  checkoutFormContainer: {
+    width: '50vw',
+    margin: theme.spacing(0, 'auto'),
+  },
   divider: {
     margin: theme.spacing(10, 0),
     [theme.breakpoints.down('md')]: {
@@ -76,6 +81,8 @@ const enterprisePlan = {
 
 const Pricing = () => {
   const classes = useStyles()
+  const [showCheckoutForm, setShowCheckoutForm] = useState(false)
+  const [planCost, setPlanCost] = useState(0)
   return (
     <Grid container direction="column" className={classes.pageContainer}>
       <div className={classes.sectionPadding}>
@@ -83,13 +90,42 @@ const Pricing = () => {
       </div>
       <Divider className={classes.divider} />
       <Grid container className={classes.sectionPadding}>
-        <Typography variant="h2" className={classes.sectionHeading}>
-          Choose the right plan for your community!
-        </Typography>
+        {showCheckoutForm ? (
+          <Button
+            variant="text"
+            size="large"
+            startIcon={<ArrowBackIcon />}
+            disableRipple
+            onClick={() => {
+              setShowCheckoutForm(false)
+              setPlanCost(0)
+            }}
+          >
+            Back to plans
+          </Button>
+        ) : (
+          <Typography variant="h2" className={classes.sectionHeading}>
+            Choose the right plan for your community!
+          </Typography>
+        )}
         <Grid container direction="row" justify="space-between">
-          <PricingPlanCard plan={basicPlan} />
-          <PricingPlanCard plan={proPlan} />
-          <PricingPlanCard plan={enterprisePlan} />
+          {!showCheckoutForm ? (
+            <>
+              <PricingPlanCard plan={basicPlan} />
+              <PricingPlanCard
+                plan={proPlan}
+                onSelect={() => {
+                  setShowCheckoutForm(true)
+                  setPlanCost(4999)
+                }}
+              />
+              <PricingPlanCard plan={enterprisePlan} />
+            </>
+          ) : (
+            <Grid className={classes.checkoutFormContainer}>
+              <CheckoutForm />
+            </Grid>
+          )}
         </Grid>
       </Grid>
     </Grid>
