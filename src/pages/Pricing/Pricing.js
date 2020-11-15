@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import { motion } from 'framer-motion'
 
 import { CheckoutForm, PricingHero, PricingPlanCard } from '.'
 
@@ -110,17 +111,19 @@ const Pricing = () => {
         )}
         <Grid container direction="row" justify="space-between">
           {!showCheckoutForm ? (
-            <>
-              <PricingPlanCard plan={basicPlan} />
-              <PricingPlanCard
-                plan={proPlan}
-                onSelect={() => {
-                  setShowCheckoutForm(true)
-                  setPlanCost(4999)
-                }}
-              />
-              <PricingPlanCard plan={enterprisePlan} />
-            </>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
+              <Grid container direction="row" justify="space-between">
+                <PricingPlanCard plan={basicPlan} />
+                <PricingPlanCard
+                  plan={proPlan}
+                  onSelect={() => {
+                    setShowCheckoutForm(true)
+                    setPlanCost(4999)
+                  }}
+                />
+                <PricingPlanCard plan={enterprisePlan} />
+              </Grid>
+            </motion.div>
           ) : (
             <Grid className={classes.checkoutFormContainer}>
               <CheckoutForm />

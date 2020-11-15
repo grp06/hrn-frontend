@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
+import { motion } from 'framer-motion'
 
 const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
@@ -92,7 +93,7 @@ const CheckoutForm = ({ price }) => {
   }
 
   return (
-    <>
+    <motion.div initial={{ x: 2000 }} animate={{ x: 0, transition: { duration: 0.55 } }}>
       <Formik
         initialValues={{
           name: 'John Smith',
@@ -156,7 +157,7 @@ const CheckoutForm = ({ price }) => {
       <div className={classes.cardElementContainer}>
         <CardElement options={cardElementOptions} />
       </div>
-    </>
+    </motion.div>
   )
 }
 
