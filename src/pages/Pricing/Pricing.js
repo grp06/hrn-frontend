@@ -7,7 +7,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { motion } from 'framer-motion'
 
-import { CheckoutCard, EnterprisePlanCard, PricingHeroNew, PricingPlanCard } from '.'
+import {
+  CheckoutCard,
+  EnterprisePlanCard,
+  getPricingPlanDetails,
+  PricingHeroNew,
+  PricingPlanCard,
+} from '.'
 import { ToggleGroup } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -31,44 +37,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const basicPlan = {
-  name: 'Free',
-  subtitle: 'Best for individuals',
-  price: 'Free!',
-  maxAttendees: 30,
-  prevPlanHighlights: [],
-  highlights: ['Unlimited Events', 'Standard Matching'],
-}
-
-const plusPlan = {
-  name: 'Plus',
-  subtitle: 'Best for small communities',
-  price: '$45 / month',
-  maxAttendees: 300,
-  prevPlanHighlights: ['Unlimited Events', 'Standard Matching'],
-  highlights: ['Advanced Matching', 'Group Video', 'Event data analysis', 'Added logo'],
-}
-
-const proPlan = {
-  name: 'Pro',
-  subtitle: 'Best for large communities',
-  price: '$99 / month',
-  maxAttendees: 300,
-  prevPlanHighlights: [
-    'Unlimited Events',
-    'Standard Matching',
-    'Advanced Matching',
-    'Group Video',
-    'Event data analysis',
-    'Added logo',
-  ],
-  highlights: ['Custom branding', 'Custom user tags', 'Concierge support'],
-}
-
 const Pricing = () => {
   const classes = useStyles()
   const [showCheckoutForm, setShowCheckoutForm] = useState(false)
   const [billingPeriod, setBillingPeriod] = useState('monthly')
+  const { freePlan, plusPlan, proPlan } = getPricingPlanDetails(billingPeriod)
   const [planCost, setPlanCost] = useState(0)
   return (
     <Grid container direction="column">
@@ -103,7 +76,7 @@ const Pricing = () => {
           {!showCheckoutForm ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
               <Grid container direction="row" justify="space-between">
-                <PricingPlanCard plan={basicPlan} />
+                <PricingPlanCard plan={freePlan} />
                 <PricingPlanCard
                   plan={plusPlan}
                   onSelect={() => {
