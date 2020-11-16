@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   subtitleHeading: {
-    color: theme.palette.common.basePink,
+    color: theme.palette.common.ghostWhiteDark,
     fontWeight: 600,
     textTransform: 'uppercase',
   },
@@ -142,10 +142,10 @@ const CheckoutForm = ({ price }) => {
                   <Field component={TextField} name="city" label="City" fullWidth required />
                 </Grid>
                 <Grid container>
-                  <Grid item lg={6} className={classes.formInputMargin}>
+                  <Grid container item md={6} className={classes.formInputMargin}>
                     <Field component={TextField} name="state" label="State" fullWidth required />
                   </Grid>
-                  <Grid container item lg={6} className={classes.formInputMargin}>
+                  <Grid container item md={6} className={classes.formInputMargin}>
                     <Field
                       component={TextField}
                       name="postal_code"

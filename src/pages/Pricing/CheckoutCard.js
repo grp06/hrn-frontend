@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
     height: '25%',
     padding: theme.spacing(2),
     backgroundColor: theme.palette.common.greyCard,
+    [theme.breakpoints.down('md')]: {
+      backgroundColor: theme.palette.common.basePurple,
+      borderRadius: '4px',
+    },
   },
 }))
 
@@ -30,14 +34,20 @@ const CheckoutCard = () => {
       className={classes.checkoutCardContainer}
     >
       <Grid container direction="row" alignItems="center">
-        <Grid container direction="column" justify="center" alignItems="flex-start" item lg={5}>
-          <Grid className={classes.planNameContainer}>
-            <Typography variant="h1">Pro</Typography>
-            <Typography variant="h1">Monthly</Typography>
-            <Typography variant="h3" style={{ marginTop: '8px' }}>
-              $49.99
-            </Typography>
-          </Grid>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignItems="flex-start"
+          item
+          lg={5}
+          className={classes.planNameContainer}
+        >
+          <Typography variant="h1">Pro</Typography>
+          <Typography variant="h1">Monthly</Typography>
+          <Typography variant="h3" style={{ marginTop: '8px' }}>
+            $49.99
+          </Typography>
         </Grid>
         <Grid container item lg={7}>
           <CheckoutForm />
