@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { motion } from 'framer-motion'
 
-import { CheckoutCard, PricingHero, PricingPlanCard } from '.'
+import { CheckoutCard, EnterprisePlanCard, PricingHero, PricingPlanCard } from '.'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -18,7 +18,9 @@ const useStyles = makeStyles((theme) => ({
   },
   pageContainer: {
     width: '80vw',
+    maxWidth: '1550px',
     margin: theme.spacing(10, 'auto'),
+
     [theme.breakpoints.down('md')]: {
       width: '90%',
       margin: theme.spacing(2, 'auto'),
@@ -118,6 +120,7 @@ const Pricing = () => {
                   }}
                 />
                 <PricingPlanCard plan={enterprisePlan} />
+                <EnterprisePlanCard />
               </Grid>
             </motion.div>
           ) : (
