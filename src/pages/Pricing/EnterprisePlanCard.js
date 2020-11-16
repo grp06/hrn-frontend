@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
   cardContainer: {
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
-    width: '64%',
+    width: '100%',
     margin: theme.spacing(2, 'auto'),
     padding: theme.spacing(3, 2),
     [theme.breakpoints.down('md')]: {

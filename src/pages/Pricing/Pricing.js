@@ -7,27 +7,14 @@ import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { motion } from 'framer-motion'
 
-import { CheckoutCard, EnterprisePlanCard, PricingHero, PricingPlanCard } from '.'
+import { CheckoutCard, EnterprisePlanCard, PricingHeroNew, PricingPlanCard } from '.'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
-    margin: theme.spacing(10, 0),
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(5, 0),
-    },
-  },
-  pageContainer: {
     width: '80vw',
-    maxWidth: '1550px',
-    margin: theme.spacing(10, 'auto'),
-
+    margin: theme.spacing(6, 'auto'),
     [theme.breakpoints.down('md')]: {
-      width: '90%',
-      margin: theme.spacing(2, 'auto'),
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-      margin: theme.spacing(2, 'auto'),
+      margin: theme.spacing(5, 'auto'),
     },
   },
   sectionHeading: {
@@ -37,10 +24,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   sectionPadding: {
-    padding: theme.spacing(0, 5),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(0, 2),
-    },
+    width: '80%',
+    maxWidth: '1550px',
+    margin: theme.spacing(0, 'auto'),
+    // padding: theme.spacing(0, 5),
+    // [theme.breakpoints.down('sm')]: {
+    //   padding: theme.spacing(0, 2),
+    // },
   },
 }))
 
@@ -83,10 +73,8 @@ const Pricing = () => {
   const [showCheckoutForm, setShowCheckoutForm] = useState(false)
   const [planCost, setPlanCost] = useState(0)
   return (
-    <Grid container direction="column" className={classes.pageContainer}>
-      <div className={classes.sectionPadding}>
-        <PricingHero />
-      </div>
+    <Grid container direction="column">
+      <PricingHeroNew />
       <Divider className={classes.divider} />
       <Grid container className={classes.sectionPadding}>
         {showCheckoutForm ? (
