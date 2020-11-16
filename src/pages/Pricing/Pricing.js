@@ -7,13 +7,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { motion } from 'framer-motion'
 
-import { CheckoutForm, PricingHero, PricingPlanCard } from '.'
+import { CheckoutCard, PricingHero, PricingPlanCard } from '.'
 
 const useStyles = makeStyles((theme) => ({
-  checkoutFormContainer: {
-    width: '50vw',
-    margin: theme.spacing(0, 'auto'),
-  },
   divider: {
     margin: theme.spacing(10, 0),
     [theme.breakpoints.down('md')]: {
@@ -125,9 +121,7 @@ const Pricing = () => {
               </Grid>
             </motion.div>
           ) : (
-            <Grid className={classes.checkoutFormContainer}>
-              <CheckoutForm />
-            </Grid>
+            <CheckoutCard />
           )}
         </Grid>
       </Grid>
