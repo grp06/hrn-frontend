@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CheckoutCard = () => {
+const CheckoutCard = ({ period, plan, price }) => {
   const classes = useStyles()
   return (
     <motion.div
@@ -43,10 +43,10 @@ const CheckoutCard = () => {
           lg={5}
           className={classes.planNameContainer}
         >
-          <Typography variant="h1">Pro</Typography>
-          <Typography variant="h1">Monthly</Typography>
+          <Typography variant="h1">{plan}</Typography>
+          <Typography variant="h1">{period}</Typography>
           <Typography variant="h3" style={{ marginTop: '8px' }}>
-            $49.99
+            {price}
           </Typography>
         </Grid>
         <Grid container item lg={7}>

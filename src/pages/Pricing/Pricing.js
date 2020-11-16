@@ -1,19 +1,12 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
 import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import { motion } from 'framer-motion'
+import { useHistory } from 'react-router-dom'
 
-import {
-  CheckoutCard,
-  EnterprisePlanCard,
-  getPricingPlanDetails,
-  PricingHeroNew,
-  PricingPlanCard,
-} from '.'
+import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
 import { ToggleGroup } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -39,33 +32,34 @@ const useStyles = makeStyles((theme) => ({
 
 const Pricing = () => {
   const classes = useStyles()
-  const [showCheckoutForm, setShowCheckoutForm] = useState(false)
+  const history = useHistory()
   const [billingPeriod, setBillingPeriod] = useState('monthly')
   const { freePlan, plusPlan, proPlan } = getPricingPlanDetails(billingPeriod)
-  const [planCost, setPlanCost] = useState(0)
+
+  const pushToCheckout = (planType, billingPeriod) => {
+    if (planType === 'plus') {
+      const stateToPass =
+        billingPeriod === 'monthly'
+          ? { planPrice: 49, planName: 'Plus', planPeriod: 'Monthly' }
+          : { planPrice: 39, planName: 'Plus', planPeriod: 'Yearly' }
+      return history.push('/checkout', stateToPass)
+    } else if (planType === 'pro') {
+      const stateToPass =
+        billingPeriod === 'monthly'
+          ? { planPrice: 129, planName: 'Pro', planPeriod: 'Monthly' }
+          : { planPrice: 99, planName: 'Pro', planPeriod: 'Yearly' }
+      return history.push('/checkout', stateToPass)
+    }
+  }
+
   return (
     <Grid container direction="column">
       <PricingHeroNew />
       <Divider className={classes.divider} />
       <Grid container className={classes.sectionPadding}>
-        {showCheckoutForm ? (
-          <Button
-            variant="text"
-            size="large"
-            startIcon={<ArrowBackIcon />}
-            disableRipple
-            onClick={() => {
-              setShowCheckoutForm(false)
-              setPlanCost(0)
-            }}
-          >
-            Back to plans
-          </Button>
-        ) : (
-          <Typography variant="h2" className={classes.sectionHeading}>
-            Choose the right plan for your community!
-          </Typography>
-        )}
+        <Typography variant="h2" className={classes.sectionHeading}>
+          Choose the right plan for your community!
+        </Typography>
         <ToggleGroup
           toggleValue={billingPeriod}
           toggleValueA="monthly"
@@ -73,24 +67,17 @@ const Pricing = () => {
           setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
         />
         <Grid container direction="row" justify="space-between">
-          {!showCheckoutForm ? (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
-              <Grid container direction="row" justify="space-between">
-                <PricingPlanCard plan={freePlan} />
-                <PricingPlanCard
-                  plan={plusPlan}
-                  onSelect={() => {
-                    setShowCheckoutForm(true)
-                    setPlanCost(4999)
-                  }}
-                />
-                <PricingPlanCard plan={proPlan} />
-                <EnterprisePlanCard />
-              </Grid>
-            </motion.div>
-          ) : (
-            <CheckoutCard />
-          )}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
+            <Grid container direction="row" justify="space-between">
+              <PricingPlanCard plan={freePlan} />
+              <PricingPlanCard
+                plan={plusPlan}
+                onSelect={() => pushToCheckout('plus', billingPeriod)}
+              />
+              <PricingPlanCard plan={proPlan} />
+              <EnterprisePlanCard />
+            </Grid>
+          </motion.div>
         </Grid>
       </Grid>
     </Grid>

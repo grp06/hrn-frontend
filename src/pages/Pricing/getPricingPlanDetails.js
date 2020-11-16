@@ -11,7 +11,7 @@ const getPricingPlanDetails = (billingPeriod) => {
   const plusPlan = {
     name: 'Plus',
     subtitle: 'Best for small communities',
-    price: billingPeriod === 'monthly' ? '$45 / month' : '$39 / month',
+    price: billingPeriod === 'monthly' ? '$49 / month' : '$39 / month',
     maxAttendees: 300,
     prevPlanHighlights: ['Unlimited Events', 'Standard Matching'],
     highlights: ['Advanced Matching', 'Group Video', 'Event data analysis', 'Added logo'],
