@@ -93,7 +93,6 @@ const NewEventForm = () => {
             event_time: new Date(),
             description:
               "Welcome to Hi Right Now 🎉 ! We'll go through a series of 6 min, 1 on 1 chats to expand your network with growth-minded and entrepreneurial professionals. This could be professional or casual or anything in between! Keep it fun and let's meet some new people. 💃",
-            post_event_link: '',
             public_event: 'private',
             round_length: 6,
             num_rounds: 9,
@@ -105,7 +104,6 @@ const NewEventForm = () => {
               event_date,
               event_time,
               num_rounds,
-              post_event_link,
               public_event,
               round_length,
             } = values
@@ -120,7 +118,6 @@ const NewEventForm = () => {
                   event_name,
                   host_id: user_id,
                   num_rounds,
-                  post_event_link,
                   public_event: isPublicEvent,
                   round_length,
                   start_at,
@@ -264,7 +261,7 @@ const NewEventForm = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid
+              {/* <Grid
                 container
                 direction="column"
                 justify="flex-start"
@@ -274,15 +271,9 @@ const NewEventForm = () => {
                 <Typography variant="h3">Post Event</Typography>
                 <Grid container direction="row">
                   <Grid item xs={12} md={6} className={classes.formInputMargin}>
-                    <Field
-                      component={TextField}
-                      name="post_event_link"
-                      label="Link to post-event Zoom/Google Meet"
-                      fullWidth
-                    />
                   </Grid>
                 </Grid>
-              </Grid>
+              </Grid> */}
               <Grid container justify="center" alignItems="center">
                 <Button
                   variant="contained"
