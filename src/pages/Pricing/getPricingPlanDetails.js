@@ -3,37 +3,40 @@ const getPricingPlanDetails = (billingPeriod) => {
     name: 'Free',
     subtitle: 'Best for individuals',
     price: 'Free!',
-    maxAttendees: 30,
+    maxAttendees: 'Unlimiited',
     prevPlanHighlights: [],
-    highlights: ['Unlimited Events', 'Standard Matching'],
+    highlights: ['Relevant Mathing AI', 'Group Vidoe Chat', '1 Event'],
   }
 
-  const plusPlan = {
-    name: 'Plus',
+  const starterPlan = {
+    name: 'Starter',
     subtitle: 'Best for small communities',
-    price: billingPeriod === 'monthly' ? '$49 / month' : '$39 / month',
-    maxAttendees: 300,
-    prevPlanHighlights: ['Unlimited Events', 'Standard Matching'],
-    highlights: ['Advanced Matching', 'Group Video', 'Event data analysis', 'Added logo'],
+    price: billingPeriod === 'monthly' ? '$59 / month' : '$49 / month',
+    maxAttendees: 'Unlimited',
+    prevPlanHighlights: ['Relevant Mathing AI', 'Group Vidoe Chat'],
+    highlights: ['Unlimited Events', 'Event Branding', '1 Host Account'],
   }
 
-  const proPlan = {
-    name: 'Pro',
+  const premiumPlan = {
+    name: 'Premium',
     subtitle: 'Best for large communities',
-    price: billingPeriod === 'monthly' ? '$129 / month' : '$99 / month',
-    maxAttendees: 300,
+    price: billingPeriod === 'monthly' ? '$169 / month' : '$149 / month',
+    maxAttendees: 'Unlimited',
     prevPlanHighlights: [
+      'Relevant Matching AI',
+      'Group Video Chat',
       'Unlimited Events',
-      'Standard Matching',
-      'Advanced Matching',
-      'Group Video',
-      'Event data analysis',
-      'Added logo',
+      'Event Branding',
     ],
-    highlights: ['Custom branding', 'Custom user tags', 'Concierge support'],
+    highlights: [
+      '5 Host Accounts',
+      'Event Analytics',
+      'Priority Support',
+      'Advanced Matching Options',
+    ],
   }
 
-  return { freePlan, plusPlan, proPlan }
+  return { freePlan, starterPlan, premiumPlan }
 }
 
 export default getPricingPlanDetails

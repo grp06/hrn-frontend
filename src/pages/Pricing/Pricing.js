@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
-import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
+import { getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
 import { ToggleGroup } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,22 +34,22 @@ const Pricing = () => {
   const classes = useStyles()
   const history = useHistory()
   const [billingPeriod, setBillingPeriod] = useState('monthly')
-  const { freePlan, plusPlan, proPlan } = getPricingPlanDetails(billingPeriod)
+  const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod)
 
   const pushToCheckout = (planType, billingPeriod) => {
-    if (planType === 'plus') {
+    if (planType === 'starter') {
       const stateToPass =
         billingPeriod === 'monthly'
-          ? { planPrice: 49, plan: 'PLUS_MONTHLY' }
-          : { planPrice: 39, plan: 'PLUS_YEARLY' }
-      return history.push('/checkout', stateToPass)
-    } else if (planType === 'pro') {
-      const stateToPass =
-        billingPeriod === 'monthly'
-          ? { planPrice: 129, plan: 'PRO_MONTHLY' }
-          : { planPrice: 99, plan: 'PRO_YEARLY' }
+          ? { planPrice: 59, plan: 'STARTER_MONTHLY' }
+          : { planPrice: 49, plan: 'STARTER_YEARLY' }
       return history.push('/checkout', stateToPass)
     }
+
+    const stateToPass =
+      billingPeriod === 'monthly'
+        ? { planPrice: 169, plan: 'PREMIUM_MONTHLY' }
+        : { planPrice: 149, plan: 'PREMIUM_YEARLY' }
+    return history.push('/checkout', stateToPass)
   }
 
   return (
@@ -71,11 +71,10 @@ const Pricing = () => {
             <Grid container direction="row" justify="space-between">
               <PricingPlanCard plan={freePlan} />
               <PricingPlanCard
-                plan={plusPlan}
-                onSelect={() => pushToCheckout('plus', billingPeriod)}
+                plan={starterPlan}
+                onSelect={() => pushToCheckout('starter', billingPeriod)}
               />
-              <PricingPlanCard plan={proPlan} />
-              <EnterprisePlanCard />
+              <PricingPlanCard plan={premiumPlan} />
             </Grid>
           </motion.div>
         </Grid>
