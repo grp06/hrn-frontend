@@ -40,14 +40,14 @@ const Pricing = () => {
     if (planType === 'plus') {
       const stateToPass =
         billingPeriod === 'monthly'
-          ? { planPrice: 49, planName: 'Plus', planPeriod: 'Monthly' }
-          : { planPrice: 39, planName: 'Plus', planPeriod: 'Yearly' }
+          ? { planPrice: 49, plan: 'PLUS_MONTHLY' }
+          : { planPrice: 39, plan: 'PLUS_YEARLY' }
       return history.push('/checkout', stateToPass)
     } else if (planType === 'pro') {
       const stateToPass =
         billingPeriod === 'monthly'
-          ? { planPrice: 129, planName: 'Pro', planPeriod: 'Monthly' }
-          : { planPrice: 99, planName: 'Pro', planPeriod: 'Yearly' }
+          ? { planPrice: 129, plan: 'PRO_MONTHLY' }
+          : { planPrice: 99, plan: 'PRO_YEARLY' }
       return history.push('/checkout', stateToPass)
     }
   }

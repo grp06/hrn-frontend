@@ -1,4 +1,5 @@
 export { default as constants } from './constants'
+export { default as createStripeCustomer } from './createStripeCustomer'
 export { default as formatDate } from './formatDate'
 export { default as getUserEventStatusMessage } from './getUserEventStatusMessage'
 export { default as getEventAnalytics } from './getEventAnalytics'

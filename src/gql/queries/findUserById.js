@@ -11,6 +11,7 @@ const findUserById = gql`
       short_bio
       linkedIn_url
       profile_pic_url
+      stripe_customer_id
       tags_users {
         tag {
           name

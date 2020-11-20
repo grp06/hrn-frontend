@@ -1,11 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { CheckoutCard } from '.'
+import { useAppContext, useUserContext } from '../../context'
+import { Loading } from '../../common'
+import { createStripeCustomer } from '../../utils'
 
 const Checkout = ({ location }) => {
   const history = useHistory()
+  const { appLoading } = useAppContext()
+  const { user } = useUserContext()
+  const [userHasStripeId, setUserHasStripeId] = useState(false)
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
-  const { planName, planPrice, planPeriod } = locationState
+  const { plan, planPrice } = locationState
 
   useEffect(() => {
     if (!Object.keys(locationState).length) {
@@ -16,7 +22,23 @@ const Checkout = ({ location }) => {
       location.state = {}
     }
   }, [])
-  return <CheckoutCard period={planPeriod} plan={planName} price={planPrice} />
+
+  useEffect(() => {
+    if (user && Object.keys(user).length > 4) {
+      const { email, name, stripe_customer_id } = user
+      if (!stripe_customer_id) {
+        console.log('im getting in here')
+        createStripeCustomer(email, name)
+      }
+      return setUserHasStripeId(true)
+    }
+  }, [user])
+
+  if (appLoading && !userHasStripeId) {
+    return <Loading />
+  }
+
+  return <CheckoutCard plan={plan} price={planPrice} />
 }
 
 export default Checkout
