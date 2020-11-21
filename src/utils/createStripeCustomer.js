@@ -1,4 +1,4 @@
-const createStripeCustomer = async (email, name) => {
+const createStripeCustomer = async (email, name, userId) => {
   const customerResponse = await fetch(
     `${process.env.REACT_APP_API_URL}/api/stripe/create-customer`,
     {
@@ -8,7 +8,7 @@ const createStripeCustomer = async (email, name) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ email, name }),
+      body: JSON.stringify({ email, name, userId }),
     }
   )
 

@@ -25,10 +25,10 @@ const Checkout = ({ location }) => {
 
   useEffect(() => {
     if (user && Object.keys(user).length > 4) {
-      const { email, name, stripe_customer_id } = user
+      const { email, id: userId, name, stripe_customer_id } = user
       if (!stripe_customer_id) {
         console.log('im getting in here')
-        createStripeCustomer(email, name)
+        createStripeCustomer(email, name, userId)
       }
       return setUserHasStripeId(true)
     }
