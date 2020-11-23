@@ -1,4 +1,6 @@
-const handlePaymentThatRequiresCustomerAction = ({
+// some payment methods require a customer to do additional authentication
+// with their financial institution Eg. 2fa for cards.
+const handlePaymentThatRequiresCustomerAction = async ({
   subscription,
   invoice,
   plan,
@@ -6,14 +8,13 @@ const handlePaymentThatRequiresCustomerAction = ({
   isRetry,
   stripe,
 }) => {
+  // subscription is active, meaning that everything succeeded, no customer actions required.
   if (subscription && subscription.status === 'active') {
-    // subscription is active, no customer actions required.
     return { subscription, plan, paymentMethodId }
   }
 
   // if its a first payment attempt, the payment intent is on the subscription latest invoce
   // if its a retry, the payment intent will be on the invoice itself.
-
   const paymentIntent = invoice
     ? invoice.payment_intent
     : subscription.latest_invoice.payment_intent
@@ -23,7 +24,7 @@ const handlePaymentThatRequiresCustomerAction = ({
     (isRetry === true && paymentIntent.status === 'requires_payment_method')
   ) {
     return stripe
-      .confirmCardPayment(paymentIntent.client_secret, { payment_menthod: paymentMethodId })
+      .confirmCardPayment(paymentIntent.client_secret, { payment_method: paymentMethodId })
       .then((res) => {
         if (res.error) {
           console.log(res.error)
@@ -43,18 +44,25 @@ const handlePaymentThatRequiresCustomerAction = ({
   return { subscription, plan, paymentMethodId }
 }
 
-const handleRequiresPaymentMethod = ({ subscription, paymentMethodId, plan }) => {
-  // subscription is active, no customer actions required.
+// If attaching a card to a Customoer object succeeds,
+// but the attempts to charge the customer fail. You will
+// get a requires_payment_method error
+const handleRequiresPaymentMethod = async ({ subscription, paymentMethodId, plan }) => {
+  // subscription is active, meaning that everything succeeded, no customer actions required.
   if (subscription.status === 'active') {
     return { subscription, paymentMethodId, plan }
   }
 
-  if (subscription.latest_invoice.payment_intent.status === ' requires_payment_method') {
+  // the card has failed to be charged, so the user might have to switch their card
+  // we save the latestInvoiceId and intent status so that when we rerun createSubscription,
+  // we just update the already created invoice, instead of making a new one
+  if (subscription.latest_invoice.payment_intent.status === 'requires_payment_method') {
     localStorage.setItem('latestInvoiceId', subscription.latest_invoice.id)
     localStorage.setItem(
       'latestInvoicePaymentIntentStatus',
       subscription.latest_invoice.payment_intent.status
     )
+    console.log('Your card was declined')
     throw new Error('Your card was declined')
   } else {
     return { subscription, paymentMethodId, plan }
@@ -84,16 +92,55 @@ const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, str
 
   // some payment methods require a customer to do additional authentication
   // with their financial institution Eg. 2fa for cards.
-  handlePaymentThatRequiresCustomerAction({
+  await handlePaymentThatRequiresCustomerAction({
     plan,
     paymentMethodId,
     subscription: subscriptionResponse,
     stripe,
   })
 
-  handleRequiresPaymentMethod({ plan, paymentMethodId, subscription: subscriptionResponse })
-  // handleRequiresPaymentMethod
-  // onSubscriptionComplete
+  await handleRequiresPaymentMethod({ plan, paymentMethodId, subscription: subscriptionResponse })
+
+  return { subscription: subscriptionResponse, paymentMethodId, plan }
+
+  // TODO add onSubscriptionComplete
 }
 
-export { createSubscription, handlePaymentThatRequiresCustomerAction, handleRequiresPaymentMethod }
+const retryInvoiceWithNewPaymentMethod = async ({
+  stripeCustomerId,
+  paymentMethodId,
+  invoiceId,
+  plan,
+}) => {
+  const retryResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/stripe/retry-invoice`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
+    },
+    body: JSON.stringify({ customerId: stripeCustomerId, paymentMethodId, invoiceId }),
+  }).then((res) => res.json())
+
+  // if the card is declined, diaply an error to the user
+  if (retryResponse.error) {
+    // the card had an error when trying to attach it to the customer
+    console.log('[retryInvoiceWithNewPaymentMethod error]', retryResponse.error)
+  }
+
+  await handlePaymentThatRequiresCustomerAction({
+    invoice: retryResponse,
+    paymentMethodId,
+    plan,
+    isRetry: true,
+  })
+
+  return { invoice: retryResponse, paymentMethodId, plan }
+}
+
+export {
+  createSubscription,
+  handlePaymentThatRequiresCustomerAction,
+  handleRequiresPaymentMethod,
+  retryInvoiceWithNewPaymentMethod,
+}

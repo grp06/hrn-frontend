@@ -7,7 +7,7 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { createSubscription } from './stripeUtils'
+import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
 
 const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
@@ -60,13 +60,11 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
-  console.log('stripeCustomerId ->', stripeCustomerId)
-
-  const retryInvoiceWithNewPaymentMethod = ({ paymentMethodId, invoiceId }) => {}
 
   const onSubscriptionComplete = (result) => {
-    console.log('[onSubscriptionComplete] ->', onSubscriptionComplete)
+    console.log('[onSubscriptionComplete] ->', result)
 
+    // means that we had to retry so lets clear our local storage
     if (result && !result.subscription) {
       const subscription = { id: result.invoice.subscription }
       result.subscription = subscription
@@ -89,39 +87,39 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
     }
 
     const cardElement = elements.getElement(CardElement)
-
     // If a previous payment was attempted, get the lastest invoice
     const latestInvoicePaymentIntentStatus = localStorage.getItem(
       'latestInvoicePaymentIntentStatus'
     )
-
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
+      // TODO add billing details from the form
       // billing_details: billingDetails,
     })
-
     if (error) {
       console.log('[createPaymentMethod error]', error)
       return
     }
-
-    console.log('[PaymentMethod]', paymentMethod)
     const paymentMethodId = paymentMethod.id
 
     // If you are resubmitting the form because it failed before
     if (latestInvoicePaymentIntentStatus === 'requires_payment_method') {
       // Update the payment method and retry invoice payment
       const invoiceId = localStorage.getItem('latestInvoiceId')
-      retryInvoiceWithNewPaymentMethod({
-        paymentMethodId,
+      const retrySubResult = retryInvoiceWithNewPaymentMethod({
         invoiceId,
+        paymentMethodId,
+        plan,
+        stripeCustomerId,
       })
+      onSubscriptionComplete(retrySubResult)
       return
     }
 
     // First time submitting the form
-    createSubscription({ paymentMethodId, plan, stripeCustomerId, stripe })
+    const subResult = await createSubscription({ paymentMethodId, plan, stripeCustomerId, stripe })
+    onSubscriptionComplete(subResult)
   }
 
   return (
