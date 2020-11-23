@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
+import { Snack } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
@@ -60,6 +62,9 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
+  const [formSubmitting, setFormSubmitting] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(null)
+  const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = (result) => {
     console.log('[onSubscriptionComplete] ->', result)
@@ -74,6 +79,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
   }
 
   const handleFormSubmit = async (formValues) => {
+    setFormSubmitting(true)
     const { name, email, addressLine1, city, state, postal_code } = formValues
     const billingDetails = {
       name,
@@ -98,7 +104,8 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       // billing_details: billingDetails,
     })
     if (error) {
-      console.log('[createPaymentMethod error]', error)
+      setFormSubmitting(false)
+      setPaymentErrorMessage(error.message)
       return
     }
     const paymentMethodId = paymentMethod.id
@@ -114,12 +121,14 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
         stripeCustomerId,
       })
       onSubscriptionComplete(retrySubResult)
+      setFormSubmitting(false)
       return
     }
 
     // First time submitting the form
     const subResult = await createSubscription({ paymentMethodId, plan, stripeCustomerId, stripe })
     onSubscriptionComplete(subResult)
+    setFormSubmitting(false)
   }
 
   return (
@@ -183,15 +192,23 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
               <Button
                 variant="contained"
                 color="primary"
-                disabled={isSubmitting}
+                startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
+                disabled={formSubmitting}
                 onClick={submitForm}
               >
-                Submit
+                {formSubmitting ? 'Updating Our Ledgers ...' : 'Submit'}
               </Button>
             </Grid>
           </Form>
         )}
       </Formik>
+      <Snack
+        open={Boolean(paymentErrorMessage)}
+        onClose={() => setPaymentErrorMessage('')}
+        severity="error"
+        duration={3000}
+        snackMessage={paymentErrorMessage}
+      />
     </Grid>
   )
 }
