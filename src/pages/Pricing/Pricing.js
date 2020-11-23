@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
-import { getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
+import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
 import { ToggleGroup } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
@@ -75,6 +75,7 @@ const Pricing = () => {
                 onSelect={() => pushToCheckout('starter', billingPeriod)}
               />
               <PricingPlanCard plan={premiumPlan} />
+              <EnterprisePlanCard />
             </Grid>
           </motion.div>
         </Grid>

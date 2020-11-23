@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { CheckoutCard } from '.'
+import { CheckoutCard, CheckoutForm } from '.'
 import { useAppContext, useUserContext } from '../../context'
 import { Loading } from '../../common'
 import { createStripeCustomer } from '../../utils'
@@ -38,7 +38,13 @@ const Checkout = ({ location }) => {
     return <Loading />
   }
 
-  return <CheckoutCard plan={plan} price={planPrice} />
+  return (
+    <CheckoutCard
+      form={<CheckoutForm plan={plan} stripeCustomerId={user.stripe_customer_id} />}
+      plan={plan}
+      price={planPrice}
+    />
+  )
 }
 
 export default Checkout

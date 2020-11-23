@@ -7,6 +7,8 @@ import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
 
+import { createSubscription } from './stripeUtils'
+
 const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
     backgroundColor: theme.palette.common.grey10,
@@ -54,31 +56,23 @@ const cardElementOptions = {
   hidePostalCode: true,
 }
 
-const CheckoutForm = ({ customer, plan }) => {
+const CheckoutForm = ({ plan, stripeCustomerId }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
+  console.log('stripeCustomerId ->', stripeCustomerId)
 
-  const createSubscription = async ({ paymentMethodId }) => {
-    const subscriptionResponse = await fetch(
-      `${process.env.REACT_APP_API_URL}/api/stripe/create-subscription`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ customerId: customer.id, paymentMethodId, plan }),
-      }
-    ).then((res) => res.json())
+  const retryInvoiceWithNewPaymentMethod = ({ paymentMethodId, invoiceId }) => {}
 
-    // if the card is declined, display an error to the user
-    if (subscriptionResponse.error) {
-      console.log('[createSubscription error]', subscriptionResponse.error)
+  const onSubscriptionComplete = (result) => {
+    console.log('[onSubscriptionComplete] ->', onSubscriptionComplete)
+
+    if (result && !result.subscription) {
+      const subscription = { id: result.invoice.subscription }
+      result.subscription = subscription
+      localStorage.setItem('latestInvoicePaymentIntentStatus', '')
+      localStorage.setItem('latestInvoiceId', '')
     }
-
-    // TODO: have to finsih this off
   }
 
   const handleFormSubmit = async (formValues) => {
@@ -97,9 +91,9 @@ const CheckoutForm = ({ customer, plan }) => {
     const cardElement = elements.getElement(CardElement)
 
     // If a previous payment was attempted, get the lastest invoice
-    // const latestInvoicePaymentIntentStatus = localStorage.getItem(
-    //   'latestInvoicePaymentIntentStatus'
-    // )
+    const latestInvoicePaymentIntentStatus = localStorage.getItem(
+      'latestInvoicePaymentIntentStatus'
+    )
 
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
@@ -114,37 +108,33 @@ const CheckoutForm = ({ customer, plan }) => {
 
     console.log('[PaymentMethod]', paymentMethod)
     const paymentMethodId = paymentMethod.id
-    createSubscription({ paymentMethodId })
 
-    // TIP: In Stripe, the amount is always the lowest denomination of your currency
-    // const data = await fetch(`${process.env.REACT_APP_API_URL}/api/stripe/payment-intents`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Access-Control-Allow-Origin': '*',
-    //     'Access-Control-Allow-Credentials': true,
-    //   },
-    //   body: JSON.stringify({ amount: 100 }),
-    // }).then((res) => res.json())
+    // If you are resubmitting the form because it failed before
+    if (latestInvoicePaymentIntentStatus === 'requires_payment_method') {
+      // Update the payment method and retry invoice payment
+      const invoiceId = localStorage.getItem('latestInvoiceId')
+      retryInvoiceWithNewPaymentMethod({
+        paymentMethodId,
+        invoiceId,
+      })
+      return
+    }
 
-    // const confirmedCardPayment = await stripe.confirmCardPayment(data.secret, {
-    //   payment_method: paymentMethodReq.paymentMethod.id,
-    // })
-
-    // console.log(confirmedCardPayment)
+    // First time submitting the form
+    createSubscription({ paymentMethodId, plan, stripeCustomerId, stripe })
   }
 
   return (
     <Grid container direction="column" className={classes.formContainer}>
       <Formik
-        // initialValues={{
-        //   name: 'John Smith',
-        //   email: 'max@hirightnow.co',
-        //   addressLine1: '32 sidecar lane',
-        //   city: 'New York',
-        //   state: 'New York',
-        //   postal_code: '11378',
-        // }}
+        initialValues={{
+          name: '',
+          email: '',
+          addressLine1: '',
+          city: '',
+          state: '',
+          postal_code: '',
+        }}
         onSubmit={async (values, { setSubmitting }) => {
           handleFormSubmit(values)
         }}

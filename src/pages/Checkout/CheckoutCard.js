@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CheckoutCard = ({ plan, price }) => {
+const CheckoutCard = ({ form, plan, price }) => {
   const classes = useStyles()
   return (
     <motion.div
@@ -50,7 +50,7 @@ const CheckoutCard = ({ plan, price }) => {
           </Typography>
         </Grid>
         <Grid container item lg={7}>
-          <CheckoutForm />
+          {form}
         </Grid>
       </Grid>
     </motion.div>
