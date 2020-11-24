@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
+import * as Yup from 'yup'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
@@ -58,6 +59,13 @@ const cardElementOptions = {
   hidePostalCode: true,
 }
 
+const CheckoutSchema = Yup.object().shape({
+  name: Yup.string().min(2, 'Too Short!').required('Required'),
+  addressLine1: Yup.string().min(2, 'Too Short!').required('Required'),
+  city: Yup.string().min(1, 'Too Short!').required('Required'),
+  state: Yup.string().min(2, 'Too Short!').required('Required'),
+  postal_code: Yup.string().min(2, 'Too Short!').required('Required'),
+})
 const CheckoutForm = ({ plan, stripeCustomerId }) => {
   const classes = useStyles()
   const stripe = useStripe()
@@ -80,10 +88,15 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
 
   const handleFormSubmit = async (formValues) => {
     setFormSubmitting(true)
-    const { name, email, addressLine1, city, state, postal_code } = formValues
+    const { name, addressLine1, city, state, postal_code } = formValues
+    if (!name || !addressLine1 || !city || !state || !postal_code) {
+      setPaymentErrorMessage('something seems to be empty  🧐')
+      setFormSubmitting(false)
+      return
+    }
+    console.log('formValues ->', formValues)
     const billingDetails = {
       name,
-      email,
       address: {
         line1: addressLine1,
         city,
@@ -91,6 +104,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
         postal_code,
       },
     }
+    console.log('billingDetails ->', billingDetails)
 
     const cardElement = elements.getElement(CardElement)
     // If a previous payment was attempted, get the lastest invoice
@@ -101,7 +115,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       type: 'card',
       card: cardElement,
       // TODO add billing details from the form
-      // billing_details: billingDetails,
+      billing_details: billingDetails,
     })
     if (error) {
       setFormSubmitting(false)
@@ -136,17 +150,17 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       <Formik
         initialValues={{
           name: '',
-          email: '',
           addressLine1: '',
           city: '',
           state: '',
           postal_code: '',
         }}
-        onSubmit={async (values, { setSubmitting }) => {
+        onSubmit={async (values) => {
           handleFormSubmit(values)
         }}
+        validationSchema={CheckoutSchema}
       >
-        {({ submitForm, isSubmitting, values }) => (
+        {({ submitForm, dirty, isValid, values }) => (
           <Form>
             <div className={classes.sectionContainer}>
               <Grid container direction="column" className={classes.formInputMargin}>
@@ -193,7 +207,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
                 variant="contained"
                 color="primary"
                 startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
-                disabled={formSubmitting}
+                disabled={formSubmitting || !isValid || !dirty}
                 onClick={submitForm}
               >
                 {formSubmitting ? 'Updating Our Ledgers ...' : 'Submit'}
