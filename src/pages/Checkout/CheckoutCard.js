@@ -3,8 +3,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { motion } from 'framer-motion'
-
-import { CheckoutForm } from '.'
+import { CheckoutForm, CheckoutSuccess } from '.'
 
 const useStyles = makeStyles((theme) => ({
   checkoutCardContainer: {
@@ -50,7 +49,8 @@ const CheckoutCard = ({ form, plan, price }) => {
           </Typography>
         </Grid>
         <Grid container item lg={7}>
-          {form}
+          {/* {form} */}
+          <CheckoutSuccess />
         </Grid>
       </Grid>
     </motion.div>

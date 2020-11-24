@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import Grid from '@material-ui/core/Grid'
 import { CheckoutCard, CheckoutForm } from '.'
 import { useAppContext, useUserContext } from '../../context'
 import { Loading } from '../../common'
@@ -39,11 +40,13 @@ const Checkout = ({ location }) => {
   }
 
   return (
-    <CheckoutCard
-      form={<CheckoutForm plan={plan} stripeCustomerId={user.stripe_customer_id} />}
-      plan={plan}
-      price={planPrice}
-    />
+    <Grid contianer justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
+      <CheckoutCard
+        form={<CheckoutForm plan={plan} stripeCustomerId={user.stripe_customer_id} />}
+        plan={plan}
+        price={planPrice}
+      />
+    </Grid>
   )
 }
 
