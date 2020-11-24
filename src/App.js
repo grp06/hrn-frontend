@@ -9,6 +9,7 @@ import { useIntercom } from 'react-use-intercom'
 import { NewEventForm, EventForm, ErrorBoundary } from './common'
 import {
   Checkout,
+  CheckoutSuccess,
   Event,
   MyEvents,
   EventComplete,
@@ -91,6 +92,7 @@ const App = () => {
                       <Route exact path="/create-event" component={NewEventForm} />
                       <Route exact path="/pricing" component={Pricing} />
                       <Route exact path="/checkout" component={Checkout} />
+                      <Route exact path="/checkout-success" component={CheckoutSuccess} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <EventProvider>
