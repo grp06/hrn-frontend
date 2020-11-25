@@ -54,7 +54,7 @@ const HostDashboard = () => {
       variables: {
         userId: userId,
       },
-      skip: !userId || (role && role !== 'host'),
+      skip: !userId || (role && !role.includes('host')),
     }
   )
   const { data: eventsAndPartnersData, loading: eventsAndPartnersLoading } = useQuery(
@@ -63,7 +63,7 @@ const HostDashboard = () => {
       variables: {
         user_id: userId,
       },
-      skip: !userId || (role && role !== 'host'),
+      skip: !userId || (role && !role.includes('host')),
     }
   )
 
@@ -108,7 +108,7 @@ const HostDashboard = () => {
     }
   }, [eventsAndPartnersData, eventsAndPartnersLoading])
 
-  if (role && role !== 'host') {
+  if (role && !role.includes('host')) {
     return <Redirect to="/events" />
   }
 

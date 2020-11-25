@@ -54,9 +54,9 @@ const NewEventForm = () => {
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
   // REDIRECTS
-  // if (user_id && role !== 'host' && role !== 'host-starter') {
-  //   return <Redirect to="/events" />
-  // }
+  if (user_id && !role.includes('host')) {
+    return <Redirect to="/events" />
+  }
 
   if (!user_id) {
     return <Redirect to="/" />
