@@ -69,7 +69,7 @@ const handleRequiresPaymentMethod = async ({ subscription, paymentMethodId, plan
   }
 }
 
-const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, stripe }) => {
+const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, stripe, userId }) => {
   const subscriptionResponse = await fetch(
     `${process.env.REACT_APP_API_URL}/api/stripe/create-subscription`,
     {
@@ -79,7 +79,7 @@ const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, str
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ customerId: stripeCustomerId, paymentMethodId, plan }),
+      body: JSON.stringify({ customerId: stripeCustomerId, paymentMethodId, plan, userId }),
     }
   ).then((res) => res.json())
 
@@ -111,6 +111,7 @@ const retryInvoiceWithNewPaymentMethod = async ({
   paymentMethodId,
   invoiceId,
   plan,
+  userId,
 }) => {
   const retryResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/stripe/retry-invoice`, {
     method: 'POST',
@@ -119,7 +120,13 @@ const retryInvoiceWithNewPaymentMethod = async ({
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify({ customerId: stripeCustomerId, paymentMethodId, invoiceId }),
+    body: JSON.stringify({
+      customerId: stripeCustomerId,
+      paymentMethodId,
+      invoiceId,
+      plan,
+      userId,
+    }),
   }).then((res) => res.json())
 
   // if the card is declined, diaply an error to the user

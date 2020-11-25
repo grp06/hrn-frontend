@@ -68,7 +68,7 @@ const CheckoutSchema = Yup.object().shape({
   postal_code: Yup.string().min(2, 'Too Short!').required('Required'),
 })
 
-const CheckoutForm = ({ plan, stripeCustomerId }) => {
+const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
@@ -87,17 +87,17 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
 
-    return history.push('/checkout', result)
+    return history.push('/checkout-success', result)
   }
 
   const handleFormSubmit = async (formValues) => {
     setFormSubmitting(true)
     const { name, addressLine1, city, state, postal_code } = formValues
-    if (!name || !addressLine1 || !city || !state || !postal_code) {
-      setPaymentErrorMessage('something seems to be empty  🧐')
-      setFormSubmitting(false)
-      return
-    }
+    // if (!name || !addressLine1 || !city || !state || !postal_code) {
+    //   setPaymentErrorMessage('something seems to be empty  🧐')
+    //   setFormSubmitting(false)
+    //   return
+    // }
     console.log('formValues ->', formValues)
     const billingDetails = {
       name,
@@ -119,7 +119,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       type: 'card',
       card: cardElement,
       // TODO add billing details from the form
-      billing_details: billingDetails,
+      // billing_details: billingDetails,
     })
     if (error) {
       setFormSubmitting(false)
@@ -137,6 +137,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
         paymentMethodId,
         plan,
         stripeCustomerId,
+        userId,
       })
       onSubscriptionComplete(retrySubResult)
       setFormSubmitting(false)
@@ -144,7 +145,13 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
     }
 
     // First time submitting the form
-    const subResult = await createSubscription({ paymentMethodId, plan, stripeCustomerId, stripe })
+    const subResult = await createSubscription({
+      paymentMethodId,
+      plan,
+      stripeCustomerId,
+      stripe,
+      userId,
+    })
     onSubscriptionComplete(subResult)
     setFormSubmitting(false)
   }
@@ -162,7 +169,7 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
         onSubmit={async (values) => {
           handleFormSubmit(values)
         }}
-        validationSchema={CheckoutSchema}
+        // validationSchema={CheckoutSchema}
       >
         {({ submitForm, dirty, isValid, values }) => (
           <Form>
@@ -211,7 +218,8 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
                 variant="contained"
                 color="primary"
                 startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
-                disabled={formSubmitting || !isValid || !dirty}
+                // disabled={formSubmitting || !isValid || !dirty}
+                disabled={formSubmitting}
                 onClick={submitForm}
               >
                 {formSubmitting ? 'Updating Our Ledgers ...' : 'Submit'}
