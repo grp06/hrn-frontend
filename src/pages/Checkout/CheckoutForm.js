@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
+import { useHistory } from 'react-router-dom'
+import * as Yup from 'yup'
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import * as Yup from 'yup'
-import { Formik, Form, Field } from 'formik'
-import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/core/styles'
 
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
@@ -66,17 +67,18 @@ const CheckoutSchema = Yup.object().shape({
   state: Yup.string().min(2, 'Too Short!').required('Required'),
   postal_code: Yup.string().min(2, 'Too Short!').required('Required'),
 })
+
 const CheckoutForm = ({ plan, stripeCustomerId }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
+  const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [paymentSuccess, setPaymentSuccess] = useState(null)
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = (result) => {
     console.log('[onSubscriptionComplete] ->', result)
-
     // means that we had to retry so lets clear our local storage
     if (result && !result.subscription) {
       const subscription = { id: result.invoice.subscription }
@@ -84,6 +86,8 @@ const CheckoutForm = ({ plan, stripeCustomerId }) => {
       localStorage.setItem('latestInvoicePaymentIntentStatus', '')
       localStorage.setItem('latestInvoiceId', '')
     }
+
+    return history.push('/checkout', result)
   }
 
   const handleFormSubmit = async (formValues) => {

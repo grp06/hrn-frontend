@@ -19,7 +19,6 @@ const Checkout = ({ location }) => {
       return history.push('/pricing')
     }
     return () => {
-      console.log('hitting this shit')
       location.state = {}
     }
   }, [])
