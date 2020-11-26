@@ -74,11 +74,11 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
   const elements = useElements()
   const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
-  const [paymentSuccess, setPaymentSuccess] = useState(null)
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = (result) => {
     console.log('[onSubscriptionComplete] ->', result)
+
     // means that we had to retry so lets clear our local storage
     if (result && !result.subscription) {
       const subscription = { id: result.invoice.subscription }
@@ -143,7 +143,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
       setFormSubmitting(false)
       return
     }
-
     // First time submitting the form
     const subResult = await createSubscription({
       paymentMethodId,

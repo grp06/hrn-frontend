@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
       height: '200px',
     },
   },
-  manageProfileButton: { maxWidth: '200px' },
+  hostFormButton: { marginTop: theme.spacing(2), maxWidth: '200px' },
   subheading: {
     fontWeight: 300,
-    width: '55%',
-    marginBottom: '32px',
+    width: '80%',
+    marginBottom: theme.spacing(2),
     [theme.breakpoints.down('md')]: {
       width: '90%',
     },
@@ -75,19 +75,26 @@ const CongratsCard = () => {
           className={classes.textContainer}
         >
           <Typography variant="h2" className={classes.heading}>
-            Congratulations! You're now a host!
+            Congratulations! You&apos;re now a host!
           </Typography>
-          <Typography variant="h3" className={classes.subheading}>
-            We recommend all hosts have a completed profile.
+          <Typography variant="h4" className={classes.subheading}>
+            We&apos;re excited for your badass events.{' '}
+            <span role="img" aria-label="sunglass smiley">
+              😎
+            </span>
+          </Typography>
+          <Typography variant="h4" className={classes.subheading}>
+            Help us perfect the experience of strengthening community bonds for you and others by
+            answering a few questions.
           </Typography>
           <Button
             variant="contained"
             size="large"
             color="primary"
             disableRipple
-            className={classes.manageProfileButton}
+            className={classes.hostFormButton}
           >
-            Manage Profile
+            Continue
           </Button>
         </Grid>
         <Hidden mdDown>

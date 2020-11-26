@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
 import { ToggleGroup } from '../../common'
 import { useUserContext } from '../../context'
-import { upgradeToHost } from '../../helpers'
+import { upgradeToHost, sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -58,9 +58,15 @@ const Pricing = () => {
 
   const handleUpgradeToHost = async () => {
     if (userId) {
-      const upgradeToHostResponse = await upgradeToHost(userId)
-      localStorage.setItem('token', upgradeToHostResponse.token)
-      window.location.reload()
+      try {
+        const upgradeToHostResponse = await upgradeToHost(userId)
+        localStorage.setItem('token', upgradeToHostResponse.token)
+        await sleep(500)
+        history.push('/checkout-success', { freeHost: true })
+        return window.location.reload()
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 
