@@ -103,7 +103,7 @@ const EventForm = ({ eventData, match }) => {
   }, [eventData])
 
   // REDIRECTS
-  if (user_id && role !== 'host') {
+  if (user_id && !role.includes('host')) {
     return <Redirect to="/events" />
   }
 

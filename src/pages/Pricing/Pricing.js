@@ -8,6 +8,8 @@ import { useHistory } from 'react-router-dom'
 
 import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
 import { ToggleGroup } from '../../common'
+import { useUserContext } from '../../context'
+import { upgradeToHost } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -33,6 +35,8 @@ const useStyles = makeStyles((theme) => ({
 const Pricing = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { user } = useUserContext()
+  const { id: userId } = user
   const [billingPeriod, setBillingPeriod] = useState('monthly')
   const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod)
 
@@ -52,6 +56,14 @@ const Pricing = () => {
     return history.push('/checkout', stateToPass)
   }
 
+  const handleUpgradeToHost = async () => {
+    if (userId) {
+      const upgradeToHostResponse = await upgradeToHost(userId)
+      localStorage.setItem('token', upgradeToHostResponse.token)
+      window.location.reload()
+    }
+  }
+
   return (
     <Grid container direction="column">
       <PricingHeroNew />
@@ -69,7 +81,7 @@ const Pricing = () => {
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
             <Grid container direction="row" justify="space-between">
-              <PricingPlanCard plan={freePlan} />
+              <PricingPlanCard plan={freePlan} onSelect={() => handleUpgradeToHost()} />
               <PricingPlanCard
                 plan={starterPlan}
                 onSelect={() => pushToCheckout('starter', billingPeriod)}
