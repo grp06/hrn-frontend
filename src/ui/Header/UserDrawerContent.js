@@ -55,6 +55,11 @@ const UserDrawerContent = ({ userId, userName }) => {
       url: '/events',
       icon: 'globe',
     },
+    {
+      label: 'Subscription',
+      url: '/subscription',
+      icon: 'credit-card',
+    },
   ]
 
   const renderLoggedInContent = () => {

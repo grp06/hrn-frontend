@@ -17,7 +17,7 @@ const Checkout = ({ location }) => {
 
   useEffect(() => {
     if (!Object.keys(locationState).length) {
-      return history.push('/pricing')
+      return history.push('/subscription')
     }
     return () => {
       location.state = {}

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostDrawerContent = () => {
+const HostDrawerContent = ({ role }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
@@ -32,18 +32,26 @@ const HostDrawerContent = () => {
       window.location.pathname.includes('video-room')
   )
 
-  const hostDrawerRoutes = [
-    {
-      label: 'Create Event',
-      url: '/create-event',
-      icon: 'plus-circle',
-    },
-    {
-      label: 'Analytics',
-      url: '/host-dashboard',
-      icon: 'bar-chart-2',
-    },
-  ]
+  const hostDrawerRoutes = role.includes('premium')
+    ? [
+        {
+          label: 'Create Event',
+          url: '/create-event',
+          icon: 'plus-circle',
+        },
+        {
+          label: 'Analytics',
+          url: '/host-dashboard',
+          icon: 'bar-chart-2',
+        },
+      ]
+    : [
+        {
+          label: 'Create Event',
+          url: '/create-event',
+          icon: 'plus-circle',
+        },
+      ]
 
   return (
     <div>

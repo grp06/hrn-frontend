@@ -76,7 +76,7 @@ const DrawerContent = () => {
           </div>
           <Divider />
           <UserDrawerContent userId={userId} userName={name} />
-          {role && role.includes('host') && <HostDrawerContent />}
+          {role && role.includes('host') && <HostDrawerContent role={role} />}
         </Grid>
         <Grid
           container

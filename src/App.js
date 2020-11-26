@@ -25,7 +25,7 @@ import {
   Onboarding,
   PreEvent,
   PrivacyPolicy,
-  Pricing,
+  Subscription,
   SetNewPassword,
   SignUp,
   Lobby,
@@ -90,7 +90,7 @@ const App = () => {
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
                       <Route exact path="/create-event" component={NewEventForm} />
-                      <Route exact path="/pricing" component={Pricing} />
+                      <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />

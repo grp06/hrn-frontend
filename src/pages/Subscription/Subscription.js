@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Pricing = () => {
+const Subscription = () => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useUserContext()
@@ -102,4 +102,4 @@ const Pricing = () => {
   )
 }
 
-export default Pricing
+export default Subscription
