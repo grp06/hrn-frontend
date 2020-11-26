@@ -50,7 +50,7 @@ const PricingHero = () => {
       </div>
       <Grid className={classes.heroContent}>
         <Typography variant="h1" style={{ color: 'black', marginBottom: '8px' }}>
-          Host 2 events on us{' '}
+          Host an event on us{' '}
           <span role="img" aria-label="wink face">
             😉
           </span>

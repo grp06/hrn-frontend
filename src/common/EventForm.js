@@ -103,12 +103,12 @@ const EventForm = ({ eventData, match }) => {
   }, [eventData])
 
   // REDIRECTS
-  if (user_id && !role.includes('host')) {
-    return <Redirect to="/events" />
-  }
-
   if (!user_id) {
     return <Redirect to="/" />
+  }
+
+  if (user_id && !role.includes('host')) {
+    return <Redirect to="/events" />
   }
 
   const handleSubmit = async (event) => {

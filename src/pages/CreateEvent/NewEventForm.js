@@ -11,12 +11,12 @@ import { Formik, Form, Field } from 'formik'
 import { TextField, RadioGroup } from 'formik-material-ui'
 import { TimePicker, DatePicker } from 'formik-material-ui-pickers'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { useHistory, Redirect } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
-import { Snack } from '.'
-import { useUserContext } from '../context'
-import { sleep } from '../helpers'
-import { createEvent, insertEventUser } from '../gql/mutations'
+import { Snack } from '../../common'
+import { useUserContext } from '../../context'
+import { sleep } from '../../helpers'
+import { createEvent, insertEventUser } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -29,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
   formInputMargin: {
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
-  },
-  pageContainer: {
-    padding: theme.spacing(4, 0),
   },
   pinkText: {
     color: theme.palette.common.basePink,
@@ -53,15 +50,6 @@ const NewEventForm = () => {
   const [createEventMutation] = useMutation(createEvent)
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
-  // REDIRECTS
-  if (user_id && !role.includes('host')) {
-    return <Redirect to="/events" />
-  }
-
-  if (!user_id) {
-    return <Redirect to="/" />
-  }
-
   const getEventStartAt = (eventDate, eventTime) => {
     const dateISOString = eventDate.toISOString()
     const timeISOString = eventTime.toISOString()
@@ -74,13 +62,7 @@ const NewEventForm = () => {
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      alignItems="center"
-      justify="center"
-      className={classes.pageContainer}
-    >
+    <Grid container direction="column" alignItems="center" justify="center">
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
         Host An Event
       </Typography>
