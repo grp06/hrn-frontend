@@ -1,6 +1,7 @@
 export { default as constants } from './constants'
 export { default as createStripeCustomer } from './createStripeCustomer'
 export { default as formatDate } from './formatDate'
+export { default as getIsSubPeriodOver } from './getIsSubPeriodOver'
 export { default as getUserEventStatusMessage } from './getUserEventStatusMessage'
 export { default as getEventAnalytics } from './getEventAnalytics'
 export { default as getEventStartedOver24HoursAgo } from './getEventStartedOver24HoursAgo'
