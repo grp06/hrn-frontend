@@ -69,7 +69,14 @@ const handleRequiresPaymentMethod = async ({ subscription, paymentMethodId, plan
   }
 }
 
-const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, stripe, userId }) => {
+const createSubscription = async ({
+  paymentMethodId,
+  plan,
+  stripeCustomerId,
+  stripe,
+  userId,
+  userEmail,
+}) => {
   const subscriptionResponse = await fetch(
     `${process.env.REACT_APP_API_URL}/api/stripe/create-subscription`,
     {
@@ -79,7 +86,13 @@ const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, str
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true,
       },
-      body: JSON.stringify({ customerId: stripeCustomerId, paymentMethodId, plan, userId }),
+      body: JSON.stringify({
+        customerId: stripeCustomerId,
+        paymentMethodId,
+        plan,
+        userId,
+        userEmail,
+      }),
     }
   ).then((res) => res.json())
 
@@ -95,13 +108,22 @@ const createSubscription = async ({ paymentMethodId, plan, stripeCustomerId, str
   await handlePaymentThatRequiresCustomerAction({
     plan,
     paymentMethodId,
-    subscription: subscriptionResponse,
+    subscription: subscriptionResponse.subscriptionObject,
     stripe,
   })
 
-  await handleRequiresPaymentMethod({ plan, paymentMethodId, subscription: subscriptionResponse })
+  await handleRequiresPaymentMethod({
+    plan,
+    paymentMethodId,
+    subscription: subscriptionResponse.subscriptionObject,
+  })
 
-  return { subscription: subscriptionResponse, paymentMethodId, plan }
+  return {
+    subscription: subscriptionResponse.subscriptionObject,
+    paymentMethodId,
+    plan,
+    token: subscriptionResponse.token,
+  }
 
   // TODO add onSubscriptionComplete
 }
@@ -112,6 +134,7 @@ const retryInvoiceWithNewPaymentMethod = async ({
   invoiceId,
   plan,
   userId,
+  userEmail,
 }) => {
   const retryResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/stripe/retry-invoice`, {
     method: 'POST',
@@ -126,6 +149,7 @@ const retryInvoiceWithNewPaymentMethod = async ({
       invoiceId,
       plan,
       userId,
+      userEmail,
     }),
   }).then((res) => res.json())
 
@@ -136,13 +160,13 @@ const retryInvoiceWithNewPaymentMethod = async ({
   }
 
   await handlePaymentThatRequiresCustomerAction({
-    invoice: retryResponse,
+    invoice: retryResponse.invoice,
     paymentMethodId,
     plan,
     isRetry: true,
   })
 
-  return { invoice: retryResponse, paymentMethodId, plan }
+  return { invoice: retryResponse.invoice, paymentMethodId, plan, token: retryResponse.token }
 }
 
 export {

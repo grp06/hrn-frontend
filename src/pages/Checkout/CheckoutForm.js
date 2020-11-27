@@ -68,7 +68,7 @@ const CheckoutSchema = Yup.object().shape({
   postal_code: Yup.string().min(2, 'Too Short!').required('Required'),
 })
 
-const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
+const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const classes = useStyles()
   const stripe = useStripe()
   const elements = useElements()
@@ -77,8 +77,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = (result) => {
-    console.log('[onSubscriptionComplete] ->', result)
-
+    localStorage.setItem('token', result.token)
     // means that we had to retry so lets clear our local storage
     if (result && !result.subscription) {
       const subscription = { id: result.invoice.subscription }
@@ -87,7 +86,8 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
 
-    return history.push('/checkout-success', result)
+    history.push('/checkout-success', result.subscription)
+    return window.location.reload()
   }
 
   const handleFormSubmit = async (formValues) => {
@@ -138,6 +138,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
         plan,
         stripeCustomerId,
         userId,
+        userEmail,
       })
       onSubscriptionComplete(retrySubResult)
       setFormSubmitting(false)
@@ -150,6 +151,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId }) => {
       stripeCustomerId,
       stripe,
       userId,
+      userEmail,
     })
     onSubscriptionComplete(subResult)
     setFormSubmitting(false)

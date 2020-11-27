@@ -10,7 +10,7 @@ const Checkout = ({ location }) => {
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { id: userId } = user
+  const { id: userId, email: userEmail } = user
   const [userHasStripeId, setUserHasStripeId] = useState(false)
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
   const { plan, planPrice } = locationState
@@ -43,7 +43,12 @@ const Checkout = ({ location }) => {
     <Grid contianer justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
       <CheckoutCard
         form={
-          <CheckoutForm plan={plan} stripeCustomerId={user.stripe_customer_id} userId={userId} />
+          <CheckoutForm
+            plan={plan}
+            stripeCustomerId={user.stripe_customer_id}
+            userId={userId}
+            userEmail={userEmail}
+          />
         }
         plan={plan}
         price={planPrice}
