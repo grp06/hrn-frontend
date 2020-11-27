@@ -7,8 +7,8 @@ import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
 import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
-import { ToggleGroup } from '../../common'
-import { useUserContext } from '../../context'
+import { Loading, ToggleGroup } from '../../common'
+import { useAppContext, useUserContext } from '../../context'
 import { upgradeToHost, sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
@@ -35,10 +35,11 @@ const useStyles = makeStyles((theme) => ({
 const Subscription = () => {
   const classes = useStyles()
   const history = useHistory()
+  const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { id: userId } = user
+  const { id: userId, role } = user
   const [billingPeriod, setBillingPeriod] = useState('monthly')
-  const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod)
+  const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
 
   const pushToCheckout = (planType, billingPeriod) => {
     if (planType === 'starter') {
@@ -68,6 +69,11 @@ const Subscription = () => {
         console.log(err)
       }
     }
+    // no userId means that this person clicking doesn't have an account yet
+  }
+
+  if (appLoading) {
+    return <Loading />
   }
 
   return (
@@ -93,7 +99,6 @@ const Subscription = () => {
                 onSelect={() => pushToCheckout('starter', billingPeriod)}
               />
               <PricingPlanCard plan={premiumPlan} />
-              <EnterprisePlanCard />
             </Grid>
           </motion.div>
         </Grid>

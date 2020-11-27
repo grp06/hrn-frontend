@@ -6,6 +6,11 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
+  activePlan: {
+    // boxShadow: '0px 0px 4px 4px #8C57DB',
+    border: '2px solid #8C57DB',
+    boxShadow: '4px 4px 0 #8C57DB',
+  },
   cardTopSection: {
     padding: theme.spacing(0, 3),
     [theme.breakpoints.down('md')]: {
@@ -84,11 +89,20 @@ const useStyles = makeStyles((theme) => ({
 
 const PricingPlanCard = ({ plan, onSelect }) => {
   const classes = useStyles()
-  const { name, subtitle, price, prevPlanHighlights, highlights, maxAttendees } = plan
+  const {
+    name,
+    subtitle,
+    price,
+    prevPlanHighlights,
+    highlights,
+    maxAttendees,
+    isActivePlan,
+    disableButton,
+  } = plan
   const renderHighlights = () => {
     return highlights.map((highlight) => {
       return (
-        <Typography variant="body1" className={classes.planHighlightTypography}>
+        <Typography variant="body1" className={classes.planHighlightTypography} key={highlight}>
           {highlight}
         </Typography>
       )
@@ -97,7 +111,7 @@ const PricingPlanCard = ({ plan, onSelect }) => {
   const renderPrevPlanHighlights = () => {
     return prevPlanHighlights.map((highlight) => {
       return (
-        <Typography variant="body1" className={classes.prevPlanHighlightTypography}>
+        <Typography variant="body1" className={classes.prevPlanHighlightTypography} key={highlight}>
           {highlight}
         </Typography>
       )
@@ -112,7 +126,11 @@ const PricingPlanCard = ({ plan, onSelect }) => {
   }
 
   return (
-    <Grid container direction="column" className={classes.pricingCardContainer}>
+    <Grid
+      container
+      direction="column"
+      className={`${classes.pricingCardContainer} ${isActivePlan && classes.activePlan}`}
+    >
       <Grid container direction="column" className={classes.cardTopSection}>
         <Grid container item xs={7} lg={12} direction="column">
           <Typography variant="h2" className={classes.planNameTypography}>
@@ -138,6 +156,7 @@ const PricingPlanCard = ({ plan, onSelect }) => {
             disableRipple
             className={classes.getStartedButton}
             onClick={onSelect}
+            disabled={isActivePlan || disableButton}
           >
             Get Started
           </Button>

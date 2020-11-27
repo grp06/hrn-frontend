@@ -1,4 +1,5 @@
-const getPricingPlanDetails = (billingPeriod) => {
+const getPricingPlanDetails = (billingPeriod, role) => {
+  console.log(role)
   const freePlan = {
     name: 'Free',
     subtitle: 'Best for individuals',
@@ -6,6 +7,8 @@ const getPricingPlanDetails = (billingPeriod) => {
     maxAttendees: 'Unlimiited',
     prevPlanHighlights: [],
     highlights: ['Relevant Mathing AI', 'Group Vidoe Chat', '1 Event'],
+    isActivePlan: role === 'host',
+    disableButton: role ? role.includes('host') : false,
   }
 
   const starterPlan = {
@@ -15,6 +18,8 @@ const getPricingPlanDetails = (billingPeriod) => {
     maxAttendees: 'Unlimited',
     prevPlanHighlights: ['Relevant Mathing AI', 'Group Vidoe Chat'],
     highlights: ['Unlimited Events', 'Event Branding', '1 Host Account'],
+    isActivePlan: role === 'host_starter',
+    disableButton: role === 'host_premium',
   }
 
   const premiumPlan = {
@@ -34,6 +39,7 @@ const getPricingPlanDetails = (billingPeriod) => {
       'Priority Support',
       'Advanced Matching Options',
     ],
+    isActivePlan: role === 'host_premium',
   }
 
   return { freePlan, starterPlan, premiumPlan }
