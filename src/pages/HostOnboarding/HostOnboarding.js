@@ -1,13 +1,25 @@
 import React from 'react'
 import { Field } from 'formik'
+import { useHistory } from 'react-router-dom'
+import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
 
 import { HostOnboardingStep } from '.'
-import { FloatCardMediumLarge } from '../../common'
+import { FloatCardMediumLarge, Loading } from '../../common'
+import { useAppContext, useUserContext } from '../../context'
 import { FormikOnboardingStepper } from '../Onboarding'
 
 const useStyles = makeStyles((theme) => ({
-  container: {},
+  skipButton: {
+    position: 'absolute',
+    left: 'auto',
+    right: '0%',
+    bottom: 'auto',
+    top: '0%',
+    textTransform: 'none',
+    color: theme.palette.common.ghostWhiteDark,
+    fontWeight: 200,
+  },
 }))
 
 const communityTypeOptions = [
@@ -34,6 +46,22 @@ const frequencyOptions = ['Weekly', 'Bi-weekly', 'Monthly', 'A few times a year'
 
 const HostOnboarding = () => {
   const classes = useStyles()
+  const history = useHistory()
+  const { appLoading } = useAppContext()
+  const { user } = useUserContext()
+  const { id: user_id, city: user_city, tags_users } = user
+
+  if (appLoading) {
+    return <Loading />
+  }
+
+  const handleSkipClick = () => {
+    if (user_city && tags_users.length) {
+      return history.push('/my-profile')
+    }
+    return history.push('/onboarding')
+  }
+
   return (
     <FloatCardMediumLarge>
       <FormikOnboardingStepper
@@ -42,7 +70,7 @@ const HostOnboarding = () => {
           currently_organize: '',
           frequency: '',
         }}
-        onHandleSubmit={() => console.log('hi')}
+        onSubmit={(values) => console.log(values)}
         isHostOnboarding
       >
         <div label="community">
@@ -88,6 +116,9 @@ const HostOnboarding = () => {
           </Field>
         </div>
       </FormikOnboardingStepper>
+      <Button variant="text" disableRipple className={classes.skipButton} onClick={handleSkipClick}>
+        Skip
+      </Button>
     </FloatCardMediumLarge>
   )
 }
