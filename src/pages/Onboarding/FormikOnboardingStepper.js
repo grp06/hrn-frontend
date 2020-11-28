@@ -46,6 +46,20 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
     }
   }
 
+  const toggleHostDisableButton = (values) => {
+    if (step === 0) {
+      if (values.community_type) setDisabledButton(false)
+    }
+    if (step === 1) {
+      if (values.currently_organize) setDisabledButton(false)
+      else setDisabledButton(true)
+    }
+    if (step === 2) {
+      if (values.frequency) setDisabledButton(false)
+      else setDisabledButton(true)
+    }
+  }
+
   return (
     <Formik
       {...props}
@@ -62,7 +76,9 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
         <Form
           autoComplete="off"
           className={classes.formContainer}
-          onChange={toggleDisableButton(values)}
+          onChange={
+            props.isHostOnboarding ? toggleHostDisableButton(values) : toggleDisableButton(values)
+          }
         >
           <Stepper alternativeLabel activeStep={step}>
             {stepArray.map((child, index) => (

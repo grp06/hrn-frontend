@@ -1,5 +1,4 @@
 const getPricingPlanDetails = (billingPeriod, role) => {
-  console.log(role)
   const freePlan = {
     name: 'Free',
     subtitle: 'Best for individuals',

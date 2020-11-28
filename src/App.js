@@ -18,13 +18,13 @@ import {
   EventsPublic,
   ForgotPassword,
   HostDashboard,
+  HostOnboarding,
   HRNAnalytics,
   LoginForm,
   MyProfile,
   MyConnections,
   VideoRoom,
   Onboarding,
-  PreEvent,
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
@@ -88,6 +88,7 @@ const App = () => {
                         component={SetNewPassword}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />
+                      <Route exact path="/host-onboarding" component={HostOnboarding} />
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
                       <Route exact path="/create-event" component={CreateEvent} />

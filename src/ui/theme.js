@@ -332,9 +332,9 @@ const theme = createMuiTheme({
     },
     MuiStepLabel: {
       label: {
-        fontSize: '1.25rem',
-        fontWeight: '400',
-        color: ghostWhite,
+        fontSize: '1rem',
+        fontWeight: '300',
+        color: ghostWhiteDark,
         '&.MuiStepLabel-active': {
           color: ghostWhite,
         },

@@ -158,7 +158,7 @@ const PricingPlanCard = ({ plan, onSelect }) => {
             onClick={onSelect}
             disabled={isActivePlan || disableButton}
           >
-            Get Started
+            {isActivePlan ? 'Current Plan' : 'Get Started'}
           </Button>
         </Grid>
       </Grid>

@@ -7,6 +7,7 @@ export { default as EventGroupVideoChat } from './EventGroupVideoChat/EventGroup
 export { default as EventsPublic } from './EventsPublic/EventsPublic'
 export { default as ForgotPassword } from './Auth/ForgotPassword'
 export { default as HostDashboard } from './HostDashboard/HostDashboard'
+export { default as HostOnboarding } from './HostOnboarding/HostOnboarding'
 export { default as HRNAnalytics } from './HRNAnalytics/HRNAnalytics'
 export { default as Lobby } from './Lobby/Lobby'
 export { default as LoginForm } from './Auth/LoginForm'
