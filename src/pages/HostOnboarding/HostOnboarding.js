@@ -49,7 +49,7 @@ const HostOnboarding = () => {
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { id: user_id, city: user_city, tags_users } = user
+  const { city: user_city, tags_users } = user
 
   if (appLoading) {
     return <Loading />

@@ -1,6 +1,5 @@
 export { default as EnterprisePlanCard } from './EnterprisePlanCard'
 export { default as getPricingPlanDetails } from './getPricingPlanDetails'
 export { default as Subscription } from './Subscription'
-export { default as PricingHero } from './PricingHero'
 export { default as PricingHeroNew } from './PricingHeroNew'
 export { default as PricingPlanCard } from './PricingPlanCard'

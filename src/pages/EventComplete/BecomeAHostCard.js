@@ -1,9 +1,10 @@
 import React from 'react'
+import Lottie from 'react-lottie'
+import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
-import Lottie from 'react-lottie'
 import * as confettiAnimation from '../../assets/confettiFalling.json'
 
 const useStyles = makeStyles((theme) => ({
@@ -15,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   becomeAHostButton: {
     margin: theme.spacing(3, 0, 1, 0),
+    width: '100%',
   },
   cardContainer: {
     position: 'relative',
@@ -26,14 +28,16 @@ const useStyles = makeStyles((theme) => ({
     border: '2px solid #FF99AD',
     boxShadow: '4px 4px 0 #FF99AD',
     borderRadius: '4px',
+    marginBottom: theme.spacing(3),
   },
   heroContent: {
     padding: theme.spacing(3, 5),
   },
 }))
 
-const PricingHero = () => {
+const BecomeAHostCard = () => {
   const classes = useStyles()
+  const history = useHistory()
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -49,7 +53,7 @@ const PricingHero = () => {
         <Lottie options={defaultOptions} height="100%" width="100%" />
       </div>
       <Grid className={classes.heroContent}>
-        <Typography variant="h1" style={{ color: 'black', marginBottom: '8px' }}>
+        <Typography variant="h2" style={{ color: 'black', marginBottom: '8px' }}>
           Host an event on us{' '}
           <span role="img" aria-label="wink face">
             😉
@@ -66,6 +70,7 @@ const PricingHero = () => {
           size="large"
           color="primary"
           className={classes.becomeAHostButton}
+          onClick={() => history.push('/subscription')}
         >
           Become a Host Now
         </Button>
@@ -74,4 +79,4 @@ const PricingHero = () => {
   )
 }
 
-export default PricingHero
+export default BecomeAHostCard
