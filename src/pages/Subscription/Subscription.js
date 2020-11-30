@@ -1,17 +1,38 @@
 import React, { useState } from 'react'
-import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
-import { EnterprisePlanCard, getPricingPlanDetails, PricingHeroNew, PricingPlanCard } from '.'
+import { getPricingPlanDetails, PricingPlanCard } from '.'
+import blurryBackground from '../../assets/blurryBackground.png'
 import { Loading, ToggleGroup } from '../../common'
 import { useAppContext, useUserContext } from '../../context'
 import { upgradeToHost, sleep } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
+  bannerGradient: {
+    background:
+      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,212,255,0) 100%)',
+    height: 'auto',
+    minHeight: '45vh',
+    width: '100%',
+    position: 'absolute',
+    top: '0%',
+    bottom: 'auto',
+    zIndex: '-1',
+  },
+  blurBackground: {
+    width: '100%',
+    height: 'auto',
+    minHeight: '45vh',
+    position: 'absolute',
+    zIndex: '-3',
+    backgroundPosition: '50% 50% !important',
+    backgroundSize: 'cover !important',
+    backgroundImage: `url(${blurryBackground})`,
+  },
   divider: {
     width: '80vw',
     margin: theme.spacing(6, 'auto'),
@@ -28,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
   sectionPadding: {
     width: '80%',
     maxWidth: '1550px',
-    margin: theme.spacing(0, 'auto'),
+    margin: theme.spacing('75px', 'auto'),
   },
 }))
 
@@ -79,8 +100,14 @@ const Subscription = () => {
 
   return (
     <Grid container direction="column">
-      <PricingHeroNew />
-      <Divider className={classes.divider} />
+      <Grid
+        container
+        direction="column"
+        alignItems="flex-start"
+        justify="center"
+        className={classes.blurBackground}
+      />
+      <div className={classes.bannerGradient} />
       <Grid container className={classes.sectionPadding}>
         <Typography variant="h2" className={classes.sectionHeading}>
           Choose the right plan for your community!

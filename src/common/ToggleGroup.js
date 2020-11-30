@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     borderRadius: 0,
     border: 'none',
-    borderBottom: '2px solid #3e4042',
     '&:hover': {
       backgroundColor: 'transparent',
     },
