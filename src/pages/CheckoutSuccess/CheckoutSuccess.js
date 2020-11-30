@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
+import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
-import { CongratsCard } from '.'
+import { CongratsCard, PaymentConfirmationCard } from '.'
 
 const CheckoutSuccess = ({ location }) => {
   const history = useHistory()
@@ -21,9 +22,39 @@ const CheckoutSuccess = ({ location }) => {
     }
   }, [])
 
+  const subscriptionStarts =
+    locationState.subscription &&
+    moment(new Date(locationState.subscription.created * 1000)).format('LL')
+
+  const subscriptionEnds =
+    locationState.subscription &&
+    moment(new Date(locationState.subscription.current_period_end * 1000)).format('LL')
+
+  const planName =
+    locationState.plan &&
+    locationState.plan.split('_')[0].charAt(0) +
+      locationState.plan.split('_')[0].slice(1).toLowerCase()
+
+  const planPeriod =
+    locationState.plan &&
+    locationState.plan.split('_')[1].charAt(0) +
+      locationState.plan.split('_')[1].slice(1).toLowerCase()
+
+  const planItem = `${planName} ${planPeriod}`
+
+  const planPrice = locationState.subscription && locationState.subscription.plan.amount / 100
+
   return (
     <Grid container justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
       <CongratsCard />
+      {locationState.subscription ? (
+        <PaymentConfirmationCard
+          planItem={planItem}
+          planPrice={planPrice}
+          subscriptionStarts={subscriptionStarts}
+          subscriptionEnds={subscriptionEnds}
+        />
+      ) : null}
     </Grid>
   )
 }

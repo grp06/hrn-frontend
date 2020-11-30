@@ -83,7 +83,8 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
 
   const onSubscriptionComplete = (result) => {
     localStorage.setItem('token', result.token)
-    // means that we had to retry so lets clear our local storage
+    // means that we had to retry the invoice so lets clear our local storage
+    // and set the subscription to the invoice
     if (result && !result.subscription) {
       const subscription = { id: result.invoice.subscription }
       result.subscription = subscription
@@ -91,7 +92,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
 
-    history.push('/checkout-success', result.subscription)
+    history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })
     return window.location.reload()
   }
 

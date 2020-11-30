@@ -14,7 +14,6 @@ const Checkout = ({ location }) => {
   const [userHasStripeId, setUserHasStripeId] = useState(false)
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
   const { plan, planPrice, planHighlights } = locationState
-  console.log('planHighlights ->', planHighlights)
 
   useEffect(() => {
     if (!Object.keys(locationState).length) {
