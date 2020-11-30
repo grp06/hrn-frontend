@@ -13,7 +13,8 @@ const Checkout = ({ location }) => {
   const { id: userId, email: userEmail } = user
   const [userHasStripeId, setUserHasStripeId] = useState(false)
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
-  const { plan, planPrice } = locationState
+  const { plan, planPrice, planHighlights } = locationState
+  console.log('planHighlights ->', planHighlights)
 
   useEffect(() => {
     if (!Object.keys(locationState).length) {
@@ -40,7 +41,7 @@ const Checkout = ({ location }) => {
   }
 
   return (
-    <Grid contianer justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
+    <Grid container justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
       <CheckoutCard
         form={
           <CheckoutForm
@@ -51,6 +52,7 @@ const Checkout = ({ location }) => {
           />
         }
         plan={plan}
+        planHighlights={planHighlights}
         price={planPrice}
       />
     </Grid>

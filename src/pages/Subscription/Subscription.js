@@ -43,10 +43,11 @@ const Subscription = () => {
 
   const pushToCheckout = (planType, billingPeriod) => {
     if (planType === 'starter') {
+      const planHighlights = starterPlan.prevPlanHighlights.concat(starterPlan.highlights)
       const stateToPass =
         billingPeriod === 'monthly'
-          ? { planPrice: 59, plan: 'STARTER_MONTHLY' }
-          : { planPrice: 49, plan: 'STARTER_YEARLY' }
+          ? { planPrice: 59, plan: 'STARTER_MONTHLY', planHighlights }
+          : { planPrice: 49, plan: 'STARTER_YEARLY', planHighlights }
       return history.push('/checkout', stateToPass)
     }
 

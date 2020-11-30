@@ -17,17 +17,21 @@ const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
     backgroundColor: theme.palette.common.grey10,
     color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1),
+    padding: theme.spacing(1.5),
     borderRadius: '4px',
+    marginTop: theme.spacing(2),
   },
   formContainer: {
     height: 'auto',
     backgroundColor: theme.palette.common.greyCard,
     padding: theme.spacing(3),
     width: '100%',
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2),
+    },
   },
-  formInputMargin: {
-    margin: theme.spacing(0.5, 0),
+  formSection: {
+    margin: theme.spacing(4, 0),
     padding: theme.spacing(0, 1),
   },
   sectionContainer: {
@@ -38,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhiteDark,
     fontWeight: 600,
     textTransform: 'uppercase',
+    marginBottom: theme.spacing(-1),
   },
 }))
 
@@ -48,7 +53,7 @@ const cardElementOptions = {
       fontSize: '1rem',
       color: '#f4f6fa',
       '::placeholder': {
-        color: '#8C57DB',
+        color: '#f4f6fa',
       },
     },
     invalid: {
@@ -175,7 +180,16 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         {({ submitForm, dirty, isValid, values }) => (
           <Form>
             <div className={classes.sectionContainer}>
-              <Grid container direction="column" className={classes.formInputMargin}>
+              <Grid container direction="column" className={classes.formSection}>
+                <Typography variant="subtitle2" className={classes.subtitleHeading}>
+                  Payment Details
+                </Typography>
+                <Field component={TextField} name="name" label="Name on card" fullWidth required />
+                <div className={classes.cardElementContainer}>
+                  <CardElement options={cardElementOptions} />
+                </div>
+              </Grid>
+              <Grid container className={classes.formSection}>
                 <Typography variant="subtitle2" className={classes.subtitleHeading}>
                   Billing Address
                 </Typography>
@@ -186,15 +200,11 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                   fullWidth
                   required
                 />
-              </Grid>
-              <Grid container className={classes.formInputMargin}>
                 <Field component={TextField} name="city" label="City" fullWidth required />
-              </Grid>
-              <Grid container>
-                <Grid container item md={6} className={classes.formInputMargin}>
+                <Grid container item md={6} style={{ paddingRight: '4px' }}>
                   <Field component={TextField} name="state" label="State" fullWidth required />
                 </Grid>
-                <Grid container item md={6} className={classes.formInputMargin}>
+                <Grid container item md={6} style={{ paddingLeft: '4px' }}>
                   <Field
                     component={TextField}
                     name="postal_code"
@@ -205,15 +215,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 </Grid>
               </Grid>
             </div>
-            <Typography variant="subtitle2" className={classes.subtitleHeading}>
-              Payment Details
-            </Typography>
-            <Grid container className={classes.formInputMargin}>
-              <Field component={TextField} name="name" label="Name on card" fullWidth required />
-            </Grid>
-            <div className={classes.cardElementContainer}>
-              <CardElement options={cardElementOptions} />
-            </div>
             <Grid container justify="center" alignItems="center">
               <Button
                 variant="contained"
@@ -223,7 +224,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 disabled={formSubmitting}
                 onClick={submitForm}
               >
-                {formSubmitting ? 'Updating Our Ledgers ...' : 'Submit'}
+                {formSubmitting ? 'Updating Our Ledgers ...' : 'Complete Payment'}
               </Button>
             </Grid>
           </Form>
