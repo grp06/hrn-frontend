@@ -10,6 +10,7 @@ const UserContext = React.createContext()
 const defaultState = {
   user: {},
   userInEvent: false,
+  userOnAuthRoute: false,
 }
 
 const UserProvider = ({ children }) => {
@@ -26,6 +27,7 @@ const UserProvider = ({ children }) => {
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
+  const userOnGateKeeperPage = Boolean(pathname.includes('gate-keeper'))
   const userInEvent = Boolean(
     pathname.includes('video-room') ||
       pathname.includes('lobby') ||
@@ -50,6 +52,23 @@ const UserProvider = ({ children }) => {
     }
   }, [userData, userId])
 
+  useEffect(() => {
+    console.log('pathname ->', pathname)
+    const isUserOnAuth = Boolean(
+      pathname === '/' ||
+        pathname.includes('sign-up') ||
+        pathname.includes('forgot-password') ||
+        pathname.includes('set-new-password') ||
+        pathname.includes('onboarding') ||
+        pathname.includes('gate-keeper')
+    )
+
+    console.log(isUserOnAuth)
+    dispatch((draft) => {
+      draft.userOnAuthRoute = isUserOnAuth
+    })
+  }, [pathname])
+
   // once we get on the app check to see if theres a userID in local storage
   // if there is then we want to set user.userId so that findByUserId query can be called
   // if not:
@@ -58,7 +77,14 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
     if (!localStorageUserId) {
-      if (!(userOnEventsPage || userOnSpecificEventPage || userOnSetNewPasswordPage)) {
+      if (
+        !(
+          userOnEventsPage ||
+          userOnSpecificEventPage ||
+          userOnSetNewPasswordPage ||
+          userOnGateKeeperPage
+        )
+      ) {
         history.push('/')
       }
     } else {

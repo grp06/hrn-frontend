@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import AppBar from '@material-ui/core/AppBar'
 import Drawer from '@material-ui/core/Drawer'
 import Hidden from '@material-ui/core/Hidden'
@@ -42,19 +42,9 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderDrawer = () => {
   const classes = useStyles()
-  const { user, userInEvent } = useUserContext()
-  const { id: userId } = user
+  const { userInEvent, userOnAuthRoute } = useUserContext()
   const [openDrawer, setOpenDrawer] = useState(false)
-  const { pathname } = window.location
   const container = window !== undefined ? () => window.document.body : undefined
-
-  const userOnAuthRoute = Boolean(
-    pathname === '/' ||
-      pathname.includes('sign-up') ||
-      pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password') ||
-      pathname.includes('onboarding')
-  )
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
