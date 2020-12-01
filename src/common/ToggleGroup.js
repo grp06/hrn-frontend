@@ -35,39 +35,40 @@ const useStyles = makeStyles((theme) => ({
   },
   toggleButtonGroup: {
     margin: theme.spacing(0, 0, 6, 0),
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(0, 0, 3, 0),
+    },
   },
 }))
 
 const ToggleGroup = ({ toggleValueA, toggleValueB, toggleValue, setToggleValue }) => {
   const classes = useStyles()
   return (
-    <Grid container justify="flex-start" alignItems="center">
-      <ToggleButtonGroup
-        value={toggleValue}
-        exclusive
-        onChange={(e) => setToggleValue(e.currentTarget.value)}
-        className={classes.toggleButtonGroup}
+    <ToggleButtonGroup
+      value={toggleValue}
+      exclusive
+      onChange={(e) => setToggleValue(e.currentTarget.value)}
+      className={classes.toggleButtonGroup}
+    >
+      <ToggleButton
+        value={toggleValueA}
+        disableRipple
+        className={
+          toggleValue === toggleValueA ? classes.toggleButtonActive : classes.toggleButtonInactive
+        }
       >
-        <ToggleButton
-          value={toggleValueA}
-          disableRipple
-          className={
-            toggleValue === toggleValueA ? classes.toggleButtonActive : classes.toggleButtonInactive
-          }
-        >
-          {toggleValueA}
-        </ToggleButton>
-        <ToggleButton
-          value={toggleValueB}
-          disableRipple
-          className={
-            toggleValue === toggleValueB ? classes.toggleButtonActive : classes.toggleButtonInactive
-          }
-        >
-          {toggleValueB}
-        </ToggleButton>
-      </ToggleButtonGroup>
-    </Grid>
+        {toggleValueA}
+      </ToggleButton>
+      <ToggleButton
+        value={toggleValueB}
+        disableRipple
+        className={
+          toggleValue === toggleValueB ? classes.toggleButtonActive : classes.toggleButtonInactive
+        }
+      >
+        {toggleValueB}
+      </ToggleButton>
+    </ToggleButtonGroup>
   )
 }
 
