@@ -2,10 +2,14 @@ import React, { useEffect } from 'react'
 import moment from 'moment'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
+
 import { CongratsCard, PaymentConfirmationCard } from '.'
+import { useUserContext } from '../../context'
 
 const CheckoutSuccess = ({ location }) => {
   const history = useHistory()
+  const { user } = useUserContext()
+  const { stripe_customer_id } = user
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
   // if the user is a paid host locationState should be an object with
   // keys paymentMethodId, plan, and subscription
@@ -53,6 +57,7 @@ const CheckoutSuccess = ({ location }) => {
           planPrice={planPrice}
           subscriptionStarts={subscriptionStarts}
           subscriptionEnds={subscriptionEnds}
+          stripeCustomerId={stripe_customer_id}
         />
       ) : null}
     </Grid>

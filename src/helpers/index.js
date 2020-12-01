@@ -1,3 +1,4 @@
+export { default as createStripeCustomerPortal } from './createStripeCustomerPortal'
 export { default as endEvent } from './endEvent'
 export { default as getToken } from './getToken'
 export { default as startEvent } from './startEvent'
