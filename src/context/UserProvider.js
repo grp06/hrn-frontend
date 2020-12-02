@@ -27,7 +27,7 @@ const UserProvider = ({ children }) => {
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
-  const userOnGateKeeperPage = Boolean(pathname.includes('gate-keeper'))
+  const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
   const userInEvent = Boolean(
     pathname.includes('video-room') ||
       pathname.includes('lobby') ||
@@ -82,7 +82,7 @@ const UserProvider = ({ children }) => {
           userOnEventsPage ||
           userOnSpecificEventPage ||
           userOnSetNewPasswordPage ||
-          userOnGateKeeperPage
+          userOnSignUpPage
         )
       ) {
         history.push('/')

@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhite,
     padding: theme.spacing(1.5),
     borderRadius: '4px',
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(2, 0),
   },
   formContainer: {
     height: 'auto',
@@ -29,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(2),
     },
+  },
+  formInputMargin: {
+    margin: theme.spacing(2, 0),
+    padding: theme.spacing(0, 1),
   },
   formSection: {
     margin: theme.spacing(4, 0),
@@ -42,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.common.ghostWhiteDark,
     fontWeight: 600,
     textTransform: 'uppercase',
-    marginBottom: theme.spacing(-1),
   },
 }))
 
@@ -185,7 +188,15 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 <Typography variant="subtitle2" className={classes.subtitleHeading}>
                   Payment Details
                 </Typography>
-                <Field component={TextField} name="name" label="Name on card" fullWidth required />
+                <Grid container className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="name"
+                    label="Name on card"
+                    fullWidth
+                    required
+                  />
+                </Grid>
                 <div className={classes.cardElementContainer}>
                   <CardElement options={cardElementOptions} />
                 </div>
@@ -194,18 +205,34 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 <Typography variant="subtitle2" className={classes.subtitleHeading}>
                   Billing Address
                 </Typography>
-                <Field
-                  component={TextField}
-                  name="addressLine1"
-                  label="Address"
-                  fullWidth
-                  required
-                />
-                <Field component={TextField} name="city" label="City" fullWidth required />
-                <Grid container item md={6} style={{ paddingRight: '4px' }}>
+                <Grid container className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="addressLine1"
+                    label="Address"
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid container className={classes.formInputMargin}>
+                  <Field component={TextField} name="city" label="City" fullWidth required />
+                </Grid>
+                <Grid
+                  container
+                  item
+                  md={6}
+                  style={{ paddingRight: '4px' }}
+                  className={classes.formInputMargin}
+                >
                   <Field component={TextField} name="state" label="State" fullWidth required />
                 </Grid>
-                <Grid container item md={6} style={{ paddingLeft: '4px' }}>
+                <Grid
+                  container
+                  item
+                  md={6}
+                  style={{ paddingLeft: '4px' }}
+                  className={classes.formInputMargin}
+                >
                   <Field
                     component={TextField}
                     name="postal_code"
