@@ -65,11 +65,6 @@ const SignUpForm = () => {
     setRedirect(false)
   }, [redirect])
 
-  // check to see if a user is already logged in, if so redirect
-  if (localStorage.getItem('userId')) {
-    return <Redirect to="/events" />
-  }
-
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     // setError(false)
@@ -110,6 +105,12 @@ const SignUpForm = () => {
     window.analytics.track('Sign up')
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
+    const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
+
+    if (subscriptionCheckoutObject) {
+      history.push('/checkout', subscriptionCheckoutObject)
+      return window.location.reload()
+    }
 
     history.push('/onboarding')
     window.location.reload()

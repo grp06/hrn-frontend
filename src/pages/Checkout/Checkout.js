@@ -12,7 +12,8 @@ const Checkout = ({ location }) => {
   const { user } = useUserContext()
   const { id: userId, email: userEmail } = user
   const [userHasStripeId, setUserHasStripeId] = useState(false)
-  const locationState = location.state && Object.keys(location.state).length ? location.state : {}
+  let locationState = location.state && Object.keys(location.state).length ? location.state : {}
+  locationState = typeof locationState === 'object' ? locationState : JSON.parse(locationState)
   const { plan, planPrice, planHighlights } = locationState
 
   useEffect(() => {
@@ -21,6 +22,7 @@ const Checkout = ({ location }) => {
     }
     return () => {
       location.state = {}
+      localStorage.setItem('subscriptionCheckoutObject', '')
     }
   }, [])
 

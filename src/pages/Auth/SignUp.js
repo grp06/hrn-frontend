@@ -1,25 +1,29 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Redirect } from 'react-router-dom'
 import { SignUpForm } from '.'
-import { getPricingPlanDetails } from '../Subscription'
+import { getSubscriptionCheckoutObject } from '../Subscription'
 
 const SignUp = () => {
   const location = useLocation()
-  console.log('location ->', location)
   const searchParams = new URLSearchParams(location.search)
   const planType = searchParams.get('planType')
   const billingPeriod = searchParams.get('billingPeriod')
-  const { starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod)
-  const planHighlights =
-    planType === 'starter'
-      ? starterPlan.prevPlanHighlights.concat(starterPlan.highlights)
-      : premiumPlan.prevPlanHighlights.concat(premiumPlan.highlights)
-  const checkoutObject = { planType, billingPeriod, planHighlights }
-  console.log('planType ->', planType)
-  console.log('billingPeriod ->', billingPeriod)
-  console.log('starterPlan ->', starterPlan)
 
-  useEffect(() => {}, [])
+  useEffect(() => {
+    if (billingPeriod && planType) {
+      const subscriptionCheckoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
+      localStorage.setItem('subscriptionCheckoutObject', JSON.stringify(subscriptionCheckoutObject))
+    }
+  }, [billingPeriod, planType])
+
+  // check to see if a user is already logged in, if so redirect
+  if (localStorage.getItem('userId')) {
+    const subCheckoutObjectFromLS = localStorage.getItem('subscriptionCheckoutObject')
+    if (subCheckoutObjectFromLS) {
+      return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
+    }
+    return <Redirect to="/events" />
+  }
 
   return <SignUpForm />
 }

@@ -1,6 +1,6 @@
 import { getPricingPlanDetails } from '.'
 
-const getCheckoutStateObject = ({ billingPeriod, planType }) => {
+const getSubscriptionCheckoutObject = (billingPeriod, planType) => {
   const { starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod)
   if (planType === 'starter') {
     const planHighlights = starterPlan.prevPlanHighlights.concat(starterPlan.highlights)
@@ -21,4 +21,4 @@ const getCheckoutStateObject = ({ billingPeriod, planType }) => {
   return checkoutStateObject
 }
 
-export default getCheckoutStateObject
+export default getSubscriptionCheckoutObject
