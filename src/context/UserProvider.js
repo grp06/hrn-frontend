@@ -60,7 +60,8 @@ const UserProvider = ({ children }) => {
         pathname.includes('forgot-password') ||
         pathname.includes('set-new-password') ||
         pathname.includes('onboarding') ||
-        pathname.includes('gate-keeper')
+        pathname.includes('host-onboarding') ||
+        pathname.includes('checkout-success')
     )
 
     console.log(isUserOnAuth)

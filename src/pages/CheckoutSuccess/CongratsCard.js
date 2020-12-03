@@ -1,6 +1,7 @@
 import React from 'react'
 import Lottie from 'react-lottie'
 import { motion } from 'framer-motion'
+import { useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Hidden from '@material-ui/core/Hidden'
@@ -43,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const CongratsCard = () => {
   const classes = useStyles()
+  const history = useHistory()
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -51,6 +53,11 @@ const CongratsCard = () => {
       preserveAspectRatio: 'xMidYMid slice',
     },
   }
+
+  const handleHostOnboardingClick = () => {
+    return history.push('/host-onboarding')
+  }
+
   return (
     <motion.div
       initial={{ x: 2000 }}
@@ -93,6 +100,7 @@ const CongratsCard = () => {
             color="primary"
             disableRipple
             className={classes.hostFormButton}
+            onClick={handleHostOnboardingClick}
           >
             Continue
           </Button>
