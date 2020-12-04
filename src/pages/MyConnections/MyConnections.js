@@ -12,7 +12,7 @@ import { listenToAllMyConnections } from '../../gql/subscriptions'
 import blurryBackground from '../../assets/blurryBackground.png'
 import { useAppContext, useUserContext } from '../../context'
 import { ConnectionCard } from '.'
-import { FloatCardLarge, Loading } from '../../common'
+import { FloatCardMedium, Loading } from '../../common'
 
 const useStyles = makeStyles((theme) => ({
   connectionsContainer: {
@@ -115,7 +115,7 @@ const MyConnections = () => {
   const renderNullDataText = (message) => {
     return (
       <>
-        <FloatCardLarge>
+        <FloatCardMedium>
           <Grid
             container
             direction="column"
@@ -139,7 +139,7 @@ const MyConnections = () => {
               Take Me There!
             </Button>
           </Grid>
-        </FloatCardLarge>
+        </FloatCardMedium>
       </>
     )
   }

@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     backgroundColor: theme.palette.common.greyCard,
     margin: theme.spacing(0, 'auto'),
-    padding: theme.spacing(3),
+    padding: theme.spacing(5),
     width: '50vw',
   },
   heading: { fontWeight: 700, marginBottom: '32px' },
@@ -51,8 +51,8 @@ const ThankYouCard = ({ handleRedirect, userHasBeenOnboarded }) => {
     <>
       <Typography variant="h2" className={classes.heading}>
         You&apos;re almost there{' '}
-        <span role="img" aria-label="upside down smiley">
-          🙃
+        <span role="img" aria-label="smiley">
+          🙂
         </span>
       </Typography>
       <Typography variant="h4" className={classes.subheading}>

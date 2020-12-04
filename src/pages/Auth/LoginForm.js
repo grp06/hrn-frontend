@@ -96,7 +96,7 @@ const LoginForm = () => {
     const eventIdInLocalStorage = localStorage.getItem('eventId')
 
     if (subscriptionCheckoutObject) {
-      history.push('/checkout', subscriptionCheckoutObject)
+      history.push('/checkout', JSON.parse(subscriptionCheckoutObject))
       window.location.reload()
       return
     }

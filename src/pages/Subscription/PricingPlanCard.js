@@ -48,10 +48,6 @@ const useStyles = makeStyles((theme) => ({
   planHighlightTypography: {
     marginBottom: theme.spacing(0.5),
   },
-  prevPlanHighlightTypography: {
-    color: theme.palette.common.ghostWhiteDark,
-    marginBottom: theme.spacing(0.5),
-  },
   planNameTypography: {
     fontWeight: 700,
     marginBottom: theme.spacing(0.25),
@@ -111,7 +107,7 @@ const PricingPlanCard = ({ plan, onSelect }) => {
   const renderPrevPlanHighlights = () => {
     return prevPlanHighlights.map((highlight) => {
       return (
-        <Typography variant="body1" className={classes.prevPlanHighlightTypography} key={highlight}>
+        <Typography variant="body1" className={classes.planHighlightTypography} key={highlight}>
           {highlight}
         </Typography>
       )

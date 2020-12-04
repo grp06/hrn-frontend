@@ -9,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { getPricingPlanDetails, PricingPlanCard } from '.'
 import blurryBackground from '../../assets/blurryBackground.png'
+import confettiDoodles from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { Loading, ToggleGroup } from '../../common'
 import { useAppContext, useUserContext } from '../../context'
 import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
@@ -69,6 +70,18 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '1550px',
     margin: theme.spacing('75px', 'auto'),
   },
+  pageContainer: {
+    backgroundImage: `url(${confettiDoodles})`,
+    backgroundSize: 'auto',
+    backgroundRepeat: 'repeat',
+    position: 'relative',
+  },
+  // overlay: {
+  //   backgroundColor: 'rgba(17, 13, 26, 0.3)',
+  //   width: '100%',
+  //   height: 'auto',
+  //   position: 'absolute',
+  // },
 }))
 
 const Subscription = () => {
@@ -128,15 +141,16 @@ const Subscription = () => {
   // }
 
   return (
-    <Grid container direction="column">
-      <Grid
+    <Grid container direction="column" className={classes.pageContainer}>
+      {/* <div className={classes.overlay}> */}
+      {/* <Grid
         container
         direction="column"
         alignItems="flex-start"
         justify="center"
         className={classes.blurBackground}
       />
-      <div className={classes.bannerGradient} />
+      <div className={classes.bannerGradient} /> */}
       <Grid container className={classes.subscriptionContainer}>
         <Typography variant="h2" className={classes.sectionHeading}>
           Choose the right plan for your community!

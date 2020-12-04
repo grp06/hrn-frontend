@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     backgroundColor: theme.palette.common.greyCard,
     margin: theme.spacing(0, 'auto'),
-    padding: theme.spacing(3),
+    padding: theme.spacing(5),
     width: '70vw',
   },
   heading: { fontWeight: 700, marginBottom: '32px' },

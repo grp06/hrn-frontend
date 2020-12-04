@@ -9,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     cursor: 'pointer',
     color: theme.palette.common.ghostWhite,
-    margin: theme.spacing(1),
-    width: '48%',
+    margin: theme.spacing(2),
+    width: '45%',
     borderRadius: '4px',
     [theme.breakpoints.down('md')]: {
       width: '70%',

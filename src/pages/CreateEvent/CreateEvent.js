@@ -32,6 +32,7 @@ const CreatEvent = () => {
   })
 
   useEffect(() => {
+    console.log('eventsData ->', eventsData)
     if (role && role === 'host' && eventsData && eventsData.events.length) {
       setComponentToShow('upgrade-plan')
     }

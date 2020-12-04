@@ -93,7 +93,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
               <Grid item>
                 <Button
                   disabled={isSubmitting}
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                   onClick={() => setStep((s) => s - 1)}
                 >
