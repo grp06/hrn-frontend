@@ -18,7 +18,7 @@ const UserProvider = ({ children }) => {
   const { setAppLoading } = useAppContext()
   const history = useHistory()
   const { userId } = state.user
-  const { pathname } = window.location
+  const { pathname } = history.location
 
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
@@ -28,6 +28,7 @@ const UserProvider = ({ children }) => {
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
+  const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
   const userInEvent = Boolean(
     pathname.includes('video-room') ||
       pathname.includes('lobby') ||
@@ -83,7 +84,8 @@ const UserProvider = ({ children }) => {
           userOnEventsPage ||
           userOnSpecificEventPage ||
           userOnSetNewPasswordPage ||
-          userOnSignUpPage
+          userOnSignUpPage ||
+          userOnSubscriptionPage
         )
       ) {
         history.push('/')

@@ -10,9 +10,10 @@ const createStripeCustomer = async (email, name, userId) => {
       },
       body: JSON.stringify({ email, name, userId }),
     }
-  )
+  ).then((res) => res.json())
 
   console.log('[createStripeCustomerResponse] ->', customerResponse)
+  return customerResponse
 }
 
 export default createStripeCustomer

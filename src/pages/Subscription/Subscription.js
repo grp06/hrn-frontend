@@ -116,11 +116,12 @@ const Subscription = () => {
       }
     }
     // no userId means that this person clicking doesn't have an account yet
+    history.push('/sign-up?planType=free&billingPeriod=forever')
   }
 
-  if (appLoading) {
-    return <Loading />
-  }
+  // if (appLoading) {
+  //   return <Loading />
+  // }
 
   return (
     <Grid container direction="column">

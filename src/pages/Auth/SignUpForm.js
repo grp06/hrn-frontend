@@ -108,7 +108,7 @@ const SignUpForm = () => {
     const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
 
     if (subscriptionCheckoutObject) {
-      history.push('/checkout', subscriptionCheckoutObject)
+      history.push('/checkout', JSON.parse(subscriptionCheckoutObject))
       return window.location.reload()
     }
 

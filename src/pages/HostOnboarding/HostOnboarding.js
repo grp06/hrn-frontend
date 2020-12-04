@@ -26,7 +26,6 @@ const HostOnboarding = () => {
   const { user } = useUserContext()
   const { city: user_city, tags_users } = user
   const [showThankYouCard, setShowThankYouCard] = useState(false)
-  const [showAwhGeeCard, setShowAwhGeeCard] = useState(false)
   const userHasBeenOnboarded = user_city && tags_users.length
 
   if (appLoading) {
@@ -35,20 +34,21 @@ const HostOnboarding = () => {
 
   const handleRedirect = () => {
     if (userHasBeenOnboarded) {
-      return history.push('/create-event')
+      history.push('/create-event')
+      return window.location.reload()
     }
-    return history.push('/onboarding')
+    history.push('/onboarding')
   }
 
   return (
     <div style={{ paddingTop: '100px' }}>
       {showThankYouCard ? (
-        <ThankYouCard handleRedirect={handleRedirect} />
+        <ThankYouCard handleRedirect={handleRedirect} userHasBeenOnboarded={userHasBeenOnboarded} />
       ) : (
         <HostOnboardingForm
           userHasBeenOnboarded={userHasBeenOnboarded}
           onFormSubmit={() => setShowThankYouCard(true)}
-          onFormSkip={() => setShowAwhGeeCard(true)}
+          onFormSkip={() => setShowThankYouCard(true)}
         />
       )}
     </div>

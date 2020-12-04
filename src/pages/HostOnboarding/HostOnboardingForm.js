@@ -57,7 +57,7 @@ const HostOnboardingForm = ({ onFormSkip, onFormSubmit }) => {
           }}
           onSubmit={async (values) => {
             console.log(values)
-            await sleep(500)
+            await sleep(1200)
             onFormSubmit()
           }}
           isHostOnboarding
