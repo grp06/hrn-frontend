@@ -82,6 +82,10 @@ const Subscription = () => {
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
 
   const pushToCheckout = (planType, billingPeriod) => {
+    if (!userId) {
+      return history.push(`/sign-up?planType=${planType}&billingPeriod=${billingPeriod}`)
+    }
+
     if (planType === 'starter') {
       const planHighlights = starterPlan.prevPlanHighlights.concat(starterPlan.highlights)
       const stateToPass =
