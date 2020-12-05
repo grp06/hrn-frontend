@@ -1,30 +1,15 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/styles'
 
 import { HostOnboardingForm, ThankYouCard } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useUserContext } from '../../context'
 
-const useStyles = makeStyles((theme) => ({
-  skipButton: {
-    position: 'absolute',
-    left: 'auto',
-    right: '0%',
-    bottom: 'auto',
-    top: '0%',
-    textTransform: 'none',
-    color: theme.palette.common.ghostWhiteDark,
-    fontWeight: 200,
-  },
-}))
-
 const HostOnboarding = () => {
-  const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
-  const { city: user_city, tags_users } = user
+  const { id: user_id, city: user_city, tags_users } = user
   const [showThankYouCard, setShowThankYouCard] = useState(false)
   const userHasBeenOnboarded = user_city && tags_users.length
 
@@ -46,9 +31,9 @@ const HostOnboarding = () => {
         <ThankYouCard handleRedirect={handleRedirect} userHasBeenOnboarded={userHasBeenOnboarded} />
       ) : (
         <HostOnboardingForm
-          userHasBeenOnboarded={userHasBeenOnboarded}
-          onFormSubmit={() => setShowThankYouCard(true)}
           onFormSkip={() => setShowThankYouCard(true)}
+          onFormSubmit={() => setShowThankYouCard(true)}
+          userId={user_id}
         />
       )}
     </div>

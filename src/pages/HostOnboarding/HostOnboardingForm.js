@@ -1,11 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { useMutation } from 'react-apollo'
 import { Field } from 'formik'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/styles'
 
 import { HostOnboardingStep } from '.'
 import { FloatCardMediumLarge } from '../../common'
+import { insertHostQuestionnaire } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { FormikOnboardingStepper } from '../Onboarding'
 
@@ -44,8 +46,26 @@ const currentlyOrganizeOptions = [
 
 const frequencyOptions = ['Weekly', 'Bi-weekly', 'Monthly', 'A few times a year']
 
-const HostOnboardingForm = ({ onFormSkip, onFormSubmit }) => {
+const HostOnboardingForm = ({ onFormSkip, onFormSubmit, userId }) => {
   const classes = useStyles()
+  const [insertHostQuestionnaireMutation] = useMutation(insertHostQuestionnaire)
+
+  const handleSubmit = (values) => {
+    const { community_type, currently_organize, event_frequency } = values
+    try {
+      insertHostQuestionnaireMutation({
+        variables: {
+          community_type: community_type.toLowerCase(),
+          currently_organize: currently_organize.toLowerCase(),
+          event_frequency: event_frequency.toLowerCase(),
+          user_id: userId,
+        },
+      })
+    } catch (err) {
+      console.log('insertHostQuestionnaireMutation error ->', err)
+    }
+  }
+
   return (
     <motion.div initial={{ x: 2000 }} animate={{ x: 0, transition: { duration: 0.55 } }}>
       <FloatCardMediumLarge>
@@ -53,10 +73,10 @@ const HostOnboardingForm = ({ onFormSkip, onFormSubmit }) => {
           initialValues={{
             community_type: '',
             currently_organize: '',
-            frequency: '',
+            event_frequency: '',
           }}
           onSubmit={async (values) => {
-            console.log(values)
+            handleSubmit(values)
             await sleep(1200)
             onFormSubmit()
           }}
@@ -91,14 +111,14 @@ const HostOnboardingForm = ({ onFormSkip, onFormSubmit }) => {
             </Field>
           </div>
           <div label="frequency">
-            <Field name="frequency">
+            <Field name="event_frequency">
               {({ field, form }) => (
                 <HostOnboardingStep
                   question="How often do you plan to connect your community on Hi Right Now?"
                   options={frequencyOptions}
                   value={field.value}
                   onChange={(answer) => {
-                    form.setFieldValue('frequency', answer)
+                    form.setFieldValue('event_frequency', answer)
                   }}
                 />
               )}
