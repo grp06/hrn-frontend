@@ -35,44 +35,34 @@ const HostDrawerContent = ({ role }) => {
   const hostDrawerRoutes = role.includes('premium')
     ? [
         {
-          label: 'Create Event',
-          url: '/create-event',
-          icon: 'plus-circle',
-        },
-        {
           label: 'Analytics',
           url: '/host-dashboard',
           icon: 'bar-chart-2',
         },
       ]
-    : [
-        {
-          label: 'Create Event',
-          url: '/create-event',
-          icon: 'plus-circle',
-        },
-      ]
+    : null
 
   return (
     <div>
       <List disablePadding>
-        {hostDrawerRoutes.map((route) => (
-          <ListItem
-            button
-            disableRipple
-            disabled={eventRunning}
-            key={route.label}
-            onClick={() => history.push(route.url)}
-            className={classes.listItem}
-          >
-            <Grid container direction="row" justify="flex-start" alignItems="center">
-              <ListItemIcon>
-                <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
-              </ListItemIcon>
-              <ListItemText primary={route.label} className={classes.listItemText} />
-            </Grid>
-          </ListItem>
-        ))}
+        {role.includes('premium') &&
+          hostDrawerRoutes.map((route) => (
+            <ListItem
+              button
+              disableRipple
+              disabled={eventRunning}
+              key={route.label}
+              onClick={() => history.push(route.url)}
+              className={classes.listItem}
+            >
+              <Grid container direction="row" justify="flex-start" alignItems="center">
+                <ListItemIcon>
+                  <FeatherIcon icon={route.icon} stroke="#f4f6fa" size="24" />
+                </ListItemIcon>
+                <ListItemText primary={route.label} className={classes.listItemText} />
+              </Grid>
+            </ListItem>
+          ))}
       </List>
     </div>
   )
