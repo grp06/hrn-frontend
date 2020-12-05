@@ -107,7 +107,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     //   setFormSubmitting(false)
     //   return
     // }
-    console.log('formValues ->', formValues)
     const billingDetails = {
       name,
       address: {
@@ -117,8 +116,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         postal_code,
       },
     }
-    console.log('billingDetails ->', billingDetails)
-
     const cardElement = elements.getElement(CardElement)
     // If a previous payment was attempted, get the lastest invoice
     const latestInvoicePaymentIntentStatus = localStorage.getItem(

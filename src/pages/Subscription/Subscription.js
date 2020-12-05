@@ -7,35 +7,13 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 
-import { getPricingPlanDetails, PricingPlanCard } from '.'
-import blurryBackground from '../../assets/blurryBackground.png'
+import { getPricingPlanDetails, getSubscriptionCheckoutObject, PricingPlanCard } from '.'
 import confettiDoodles from '../../assets/ConfettiDoodlesSmallerScale.svg'
-import { Loading, ToggleGroup } from '../../common'
-import { useAppContext, useUserContext } from '../../context'
+import { ToggleGroup } from '../../common'
+import { useUserContext } from '../../context'
 import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,212,255,0) 100%)',
-    height: 'auto',
-    minHeight: '45vh',
-    width: '100%',
-    position: 'absolute',
-    top: '0%',
-    bottom: 'auto',
-    zIndex: '-1',
-  },
-  blurBackground: {
-    width: '100%',
-    height: 'auto',
-    minHeight: '45vh',
-    position: 'absolute',
-    zIndex: '-3',
-    backgroundPosition: '50% 50% !important',
-    backgroundSize: 'cover !important',
-    backgroundImage: `url(${blurryBackground})`,
-  },
   divider: {
     width: '80vw',
     margin: theme.spacing(6, 'auto'),
@@ -76,43 +54,23 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'repeat',
     position: 'relative',
   },
-  // overlay: {
-  //   backgroundColor: 'rgba(17, 13, 26, 0.3)',
-  //   width: '100%',
-  //   height: 'auto',
-  //   position: 'absolute',
-  // },
 }))
 
 const Subscription = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id } = user
   const [billingPeriod, setBillingPeriod] = useState('monthly')
   const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
 
-  const pushToCheckout = (planType, billingPeriod) => {
+  const pushToCheckout = (billingPeriod, planType) => {
     if (!userId) {
       return history.push(`/sign-up?planType=${planType}&billingPeriod=${billingPeriod}`)
     }
-
-    if (planType === 'starter') {
-      const planHighlights = starterPlan.prevPlanHighlights.concat(starterPlan.highlights)
-      const stateToPass =
-        billingPeriod === 'monthly'
-          ? { planPrice: 59, plan: 'STARTER_MONTHLY', planHighlights }
-          : { planPrice: 49, plan: 'STARTER_YEARLY', planHighlights }
-      return history.push('/checkout', stateToPass)
-    }
-
-    const stateToPass =
-      billingPeriod === 'monthly'
-        ? { planPrice: 169, plan: 'PREMIUM_MONTHLY' }
-        : { planPrice: 149, plan: 'PREMIUM_YEARLY' }
-    return history.push('/checkout', stateToPass)
+    const checkoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
+    return history.push('/checkout', checkoutObject)
   }
 
   const handleCreateCustomerPortal = async () => {
@@ -136,21 +94,8 @@ const Subscription = () => {
     history.push('/sign-up?planType=free&billingPeriod=forever')
   }
 
-  // if (appLoading) {
-  //   return <Loading />
-  // }
-
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      {/* <div className={classes.overlay}> */}
-      {/* <Grid
-        container
-        direction="column"
-        alignItems="flex-start"
-        justify="center"
-        className={classes.blurBackground}
-      />
-      <div className={classes.bannerGradient} /> */}
       <Grid container className={classes.subscriptionContainer}>
         <Typography variant="h2" className={classes.sectionHeading}>
           Choose the right plan for your community!
@@ -191,9 +136,12 @@ const Subscription = () => {
               <PricingPlanCard plan={freePlan} onSelect={() => handleUpgradeToHost()} />
               <PricingPlanCard
                 plan={starterPlan}
-                onSelect={() => pushToCheckout('starter', billingPeriod)}
+                onSelect={() => pushToCheckout(billingPeriod, 'starter')}
               />
-              <PricingPlanCard plan={premiumPlan} />
+              <PricingPlanCard
+                plan={premiumPlan}
+                onSelect={() => pushToCheckout(billingPeriod, 'premium')}
+              />
             </Grid>
           </motion.div>
         </Grid>
