@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   privacyPolicyText: {
     marginTop: theme.spacing(3),
+    textAlign: 'center',
   },
   privacyPolicyLink: {
     textDecoration: 'none',
