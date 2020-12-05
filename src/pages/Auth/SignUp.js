@@ -22,15 +22,6 @@ const SignUp = () => {
     }
   }, [billingPeriod, planType])
 
-  // check to see if a user is already logged in, if so redirect
-  if (localStorage.getItem('userId')) {
-    const subCheckoutObjectFromLS = localStorage.getItem('subscriptionCheckoutObject')
-    if (subCheckoutObjectFromLS) {
-      return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
-    }
-    return <Redirect to="/events" />
-  }
-
   return <SignUpForm />
 }
 

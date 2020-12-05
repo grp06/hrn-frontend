@@ -66,6 +66,16 @@ const SignUpForm = () => {
     setRedirect(false)
   }, [redirect])
 
+  // check to see if a user is already logged in, if so redirect
+  if (localStorage.getItem('userId')) {
+    const subCheckoutObjectFromLS = localStorage.getItem('subscriptionCheckoutObject')
+    console.log('subCheckoutObjectFromLS ->', subCheckoutObjectFromLS)
+    if (subCheckoutObjectFromLS) {
+      return <Redirect to={{ pathname: '/checkout', state: JSON.parse(subCheckoutObjectFromLS) }} />
+    }
+    return <Redirect to="/events" />
+  }
+
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     // setError(false)
