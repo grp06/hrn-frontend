@@ -17,7 +17,6 @@ import {
   EventGroupVideoChat,
   EventsPublic,
   ForgotPassword,
-  GateKeeper,
   HostDashboard,
   HostOnboarding,
   HRNAnalytics,
@@ -88,7 +87,6 @@ const App = () => {
                         path="/set-new-password/:userId/:token"
                         component={SetNewPassword}
                       />
-                      <Route exact path="/gate-keeper" component={GateKeeper} />
                       <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/host-onboarding" component={HostOnboarding} />
                       <Route exact path="/my-profile" component={MyProfile} />

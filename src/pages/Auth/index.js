@@ -1,6 +1,5 @@
 export { default as ForgotPassword } from './ForgotPassword'
 export { default as ForgotPasswordForm } from './ForgotPasswordForm'
-export { default as GateKeeper } from './GateKeeper'
 export { default as LoginForm } from './LoginForm'
 export { default as SignUp } from './SignUp'
 export { default as SignUpForm } from './SignUpForm'
