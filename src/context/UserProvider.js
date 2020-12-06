@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { useAppContext } from '.'
 import { findUserById } from '../gql/queries'
 
@@ -10,14 +10,16 @@ const UserContext = React.createContext()
 const defaultState = {
   user: {},
   userInEvent: false,
+  userOnAuthRoute: false,
 }
 
 const UserProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { setAppLoading } = useAppContext()
   const history = useHistory()
+  const location = useLocation()
   const { userId } = state.user
-  const { pathname } = window.location
+  const { pathname } = location
 
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
@@ -26,10 +28,21 @@ const UserProvider = ({ children }) => {
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
+  const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
+  const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
   const userInEvent = Boolean(
     pathname.includes('video-room') ||
       pathname.includes('lobby') ||
       pathname.includes('group-video-chat')
+  )
+  const isUserOnAuth = Boolean(
+    pathname === '/' ||
+      pathname.includes('sign-up') ||
+      pathname.includes('forgot-password') ||
+      pathname.includes('set-new-password') ||
+      pathname.includes('onboarding') ||
+      pathname.includes('host-onboarding') ||
+      pathname.includes('checkout-success')
   )
 
   const { data: userData } = useQuery(findUserById, {
@@ -50,6 +63,15 @@ const UserProvider = ({ children }) => {
     }
   }, [userData, userId])
 
+  useEffect(() => {
+    if (location) {
+      dispatch((draft) => {
+        draft.userOnAuthRoute = isUserOnAuth
+        draft.userOnEventsPage = userInEvent
+      })
+    }
+  }, [location])
+
   // once we get on the app check to see if theres a userID in local storage
   // if there is then we want to set user.userId so that findByUserId query can be called
   // if not:
@@ -58,7 +80,15 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
     if (!localStorageUserId) {
-      if (!(userOnEventsPage || userOnSpecificEventPage || userOnSetNewPasswordPage)) {
+      if (
+        !(
+          userOnEventsPage ||
+          userOnSpecificEventPage ||
+          userOnSetNewPasswordPage ||
+          userOnSignUpPage ||
+          userOnSubscriptionPage
+        )
+      ) {
         history.push('/')
       }
     } else {

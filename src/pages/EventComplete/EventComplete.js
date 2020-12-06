@@ -7,6 +7,7 @@ import { useSubscription } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
 
+import { BecomeAHostCard } from '.'
 import {
   useAppContext,
   useEventContext,
@@ -81,7 +82,7 @@ const EventComplete = ({ match }) => {
   const { event, resetEvent } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
-  const { id: userId } = user
+  const { id: userId, role } = user
   const { banner_photo_url, id: event_id } = event
 
   const history = useHistory()
@@ -159,29 +160,6 @@ const EventComplete = ({ match }) => {
               className={classes.buttonCard}
             >
               <Typography variant="h3" className={classes.cardTitle}>
-                Want to Host An Event?
-              </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                disableRipple
-                href={becomeAHostTypeform}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={classes.sideButton}
-              >
-                Become a Host
-              </Button>
-            </Grid>
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="flex-start"
-              className={classes.buttonCard}
-            >
-              <Typography variant="h3" className={classes.cardTitle}>
                 Leave Us a Tip!
               </Typography>
               <Button
@@ -197,6 +175,7 @@ const EventComplete = ({ match }) => {
                 Give Feedback
               </Button>
             </Grid>
+            {role && !role.includes('host') ? <BecomeAHostCard /> : null}
           </Grid>
         </Grid>
       </Grid>

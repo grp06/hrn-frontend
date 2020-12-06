@@ -202,13 +202,18 @@ const theme = createMuiTheme({
     MuiInputLabel: {
       root: {
         color: ghostWhiteBody,
-        fontSize: '1rem',
+        fontSize: '0.75rem',
+        marginBottom: '8px',
       },
       asterisk: {
         color: basePink,
       },
       formControl: {
         zIndex: 999,
+        transform: 'none',
+      },
+      shrink: {
+        transform: 'translate(0, 1.5px)',
       },
     },
     MuiInput: {
@@ -332,9 +337,9 @@ const theme = createMuiTheme({
     },
     MuiStepLabel: {
       label: {
-        fontSize: '1.25rem',
-        fontWeight: '400',
-        color: ghostWhite,
+        fontSize: '1rem',
+        fontWeight: '300',
+        color: ghostWhiteDark,
         '&.MuiStepLabel-active': {
           color: ghostWhite,
         },

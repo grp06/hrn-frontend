@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
   privacyPolicyText: {
     marginTop: theme.spacing(3),
+    textAlign: 'center',
   },
   privacyPolicyLink: {
     textDecoration: 'none',
@@ -64,11 +65,6 @@ const SignUpForm = () => {
   useEffect(() => {
     setRedirect(false)
   }, [redirect])
-
-  // check to see if a user is already logged in, if so redirect
-  if (localStorage.getItem('userId')) {
-    return <Redirect to="/events" />
-  }
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
@@ -110,6 +106,12 @@ const SignUpForm = () => {
     window.analytics.track('Sign up')
     localStorage.setItem('userId', id)
     localStorage.setItem('token', token)
+    const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
+
+    if (subscriptionCheckoutObject) {
+      history.push('/checkout', JSON.parse(subscriptionCheckoutObject))
+      return window.location.reload()
+    }
 
     history.push('/onboarding')
     window.location.reload()

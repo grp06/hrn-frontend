@@ -11,6 +11,8 @@
     "@material-ui/lab": "^4.0.0-alpha.55",
     "@material-ui/pickers": "^3.2.10",
     "@projectstorm/react-diagrams": "^6.0.1-beta.7",
+    "@stripe/react-stripe-js": "^1.1.2",
+    "@stripe/stripe-js": "^1.11.0",
     "@testing-library/jest-dom": "^5.11.1",
     "@testing-library/react": "^10.4.7",
     "@testing-library/user-event": "^7.1.2",
@@ -60,7 +62,8 @@
     "styled-components": "^5.1.0",
     "subscriptions-transport-ws": "^0.9.16",
     "twilio-video": "^2.7.3",
-    "use-immer": "^0.4.0"
+    "use-immer": "^0.4.0",
+    "yup": "^0.31.0"
   },
   "scripts": {
     "start": "react-scripts start",

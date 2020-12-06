@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import Typography from '@material-ui/core/Typography'
 import { useQuery } from '@apollo/react-hooks'
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HostDashboard = () => {
   const classes = useStyles()
+  const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { id: userId, role } = user
@@ -54,7 +56,7 @@ const HostDashboard = () => {
       variables: {
         userId: userId,
       },
-      skip: !userId || (role && role !== 'host'),
+      skip: !userId || (role && !role.includes('host')),
     }
   )
   const { data: eventsAndPartnersData, loading: eventsAndPartnersLoading } = useQuery(
@@ -63,7 +65,7 @@ const HostDashboard = () => {
       variables: {
         user_id: userId,
       },
-      skip: !userId || (role && role !== 'host'),
+      skip: !userId || (role && !role.includes('host')),
     }
   )
 
@@ -72,6 +74,12 @@ const HostDashboard = () => {
   useEffect(() => {
     window.analytics.page('/host-dashbaord')
   }, [])
+
+  useEffect(() => {
+    if (role && !role.includes('premium')) {
+      history.push('/events')
+    }
+  }, [role])
 
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables
@@ -108,7 +116,7 @@ const HostDashboard = () => {
     }
   }, [eventsAndPartnersData, eventsAndPartnersLoading])
 
-  if (role && role !== 'host') {
+  if (role && !role.includes('host')) {
     return <Redirect to="/events" />
   }
 
