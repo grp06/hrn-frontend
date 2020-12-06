@@ -41,6 +41,7 @@ import {
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
+import ProfilePictureModal from './ui/Subheader/ProfilePictureModal'
 import theme from './ui/theme'
 
 const App = () => {
@@ -129,6 +130,7 @@ const App = () => {
                   </Switch>
                   <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                   <GetTagsModal />
+                  <ProfilePictureModal />
                 </UserProvider>
               </AppProvider>
             </ErrorBoundary>
