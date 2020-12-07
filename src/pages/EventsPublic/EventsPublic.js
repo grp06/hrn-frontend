@@ -75,7 +75,6 @@ const useStyles = makeStyles((theme) => ({
 const EventsPublic = () => {
   const classes = useStyles()
   const { setEventId, resetEvent } = useEventContext()
-  const [eventToggleValue, setEventToggleValue] = React.useState('HRN')
 
   const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
     getAllPublicEvents,
@@ -113,45 +112,21 @@ const EventsPublic = () => {
     )
   }
 
-  const EventPublicRegex = /^Hi\sRight\sNow/
-  const renderEventsCards = (eventGroup, emptyGroupMessage) => {
+  const renderEventsCards = () => {
     if (allPublicEventsData && allPublicEventsData.events.length) {
-      const group =
-        eventGroup === 'HRN'
-          ? allPublicEventsData.events
-              .filter((event) => {
-                const eventStartedOver24HoursAgo = getEventStartedOver24HoursAgo(event.start_at)
-                return (
-                  event.event_name.match(EventPublicRegex) &&
-                  !event.ended_at &&
-                  !eventStartedOver24HoursAgo
-                )
-              })
-              .sort((eventA, eventB) => {
-                if (eventA && eventB) {
-                  if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
-                    return 1
-                  }
-                  return -1
-                }
-              })
-          : allPublicEventsData.events
-              .filter((event) => {
-                const eventStartedOver24HoursAgo = getEventStartedOver24HoursAgo(event.start_at)
-                return (
-                  !event.event_name.match(EventPublicRegex) &&
-                  !event.ended_at &&
-                  !eventStartedOver24HoursAgo
-                )
-              })
-              .sort((eventA, eventB) => {
-                if (eventA && eventB) {
-                  if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
-                    return 1
-                  }
-                  return -1
-                }
-              })
+      const group = allPublicEventsData.events
+        .filter((event) => {
+          const eventStartedOver24HoursAgo = getEventStartedOver24HoursAgo(event.start_at)
+          return !event.ended_at && !eventStartedOver24HoursAgo
+        })
+        .sort((eventA, eventB) => {
+          if (eventA && eventB) {
+            if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
+              return 1
+            }
+            return -1
+          }
+        })
 
       if (group.length > 0) {
         return group.map((event) => (
@@ -160,13 +135,9 @@ const EventsPublic = () => {
           </div>
         ))
       }
-      return renderNullDataText(emptyGroupMessage)
+      return renderNullDataText('No upcoming events 😢')
     }
-    return renderNullDataText(emptyGroupMessage)
-  }
-
-  const handleEventToggle = (event) => {
-    setEventToggleValue(event.currentTarget.value)
+    return renderNullDataText('No upcoming events 😢')
   }
 
   return (
@@ -185,40 +156,8 @@ const EventsPublic = () => {
         </Grid>
       </Grid>
 
-      <Grid container justify="flex-start" alignItems="center" className={classes.toggleGrid}>
-        <ToggleButtonGroup
-          value={eventToggleValue}
-          groupedTextHorizontal
-          exclusive
-          onChange={handleEventToggle}
-          className={classes.toggleButtonGroup}
-        >
-          <ToggleButton
-            value="HRN"
-            disableRipple
-            className={
-              eventToggleValue === 'HRN' ? classes.toggleButtonActive : classes.toggleButtonInactive
-            }
-          >
-            Hi Right Now Events
-          </ToggleButton>
-          <ToggleButton
-            value="OthersEvent"
-            disableRipple
-            className={
-              eventToggleValue === 'OthersEvent'
-                ? classes.toggleButtonActive
-                : classes.toggleButtonInactive
-            }
-          >
-            All Events
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Grid>
       <Grid container direction="column" justify="center" alignItems="center">
-        {eventToggleValue === 'HRN'
-          ? renderEventsCards('HRN', 'Looks like No Hi Right Now Events yet 😢')
-          : renderEventsCards('OthersEvent', 'Looks like No Events yet 😢')}
+        {renderEventsCards()}
       </Grid>
     </>
   )
