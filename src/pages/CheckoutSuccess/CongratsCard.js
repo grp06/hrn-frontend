@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CongratsCard = () => {
+const CongratsCard = ({ userHasDoneHostQuestionnaire }) => {
   const classes = useStyles()
   const history = useHistory()
   const defaultOptions = {
@@ -55,7 +55,10 @@ const CongratsCard = () => {
   }
 
   const handleHostOnboardingClick = () => {
-    return history.push('/host-onboarding')
+    if (!userHasDoneHostQuestionnaire) {
+      return history.push('/host-onboarding')
+    }
+    history.push('/create-event')
   }
 
   return (
@@ -90,10 +93,17 @@ const CongratsCard = () => {
               😎
             </span>
           </Typography>
-          <Typography variant="h4" className={classes.subheading}>
-            Help us perfect the experience of strengthening community bonds for you and others by
-            answering a few questions.
-          </Typography>
+          {!userHasDoneHostQuestionnaire ? (
+            <Typography variant="h4" className={classes.subheading}>
+              Help us perfect the experience of strengthening community bonds for you and others by
+              answering a few questions.
+            </Typography>
+          ) : (
+            <Typography variant="h4" className={classes.subheading}>
+              Click the button below and start throwing events for your community and beyond!
+            </Typography>
+          )}
+
           <Button
             variant="contained"
             size="large"

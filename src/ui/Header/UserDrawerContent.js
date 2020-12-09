@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ userId, userName }) => {
+const UserDrawerContent = ({ role, userId, userName }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
@@ -34,7 +34,7 @@ const UserDrawerContent = ({ userId, userName }) => {
   )
   const usersFirstName = userName && userName.split(' ')[0]
 
-  const userDrawerRoutes = [
+  const loggedInRoutes = [
     {
       label: usersFirstName,
       url: '/my-profile',
@@ -56,14 +56,27 @@ const UserDrawerContent = ({ userId, userName }) => {
       icon: 'globe',
     },
     {
-      label: 'Subscription',
+      label: role && role.includes('host') ? 'Subscription' : 'Become a Host',
       url: '/subscription',
-      icon: 'credit-card',
+      icon: role && role.includes('host') ? 'credit-card' : 'award',
     },
   ]
 
-  const renderLoggedInContent = () => {
-    return userDrawerRoutes.map((route) => (
+  const loggedOutRoutes = [
+    {
+      label: 'All Events',
+      url: '/events',
+      icon: 'globe',
+    },
+    {
+      label: 'Become a Host',
+      url: '/subscription',
+      icon: 'award',
+    },
+  ]
+
+  const renderDrawers = (routes) => {
+    return routes.map((route) => (
       <ListItem
         button
         disableRipple
@@ -83,24 +96,7 @@ const UserDrawerContent = ({ userId, userName }) => {
   }
 
   const renderContent = () => {
-    return userId ? (
-      renderLoggedInContent()
-    ) : (
-      <ListItem
-        button
-        disableRipple
-        key="1"
-        onClick={() => history.push('/events')}
-        className={classes.listItem}
-      >
-        <Grid container direction="row" justify="flex-start" alignItems="center">
-          <ListItemIcon>
-            <FeatherIcon icon="globe" stroke="#f4f6fa" size="24" />
-          </ListItemIcon>
-          <ListItemText disableTypography primary="All Events" className={classes.listItemText} />
-        </Grid>
-      </ListItem>
-    )
+    return userId ? renderDrawers(loggedInRoutes) : renderDrawers(loggedOutRoutes)
   }
 
   return (

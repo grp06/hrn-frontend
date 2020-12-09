@@ -67,6 +67,7 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
+  const userIsHost = role && role.includes('host')
 
   return (
     <>
@@ -80,9 +81,9 @@ const DrawerContent = () => {
             </Grid>
           </div>
           <Divider />
-          {role && role.includes('host') && <CreateEventSidebarButton />}
-          <UserDrawerContent userId={userId} userName={name} />
-          {role && role.includes('host') && <HostDrawerContent role={role} />}
+          {userIsHost && <CreateEventSidebarButton />}
+          <UserDrawerContent userId={userId} userName={name} role={role} />
+          {userIsHost && <HostDrawerContent role={role} />}
         </Grid>
         <Grid
           container
