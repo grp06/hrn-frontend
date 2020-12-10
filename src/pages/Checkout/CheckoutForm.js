@@ -102,11 +102,11 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const handleFormSubmit = async (formValues) => {
     setFormSubmitting(true)
     const { name, addressLine1, city, state, postal_code } = formValues
-    // if (!name || !addressLine1 || !city || !state || !postal_code) {
-    //   setPaymentErrorMessage('something seems to be empty  🧐')
-    //   setFormSubmitting(false)
-    //   return
-    // }
+    if (!name || !addressLine1 || !city || !state || !postal_code) {
+      setPaymentErrorMessage('something seems to be empty  🧐')
+      setFormSubmitting(false)
+      return
+    }
     const billingDetails = {
       name,
       address: {
@@ -124,8 +124,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
-      // TODO add billing details from the form
-      // billing_details: billingDetails,
+      billing_details: billingDetails,
     })
     if (error) {
       setFormSubmitting(false)
@@ -176,7 +175,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         onSubmit={async (values) => {
           handleFormSubmit(values)
         }}
-        // validationSchema={CheckoutSchema}
+        validationSchema={CheckoutSchema}
       >
         {({ submitForm, dirty, isValid, values }) => (
           <Form>
@@ -245,8 +244,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 variant="contained"
                 color="primary"
                 startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
-                // disabled={formSubmitting || !isValid || !dirty}
-                disabled={formSubmitting}
+                disabled={formSubmitting || !isValid || !dirty}
                 onClick={submitForm}
               >
                 {formSubmitting ? 'Updating Our Ledgers ...' : 'Complete Payment'}
