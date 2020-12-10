@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
   },
   planHighlightsList: {
     marginTop: theme.spacing(1),
-    padding: theme.spacing(0, 3),
+    padding: theme.spacing(0, 0, 0, 3),
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(0, 1),
     },
@@ -48,6 +48,14 @@ const useStyles = makeStyles((theme) => ({
   planHighlightTypography: {
     marginBottom: theme.spacing(0.5),
   },
+  planNameContainer: {
+    [theme.breakpoints.down('md')]: {
+      width: '60%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
+  },
   planNameTypography: {
     fontWeight: 700,
     marginBottom: theme.spacing(0.25),
@@ -55,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
   priceAndButtonContainer: {
     [theme.breakpoints.down('md')]: {
       alignItems: 'flex-end',
+      width: '40%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(2),
+      alignItems: 'flex-start',
+      width: '100%',
     },
   },
   pricingCardContainer: {
@@ -128,20 +142,13 @@ const PricingPlanCard = ({ plan, onSelect }) => {
       className={`${classes.pricingCardContainer} ${isActivePlan && classes.activePlan}`}
     >
       <Grid container direction="column" className={classes.cardTopSection}>
-        <Grid container item xs={7} lg={12} direction="column">
+        <Grid container direction="column" className={classes.planNameContainer}>
           <Typography variant="h2" className={classes.planNameTypography}>
             {name}
           </Typography>
           <Typography variant="subtitle1">{subtitle}</Typography>
         </Grid>
-        <Grid
-          container
-          item
-          xs={5}
-          lg={12}
-          direction="column"
-          className={classes.priceAndButtonContainer}
-        >
+        <Grid container direction="column" className={classes.priceAndButtonContainer}>
           <Typography variant="h3" className={classes.priceTypography}>
             {price}
           </Typography>

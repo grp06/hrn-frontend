@@ -6,15 +6,18 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   toggleButtonActive: {
-    width: '125px',
+    width: '100px',
     '&.Mui-selected': {
-      color: theme.palette.common.basePink,
-      borderRadius: 0,
+      color: 'rgba(0, 0, 0, 0.87)',
+      // borderRadius: 0,
+      borderRadius: 4,
       border: 'none',
-      borderBottom: `2px solid ${theme.palette.common.basePink}`,
-      backgroundColor: 'transparent',
+
+      // borderBottom: `2px solid ${theme.palette.common.basePink}`,
+      // backgroundColor: 'transparent',
+      backgroundColor: theme.palette.common.basePink,
       '&:hover': {
-        backgroundColor: 'transparent',
+        backgroundColor: 'rgb(178, 107, 121)',
       },
     },
     [theme.breakpoints.down('sm')]: {
@@ -22,12 +25,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonInactive: {
-    width: '125px',
+    width: '100px',
     color: theme.palette.common.ghostWhite,
-    borderRadius: 0,
+    backgroundColor: theme.palette.common.greyButton,
+    borderRadius: 4,
     border: 'none',
     '&:hover': {
-      backgroundColor: 'transparent',
+      backgroundColor: theme.palette.common.greyButtonHover,
     },
     [theme.breakpoints.down('sm')]: {
       width: '100px',
