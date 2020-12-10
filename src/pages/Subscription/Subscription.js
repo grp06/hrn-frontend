@@ -60,7 +60,7 @@ const Subscription = () => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useUserContext()
-  const { id: userId, role, stripe_customer_id } = user
+  const { id: userId, role, stripe_customer_id, sub_period_end } = user
   const [billingPeriod, setBillingPeriod] = useState('monthly')
   const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
@@ -76,6 +76,13 @@ const Subscription = () => {
   const handleCreateCustomerPortal = async () => {
     const portal = await createStripeCustomerPortal(stripe_customer_id)
     window.open(portal.url)
+  }
+
+  const handlePlanSelect = (billingPeriod, planType) => {
+    if (sub_period_end) {
+      return handleCreateCustomerPortal()
+    }
+    return pushToCheckout(billingPeriod, planType)
   }
 
   const handleUpgradeToHost = async () => {
@@ -136,11 +143,11 @@ const Subscription = () => {
               <PricingPlanCard plan={freePlan} onSelect={() => handleUpgradeToHost()} />
               <PricingPlanCard
                 plan={starterPlan}
-                onSelect={() => pushToCheckout(billingPeriod, 'starter')}
+                onSelect={() => handlePlanSelect(billingPeriod, 'starter')}
               />
               <PricingPlanCard
                 plan={premiumPlan}
-                onSelect={() => pushToCheckout(billingPeriod, 'premium')}
+                onSelect={() => handlePlanSelect(billingPeriod, 'premium')}
               />
             </Grid>
           </motion.div>

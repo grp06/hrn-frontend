@@ -1,20 +1,33 @@
 import React, { useEffect } from 'react'
 import moment from 'moment'
+import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 
 import { CongratsCard, PaymentConfirmationCard } from '.'
+import { Loading } from '../../common'
 import { useUserContext } from '../../context'
+import { getHostQuestionnaire } from '../../gql/queries'
 
 const CheckoutSuccess = ({ location }) => {
   const history = useHistory()
   const { user } = useUserContext()
-  const { stripe_customer_id } = user
+  const { id: user_id, stripe_customer_id } = user
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
   // if the user is a paid host locationState should be an object with
   // keys paymentMethodId, plan, and subscription
   // If the user is a free host locationState will have {freeHost: true}
   console.log(locationState)
+
+  const { data: hostQuestionnaireQuery, loading: hostQuestionnaireQueryLoading } = useQuery(
+    getHostQuestionnaire,
+    {
+      variables: {
+        user_id,
+      },
+      skip: !user_id,
+    }
+  )
 
   useEffect(() => {
     if (!Object.keys(locationState).length) {
@@ -48,9 +61,16 @@ const CheckoutSuccess = ({ location }) => {
 
   const planPrice = locationState.subscription && locationState.subscription.plan.amount / 100
 
+  if (hostQuestionnaireQueryLoading) {
+    return <Loading />
+  }
+
+  const userHasDoneHostQuestionnaire =
+    hostQuestionnaireQuery && hostQuestionnaireQuery.host_questionnaire.length >= 1
+
   return (
     <Grid container justify="center" alignItems="center" style={{ paddingTop: '100px' }}>
-      <CongratsCard />
+      <CongratsCard userHasDoneHostQuestionnaire={userHasDoneHostQuestionnaire} />
       {locationState.subscription ? (
         <PaymentConfirmationCard
           planItem={planItem}
