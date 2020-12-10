@@ -74,18 +74,20 @@ const ProfilePictureModal = () => {
   const { user } = useUserContext()
   const { id: userId, profile_pic_url } = user
   const [showModal, setShowModal] = useState(true)
+  const EventHomeRegex = /\/events\/\d+/
   const EventInProgressRegex = /\/events\/\d+\//
 
+  const onEventsPage = window.location.pathname === '/events'
+  const onEventHomePage = Boolean(window.location.pathname.match(EventHomeRegex))
   const onEventInProgressPage = Boolean(window.location.pathname.match(EventInProgressRegex))
   const haveShownProfilePicModal = localStorage.getItem('haveShownProfilePicModal')
-  const userOnOnboarding = window.location.pathname.includes('onboarding')
 
   const showProfilePicModal =
     userId &&
-    !onEventInProgressPage &&
     !haveShownProfilePicModal &&
     !profile_pic_url &&
-    !userOnOnboarding
+    (onEventsPage || onEventHomePage) &&
+    !onEventInProgressPage
 
   useEffect(() => {
     if (showProfilePicModal) {

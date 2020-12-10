@@ -91,15 +91,6 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
     else return 'RSVP'
   }
 
-  const handleCancelRSVPClick = async () => {
-    try {
-      await deleteEventUserMutation()
-      window.analytics.track('RSVP cancelled')
-    } catch (error) {
-      console.log('error = ', error)
-    }
-  }
-
   const handleRSVPClick = () => {
     if (!user_id) {
       localStorage.setItem('eventId', event_id)

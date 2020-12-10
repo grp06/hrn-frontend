@@ -45,34 +45,31 @@ const useStyles = makeStyles((theme) => ({
 const GeosuggestCityInput = ({ placeholder, initialValue, onSuggestSelectCallback }) => {
   const classes = useStyles()
 
-  useEffect(() => {
-    const geosuggestLabelDOMElement = document.getElementById('geosuggest-label')
-    const geosuggestUnderlineDOMElement = document.getElementById('geosuggest-form-container')
-    geosuggestLabelDOMElement.classList.add(
-      'MuiFormLabel-root',
-      'MuiInputLabel-root',
-      'MuiInputLabel-formControl',
-      'MuiInputLabel-animated',
-      'MuiInputLabel-shrink',
-      'MuiFormLabel-filled'
-    )
-    geosuggestUnderlineDOMElement.classList.add(
-      // 'MuiInputBase-root',
-      'MuiInput-root',
-      // 'MuiInput-underline',
-      'MuiInputBase-fullWidth',
-      'MuiInput-fullWidth',
-      'MuiInputBase-formControl',
-      'MuiInput-formControl'
-    )
-    // console.log(geosuggestDOMElement)
-  }, [])
+  // useEffect(() => {
+  //   const geosuggestLabelDOMElement = document.getElementById('geosuggest-label')
+  //   const geosuggestUnderlineDOMElement = document.getElementById('geosuggest-form-container')
+  //   geosuggestLabelDOMElement.classList.add(
+  //     'MuiFormLabel-root',
+  //     'MuiInputLabel-root',
+  //     'MuiInputLabel-formControl',
+  //     'MuiInputLabel-animated',
+  //     'MuiInputLabel-shrink',
+  //     'MuiFormLabel-filled'
+  //   )
+  //   geosuggestUnderlineDOMElement.classList.add(
+  //     // 'MuiInputBase-root',
+  //     'MuiInput-root',
+  //     // 'MuiInput-underline',
+  //     'MuiInputBase-fullWidth',
+  //     'MuiInput-fullWidth',
+  //     'MuiInputBase-formControl',
+  //     'MuiInput-formControl'
+  //   )
+  //   // console.log(geosuggestDOMElement)
+  // }, [])
 
   return (
     <div id="geosuggest-form-container" className={classes.geosuggestContainer}>
-      <div id="geosuggest-label" className={classes.geosuggestLabel}>
-        city
-      </div>
       <Geosuggest
         placeholder={placeholder}
         types={['(cities)']}

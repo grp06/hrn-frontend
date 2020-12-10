@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   privacyPolicyText: {
     marginTop: theme.spacing(3),
+    textAlign: 'center',
   },
   privacyPolicyLink: {
     textDecoration: 'none',
@@ -91,9 +92,15 @@ const LoginForm = () => {
 
     const { id, token } = loginResponse
     localStorage.setItem('token', token)
-
     localStorage.setItem('userId', id)
+    const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
     const eventIdInLocalStorage = localStorage.getItem('eventId')
+
+    if (subscriptionCheckoutObject) {
+      history.push('/checkout', JSON.parse(subscriptionCheckoutObject))
+      window.location.reload()
+      return
+    }
 
     if (eventIdInLocalStorage) {
       history.replace(`/events/${eventIdInLocalStorage}`)

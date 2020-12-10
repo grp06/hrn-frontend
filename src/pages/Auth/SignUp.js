@@ -1,7 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation, Redirect } from 'react-router-dom'
 import { SignUpForm } from '.'
+import { getSubscriptionCheckoutObject } from '../Subscription'
 
 const SignUp = () => {
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const planType = searchParams.get('planType')
+  const billingPeriod = searchParams.get('billingPeriod')
+  const [checkedSCOInLS, setCheckedSCOInLS] = useState(false)
+
+  // if we are coming from webflow, or passing query string to sign up (when you dont have an
+  // an account and you click a sub on our app)
+  useEffect(() => {
+    if (billingPeriod && planType) {
+      const subscriptionCheckoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
+      localStorage.setItem('subscriptionCheckoutObject', JSON.stringify(subscriptionCheckoutObject))
+    }
+    setCheckedSCOInLS(true)
+  }, [billingPeriod, planType])
+
+  // check to see if a user is already logged in, if so redirect
+  if (checkedSCOInLS && localStorage.getItem('userId')) {
+    const subCheckoutObjectFromLS = localStorage.getItem('subscriptionCheckoutObject')
+    if (subCheckoutObjectFromLS) {
+      return <Redirect to={{ pathname: '/checkout', state: JSON.parse(subCheckoutObjectFromLS) }} />
+    }
+    return <Redirect to="/events" />
+  }
+
   return <SignUpForm />
 }
 
