@@ -94,7 +94,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoicePaymentIntentStatus', '')
       localStorage.setItem('latestInvoiceId', '')
     }
-
+    window.analytics.track(`successfully paid for ${result.plan}`)
     history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })
     return window.location.reload()
   }

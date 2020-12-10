@@ -61,6 +61,7 @@ const HostOnboardingForm = ({ onFormSkip, onFormSubmit, userId }) => {
           user_id: userId,
         },
       })
+      window.analytics.track('submitted host questionnaire')
     } catch (err) {
       console.log('insertHostQuestionnaireMutation error ->', err)
     }

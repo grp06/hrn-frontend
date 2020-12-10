@@ -66,6 +66,7 @@ const Subscription = () => {
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
 
   const pushToCheckout = (billingPeriod, planType) => {
+    window.analytics.track(`click ${planType} ${billingPeriod}`)
     if (!userId) {
       return history.push(`/sign-up?planType=${planType}&billingPeriod=${billingPeriod}`)
     }
@@ -74,6 +75,7 @@ const Subscription = () => {
   }
 
   const handleCreateCustomerPortal = async () => {
+    window.analytics.track('click stripe customer portal')
     const portal = await createStripeCustomerPortal(stripe_customer_id)
     window.open(portal.url)
   }
@@ -90,6 +92,7 @@ const Subscription = () => {
       try {
         const upgradeToHostResponse = await upgradeToHost(userId)
         localStorage.setItem('token', upgradeToHostResponse.token)
+        window.analytics.track('upgrade to free host')
         await sleep(500)
         history.push('/checkout-success', { freeHost: true })
         return window.location.reload()
@@ -98,6 +101,7 @@ const Subscription = () => {
       }
     }
     // no userId means that this person clicking doesn't have an account yet
+    window.analytics.track('upgrade to free host')
     history.push('/sign-up?planType=free&billingPeriod=forever')
   }
 

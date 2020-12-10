@@ -70,7 +70,10 @@ const BecomeAHostCard = () => {
           size="large"
           color="primary"
           className={classes.becomeAHostButton}
-          onClick={() => history.push('/subscription')}
+          onClick={() => {
+            window.analytics.track('become a host from event complete')
+            history.push('/subscription')
+          }}
         >
           Become a Host Now
         </Button>

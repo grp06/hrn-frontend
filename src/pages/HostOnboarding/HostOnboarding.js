@@ -31,7 +31,10 @@ const HostOnboarding = () => {
         <ThankYouCard handleRedirect={handleRedirect} userHasBeenOnboarded={userHasBeenOnboarded} />
       ) : (
         <HostOnboardingForm
-          onFormSkip={() => setShowThankYouCard(true)}
+          onFormSkip={() => {
+            window.analytics.track('skipped host questionnaire')
+            setShowThankYouCard(true)
+          }}
           onFormSubmit={() => setShowThankYouCard(true)}
           userId={user_id}
         />
