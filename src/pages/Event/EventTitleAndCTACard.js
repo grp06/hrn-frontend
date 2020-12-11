@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
@@ -49,6 +50,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
   const [showComeBackSnack, setShowComeBackSnack] = useState(false)
+  const [rsvpButtonLoading, setRsvpButtonLoading] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
   const { event_name, event_users, host_id, id: event_id, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
@@ -86,20 +88,28 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
 
   const getUserCTAButtonText = () => {
     if (userAlreadyRSVPed && event_status === 'not-started') return "You're all set!"
-    else if (!userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete')
+    else if (
+      !rsvpButtonLoading &&
+      !userAlreadyRSVPed &&
+      event_status !== 'not-started' &&
+      event_status !== 'complete'
+    )
       return 'Join Event'
-    else return 'RSVP'
+    else if (rsvpButtonLoading) return 'Loading'
+    return 'RSVP'
   }
 
-  const handleRSVPClick = () => {
+  const handleRSVPClick = async () => {
+    setRsvpButtonLoading(true)
     if (!user_id) {
       localStorage.setItem('eventId', event_id)
       history.push('/sign-up')
     } else {
       if (!userAlreadyRSVPed) {
-        rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
+        await rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
       }
     }
+    setRsvpButtonLoading(false)
   }
 
   const handleAllSetClick = () => {
@@ -124,6 +134,8 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         size="large"
         color={userAlreadyRSVPed ? 'secondary' : 'primary'}
         disableRipple
+        disabled={rsvpButtonLoading}
+        startIcon={rsvpButtonLoading ? <CircularProgress size={20} /> : null}
         onClick={userAlreadyRSVPed ? handleAllSetClick : debounce(handleRSVPClick, 250)}
       >
         {getUserCTAButtonText()}
