@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: '100%',
     padding: theme.spacing(3, 5),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 3),
+    },
   },
   cardTitle: {
     margin: 0,

@@ -20,6 +20,9 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     padding: theme.spacing(3, 5),
     marginBottom: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 3),
+    },
   },
   hostAndRSVPContainer: {
     marginBottom: theme.spacing(2),
@@ -38,6 +41,12 @@ const useStyles = makeStyles((theme) => ({
   },
   largeNumber: {
     ...theme.typography.largeNumber,
+  },
+  rsvpAndOnlineNumberContainer: {
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'flex-start',
+      marginTop: theme.spacing(3),
+    },
   },
   rsvpedNumberContainer: {
     width: 'auto',
@@ -64,7 +73,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
         justify="space-between"
         className={classes.hostAndRSVPContainer}
       >
-        <Grid container item direction="column" xs={12} md={6}>
+        <Grid container item direction="column" xs={12} sm={6}>
           <Typography variant="subtitle1" className={classes.subtitle}>
             Hosted By /
           </Typography>
@@ -92,7 +101,15 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
             </Grid>
           </Grid>
         </Grid>
-        <Grid container item xs={6} direction="row" justify="flex-end">
+        <Grid
+          container
+          item
+          xs={12}
+          sm={6}
+          direction="row"
+          justify="flex-end"
+          className={classes.rsvpAndOnlineNumberContainer}
+        >
           {userIsHost || (!userIsHost && event_users.length > 9) ? (
             <Grid
               container

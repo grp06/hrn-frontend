@@ -1,5 +1,6 @@
 export { default as AttendeesList } from './AttendeesList'
 export { default as ChangeEventPhotoBanner } from './ChangeEventPhotoBanner'
+export { default as DeleteEventButton } from './DeleteEventButton'
 export { default as Event } from './Event'
 export { default as EventPhotoBanner } from './EventPhotoBanner'
 export { default as EventRSVPsCard } from './EventRSVPsCard'

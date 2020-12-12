@@ -43,6 +43,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
     paddingBottom: '40px',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   podcastContainer: {
     width: '44%',

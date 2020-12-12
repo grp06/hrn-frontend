@@ -23,6 +23,9 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: 'auto',
     padding: theme.spacing(3, 5),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 3),
+    },
   },
   seeAllButton: {
     backgroundColor: 'transparent',
