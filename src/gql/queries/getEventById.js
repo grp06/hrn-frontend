@@ -27,6 +27,7 @@ const getEventById = gql`
       host {
         name
         profile_pic_url
+        short_bio
       }
     }
   }
