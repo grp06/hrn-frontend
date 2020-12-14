@@ -56,7 +56,7 @@ const HRNAnalytics = () => {
     setValue(newValue)
   }
 
-  if (!adminUserIds.includes(userId)) {
+  if (userId && !adminUserIds.includes(userId)) {
     return <Redirect to="/" />
   }
 
