@@ -58,10 +58,10 @@ const HRNAnalytics = () => {
     userId === 8 ||
     userId === 12 ||
     userId === 115 ||
-    userId === 513 ||
-    userId === 1628 ||
-    userId === 2567 ||
-    userId === 1
+    userId === 506 ||
+    userId === 3091 ||
+    userId === 3552 ||
+    userId === 3974
 
   if (allDBUsersLoading || allDBEventsAndRoundsLoading || roundsDataLoading) {
     return <Loading />

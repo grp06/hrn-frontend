@@ -1,5 +1,7 @@
 const constants = {
   // change me back to 20000?
+  // george, stephen, max, lenny, zhen, sandra, ash
+  adminUserIds: [8, 12, 115, 506, 3091, 3552, 3974],
   lastSeenDuration: 750,
   roundLength: 300,
   betweenRoundsDelay: 20000,
