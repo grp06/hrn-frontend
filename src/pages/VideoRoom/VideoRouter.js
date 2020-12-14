@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTwilioContext } from '../../context'
-import { PostChatRating } from '.'
+import { PostChatRating, StartupFuelInBetweenRounds } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 
-const VideoRouter = ({ eventStatus, myRound, setUserEventStatus }) => {
+const VideoRouter = ({ eventId, eventStatus, myRound, setUserEventStatus }) => {
   const {
     partnerDisconnected,
     partnerNeverConnected,
@@ -15,6 +15,9 @@ const VideoRouter = ({ eventStatus, myRound, setUserEventStatus }) => {
     const hasPartner = !hasRoundsData ? false : myRound.partner_id
     switch (eventStatus) {
       case 'in-between-rounds':
+        if (eventId === 656) {
+          return <StartupFuelInBetweenRounds />
+        }
         return hasPartner ? (
           <PostChatRating myRound={myRound} setUserEventStatus={setUserEventStatus} />
         ) : (
