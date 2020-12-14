@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
 import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
-import { Loading } from '../../common'
+import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
@@ -101,6 +101,7 @@ const VideoRoom = ({ match }) => {
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
   })
+  console.log('🚀 ~ VideoRoom ~ myRoundPartnerData', myRoundPartnerData)
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
@@ -271,7 +272,13 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-
+        {myRoundPartnerData && myRoundPartnerData.partners.length ? (
+          <ChatBox
+            userId={userId}
+            eventId={eventId}
+            partnerId={myRoundPartnerData.partners[0].partner_id}
+          />
+        ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
       </div>
     </div>
