@@ -263,6 +263,7 @@ const VideoRoom = ({ match }) => {
   return (
     <div>
       <VideoRouter
+        eventId={event_id}
         myRound={myRound}
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
