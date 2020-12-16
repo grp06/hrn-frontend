@@ -63,9 +63,9 @@ const PaidHostDashboard = () => {
     },
   })
 
-  if (userId && !adminUserIds.includes(userId)) {
-    return <Redirect to="/" />
-  }
+  // if (userId && !adminUserIds.includes(userId)) {
+  //   return <Redirect to="/" />
+  // }
 
   if ((hostDataLoading, hostStarterDataLoading, hostPremiumDataLoading)) {
     return <Loading />
@@ -75,35 +75,39 @@ const PaidHostDashboard = () => {
     let paidStarterPlanNumbers, paidPremiumPlanNumbers
 
     if (hostStarterData) {
-      paidStarterPlanNumbers = hostStarterData.users.reduce(
-        (total, user) => {
-          const subPeriodEndDate = moment(new Date(user.sub_period_end))
-          const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
-          if (daysUntilSubEnds < 31 && daysUntilSubEnds >= 0) {
-            total.starterMonthlyPlans++
+      paidStarterPlanNumbers = hostStarterData.users
+        .filter((user) => !adminUserIds.includes(user.id))
+        .reduce(
+          (total, user) => {
+            const subPeriodEndDate = moment(new Date(user.sub_period_end))
+            const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
+            if (daysUntilSubEnds < 31 && daysUntilSubEnds >= 0) {
+              total.starterMonthlyPlans++
+              return total
+            }
+            total.starterYearlyPlans++
             return total
-          }
-          total.starterYearlyPlans++
-          return total
-        },
-        { starterMonthlyPlans: 0, starterYearlyPlans: 0 }
-      )
+          },
+          { starterMonthlyPlans: 0, starterYearlyPlans: 0 }
+        )
     }
 
     if (hostPremiumData) {
-      paidPremiumPlanNumbers = hostPremiumData.users.reduce(
-        (total, user) => {
-          const subPeriodEndDate = moment(new Date(user.sub_period_end))
-          const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
-          if (daysUntilSubEnds < 31 && daysUntilSubEnds > 0) {
-            total.premiumMonthlyPlans++
+      paidPremiumPlanNumbers = hostPremiumData.users
+        .filter((user) => !adminUserIds.includes(user.id))
+        .reduce(
+          (total, user) => {
+            const subPeriodEndDate = moment(new Date(user.sub_period_end))
+            const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
+            if (daysUntilSubEnds < 31 && daysUntilSubEnds > 0) {
+              total.premiumMonthlyPlans++
+              return total
+            }
+            total.premiumYearlyPlans++
             return total
-          }
-          total.premiumYearlyPlans++
-          return total
-        },
-        { premiumMonthlyPlans: 0, premiumYearlyPlans: 0 }
-      )
+          },
+          { premiumMonthlyPlans: 0, premiumYearlyPlans: 0 }
+        )
     }
 
     const totalMRR =
@@ -154,7 +158,8 @@ const PaidHostDashboard = () => {
             Starter Hosts
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#FF99AD' }}>
-            {hostStarterData && hostStarterData.users.length}
+            {hostStarterData &&
+              hostStarterData.users.filter((user) => !adminUserIds.includes(user.id)).length}
           </Typography>
         </Grid>
         <Grid
@@ -170,7 +175,8 @@ const PaidHostDashboard = () => {
             Premium Hosts
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#fabb5b' }}>
-            {hostPremiumData && hostPremiumData.users.length}
+            {hostPremiumData &&
+              hostPremiumData.users.filter((user) => !adminUserIds.includes(user.id)).length}
           </Typography>
         </Grid>
       </Grid>
