@@ -20,6 +20,7 @@ import { useUserContext } from '../../context'
 import { Loading } from '../../common'
 import { EventExpansionPanelAdmin } from '.'
 import { getAllUsers, getAllEvents, getAllRounds } from '../../gql/queries'
+import { constants } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   expansionPanelsContainer: {
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const HRNAnalytics = () => {
   const classes = useStyles()
   const { user } = useUserContext()
+  const { adminUserIds } = constants
   const { id: userId } = user
   const { data: allDBUsers, loading: allDBUsersLoading } = useQuery(getAllUsers)
   const { data: allDBEventsAndRounds, loading: allDBEventsAndRoundsLoading } = useQuery(
@@ -54,21 +56,12 @@ const HRNAnalytics = () => {
     setValue(newValue)
   }
 
-  const userIsAdmin =
-    userId === 8 ||
-    userId === 12 ||
-    userId === 115 ||
-    userId === 513 ||
-    userId === 1628 ||
-    userId === 2567 ||
-    userId === 1
+  if (userId && !adminUserIds.includes(userId)) {
+    return <Redirect to="/" />
+  }
 
   if (allDBUsersLoading || allDBEventsAndRoundsLoading || roundsDataLoading) {
     return <Loading />
-  }
-
-  if (!userIsAdmin) {
-    return <Redirect to="/" />
   }
 
   const generateWeeksArr = () => {

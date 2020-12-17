@@ -20,16 +20,17 @@ import {
   HostDashboard,
   HostOnboarding,
   HRNAnalytics,
+  Lobby,
   LoginForm,
   MyProfile,
   MyConnections,
   VideoRoom,
   Onboarding,
+  PaidHostDashboard,
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
   SignUp,
-  Lobby,
 } from './pages'
 import {
   AppProvider,
@@ -98,6 +99,7 @@ const App = () => {
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
+                      <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <EventProvider>
                         <Route
                           exact

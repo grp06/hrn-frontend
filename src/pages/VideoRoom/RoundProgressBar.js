@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
 
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const classes = useStyles()
-  const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
+  const { id: eventId, round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
@@ -95,11 +95,15 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const getOneSecondInPct = () => {
       if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
         // ex: one tick of the progress bar is 10%
-
+        // we dont need to change this for startupfuels event
         return (1000 / (betweenRoundsDelay / 2)) * 100
       }
       if (eventStatus === 'in-between-rounds') {
         // ex: one tick of the progress bar is 5%
+        // startupfuels event is 5 minutes in between rounds
+        if (eventId === 656) {
+          return (1000 / 300000) * 100
+        }
         return (1000 / betweenRoundsDelay) * 100
       }
       return (1000 / (round_length * 60000)) * 100
