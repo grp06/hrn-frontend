@@ -113,26 +113,6 @@ const ChatBox = ({ userId, eventId, partnerId }) => {
           </Button>
         </Grid>
       </Grid>
-      {/* <List dense>
-        {oldOnlineUsers.map(({ user }) => {
-          // const formattedDate = user.updated_at.slice(0, 10)
-          // const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
-          return (
-            <ListItem key={user.id}>
-              <ListItemAvatar>
-                <Avatar>
-                  <img
-                    alt="company-logo"
-                    className={classes.avatar}
-                    src={user.profile_pic_url || logo}
-                  />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={user.name} />
-            </ListItem>
-          )
-        })}
-      </List>       */}
     </Grid>
   )
 }
