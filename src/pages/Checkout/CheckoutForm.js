@@ -96,14 +96,14 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     }
     window.analytics.track(`successfully paid for ${result.plan}`)
     console.log('stripeCustomerId = ', stripeCustomerId)
-    if (process.env.NODE_ENV === 'production') {
-      $FPROM.trackSignup({
-        uid: result.stripeCustomerId,
-        function() {
-          console.log('Callback received!')
-        },
-      })
-    }
+    // if (process.env.NODE_ENV === 'production') {
+    //   $FPROM.trackSignup({
+    //     uid: result.stripeCustomerId,
+    //     function() {
+    //       console.log('Callback received!')
+    //     },
+    //   })
+    // }
     history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })
     return window.location.reload()
   }
