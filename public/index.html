@@ -6,14 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Hi Right Now" />
-    <meta content="Hi Right Now" property="og:title" />
-    <meta
-      content="Meaningful connections made easy. Expand your professional connections via quick 1 on 1 video conversations."
-      property="og:description"
-    />
-    <meta content="http://pandemicspecial.com/get-high.png" property="og:image" />
-    <meta content="http://pandemicspecial.com/get-high.png" property="twitter:image" />
+    <meta property="og:image" name="image" content="%PUBLIC_URL%/get-high.png" />
+    <meta property="og:title" content="Hi Right Now" />
+    <meta property="og:url" content="https://launch.hirightnow.co/events" />
     <meta property="og:type" content="website" />
+    <meta
+      property="og:description"
+      content="Meaningful connections made easy. Expand your professional connections via quick 1 on 1 video conversations."
+    />
+    <link rel="alternate" type="application/json+oembed" href="%PUBLIC_URL%/get-high.png" />
+    <link rel="alternate" type="text/xml+oembed" href="http://pickettg.me/get-high.png" />
+    <meta property="twitter:image" content="http://pickettg.me/get-high.png" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjt3ub_dEE99sy8-jcm_8e0WfOkGGpfJM&libraries=places"></script>
     <!--
@@ -104,6 +107,23 @@
 
             analytics.page()
           }
+      })()
+    </script>
+    <script type="text/javascript">
+      ;(function () {
+        var t = document.createElement('script')
+        ;(t.type = 'text/javascript'),
+          (t.async = !0),
+          (t.src = 'https://cdn.firstpromoter.com/fprom.js'),
+          (t.onload = t.onreadystatechange = function () {
+            var t = this.readyState
+            if (!t || 'complete' == t || 'loaded' == t)
+              try {
+                $FPROM.init('oblunyhd', '.hirightnow.co')
+              } catch (t) {}
+          })
+        var e = document.getElementsByTagName('script')[0]
+        e.parentNode.insertBefore(t, e)
       })()
     </script>
   </head>

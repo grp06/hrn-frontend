@@ -88,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
     height: '25px',
     marginRight: '5px',
     display: 'inline',
+    visibility: 'hidden',
   },
 }))
 

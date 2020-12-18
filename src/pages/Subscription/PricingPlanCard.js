@@ -130,7 +130,7 @@ const PricingPlanCard = ({ plan, onSelect }) => {
   const renderMaxAttendees = () => {
     return (
       <Typography variant="body1" className={classes.planHighlightTypography}>
-        Up to {maxAttendees} Attendees
+        {maxAttendees} Attendees
       </Typography>
     )
   }
