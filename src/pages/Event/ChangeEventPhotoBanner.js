@@ -7,11 +7,24 @@ import Typography from '@material-ui/core/Typography'
 import PanoramaIcon from '@material-ui/icons/Panorama'
 import { makeStyles } from '@material-ui/styles'
 import { useMutation } from 'react-apollo'
+import { motion } from 'framer-motion'
 
 import { Snack } from '../../common'
 import { updateEventBannerPhoto } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
+  animateButtonDiv: {
+    position: 'absolute',
+    top: 15,
+    right: '7vw',
+    left: 'auto',
+    zIndex: 999,
+    [theme.breakpoints.down('xs')]: {
+      top: 65,
+      left: 10,
+    },
+    borderRadius: '4px',
+  },
   bannerSearchForm: {
     position: 'absolute',
     top: 15,
@@ -30,19 +43,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   changeBannerButton: {
-    position: 'absolute',
     background: 'rgba(0,0,0,.5)',
     '&:hover': {
       background: 'rgba(0,0,0,.7)',
     },
-    top: 15,
-    right: '7vw',
-    left: 'auto',
-    zIndex: 999,
-    [theme.breakpoints.down('xs')]: {
-      top: 65,
-      left: 10,
-    },
+    borderRadius: '4px',
   },
   closeSearchFormButton: {
     position: 'absolute',
@@ -67,6 +72,34 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: '300',
   },
 }))
+
+const buttonVariants = {
+  shake: {
+    rotate: [0, 10, 0, -10, 0, -10, 0, 10, 0],
+    border: [
+      '0px solid ',
+      '3px solid ',
+      '3px solid ',
+      '3px solid ',
+      '3px solid ',
+      '3px solid ',
+      '3px solid ',
+      '3px solid ',
+      '0px',
+    ],
+    borderColor: [
+      '#fabb5b',
+      '#fabb5b',
+      '#fabb5b',
+      '#fabb5b',
+      '#fabb5b',
+      '#fabb5b',
+      '#fabb5b',
+      '#ffffff00',
+    ],
+    transition: { duration: 1.3, delay: 1, ease: 'linear' },
+  },
+}
 
 const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
   const classes = useStyles()
@@ -148,24 +181,26 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
   return (
     <div>
       {showChangeBannerButton ? (
-        <Button
-          className={classes.changeBannerButton}
-          size="large"
-          variant="text"
-          disableRipple
-          onClick={() => {
-            setShowBannerSearch(true)
-            setShowChangeBannerButton(false)
-          }}
-        >
-          <Grid container direction="row">
-            <PanoramaIcon />
-            <Typography variant="body1" style={{ marginLeft: '8px' }}>
-              {' '}
-              change banner
-            </Typography>
-          </Grid>
-        </Button>
+        <motion.div className={classes.animateButtonDiv} variants={buttonVariants} animate="shake">
+          <Button
+            className={classes.changeBannerButton}
+            size="large"
+            variant="text"
+            disableRipple
+            onClick={() => {
+              setShowBannerSearch(true)
+              setShowChangeBannerButton(false)
+            }}
+          >
+            <Grid container direction="row">
+              <PanoramaIcon />
+              <Typography variant="body1" style={{ marginLeft: '8px' }}>
+                {' '}
+                change banner
+              </Typography>
+            </Grid>
+          </Button>
+        </motion.div>
       ) : null}
       {showBannerSearch ? (
         <Grid

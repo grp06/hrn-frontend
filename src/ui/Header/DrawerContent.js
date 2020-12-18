@@ -6,7 +6,12 @@ import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useUserContext } from '../../context'
 
-import { HostDrawerContent, UserDrawerContent, SettingsDrawerContent } from '.'
+import {
+  CreateEventSidebarButton,
+  HostDrawerContent,
+  UserDrawerContent,
+  SettingsDrawerContent,
+} from '.'
 import logo from '../../assets/logoWhite.svg'
 
 const useStyles = makeStyles((theme) => ({
@@ -62,6 +67,7 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
+  const userIsHost = role && role.includes('host')
 
   return (
     <>
@@ -75,8 +81,9 @@ const DrawerContent = () => {
             </Grid>
           </div>
           <Divider />
-          <UserDrawerContent userId={userId} userName={name} />
-          {role === 'host' && <HostDrawerContent />}
+          {userIsHost && <CreateEventSidebarButton />}
+          <UserDrawerContent userId={userId} userName={name} role={role} />
+          {userIsHost && <HostDrawerContent role={role} />}
         </Grid>
         <Grid
           container

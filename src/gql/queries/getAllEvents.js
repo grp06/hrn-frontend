@@ -16,26 +16,26 @@ const getAllEvents = gql`
       current_round
       num_rounds
       description
-      rounds {
-        partnerX_thumb
-        partnerY_thumb
-        round_number
-        partnerX {
+      partners {
+        i_shared_details
+        partner_shared_details
+        round
+        user {
           name
           id
           email
         }
-        partnerY {
-          email
-          id
+        partner {
           name
+          id
+          email
         }
-        partnerX_id
-        partnerY_id
+        user_id
+        partner_id
       }
-      host_id
       start_at
       status
+      host_id
       id
       round_length
       group_video_chat

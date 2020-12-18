@@ -5,7 +5,7 @@ import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { FloatCardMedium, GeosuggestCityInput, Loading, Snack } from '../../common'
+import { FloatCardMediumLarge, GeosuggestCityInput, Loading, Snack } from '../../common'
 import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
@@ -15,16 +15,10 @@ import { useAppContext, useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    marginTop: '200px',
+    marginTop: '100px',
   },
   cityInputContainer: {
     padding: theme.spacing(0, 2.5),
-  },
-  pinkText: {
-    color: theme.palette.common.basePink,
-  },
-  shortBioDesc: {
-    marginBottom: theme.spacing(3.5),
   },
   shortBioInputContainer: {
     padding: theme.spacing(0, 2.5),
@@ -138,7 +132,7 @@ const Onboarding = () => {
 
   return (
     <div className={classes.container}>
-      <FloatCardMedium>
+      <FloatCardMediumLarge>
         <FormikOnboardingStepper
           initialValues={{
             city: '',
@@ -147,8 +141,8 @@ const Onboarding = () => {
           }}
           onSubmit={handleOnboardingFormSubmit}
         >
-          <div label="city" className={classes.cityInputContainer}>
-            <Field name="city">
+          <div label="City">
+            <Field name="city" label="City" required>
               {({ form }) => (
                 <GeosuggestCityInput
                   placeholder="Type in your city"
@@ -162,21 +156,19 @@ const Onboarding = () => {
               )}
             </Field>
           </div>
-          <div label="interests">
-            <Field name="interests">
-              {({ field, form }) => (
-                <OnboardingInterestTagInput
-                  tagsData={tagsData.tags}
-                  userId={user_id}
-                  value={field.value}
-                  onChange={(interests) => {
-                    form.setFieldValue('interests', interests)
-                  }}
-                />
-              )}
-            </Field>
-          </div>
-          <div label="short bio" className={classes.shortBioInputContainer}>
+          <Field name="interests" label="Interests" required>
+            {({ field, form }) => (
+              <OnboardingInterestTagInput
+                tagsData={tagsData.tags}
+                userId={user_id}
+                value={field.value}
+                onChange={(interests) => {
+                  form.setFieldValue('interests', interests)
+                }}
+              />
+            )}
+          </Field>
+          <div label="Short Bio" className={classes.shortBioInputContainer}>
             <Typography variant="subtitle1" className={classes.shortBioDesc}>
               Please provide a short bio that will be used to send out to people who you connect
               with so everyone gets to see how awesome you are{' '}
@@ -188,7 +180,6 @@ const Onboarding = () => {
             <Field
               name="short_bio"
               component={TextField}
-              label="Short Bio"
               autoFocus
               fullWidth
               multiline
@@ -204,7 +195,7 @@ const Onboarding = () => {
           duration={1500}
           snackMessage="Updated our books!"
         />
-      </FloatCardMedium>
+      </FloatCardMediumLarge>
     </div>
   )
 }

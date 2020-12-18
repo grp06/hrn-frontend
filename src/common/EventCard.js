@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   eventContainer: {
     width: '100%',
     position: 'relative',
+    borderRadius: '4px',
   },
   eventEndedOverlay: {
     position: 'absolute',
@@ -60,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('sm')]: {
       height: 'auto',
     },
+    borderRadius: '4px',
   },
   icon: {
     color: theme.palette.common.ghostWhiteBody,
@@ -73,6 +75,23 @@ const useStyles = makeStyles((theme) => ({
   },
   hostName: {
     margin: '0',
+  },
+  liveGlowContaner: {
+    borderRadius: '4px',
+  },
+  liveLogo: {
+    position: 'absolute',
+    top: '3%',
+    right: '2%',
+    bottom: 'auto',
+    left: 'auto',
+    width: '60px',
+    height: 'auto',
+    color: theme.palette.common.ghostWhite,
+    fontWeight: 'bold',
+    backgroundColor: theme.palette.common.basePurple,
+    borderRadius: '4px',
+    textAlign: 'center',
   },
   subtitle: {
     margin: theme.spacing(1),
@@ -89,55 +108,76 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const liveEventVariants = {
+  glow: {
+    scale: 1.02,
+    boxShadow: '0px 0px 7px 7px #8C57DB',
+    transition: {
+      duration: 2.0,
+      yoyo: Infinity,
+    },
+  },
+}
+
 const EventCard = ({ event }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { banner_photo_url, description, event_name, host, id, start_at, ended_at } = event
+  const {
+    banner_photo_url,
+    description,
+    event_name,
+    host,
+    id,
+    start_at,
+    ended_at,
+    status: event_status,
+  } = event
   const { name: hostName, profile_pic_url } = host
   const startTime = new Date(start_at).getTime()
+  const eventIsLive = event_status !== 'not-started' && event_status !== 'complete'
 
   const handleEventOverButtonClick = () => {
     history.push(`/events/${id}`)
   }
 
-  return (
-    <motion.div whileHover={{ scale: 1.02 }}>
-      <FloatCardMediumLarge>
+  const EventCardContent = (
+    <FloatCardMediumLarge>
+      <Grid
+        container
+        justify="flex-start"
+        wrap="wrap"
+        className={classes.eventContainer}
+        onClick={() => {
+          if (!ended_at) {
+            history.push(`/events/${id}`)
+          }
+        }}
+      >
+        {ended_at && <div className={classes.eventEndedOverlay} />}
         <Grid
-          container
-          justify="flex-start"
-          wrap="wrap"
-          className={classes.eventContainer}
-          onClick={() => {
-            if (!ended_at) {
-              history.push(`/events/${id}`)
-            }
+          item
+          lg={4}
+          md={12}
+          className={classes.eventImage}
+          style={{
+            backgroundImage: banner_photo_url
+              ? `url("${banner_photo_url}")`
+              : `url("${globeMask}")`,
           }}
         >
-          {ended_at && <div className={classes.eventEndedOverlay} />}
-          <Grid
-            item
-            lg={4}
-            md={12}
-            className={classes.eventImage}
-            style={{
-              backgroundImage: banner_photo_url
-                ? `url("${banner_photo_url}")`
-                : `url("${globeMask}")`,
-            }}
-          >
-            <div />
-          </Grid>
-          <Grid
-            container
-            item
-            lg={8}
-            md={12}
-            direction="column"
-            justify="flex-start"
-            alignItems="flex-start"
-            className={classes.eventContentContainer}
-          >
+          <div />
+        </Grid>
+        <Grid
+          container
+          item
+          lg={8}
+          md={12}
+          direction="column"
+          justify="flex-start"
+          alignItems="flex-start"
+          className={classes.eventContentContainer}
+        >
+          <Grid container item direction="column" style={{ marginTop: '8px', marginBottom: '8px' }}>
             <Typography gutterBottom variant="h2" style={{ marginBottom: 0 }}>
               {event_name}
             </Typography>
@@ -176,30 +216,48 @@ const EventCard = ({ event }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid>
-              {ended_at ? (
-                <Button
-                  className={classes.eventOverButton}
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleEventOverButtonClick}
-                >
-                  View My Connections
-                </Button>
-              ) : (
-                <Grid>
-                  <Typography variant="subtitle1">Description /</Typography>
-                  <Typography variant="body1" component="p">
-                    {truncateText(description, 350)}
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
+          </Grid>
+          <Grid>
+            {ended_at ? (
+              <Button
+                className={classes.eventOverButton}
+                variant="contained"
+                color="secondary"
+                onClick={handleEventOverButtonClick}
+              >
+                View My Connections
+              </Button>
+            ) : (
+              <Grid>
+                <Typography variant="subtitle1">Description /</Typography>
+                <Typography variant="body1" component="p">
+                  {truncateText(description, 350)}
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </Grid>
-      </FloatCardMediumLarge>
-    </motion.div>
+        {eventIsLive ? (
+          <Typography className={classes.liveLogo} variant="subtitle1">
+            LIVE
+          </Typography>
+        ) : null}
+      </Grid>
+    </FloatCardMediumLarge>
   )
+
+  return eventIsLive ? (
+    <motion.div variants={liveEventVariants} animate="glow">
+      {EventCardContent}
+    </motion.div>
+  ) : (
+    <motion.div whileHover={{ scale: 1.02 }}>{EventCardContent}</motion.div>
+  )
+  // return (
+  //   <motion.div variants={liveEventVariants} animate="glow" className={classes.liveGlowContainer}>
+  //     {EventCardContent}
+  //   </motion.div>
+  // )
 }
 
 export default EventCard

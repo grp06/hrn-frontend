@@ -8,6 +8,7 @@ const getEventsByUserId = gql`
         ended_at
         id
         description
+        status
         event_name
         host_id
         current_round

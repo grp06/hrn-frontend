@@ -6,8 +6,11 @@ import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-d
 import makeApolloClient from './apollo'
 import { useIntercom } from 'react-use-intercom'
 
-import { NewEventForm, EventForm, ErrorBoundary } from './common'
+import { ErrorBoundary } from './common'
 import {
+  Checkout,
+  CheckoutSuccess,
+  CreateEvent,
   Event,
   MyEvents,
   EventComplete,
@@ -15,17 +18,19 @@ import {
   EventsPublic,
   ForgotPassword,
   HostDashboard,
+  HostOnboarding,
   HRNAnalytics,
+  Lobby,
   LoginForm,
   MyProfile,
   MyConnections,
   VideoRoom,
   Onboarding,
-  PreEvent,
+  PaidHostDashboard,
   PrivacyPolicy,
+  Subscription,
   SetNewPassword,
   SignUp,
-  Lobby,
 } from './pages'
 import {
   AppProvider,
@@ -37,6 +42,7 @@ import {
 import HeaderDrawer from './ui/Header/HeaderDrawer'
 import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
+import ProfilePictureModal from './ui/Subheader/ProfilePictureModal'
 import theme from './ui/theme'
 
 const App = () => {
@@ -84,11 +90,16 @@ const App = () => {
                         component={SetNewPassword}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />
+                      <Route exact path="/host-onboarding" component={HostOnboarding} />
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
-                      <Route exact path="/create-event" component={NewEventForm} />
+                      <Route exact path="/create-event" component={CreateEvent} />
+                      <Route exact path="/subscription" component={Subscription} />
+                      <Route exact path="/checkout" component={Checkout} />
+                      <Route exact path="/checkout-success" component={CheckoutSuccess} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
+                      <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <EventProvider>
                         <Route
                           exact
@@ -121,6 +132,7 @@ const App = () => {
                   </Switch>
                   <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                   <GetTagsModal />
+                  <ProfilePictureModal />
                 </UserProvider>
               </AppProvider>
             </ErrorBoundary>
