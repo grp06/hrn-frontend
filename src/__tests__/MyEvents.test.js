@@ -17,7 +17,7 @@ const getEventsByUserIdMock = [
         event_users: [
           {
             event: {
-              start_at: '2020-10-22T20:31:12.937+00:00',
+              start_at: '2021-10-22T20:31:12.937+00:00',
               ended_at: false,
               id: 4,
               description: 'Test Desc',
@@ -105,10 +105,8 @@ const getEventsByUserIdMock = [
 it('should render 2 event cards from the mocked Query', async () => {
   render(<MyEvents />, { apolloMocks: getEventsByUserIdMock })
   screen.debug()
-  // const completedEventCard = await waitFor(() => screen.getByText(/view my connections/i))
   const completedEventCard = await waitFor(() =>
-    screen.getByRole('heading', { name: /all events/i })
+    screen.getByRole('heading', { name: /completed event/i })
   )
-  // console.log(completedEventCard)
-  screen.debug()
+  // screen.debug()
 })
