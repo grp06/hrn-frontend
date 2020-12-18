@@ -84,7 +84,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
-  const onSubscriptionComplete = (result) => {
+  const onSubscriptionComplete = (result, stripeCustomerId) => {
     localStorage.setItem('token', result.token)
     // means that we had to retry the invoice so lets clear our local storage
     // and set the subscription to the invoice
@@ -95,6 +95,15 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
     window.analytics.track(`successfully paid for ${result.plan}`)
+    console.log('stripeCustomerId = ', stripeCustomerId)
+    if (process.env.NODE_ENV === 'production') {
+      $FPROM.trackSignup({
+        uid: result.stripeCustomerId,
+        function() {
+          console.log('Callback received!')
+        },
+      })
+    }
     history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })
     return window.location.reload()
   }
@@ -145,7 +154,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         userId,
         userEmail,
       })
-      onSubscriptionComplete(retrySubResult)
+      onSubscriptionComplete(retrySubResult, stripeCustomerId)
       setFormSubmitting(false)
       return
     }
@@ -158,7 +167,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       userId,
       userEmail,
     })
-    onSubscriptionComplete(subResult)
+    onSubscriptionComplete(subResult, stripeCustomerId)
     setFormSubmitting(false)
   }
 
