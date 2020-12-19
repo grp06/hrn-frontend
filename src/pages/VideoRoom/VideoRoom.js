@@ -101,7 +101,6 @@ const VideoRoom = ({ match }) => {
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
   })
-  console.log('🚀 ~ VideoRoom ~ myRoundPartnerData', myRoundPartnerData)
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
@@ -274,11 +273,7 @@ const VideoRoom = ({ match }) => {
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
         {myRoundPartnerData && myRoundPartnerData.partners.length ? (
-          <ChatBox
-            userId={userId}
-            eventId={eventId}
-            partnerId={myRoundPartnerData.partners[0].partner_id}
-          />
+          <ChatBox myRound={myRoundPartnerData.partners[0]} />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
       </div>

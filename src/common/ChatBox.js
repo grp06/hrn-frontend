@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/styles'
+import { useSubscription, useMutation } from '@apollo/react-hooks'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import TextField from '@material-ui/core/TextField'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
 import ListItemText from '@material-ui/core/ListItemText'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import { listenToChatMessages } from '../gql/subscriptions'
-import { insertPersonalChatMessage } from '../gql/mutations'
+import TextField from '@material-ui/core/TextField'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/styles'
 
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { formatChatMessagesDate } from '../utils'
+import { insertPersonalChatMessage } from '../gql/mutations'
+import { listenToChatMessages } from '../gql/subscriptions'
 
 const createStyles = makeStyles((theme) => ({
+  chatBoxTitle: {
+    padding: theme.spacing(1, 0),
+    fontFamily: 'Muli',
+    fontWeight: 700,
+    color: theme.palette.common.basePink,
+  },
   chatContainer: {
     position: 'absolute',
     bottom: '10%',
@@ -33,56 +37,95 @@ const createStyles = makeStyles((theme) => ({
   },
   chatList: {
     flexDirection: 'column',
-    height: '83%',
+    maxHeight: '83%',
+    overflow: 'scroll',
   },
-  sendMessage: {
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
+  messageContent: {
+    fontWeight: 400,
+    color: theme.palette.common.ghostWhite,
   },
-  from: {
-    color: 'grey',
+  messageTimeStamp: {
+    color: '#666666',
+    fontSize: '0.75rem',
+    marginLeft: theme.spacing(0.5),
+  },
+  sendersName: {
+    color: theme.palette.common.ghostWhite,
+    fontWeight: 700,
   },
 }))
 
-const ChatBox = ({ userId, eventId, partnerId }) => {
+const ChatBox = ({ myRound }) => {
   const classes = createStyles()
-
-  const [message, setMessage] = useState(null)
+  const { event_id, partner: myPartner, partner_id, user_id } = myRound
+  const { name: myPartnersName } = myPartner
+  const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
+  const myPartnersFirstName = myPartnersName && myPartnersName.split(' ')[0]
 
-  const { data: eventData } = useSubscription(listenToChatMessages, {
+  const { data: chatMessages } = useSubscription(listenToChatMessages, {
     variables: {
-      user_id: userId,
-      partner_id: partnerId,
+      user_id,
+      partner_id,
     },
-    skip: !eventId,
+    skip: !event_id,
   })
 
   const [insertPersonalChatMessageMutation] = useMutation(insertPersonalChatMessage, {
-    user_id: userId,
-    partner_id: partnerId,
+    user_id,
+    partner_id,
     content: message,
   })
 
   useEffect(() => {
-    if (eventData && !list) {
-      console.log('eventData = ', eventData)
-      setList(eventData)
+    if (chatMessages && !list) {
+      setList(chatMessages)
     }
-  }, [eventData])
+  }, [chatMessages])
+
+  const sendMessage = (event) => {
+    // keyCode 13 is 'enter'
+    if (event.keyCode === 13) {
+      insertPersonalChatMessageMutation({
+        variables: {
+          user_id,
+          partner_id,
+          content: message,
+        },
+      })
+      setMessage('')
+    }
+  }
 
   return (
-    <Grid container direction="column" className={classes.chatContainer}>
+    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        className={classes.chatBoxTitle}
+      >
+        Chat with {myPartnersFirstName}
+      </Grid>
       <List dense className={classes.chatList}>
-        {eventData &&
-          eventData.personal_chat_messages.length &&
-          eventData.personal_chat_messages.map((message) => {
-            console.log('message = ', message)
+        {chatMessages &&
+          chatMessages.personal_chat_messages.length &&
+          chatMessages.personal_chat_messages.map((message) => {
+            const { content: messageContent, created_at, user } = message
+            const sendersFirstName = user.name && user.name.split(' ')[0]
+            const messageSentAt = formatChatMessagesDate(created_at)
             return (
-              <ListItem>
-                <span className={classes.from}>{message.user.name}:&nbsp;</span>
-                <ListItemText>{message.content} </ListItemText>
+              <ListItem dense>
+                <ListItemText
+                  primary={
+                    <Grid container alignItems="flex-end">
+                      <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
+                      <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                    </Grid>
+                  }
+                  secondary={<span className={classes.messageContent}>{messageContent}</span>}
+                />
               </ListItem>
             )
           })}
@@ -90,27 +133,16 @@ const ChatBox = ({ userId, eventId, partnerId }) => {
       <Grid item container direction="column" className={classes.inputContainer}>
         <Grid item>
           <TextField
+            autoComplete={false}
             id="message"
             required
             fullWidth
+            placeholder="Type your message here ..."
             className={classes.input}
             value={message}
+            onKeyDown={sendMessage}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <Button
-            onClick={() => {
-              insertPersonalChatMessageMutation({
-                variables: {
-                  user_id: userId,
-                  partner_id: partnerId,
-                  content: message,
-                },
-              })
-            }}
-            className={classes.sendMessage}
-          >
-            Send
-          </Button>
         </Grid>
       </Grid>
       {/* <List dense>
