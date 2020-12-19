@@ -148,7 +148,7 @@ const EventsPublic = () => {
           className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h1">All Events</Typography>
+            <Typography variant="h1">Public Events</Typography>
           </Grid>
         </Grid>
       </Grid>

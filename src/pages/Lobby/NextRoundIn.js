@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength }) => {
+const NextRoundIn = ({ currentRound, eventId, eventStatus, eventUpdatedAt, roundLength }) => {
   const classes = useStyles()
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 
@@ -68,7 +68,9 @@ const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength })
             💤
           </span>
         </Typography>
-        <Typography variant="h6">Give him 20 seconds to start the next round.</Typography>
+        <Typography variant="h6">
+          Give him {eventId === 656 ? '5 minutes' : '20 seconds'} to start the next round.
+        </Typography>
       </>
     )
   }
