@@ -142,6 +142,7 @@ const ChatBox = ({ myRound }) => {
             className={classes.input}
             value={message}
             onKeyDown={sendMessage}
+            InputProps={{ style: { marginTop: 0 } }}
             onChange={(e) => setMessage(e.target.value)}
           />
         </Grid>
