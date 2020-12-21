@@ -9,13 +9,16 @@ import { PreEventInstructionModal } from '.'
 
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
+import { constants } from '../../utils'
+
+const { bottomNavBarHeight } = constants
 
 const useStyles = makeStyles((theme) => ({
   container: {
     position: 'fixed',
     zIndex: 999,
     width: '100%',
-    height: '80px',
+    height: bottomNavBarHeight,
     top: 'auto',
     bottom: '0%',
     padding: theme.spacing(2, 4),

@@ -1,5 +1,6 @@
 export { default as ConnectionIssuesModal } from './ConnectionIssuesModal'
 export { default as HostEventControlsCard } from './HostEventControlsCard'
+export { default as InVideoBottomControlPanel } from './InVideoBottomControlPanel'
 export { default as MoreActionsButton } from './MoreActionsButton'
 export { default as PartnerTagsList } from './PartnerTagsList'
 export { default as PostChatRating } from './PostChatRating'

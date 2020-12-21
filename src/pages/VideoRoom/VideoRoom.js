@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
-import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateLastSeen } from '../../gql/mutations'
@@ -81,6 +81,7 @@ const VideoRoom = ({ match }) => {
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
+  const [chatIsOpen, setChatIsOpen] = useState(false)
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
@@ -272,10 +273,15 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-        {myRoundPartnerData && myRoundPartnerData.partners.length ? (
+        {myRoundPartnerData && myRoundPartnerData.partners.length && chatIsOpen ? (
           <ChatBox myRound={myRoundPartnerData.partners[0]} />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
+        <InVideoBottomControlPanel
+          myRound={myRound}
+          chatIsOpen={chatIsOpen}
+          toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        />
       </div>
     </div>
   )

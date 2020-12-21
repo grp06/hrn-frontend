@@ -8,9 +8,10 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { formatChatMessagesDate } from '../utils'
 import { insertPersonalChatMessage } from '../gql/mutations'
 import { listenToChatMessages } from '../gql/subscriptions'
+import { constants, formatChatMessagesDate } from '../utils'
+const { bottomNavBarHeight } = constants
 
 const createStyles = makeStyles((theme) => ({
   chatBoxTitle: {
@@ -21,7 +22,7 @@ const createStyles = makeStyles((theme) => ({
   },
   chatContainer: {
     position: 'absolute',
-    bottom: '10%',
+    bottom: bottomNavBarHeight + 50,
     right: '1%',
     display: 'block',
     width: '25vw',

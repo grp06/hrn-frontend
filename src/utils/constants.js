@@ -9,6 +9,7 @@ const constants = {
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,
   drawerWidth: 175,
+  bottomNavBarHeight: 80,
   intercomAppId: 'jpmq80un',
   linkedInCommunityLink: 'https://www.linkedin.com/groups/8951502/',
   becomeAHostTypeform: 'https://stephen687387.typeform.com/to/UOwU16',
