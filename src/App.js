@@ -5,6 +5,8 @@ import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import makeApolloClient from './apollo'
 import { useIntercom } from 'react-use-intercom'
+import { constants } from './utils'
+import './intercom.css'
 
 import { ErrorBoundary } from './common'
 import {
@@ -49,6 +51,8 @@ const App = () => {
   const { boot } = useIntercom()
   const [client, setClient] = useState(null)
   const [activeTab, setActiveTab] = useState(0)
+  const { intercomAppId } = constants
+
   async function createClient() {
     try {
       const apolloClient = await makeApolloClient()
@@ -63,12 +67,42 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    boot()
+    boot({ customAttributes: { custom_launcher_selector: '.intercom-launcher' } })
   }, [])
 
   if (!client) {
     return null
   }
+
+  const timeout = setTimeout(() => clearInterval(interval), 30000)
+  const interval = setInterval(() => {
+    if (window.Intercom.booted) {
+      const launcher = document.querySelector('.intercom-launcher')
+      const unreadCount = launcher.querySelector('.intercom-unread-count')
+
+      window.Intercom('onShow', () => {
+        launcher.classList.add('intercom-open')
+      })
+
+      window.Intercom('onHide', () => {
+        launcher.classList.remove('intercom-open')
+      })
+
+      window.Intercom('onUnreadCountChange', (count) => {
+        unreadCount.textContent = count
+
+        if (count) {
+          unreadCount.classList.add('active')
+        } else {
+          unreadCount.classList.remove('active')
+        }
+      })
+
+      launcher.classList.add('intercom-booted')
+      clearInterval(interval)
+      clearTimeout(timeout)
+    }
+  })
 
   // the last route is for naughty urls
   return (
@@ -133,6 +167,14 @@ const App = () => {
                   <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                   <GetTagsModal />
                   <ProfilePictureModal />
+                  <a
+                    className="intercom-launcher"
+                    href={`mailto:${intercomAppId}@incoming.intercom.io`}
+                  >
+                    <div className="intercom-icon-close" />
+                    <div className="intercom-icon-open" />
+                    <div className="intercom-unread-count" />
+                  </a>
                 </UserProvider>
               </AppProvider>
             </ErrorBoundary>

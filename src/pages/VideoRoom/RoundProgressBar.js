@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 import { constants } from '../../utils'
 import { Snack } from '../../common'
 
-const { betweenRoundsDelay } = constants
+const { betweenRoundsDelay, bottomNavBarHeight } = constants
 
 const useStyles = makeStyles((theme) => ({
   animatedCountdown: {
@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
   roundProgressBarContainer: {
     width: '100%',
-    height: 20,
+    // height: 20,
     position: 'fixed',
-    bottom: 0,
+    bottom: bottomNavBarHeight,
   },
 }))
 
