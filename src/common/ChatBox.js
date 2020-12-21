@@ -15,7 +15,7 @@ const { bottomNavBarHeight } = constants
 
 const createStyles = makeStyles((theme) => ({
   chatBoxTitle: {
-    padding: theme.spacing(1, 0),
+    padding: theme.spacing(1.5, 0),
     fontFamily: 'Muli',
     fontWeight: 700,
     color: theme.palette.common.basePink,
@@ -38,8 +38,9 @@ const createStyles = makeStyles((theme) => ({
   },
   chatList: {
     flexDirection: 'column',
-    maxHeight: '83%',
+    height: '83%',
     overflow: 'scroll',
+    padding: theme.spacing(0, 1),
   },
   messageContent: {
     fontWeight: 400,
@@ -83,6 +84,12 @@ const ChatBox = ({ myRound }) => {
       setList(chatMessages)
     }
   }, [chatMessages])
+
+  const getNumberOfRows = () => {
+    const charsPerLine = 40
+    const numRows = Math.ceil(message.length / charsPerLine)
+    return numRows === 0 ? 1 : numRows
+  }
 
   const sendMessage = (event) => {
     // keyCode 13 is 'enter'
@@ -141,6 +148,8 @@ const ChatBox = ({ myRound }) => {
             placeholder="Type your message here ..."
             className={classes.input}
             value={message}
+            multiline
+            rows={getNumberOfRows()}
             onKeyDown={sendMessage}
             InputProps={{ style: { marginTop: 0 } }}
             onChange={(e) => setMessage(e.target.value)}
