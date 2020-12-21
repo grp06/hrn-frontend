@@ -155,6 +155,8 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
+      console.log('myRoundPartnerData ->', myRoundPartnerData)
+      console.log('myRoundPartnerData.partners ->', myRoundPartnerData.partners)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
