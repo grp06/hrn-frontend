@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     position: 'fixed',
-    zIndex: 999,
+    zIndex: 3,
     width: '100%',
     height: bottomNavBarHeight,
     top: 'auto',

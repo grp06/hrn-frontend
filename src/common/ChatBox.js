@@ -22,7 +22,7 @@ const createStyles = makeStyles((theme) => ({
   },
   chatContainer: {
     position: 'absolute',
-    bottom: bottomNavBarHeight + 50,
+    bottom: bottomNavBarHeight + 75,
     right: '1%',
     display: 'block',
     width: '25vw',
@@ -42,9 +42,14 @@ const createStyles = makeStyles((theme) => ({
     overflow: 'scroll',
     padding: theme.spacing(0, 1),
   },
+  inputContainer: {
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.common.greyCard,
+  },
   messageContent: {
     fontWeight: 400,
     color: theme.palette.common.ghostWhite,
+    wordWrap: 'break-word',
   },
   messageTimeStamp: {
     color: '#666666',
@@ -133,28 +138,27 @@ const ChatBox = ({ myRound }) => {
                     </Grid>
                   }
                   secondary={<span className={classes.messageContent}>{messageContent}</span>}
+                  secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
                 />
               </ListItem>
             )
           })}
       </List>
-      <Grid item container direction="column" className={classes.inputContainer}>
-        <Grid item>
-          <TextField
-            autoComplete={false}
-            id="message"
-            required
-            fullWidth
-            placeholder="Type your message here ..."
-            className={classes.input}
-            value={message}
-            multiline
-            rows={getNumberOfRows()}
-            onKeyDown={sendMessage}
-            InputProps={{ style: { marginTop: 0 } }}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-        </Grid>
+      <Grid container direction="column" className={classes.inputContainer}>
+        <TextField
+          autoComplete={false}
+          id="message"
+          required
+          fullWidth
+          placeholder="Type your message here ..."
+          className={classes.input}
+          value={message}
+          multiline
+          rows={getNumberOfRows()}
+          onKeyDown={sendMessage}
+          InputProps={{ style: { marginTop: 0, padding: 0 } }}
+          onChange={(e) => setMessage(e.target.value)}
+        />
       </Grid>
     </Grid>
   )

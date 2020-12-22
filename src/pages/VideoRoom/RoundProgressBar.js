@@ -171,25 +171,25 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
             className={classes.animatedBackdrop}
           />
         ) : null}
-        <Snack
-          open={showRoundStartedSnack}
-          onClose={() => setShowRoundStartedSnack(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          duration={10000}
-          severity="success"
-          snackIcon={<TimerIcon />}
-          snackMessage={`${event.round_length} minutes left`}
-        />
-        <Snack
-          open={show20SecondsLeftSnack}
-          onClose={() => setShow20SecondsLeftSnack(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          duration={15000}
-          severity="error"
-          snackMessage="15 seconds left!"
-        />
         <LinearProgress variant="determinate" value={progressBarValue} />
       </Grid>
+      <Snack
+        open={showRoundStartedSnack}
+        onClose={() => setShowRoundStartedSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={10000}
+        severity="success"
+        snackIcon={<TimerIcon />}
+        snackMessage={`${event.round_length} minutes left`}
+      />
+      <Snack
+        open={show20SecondsLeftSnack}
+        onClose={() => setShow20SecondsLeftSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={15000}
+        severity="error"
+        snackMessage="15 seconds left!"
+      />
     </>
   )
 })

@@ -112,7 +112,7 @@ const Lobby = () => {
     }
   }, [eventStatus, userEventStatus, myRoundData])
 
-  if (appLoading || Object.keys(event).length < 2) {
+  if (appLoading || Object.keys(event).length < 2 || Object.keys(user).length < 2) {
     return <Loading />
   }
 
