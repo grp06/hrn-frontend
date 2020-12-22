@@ -30,9 +30,9 @@ const createStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
     [theme.breakpoints.down('md')]: {
-      width: '60vw',
+      width: '30vw',
     },
-    [theme.breakpoints.down('xs')]: {
+    [theme.breakpoints.down('sm')]: {
       width: '85vw',
     },
   },
