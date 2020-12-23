@@ -1,7 +1,9 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
+import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import { getTimeUntilEvent } from '../../utils'
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { StartEventButton } from '../PreEvent'
@@ -14,6 +16,13 @@ import { constants } from '../../utils'
 const { bottomNavBarHeight } = constants
 
 const useStyles = makeStyles((theme) => ({
+  activeButton: {
+    borderRadius: '4px',
+    backgroundColor: '#41444A !important',
+    '&:hover': {
+      backgroundColor: 'transparent !important',
+    },
+  },
   container: {
     position: 'fixed',
     zIndex: 999,
@@ -24,14 +33,24 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4),
     backgroundColor: theme.palette.common.grey10,
   },
+  iconButton: {
+    backgroundColor: 'transparent',
+    boxShadow: 'none',
+    '&:hover': {
+      borderRadius: '4px',
+      backgroundColor: '#41444A',
+    },
+  },
   settingsAndChatGrid: {
     paddingRight: '6vw',
   },
 }))
 
 const BottomControlPanel = ({
+  chatIsOpen,
   event,
   setUserHasEnabledCameraAndMic,
+  toggleChat,
   userId,
   userHasEnabledCameraAndMic,
 }) => {
@@ -114,6 +133,19 @@ const BottomControlPanel = ({
         alignItems="center"
         className={classes.settingsAndChatGrid}
       >
+        <Grid item>
+          <IconButton
+            disableRipple
+            className={
+              chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+            }
+          >
+            <ChatBubbleIcon
+              style={{ color: 'ghostWhite', fontSize: '2rem' }}
+              onClick={toggleChat}
+            />
+          </IconButton>
+        </Grid>
         <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
       </Grid>
     </Grid>

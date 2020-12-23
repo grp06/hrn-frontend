@@ -15,9 +15,6 @@ const VideoRouter = ({ eventId, eventStatus, myRound, setUserEventStatus }) => {
     const hasPartner = !hasRoundsData ? false : myRound.partner_id
     switch (eventStatus) {
       case 'in-between-rounds':
-        if (eventId === 656) {
-          return <StartupFuelInBetweenRounds />
-        }
         return hasPartner ? (
           <PostChatRating myRound={myRound} setUserEventStatus={setUserEventStatus} />
         ) : (

@@ -41,7 +41,6 @@ const useStyles = makeStyles((theme) => ({
 
 const InVideoBottomControlPanel = React.memo(({ chatIsOpen, myRound, toggleChat }) => {
   const classes = useStyles()
-  console.log('chatIsOpen ->', chatIsOpen)
   return (
     <Grid
       container
