@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 
-import { VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
-import { Loading } from '../../common'
+import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
@@ -81,6 +81,7 @@ const VideoRoom = ({ match }) => {
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
+  const [chatIsOpen, setChatIsOpen] = useState(false)
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
@@ -154,6 +155,8 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
+      console.log('myRoundPartnerData ->', myRoundPartnerData)
+      console.log('myRoundPartnerData.partners ->', myRoundPartnerData.partners)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
@@ -272,8 +275,15 @@ const VideoRoom = ({ match }) => {
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
-
+        {myRoundPartnerData && myRoundPartnerData.partners.length && chatIsOpen ? (
+          <ChatBox myRound={myRoundPartnerData.partners[0]} />
+        ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
+        <InVideoBottomControlPanel
+          myRound={myRound}
+          chatIsOpen={chatIsOpen}
+          toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        />
       </div>
     </div>
   )

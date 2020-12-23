@@ -5,6 +5,8 @@ const insertEventUser = gql`
     insert_event_users(objects: { event_id: $event_id, user_id: $user_id }) {
       returning {
         id
+        event_id
+        user_id
       }
     }
   }

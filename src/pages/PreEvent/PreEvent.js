@@ -93,6 +93,7 @@ const PreEvent = ({ onlineEventUsers }) => {
   const [numRooms, setNumRooms] = useState(null)
   const eventSet = Object.keys(event).length > 1
   const { startPreEventTwilio } = usePreEventTwilio()
+  const hostsFirstName = hostName && hostName.split(' ')[0]
 
   useEffect(() => {
     if (eventSet) {
@@ -262,7 +263,7 @@ const PreEvent = ({ onlineEventUsers }) => {
             alignItems="center"
             className={classes.hostNameContainer}
           >
-            <Typography variant="h2">{hostName}</Typography>
+            <Typography variant="h2">{hostsFirstName}</Typography>
           </Grid>
         </Grid>
       </motion.div>

@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 import { constants } from '../../utils'
 import { Snack } from '../../common'
 
-const { betweenRoundsDelay } = constants
+const { betweenRoundsDelay, bottomNavBarHeight } = constants
 
 const useStyles = makeStyles((theme) => ({
   animatedCountdown: {
@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
   },
   roundProgressBarContainer: {
     width: '100%',
-    height: 20,
+    // height: 20,
     position: 'fixed',
-    bottom: 0,
+    bottom: bottomNavBarHeight,
   },
 }))
 
@@ -95,15 +95,10 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const getOneSecondInPct = () => {
       if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
         // ex: one tick of the progress bar is 10%
-        // we dont need to change this for startupfuels event
         return (1000 / (betweenRoundsDelay / 2)) * 100
       }
       if (eventStatus === 'in-between-rounds') {
         // ex: one tick of the progress bar is 5%
-        // startupfuels event is 5 minutes in between rounds
-        if (eventId === 656) {
-          return (1000 / 300000) * 100
-        }
         return (1000 / betweenRoundsDelay) * 100
       }
       return (1000 / (round_length * 60000)) * 100
@@ -171,25 +166,25 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
             className={classes.animatedBackdrop}
           />
         ) : null}
-        <Snack
-          open={showRoundStartedSnack}
-          onClose={() => setShowRoundStartedSnack(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          duration={10000}
-          severity="success"
-          snackIcon={<TimerIcon />}
-          snackMessage={`${event.round_length} minutes left`}
-        />
-        <Snack
-          open={show20SecondsLeftSnack}
-          onClose={() => setShow20SecondsLeftSnack(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          duration={15000}
-          severity="error"
-          snackMessage="15 seconds left!"
-        />
         <LinearProgress variant="determinate" value={progressBarValue} />
       </Grid>
+      <Snack
+        open={showRoundStartedSnack}
+        onClose={() => setShowRoundStartedSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={10000}
+        severity="success"
+        snackIcon={<TimerIcon />}
+        snackMessage={`${event.round_length} minutes left`}
+      />
+      <Snack
+        open={show20SecondsLeftSnack}
+        onClose={() => setShow20SecondsLeftSnack(false)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        duration={15000}
+        severity="error"
+        snackMessage="15 seconds left!"
+      />
     </>
   )
 })

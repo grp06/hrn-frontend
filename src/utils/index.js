@@ -1,5 +1,6 @@
 export { default as constants } from './constants'
 export { default as createStripeCustomer } from './createStripeCustomer'
+export { default as formatChatMessagesDate } from './formatChatMessagesDate'
 export { default as formatDate } from './formatDate'
 export { default as getIsSubPeriodOver } from './getIsSubPeriodOver'
 export { default as getUserEventStatusMessage } from './getUserEventStatusMessage'

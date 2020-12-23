@@ -76,19 +76,17 @@ const LoginForm = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        window.analytics.track('sign in')
+        // window.analytics.track('sign in')
         return data
       })
-    // check to see if we have token, if not then theres an error
-    // I tried try and catch, but it doesn't seem that we are throwing
-    // an error from the backend
+
     if (!loginResponse.token) {
       setShowErrorSnack(true)
       return
     }
 
     setShowLoginSuccessSnack(true)
-    await sleep(500)
+    // await sleep(500)
 
     const { id, token } = loginResponse
     localStorage.setItem('token', token)
