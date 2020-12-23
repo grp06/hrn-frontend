@@ -9,6 +9,7 @@ const listenToChatMessages = gql`
           { _or: [{ recipient_id: { _eq: $user_id } }, { recipient_id: { _eq: $partner_id } }] }
         ]
       }
+      order_by: { created_at: asc }
     ) {
       content
       created_at
