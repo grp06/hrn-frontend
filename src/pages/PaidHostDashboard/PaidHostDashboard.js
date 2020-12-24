@@ -1,17 +1,22 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import moment from 'moment'
 import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
-import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
+import { HostInfoTable } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'
 import { constants } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
+  activeTimeframeButton: {
+    backgroundColor: theme.palette.common.basePink,
+  },
   largeNumber: {
     fontSize: '10rem',
     marginTop: '-20px',
@@ -41,6 +46,7 @@ const PaidHostDashboard = () => {
   const user = useUserContext()
   const { adminUserIds } = constants
   const { id: userId } = user
+  const [numberOfDaysToCompare, setNumberOfDaysToCompare] = useState(1)
   const now = useRef(new Date().toISOString())
 
   const { data: hostData, loading: hostDataLoading } = useQuery(getUsersByRoleName, {
@@ -63,9 +69,9 @@ const PaidHostDashboard = () => {
     },
   })
 
-  // if (userId && !adminUserIds.includes(userId)) {
-  //   return <Redirect to="/" />
-  // }
+  if (userId && !adminUserIds.includes(userId)) {
+    return <Redirect to="/" />
+  }
 
   if ((hostDataLoading, hostStarterDataLoading, hostPremiumDataLoading)) {
     return <Loading />
@@ -111,12 +117,44 @@ const PaidHostDashboard = () => {
     }
 
     const totalMRR =
-      paidStarterPlanNumbers.starterMonthlyPlans * 59 +
-      paidStarterPlanNumbers.starterYearlyPlans * 588 +
-      paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
-      paidPremiumPlanNumbers.premiumYearlyPlans * 1788
+      paidStarterPlanNumbers && paidPremiumPlanNumbers
+        ? paidStarterPlanNumbers.starterMonthlyPlans * 59 +
+          paidStarterPlanNumbers.starterYearlyPlans * 588 +
+          paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
+          paidPremiumPlanNumbers.premiumYearlyPlans * 1788
+        : 0
 
     return { totalMRR, paidStarterPlanNumbers, paidPremiumPlanNumbers }
+  }
+
+  const getArrayOfHostsBetweenTimeFrame = (userArray) => {
+    return userArray.users && userArray.users.length
+      ? userArray.users
+          .filter((user) => !adminUserIds.includes(user.id))
+          .filter((user) => {
+            const compareDate = moment(new Date(user.became_host_at))
+            const dateTo = moment().endOf('day').format('YYYY-MM-DD')
+            const dateFrom = moment()
+              .subtract(numberOfDaysToCompare, 'days')
+              .endOf('day')
+              .format('YYYY-MM-DD')
+            return compareDate.isBetween(dateFrom, dateTo, 'days', '[]')
+          })
+      : []
+  }
+
+  const renderHostTables = () => {
+    const unpaidHosts = hostData && getArrayOfHostsBetweenTimeFrame(hostData)
+    const starterHosts = hostStarterData && getArrayOfHostsBetweenTimeFrame(hostStarterDataLoading)
+    const premiumHosts = hostPremiumData && getArrayOfHostsBetweenTimeFrame(hostPremiumData)
+
+    return (
+      <Grid container direction="column">
+        {unpaidHosts && unpaidHosts.length ? <HostInfoTable arrayOfHosts={unpaidHosts} /> : null}
+        {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
+        {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
+      </Grid>
+    )
   }
 
   const mrrStats = getCurrentMRR()
@@ -179,6 +217,36 @@ const PaidHostDashboard = () => {
               hostPremiumData.users.filter((user) => !adminUserIds.includes(user.id)).length}
           </Typography>
         </Grid>
+      </Grid>
+      <Grid container direction="row" justify="space-around" alignItems="center">
+        <Button
+          variant="contained"
+          color="default"
+          onClick={() => setNumberOfDaysToCompare(1)}
+          disableRipple
+          className={numberOfDaysToCompare === 1 ? classes.activeTimeframeButton : null}
+        >
+          Last 24 hours
+        </Button>
+        <Button
+          variant="contained"
+          color="default"
+          onClick={() => setNumberOfDaysToCompare(7)}
+          disableRipple
+          className={numberOfDaysToCompare === 7 ? classes.activeTimeframeButton : null}
+        >
+          Last 7 days
+        </Button>
+        <Button
+          variant="contained"
+          color="default"
+          onClick={() => setNumberOfDaysToCompare(30)}
+          disableRipple
+          className={numberOfDaysToCompare === 30 ? classes.activeTimeframeButton : null}
+        >
+          Last 30 days
+        </Button>
+        {renderHostTables()}
       </Grid>
     </Grid>
   )
