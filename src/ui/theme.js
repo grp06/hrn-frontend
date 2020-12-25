@@ -162,16 +162,31 @@ const theme = createMuiTheme({
         backgroundColor: 'transparent',
       },
       rounded: {
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
+        backgroundColor: greyCard,
       },
       elevation4: {
         boxShadow: 'none',
       },
       elevation1: {
-        border: '1px solid #f4f6fa',
-        boxShadow: '3px 3px 0 #f4f6fa',
+        border: `1px solid ${greyBorder}`,
+        // border: '1px solid #f4f6fa',
+        // boxShadow: '3px 3px 0 #f4f6fa',
         // border: '1px solid #fabb5b',
         // boxShadow: '3px 3px 0 #fabb5b',
+      },
+    },
+    MuiTableCell: {
+      root: {
+        borderBottom: `1px solid ${greyBorder}`,
+      },
+      body: {
+        color: ghostWhiteBody,
+        fontFamily: 'Muli',
+      },
+      head: {
+        color: ghostWhite,
+        fontFamily: 'Muli',
       },
     },
     MuiDivider: {
