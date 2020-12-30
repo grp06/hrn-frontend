@@ -29,7 +29,7 @@ const DeleteEventButton = ({ eventId }) => {
         },
       })
     } catch (err) {
-      console.log('deleteEventMutation -> error')
+      console.log('deleteEventMutation ->', err)
       return
     }
     history.push('/events')
