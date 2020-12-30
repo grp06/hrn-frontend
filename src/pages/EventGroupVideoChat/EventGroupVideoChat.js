@@ -8,7 +8,7 @@ import BeachAccessIcon from '../../assets/beachAccess.svg'
 import BabyBottleIcon from '../../assets/babyBottle.svg'
 import PersonIcon from '../../assets/greyPerson.svg'
 import MicOffIcon from '../../assets/micOff.svg'
-import { Loading } from '../../common'
+import { EventChatBox, Loading } from '../../common'
 import {
   useAppContext,
   useEventContext,
@@ -88,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
     height: '25px',
     marginRight: '5px',
     display: 'inline',
+    visibility: 'hidden',
   },
 }))
 
@@ -104,6 +105,7 @@ const EventGroupVideoChat = () => {
   } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
   const arrayOfOnlineUserIds = useRef([])
+  const [chatIsOpen, setChatIsOpen] = useState(true)
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
   const { host_id, id: event_id, status: event_status } = event
@@ -281,10 +283,13 @@ const EventGroupVideoChat = () => {
         alignItems="center"
         className={classes.videoBox}
       />
+      {chatIsOpen ? <EventChatBox eventId={event_id} hostId={host_id} userId={user_id} /> : null}
       <GroupVideoChatBottomPanel
+        chatIsOpen={chatIsOpen}
         event_id={event_id}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userIsHost={userIsHost}
+        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
         twilioGroupChatRoom={groupChatRoom}
       />
     </>

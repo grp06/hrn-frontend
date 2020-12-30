@@ -9,6 +9,11 @@ import { constants } from './utils'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 
+if (process.env.NODE_ENV === 'test') {
+  const { server } = require('./mocks/server')
+  server.start()
+}
+
 const { intercomAppId } = constants
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
 

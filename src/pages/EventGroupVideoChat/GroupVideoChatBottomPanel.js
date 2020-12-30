@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
 import VideocamIcon from '@material-ui/icons/Videocam'
@@ -12,6 +13,13 @@ import { EndEventButton, LeaveEventButton } from '.'
 import { SetupMicAndCameraButton } from '../Event'
 
 const useStyles = makeStyles((theme) => ({
+  activeButton: {
+    borderRadius: '4px',
+    backgroundColor: '#41444A !important',
+    '&:hover': {
+      backgroundColor: 'transparent !important',
+    },
+  },
   container: {
     position: 'fixed',
     zIndex: 999,
@@ -24,9 +32,10 @@ const useStyles = makeStyles((theme) => ({
   },
   greySquareIconButton: {
     borderRadius: '4px',
-    backgroundColor: 'none',
+    backgroundColor: 'transparent',
     '&:hover': {
-      backgroundColor: theme.palette.common.greyHover,
+      borderRadius: '4px',
+      backgroundColor: '#41444A',
     },
     margin: theme.spacing(0, 1),
   },
@@ -36,7 +45,14 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const GroupVideoChatBottomPanel = React.memo(
-  ({ event_id, setUserHasEnabledCameraAndMic, twilioGroupChatRoom, userIsHost }) => {
+  ({
+    chatIsOpen,
+    event_id,
+    setUserHasEnabledCameraAndMic,
+    toggleChat,
+    twilioGroupChatRoom,
+    userIsHost,
+  }) => {
     const classes = useStyles()
     const [participantHasEnabledAudio, setParticipantHasEnabledAudio] = useState(false)
     const [participantHasEnabledVideo, setParticipantHasEnabledVideo] = useState(false)
@@ -180,7 +196,20 @@ const GroupVideoChatBottomPanel = React.memo(
           alignItems="center"
           className={classes.settingsAndChatGrid}
         >
-          {/* <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} /> */}
+          <Grid item>
+            <IconButton
+              disableRipple
+              className={
+                chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+              }
+            >
+              <ChatBubbleIcon
+                style={{ color: 'ghostWhite', fontSize: '2rem' }}
+                onClick={toggleChat}
+              />
+            </IconButton>
+          </Grid>
+          <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />
         </Grid>
       </Grid>
     )

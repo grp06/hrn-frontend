@@ -2,8 +2,12 @@
   "name": "@hirightnow/client",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "resetMocks": true
+  },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
+    "@apollo/react-testing": "^3.1.4",
     "@date-io/date-fns": "1.x",
     "@emotion/core": "^10.0.28",
     "@material-ui/core": "^4.9.12",
@@ -68,7 +72,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "CI= react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --modulePaths=src --env=jest-environment-jsdom-sixteen",
     "eject": "react-scripts eject",
     "lint": "estlint",
     "build:staging": "env-cmd -f .env.staging npm run build"
@@ -91,12 +95,15 @@
   "devDependencies": {
     "@babel/core": "^7.9.6",
     "@babel/runtime": "^7.9.6",
+    "@jackfranklin/test-data-bot": "^1.3.0",
     "babel-eslint": "^10.1.0",
     "css-loader": "^3.6.0",
-    "eslint-config-airbnb": "^18.1.0",
+    "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "husky": "^4.2.5",
+    "jest-environment-jsdom-sixteen": "^1.0.3",
+    "msw": "^0.21.3",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "style-loader": "^1.2.1"

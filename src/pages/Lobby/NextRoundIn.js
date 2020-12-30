@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength }) => {
+const NextRoundIn = ({ currentRound, eventId, eventStatus, eventUpdatedAt, roundLength }) => {
   const classes = useStyles()
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 

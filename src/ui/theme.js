@@ -12,6 +12,7 @@ const greySubtitle = '#BFBFBF'
 const greyCard = '#191919'
 const greyNav = '#1c1c1c'
 const grey10 = '#262626'
+const grey15 = '#303030'
 const greyHover = '#424242'
 const greyBoxShadow = '0 2px 12px rgba(0,0,0,0.2)'
 const greyHighlight = '#2d2d2d'
@@ -41,6 +42,7 @@ const theme = createMuiTheme({
       greySubtitle,
       red,
       grey10,
+      grey15,
     },
     primary: {
       main: basePurple,
@@ -160,16 +162,31 @@ const theme = createMuiTheme({
         backgroundColor: 'transparent',
       },
       rounded: {
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
+        backgroundColor: greyCard,
       },
       elevation4: {
         boxShadow: 'none',
       },
       elevation1: {
-        border: '1px solid #f4f6fa',
-        boxShadow: '3px 3px 0 #f4f6fa',
+        border: `1px solid ${greyBorder}`,
+        // border: '1px solid #f4f6fa',
+        // boxShadow: '3px 3px 0 #f4f6fa',
         // border: '1px solid #fabb5b',
         // boxShadow: '3px 3px 0 #fabb5b',
+      },
+    },
+    MuiTableCell: {
+      root: {
+        borderBottom: `1px solid ${greyBorder}`,
+      },
+      body: {
+        color: ghostWhiteBody,
+        fontFamily: 'Muli',
+      },
+      head: {
+        color: ghostWhite,
+        fontFamily: 'Muli',
       },
     },
     MuiDivider: {

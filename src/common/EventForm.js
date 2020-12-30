@@ -59,7 +59,6 @@ const EventForm = ({ eventData, match }) => {
   const [isEventPublic, setIsEventPublic] = useState(false)
   const [roundLength, setRoundLength] = useState(5)
   const [numRounds, setNumRounds] = useState(10)
-  const [postEventVideoCallLink, setPostEventVideoCallLink] = useState('')
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString())
   const [showCreateEditEventSuccess, setShowCreateEditEventSuccess] = useState(false)
 
@@ -73,7 +72,6 @@ const EventForm = ({ eventData, match }) => {
       public_event: isEventPublic,
       round_length: roundLength,
       num_rounds: numRounds,
-      post_event_link: postEventVideoCallLink,
     },
   })
 
@@ -98,7 +96,6 @@ const EventForm = ({ eventData, match }) => {
       setRoundLength(round_length)
       setNumRounds(num_rounds)
       setIsEventPublic(public_event)
-      setPostEventVideoCallLink(post_event_link)
     }
   }, [eventData])
 
@@ -123,7 +120,6 @@ const EventForm = ({ eventData, match }) => {
             id: eventData.id,
             round_length: roundLength,
             num_rounds: numRounds,
-            post_event_link: postEventVideoCallLink,
             public_event: isEventPublic,
           },
         })
@@ -265,17 +261,6 @@ const EventForm = ({ eventData, match }) => {
                     name="public_event"
                     label="public event"
                     size="small"
-                  />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    id="post-event-call"
-                    label="Link to post-event Zoom/Google Meet"
-                    placeholder="(not required)"
-                    fullWidth
-                    className={classes.input}
-                    value={postEventVideoCallLink}
-                    onChange={(e) => setPostEventVideoCallLink(e.target.value)}
                   />
                 </Grid>
               </Grid>

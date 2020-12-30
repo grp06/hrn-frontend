@@ -1,5 +1,7 @@
 const constants = {
   // change me back to 20000?
+  // george, stephen, max, lenny, zhen, sandra, ash, azul, jasper
+  adminUserIds: [8, 12, 115, 506, 3091, 3552, 3974, 4939, 5218],
   lastSeenDuration: 750,
   roundLength: 300,
   betweenRoundsDelay: 20000,
@@ -7,6 +9,7 @@ const constants = {
   hasPartnerAndIsConnectingBreathingRoom: 1500,
   maxNumUsersPerRoom: 40,
   drawerWidth: 175,
+  bottomNavBarHeight: 80,
   intercomAppId: 'jpmq80un',
   linkedInCommunityLink: 'https://www.linkedin.com/groups/8951502/',
   becomeAHostTypeform: 'https://stephen687387.typeform.com/to/UOwU16',

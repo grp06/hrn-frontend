@@ -187,7 +187,12 @@ const EventCard = ({ event }) => {
                 {formatDate(startTime)}
               </Typography>
             </Grid>
-            <Grid item direction="column" style={{ marginTop: '8px', marginBottom: '8px' }}>
+            <Grid
+              container
+              item
+              direction="column"
+              style={{ marginTop: '8px', marginBottom: '8px' }}
+            >
               <Typography variant="subtitle1">Hosted By /</Typography>
               <Grid container direction="row" alignItems="center" justify="flex-start">
                 <Avatar className={classes.avatarContainer}>
