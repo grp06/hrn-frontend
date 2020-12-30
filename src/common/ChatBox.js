@@ -85,6 +85,8 @@ const ChatBox = ({ myRound }) => {
   })
 
   useEffect(() => {
+    const chatList = document.getElementById('chat-list')
+    chatList.scrollTop = chatList.scrollHeight
     if (chatMessages && !list) {
       setList(chatMessages)
     }
@@ -121,7 +123,7 @@ const ChatBox = ({ myRound }) => {
       >
         Chat with {myPartnersFirstName}
       </Grid>
-      <List dense className={classes.chatList}>
+      <List dense className={classes.chatList} id="chat-list">
         {chatMessages &&
           chatMessages.personal_chat_messages.length &&
           chatMessages.personal_chat_messages.map((message) => {

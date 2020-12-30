@@ -83,6 +83,8 @@ const EventChatBox = ({ eventId, hostId, userId }) => {
   const [insertEventChatMessageMutation] = useMutation(insertEventChatMessage)
 
   useEffect(() => {
+    const chatList = document.getElementById('chat-list')
+    chatList.scrollTop = chatList.scrollHeight
     if (chatMessages && !list) {
       setList(chatMessages)
     }
@@ -119,7 +121,7 @@ const EventChatBox = ({ eventId, hostId, userId }) => {
       >
         Chat with Everyone
       </Grid>
-      <List dense className={classes.chatList}>
+      <List dense className={classes.chatList} id="chat-list">
         {chatMessages &&
           chatMessages.event_group_chat_messages.length &&
           chatMessages.event_group_chat_messages.map((message) => {
