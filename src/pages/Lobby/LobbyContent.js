@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { OnlineAttendeesCard } from '.'
 import {
+  AboutTheHostCard,
   EventPhotoBanner,
   EventTitleAndCTACard,
   HostAndEventDescCard,
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 const LobbyContent = React.memo(
   ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user }) => {
     const classes = useStyles()
-    const { banner_photo_url, host_id, id: event_id, status: eventStatus } = event
+    const { banner_photo_url, host, host_id, id: event_id, status: eventStatus } = event
     const { id: user_id } = user
     const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
@@ -93,12 +94,21 @@ const LobbyContent = React.memo(
                   </Grid>
                 </Grid>
                 {userIsHost ? (
-                  <Grid container direction="row" justify="flex-end">
+                  <Grid container direction="row" justify="space-between">
+                    <div className={classes.whatToExpectContainer}>
+                      <AboutTheHostCard host={host} userIsHost={userIsHost} />
+                    </div>
                     <div className={classes.podcastContainer}>
                       <PodcastCard />
                     </div>
                   </Grid>
-                ) : null}
+                ) : (
+                  <Grid container direction="row" justify="flex-start">
+                    <div className={classes.whatToExpectContainer}>
+                      <AboutTheHostCard host={host} userIsHost={userIsHost} />
+                    </div>
+                  </Grid>
+                )}
               </Grid>
             </>
           )

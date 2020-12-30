@@ -1,6 +1,7 @@
 export { default as addFriend } from './addFriend'
 export { default as createEvent } from './createEvent'
 export { default as createUser } from './createUser'
+export { default as deleteEvent } from './deleteEvent'
 export { default as deleteEventUser } from './deleteEventUser'
 export { default as deleteRounds } from './deleteRounds'
 export { default as deleteUsersTags } from './deleteUsersTags'

@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
 import {
+  AboutTheHostCard,
   EventPhotoBanner,
   EventRSVPsCard,
   EventStatusRedirect,
@@ -43,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
     paddingBottom: '40px',
+    [theme.breakpoints.down('sm')]: {
+      width: '90vw',
+    },
   },
   podcastContainer: {
     width: '44%',
@@ -78,6 +82,7 @@ const Event = ({ match }) => {
   const {
     banner_photo_url,
     event_users,
+    host,
     host_id,
     id: event_id,
     start_at,
@@ -139,12 +144,21 @@ const Event = ({ match }) => {
           </Grid>
         </Grid>
         {userIsHost ? (
-          <Grid container direction="row" justify="flex-end">
+          <Grid container direction="row" justify="space-between">
+            <div className={classes.whatToExpectContainer}>
+              <AboutTheHostCard host={host} userIsHost={userIsHost} />
+            </div>
             <div className={classes.podcastContainer}>
               <PodcastCard />
             </div>
           </Grid>
-        ) : null}
+        ) : (
+          <Grid container direction="row" justify="flex-start">
+            <div className={classes.whatToExpectContainer}>
+              <AboutTheHostCard host={host} userIsHost={userIsHost} />
+            </div>
+          </Grid>
+        )}
       </Grid>
     </>
   )
