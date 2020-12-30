@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { insertPersonalChatMessage } from '../gql/mutations'
-import { listenToChatMessages } from '../gql/subscriptions'
+import { insertEventChatMessage } from '../gql/mutations'
+import { listenToEventChatMessages } from '../gql/subscriptions'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
 
@@ -21,7 +21,7 @@ const createStyles = makeStyles((theme) => ({
     color: theme.palette.common.basePink,
   },
   chatContainer: {
-    position: 'absolute',
+    position: 'fixed',
     bottom: bottomNavBarHeight + 75,
     right: '1%',
     display: 'block',
@@ -29,6 +29,7 @@ const createStyles = makeStyles((theme) => ({
     height: '50vh',
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
+    zIndex: '999',
     [theme.breakpoints.down('md')]: {
       width: '30vw',
     },
@@ -41,6 +42,11 @@ const createStyles = makeStyles((theme) => ({
     height: '83%',
     overflow: 'scroll',
     padding: theme.spacing(0, 1),
+  },
+  hostTag: {
+    marginLeft: theme.spacing(0.5),
+    color: theme.palette.common.basePink,
+    fontWeight: 700,
   },
   inputContainer: {
     padding: theme.spacing(2),
@@ -62,27 +68,19 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChatBox = ({ myRound }) => {
+const EventChatBox = ({ eventId, hostId, userId }) => {
   const classes = createStyles()
-  const { event_id, partner: myPartner, partner_id, user_id } = myRound
-  const { name: myPartnersName } = myPartner
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
-  const myPartnersFirstName = myPartnersName && myPartnersName.split(' ')[0]
 
-  const { data: chatMessages } = useSubscription(listenToChatMessages, {
+  const { data: chatMessages } = useSubscription(listenToEventChatMessages, {
     variables: {
-      user_id,
-      partner_id,
+      event_id: eventId,
     },
-    skip: !event_id,
+    skip: !eventId,
   })
 
-  const [insertPersonalChatMessageMutation] = useMutation(insertPersonalChatMessage, {
-    user_id,
-    partner_id,
-    content: message,
-  })
+  const [insertEventChatMessageMutation] = useMutation(insertEventChatMessage)
 
   useEffect(() => {
     const chatList = document.getElementById('chat-list')
@@ -101,11 +99,11 @@ const ChatBox = ({ myRound }) => {
   const sendMessage = (event) => {
     // keyCode 13 is 'enter'
     if (event.keyCode === 13) {
-      insertPersonalChatMessageMutation({
+      insertEventChatMessageMutation({
         variables: {
-          user_id,
-          partner_id,
           content: message,
+          event_id: eventId,
+          user_id: userId,
         },
       })
       setMessage('')
@@ -121,14 +119,15 @@ const ChatBox = ({ myRound }) => {
         alignItems="center"
         className={classes.chatBoxTitle}
       >
-        Chat with {myPartnersFirstName}
+        Chat with Everyone
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
         {chatMessages &&
-          chatMessages.personal_chat_messages.length &&
-          chatMessages.personal_chat_messages.map((message) => {
-            const { content: messageContent, created_at, user } = message
+          chatMessages.event_group_chat_messages.length &&
+          chatMessages.event_group_chat_messages.map((message) => {
+            const { content: messageContent, created_at, sender_id, user } = message
             const sendersFirstName = user.name && user.name.split(' ')[0]
+            const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
             const messageSentAt = formatChatMessagesDate(created_at)
             return (
               <ListItem dense>
@@ -136,6 +135,7 @@ const ChatBox = ({ myRound }) => {
                   primary={
                     <Grid container alignItems="flex-end">
                       <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
+                      {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
                       <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
                     </Grid>
                   }
@@ -152,7 +152,7 @@ const ChatBox = ({ myRound }) => {
           id="message"
           required
           fullWidth
-          placeholder="Type your message here ..."
+          placeholder="Jump in and say hello 👋 "
           className={classes.input}
           value={message}
           multiline
@@ -166,4 +166,4 @@ const ChatBox = ({ myRound }) => {
   )
 }
 
-export default ChatBox
+export default EventChatBox
