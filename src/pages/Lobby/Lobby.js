@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useSubscription } from '@apollo/react-hooks'
@@ -6,7 +6,6 @@ import { useSubscription } from '@apollo/react-hooks'
 import {
   BottomControlPanel,
   CameraAndMicSetupScreen,
-  EventChatBox,
   EventCountdown,
   NextRoundIn,
   LobbyContent,
@@ -17,7 +16,7 @@ import {
   useUserContext,
   useUserEventStatusContext,
 } from '../../context'
-import { Loading } from '../../common'
+import { EventChatBox, Loading } from '../../common'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
 
@@ -35,6 +34,7 @@ const Lobby = () => {
   const { appLoading } = useAppContext()
   const { event } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
+  const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
     setUserEventStatus,
@@ -45,6 +45,7 @@ const Lobby = () => {
   const {
     current_round: round,
     event_users,
+    host_id: hostId,
     id: eventId,
     round_length,
     start_at: eventStartTime,
@@ -138,13 +139,12 @@ const Lobby = () => {
         userEventStatus={userEventStatus}
         user={user}
       />
-      {/* <EventChatBox
-            eventStatus={eventStatus}
-            onlineEventUsers={<OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />}
-          /> */}
+      {chatIsOpen ? <EventChatBox eventId={eventId} hostId={hostId} userId={user_id} /> : null}
       <BottomControlPanel
+        chatIsOpen={chatIsOpen}
         event={event}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
+        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
