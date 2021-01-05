@@ -55,14 +55,15 @@ const useStyles = makeStyles((theme) => ({
 
 function TransitionModal({
   button,
+  disabled,
   iconButton,
   fabButton,
+  hideNoWay,
   modalBody,
   onAcceptFunction,
   onAcceptButtonText,
   onCloseFunction,
   onCloseButtonText,
-  hideNoWay,
 }) {
   const classes = useStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button || {}
@@ -120,6 +121,7 @@ function TransitionModal({
         color={buttonColor || 'primary'}
         onClick={handleOpen}
         style={buttonStyle}
+        disabled={disabled}
       >
         {buttonText}
       </Button>
