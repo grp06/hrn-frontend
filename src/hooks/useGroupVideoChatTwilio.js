@@ -72,7 +72,6 @@ const useGroupVideoChatTwilio = () => {
           }
           if (participantsDiv) {
             participantsDiv.style.border = '1.5px solid #fabb5b'
-            participantsDiv.style.boxShadow = '0px 0px 4px 3px #FABB5B'
           }
           dominantSpeakerId = newDominantSpeakerId
         }

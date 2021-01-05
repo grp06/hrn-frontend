@@ -61,13 +61,11 @@ const GroupVideoChatBottomPanel = React.memo(
     const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(false)
 
     useEffect(() => {
-      if (userIsHost) {
-        setParticipantHasEnabledVideo(true)
-        setParticipantsVideoIsOn(true)
-        setParticipantHasEnabledAudio(true)
-        setParticipantsAudioIsOn(true)
-      }
-    }, [userIsHost])
+      setParticipantHasEnabledVideo(true)
+      setParticipantsVideoIsOn(true)
+      setParticipantHasEnabledAudio(true)
+      setParticipantsAudioIsOn(true)
+    }, [])
 
     const handleEnableVideo = () => {
       const { localParticipant } = twilioGroupChatRoom
@@ -120,6 +118,12 @@ const GroupVideoChatBottomPanel = React.memo(
         })
       } else {
         // publish our video track and add it to our screen
+        // the video div should only have one child at this point (the name card)
+        // if it has more than there is already a video being attached, so lets return
+        // so we dont keep attaching multiple videos
+        if (localParticipantsVideoDiv.children.length > 1) {
+          return
+        }
         twilioGroupChatRoom.localParticipant.publishTrack(participantsVideoTracks)
         const attachedTrack = participantsVideoTracks.attach()
         attachedTrack.style.transform = 'scale(-1, 1)'
