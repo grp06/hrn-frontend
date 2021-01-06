@@ -96,7 +96,7 @@ const EventGroupVideoChat = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event } = useEventContext()
+  const { event, eventChatMessages } = useEventContext()
   const { user } = useUserContext()
   const {
     onlineEventUsers,
@@ -283,7 +283,14 @@ const EventGroupVideoChat = () => {
         alignItems="center"
         className={classes.videoBox}
       />
-      {chatIsOpen ? <EventChatBox eventId={event_id} hostId={host_id} userId={user_id} /> : null}
+      {chatIsOpen ? (
+        <EventChatBox
+          eventId={event_id}
+          hostId={host_id}
+          messages={eventChatMessages}
+          userId={user_id}
+        />
+      ) : null}
       <GroupVideoChatBottomPanel
         chatIsOpen={chatIsOpen}
         event_id={event_id}

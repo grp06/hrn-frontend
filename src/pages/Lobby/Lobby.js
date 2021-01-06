@@ -32,7 +32,7 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event } = useEventContext()
+  const { event, eventChatMessages } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
@@ -139,7 +139,14 @@ const Lobby = () => {
         userEventStatus={userEventStatus}
         user={user}
       />
-      {chatIsOpen ? <EventChatBox eventId={eventId} hostId={hostId} userId={user_id} /> : null}
+      {chatIsOpen ? (
+        <EventChatBox
+          eventId={eventId}
+          hostId={hostId}
+          messages={eventChatMessages}
+          userId={user_id}
+        />
+      ) : null}
       <BottomControlPanel
         chatIsOpen={chatIsOpen}
         event={event}

@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
 import { insertEventChatMessage } from '../gql/mutations'
-import { listenToEventChatMessages } from '../gql/subscriptions'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
 
@@ -68,27 +66,20 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = ({ eventId, hostId, userId }) => {
+const EventChatBox = ({ eventId, hostId, messages, userId }) => {
   const classes = createStyles()
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
-
-  const { data: chatMessages } = useSubscription(listenToEventChatMessages, {
-    variables: {
-      event_id: eventId,
-    },
-    skip: !eventId,
-  })
 
   const [insertEventChatMessageMutation] = useMutation(insertEventChatMessage)
 
   useEffect(() => {
     const chatList = document.getElementById('chat-list')
     chatList.scrollTop = chatList.scrollHeight
-    if (chatMessages && !list) {
-      setList(chatMessages)
+    if (messages && !list) {
+      setList(messages)
     }
-  }, [chatMessages])
+  }, [messages])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -122,9 +113,9 @@ const EventChatBox = ({ eventId, hostId, userId }) => {
         Chat with Everyone
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
-        {chatMessages &&
-          chatMessages.event_group_chat_messages.length &&
-          chatMessages.event_group_chat_messages.map((message) => {
+        {messages &&
+          messages.length &&
+          messages.map((message) => {
             const { content: messageContent, created_at, sender_id, user } = message
             const sendersFirstName = user.name && user.name.split(' ')[0]
             const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
