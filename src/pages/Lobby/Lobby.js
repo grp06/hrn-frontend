@@ -32,7 +32,12 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event, eventChatMessages } = useEventContext()
+  const {
+    event,
+    eventChatMessages,
+    numberOfUnreadChatMessages,
+    setNumberOfReadChatMessages,
+  } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
@@ -67,6 +72,15 @@ const Lobby = () => {
         eventStatus === 'room-in-progress') ||
       eventStatus === 'not-started',
   })
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        setNumberOfReadChatMessages(eventChatMessages.length)
+      }
+      return !prevState
+    })
+  }
 
   useEffect(() => {
     setUserInEvent(true)
@@ -150,8 +164,9 @@ const Lobby = () => {
       <BottomControlPanel
         chatIsOpen={chatIsOpen}
         event={event}
+        numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        toggleChat={toggleChat}
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />

@@ -96,7 +96,12 @@ const EventGroupVideoChat = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event, eventChatMessages } = useEventContext()
+  const {
+    event,
+    eventChatMessages,
+    numberOfUnreadChatMessages,
+    setNumberOfReadChatMessages,
+  } = useEventContext()
   const { user } = useUserContext()
   const {
     onlineEventUsers,
@@ -223,6 +228,15 @@ const EventGroupVideoChat = () => {
     })
   }
 
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        setNumberOfReadChatMessages(eventChatMessages.length)
+      }
+      return !prevState
+    })
+  }
+
   useEffect(() => {
     if (event && event_id) {
       if (event_status === 'complete') {
@@ -294,9 +308,10 @@ const EventGroupVideoChat = () => {
       <GroupVideoChatBottomPanel
         chatIsOpen={chatIsOpen}
         event_id={event_id}
+        numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userIsHost={userIsHost}
-        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        toggleChat={toggleChat}
         twilioGroupChatRoom={groupChatRoom}
       />
     </>

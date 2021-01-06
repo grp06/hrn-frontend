@@ -13,13 +13,15 @@ const defaultState = {
   eventId: null,
   event: {},
   eventChatMessages: null,
+  numberOfReadChatMessages: 0,
+  numberOfUnreadChatMessages: 0,
 }
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { setAppLoading } = useAppContext()
   const { pathname } = window.location
-  const { event, eventChatMessages } = state
+  const { event, eventChatMessages, numberOfReadChatMessages } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
@@ -87,10 +89,21 @@ const EventProvider = ({ children }) => {
       if (existingChatMessages !== incomingChatMessages) {
         dispatch((draft) => {
           draft.eventChatMessages = chatMessages.event_group_chat_messages
+          draft.numberOfUnreadChatMessages =
+            chatMessages.event_group_chat_messages.length - numberOfReadChatMessages
         })
       }
     }
   }, [chatMessages, userOnLobbyOrGroupChat])
+
+  useEffect(() => {
+    if (numberOfReadChatMessages) {
+      dispatch((draft) => {
+        draft.numberOfUnreadChatMessages =
+          chatMessages.event_group_chat_messages.length - numberOfReadChatMessages
+      })
+    }
+  }, [numberOfReadChatMessages])
 
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }

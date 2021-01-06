@@ -22,10 +22,17 @@ const useEventContext = () => {
     })
   }
 
+  const setNumberOfReadChatMessages = (readMessagesCount) => {
+    dispatch((draft) => {
+      draft.numberOfReadChatMessages = readMessagesCount
+    })
+  }
+
   return {
     ...state,
     resetEvent,
     setEventId,
+    setNumberOfReadChatMessages,
   }
 }
 
