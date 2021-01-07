@@ -4,8 +4,6 @@ import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 
 import { GroupVideoChatBottomPanel } from '.'
-import BeachAccessIcon from '../../assets/beachAccess.svg'
-import BabyBottleIcon from '../../assets/babyBottle.svg'
 import PersonIcon from '../../assets/greyPerson.svg'
 import MicOffIcon from '../../assets/micOff.svg'
 import { EventChatBox, Loading } from '../../common'
@@ -43,18 +41,19 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     zIndex: 9,
     top: 'auto',
-    left: '0%',
+    left: '1%',
     right: 'auto',
-    bottom: '-0.05%',
-    width: '100%',
+    bottom: '1%',
+    width: 'auto',
+    height: '25px',
+    borderRadius: '4px',
     backgroundColor: 'rgb(36,37,38,0.7)',
-    padding: theme.spacing(0.75, 0),
+    padding: theme.spacing(0.5, 1),
   },
   usersNameDiv: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginLeft: '12px',
   },
   usersNameInVideo: {
     fontFamily: 'Muli',
@@ -77,18 +76,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundRepeat: 'no-repeat',
     width: '25px',
     height: '25px',
-    marginRight: '10px',
+    marginRight: '-4px',
+    marginLeft: '4px',
     display: 'none',
   },
-  babyBottleIconDiv: {
-    backgroundImage: `url(${BabyBottleIcon})`,
-    backgroundPosition: '50% 50%',
-    backgroundRepeat: 'no-repeat',
-    width: '25px',
-    height: '25px',
+  hostTag: {
+    color: theme.palette.common.basePink,
+    fontWeight: 700,
+    fontFamily: 'Muli',
     marginRight: '5px',
-    display: 'inline',
-    visibility: 'hidden',
+    fontSize: '1.25rem',
   },
 }))
 
@@ -96,7 +93,12 @@ const EventGroupVideoChat = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event } = useEventContext()
+  const {
+    event,
+    eventChatMessages,
+    numberOfUnreadChatMessages,
+    setNumberOfReadChatMessages,
+  } = useEventContext()
   const { user } = useUserContext()
   const {
     onlineEventUsers,
@@ -141,14 +143,16 @@ const EventGroupVideoChat = () => {
       const usersNamePTag = document.createElement('p')
       const usersNameNode = document.createTextNode(usersFirstName)
       const usersMicOffDiv = document.createElement('div')
+      if (thisIsHostDiv) {
+        const hostTagPTag = thisIsHostDiv && document.createElement('p')
+        const hostTagNode = document.createTextNode('• Host')
+        hostTagPTag.setAttribute('class', classes.hostTag)
+        hostTagPTag.appendChild(hostTagNode)
+        usersNameDiv.appendChild(hostTagPTag)
+      }
       usersNamePTag.appendChild(usersNameNode)
       usersNamePTag.setAttribute('class', classes.usersNameInVideo)
       usersNameDiv.setAttribute('class', classes.usersNameDiv)
-      if (thisIsHostDiv) {
-        const beachAccessDiv = thisIsHostDiv && document.createElement('div')
-        beachAccessDiv.setAttribute('class', classes.babyBottleIconDiv)
-        usersNameDiv.appendChild(beachAccessDiv)
-      }
       usersNameDiv.appendChild(usersNamePTag)
       usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
       usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
@@ -192,8 +196,8 @@ const EventGroupVideoChat = () => {
     console.log('calling CONNECT')
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-    const audioDevice = userIsHost ? { deviceId: localStoragePreferredAudioId } : false
-    const videoDevice = userIsHost ? { deviceId: localStoragePreferredVideoId } : false
+    const audioDevice = { deviceId: localStoragePreferredAudioId }
+    const videoDevice = { deviceId: localStoragePreferredVideoId }
     const myRoom = await connect(groupChatToken, {
       maxAudioBitrate: 16000,
       audio: audioDevice,
@@ -220,6 +224,15 @@ const EventGroupVideoChat = () => {
     arrayOfDivElementsInVideoGrid.forEach((divElement) => {
       divElement.style.height = height
       divElement.style.width = width
+    })
+  }
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        setNumberOfReadChatMessages(eventChatMessages.length)
+      }
+      return !prevState
     })
   }
 
@@ -283,13 +296,21 @@ const EventGroupVideoChat = () => {
         alignItems="center"
         className={classes.videoBox}
       />
-      {chatIsOpen ? <EventChatBox eventId={event_id} hostId={host_id} userId={user_id} /> : null}
+      {chatIsOpen ? (
+        <EventChatBox
+          eventId={event_id}
+          hostId={host_id}
+          messages={eventChatMessages}
+          userId={user_id}
+        />
+      ) : null}
       <GroupVideoChatBottomPanel
         chatIsOpen={chatIsOpen}
         event_id={event_id}
+        numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userIsHost={userIsHost}
-        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        toggleChat={toggleChat}
         twilioGroupChatRoom={groupChatRoom}
       />
     </>

@@ -423,6 +423,21 @@ const theme = createMuiTheme({
         color: grey10,
       },
     },
+    MuiPickersDay: {
+      day: {
+        color: ghostWhite,
+      },
+    },
+    MuiPickersCalendarHeader: {
+      iconButton: {
+        backgroundColor: 'transparent',
+      },
+    },
+    MuiPickersClockNumber: {
+      clockNumber: {
+        color: ghostWhite,
+      },
+    },
   },
 })
 

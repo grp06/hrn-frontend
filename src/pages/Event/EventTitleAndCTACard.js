@@ -9,8 +9,9 @@ import copy from 'copy-to-clipboard'
 import debounce from 'lodash.debounce'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
+import { DeleteEventButton } from '.'
 import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
-import { insertEventUser, deleteEventUser } from '../../gql/mutations'
+import { insertEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
 import { makeStyles } from '@material-ui/styles'
 
@@ -62,13 +63,6 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
-    variables: {
-      event_id,
-      user_id,
-    },
-  })
-
-  const [deleteEventUserMutation] = useMutation(deleteEventUser, {
     variables: {
       event_id,
       user_id,
@@ -180,6 +174,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           >
             <FeatherIcon icon="share-2" stroke="#f4f6fa" size="30" />
           </Button>
+          {userIsHost ? <DeleteEventButton eventId={event_id} /> : null}
           {renderRSVPOrEditButton()}
         </Grid>
       )}

@@ -1,9 +1,10 @@
 import React from 'react'
+import Badge from '@material-ui/core/Badge'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/styles'
 import IconButton from '@material-ui/core/IconButton'
 import Typography from '@material-ui/core/Typography'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
+import { makeStyles } from '@material-ui/styles'
 import { getTimeUntilEvent } from '../../utils'
 import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { StartEventButton } from '../PreEvent'
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const BottomControlPanel = ({
   chatIsOpen,
   event,
+  numberOfUnreadChatMessages,
   setUserHasEnabledCameraAndMic,
   toggleChat,
   userId,
@@ -140,10 +142,12 @@ const BottomControlPanel = ({
               chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
             }
           >
-            <ChatBubbleIcon
-              style={{ color: 'ghostWhite', fontSize: '2rem' }}
-              onClick={toggleChat}
-            />
+            <Badge badgeContent={chatIsOpen ? 0 : numberOfUnreadChatMessages} color="secondary">
+              <ChatBubbleIcon
+                style={{ color: 'ghostWhite', fontSize: '2rem' }}
+                onClick={toggleChat}
+              />
+            </Badge>
           </IconButton>
         </Grid>
         <SetupMicAndCameraButton setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic} />

@@ -32,7 +32,12 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event } = useEventContext()
+  const {
+    event,
+    eventChatMessages,
+    numberOfUnreadChatMessages,
+    setNumberOfReadChatMessages,
+  } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
@@ -56,17 +61,32 @@ const Lobby = () => {
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
+  const skipListenToPartnersTableSub =
+    !user_id ||
+    !eventId ||
+    !round ||
+    eventStatus === 'not-started' ||
+    eventStatus === 'pre-event' ||
+    ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
+      eventStatus === 'room-in-progress')
+
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
       event_id: eventId,
       user_id: user_id,
       round,
     },
-    skip:
-      ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
-        eventStatus === 'room-in-progress') ||
-      eventStatus === 'not-started',
+    skip: skipListenToPartnersTableSub,
   })
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        setNumberOfReadChatMessages(eventChatMessages.length)
+      }
+      return !prevState
+    })
+  }
 
   useEffect(() => {
     setUserInEvent(true)
@@ -139,12 +159,20 @@ const Lobby = () => {
         userEventStatus={userEventStatus}
         user={user}
       />
-      {chatIsOpen ? <EventChatBox eventId={eventId} hostId={hostId} userId={user_id} /> : null}
+      {chatIsOpen ? (
+        <EventChatBox
+          eventId={eventId}
+          hostId={hostId}
+          messages={eventChatMessages}
+          userId={user_id}
+        />
+      ) : null}
       <BottomControlPanel
         chatIsOpen={chatIsOpen}
         event={event}
+        numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        toggleChat={toggleChat}
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />

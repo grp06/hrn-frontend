@@ -2,7 +2,7 @@ const constants = {
   // change me back to 20000?
   // george, stephen, max, lenny, zhen, sandra, ash, azul, jasper
   adminUserIds: [8, 12, 115, 506, 3091, 3552, 3974, 4939, 5218],
-  lastSeenDuration: 50,
+  lastSeenDuration: 5000,
   roundLength: 300,
   betweenRoundsDelay: 20000,
   partnerCameraIssueTimeout: 25000,
@@ -11,8 +11,6 @@ const constants = {
   drawerWidth: 175,
   bottomNavBarHeight: 80,
   intercomAppId: 'jpmq80un',
-  linkedInCommunityLink: 'https://www.linkedin.com/groups/8951502/',
-  becomeAHostTypeform: 'https://stephen687387.typeform.com/to/UOwU16',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',
