@@ -32,7 +32,12 @@ const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
-  const { event } = useEventContext()
+  const {
+    event,
+    eventChatMessages,
+    numberOfUnreadChatMessages,
+    setNumberOfReadChatMessages,
+  } = useEventContext()
   const { user, setUserInEvent } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
@@ -73,6 +78,15 @@ const Lobby = () => {
     },
     skip: skipListenToPartnersTableSub,
   })
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        setNumberOfReadChatMessages(eventChatMessages.length)
+      }
+      return !prevState
+    })
+  }
 
   useEffect(() => {
     setUserInEvent(true)
@@ -145,12 +159,20 @@ const Lobby = () => {
         userEventStatus={userEventStatus}
         user={user}
       />
-      {chatIsOpen ? <EventChatBox eventId={eventId} hostId={hostId} userId={user_id} /> : null}
+      {chatIsOpen ? (
+        <EventChatBox
+          eventId={eventId}
+          hostId={hostId}
+          messages={eventChatMessages}
+          userId={user_id}
+        />
+      ) : null}
       <BottomControlPanel
         chatIsOpen={chatIsOpen}
         event={event}
+        numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
-        toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+        toggleChat={toggleChat}
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
