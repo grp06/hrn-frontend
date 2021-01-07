@@ -56,16 +56,22 @@ const Lobby = () => {
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
+  const skipListenToPartnersTableSub =
+    !user_id ||
+    !eventId ||
+    !round ||
+    eventStatus === 'not-started' ||
+    eventStatus === 'pre-event' ||
+    ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
+      eventStatus === 'room-in-progress')
+
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
       event_id: eventId,
       user_id: user_id,
       round,
     },
-    skip:
-      ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
-        eventStatus === 'room-in-progress') ||
-      eventStatus === 'not-started',
+    skip: skipListenToPartnersTableSub,
   })
 
   useEffect(() => {
