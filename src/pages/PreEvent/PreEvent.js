@@ -94,6 +94,7 @@ const PreEvent = ({ onlineEventUsers }) => {
   const eventSet = Object.keys(event).length > 1
   const { startPreEventTwilio } = usePreEventTwilio()
   const hostsFirstName = hostName && hostName.split(' ')[0]
+  const userIsHost = event.host_id === userId
 
   useEffect(() => {
     if (eventSet) {
@@ -228,12 +229,14 @@ const PreEvent = ({ onlineEventUsers }) => {
         <Typography className={classes.liveLogo} variant="subtitle1">
           LIVE
         </Typography>
-        <Grid container justify="center" alignItems="center" className={classes.viewersContainer}>
-          <VisibilityOutlinedIcon stroke="#f4f6fa" style={{ color: '#f4f6fa' }} />
-          <Typography variant="body1" className={classes.viewersNumber}>
-            {onlineEventUsers && onlineEventUsers.length ? onlineEventUsers.length : '--'}
-          </Typography>
-        </Grid>
+        {userIsHost ? (
+          <Grid container justify="center" alignItems="center" className={classes.viewersContainer}>
+            <VisibilityOutlinedIcon stroke="#f4f6fa" style={{ color: '#f4f6fa' }} />
+            <Typography variant="body1" className={classes.viewersNumber}>
+              {onlineEventUsers && onlineEventUsers.length ? onlineEventUsers.length : '--'}
+            </Typography>
+          </Grid>
+        ) : null}
       </Grid>
       <motion.div
         initial={{ x: 500, y: 40 }}

@@ -126,6 +126,7 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
             href={linkedIn_url.includes('http') ? linkedIn_url : `https://${linkedIn_url}`}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() => window.analytics.track('Clicked LinkedIn Profile')}
           >
             <LinkedInIcon style={{ color: '#FF99AD' }} fontSize="small" />
           </Fab>

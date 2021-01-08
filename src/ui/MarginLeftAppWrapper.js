@@ -16,6 +16,8 @@ const useStyles = makeStyles((theme) => ({
 const MarginLeftAppWrapper = ({ children }) => {
   const classes = useStyles()
   const { userInEvent, userOnAuthRoute } = useUserContext()
+  console.log('userInEvent ->', userInEvent)
+  console.log('userOnAuthRoute ->', userOnAuthRoute)
 
   return (
     <div className={!userInEvent && !userOnAuthRoute ? classes.pageWrapper : ''}>{children}</div>
