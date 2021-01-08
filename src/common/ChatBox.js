@@ -62,21 +62,13 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChatBox = ({ myRound }) => {
+const ChatBox = ({ messages, myRound }) => {
   const classes = createStyles()
   const { event_id, partner: myPartner, partner_id, user_id } = myRound
   const { name: myPartnersName } = myPartner
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
   const myPartnersFirstName = myPartnersName && myPartnersName.split(' ')[0]
-
-  const { data: chatMessages } = useSubscription(listenToChatMessages, {
-    variables: {
-      user_id,
-      partner_id,
-    },
-    skip: !event_id,
-  })
 
   const [insertPersonalChatMessageMutation] = useMutation(insertPersonalChatMessage, {
     user_id,
@@ -87,10 +79,10 @@ const ChatBox = ({ myRound }) => {
   useEffect(() => {
     const chatList = document.getElementById('chat-list')
     chatList.scrollTop = chatList.scrollHeight
-    if (chatMessages && !list) {
-      setList(chatMessages)
+    if (messages && !list) {
+      setList(messages)
     }
-  }, [chatMessages])
+  }, [messages])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -124,9 +116,9 @@ const ChatBox = ({ myRound }) => {
         Chat with {myPartnersFirstName}
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
-        {chatMessages &&
-          chatMessages.personal_chat_messages.length &&
-          chatMessages.personal_chat_messages.map((message) => {
+        {messages &&
+          messages.length &&
+          messages.map((message) => {
             const { content: messageContent, created_at, user } = message
             const sendersFirstName = user.name && user.name.split(' ')[0]
             const messageSentAt = formatChatMessagesDate(created_at)

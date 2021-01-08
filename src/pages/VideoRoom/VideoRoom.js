@@ -74,7 +74,11 @@ const VideoRoom = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
-  const { userEventStatus, setUserEventStatus } = useUserEventStatusContext()
+  const {
+    personalChatMessagesWithCurrentPartner,
+    userEventStatus,
+    setUserEventStatus,
+  } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
   const { id: userId, updated_at: userUpdatedAt } = user
@@ -276,7 +280,10 @@ const VideoRoom = ({ match }) => {
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
         {myRoundPartnerData && myRoundPartnerData.partners.length && chatIsOpen ? (
-          <ChatBox myRound={myRoundPartnerData.partners[0]} />
+          <ChatBox
+            messages={personalChatMessagesWithCurrentPartner}
+            myRound={myRoundPartnerData.partners[0]}
+          />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
         <InVideoBottomControlPanel
