@@ -62,7 +62,7 @@ const EventProvider = ({ children }) => {
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
   const eventId = parseInt(pathnameArray[2], 10)
-  console.log({ eventChatMessages, numberOfReadChatMessages })
+
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
