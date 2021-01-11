@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
 
 const InVideoBottomControlPanel = React.memo(
   ({ chatIsOpen, myRound, numberOfUnreadMessagesFromMyPartner, toggleChat }) => {
-    console.log('numberOfUnreadMessagesfromMyPartner ->', numberOfUnreadMessagesFromMyPartner)
     const classes = useStyles()
     return (
       <Grid

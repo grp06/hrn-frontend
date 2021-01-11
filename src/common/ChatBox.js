@@ -110,10 +110,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
         return unreadMessagesArray
       }, [])
 
-      console.log('freshlyReadMessages ->', freshlyReadMessages)
-
       if (freshlyReadMessages && freshlyReadMessages.length) {
-        console.log('im bulk upserting now')
         bulkUpsertMessages(freshlyReadMessages)
       }
     }

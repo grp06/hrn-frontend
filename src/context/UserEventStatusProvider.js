@@ -119,24 +119,17 @@ const UserEventStatusProvider = ({ children }) => {
       const incomingChatMessages = JSON.stringify(chatMessages.personal_chat_messages)
 
       if (existingChatMessages !== incomingChatMessages) {
+        const unreadMessagesSentToMe = chatMessages.personal_chat_messages.filter(
+          (message) => message.recipient_id === userId && !message.read
+        )
         dispatch((draft) => {
           draft.personalChatMessagesWithCurrentPartner = chatMessages.personal_chat_messages
-          draft.numberOfUnreadMessagesFromMyPartner =
-            chatMessages.personal_chat_messages.length - numberOfReadMessagesFromMyPartner
+          draft.numberOfUnreadMessagesFromMyPartner = unreadMessagesSentToMe.length
         })
       }
     }
   }, [chatMessages, partner_id])
 
-  // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
-  useEffect(() => {
-    if (numberOfReadMessagesFromMyPartner) {
-      dispatch((draft) => {
-        draft.numberOfUnreadMessagesFromMyPartner =
-          chatMessages.personal_chat_messages.length - numberOfReadMessagesFromMyPartner
-      })
-    }
-  }, [numberOfReadMessagesFromMyPartner])
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>
       {children}

@@ -116,7 +116,11 @@ const VideoRoom = ({ match }) => {
           personalChatMessagesWithCurrentPartner &&
           personalChatMessagesWithCurrentPartner.length
         ) {
-          setNumberOfReadMessagesFromMyPartner(personalChatMessagesWithCurrentPartner.length)
+          setNumberOfReadMessagesFromMyPartner(
+            personalChatMessagesWithCurrentPartner.filter(
+              (message) => message.recipient_id === userId && message.read
+            ).length
+          )
         }
       }
       return !prevState
