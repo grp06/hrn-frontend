@@ -281,6 +281,7 @@ const VideoRoom = ({ match }) => {
         <div id="remote-video" className={classes.mainVid} />
         {myRoundPartnerData && myRoundPartnerData.partners.length && chatIsOpen ? (
           <ChatBox
+            chatIsOpen={chatIsOpen}
             messages={personalChatMessagesWithCurrentPartner}
             myRound={myRoundPartnerData.partners[0]}
           />

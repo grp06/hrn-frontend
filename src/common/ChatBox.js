@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -8,8 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { insertPersonalChatMessage } from '../gql/mutations'
-import { listenToChatMessages } from '../gql/subscriptions'
+import { bulkUpsertReadPersonalChatMessage, insertPersonalChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
 
@@ -62,7 +61,7 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChatBox = ({ messages, myRound }) => {
+const ChatBox = ({ chatIsOpen, messages, myRound }) => {
   const classes = createStyles()
   const { event_id, partner: myPartner, partner_id, user_id } = myRound
   const { name: myPartnersName } = (myPartner && Object.keys(myPartner).length && myPartner) || ''
@@ -76,6 +75,8 @@ const ChatBox = ({ messages, myRound }) => {
     content: message,
   })
 
+  const [bulkUpsertReadChatMessages] = useMutation(bulkUpsertReadPersonalChatMessage)
+
   useEffect(() => {
     const chatList = document.getElementById('chat-list')
     chatList.scrollTop = chatList.scrollHeight
@@ -83,6 +84,40 @@ const ChatBox = ({ messages, myRound }) => {
       setList(messages)
     }
   }, [messages])
+
+  useEffect(() => {
+    const bulkUpsertMessages = async (messages) => {
+      try {
+        await bulkUpsertReadChatMessages({
+          variables: {
+            messages,
+          },
+        })
+      } catch (err) {
+        console.log('bulkUpsertReadPersonalChatMessages error ->', err)
+      }
+    }
+
+    if (chatIsOpen && messages && messages.length) {
+      const freshlyReadMessages = messages.reduce((unreadMessagesArray, message) => {
+        // get all the unread messages that have been sent to you
+        if (message.recipient_id === user_id && !message.read) {
+          // pull off all keys except user and recipient
+          const { content, id, recipient_id, sender_id } = message
+          const messageToBeUpserted = { content, id, read: true, recipient_id, sender_id }
+          unreadMessagesArray.push(messageToBeUpserted)
+        }
+        return unreadMessagesArray
+      }, [])
+
+      console.log('freshlyReadMessages ->', freshlyReadMessages)
+
+      if (freshlyReadMessages && freshlyReadMessages.length) {
+        console.log('im bulk upserting now')
+        bulkUpsertMessages(freshlyReadMessages)
+      }
+    }
+  }, [chatIsOpen, messages])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40

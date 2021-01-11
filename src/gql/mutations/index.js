@@ -1,4 +1,5 @@
 export { default as addFriend } from './addFriend'
+export { default as bulkUpsertReadPersonalChatMessage } from './bulkUpsertReadPersonalChatMessage'
 export { default as createEvent } from './createEvent'
 export { default as createUser } from './createUser'
 export { default as deleteEvent } from './deleteEvent'
