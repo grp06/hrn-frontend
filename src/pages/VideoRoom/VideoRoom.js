@@ -76,8 +76,10 @@ const VideoRoom = ({ match }) => {
   const { event } = useEventContext()
   const {
     personalChatMessagesWithCurrentPartner,
-    userEventStatus,
+    numberOfUnreadMessagesFromMyPartner,
+    setNumberOfReadMessagesFromMyPartner,
     setUserEventStatus,
+    userEventStatus,
   } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
@@ -106,6 +108,20 @@ const VideoRoom = ({ match }) => {
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
   })
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        if (
+          personalChatMessagesWithCurrentPartner &&
+          personalChatMessagesWithCurrentPartner.length
+        ) {
+          setNumberOfReadMessagesFromMyPartner(personalChatMessagesWithCurrentPartner.length)
+        }
+      }
+      return !prevState
+    })
+  }
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
@@ -288,9 +304,10 @@ const VideoRoom = ({ match }) => {
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
         <InVideoBottomControlPanel
-          myRound={myRound}
           chatIsOpen={chatIsOpen}
-          toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+          numberOfUnreadMessagesFromMyPartner={numberOfUnreadMessagesFromMyPartner}
+          myRound={myRound}
+          toggleChat={toggleChat}
         />
       </div>
     </div>

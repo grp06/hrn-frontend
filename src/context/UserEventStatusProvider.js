@@ -25,11 +25,15 @@ const defaultState = {
   onlineEventUsers: [],
   userHasEnabledCameraAndMic: true,
   personalChatMessagesWithCurrentPartner: [],
+  numberOfReadMessagesFromMyPartner: 0,
+  numberOfUnreadMessagesFromMyPartner: 0,
 }
 
 const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const {
+    numberOfReadMessagesFromMyPartner,
+    numberOfUnreadMessagesFromMyPartner,
     personalChatMessagesWithCurrentPartner,
     userEventStatus,
     userHasEnabledCameraAndMic,
@@ -108,6 +112,7 @@ const UserEventStatusProvider = ({ children }) => {
     }
   }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic])
 
+  // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {
     if (chatMessages && partner_id) {
       const existingChatMessages = JSON.stringify(personalChatMessagesWithCurrentPartner)
@@ -116,11 +121,22 @@ const UserEventStatusProvider = ({ children }) => {
       if (existingChatMessages !== incomingChatMessages) {
         dispatch((draft) => {
           draft.personalChatMessagesWithCurrentPartner = chatMessages.personal_chat_messages
+          draft.numberOfUnreadMessagesFromMyPartner =
+            chatMessages.personal_chat_messages.length - numberOfReadMessagesFromMyPartner
         })
       }
     }
   }, [chatMessages, partner_id])
 
+  // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
+  useEffect(() => {
+    if (numberOfReadMessagesFromMyPartner) {
+      dispatch((draft) => {
+        draft.numberOfUnreadMessagesFromMyPartner =
+          chatMessages.personal_chat_messages.length - numberOfReadMessagesFromMyPartner
+      })
+    }
+  }, [numberOfReadMessagesFromMyPartner])
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>
       {children}

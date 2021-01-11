@@ -1,4 +1,5 @@
 import React from 'react'
+import Badge from '@material-ui/core/Badge'
 import Grid from '@material-ui/core/Grid'
 import IconButton from '@material-ui/core/IconButton'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
@@ -39,37 +40,48 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const InVideoBottomControlPanel = React.memo(({ chatIsOpen, myRound, toggleChat }) => {
-  const classes = useStyles()
-  return (
-    <Grid
-      container
-      direction="row"
-      justify="flex-end"
-      alignItems="center"
-      wrap="nowrap"
-      className={classes.container}
-    >
-      <Grid item>
-        <IconButton
-          disableRipple
-          className={
-            chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
-          }
-        >
-          <ChatBubbleIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} onClick={toggleChat} />
-        </IconButton>
-      </Grid>
-      {/* <Grid item>
+const InVideoBottomControlPanel = React.memo(
+  ({ chatIsOpen, myRound, numberOfUnreadMessagesFromMyPartner, toggleChat }) => {
+    console.log('numberOfUnreadMessagesfromMyPartner ->', numberOfUnreadMessagesFromMyPartner)
+    const classes = useStyles()
+    return (
+      <Grid
+        container
+        direction="row"
+        justify="flex-end"
+        alignItems="center"
+        wrap="nowrap"
+        className={classes.container}
+      >
+        <Grid item>
+          <IconButton
+            disableRipple
+            className={
+              chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+            }
+          >
+            <Badge
+              badgeContent={chatIsOpen ? 0 : numberOfUnreadMessagesFromMyPartner}
+              color="secondary"
+            >
+              <ChatBubbleIcon
+                style={{ color: 'ghostWhite', fontSize: '2rem' }}
+                onClick={toggleChat}
+              />
+            </Badge>
+          </IconButton>
+        </Grid>
+        {/* <Grid item>
         <IconButton disableRipple className={classes.iconButton}>
           <NoteIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />
         </IconButton>
       </Grid> */}
-      <Grid item>
-        <MoreActionsButton myRound={myRound} />
+        <Grid item>
+          <MoreActionsButton myRound={myRound} />
+        </Grid>
       </Grid>
-    </Grid>
-  )
-})
+    )
+  }
+)
 
 export default InVideoBottomControlPanel

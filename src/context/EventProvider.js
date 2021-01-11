@@ -81,6 +81,7 @@ const EventProvider = ({ children }) => {
     }
   }, [eventData, dispatch, event, userOnEventPage, history])
 
+  // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {
     if (userOnLobbyOrGroupChat && chatMessages) {
       const existingChatMessages = JSON.stringify(eventChatMessages)
@@ -96,6 +97,7 @@ const EventProvider = ({ children }) => {
     }
   }, [chatMessages, userOnLobbyOrGroupChat])
 
+  // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
   useEffect(() => {
     if (numberOfReadChatMessages) {
       dispatch((draft) => {

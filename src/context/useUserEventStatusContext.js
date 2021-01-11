@@ -9,6 +9,12 @@ const useUserEventStatusContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
+  const setNumberOfReadMessagesFromMyPartner = (readMessagesCount) => {
+    dispatch((draft) => {
+      draft.numberOfReadMessagesFromMyPartner = readMessagesCount
+    })
+  }
+
   const setUserEventStatus = (status) => {
     console.log('setUSerEventStatus ->', status)
     dispatch((draft) => {
@@ -24,6 +30,7 @@ const useUserEventStatusContext = () => {
 
   return {
     ...state,
+    setNumberOfReadMessagesFromMyPartner,
     setUserEventStatus,
     setUserHasEnabledCameraAndMic,
   }
