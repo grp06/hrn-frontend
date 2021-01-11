@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, createContext, useContext } from 'react'
 
 import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -6,15 +6,49 @@ import { useHistory } from 'react-router-dom'
 import { useAppContext } from '.'
 import { listenToEvent, listenToEventChatMessages } from '../gql/subscriptions'
 
-const EventContext = React.createContext()
+const EventContext = createContext()
 
 const defaultState = {
   // eventId is for event subscriptions
   eventId: null,
   event: {},
-  eventChatMessages: null,
+  eventChatMessages: [],
   numberOfReadChatMessages: 0,
   numberOfUnreadChatMessages: 0,
+}
+
+const useEventContext = () => {
+  const [state, dispatch] = useContext(EventContext)
+
+  if (dispatch === undefined) {
+    throw new Error('Must have dispatch defined')
+  }
+
+  const resetEvent = () => {
+    dispatch((draft) => {
+      draft.event = {}
+    })
+  }
+
+  // LETS TRY TO GET RID OF THIS
+  const setEventId = (eventId) => {
+    dispatch((draft) => {
+      draft.eventId = eventId
+    })
+  }
+
+  const setNumberOfReadChatMessages = (readMessagesCount) => {
+    dispatch((draft) => {
+      draft.numberOfReadChatMessages = readMessagesCount
+    })
+  }
+
+  return {
+    ...state,
+    resetEvent,
+    setEventId,
+    setNumberOfReadChatMessages,
+  }
 }
 
 const EventProvider = ({ children }) => {
@@ -28,7 +62,7 @@ const EventProvider = ({ children }) => {
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
   const eventId = parseInt(pathnameArray[2], 10)
-
+  console.log({ eventChatMessages, numberOfReadChatMessages })
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
     variables: {
@@ -108,4 +142,4 @@ const EventProvider = ({ children }) => {
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }
 
-export { EventProvider, EventContext }
+export { useEventContext, EventProvider }
