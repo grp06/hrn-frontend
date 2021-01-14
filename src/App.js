@@ -33,6 +33,7 @@ import {
   Subscription,
   SetNewPassword,
   SignUp,
+  SignUpNew,
 } from './pages'
 import {
   AppProvider,
@@ -117,6 +118,7 @@ const App = () => {
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
                       <Route exact path="/sign-up" component={SignUp} />
+                      <Route exact path="/sign-up-new" component={SignUpNew} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
                       <Route
                         exact
@@ -134,6 +136,7 @@ const App = () => {
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
+
                       <EventProvider>
                         <Route
                           exact
