@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, createContext, useContext } from 'react'
 
 import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -11,7 +11,7 @@ import { listenToOnlineEventUsers } from '../gql/subscriptions'
 
 const { lastSeenDuration, bannedUserIds } = constants
 
-const UserEventStatusContext = React.createContext()
+const UserEventStatusContext = createContext()
 
 // status could be
 // no partner
@@ -25,6 +25,33 @@ const defaultState = {
   userEventStatus: 'waiting for match',
   onlineEventUsers: [],
   userHasEnabledCameraAndMic: false,
+}
+
+const useUserEventStatusContext = () => {
+  const [state, dispatch] = useContext(UserEventStatusContext)
+
+  if (dispatch === undefined) {
+    throw new Error('Must have dispatch defined')
+  }
+
+  const setUserEventStatus = (status) => {
+    console.log('setUSerEventStatus ->', status)
+    dispatch((draft) => {
+      draft.userEventStatus = status
+    })
+  }
+
+  const setUserHasEnabledCameraAndMic = (userHasEnabledCameraAndMic) => {
+    dispatch((draft) => {
+      draft.userHasEnabledCameraAndMic = userHasEnabledCameraAndMic
+    })
+  }
+
+  return {
+    ...state,
+    setUserEventStatus,
+    setUserHasEnabledCameraAndMic,
+  }
 }
 
 const UserEventStatusProvider = ({ children }) => {
@@ -101,4 +128,4 @@ const UserEventStatusProvider = ({ children }) => {
   )
 }
 
-export { UserEventStatusContext, UserEventStatusProvider }
+export { useUserEventStatusContext, UserEventStatusProvider }
