@@ -1,7 +1,6 @@
 export { AppProvider } from './AppProvider'
 export * from './EventContext'
-export { TwilioProvider } from './TwilioProvider'
+export * from './TwilioContext'
 export * from './UserContext'
 export * from './UserEventStatusContext'
 export { default as useAppContext } from './useAppContext'
-export { default as useTwilioContext } from './useTwilioContext'
