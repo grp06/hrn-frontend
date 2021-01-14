@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, createContext, useContext } from 'react'
 
 import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -10,7 +10,7 @@ import { listenToChatMessages, listenToOnlineEventUsers } from '../gql/subscript
 
 const { lastSeenDuration, bannedUserIds } = constants
 
-const UserEventStatusContext = React.createContext()
+const UserEventStatusContext = createContext()
 
 // status could be
 // no partner
@@ -27,6 +27,40 @@ const defaultState = {
   personalChatMessagesWithCurrentPartner: [],
   numberOfReadMessagesFromMyPartner: 0,
   numberOfUnreadMessagesFromMyPartner: 0,
+}
+
+const useUserEventStatusContext = () => {
+  const [state, dispatch] = useContext(UserEventStatusContext)
+
+  if (dispatch === undefined) {
+    throw new Error('Must have dispatch defined')
+  }
+
+  const setNumberOfReadMessagesFromMyPartner = (readMessagesCount) => {
+    dispatch((draft) => {
+      draft.numberOfReadMessagesFromMyPartner = readMessagesCount
+    })
+  }
+
+  const setUserEventStatus = (status) => {
+    console.log('setUSerEventStatus ->', status)
+    dispatch((draft) => {
+      draft.userEventStatus = status
+    })
+  }
+
+  const setUserHasEnabledCameraAndMic = (userHasEnabledCameraAndMic) => {
+    dispatch((draft) => {
+      draft.userHasEnabledCameraAndMic = userHasEnabledCameraAndMic
+    })
+  }
+
+  return {
+    ...state,
+    setNumberOfReadMessagesFromMyPartner,
+    setUserEventStatus,
+    setUserHasEnabledCameraAndMic,
+  }
 }
 
 const UserEventStatusProvider = ({ children }) => {
@@ -137,4 +171,4 @@ const UserEventStatusProvider = ({ children }) => {
   )
 }
 
-export { UserEventStatusContext, UserEventStatusProvider }
+export { useUserEventStatusContext, UserEventStatusProvider }

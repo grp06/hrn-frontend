@@ -1,6 +1,12 @@
-import { useContext } from 'react'
+import React, { createContext, useContext } from 'react'
+import { useImmer } from 'use-immer'
 
-import { AppContext } from './AppProvider'
+const AppContext = createContext()
+
+const defaultState = {
+  redirect: null,
+  appLoading: true,
+}
 
 const useAppContext = () => {
   const [state, dispatch] = useContext(AppContext)
@@ -28,4 +34,9 @@ const useAppContext = () => {
   }
 }
 
-export default useAppContext
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useImmer({ ...defaultState })
+  return <AppContext.Provider value={[state, dispatch]}>{children}</AppContext.Provider>
+}
+
+export { useAppContext, AppProvider }

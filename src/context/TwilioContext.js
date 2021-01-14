@@ -1,6 +1,15 @@
-import { useContext } from 'react'
+import React, { createContext, useContext } from 'react'
 
-import { TwilioContext } from './TwilioProvider'
+import { useImmer } from 'use-immer'
+
+const TwilioContext = createContext()
+
+const defaultState = {
+  partnerDisconnected: false,
+  partnerNeverConnected: false,
+  hasPartnerAndIsConnecting: false,
+  myRound: null,
+}
 
 const useTwilioContext = () => {
   const [state, dispatch] = useContext(TwilioContext)
@@ -43,4 +52,10 @@ const useTwilioContext = () => {
   }
 }
 
-export default useTwilioContext
+const TwilioProvider = ({ children }) => {
+  const [state, dispatch] = useImmer({ ...defaultState })
+
+  return <TwilioContext.Provider value={[state, dispatch]}>{children}</TwilioContext.Provider>
+}
+
+export { useTwilioContext, TwilioProvider }
