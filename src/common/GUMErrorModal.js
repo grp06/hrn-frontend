@@ -46,7 +46,6 @@ const GUMErrorModal = ({ onComplete, errorName }) => {
   const [open, setOpen] = useState(true)
   const errorMessage = GUMErrorMessage(errorName)
 
-  console.log('im getting called')
   const handleClose = () => {
     setOpen(false)
     onComplete()
