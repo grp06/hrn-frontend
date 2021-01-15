@@ -14,6 +14,7 @@ import {
   CheckoutSuccess,
   CreateEvent,
   Event,
+  EventNew,
   MyEvents,
   EventComplete,
   EventGroupVideoChat,
@@ -39,6 +40,7 @@ import {
 import {
   AppProvider,
   EventProvider,
+  EventNewProvider,
   TwilioProvider,
   UserProvider,
   UserNewProvider,
@@ -140,7 +142,9 @@ const App = () => {
                         <Route exact path="/host-dashboard" component={HostDashboard} />
                         <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                         <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
-
+                        <EventNewProvider>
+                          <Route exact path="/events-new/:id" component={EventNew} />
+                        </EventNewProvider>
                         <EventProvider>
                           <Route
                             exact

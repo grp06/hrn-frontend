@@ -59,6 +59,7 @@ const UserNewProvider = ({ children }) => {
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventNewPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
+  // TODO: make userNewInEvent reflect the new routes
   const userNewInEvent = Boolean(
     pathname.includes('video-room') ||
       pathname.includes('lobby') ||
@@ -91,9 +92,6 @@ const UserNewProvider = ({ children }) => {
 
   useEffect(() => {
     if (location) {
-      console.log('i should be getting in here')
-      console.log('isUserOnAuth ->', isUserOnAuth)
-      console.log('userNewInEvent ->', userNewInEvent)
       dispatch((draft) => {
         draft.userNewOnAuthRoute = isUserOnAuth
         draft.userNewInEvent = userNewInEvent
