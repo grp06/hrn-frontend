@@ -1,4 +1,7 @@
 import React, { useEffect } from 'react'
+import Grid from '@material-ui/core/Grid'
+import Typography from '@material-ui/core/Typography'
+import { MeetCelebButton, RSVPForEventNewForm } from '.'
 import { Loading } from '../../common'
 import { useAppContext, useEventNewContext, useUserNewContext } from '../../context'
 
@@ -7,6 +10,9 @@ const EventNew = ({ match }) => {
   const { appLoading } = useAppContext()
   const { userNew } = useUserNewContext()
   const { eventNew, setEventNewId } = useEventNewContext()
+  const { event_users_new, host, host_id, id: event_id, start_at, status: event_status } = eventNew
+  const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
+  const eventNewSet = Object.keys(eventNew).length > 1
 
   useEffect(() => {
     if (!Object.keys(eventNew).length && eventNewId) {
@@ -18,7 +24,16 @@ const EventNew = ({ match }) => {
     return <Loading />
   }
 
-  return <div>Test</div>
+  return (
+    <Grid container direction="column">
+      <Typography variant="h2">ChitChat with {hostName}</Typography>
+      <Typography variant="h2">insert What To Expect Card here</Typography>
+      <MeetCelebButton
+        hostName={hostName}
+        modalBody={<RSVPForEventNewForm eventNew={eventNew} />}
+      />
+    </Grid>
+  )
 }
 
 export default EventNew

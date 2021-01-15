@@ -16,6 +16,14 @@ const listenToEventNew = gql`
       round_length
       start_at
       status
+      event_users_new(order_by: { user: { id: asc } }) {
+        user {
+          created_at
+          name
+          role
+          id
+        }
+      }
     }
   }
 `

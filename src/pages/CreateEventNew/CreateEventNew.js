@@ -30,9 +30,6 @@ const useStyles = makeStyles((theme) => ({
   pinkText: {
     color: theme.palette.common.basePink,
   },
-  publicEventLabel: {
-    fontSize: '0.75rem',
-  },
   sectionContainer: {
     margin: theme.spacing(4, 0),
   },

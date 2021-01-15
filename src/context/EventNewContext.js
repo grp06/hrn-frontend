@@ -55,6 +55,7 @@ const EventNewProvider = ({ children }) => {
   const userOnEventNewPage = Boolean(pathname.match(eventNewRegex))
   const userOnLobbyOrGroupChat = pathname.includes('lobby')
 
+  console.log('eventNew ->', eventNew)
   // subscribe to the Event only if we have an eventNewId
   const { data: eventNewData } = useSubscription(listenToEventNew, {
     variables: {
