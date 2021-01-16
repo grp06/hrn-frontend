@@ -1,5 +1,6 @@
 export { default as didIShareDetailsInPrevEvent } from './didIShareDetailsInPrevEvent'
 export { default as findUserById } from './findUserById'
+export { default as findUserNewById } from './findUserNewById'
 export { default as findUsersCreatedBetweenTwoDates } from './findUsersCreatedBetweenTwoDates'
 export { default as getAllEvents } from './getAllEvents'
 export { default as getAllMyConnections } from './getAllMyConnections'
