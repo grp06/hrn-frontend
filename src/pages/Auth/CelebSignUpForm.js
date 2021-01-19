@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Link, Redirect, useHistory } from 'react-router-dom'
-import { constants } from '../../utils/'
+import { constants } from '../../utils'
 import { FloatCardMedium, Snack } from '../../common'
 import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SignUpFormNew = () => {
+const CelebSignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
   const { redirect, setRedirect } = useAppContext()
@@ -230,5 +230,5 @@ const SignUpFormNew = () => {
   )
 }
 
-export default SignUpFormNew
+export default CelebSignUpForm
 // (must contain 1 upper case, lower case, and special character)

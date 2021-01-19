@@ -1,6 +1,6 @@
 import React from 'react'
-import { SignUpFormNew } from '../Auth'
+import { CelebSignUpForm } from '../Auth'
 
 export const CelebSignUp = () => {
-  return <SignUpFormNew />
+  return <CelebSignUpForm />
 }
