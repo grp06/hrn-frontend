@@ -7,13 +7,13 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { Link, Redirect, useHistory } from 'react-router-dom'
-import { constants } from '../../utils/'
+import { constants } from '../../utils'
 import { FloatCardMedium, Snack } from '../../common'
 import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
 
-const { USER_ID, TOKEN } = constants
+const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const SignUpFormNew = () => {
+const CelebSignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
   const { redirect, setRedirect } = useAppContext()
@@ -131,9 +131,10 @@ const SignUpFormNew = () => {
 
     window.analytics.track('Sign up new')
     localStorage.setItem(USER_ID, id)
+    localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, token)
     // TODO: decide where to send new user
-    history.push('/create-event-new')
+    history.push('/creator-home')
     window.location.reload()
   }
 
@@ -253,5 +254,5 @@ const SignUpFormNew = () => {
   )
 }
 
-export default SignUpFormNew
+export default CelebSignUpForm
 // (must contain 1 upper case, lower case, and special character)

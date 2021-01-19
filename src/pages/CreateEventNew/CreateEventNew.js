@@ -11,7 +11,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import { Snack } from '../../common'
-import { useUserNewContext } from '../../context'
+import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
 import { createEventNew } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
 const CreateEventNew = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { userNew } = useUserNewContext()
-  const { id: user_id, role } = userNew
+  const { user } = useUserContext()
+  const { id: user_id, role } = user
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState(false)
   const [createEventNewMutation] = useMutation(createEventNew)
 
@@ -122,7 +122,7 @@ const CreateEventNew = () => {
                 alignItems="flex-start"
                 className={classes.sectionContainer}
               >
-                <Typography variant="h4">Event Details</Typography>
+                <Typography variant="h3">Event Details</Typography>
                 <Grid container direction="row">
                   <Grid item xs={12} md={6} className={classes.formInputMargin}>
                     <Field
@@ -145,43 +145,22 @@ const CreateEventNew = () => {
                 </Grid>
                 <Grid
                   container
-                  direction="column"
+                  direction="row"
                   justify="flex-start"
                   alignItems="flex-start"
                   className={classes.sectionContainer}
                 >
-                  <Typography variant="h4">Duration</Typography>
-                  <Typography variant="subtitle1" className={classes.pinkText}>
-                    {values.round_length * values.num_rounds > 0
-                      ? `Your event will take around ${
-                          values.round_length * values.num_rounds
-                        } minutes`
-                      : "Your event will go on for as long as you'd like"}
-                  </Typography>
+                  <Typography variant="h3">Duration</Typography>
+
                   <Grid container direction="row">
-                    <Grid
-                      container
-                      item
-                      direction="row"
-                      alignItems="flex-end"
-                      xs={12}
-                      md={3}
-                      className={classes.formInputMargin}
-                    >
+                    <Grid item xs={12} md={6} className={classes.formInputMargin}>
                       <Field
                         component={TextField}
                         name="round_length"
-                        label="Round Length (minutes)"
+                        label="Length of each conversation (minutes)"
                         type="number"
                         required
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={3} className={classes.formInputMargin}>
-                      <Field
-                        component={TextField}
-                        name="num_rounds"
-                        label="Number Of Rounds"
-                        type="number"
+                        className={classes.conversationLength}
                       />
                     </Grid>
                   </Grid>

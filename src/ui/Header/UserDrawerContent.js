@@ -25,55 +25,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ role, userId, userName }) => {
+const UserDrawerContent = ({
+  routes: { loggedInRoutes, loggedOutRoutes },
+  role,
+  userId,
+  userName,
+}) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
     window.location.pathname.includes('pre-event') ||
       window.location.pathname.includes('video-room')
   )
-  const usersFirstName = userName && userName.split(' ')[0]
-
-  const loggedInRoutes = [
-    {
-      label: usersFirstName,
-      url: '/my-profile',
-      icon: 'user',
-    },
-    {
-      label: 'Connections',
-      url: '/my-connections',
-      icon: 'users',
-    },
-    {
-      label: 'My Events',
-      url: '/my-events',
-      icon: 'calendar',
-    },
-    {
-      label: 'All Events',
-      url: '/events',
-      icon: 'globe',
-    },
-    {
-      label: role && role.includes('host') ? 'Subscription' : 'Become a Host',
-      url: '/subscription',
-      icon: role && role.includes('host') ? 'credit-card' : 'award',
-    },
-  ]
-
-  const loggedOutRoutes = [
-    {
-      label: 'All Events',
-      url: '/events',
-      icon: 'globe',
-    },
-    {
-      label: 'Become a Host',
-      url: '/subscription',
-      icon: 'award',
-    },
-  ]
 
   const renderDrawers = (routes) => {
     return routes.map((route) => (
