@@ -27,11 +27,18 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
   },
+  pageContainer: {
+    marginTop: '75px',
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '100px',
+      marginBottom: '25px',
+    },
+  },
   pinkText: {
     color: theme.palette.common.basePink,
   },
   sectionContainer: {
-    margin: theme.spacing(4, 0),
+    margin: theme.spacing(4, 0, 2, 0),
   },
 }))
 
@@ -60,19 +67,24 @@ const CreateEventNew = () => {
       direction="column"
       alignItems="center"
       justify="center"
-      style={{ marginTop: '75px' }}
+      className={classes.pageContainer}
     >
-      <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
-        Let Your Fans Meet You
+      <Typography
+        variant="h3"
+        style={{ fontWeight: 700, marginBottom: '10px', textAlign: 'center' }}
+      >
+        Say Hi To Your Fans{' '}
+        <span role="img" aria-label="hand wave">
+          👋
+        </span>
       </Typography>
-      <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{
             event_date: new Date(),
             event_time: new Date(),
             round_length: 2,
-            num_rounds: 15,
+            num_rounds: null,
           }}
           onSubmit={async (values, { setSubmitting }) => {
             const { event_date, event_time, num_rounds, round_length } = values
@@ -110,13 +122,13 @@ const CreateEventNew = () => {
                 alignItems="flex-start"
                 className={classes.sectionContainer}
               >
-                <Typography variant="h3">Basics</Typography>
+                <Typography variant="h4">Event Details</Typography>
                 <Grid container direction="row">
                   <Grid item xs={12} md={6} className={classes.formInputMargin}>
                     <Field
                       component={DatePicker}
                       name="event_date"
-                      label="Event Date"
+                      label="Date"
                       fullWidth
                       required
                     />
@@ -125,7 +137,7 @@ const CreateEventNew = () => {
                     <Field
                       component={TimePicker}
                       name="event_time"
-                      label="Event Time"
+                      label="Time"
                       fullWidth
                       required
                     />
@@ -138,9 +150,13 @@ const CreateEventNew = () => {
                   alignItems="flex-start"
                   className={classes.sectionContainer}
                 >
-                  <Typography variant="h3">Duration</Typography>
-                  <Typography variant="body1" className={classes.pinkText}>
-                    Your event will take around {values.round_length * values.num_rounds} minutes
+                  <Typography variant="h4">Duration</Typography>
+                  <Typography variant="subtitle1" className={classes.pinkText}>
+                    {values.round_length * values.num_rounds > 0
+                      ? `Your event will take around ${
+                          values.round_length * values.num_rounds
+                        } minutes`
+                      : "Your event will go on for as long as you'd like"}
                   </Typography>
                   <Grid container direction="row">
                     <Grid
@@ -166,7 +182,6 @@ const CreateEventNew = () => {
                         name="num_rounds"
                         label="Number Of Rounds"
                         type="number"
-                        required
                       />
                     </Grid>
                   </Grid>

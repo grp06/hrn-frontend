@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 const createEventNew = gql`
   mutation createEventNew(
     $host_id: Int!
-    $num_rounds: Int!
+    $num_rounds: Int
     $round_length: Int!
     $start_at: timestamptz!
   ) {
