@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const createEventNew = gql`
-  mutation createEventNew(
+const createChitChat = gql`
+  mutation createChitChat(
     $host_id: Int!
     $num_rounds: Int!
     $round_length: Int!
@@ -21,4 +21,4 @@ const createEventNew = gql`
     }
   }
 `
-export default createEventNew
+export default createChitChat

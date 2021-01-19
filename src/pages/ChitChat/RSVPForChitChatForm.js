@@ -25,9 +25,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const RSVPForEventNewForm = ({ eventNew }) => {
+const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
-  const { host } = eventNew
+  const { host } = chitChat
   const { name: hostName } = host
   return (
     <Formik
@@ -89,4 +89,4 @@ const RSVPForEventNewForm = ({ eventNew }) => {
   )
 }
 
-export default RSVPForEventNewForm
+export default RSVPForChitChatForm

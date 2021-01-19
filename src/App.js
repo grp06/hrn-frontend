@@ -14,7 +14,7 @@ import {
   CheckoutSuccess,
   CreateEvent,
   Event,
-  EventNew,
+  ChitChat,
   MyEvents,
   EventComplete,
   EventGroupVideoChat,
@@ -35,13 +35,13 @@ import {
   SetNewPassword,
   SignUp,
   CelebSignUp,
-  CreateEventNew,
+  CreateChitChat,
   CreatorHome,
 } from './pages'
 import {
   AppProvider,
   EventProvider,
-  EventNewProvider,
+  ChitChatProvider,
   TwilioProvider,
   UserProvider,
   UserEventStatusProvider,
@@ -134,7 +134,7 @@ const App = () => {
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
                       <Route exact path="/create-event" component={CreateEvent} />
-                      <Route exact path="/create-event-v2" component={CreateEventNew} />
+                      <Route exact path="/create-chit-chat" component={CreateChitChat} />
                       <Route exact path="/creator-home" component={CreatorHome} />
                       <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
@@ -142,9 +142,9 @@ const App = () => {
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
-                      <EventNewProvider>
-                        <Route exact path="/events-new/:id" component={EventNew} />
-                      </EventNewProvider>
+                      <ChitChatProvider>
+                        <Route exact path="/chit-chat/:id" component={ChitChat} />
+                      </ChitChatProvider>
                       <EventProvider>
                         <Route
                           exact

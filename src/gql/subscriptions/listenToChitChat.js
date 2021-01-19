@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 
-const listenToEventNew = gql`
-  subscription listenToEventNew($event_id: Int!) {
+const listenToChitChat = gql`
+  subscription listenToChitChat($event_id: Int!) {
     events_new(where: { id: { _eq: $event_id } }) {
       ended_at
       host_id
@@ -28,4 +28,4 @@ const listenToEventNew = gql`
   }
 `
 
-export default listenToEventNew
+export default listenToChitChat

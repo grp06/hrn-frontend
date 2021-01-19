@@ -1,7 +1,7 @@
 export { default as displayOnlineUsers } from './displayOnlineUsers'
 export { default as listenToAllMyConnections } from './listenToAllMyConnections'
 export { default as listenToEvent } from './listenToEvent'
-export { default as listenToEventNew } from './listenToEventNew'
+export { default as listenToChitChat } from './listenToChitChat'
 export { default as listenToPartnersTable } from './listenToPartnersTable'
 export { default as listenToRounds } from './listenToRounds'
 export { default as listenToOnlineEventUsers } from './listenToOnlineEventUsers'

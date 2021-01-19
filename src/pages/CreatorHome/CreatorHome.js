@@ -59,7 +59,7 @@ const CreatorHome = () => {
         type="submit"
         variant="contained"
         className={classes.createEventButton}
-        onClick={() => history.push('/create-event-v2')}
+        onClick={() => history.push('/create-chit-chat')}
       >
         Create Event
       </Button>
