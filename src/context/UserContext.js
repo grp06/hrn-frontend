@@ -6,7 +6,9 @@ import { getUserById } from '../helpers'
 const UserContext = createContext()
 
 const defaultState = {
-  user: {},
+  user: {
+    tags_users: [],
+  },
   userInEvent: false,
   userOnAuthRoute: false,
 }
@@ -64,7 +66,7 @@ const useUserContext = () => {
 }
 
 const UserProvider = ({ children }) => {
-  const [state, dispatch] = useImmer({ ...defaultState })
+  const [state, dispatch] = useImmer(defaultState)
   const { setAppLoading } = useAppContext()
   const history = useHistory()
   const location = useLocation()
@@ -80,20 +82,22 @@ const UserProvider = ({ children }) => {
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
-  const userInEvent = Boolean(
-    pathname.includes('video-room') ||
-      pathname.includes('lobby') ||
-      pathname.includes('group-video-chat')
-  )
-  const isUserOnAuth = Boolean(
-    pathname === '/' ||
-      pathname.includes('sign-up') ||
-      pathname.includes('forgot-password') ||
-      pathname.includes('set-new-password') ||
-      pathname.includes('onboarding') ||
-      pathname.includes('host-onboarding') ||
-      pathname.includes('checkout-success')
-  )
+
+  const eventRoutes = ['video-room', 'lobby', 'group-vide-chat']
+
+  const userInEvent = eventRoutes.some((route) => pathname.includes(route))
+
+  const authRoutes = [
+    'sign-up',
+    'forgot-password',
+    'set-new-password',
+    'onboarding',
+    'host-onboarding',
+    'checkout-success',
+    'sign-up-new',
+  ]
+
+  const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
 
   useEffect(() => {
     const role = localStorage.getItem('role')
@@ -114,7 +118,8 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       dispatch((draft) => {
-        draft.user = userData
+        // TODO: check why Immer isn't making a deep clone of user object
+        draft.user = { ...draft.user, ...userData }
         draft.userInEvent = userInEvent
       })
       return setAppLoading(false)

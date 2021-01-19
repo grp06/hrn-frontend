@@ -69,6 +69,61 @@ const DrawerContent = () => {
   const { name, role, id: userId } = user
   const userIsHost = role && role.includes('host')
 
+  const usersFirstName = name?.split(' ')[0]
+
+  const loggedInRoutes =
+    role === 'celeb' || role === 'fan'
+      ? [
+          {
+            label: usersFirstName,
+            url: '/my-profile',
+            icon: 'user',
+          },
+        ]
+      : [
+          {
+            label: usersFirstName,
+            url: '/my-profile',
+            icon: 'user',
+          },
+          {
+            label: 'Connections',
+            url: '/my-connections',
+            icon: 'users',
+          },
+          {
+            label: 'My Events',
+            url: '/my-events',
+            icon: 'calendar',
+          },
+          {
+            label: 'All Events',
+            url: '/events',
+            icon: 'globe',
+          },
+          {
+            label: role && role.includes('host') ? 'Subscription' : 'Become a Host',
+            url: '/subscription',
+            icon: role && role.includes('host') ? 'credit-card' : 'award',
+          },
+        ]
+
+  const loggedOutRoutes =
+    role === 'celeb' || role === 'fan'
+      ? []
+      : [
+          {
+            label: 'All Events',
+            url: '/events',
+            icon: 'globe',
+          },
+          {
+            label: 'Become a Host',
+            url: '/subscription',
+            icon: 'award',
+          },
+        ]
+
   return (
     <>
       <Grid container justify="flex-start" className={classes.container}>
@@ -82,9 +137,15 @@ const DrawerContent = () => {
           </div>
           <Divider />
           {userIsHost && <CreateEventSidebarButton />}
-          <UserDrawerContent userId={userId} userName={name} role={role} />
+          <UserDrawerContent
+            routes={{ loggedInRoutes, loggedOutRoutes }}
+            userId={userId}
+            userName={name}
+            role={role}
+          />
           {userIsHost && <HostDrawerContent role={role} />}
         </Grid>
+
         <Grid
           container
           direction="column"
