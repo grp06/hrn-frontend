@@ -3,7 +3,13 @@ import FeatherIcon from 'feather-icons-react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { ChitChatCard, MeetCelebButton, RSVPForChitChatForm } from '.'
+import {
+  ChitChatCard,
+  MeetCelebButton,
+  RSVPForChitChatForm,
+  StartChitChatButton,
+  WhatToExpectChitChat,
+} from '.'
 import { Loading } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
@@ -11,9 +17,15 @@ import { makeStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
     color: theme.palette.common.ghostWhite,
-    margin: theme.spacing(2, 'auto'),
+    margin: theme.spacing(3, 'auto'),
     textTransform: 'none',
-    width: '90%',
+    width: '100%',
+  },
+  CTAButton: {
+    marginTop: theme.spacing(4),
+  },
+  bodyContainer: {
+    padding: theme.spacing(2),
   },
 }))
 
@@ -39,27 +51,42 @@ const ChitChat = ({ match }) => {
     return <Loading />
   }
 
+  const renderCTAButton = () => {
+    return (
+      <Grid container direction="row" className={classes.CTAButton}>
+        {userIsHost ? (
+          <StartChitChatButton />
+        ) : (
+          <MeetCelebButton
+            hostName={hostName}
+            modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
+          />
+        )}
+      </Grid>
+    )
+  }
+
   return (
     <Grid container direction="column">
       <ChitChatCard chitChat={chitChat} userIsHost={userIsHost} />
-      <Button
-        variant="outlined"
-        color="primary"
-        size="large"
-        className={classes.copyEventLinkButton}
-      >
-        <Grid item container direction="row" alignItems="center" justify="center">
-          <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
-          <Typography variant="body1" style={{ marginLeft: '8px' }}>
-            Copy event link
-          </Typography>
-        </Grid>
-      </Button>
-      <Typography variant="h2">insert What To Expect Card here</Typography>
-      <MeetCelebButton
-        hostName={hostName}
-        modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
-      />
+      <Grid container direction="column" className={classes.bodyContainer}>
+        <Button
+          variant="outlined"
+          color="primary"
+          size="large"
+          className={classes.copyEventLinkButton}
+        >
+          <Grid item container direction="row" alignItems="center" justify="center">
+            <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
+            <Typography variant="body1" style={{ marginLeft: '8px' }}>
+              Copy event link
+            </Typography>
+          </Grid>
+        </Button>
+        <Typography variant="h4">What to expect</Typography>
+        <WhatToExpectChitChat userIsHost={userIsHost} />
+        {renderCTAButton()}
+      </Grid>
     </Grid>
   )
 }
