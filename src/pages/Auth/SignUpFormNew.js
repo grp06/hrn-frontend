@@ -12,7 +12,7 @@ import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
 
-const { USER_ID, TOKEN } = constants
+const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -111,9 +111,10 @@ const SignUpFormNew = () => {
 
     window.analytics.track('Sign up new')
     localStorage.setItem(USER_ID, id)
+    localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, token)
     // TODO: decide where to send new user
-    history.push('/onboarding-new')
+    history.push('/get-started')
     window.location.reload()
   }
 

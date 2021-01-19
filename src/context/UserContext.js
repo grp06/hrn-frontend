@@ -1,10 +1,8 @@
-import React, { useEffect, createContext, useContext } from 'react'
+import React, { useEffect, useState, createContext, useContext } from 'react'
 import { useImmer } from 'use-immer'
-import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAppContext } from '.'
-import { findUserById } from '../gql/queries'
-
+import { getUserById } from '../helpers'
 const UserContext = createContext()
 
 const defaultState = {
@@ -22,15 +20,9 @@ const useUserContext = () => {
 
   const resetUser = () => {
     dispatch((draft) => {
-      draft.user = {
-        name: '',
-        userId: null,
-        role: '',
-        city: '',
-        shortBio: '',
-        linkedIn_url: '',
-        tags_users: [],
-      }
+      // TODO MAX if we really need to individually set properties, we can
+      // but it seems setting the empty object does the trick
+      draft.user = {}
     })
   }
 
@@ -78,7 +70,7 @@ const UserProvider = ({ children }) => {
   const location = useLocation()
   const { userId } = state.user
   const { pathname } = location
-
+  const [userData, setUserData] = useState(null)
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
   const setNewPasswordPageRegex = /set-new-password/
@@ -103,21 +95,29 @@ const UserProvider = ({ children }) => {
       pathname.includes('checkout-success')
   )
 
-  const { data: userData } = useQuery(findUserById, {
-    variables: { id: userId },
-    skip: !userId,
-  })
+  useEffect(() => {
+    const role = localStorage.getItem('role')
+    const getUserWrapper = async () => {
+      const userDataRes = await getUserById({ userId, role })
+      setUserData(userDataRes.userObj)
+    }
+    if (userId) {
+      try {
+        getUserWrapper()
+      } catch (error) {
+        console.log('error = ', error)
+      }
+    }
+  }, [userId])
 
   // Setting the user state in context after findUserById Query is made
   useEffect(() => {
     if (userData) {
-      if (userData.users.length) {
-        dispatch((draft) => {
-          draft.user = userData.users[0]
-          draft.userInEvent = userInEvent
-        })
-        return setAppLoading(false)
-      }
+      dispatch((draft) => {
+        draft.user = userData
+        draft.userInEvent = userInEvent
+      })
+      return setAppLoading(false)
     }
   }, [userData, userId])
 
@@ -137,6 +137,7 @@ const UserProvider = ({ children }) => {
   // otherwise redirect back to /login
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
+
     if (!localStorageUserId) {
       if (
         !(

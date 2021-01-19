@@ -3,12 +3,12 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { MeetCelebButton, RSVPForEventNewForm } from '.'
 import { Loading } from '../../common'
-import { useAppContext, useEventNewContext, useUserNewContext } from '../../context'
+import { useAppContext, useEventNewContext, useUserContext } from '../../context'
 
 const EventNew = ({ match }) => {
   const { id: eventNewId } = match.params
   const { appLoading } = useAppContext()
-  const { userNew } = useUserNewContext()
+  const { user } = useUserContext()
   const { eventNew, setEventNewId } = useEventNewContext()
   const { event_users_new, host, host_id, id: event_id, start_at, status: event_status } = eventNew
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}

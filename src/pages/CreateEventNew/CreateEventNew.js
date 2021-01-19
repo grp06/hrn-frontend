@@ -11,7 +11,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import { Snack } from '../../common'
-import { useUserNewContext } from '../../context'
+import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
 import { createEventNew } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
@@ -38,8 +38,8 @@ const useStyles = makeStyles((theme) => ({
 const CreateEventNew = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { userNew } = useUserNewContext()
-  const { id: user_id, role } = userNew
+  const { user } = useUserContext()
+  const { id: user_id, role } = user
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState(false)
   const [createEventNewMutation] = useMutation(createEventNew)
 
