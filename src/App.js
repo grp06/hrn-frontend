@@ -36,7 +36,7 @@ import {
   SignUp,
   CelebSignUp,
   CreateEventNew,
-  GetStarted,
+  CreatorHome,
 } from './pages'
 import {
   AppProvider,
@@ -134,8 +134,8 @@ const App = () => {
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
                       <Route exact path="/create-event" component={CreateEvent} />
-                      <Route exact path="/create-event-new" component={CreateEventNew} />
-                      <Route exact path="/get-started" component={GetStarted} />
+                      <Route exact path="/create-event-v2" component={CreateEventNew} />
+                      <Route exact path="/creator-home" component={CreatorHome} />
                       <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />

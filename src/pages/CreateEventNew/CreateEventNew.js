@@ -63,7 +63,7 @@ const CreateEventNew = () => {
       style={{ marginTop: '75px' }}
     >
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
-        Let Your Fans Meet You
+        Create Event
       </Typography>
       <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -110,7 +110,7 @@ const CreateEventNew = () => {
                 alignItems="flex-start"
                 className={classes.sectionContainer}
               >
-                <Typography variant="h3">Basics</Typography>
+                <Typography variant="h3">Event Details</Typography>
                 <Grid container direction="row">
                   <Grid item xs={12} md={6} className={classes.formInputMargin}>
                     <Field
@@ -133,42 +133,22 @@ const CreateEventNew = () => {
                 </Grid>
                 <Grid
                   container
-                  direction="column"
+                  direction="row"
                   justify="flex-start"
                   alignItems="flex-start"
                   className={classes.sectionContainer}
                 >
                   <Typography variant="h3">Duration</Typography>
-                  <Typography variant="body1" className={classes.pinkText}>
-                    Your event will take around {values.round_length * values.num_rounds} minutes
-                  </Typography>
+
                   <Grid container direction="row">
-                    <Grid
-                      container
-                      item
-                      direction="row"
-                      alignItems="flex-end"
-                      xs={12}
-                      md={3}
-                      className={classes.formInputMargin}
-                    >
-                      <Field
-                        component={TextField}
-                        name="round_length"
-                        label="Round Length (minutes)"
-                        type="number"
-                        required
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={3} className={classes.formInputMargin}>
-                      <Field
-                        component={TextField}
-                        name="num_rounds"
-                        label="Number Of Rounds"
-                        type="number"
-                        required
-                      />
-                    </Grid>
+                    <Field
+                      component={TextField}
+                      name="round_length"
+                      label="Length of each conversation (minutes)"
+                      type="number"
+                      required
+                      className={classes.conversationLength}
+                    />
                   </Grid>
                 </Grid>
               </Grid>

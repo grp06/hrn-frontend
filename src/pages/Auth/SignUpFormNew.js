@@ -114,7 +114,7 @@ const SignUpFormNew = () => {
     localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, token)
     // TODO: decide where to send new user
-    history.push('/get-started')
+    history.push('/creator-home')
     window.location.reload()
   }
 
