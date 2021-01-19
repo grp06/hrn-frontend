@@ -34,7 +34,7 @@ import {
   Subscription,
   SetNewPassword,
   SignUp,
-  SignUpNew,
+  CelebSignUp,
   CreateEventNew,
   GetStarted,
 } from './pages'
@@ -122,7 +122,7 @@ const App = () => {
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
                       <Route exact path="/sign-up" component={SignUp} />
-                      <Route exact path="/sign-up-new" component={SignUpNew} />
+                      <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
                       <Route
                         exact

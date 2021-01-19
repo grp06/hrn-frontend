@@ -1,6 +1,6 @@
 import React from 'react'
 import { SignUpFormNew } from '../Auth'
 
-export const SignUpNew = () => {
+export const CelebSignUp = () => {
   return <SignUpFormNew />
 }
