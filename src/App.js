@@ -14,6 +14,7 @@ import {
   CheckoutSuccess,
   CreateEvent,
   Event,
+  EventNew,
   MyEvents,
   EventComplete,
   EventGroupVideoChat,
@@ -33,11 +34,14 @@ import {
   Subscription,
   SetNewPassword,
   SignUp,
-  SignUpNew,
+  CelebSignUp,
+  CreateEventNew,
+  GetStarted,
 } from './pages'
 import {
   AppProvider,
   EventProvider,
+  EventNewProvider,
   TwilioProvider,
   UserProvider,
   UserEventStatusProvider,
@@ -118,7 +122,7 @@ const App = () => {
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
                       <Route exact path="/sign-up" component={SignUp} />
-                      <Route exact path="/sign-up-new" component={SignUpNew} />
+                      <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
                       <Route
                         exact
@@ -130,13 +134,17 @@ const App = () => {
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
                       <Route exact path="/create-event" component={CreateEvent} />
+                      <Route exact path="/create-event-new" component={CreateEventNew} />
+                      <Route exact path="/get-started" component={GetStarted} />
                       <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
-
+                      <EventNewProvider>
+                        <Route exact path="/events-new/:id" component={EventNew} />
+                      </EventNewProvider>
                       <EventProvider>
                         <Route
                           exact

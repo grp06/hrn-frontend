@@ -54,6 +54,7 @@ const HeaderDrawer = () => {
     !userOnAuthRoute &&
     !userInEvent && (
       <div className={classes.root}>
+        {/* This is the hamburger menu bar that opens the drawer on mobile */}
         <Hidden mdUp implementation="css">
           <AppBar position="fixed" className={classes.appBar}>
             <Toolbar disableGutters>
@@ -69,6 +70,7 @@ const HeaderDrawer = () => {
             </Toolbar>
           </AppBar>
         </Hidden>
+        {/* This is the mobile drawer/sidebar */}
         <Hidden smUp implementation="css">
           <Drawer
             container={container}
@@ -85,6 +87,7 @@ const HeaderDrawer = () => {
             <DrawerContent />
           </Drawer>
         </Hidden>
+        {/* This is the desktop drawer/sidebar */}
         <Hidden xsDown implementation="css">
           <Drawer
             variant="permanent"

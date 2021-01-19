@@ -1,8 +1,8 @@
 {
   "env": {
     "browser": true,
-    "es6": true,
-    "jest/globalss":true
+    "es6": true
+    // "jest/globals": true
   },
   "extends": ["airbnb", "prettier", "airbnb/hooks"],
   "plugins": ["prettier"],

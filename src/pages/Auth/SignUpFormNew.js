@@ -12,7 +12,7 @@ import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
 
-const { USER_ID, TOKEN } = constants
+const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -60,7 +60,8 @@ const SignUpFormNew = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showErrorSnack, setShowErrorSnack] = useState(false)
+  const [venmo, setVenmo] = useState('')
+  const [cashApp, setCashApp] = useState('')
   const [showSignupSuccessSnack, setShowSignupSuccessSnack] = useState(false)
   const [error, setError] = useState(null)
 
@@ -70,8 +71,10 @@ const SignUpFormNew = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    // setError(false)
-
+    if (!cashApp && !venmo) {
+      setError('You have to provide either your Cash App or Venmo username')
+      return
+    }
     let signUpResponse
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
@@ -81,13 +84,13 @@ const SignUpFormNew = () => {
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true,
         },
-        body: JSON.stringify({ name, email, password, role: 'celeb' }),
+        body: JSON.stringify({ name, email, password, role: 'celeb', venmo, cash_app: cashApp }),
       })
       // cant we just chain .json() to the above res?
       signUpResponse = await res.json()
 
       if (signUpResponse.error) {
-        setShowErrorSnack(true)
+        setError(signUpResponse.error)
         throw signUpResponse.error
       }
     } catch (err) {
@@ -108,9 +111,10 @@ const SignUpFormNew = () => {
 
     window.analytics.track('Sign up new')
     localStorage.setItem(USER_ID, id)
+    localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, token)
-
-    history.push('/onboarding-new')
+    // TODO: decide where to send new user
+    history.push('/get-started')
     window.location.reload()
   }
 
@@ -154,6 +158,24 @@ const SignUpFormNew = () => {
               </Grid>
               <Grid item>
                 <TextField
+                  label="Venmo username"
+                  fullWidth
+                  className={classes.input}
+                  value={venmo}
+                  onChange={(e) => setVenmo(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  label="Cash app username"
+                  fullWidth
+                  className={classes.input}
+                  value={cashApp}
+                  onChange={(e) => setCashApp(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
                   id="password"
                   label="Password (8 chars min)"
                   type="password"
@@ -189,8 +211,8 @@ const SignUpFormNew = () => {
                 </Link>
               </Typography>
               <Snack
-                open={showErrorSnack}
-                onClose={() => setShowErrorSnack(false)}
+                open={Boolean(error)}
+                onClose={() => setError('')}
                 severity="error"
                 snackMessage={error}
               />

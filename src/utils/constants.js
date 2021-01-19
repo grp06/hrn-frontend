@@ -21,6 +21,7 @@ const constants = {
   bannedUserIds: [3477, 2329],
   USER_ID: 'userId',
   TOKEN: 'token',
+  ROLE: 'role',
 }
 
 export default constants
