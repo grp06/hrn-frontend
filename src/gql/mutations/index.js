@@ -1,6 +1,6 @@
 export { default as addFriend } from './addFriend'
 export { default as createEvent } from './createEvent'
-export { default as createEventNew } from './createEventNew'
+export { default as createChitChat } from './createChitChat'
 export { default as createUser } from './createUser'
 export { default as deleteEvent } from './deleteEvent'
 export { default as deleteEventUser } from './deleteEventUser'

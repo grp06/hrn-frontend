@@ -1,6 +1,6 @@
 export * from './AppContext'
 export * from './EventContext'
-export * from './EventNewContext'
+export * from './ChitChatContext'
 export * from './TwilioContext'
 export * from './UserContext'
 export * from './UserEventStatusContext'

@@ -13,7 +13,7 @@ import { useMutation } from 'react-apollo'
 import { Snack } from '../../common'
 import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
-import { createEventNew } from '../../gql/mutations'
+import { createChitChat } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -35,13 +35,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreateEventNew = () => {
+const CreateChitChat = () => {
   const classes = useStyles()
   const history = useHistory()
   const { user } = useUserContext()
   const { id: user_id, role } = user
-  const [showCreateEventSuccess, setShowCreateEventSuccess] = useState(false)
-  const [createEventNewMutation] = useMutation(createEventNew)
+  const [showCreateChitChatSuccess, setShowCreateChitChatSuccess] = useState(false)
+  const [createChitChatMutation] = useMutation(createChitChat)
 
   const getEventStartAt = (eventDate, eventTime) => {
     const dateISOString = eventDate.toISOString()
@@ -76,10 +76,10 @@ const CreateEventNew = () => {
           }}
           onSubmit={async (values, { setSubmitting }) => {
             const { event_date, event_time, num_rounds, round_length } = values
-            let createEventResponse
+            let createChitChatResponse
             const start_at = getEventStartAt(event_date, event_time)
             try {
-              createEventResponse = await createEventNewMutation({
+              createChitChatResponse = await createChitChatMutation({
                 variables: {
                   host_id: user_id,
                   num_rounds,
@@ -94,11 +94,11 @@ const CreateEventNew = () => {
             } catch (error) {
               console.log('error')
             }
-            const { id: event_id } = createEventResponse.data.insert_events_new.returning[0]
-            setShowCreateEventSuccess(true)
+            const { id: event_id } = createChitChatResponse.data.insert_events_new.returning[0]
+            setShowCreateChitChatSuccess(true)
             await sleep(800)
             setSubmitting(false)
-            history.push(`/events-new/${event_id}`)
+            history.push(`/chit-chat/${event_id}`)
           }}
         >
           {({ submitForm, isSubmitting, values }) => (
@@ -166,8 +166,8 @@ const CreateEventNew = () => {
           )}
         </Formik>
         <Snack
-          open={showCreateEventSuccess}
-          onClose={() => setShowCreateEventSuccess(false)}
+          open={showCreateChitChatSuccess}
+          onClose={() => setShowCreateChitChatSuccess(false)}
           severity="success"
           snackMessage="Event Created/Updated"
         />
@@ -176,4 +176,4 @@ const CreateEventNew = () => {
   )
 }
 
-export default CreateEventNew
+export default CreateChitChat
