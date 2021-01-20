@@ -75,10 +75,12 @@ const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null)
   const specificEventPageRegex = /\/events\/\d+[\/]?$/
   const eventsPageRegex = /\/events[\/]?$/
+  const specificChitChatPageRegex = /\/chit-chat\/\d+[\/]?$/
   const setNewPasswordPageRegex = /set-new-password/
 
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
+  const userOnSpecificChitChatPage = Boolean(pathname.match(specificChitChatPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
@@ -148,6 +150,7 @@ const UserProvider = ({ children }) => {
         !(
           userOnEventsPage ||
           userOnSpecificEventPage ||
+          userOnSpecificChitChatPage ||
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
           userOnSubscriptionPage

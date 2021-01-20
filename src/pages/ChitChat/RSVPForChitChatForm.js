@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
+import * as Yup from 'yup'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
+import { Snack } from '../../common'
+import { signupByRole } from '../../helpers'
+import { constants } from '../../utils'
 import { makeStyles } from '@material-ui/styles'
+
+const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   formContainer: {
@@ -25,67 +32,120 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
+const RSVPSchema = Yup.object().shape({
+  name: Yup.string().min(2, 'Too Short!').required('Required'),
+  phone_number: Yup.string().min(7, 'Too Short!').required('Required'),
+})
+
 const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
+  const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
+  const [formSubmitting, setFormSubmitting] = useState(false)
   const { host } = chitChat
   const { name: hostName } = host
   return (
-    <Formik
-      initialValues={{
-        phone_number: '',
-        name: '',
-      }}
-      onSubmit={async (values, { setSubmitting }) => {
-        const { phone_number, name } = values
-        // TODO hit the backend and create a user_new
-        // get the id from that
-        // create a mutation that makes an entry in event_users_new
-        setSubmitting(false)
-      }}
-    >
-      {({ submitForm, isSubmitting, values }) => (
-        <Form className={classes.formContainer}>
-          <Grid
-            container
-            direction="column"
-            justify="center"
-            alignItems="center"
-            className={classes.sectionContainer}
-          >
-            <Typography variant="h3">
-              Get the chance to meet {hostName}{' '}
-              <span role="img" aria-label="hooray smiley">
-                🥳
-              </span>
-            </Typography>
-            <Grid container direction="row">
-              <Grid item xs={12} className={classes.formInputMargin}>
-                <Field component={TextField} name="name" label="Your name" type="text" required />
-              </Grid>
-              <Grid item xs={12} className={classes.formInputMargin}>
-                <Field
-                  component={TextField}
-                  name="phone_number"
-                  label="Your phone number"
-                  type="text"
-                  required
-                />
+    <div>
+      <Formik
+        initialValues={{
+          phone_number: '',
+          name: '',
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          setFormSubmitting(true)
+          const { phone_number, name } = values
+          if (!phone_number || !name) {
+            setRSVPFormErrorMessage('something seems to be empty  🧐')
+            setFormSubmitting(false)
+            return
+          }
+          let signupResponse
+          try {
+            signupResponse = await signupByRole({
+              role: 'fan',
+              userInfo: { name, phone_number },
+            })
+            if (signupResponse.error) {
+              setRSVPFormErrorMessage(signupResponse.error)
+              throw signupResponse.error
+            }
+          } catch (err) {
+            console.log('err === ', err)
+            setRSVPFormErrorMessage(err)
+            setFormSubmitting(false)
+          }
+
+          const { token, id, role } = signupResponse
+          window.analytics.identify(id, {
+            name,
+            phone_number,
+            role,
+          })
+          window.analytics.track('Sign up fan new')
+          localStorage.setItem(USER_ID, id)
+          localStorage.setItem(ROLE, role)
+          localStorage.setItem(TOKEN, token)
+          console.log('token ->', token)
+          console.log('role ->', role)
+          console.log('id ->', id)
+
+          // get the id from that
+          // create a mutation that makes an entry in event_users_new
+          setSubmitting(false)
+        }}
+        validationSchema={RSVPSchema}
+      >
+        {({ submitForm, dirty, isValid, values }) => (
+          <Form className={classes.formContainer}>
+            <Grid
+              container
+              direction="column"
+              justify="center"
+              alignItems="center"
+              className={classes.sectionContainer}
+            >
+              <Typography variant="h3">
+                Get the chance to meet {hostName}{' '}
+                <span role="img" aria-label="hooray smiley">
+                  🥳
+                </span>
+              </Typography>
+              <Grid container direction="row">
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field component={TextField} name="name" label="Your name" type="text" required />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="phone_number"
+                    label="Your phone number"
+                    type="text"
+                    required
+                  />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid container justify="center" alignItems="center">
-            <Button
-              variant="contained"
-              color="primary"
-              disabled={isSubmitting}
-              onClick={submitForm}
-            >
-              Sign me up!
-            </Button>
-          </Grid>
-        </Form>
-      )}
-    </Formik>
+            <Grid container justify="center" alignItems="center">
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
+                disabled={formSubmitting || !isValid || !dirty}
+                onClick={submitForm}
+              >
+                Sign me up!
+              </Button>
+            </Grid>
+          </Form>
+        )}
+      </Formik>
+      <Snack
+        open={Boolean(RSVPFormErrorMessage)}
+        onClose={() => setRSVPFormErrorMessage('')}
+        severity="error"
+        duration={3000}
+        snackMessage={RSVPFormErrorMessage}
+      />
+    </div>
   )
 }
 
