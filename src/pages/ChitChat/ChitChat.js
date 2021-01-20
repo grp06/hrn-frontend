@@ -36,7 +36,7 @@ const ChitChat = ({ match }) => {
   const { user } = useUserContext()
   const { id: user_id } = user
   const { chitChat, setEventNewId } = useChitChatContext()
-  const { event_users_new, host, host_id, id: event_id, start_at, status: event_status } = chitChat
+  const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const chitChatSet = Object.keys(chitChat).length > 1
@@ -59,7 +59,7 @@ const ChitChat = ({ match }) => {
         ) : (
           <MeetCelebButton
             hostName={hostName}
-            modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
+            modalBody={<RSVPForChitChatForm chitChat={chitChat} chitChatId={chitChatId} />}
           />
         )}
       </Grid>

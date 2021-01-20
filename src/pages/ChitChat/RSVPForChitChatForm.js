@@ -6,10 +6,12 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
+import { useMutation } from '@apollo/react-hooks'
+import { makeStyles } from '@material-ui/styles'
 import { Snack } from '../../common'
 import { signupByRole } from '../../helpers'
 import { constants } from '../../utils'
-import { makeStyles } from '@material-ui/styles'
+import { insertEventUserNew } from '../../gql/mutations'
 
 const { USER_ID, TOKEN, ROLE } = constants
 
@@ -37,12 +39,14 @@ const RSVPSchema = Yup.object().shape({
   phone_number: Yup.string().min(7, 'Too Short!').required('Required'),
 })
 
-const RSVPForChitChatForm = ({ chitChat }) => {
+const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
   const { host } = chitChat
   const { name: hostName } = host
+  const [insertEventUserNewMutation] = useMutation(insertEventUserNew)
+
   return (
     <div>
       <Formik
@@ -84,13 +88,18 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           localStorage.setItem(USER_ID, id)
           localStorage.setItem(ROLE, role)
           localStorage.setItem(TOKEN, token)
-          console.log('token ->', token)
-          console.log('role ->', role)
-          console.log('id ->', id)
-
-          // get the id from that
           // create a mutation that makes an entry in event_users_new
-          setSubmitting(false)
+          try {
+            await insertEventUserNewMutation({
+              variables: {
+                event_id: chitChatId,
+                user_id: id,
+              },
+            })
+          } catch (error) {
+            console.log('error = ', error)
+          }
+          setFormSubmitting(false)
         }}
         validationSchema={RSVPSchema}
       >

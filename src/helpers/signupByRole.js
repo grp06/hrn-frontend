@@ -1,6 +1,6 @@
 const signupByRole = async ({ role, userInfo }) => {
   const { cashApp, email, name, password, phone_number, venmo } = userInfo
-  return fetch(`${process.env.REACT_APP_API_URL}/api/signup`, {
+  return fetch(`${process.env.REACT_APP_API_URL}/api/sign-up-new`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
