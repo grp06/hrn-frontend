@@ -25,6 +25,7 @@ import {
   HRNAnalytics,
   Lobby,
   LoginForm,
+  LoginNew,
   MyProfile,
   MyConnections,
   VideoRoom,
@@ -121,6 +122,7 @@ const App = () => {
                   <Switch>
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
+                      <Route exact path="/login-new" component={LoginNew} />
                       <Route exact path="/sign-up" component={SignUp} />
                       <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
