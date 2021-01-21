@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 const CelebProfile = () => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, updateUserNewObject } = useUserContext()
   const [contentState, setContentState] = useState('celeb-profile')
 
   if (appLoading || Object.keys(user).length < 2) {
@@ -28,6 +28,7 @@ const CelebProfile = () => {
           <EditCelebProfile
             celeb={user}
             setCelebProfileContent={(contentState) => setContentState(contentState)}
+            updateUserNewObjectInContext={(userObject) => updateUserNewObject(userObject)}
           />
         )
       default:
