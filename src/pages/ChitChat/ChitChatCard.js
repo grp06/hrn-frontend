@@ -65,7 +65,7 @@ const ChitChatCard = ({ chitChat, userIsHost }) => {
     <Grid container direction="row" className={classes.cardContainer}>
       <Grid container direction="column" justify="flex-end">
         <Typography variant="h2" style={{ marginBottom: '8px' }}>
-          Meet with {hostName}
+          Meet {hostName}
         </Typography>
         <Grid item container direction="row" alignItems="flex-end">
           <FeatherIcon icon="calendar" stroke="#f4f6fa" size="18" />
