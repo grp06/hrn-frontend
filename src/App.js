@@ -10,6 +10,7 @@ import './intercom.css'
 
 import { ErrorBoundary } from './common'
 import {
+  CelebProfile,
   Checkout,
   CheckoutSuccess,
   CreateEvent,
@@ -132,6 +133,7 @@ const App = () => {
                         component={SetNewPassword}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />
+                      <Route exact path="/celeb-profile" component={CelebProfile} />
                       <Route exact path="/host-onboarding" component={HostOnboarding} />
                       <Route exact path="/my-profile" component={MyProfile} />
                       <Route exact path="/my-connections" component={MyConnections} />
