@@ -97,10 +97,7 @@ const LoginFormNew = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h2" className={classes.formHeader}>
-                  Welcome{' '}
-                  <span role="img" aria-label="hand wave">
-                    👋
-                  </span>
+                  Creator Login
                 </Typography>
               </Grid>
             </Grid>
