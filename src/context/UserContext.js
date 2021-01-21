@@ -2,7 +2,7 @@ import React, { useEffect, useState, createContext, useContext } from 'react'
 import { useImmer } from 'use-immer'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAppContext } from '.'
-import { getUserById } from '../helpers'
+import { getUserById, getUserNewById } from '../helpers'
 const UserContext = createContext()
 
 const defaultState = {
@@ -83,6 +83,7 @@ const UserProvider = ({ children }) => {
   const userOnSpecificChitChatPage = Boolean(pathname.match(specificChitChatPageRegex))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
+  const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
   const eventRoutes = ['video-room', 'lobby', 'group-vide-chat']
@@ -97,6 +98,7 @@ const UserProvider = ({ children }) => {
     'host-onboarding',
     'checkout-success',
     'sign-up-new',
+    'login-new',
   ]
 
   const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
@@ -104,7 +106,10 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const role = localStorage.getItem('role')
     const getUserWrapper = async () => {
-      const userDataRes = await getUserById({ userId, role })
+      const userDataRes =
+        role === 'fan' || role === 'celeb'
+          ? await getUserNewById({ userId })
+          : await getUserById({ userId })
       setUserData(userDataRes.userObj)
     }
     if (userId) {
@@ -153,7 +158,8 @@ const UserProvider = ({ children }) => {
           userOnSpecificChitChatPage ||
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
-          userOnSubscriptionPage
+          userOnSubscriptionPage ||
+          userOnLoginNewPage
         )
       ) {
         history.push('/')

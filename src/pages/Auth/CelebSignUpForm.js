@@ -5,12 +5,12 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Link, Redirect, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { constants } from '../../utils'
 import { FloatCardMedium, Snack } from '../../common'
 import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
-import { sleep } from '../../helpers'
+import { sleep, signupUserNew } from '../../helpers'
 
 const { USER_ID, TOKEN, ROLE } = constants
 
@@ -75,23 +75,16 @@ const CelebSignUpForm = () => {
       setError('You have to provide either your Cash App or Venmo username')
       return
     }
-    let signUpResponse
+    let signupResponse
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/sign-up-new`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ name, email, password, role: 'celeb', venmo, cash_app: cashApp }),
+      signupResponse = await signupUserNew({
+        role: 'celeb',
+        userInfo: { cash_app: cashApp, email, name, password, venmo },
       })
-      // cant we just chain .json() to the above res?
-      signUpResponse = await res.json()
 
-      if (signUpResponse.error) {
-        setError(signUpResponse.error)
-        throw signUpResponse.error
+      if (signupResponse.error) {
+        setError(signupResponse.error)
+        throw signupResponse.error
       }
     } catch (err) {
       console.log('err === ', err)
@@ -102,7 +95,7 @@ const CelebSignUpForm = () => {
 
     await sleep(800)
 
-    const { token, id, role } = signUpResponse
+    const { token, id, role } = signupResponse
     window.analytics.identify(id, {
       name,
       email,

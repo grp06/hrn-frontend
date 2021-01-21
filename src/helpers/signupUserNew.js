@@ -1,4 +1,4 @@
-const signupByRole = async ({ role, userInfo }) => {
+const signupUserNew = async ({ role, userInfo }) => {
   const { cashApp, email, name, password, phone_number, venmo } = userInfo
   return fetch(`${process.env.REACT_APP_API_URL}/api/sign-up-new`, {
     method: 'POST',
@@ -19,4 +19,4 @@ const signupByRole = async ({ role, userInfo }) => {
   }).then((res) => res.json())
 }
 
-export default signupByRole
+export default signupUserNew

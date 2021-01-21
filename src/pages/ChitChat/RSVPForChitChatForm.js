@@ -9,7 +9,7 @@ import { TextField } from 'formik-material-ui'
 import { useMutation } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 import { Snack } from '../../common'
-import { signupByRole } from '../../helpers'
+import { signupUserNew } from '../../helpers'
 import { constants } from '../../utils'
 import { insertEventUserNew } from '../../gql/mutations'
 
@@ -64,7 +64,7 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
           }
           let signupResponse
           try {
-            signupResponse = await signupByRole({
+            signupResponse = await signupUserNew({
               role: 'fan',
               userInfo: { name, phone_number },
             })
