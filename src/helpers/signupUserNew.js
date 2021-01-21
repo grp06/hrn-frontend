@@ -1,4 +1,4 @@
-const signupUserNew = async ({ role, userInfo }) => {
+const signupUserNew = async ({ role, userInfo, chitChatId }) => {
   const { cashApp, email, name, password, phone_number, venmo } = userInfo
   return fetch(`${process.env.REACT_APP_API_URL}/api/sign-up-new`, {
     method: 'POST',
@@ -15,6 +15,7 @@ const signupUserNew = async ({ role, userInfo }) => {
       phone_number,
       role,
       venmo,
+      chitChatId,
     }),
   }).then((res) => res.json())
 }

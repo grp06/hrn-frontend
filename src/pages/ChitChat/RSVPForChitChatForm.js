@@ -6,12 +6,10 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import { useMutation } from '@apollo/react-hooks'
 import { makeStyles } from '@material-ui/styles'
 import { Snack } from '../../common'
 import { signupUserNew } from '../../helpers'
 import { constants } from '../../utils'
-import { insertEventUserNew } from '../../gql/mutations'
 
 const { USER_ID, TOKEN, ROLE } = constants
 
@@ -45,7 +43,6 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
   const [formSubmitting, setFormSubmitting] = useState(false)
   const { host } = chitChat
   const { name: hostName } = host
-  const [insertEventUserNewMutation] = useMutation(insertEventUserNew)
 
   return (
     <div>
@@ -67,7 +64,9 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
             signupResponse = await signupUserNew({
               role: 'fan',
               userInfo: { name, phone_number },
+              chitChatId,
             })
+            console.log('🚀 ~ onSubmit={ ~ signupResponse', signupResponse)
             if (signupResponse.error) {
               setRSVPFormErrorMessage(signupResponse.error)
               throw signupResponse.error
@@ -88,17 +87,7 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
           localStorage.setItem(USER_ID, id)
           localStorage.setItem(ROLE, role)
           localStorage.setItem(TOKEN, token)
-          // create a mutation that makes an entry in event_users_new
-          try {
-            await insertEventUserNewMutation({
-              variables: {
-                event_id: chitChatId,
-                user_id: id,
-              },
-            })
-          } catch (error) {
-            console.log('error = ', error)
-          }
+
           setFormSubmitting(false)
         }}
         validationSchema={RSVPSchema}
