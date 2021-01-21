@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import * as Yup from 'yup'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
@@ -25,6 +27,10 @@ const useStyles = makeStyles((theme) => ({
   formInputMargin: {
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
+  },
+  phoneInputClass: {
+    width: '100%',
+    background: 'blue',
   },
   pinkText: {
     color: theme.palette.common.basePink,
@@ -103,7 +109,7 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
         }}
         validationSchema={RSVPSchema}
       >
-        {({ submitForm, dirty, isValid, values }) => (
+        {({ dirty, isValid, submitForm }) => (
           <Form className={classes.formContainer}>
             <Grid
               container
@@ -123,13 +129,34 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
                   <Field component={TextField} name="name" label="Your name" type="text" required />
                 </Grid>
                 <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="phone_number"
-                    label="Your phone number"
-                    type="text"
-                    required
-                  />
+                  <Field name="phone_number" label="Your phone number" required>
+                    {({ form }) => (
+                      <PhoneInput
+                        inputProps={{ name: 'phone_number', required: true, autoFocus: true }}
+                        inputStyle={{
+                          width: '100%',
+                          background: '#262626',
+                          color: '#E2E8F2',
+                          border: 'none',
+                          borderBottom: '2px solid #3e4042',
+                        }}
+                        buttonStyle={{
+                          background: '#262626',
+                          border: '1px solid #3e4042',
+                        }}
+                        dropdownStyle={{
+                          width: '200px',
+                          background: '#262626',
+                          color: '#E2E8F2',
+                        }}
+                        country={'us'}
+                        value={form.values.phone_number}
+                        onChange={(phoneNumber) => {
+                          form.setFieldValue('phone_number', phoneNumber)
+                        }}
+                      />
+                    )}
+                  </Field>
                 </Grid>
               </Grid>
             </Grid>
