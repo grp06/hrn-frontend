@@ -34,10 +34,20 @@ const useStyles = makeStyles((theme) => ({
 
 const EditCelebProfile = ({ celeb, setCelebProfileContent }) => {
   const classes = useStyles()
-  const { cash_app, email, name, profile_pic_url, venmo } = celeb
+  const { cash_app, email: celebsEmail, name: celebsName, profile_pic_url, venmo } = celeb
 
   const handleFormClose = () => {
     setCelebProfileContent('celeb-profile')
+  }
+
+  const handleFormSubmit = async (values) => {
+    const celebChangedName = !(values.name === celebsName)
+    const celebChangedEmail = !(values.email === celebsEmail)
+    const celebChangedCashApp = !(values.cash_app === cash_app)
+    const celebChangedVenmo = !(values.venmo === venmo)
+
+    if (celebChangedName || celebChangedEmail || celebChangedCashApp || celebChangedVenmo) {
+    }
   }
 
   return (
@@ -45,8 +55,8 @@ const EditCelebProfile = ({ celeb, setCelebProfileContent }) => {
       onSubmit={() => console.log('hello')}
       initialValues={{
         cash_app: cash_app || '',
-        email,
-        name,
+        email: celebsEmail,
+        name: celebsName,
         venmo: venmo || '',
       }}
     >

@@ -83,6 +83,7 @@ const CelebProfilePreview = ({ celeb, setCelebProfileContent }) => {
   const history = useHistory()
   const { cash_app, email, name, profile_pic_url, venmo } = celeb
   const eventIdInLS = localStorage.getItem('eventId')
+
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <div className={classes.wrap}>
