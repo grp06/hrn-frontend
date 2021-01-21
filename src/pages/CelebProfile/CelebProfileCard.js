@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CelebProfilePreview = ({ celeb, setCelebProfileContent }) => {
+const CelebProfilePreview = ({ celeb, setIsEditing }) => {
   const classes = useStyles()
   const history = useHistory()
   const { cash_app, email, name, profile_pic_url, venmo, password } = celeb
@@ -107,7 +107,7 @@ const CelebProfilePreview = ({ celeb, setCelebProfileContent }) => {
           icon="edit"
           stroke="#f4f6fa"
           size="22"
-          onClick={() => setCelebProfileContent('edit-celeb-profile')}
+          onClick={() => setIsEditing(true)}
         />
       </div>
       <form className={classes.form}>
