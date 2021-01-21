@@ -67,8 +67,8 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
-  console.log('🚀 ~ DrawerContent ~ role', role)
   const userIsHost = role && role.includes('host')
+  const onNewApp = window.location.pathname.includes('chit-chat')
 
   const usersFirstName = name?.split(' ')[0]
 
@@ -110,7 +110,7 @@ const DrawerContent = () => {
         ]
 
   const loggedOutRoutes =
-    role === 'celeb' || role === 'fan'
+    !role && onNewApp
       ? []
       : [
           {

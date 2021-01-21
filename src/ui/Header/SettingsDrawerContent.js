@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const SettingsDrawerContent = ({ resetUser, userId }) => {
   const classes = useStyles()
   const history = useHistory()
+  const onNewApp = window.location.pathname.includes('chit-chat')
 
   const handleLogout = () => {
     window.analytics && window.analytics.track('logged out')
@@ -35,6 +36,7 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
     history.push('/')
   }
 
+  const loginRoute = onNewApp ? '/login-new' : '/'
   const renderLoginOrLogout = () => {
     return userId ? (
       <ListItem button disableRipple onClick={() => handleLogout()} className={classes.listItem}>
@@ -46,7 +48,12 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
         </Grid>
       </ListItem>
     ) : (
-      <ListItem button disableRipple onClick={() => history.push('/')} className={classes.listItem}>
+      <ListItem
+        button
+        disableRipple
+        onClick={() => history.push(loginRoute)}
+        className={classes.listItem}
+      >
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
             <FeatherIcon icon="log-in" stroke="#f4f6fa" size="24" />
