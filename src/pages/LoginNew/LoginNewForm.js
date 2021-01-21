@@ -11,7 +11,7 @@ import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep, loginUserNew } from '../../helpers'
 import { constants } from '../../utils'
 
-const { TOKEN, USER_ID } = constants
+const { TOKEN, USER_ID, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -69,19 +69,24 @@ const LoginFormNew = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault()
     const loginResponse = await loginUserNew({ email, password })
+    const { id, token, role } = loginResponse
 
     if (!loginResponse.token) {
       setShowErrorSnack(true)
       return
     }
+    localStorage.setItem(TOKEN, token)
+    localStorage.setItem(USER_ID, id)
+    localStorage.setItem(ROLE, role)
 
     setShowLoginSuccessSnack(true)
     await sleep(500)
 
-    const { id, token } = loginResponse
-    localStorage.setItem(TOKEN, token)
-    localStorage.setItem(USER_ID, id)
+    console.log('🚀 ~ handleFormSubmit ~ loginResponse', loginResponse)
     history.push('/creator-home')
+    // I'm only doing this here because in DrawerContent role is undefined at this point.
+    // and you have to reload to make the sidebar work correctly. Lazy but I don't wanna work on that noow - George
+    window.location.reload()
   }
 
   return (

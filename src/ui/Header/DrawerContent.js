@@ -67,6 +67,7 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
+  console.log('🚀 ~ DrawerContent ~ role', role)
   const userIsHost = role && role.includes('host')
 
   const usersFirstName = name?.split(' ')[0]
