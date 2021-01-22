@@ -37,7 +37,7 @@ const RSVPSchema = Yup.object().shape({
   phone_number: Yup.string().min(7, 'Too Short!').required('Required'),
 })
 
-const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
+const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
@@ -64,7 +64,7 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
             signupResponse = await signupUserNew({
               role: 'fan',
               userInfo: { name, phone_number },
-              chitChatId,
+              chitChat,
             })
             console.log('🚀 ~ onSubmit={ ~ signupResponse', signupResponse)
             if (signupResponse.error) {
@@ -74,7 +74,9 @@ const RSVPForChitChatForm = ({ chitChat, chitChatId }) => {
           } catch (err) {
             console.log('err === ', err)
             setRSVPFormErrorMessage(err)
+            // returning because we dont wanna do the below stuff if we error our
             setFormSubmitting(false)
+            return
           }
 
           const { token, id, role } = signupResponse
