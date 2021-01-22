@@ -83,7 +83,7 @@ const ChitChat = ({ match }) => {
   }
 
   const renderCopyLinkButton = () =>
-    user_id === host_id && (
+    userIsHost && (
       <Button
         variant="outlined"
         color="primary"
@@ -103,7 +103,7 @@ const ChitChat = ({ match }) => {
     console.log('user_id = ', user_id)
     return u.user.id === user_id
   })
-  console.log('🚀 ~ ChitChat ~ queueNumber', queueNumber)
+
   const renderQueueText = () => {
     if (queueNumber === 0) {
       return `You're up next! You'll speak with ${hostName} soon!`
@@ -115,7 +115,7 @@ const ChitChat = ({ match }) => {
     )
   }
   const renderFanMainContent = () =>
-    user_id !== host_id && (
+    userIsHost && (
       <Grid direction="column" container className={classes.fanMainContent}>
         <Typography variant="h3">You are now in the queue</Typography>
         <div className={classes.queueCard}>
