@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, useFormik } from 'formik'
 import { TextField } from 'formik-material-ui'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -36,59 +36,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EditCelebProfile = ({ celeb, setCelebProfileContent, updateUserNewObjectInContext }) => {
+const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext }) => {
   const classes = useStyles()
-  const {
-    cash_app,
-    email: celebsEmail,
-    id: celebsId,
-    name: celebsName,
-    profile_pic_url,
-    venmo,
-  } = celeb
+  const { cash_app = '', email, id: celebsId, name, profile_pic_url, venmo = '' } = celeb
   const [updateUserNewMutation] = useMutation(updateUserNew)
   const [showUpdateSuccessSnack, setShowUpdateSuccessSnack] = useState(false)
 
   const handleFormClose = () => {
-    setCelebProfileContent('celeb-profile')
+    setIsEditing(false)
   }
+
+  const prevCelebValues = { name, email, cash_app, venmo }
 
   const handleFormSubmit = async ({ setSubmitting, values }) => {
     setSubmitting(true)
-    const celebChangedName = !(values.name === celebsName)
-    const celebChangedEmail = !(values.email === celebsEmail)
-    const celebChangedCashApp = !(values.cash_app === cash_app)
-    const celebChangedVenmo = !(values.venmo === venmo)
 
-    if (celebChangedName || celebChangedEmail || celebChangedCashApp || celebChangedVenmo) {
-      const { cash_app, email, name, venmo } = values
+    // ? Do we want to be case sensitive when updating?
+    const changedValues = Object.keys(values).filter(
+      (key) => values[key].toLowerCase() !== prevCelebValues[key].toLowerCase()
+    )
+
+    if (changedValues.length > 0) {
+      // * Had to comment this out because the mutation needs all values even if they're not changed
+      // * but it would be great if we only update changed values
+      // const changedValuesObject = changedValues.reduce((initialObj, currentChangedProperty) => {
+      //   initialObj[currentChangedProperty] = values[currentChangedProperty]
+      //   return initialObj
+      // }, {})
+      const { name, email, venmo, cash_app } = values
       try {
         const updateUserNewMutationResponse = await updateUserNewMutation({
           variables: {
-            cash_app,
             id: celebsId,
-            email,
             name,
+            email,
             venmo,
+            cash_app,
           },
         })
-
         await sleep(500)
         setShowUpdateSuccessSnack(true)
         await sleep(500)
-
         if (updateUserNewMutationResponse) {
           updateUserNewObjectInContext(
             updateUserNewMutationResponse.data.update_users_new.returning[0]
           )
-          setCelebProfileContent('celeb-profile')
+          setIsEditing(false)
         }
       } catch (err) {
         console.log('updateUserNewMutation error ->', err)
       }
     }
+
     setSubmitting(false)
   }
+
+  const TextFieldRequired = (props) => <TextField required {...props} />
 
   return (
     <div>
@@ -96,8 +99,8 @@ const EditCelebProfile = ({ celeb, setCelebProfileContent, updateUserNewObjectIn
         onSubmit={(values, { setSubmitting }) => handleFormSubmit({ setSubmitting, values })}
         initialValues={{
           cash_app: cash_app || '',
-          email: celebsEmail,
-          name: celebsName,
+          email,
+          name,
           venmo: venmo || '',
         }}
       >
@@ -106,7 +109,7 @@ const EditCelebProfile = ({ celeb, setCelebProfileContent, updateUserNewObjectIn
             <div>
               <Field
                 name="name"
-                component={TextField}
+                component={TextFieldRequired}
                 fullWidth
                 value={values.name}
                 id="name"
@@ -116,11 +119,31 @@ const EditCelebProfile = ({ celeb, setCelebProfileContent, updateUserNewObjectIn
             <div>
               <Field
                 name="email"
-                component={TextField}
+                component={TextFieldRequired}
                 fullWidth
                 value={values.email}
                 id="email"
                 label="Email"
+              />
+            </div>
+            {/* <div>
+              <Field
+                name="password"
+                component={TextFieldRequired}
+                fullWidth
+                value={values.password}
+                id="password"
+                label="Password"
+              />
+            </div> */}
+            <div>
+              <Field
+                name="venmo"
+                component={TextField}
+                fullWidth
+                value={values.venmo}
+                id="venmo"
+                label="Venmo"
               />
             </div>
             <div>
@@ -131,16 +154,6 @@ const EditCelebProfile = ({ celeb, setCelebProfileContent, updateUserNewObjectIn
                 value={values.cash_app}
                 id="cash_app"
                 label="Cash App"
-              />
-            </div>
-            <div>
-              <Field
-                name="venmo"
-                component={TextField}
-                fullWidth
-                value={values.venmo}
-                id="venmo"
-                label="Venmo"
               />
             </div>
             <Grid

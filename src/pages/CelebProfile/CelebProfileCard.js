@@ -1,11 +1,9 @@
 import React from 'react'
-import FeatherIcon from 'feather-icons-react'
 import { useHistory } from 'react-router-dom'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Avatar, Button, Grid, TextField } from '@material-ui/core'
 import logo from '../../assets/logoWhite.svg'
+import FeatherIcon from 'feather-icons-react'
+
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -35,14 +33,18 @@ const useStyles = makeStyles((theme) => ({
   editProfileButton: {
     margin: theme.spacing(2, 0),
   },
-  fileForm: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
+  form: {
+    boxSizing: 'border-box',
+    width: '90%',
     display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexFlow: 'column',
+    backgroundColor: theme.palette.common.greyCard,
+    padding: 17,
+    '& .MuiFormControl-root:not(:first-child)': {
+      marginTop: '16px',
+    },
   },
+
   overlay: {
     position: 'absolute',
     top: 0,
@@ -76,13 +78,23 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     cursor: 'pointer',
   },
+  icon: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    transform: 'translateX(100%)',
+  },
 }))
 
-const CelebProfilePreview = ({ celeb, setCelebProfileContent }) => {
+const CelebProfilePreview = ({ celeb, setIsEditing }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { cash_app, email, name, profile_pic_url, venmo } = celeb
+  const { cash_app, email, name, profile_pic_url, venmo, password } = celeb
   const eventIdInLS = localStorage.getItem('eventId')
+
+  const readonly = {
+    readOnly: true,
+  }
 
   return (
     <Grid container direction="column" alignItems="center" justify="center">
@@ -91,15 +103,20 @@ const CelebProfilePreview = ({ celeb, setCelebProfileContent }) => {
           <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
         </Avatar>
         <FeatherIcon
-          icon="edit-2"
+          className={classes.icon}
+          icon="edit"
           stroke="#f4f6fa"
           size="22"
-          onClick={() => setCelebProfileContent('edit-celeb-profile')}
+          onClick={() => setIsEditing(true)}
         />
       </div>
-      <Typography variant="h3">{name}</Typography>
-      <Typography variant="subtitle1">{cash_app}</Typography>
-      <Typography variant="subtitle1">{venmo}</Typography>
+      <form className={classes.form}>
+        <TextField label="Full name" value={name} InputProps={readonly} />
+        <TextField label="Email" value={email} InputProps={readonly} />
+        <TextField label="Password" type="password" value={password} InputProps={readonly} />
+        <TextField label="Venmo" value={venmo} InputProps={readonly} />
+        <TextField label="Cash App" value={cash_app} InputProps={readonly} />
+      </form>
       <Grid
         container
         justify="space-around"

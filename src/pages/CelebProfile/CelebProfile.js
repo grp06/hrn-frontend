@@ -15,33 +15,23 @@ const CelebProfile = () => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user, updateUserNewObject } = useUserContext()
-  const [contentState, setContentState] = useState('celeb-profile')
+  const [isEditing, setIsEditing] = useState(true)
 
   if (appLoading || Object.keys(user).length < 2) {
     return <Loading />
   }
 
-  const renderContent = () => {
-    switch (contentState) {
-      case 'edit-celeb-profile':
-        return (
-          <EditCelebProfile
-            celeb={user}
-            setCelebProfileContent={(contentState) => setContentState(contentState)}
-            updateUserNewObjectInContext={(userObject) => updateUserNewObject(userObject)}
-          />
-        )
-      default:
-        return (
-          <CelebProfileCard
-            celeb={user}
-            setCelebProfileContent={(contentState) => setContentState(contentState)}
-          />
-        )
-    }
-  }
+  const content = isEditing ? (
+    <EditCelebProfile
+      celeb={user}
+      setIsEditing={setIsEditing}
+      updateUserNewObjectInContext={updateUserNewObject}
+    />
+  ) : (
+    <CelebProfileCard celeb={user} setIsEditing={setIsEditing} />
+  )
 
-  return <Grid className={classes.container}>{renderContent()}</Grid>
+  return <Grid className={classes.container}>{content}</Grid>
 }
 
 export default CelebProfile
