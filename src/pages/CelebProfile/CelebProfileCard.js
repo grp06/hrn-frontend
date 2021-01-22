@@ -7,9 +7,14 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
+  avatarLogo: {
     width: '75%',
     height: '75%',
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   avatarContainer: {
     backgroundColor: 'transparent',
@@ -100,7 +105,11 @@ const CelebProfilePreview = ({ celeb, setIsEditing }) => {
     <Grid container direction="column" alignItems="center" justify="center">
       <div className={classes.wrap}>
         <Avatar className={classes.avatarContainer}>
-          <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
+          {profile_pic_url ? (
+            <img alt="Profile" className={classes.avatar} src={profile_pic_url} />
+          ) : (
+            <img alt="company-logo" className={classes.avatarLogo} src={logo} />
+          )}
         </Avatar>
         <FeatherIcon
           className={classes.icon}

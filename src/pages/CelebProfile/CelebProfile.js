@@ -19,7 +19,7 @@ const CelebProfile = () => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user, updateUserNewObject } = useUserContext()
-  const [isEditing, setIsEditing] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
 
   if (appLoading || Object.keys(user).length < 2) {
     return <Loading />

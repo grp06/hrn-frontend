@@ -17,9 +17,14 @@ import logo from '../../assets/logoWhite.svg'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
+  avatarLogo: {
     width: '75%',
     height: '75%',
+  },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
   },
   avatarContainer: {
     backgroundColor: 'transparent',
@@ -117,8 +122,6 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
   }
 
   const submitProfilePicture = async (avatarImageAsParameter) => {
-    console.log(avatarImageAsParameter)
-
     const formData = new FormData()
     formData.append('file', avatarImageAsParameter)
     formData.append('userId', celebsId)
@@ -147,18 +150,21 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
         'Content-Type': 'application/json',
       },
     })
+
+    return url
   }
 
   const handleFormSubmit = async ({ setSubmitting, values }) => {
     setSubmitting(true)
+
     // ? Do we want to be case sensitive when updating?
+    const newImageUrl = avatarImage ? await submitProfilePicture(avatarImage) : null
+
     const changedValues = Object.keys(values).filter(
       (key) => values[key].toLowerCase() !== prevCelebValues[key].toLowerCase()
     )
 
-    if (changedValues.length > 0 || avatarImage) {
-      submitProfilePicture(avatarImage)
-
+    if (changedValues.length > 0 || newImageUrl) {
       const changedValuesObject = changedValues.reduce((initialObj, currentChangedProperty) => {
         initialObj[currentChangedProperty] = values[currentChangedProperty]
         return initialObj
@@ -169,6 +175,7 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
           id: celebsId,
           changes: {
             ...changedValuesObject,
+            profile_pic_url: newImageUrl,
           },
         },
       })
@@ -203,7 +210,12 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
                 Edit Profile Picture
                 <input type="file" accept="image/*" capture="user" onChange={handleImageSelect} />
               </label>
-              <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
+
+              {profile_pic_url ? (
+                <img alt="Profile" className={classes.avatar} src={profile_pic_url} />
+              ) : (
+                <img alt="company-logo" className={classes.avatarLogo} src={logo} />
+              )}
             </Avatar>
             <Field
               name="name"

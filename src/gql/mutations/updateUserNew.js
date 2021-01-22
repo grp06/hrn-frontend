@@ -9,6 +9,7 @@ const updateUserNew = gql`
         email
         cash_app
         venmo
+        profile_pic_url
       }
     }
   }
