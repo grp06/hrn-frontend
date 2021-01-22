@@ -38,6 +38,7 @@ import {
   CelebSignUp,
   CreateChitChat,
   CreatorHome,
+  ChitChatVideoRoom,
 } from './pages'
 import {
   AppProvider,
@@ -146,6 +147,11 @@ const App = () => {
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <ChitChatProvider>
                         <Route exact path="/chit-chat/:id" component={ChitChat} />
+                        <Route
+                          exact
+                          path="/chit-chat/:id/video-room"
+                          component={ChitChatVideoRoom}
+                        />
                       </ChitChatProvider>
                       <EventProvider>
                         <Route
