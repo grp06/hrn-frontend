@@ -11,6 +11,12 @@ const useParticipantConnectedToGroupVideoChat = () => {
     // when other people join after we're already there
     participant.on('trackPublished', (publication) => {
       remoteTrackPublished(publication, participant.identity)
+      const participantsMicOffIconDiv = document.getElementById(
+        `${participant.identity}-mic-off-icon-div`
+      )
+      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
+        participantsMicOffIconDiv.style.display = 'none'
+      }
     })
 
     participant.on('trackUnpublished', (publication) => {

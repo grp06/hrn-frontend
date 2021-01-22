@@ -169,6 +169,7 @@ const EventGroupVideoChat = () => {
         videoGrid.insertBefore(newDivElement, videoGrid.firstChild)
       } else {
         videoGrid.appendChild(newDivElement)
+        usersMicOffDiv.style.display = 'inline'
       }
     })
   }
