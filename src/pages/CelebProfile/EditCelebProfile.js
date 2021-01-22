@@ -1,30 +1,77 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import { Formik, Form, Field, useFormik } from 'formik'
+import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Grid from '@material-ui/core/Grid'
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  Divider,
+  Typography as Typ,
+  Avatar,
+} from '@material-ui/core'
 import { Snack } from '../../common'
 import { updateUserNew } from '../../gql/mutations'
 import { sleep } from '../../helpers'
+import logo from '../../assets/logoWhite.svg'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  avatar: {
+    width: '75%',
+    height: '75%',
+  },
+  avatarContainer: {
+    backgroundColor: 'transparent',
+    width: 88,
+    height: 88,
+    backgroundColor: theme.palette.common.basePurple,
+    margin: '0 auto',
+    position: 'relative',
+  },
+  avatarOverlay: {
+    position: 'absolute',
+    backgroundColor: theme.palette.common.bodyBlack,
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    opacity: 0.7,
+    color: theme.palette.common.ghostWhite,
+    height: '110%',
+    width: '110%',
+  },
+  avatarButton: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    backgroundColor: 'transparent',
+    color: theme.palette.common.ghostWhite,
+    height: '105%',
+    width: '100%',
+    border: 'none',
+    textAlign: 'center',
+    fontSize: '0.8rem',
+    paddingTop: 65,
+    '& input[type="file"]': {
+      display: 'none',
+    },
+  },
   formContainer: {
     width: '80%',
     margin: theme.spacing(3, 'auto'),
+    '& .MuiFormControl-root:not(:first-child)': {
+      marginTop: '24px',
+    },
   },
   tagsContainer: {
     width: '100%',
     marginTop: theme.spacing(5),
   },
   buttonContainer: {
-    width: '65%',
-    [theme.breakpoints.down('md')]: {
-      width: '50%',
+    '& button:first-child': {
+      marginTop: 35,
     },
-    margin: theme.spacing(0, 'auto'),
   },
   cancelButton: {
     margin: theme.spacing(1.5, 0),
@@ -34,61 +81,105 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: theme.palette.common.greyButtonHover,
     },
   },
+  divider: {
+    marginTop: 35,
+    marginBottom: 25,
+  },
 }))
 
 const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext }) => {
   const classes = useStyles()
+
+  // * The default values for the values below is to avoid the changedValues variable from crashing
   const { cash_app = '', email, id: celebsId, name, profile_pic_url, venmo = '' } = celeb
-  const [updateUserNewMutation] = useMutation(updateUserNew)
+  const prevCelebValues = { name, email, cash_app, venmo }
+
   const [showUpdateSuccessSnack, setShowUpdateSuccessSnack] = useState(false)
+  const [avatarImage, setAvatarImage] = useState(null)
+
+  const [updateUserNewMutation] = useMutation(updateUserNew, {
+    onCompleted: async (data) => {
+      const [updatedData] = data.update_users_new.returning
+      await sleep(500)
+      setShowUpdateSuccessSnack(true)
+      await sleep(500)
+      if (updatedData) {
+        console.log(updatedData)
+        updateUserNewObjectInContext(updatedData)
+        setIsEditing(false)
+      }
+    },
+    onError: (err) => console.error('updateUserNewMutation error ->', err),
+  })
 
   const handleFormClose = () => {
     setIsEditing(false)
   }
 
-  const prevCelebValues = { name, email, cash_app, venmo }
+  const submitProfilePicture = async (avatarImageAsParameter) => {
+    console.log(avatarImageAsParameter)
+
+    const formData = new FormData()
+    formData.append('file', avatarImageAsParameter)
+    formData.append('userId', celebsId)
+    const urlAndFile = await await fetch(
+      `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    ).then((res) => res.json())
+    const newFile = new Blob([new Uint8Array(urlAndFile.data.data)], { type: 'image/jpeg' })
+    const res = await fetch(urlAndFile.url, {
+      method: 'PUT',
+      body: newFile,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': avatarImageAsParameter.type,
+      },
+    })
+    const url = res.url.split('?')[0]
+    await fetch(`${process.env.REACT_APP_API_URL}/api/upload/save-profile-pic-url`, {
+      method: 'POST',
+      body: JSON.stringify({ userId: celebsId, url }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  }
 
   const handleFormSubmit = async ({ setSubmitting, values }) => {
     setSubmitting(true)
-
     // ? Do we want to be case sensitive when updating?
     const changedValues = Object.keys(values).filter(
       (key) => values[key].toLowerCase() !== prevCelebValues[key].toLowerCase()
     )
 
-    if (changedValues.length > 0) {
-      // * Had to comment this out because the mutation needs all values even if they're not changed
-      // * but it would be great if we only update changed values
-      // const changedValuesObject = changedValues.reduce((initialObj, currentChangedProperty) => {
-      //   initialObj[currentChangedProperty] = values[currentChangedProperty]
-      //   return initialObj
-      // }, {})
-      const { name, email, venmo, cash_app } = values
-      try {
-        const updateUserNewMutationResponse = await updateUserNewMutation({
-          variables: {
-            id: celebsId,
-            name,
-            email,
-            venmo,
-            cash_app,
+    if (changedValues.length > 0 || avatarImage) {
+      submitProfilePicture(avatarImage)
+
+      const changedValuesObject = changedValues.reduce((initialObj, currentChangedProperty) => {
+        initialObj[currentChangedProperty] = values[currentChangedProperty]
+        return initialObj
+      }, {})
+
+      updateUserNewMutation({
+        variables: {
+          id: celebsId,
+          changes: {
+            ...changedValuesObject,
           },
-        })
-        await sleep(500)
-        setShowUpdateSuccessSnack(true)
-        await sleep(500)
-        if (updateUserNewMutationResponse) {
-          updateUserNewObjectInContext(
-            updateUserNewMutationResponse.data.update_users_new.returning[0]
-          )
-          setIsEditing(false)
-        }
-      } catch (err) {
-        console.log('updateUserNewMutation error ->', err)
-      }
+        },
+      })
     }
 
     setSubmitting(false)
+  }
+
+  const handleImageSelect = (e) => {
+    const [file] = e.target.files
+    setAvatarImage(file)
   }
 
   const TextFieldRequired = (props) => <TextField required {...props} />
@@ -106,56 +197,48 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
       >
         {({ isSubmitting, values }) => (
           <Form autoComplete="off" className={classes.formContainer}>
-            <div>
-              <Field
-                name="name"
-                component={TextFieldRequired}
-                fullWidth
-                value={values.name}
-                id="name"
-                label="Full Name"
-              />
-            </div>
-            <div>
-              <Field
-                name="email"
-                component={TextFieldRequired}
-                fullWidth
-                value={values.email}
-                id="email"
-                label="Email"
-              />
-            </div>
-            {/* <div>
-              <Field
-                name="password"
-                component={TextFieldRequired}
-                fullWidth
-                value={values.password}
-                id="password"
-                label="Password"
-              />
-            </div> */}
-            <div>
-              <Field
-                name="venmo"
-                component={TextField}
-                fullWidth
-                value={values.venmo}
-                id="venmo"
-                label="Venmo"
-              />
-            </div>
-            <div>
-              <Field
-                name="cash_app"
-                component={TextField}
-                fullWidth
-                value={values.cash_app}
-                id="cash_app"
-                label="Cash App"
-              />
-            </div>
+            <Avatar className={classes.avatarContainer}>
+              <div className={classes.avatarOverlay} />
+              <label className={classes.avatarButton}>
+                Edit Profile Picture
+                <input type="file" accept="image/*" capture="user" onChange={handleImageSelect} />
+              </label>
+              <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
+            </Avatar>
+            <Field
+              name="name"
+              component={TextFieldRequired}
+              fullWidth
+              value={values.name}
+              id="name"
+              label="Full Name"
+            />
+            <Field
+              name="email"
+              component={TextFieldRequired}
+              fullWidth
+              value={values.email}
+              id="email"
+              label="Email"
+            />
+            <Divider className={classes.divider} />
+            <Typ variant="subtitle2">How would you like to recieve payment?</Typ>
+            <Field
+              name="venmo"
+              component={TextField}
+              fullWidth
+              value={values.venmo}
+              id="venmo"
+              label="Venmo Username"
+            />
+            <Field
+              name="cash_app"
+              component={TextField}
+              fullWidth
+              value={values.cash_app}
+              id="cash_app"
+              label="Cash App Username"
+            />
             <Grid
               container
               item
@@ -166,15 +249,21 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
               className={classes.buttonContainer}
             >
               <Button
+                fullWidth
                 startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
                 disabled={isSubmitting}
                 variant="contained"
                 color="primary"
                 type="submit"
               >
-                {isSubmitting ? 'Saving' : 'Save'}
+                {isSubmitting ? 'Saving' : 'Confirm'}
               </Button>
-              <Button variant="outlined" className={classes.cancelButton} onClick={handleFormClose}>
+              <Button
+                fullWidth
+                variant="outlined"
+                className={classes.cancelButton}
+                onClick={handleFormClose}
+              >
                 Cancel
               </Button>
             </Grid>
