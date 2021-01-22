@@ -101,6 +101,7 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
 
   const [showUpdateSuccessSnack, setShowUpdateSuccessSnack] = useState(false)
   const [avatarImage, setAvatarImage] = useState(null)
+  const [avatarPreview, setAvatarPreview] = useState('')
 
   const [updateUserNewMutation] = useMutation(updateUserNew, {
     onCompleted: async (data) => {
@@ -187,6 +188,7 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
   const handleImageSelect = (e) => {
     const [file] = e.target.files
     setAvatarImage(file)
+    setAvatarPreview(URL.createObjectURL(file))
   }
 
   const TextFieldRequired = (props) => <TextField required {...props} />
@@ -211,8 +213,12 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
                 <input type="file" accept="image/*" capture="user" onChange={handleImageSelect} />
               </label>
 
-              {profile_pic_url ? (
-                <img alt="Profile" className={classes.avatar} src={profile_pic_url} />
+              {profile_pic_url || avatarPreview ? (
+                <img
+                  alt="Profile"
+                  className={classes.avatar}
+                  src={avatarPreview ? avatarPreview : profile_pic_url}
+                />
               ) : (
                 <img alt="company-logo" className={classes.avatarLogo} src={logo} />
               )}
