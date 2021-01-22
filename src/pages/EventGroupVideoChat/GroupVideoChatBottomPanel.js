@@ -63,11 +63,13 @@ const GroupVideoChatBottomPanel = React.memo(
     const [participantsAudioIsOn, setParticipantsAudioIsOn] = useState(false)
 
     useEffect(() => {
-      setParticipantHasEnabledVideo(true)
-      setParticipantsVideoIsOn(true)
-      setParticipantHasEnabledAudio(true)
-      setParticipantsAudioIsOn(true)
-    }, [])
+      if (userIsHost) {
+        setParticipantHasEnabledVideo(true)
+        setParticipantsVideoIsOn(true)
+        setParticipantHasEnabledAudio(true)
+        setParticipantsAudioIsOn(true)
+      }
+    }, [userIsHost])
 
     const handleEnableVideo = () => {
       const { localParticipant } = twilioGroupChatRoom
