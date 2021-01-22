@@ -13,6 +13,9 @@ import {
 import { Loading } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
+import { useParams } from 'react-router-dom'
+import { useMutation } from 'react-apollo'
+import { startChitChat } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -29,17 +32,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChitChat = ({ match }) => {
+const ChitChat = () => {
   const classes = useStyles()
-  const { id: chitChatId } = match.params
   const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { id: user_id } = user
+  const { id: chitChatId } = useParams()
+  const {
+    user: { id: userId },
+  } = useUserContext()
   const { chitChat, setEventNewId } = useChitChatContext()
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
-  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const chitChatSet = Object.keys(chitChat).length > 1
+
+  const [startChitChatMutation] = useMutation(startChitChat)
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
@@ -49,6 +55,15 @@ const ChitChat = ({ match }) => {
 
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
+  }
+
+  const startChitChatHandler = () => {
+    startChitChatMutation({
+      variables: {
+        id: chitChatId,
+        userId,
+      },
+    })
   }
 
   const renderCTAButton = () => {
