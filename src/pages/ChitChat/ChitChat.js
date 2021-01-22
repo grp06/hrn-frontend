@@ -115,7 +115,7 @@ const ChitChat = ({ match }) => {
     )
   }
   const renderFanMainContent = () =>
-    userIsHost && (
+    !userIsHost && (
       <Grid direction="column" container className={classes.fanMainContent}>
         <Typography variant="h3">You are now in the queue</Typography>
         <div className={classes.queueCard}>
