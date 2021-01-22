@@ -59,6 +59,7 @@
     "react-geosuggest": "^2.13.1",
     "react-icalendar-link": "^1.0.3",
     "react-lottie": "^1.2.3",
+    "react-phone-input-2": "^2.13.9",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-use-intercom": "^1.1.0",
