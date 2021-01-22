@@ -196,7 +196,7 @@ const EventGroupVideoChat = () => {
     console.log('calling CONNECT')
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-    const audioDevice = { deviceId: localStoragePreferredAudioId }
+    const audioDevice = userIsHost ? { deviceId: localStoragePreferredAudioId } : false
     const videoDevice = { deviceId: localStoragePreferredVideoId }
     const myRoom = await connect(groupChatToken, {
       maxAudioBitrate: 16000,
