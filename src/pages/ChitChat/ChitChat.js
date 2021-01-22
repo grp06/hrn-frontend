@@ -27,6 +27,20 @@ const useStyles = makeStyles((theme) => ({
   bodyContainer: {
     padding: theme.spacing(2),
   },
+  queueCard: {
+    margin: theme.spacing(2, 0),
+    padding: theme.spacing(1),
+    background: theme.palette.common.greyCard,
+    textAlign: 'center',
+  },
+  queueNumber: {
+    color: theme.palette.common.basePink,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  fanMainContent: {
+    margin: theme.spacing(2, 0),
+  },
 }))
 
 const ChitChat = ({ match }) => {
@@ -39,7 +53,6 @@ const ChitChat = ({ match }) => {
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const chitChatSet = Object.keys(chitChat).length > 1
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
@@ -50,39 +63,76 @@ const ChitChat = ({ match }) => {
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
   }
+  const currentUserIsRSVPd = event_users_new.some((eventUser) => eventUser.user.id === user_id)
 
   const renderCTAButton = () => {
     return (
-      <Grid container direction="row" className={classes.CTAButton}>
-        {userIsHost ? (
-          <StartChitChatButton />
-        ) : (
-          <MeetCelebButton
-            hostName={hostName}
-            modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
-          />
-        )}
-      </Grid>
+      !currentUserIsRSVPd && (
+        <Grid container direction="row" className={classes.CTAButton}>
+          {userIsHost ? (
+            <StartChitChatButton />
+          ) : (
+            <MeetCelebButton
+              hostName={hostName}
+              modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
+            />
+          )}
+        </Grid>
+      )
     )
   }
+
+  const renderCopyLinkButton = () =>
+    user_id === host_id && (
+      <Button
+        variant="outlined"
+        color="primary"
+        size="large"
+        className={classes.copyEventLinkButton}
+      >
+        <Grid item container direction="row" alignItems="center" justify="center">
+          <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
+          <Typography variant="body1" style={{ marginLeft: '8px' }}>
+            Copy event link
+          </Typography>
+        </Grid>
+      </Button>
+    )
+  const queueNumber = event_users_new.findIndex((u) => {
+    console.log('u = ', u)
+    console.log('user_id = ', user_id)
+    return u.user.id === user_id
+  })
+  console.log('🚀 ~ ChitChat ~ queueNumber', queueNumber)
+  const renderQueueText = () => {
+    if (queueNumber === 0) {
+      return `You're up next! You'll speak with ${hostName} soon!`
+    }
+    return (
+      <>
+        <span className={classes.queueNumber}>{queueNumber}</span> people in front of you
+      </>
+    )
+  }
+  const renderFanMainContent = () =>
+    user_id !== host_id && (
+      <Grid direction="column" container className={classes.fanMainContent}>
+        <Typography variant="h3">You are now in the queue</Typography>
+        <div className={classes.queueCard}>
+          <Typography variant="h4">{renderQueueText()}</Typography>
+        </div>
+        <Typography variant="subtitle1">
+          You can leave this page, but if you’re not here when it’s your turn, you will be skipped.
+        </Typography>
+      </Grid>
+    )
 
   return (
     <Grid container direction="column">
       <ChitChatCard chitChat={chitChat} userIsHost={userIsHost} />
       <Grid container direction="column" className={classes.bodyContainer}>
-        <Button
-          variant="outlined"
-          color="primary"
-          size="large"
-          className={classes.copyEventLinkButton}
-        >
-          <Grid item container direction="row" alignItems="center" justify="center">
-            <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
-            <Typography variant="body1" style={{ marginLeft: '8px' }}>
-              Copy event link
-            </Typography>
-          </Grid>
-        </Button>
+        {renderCopyLinkButton()}
+        {renderFanMainContent()}
         <Typography variant="h4">What to expect</Typography>
         <WhatToExpectChitChat userIsHost={userIsHost} />
         {renderCTAButton()}
