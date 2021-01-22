@@ -59,7 +59,7 @@ const ChitChat = ({ match }) => {
         ) : (
           <MeetCelebButton
             hostName={hostName}
-            modalBody={<RSVPForChitChatForm chitChat={chitChat} chitChatId={chitChatId} />}
+            modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
           />
         )}
       </Grid>

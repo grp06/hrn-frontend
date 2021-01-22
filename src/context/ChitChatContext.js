@@ -55,7 +55,6 @@ const ChitChatProvider = ({ children }) => {
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
   const userOnLobbyOrGroupChat = pathname.includes('lobby')
 
-  console.log('chitChat ->', chitChat)
   // subscribe to the Event only if we have an chitChatId
   const { data: chitChatData } = useSubscription(listenToChitChat, {
     variables: {
