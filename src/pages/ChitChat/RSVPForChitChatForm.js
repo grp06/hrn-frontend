@@ -47,6 +47,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
+  const [countryCode, setCountryCode] = useState('+1')
   const { host } = chitChat
   const { name: hostName } = host
 
@@ -60,6 +61,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
         onSubmit={async (values, { setSubmitting }) => {
           setFormSubmitting(true)
           const { phone_number, name } = values
+          console.log('🚀 ~ onSubmit={ ~ phone_number', phone_number)
           if (!phone_number || !name) {
             setRSVPFormErrorMessage('something seems to be empty  🧐')
             setFormSubmitting(false)
@@ -69,7 +71,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           try {
             signupResponse = await signupUserNew({
               role: 'fan',
-              userInfo: { name, phone_number },
+              userInfo: { name, phone_number: `+${phone_number}` },
               chitChat,
             })
             console.log('🚀 ~ onSubmit={ ~ signupResponse', signupResponse)
@@ -140,7 +142,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                           background: '#262626',
                           color: '#E2E8F2',
                         }}
-                        country={'us'}
+                        country="us"
                         value={form.values.phone_number}
                         onChange={(phoneNumber) => {
                           form.setFieldValue('phone_number', phoneNumber)
