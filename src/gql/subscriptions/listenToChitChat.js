@@ -17,6 +17,7 @@ const listenToChitChat = gql`
       start_at
       status
       event_users_new(order_by: { user: { id: asc } }) {
+        status
         user {
           name
           role
