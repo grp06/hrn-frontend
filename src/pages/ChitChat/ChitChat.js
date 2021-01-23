@@ -3,6 +3,8 @@ import FeatherIcon from 'feather-icons-react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import { useMutation } from 'react-apollo'
+import { useParams } from 'react-router-dom'
 import {
   ChitChatCard,
   MeetCelebButton,
@@ -13,9 +15,6 @@ import {
 import { Loading } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
-import { useParams } from 'react-router-dom'
-import { useMutation } from 'react-apollo'
-import { startChitChat } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -45,32 +44,28 @@ const ChitChat = () => {
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const chitChatSet = Object.keys(chitChat).length > 1
 
-  const [startChitChatMutation] = useMutation(startChitChat)
-
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
       setEventNewId(parseInt(chitChatId, 10))
     }
   }, [chitChatId, chitChat, setEventNewId])
 
+  useEffect(() => {
+    console.log('event_status = ', event_status)
+    if (userIsHost && event_status === 'call-in-progress') {
+      console.log('push me')
+    }
+  }, [event_status])
+
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
-  }
-
-  const startChitChatHandler = () => {
-    startChitChatMutation({
-      variables: {
-        id: chitChatId,
-        userId,
-      },
-    })
   }
 
   const renderCTAButton = () => {
     return (
       <Grid container direction="row" className={classes.CTAButton}>
         {userIsHost ? (
-          <StartChitChatButton />
+          <StartChitChatButton chitChatId={chitChatId} userId={userId} />
         ) : (
           <MeetCelebButton
             hostName={hostName}
