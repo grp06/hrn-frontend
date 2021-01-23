@@ -47,7 +47,6 @@ const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
-  const [countryCode, setCountryCode] = useState('+1')
   const { host } = chitChat
   const { name: hostName } = host
 
@@ -61,7 +60,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
         onSubmit={async (values, { setSubmitting }) => {
           setFormSubmitting(true)
           const { phone_number, name } = values
-          console.log('🚀 ~ onSubmit={ ~ phone_number', phone_number)
+
           if (!phone_number || !name) {
             setRSVPFormErrorMessage('something seems to be empty  🧐')
             setFormSubmitting(false)
@@ -74,7 +73,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               userInfo: { name, phone_number: `+${phone_number}` },
               chitChat,
             })
-            console.log('🚀 ~ onSubmit={ ~ signupResponse', signupResponse)
+
             if (signupResponse.error) {
               setRSVPFormErrorMessage(signupResponse.error)
               throw signupResponse.error
@@ -99,6 +98,8 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           localStorage.setItem(TOKEN, token)
 
           setFormSubmitting(false)
+          // I'm confused by this transition modal stuff so I'm just reloading for now - George
+          window.location.reload()
         }}
         validationSchema={RSVPSchema}
       >
