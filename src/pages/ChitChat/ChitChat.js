@@ -3,8 +3,8 @@ import FeatherIcon from 'feather-icons-react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useMutation } from 'react-apollo'
-import { useParams } from 'react-router-dom'
+
+import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
   MeetCelebButton,
@@ -56,6 +56,7 @@ const ChitChat = () => {
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
+  const history = useHistory()
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
@@ -64,11 +65,22 @@ const ChitChat = () => {
   }, [chitChatId, chitChat, setEventNewId])
 
   useEffect(() => {
-    console.log('event_status = ', event_status)
     if (userIsHost && event_status === 'call-in-progress') {
-      console.log('push me')
+      history.push(`/chit-chat/${chitChatId}/video-room`)
     }
-  }, [event_status])
+  }, [event_status, userIsHost])
+
+  useEffect(() => {
+    if (!userIsHost && event_status === 'call-in-progress' && event_users_new.length && userId) {
+      const currentFanStatus = event_users_new.find((eventUser) => eventUser.user.id === userId)
+        .status
+
+      if (currentFanStatus === 'in-chat') {
+        console.log('push me to chat')
+        history.push(`/chit-chat/${chitChatId}/video-room`)
+      }
+    }
+  }, [event_status, event_users_new, userId])
 
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
@@ -80,7 +92,7 @@ const ChitChat = () => {
       !currentUserIsRSVPd && (
         <Grid container direction="row" className={classes.CTAButton}>
           {userIsHost ? (
-            <StartChitChatButton />
+            <StartChitChatButton chitChatId={chitChatId} userId={userId} />
           ) : (
             <MeetCelebButton
               hostName={hostName}
@@ -109,8 +121,6 @@ const ChitChat = () => {
       </Button>
     )
   const queueNumber = event_users_new.findIndex((u) => {
-    console.log('u = ', u)
-    console.log('userId = ', userId)
     return u.user.id === userId
   })
 
