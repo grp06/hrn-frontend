@@ -7,14 +7,19 @@ import FeatherIcon from 'feather-icons-react'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  avatar: {
+  avatarLogo: {
     width: '75%',
     height: '75%',
   },
+  avatar: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
   avatarContainer: {
     backgroundColor: 'transparent',
-    width: '125px',
-    height: '125px',
+    width: 88,
+    height: 88,
   },
   buttonContainer: {
     width: '50%',
@@ -73,8 +78,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.common.basePurple,
     borderRadius: '180px',
     position: 'relative',
-    width: '125px',
-    height: '125px',
+    width: 88,
+    height: 88,
     marginBottom: theme.spacing(2),
     cursor: 'pointer',
   },
@@ -89,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 const CelebProfilePreview = ({ celeb, setIsEditing }) => {
   const classes = useStyles()
   const history = useHistory()
-  const { cash_app, email, name, profile_pic_url, venmo, password } = celeb
+  const { cash_app, email, name, profile_pic_url, venmo } = celeb
   const eventIdInLS = localStorage.getItem('eventId')
 
   const readonly = {
@@ -100,7 +105,11 @@ const CelebProfilePreview = ({ celeb, setIsEditing }) => {
     <Grid container direction="column" alignItems="center" justify="center">
       <div className={classes.wrap}>
         <Avatar className={classes.avatarContainer}>
-          <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
+          {profile_pic_url ? (
+            <img alt="Profile" className={classes.avatar} src={profile_pic_url} />
+          ) : (
+            <img alt="company-logo" className={classes.avatarLogo} src={logo} />
+          )}
         </Avatar>
         <FeatherIcon
           className={classes.icon}
@@ -113,7 +122,6 @@ const CelebProfilePreview = ({ celeb, setIsEditing }) => {
       <form className={classes.form}>
         <TextField label="Full name" value={name} InputProps={readonly} />
         <TextField label="Email" value={email} InputProps={readonly} />
-        <TextField label="Password" type="password" value={password} InputProps={readonly} />
         <TextField label="Venmo" value={venmo} InputProps={readonly} />
         <TextField label="Cash App" value={cash_app} InputProps={readonly} />
       </form>

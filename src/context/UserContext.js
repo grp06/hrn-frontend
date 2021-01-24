@@ -61,6 +61,7 @@ const useUserContext = () => {
       draft.user.email = userObject.email
       draft.user.name = userObject.name
       draft.user.venmo = userObject.venmo
+      draft.user.profile_pic_url = userObject.profile_pic_url
     })
   }
 

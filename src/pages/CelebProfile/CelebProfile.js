@@ -4,6 +4,8 @@ import { useAppContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
 import { CelebProfileCard, EditCelebProfile } from '.'
 import { Loading } from '../../common'
+import constants from '../../utils/constants'
+import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -12,10 +14,12 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const CelebProfile = () => {
+  const role = localStorage.getItem(constants.ROLE)
+
   const classes = useStyles()
   const { appLoading } = useAppContext()
   const { user, updateUserNewObject } = useUserContext()
-  const [isEditing, setIsEditing] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
 
   if (appLoading || Object.keys(user).length < 2) {
     return <Loading />
@@ -31,7 +35,8 @@ const CelebProfile = () => {
     <CelebProfileCard celeb={user} setIsEditing={setIsEditing} />
   )
 
-  return <Grid className={classes.container}>{content}</Grid>
+  // ! /chitchat is not implemented yet
+  return role ? <Grid className={classes.container}>{content}</Grid> : <Redirect to="/chitchat" />
 }
 
 export default CelebProfile
