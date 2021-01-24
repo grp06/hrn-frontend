@@ -56,6 +56,13 @@ const ChitChat = () => {
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
+  const currentUserIsRSVPd =
+    event_users_new && event_users_new.some((eventUser) => eventUser.user.id === userId)
+  const usersQueueNumber =
+    event_users_new &&
+    event_users_new.findIndex((u) => {
+      return u.user.id === userId
+    })
   const history = useHistory()
 
   useEffect(() => {
@@ -85,23 +92,20 @@ const ChitChat = () => {
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
   }
-  const currentUserIsRSVPd = event_users_new.some((eventUser) => eventUser.user.id === userId)
 
   const renderCTAButton = () => {
-    return (
-      !currentUserIsRSVPd && (
-        <Grid container direction="row" className={classes.CTAButton}>
-          {userIsHost ? (
-            <StartChitChatButton chitChatId={chitChatId} userId={userId} />
-          ) : (
-            <MeetCelebButton
-              hostName={hostName}
-              modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
-            />
-          )}
-        </Grid>
-      )
-    )
+    return !currentUserIsRSVPd ? (
+      <Grid container direction="row" className={classes.CTAButton}>
+        {userIsHost ? (
+          <StartChitChatButton chitChatId={chitChatId} userId={userId} />
+        ) : (
+          <MeetCelebButton
+            hostName={hostName}
+            modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
+          />
+        )}
+      </Grid>
+    ) : null
   }
 
   const renderCopyLinkButton = () =>
@@ -120,22 +124,21 @@ const ChitChat = () => {
         </Grid>
       </Button>
     )
-  const queueNumber = event_users_new.findIndex((u) => {
-    return u.user.id === userId
-  })
 
   const renderQueueText = () => {
-    if (queueNumber === 0) {
+    if (usersQueueNumber === 0) {
       return `You're up next! You'll speak with ${hostName} soon!`
     }
     return (
       <>
-        <span className={classes.queueNumber}>{queueNumber}</span> people in front of you
+        <span className={classes.queueNumber}>{usersQueueNumber}</span>{' '}
+        {usersQueueNumber > 1 ? 'people' : 'person'} in front of you
       </>
     )
   }
+
   const renderFanMainContent = () =>
-    !userIsHost && (
+    !userIsHost && usersQueueNumber >= 0 ? (
       <Grid direction="column" container className={classes.fanMainContent}>
         <Typography variant="h3">You are now in the queue</Typography>
         <div className={classes.queueCard}>
@@ -145,7 +148,7 @@ const ChitChat = () => {
           You can leave this page, but if you’re not here when it’s your turn, you will be skipped.
         </Typography>
       </Grid>
-    )
+    ) : null
 
   return (
     <Grid container direction="column">

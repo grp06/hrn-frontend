@@ -42,8 +42,9 @@ import {
 } from './pages'
 import {
   AppProvider,
-  EventProvider,
   ChitChatProvider,
+  ChitChatUserStatusProvider,
+  EventProvider,
   TwilioProvider,
   UserProvider,
   UserEventStatusProvider,
@@ -146,12 +147,14 @@ const App = () => {
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <ChitChatProvider>
-                        <Route exact path="/chit-chat/:id" component={ChitChat} />
-                        <Route
-                          exact
-                          path="/chit-chat/:id/video-room"
-                          component={ChitChatVideoRoom}
-                        />
+                        <ChitChatUserStatusProvider>
+                          <Route exact path="/chit-chat/:id" component={ChitChat} />
+                          <Route
+                            exact
+                            path="/chit-chat/:id/video-room"
+                            component={ChitChatVideoRoom}
+                          />
+                        </ChitChatUserStatusProvider>
                       </ChitChatProvider>
                       <EventProvider>
                         <Route
