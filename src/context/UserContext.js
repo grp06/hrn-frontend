@@ -55,12 +55,23 @@ const useUserContext = () => {
     })
   }
 
+  const updateUserNewObject = (userObject) => {
+    dispatch((draft) => {
+      draft.user.cash_app = userObject.cash_app
+      draft.user.email = userObject.email
+      draft.user.name = userObject.name
+      draft.user.venmo = userObject.venmo
+      draft.user.profile_pic_url = userObject.profile_pic_url
+    })
+  }
+
   return {
     ...state,
     resetUser,
     setUsersTags,
     setUserUpdatedAt,
     updateUserObject,
+    updateUserNewObject,
     setUserInEvent,
   }
 }
