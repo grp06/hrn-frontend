@@ -26,11 +26,18 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
   },
+  pageContainer: {
+    marginTop: '75px',
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '100px',
+      marginBottom: '25px',
+    },
+  },
   pinkText: {
     color: theme.palette.common.basePink,
   },
   sectionContainer: {
-    margin: theme.spacing(4, 0),
+    margin: theme.spacing(4, 0, 2, 0),
   },
 }))
 
@@ -68,7 +75,6 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
         {chitChatDetails ? 'Edit Your Event' : 'Create Event'}
       </Typography>
-      <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{
@@ -107,7 +113,7 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                     <Field
                       component={DatePicker}
                       name="event_date"
-                      label="Event Date"
+                      label="Date"
                       fullWidth
                       required
                     />
@@ -116,7 +122,7 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                     <Field
                       component={TimePicker}
                       name="event_time"
-                      label="Event Time"
+                      label="Time"
                       fullWidth
                       required
                     />
@@ -132,14 +138,16 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                   <Typography variant="h3">Duration</Typography>
 
                   <Grid container direction="row">
-                    <Field
-                      component={TextField}
-                      name="round_length"
-                      label="Length of each conversation (minutes)"
-                      type="number"
-                      required
-                      className={classes.conversationLength}
-                    />
+                    <Grid item xs={12} md={6} className={classes.formInputMargin}>
+                      <Field
+                        component={TextField}
+                        name="round_length"
+                        label="Length of each conversation (minutes)"
+                        type="number"
+                        required
+                        className={classes.conversationLength}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>

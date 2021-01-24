@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 
 import Button from '@material-ui/core/Button'
+import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Link, useHistory } from 'react-router-dom'
+import { makeStyles } from '@material-ui/core/styles'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import { constants } from '../../utils'
 import { FloatCardMedium, Snack } from '../../common'
 import { useAppContext } from '../../context'
@@ -15,6 +16,21 @@ import { sleep, signupUserNew } from '../../helpers'
 const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
+  cardContainer: {
+    position: 'relative',
+    bottom: '0%',
+    display: 'block',
+    width: '50vw',
+    height: 'auto',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    marginBottom: '75px',
+    borderRadius: '4px',
+    backgroundColor: theme.palette.common.greyCard,
+    [theme.breakpoints.down('xs')]: {
+      width: '95vw',
+    },
+  },
   wrapper: {
     width: '100vw',
     height: '100vh',
@@ -49,6 +65,10 @@ const useStyles = makeStyles((theme) => ({
   privacyPolicyLink: {
     textDecoration: 'none',
     color: theme.palette.common.sunray,
+  },
+  recievePaymentsTypography: {
+    margin: theme.spacing(1, 0, 3, 0),
+    color: theme.palette.common.ghostWhite,
   },
 }))
 
@@ -113,7 +133,7 @@ const CelebSignUpForm = () => {
 
   return (
     <Grid container justify="center" alignItems="center" className={classes.wrapper}>
-      <FloatCardMedium>
+      <Grid container direction="column" className={classes.cardContainer}>
         <Grid item container direction="column" sm={9} xs={12} className={classes.formContainer}>
           <form onSubmit={handleFormSubmit}>
             <Grid item container direction="column" alignItems="center">
@@ -130,7 +150,7 @@ const CelebSignUpForm = () => {
               <Grid item>
                 <TextField
                   id="name"
-                  label="Name"
+                  label="Full Name"
                   required
                   fullWidth
                   className={classes.input}
@@ -151,24 +171,6 @@ const CelebSignUpForm = () => {
               </Grid>
               <Grid item>
                 <TextField
-                  label="Venmo username"
-                  fullWidth
-                  className={classes.input}
-                  value={venmo}
-                  onChange={(e) => setVenmo(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  label="Cash app username"
-                  fullWidth
-                  className={classes.input}
-                  value={cashApp}
-                  onChange={(e) => setCashApp(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
                   id="password"
                   label="Password (8 chars min)"
                   type="password"
@@ -177,6 +179,28 @@ const CelebSignUpForm = () => {
                   className={classes.input}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                />
+              </Grid>
+              <Divider />
+              <Typography variant="subtitle2" className={classes.recievePaymentsTypography}>
+                How would you like to recieve payments?
+              </Typography>
+              <Grid item>
+                <TextField
+                  label="Venmo Username"
+                  fullWidth
+                  className={classes.input}
+                  value={venmo}
+                  onChange={(e) => setVenmo(e.target.value)}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  label="Cash App Username"
+                  fullWidth
+                  className={classes.input}
+                  value={cashApp}
+                  onChange={(e) => setCashApp(e.target.value)}
                 />
               </Grid>
             </Grid>
@@ -218,7 +242,7 @@ const CelebSignUpForm = () => {
             </Grid>
           </form>
         </Grid>
-      </FloatCardMedium>
+      </Grid>
     </Grid>
   )
 }
