@@ -1,6 +1,5 @@
 export { default as addFriend } from './addFriend'
 export { default as createEvent } from './createEvent'
-export { default as createChitChat } from './createChitChat'
 export { default as createUser } from './createUser'
 export { default as deleteEvent } from './deleteEvent'
 export { default as deleteEventUser } from './deleteEventUser'
@@ -24,3 +23,4 @@ export { default as updatePartnerSharedDetails } from './updatePartnerSharedDeta
 export { default as updateUser } from './updateUser'
 export { default as updateChitChatStatus } from './updateChitChatStatus'
 export { default as updateFanStatus } from './updateFanStatus'
+export { default as upsertChitChat } from './upsertChitChat'

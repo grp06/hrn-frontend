@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
@@ -45,8 +46,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ChitChatCard = ({ chitChat, userIsHost }) => {
   const classes = useStyles()
-  const { event_users_new, host, start_at } = chitChat
-  const { name: hostName } = host
+  const history = useHistory()
+  const {
+    event_users_new,
+    host: { name: hostName },
+    id: chitChatId,
+    start_at,
+  } = chitChat
   const startTime = new Date(start_at).getTime()
 
   const renderEditEventButton = () => {
@@ -56,7 +62,7 @@ const ChitChatCard = ({ chitChat, userIsHost }) => {
         stroke="#f4f6fa"
         size="22"
         className={classes.editEventButton}
-        onClick={() => console.log('hey')}
+        onClick={() => history.push(`/create-chit-chat?chitChatId=${chitChatId}`)}
       />
     ) : null
   }

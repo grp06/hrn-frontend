@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import { Snack } from '../../common'
 import { sleep } from '../../helpers'
-import { createChitChat } from '../../gql/mutations'
+import { upsertChitChat } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -34,11 +34,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreateChitChatForm = ({ userId }) => {
+const CreateChitChatForm = ({ chitChatDetails, userId }) => {
   const classes = useStyles()
   const history = useHistory()
   const [showCreateChitChatSuccess, setShowCreateChitChatSuccess] = useState(false)
-  const [createChitChatMutation] = useMutation(createChitChat)
+  const [upsertChitChatMutation] = useMutation(upsertChitChat, {
+    onCompleted: async (data) => {
+      const { id: event_id, num_rounds, round_length } = data.insert_events_new.returning[0]
+      window.analytics.track('Event New created', {
+        num_rounds,
+        round_length,
+      })
+      setShowCreateChitChatSuccess(true)
+      await sleep(800)
+      history.push(`/chit-chat/${event_id}`)
+    },
+  })
+  const { id: chitChatId, num_rounds, round_length, start_at } = chitChatDetails || {}
 
   const getEventStartAt = (eventDate, eventTime) => {
     const dateISOString = eventDate.toISOString()
@@ -54,42 +66,30 @@ const CreateChitChatForm = ({ userId }) => {
   return (
     <>
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
-        Create Event
+        {chitChatDetails ? 'Edit Your Event' : 'Create Event'}
       </Typography>
       <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{
-            event_date: new Date(),
-            event_time: new Date(),
-            round_length: 2,
-            num_rounds: 15,
+            event_date: new Date(start_at) || new Date(),
+            event_time: new Date(start_at) || new Date(),
+            round_length: round_length || 2,
+            num_rounds: num_rounds || 15,
           }}
           onSubmit={async (values, { setSubmitting }) => {
             const { event_date, event_time, num_rounds, round_length } = values
-            let createChitChatResponse
             const start_at = getEventStartAt(event_date, event_time)
+            const event_details = { host_id: userId, num_rounds, round_length, start_at }
+            // this is for adding the chit chat id if we are editing, instead of creating
+            if (chitChatId) event_details.id = chitChatId
             try {
-              createChitChatResponse = await createChitChatMutation({
-                variables: {
-                  host_id: userId,
-                  num_rounds,
-                  round_length,
-                  start_at,
-                },
-              })
-              window.analytics.track('Event New created', {
-                num_rounds,
-                round_length,
-              })
+              await upsertChitChatMutation({ variables: { event_details } })
+              setSubmitting(false)
             } catch (error) {
               console.log('error')
+              setSubmitting(false)
             }
-            const { id: event_id } = createChitChatResponse.data.insert_events_new.returning[0]
-            setShowCreateChitChatSuccess(true)
-            await sleep(800)
-            setSubmitting(false)
-            history.push(`/chit-chat/${event_id}`)
           }}
         >
           {({ submitForm, isSubmitting, values }) => (
