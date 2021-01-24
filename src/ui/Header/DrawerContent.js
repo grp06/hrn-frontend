@@ -131,9 +131,11 @@ const DrawerContent = () => {
         <Grid container direction="column" className={classes.topHalfOfDrawer}>
           <div className={classes.toolbar}>
             <Grid container justify="center" alignItems="center" className={classes.topOfDrawer}>
-              <Button component={Link} to="/" disableRipple>
-                <img alt="company-logo" className={classes.logo} src={logo} />
-              </Button>
+              {role !== 'fan' && (
+                <Button component={Link} to="/" disableRipple>
+                  <img alt="company-logo" className={classes.logo} src={logo} />
+                </Button>
+              )}
             </Grid>
           </div>
           <Divider />
