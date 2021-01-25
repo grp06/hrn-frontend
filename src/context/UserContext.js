@@ -37,14 +37,12 @@ const useUserContext = () => {
 
   const setUserUpdatedAt = (updatedAt) => {
     dispatch((draft) => {
-      console.log('Date.now === in context', Date.now())
       draft.user.updated_at = updatedAt
     })
   }
 
   // TODO we gotta actually use this function somewhere
   const setUserInChitChatEvent = (boolean) => {
-    console.log('🚀 ~ setUserInChitChatEvent ~ boolean', boolean)
     dispatch((draft) => {
       draft.userInChitChatEvent = boolean
     })

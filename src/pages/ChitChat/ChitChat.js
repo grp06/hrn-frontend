@@ -17,6 +17,7 @@ import { useAppContext, useChitChatContext, useUserContext } from '../../context
 import { makeStyles } from '@material-ui/styles'
 import { listenToOnlineFansByChitChatId } from '../../gql/subscriptions'
 import { updateFanStatus } from '../../gql/mutations'
+import { useChitChatHelpers } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -54,7 +55,6 @@ const ChitChat = () => {
   const {
     user: { id: userId },
   } = useUserContext()
-  const [updateFanStatusMutation] = useMutation(updateFanStatus)
 
   const { chitChat, setEventNewId } = useChitChatContext()
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
@@ -87,14 +87,7 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (userIsHost && event_status === 'call-in-progress') {
-      const firstFanToMeet = onlineFansData.online_event_users_new[0].user_id
-
-      updateFanStatusMutation({
-        variables: {
-          userId: firstFanToMeet,
-          status: 'in-chat',
-        },
-      })
+      history.push(`/chit-chat/${chitChatId}/video-room`)
     }
   }, [event_status, userIsHost])
 
@@ -116,7 +109,13 @@ const ChitChat = () => {
 
   const renderCTAButton = () => {
     if (userIsHost && event_users_new.length) {
-      return <StartChitChatButton chitChatId={chitChatId} userId={userId} />
+      return (
+        <StartChitChatButton
+          onlineFansData={onlineFansData}
+          chitChatId={chitChatId}
+          userId={userId}
+        />
+      )
     }
 
     if (!currentUserIsRSVPd && !userIsHost) {
