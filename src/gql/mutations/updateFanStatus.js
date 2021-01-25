@@ -5,6 +5,7 @@ const updateFanStatus = gql`
     update_event_users_new(where: { user_id: { _eq: $userId } }, _set: { status: $status }) {
       returning {
         status
+        updated_at
       }
     }
   }

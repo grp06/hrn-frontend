@@ -8,6 +8,7 @@ const updateChitChatStatus = gql`
     ) {
       returning {
         status
+        updated_at
       }
     }
   }

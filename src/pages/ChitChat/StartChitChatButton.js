@@ -1,45 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import Typography from '@material-ui/core/Typography'
-import { useMutation, useSubscription } from 'react-apollo'
+
 import { TransitionModal } from '../../common'
-import { updateChitChatStatus, updateFanStatus } from '../../gql/mutations'
-import { listenToOnlineFansByChitChatId } from '../../gql/subscriptions'
+import { useChitChatHelpers } from '../../helpers'
 
 const StartChitChatButton = ({ chitChatId, userId }) => {
-  const [onlineFans, setOnlineFans] = useState(null)
-  const [updateChitChatStatusMutation] = useMutation(updateChitChatStatus)
-  const [updateFanStatusMutation] = useMutation(updateFanStatus)
-  const { data: onlineFansData, loading: fansLoading } = useSubscription(
-    listenToOnlineFansByChitChatId,
-    {
-      variables: {
-        chitChatId,
-      },
-      skip: !chitChatId,
-    }
-  )
+  const { startNextChitChat } = useChitChatHelpers()
 
-  const startChitChatHandler = async () => {
-    try {
-      await updateChitChatStatusMutation({
-        variables: {
-          chitChatId,
-          userId,
-          status: 'call-in-progress',
-        },
-      })
-      const firstFanToMeet = onlineFansData.online_event_users_new[0].user_id
-
-      await updateFanStatusMutation({
-        variables: {
-          userId: firstFanToMeet,
-          status: 'in-chat',
-        },
-      })
-    } catch (error) {
-      console.log('error = ', error)
-    }
-  }
   return (
     <div style={{ width: '100%' }}>
       {TransitionModal({
@@ -61,7 +28,7 @@ const StartChitChatButton = ({ chitChatId, userId }) => {
           </Typography>
         ),
         onAcceptButtonText: 'Lets Start!',
-        onAcceptFunction: () => startChitChatHandler(),
+        onAcceptFunction: () => startNextChitChat({ chitChatId, userId }),
       })}
     </div>
   )
