@@ -17,8 +17,6 @@ import { Loading } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
 import { listenToOnlineFansByChitChatId } from '../../gql/subscriptions'
-import { updateFanStatus } from '../../gql/mutations'
-import { useChitChatHelpers } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -28,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   CTAButton: {
-    marginTop: theme.spacing(4),
+    width: '100vw',
+    position: 'fixed',
+    top: 'auto',
+    bottom: 0,
+    padding: theme.spacing(3, 1.5),
+    backgroundColor: theme.palette.common.greyCard,
   },
   bodyContainer: {
     padding: theme.spacing(2),
@@ -127,7 +130,7 @@ const ChitChat = () => {
   )
 
   return (
-    <Grid container direction="column">
+    <Grid container direction="column" style={{ position: 'relative' }}>
       <ChitChatCard chitChat={chitChat} userIsHost={userIsHost} />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
@@ -139,9 +142,9 @@ const ChitChat = () => {
         />
         <Typography variant="h4">What to expect</Typography>
         <WhatToExpectChitChat userIsHost={userIsHost} />
-        <Grid container direction="row" className={classes.CTAButton}>
-          {renderCTAButton()}
-        </Grid>
+      </Grid>
+      <Grid container direction="row" className={classes.CTAButton}>
+        {renderCTAButton()}
       </Grid>
     </Grid>
   )
