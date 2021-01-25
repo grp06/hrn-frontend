@@ -7,6 +7,7 @@ import { useSubscription, useMutation } from 'react-apollo'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
+  FanQueueCard,
   MeetCelebButton,
   RSVPForChitChatForm,
   StartChitChatButton,
@@ -31,20 +32,6 @@ const useStyles = makeStyles((theme) => ({
   bodyContainer: {
     padding: theme.spacing(2),
   },
-  queueCard: {
-    margin: theme.spacing(2, 0),
-    padding: theme.spacing(1),
-    background: theme.palette.common.greyCard,
-    textAlign: 'center',
-  },
-  queueNumber: {
-    color: theme.palette.common.basePink,
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  fanMainContent: {
-    margin: theme.spacing(2, 0),
-  },
 }))
 
 const ChitChat = () => {
@@ -60,10 +47,10 @@ const ChitChat = () => {
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-  const currentUserIsRSVPd =
+  const fanIsRSVPed =
     event_users_new && event_users_new.some((eventUser) => eventUser.user.id === userId)
 
-  const usersQueueNumber =
+  const fansQueueNumber =
     event_users_new &&
     event_users_new.findIndex((u) => {
       return u.user.id === userId
@@ -119,7 +106,7 @@ const ChitChat = () => {
       return <StartChitChatButton chitChatId={chitChatId} userId={userId} />
     }
 
-    if (!currentUserIsRSVPd && !userIsHost) {
+    if (!fanIsRSVPed && !userIsHost) {
       return (
         <MeetCelebButton
           hostName={hostName}
@@ -129,63 +116,28 @@ const ChitChat = () => {
     }
   }
 
-  const renderCopyLinkButton = () =>
-    userIsHost && (
-      <Button
-        variant="outlined"
-        color="primary"
-        size="large"
-        className={classes.copyEventLinkButton}
-      >
-        <Grid item container direction="row" alignItems="center" justify="center">
-          <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
-          <Typography variant="body1" style={{ marginLeft: '8px' }}>
-            Copy event link
-          </Typography>
-        </Grid>
-      </Button>
-    )
-
-  const renderQueueText = () => {
-    const hostFirstName = hostName && hostName.split(' ')[0]
-
-    if (usersQueueNumber === 0) {
-      if (event_status === 'not-started') {
-        return `${hostFirstName} hasn't started the event yet. But When it's time you're the first in line!`
-      }
-      return `You're up next! You'll speak with ${hostFirstName} soon!`
-    }
-    return (
-      <>
-        <span className={classes.queueNumber}>{usersQueueNumber}</span>{' '}
-        {usersQueueNumber > 1 ? 'people' : 'person'} in front of you
-      </>
-    )
-  }
-
-  const fanIsRSVPd =
-    event_users_new.length && event_users_new.findIndex((u) => u.user.id === userId) > -1
-
-  const renderFanMainContent = () =>
-    !userIsHost &&
-    fanIsRSVPd && (
-      <Grid direction="column" container className={classes.fanMainContent}>
-        <Typography variant="h3">You are now in the queue</Typography>
-        <div className={classes.queueCard}>
-          <Typography variant="h4">{renderQueueText()}</Typography>
-        </div>
-        <Typography variant="subtitle1">
-          You can leave this page, but if you’re not here when it’s your turn, you will be skipped.
+  const renderCopyLinkButton = () => (
+    <Button variant="outlined" color="primary" size="large" className={classes.copyEventLinkButton}>
+      <Grid item container direction="row" alignItems="center" justify="center">
+        <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
+        <Typography variant="body1" style={{ marginLeft: '8px' }}>
+          Copy event link
         </Typography>
       </Grid>
-    )
+    </Button>
+  )
 
   return (
     <Grid container direction="column">
       <ChitChatCard chitChat={chitChat} userIsHost={userIsHost} />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
-        {renderFanMainContent()}
+        <FanQueueCard
+          eventStatus={event_status}
+          fanIsRSVPed={fanIsRSVPed}
+          fansQueueNumber={fansQueueNumber}
+          hostName={hostName}
+        />
         <Typography variant="h4">What to expect</Typography>
         <WhatToExpectChitChat userIsHost={userIsHost} />
         <Grid container direction="row" className={classes.CTAButton}>
