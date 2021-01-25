@@ -68,7 +68,7 @@ const ChitChatUserStatusProvider = ({ children }) => {
     variables: {
       chitChatId,
     },
-    skip: !chitChatId,
+    skip: !userId || !chitChatId,
   })
   // check if need to push to chitChatComplete
   // TODO create chitChatComplete page

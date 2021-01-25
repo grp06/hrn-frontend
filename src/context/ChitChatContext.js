@@ -93,7 +93,7 @@ const ChitChatProvider = ({ children }) => {
   }, [userId, userHasWorkingTech, eventStatus])
 
   useEffect(() => {
-    if (chitChatRSVPsData && chitChatRSVPsData.event_users_new.length) {
+    if (chitChatRSVPsData && chitChatRSVPsData.event_users_new) {
       dispatch((draft) => {
         draft.chitChatRSVPs = chitChatRSVPsData.event_users_new
       })

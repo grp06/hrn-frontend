@@ -93,15 +93,8 @@ const ChitChat = () => {
       }
     }
   }, [eventStatus, onlineChitChatUsersArray, userId])
-  console.log('🚀 ~ ChitChat ~ chitChatRSVPs', chitChatRSVPs)
-  console.log('🚀 ~ ChitChat ~ onlineChitChatUsersArray', onlineChitChatUsersArray)
 
-  if (
-    appLoading ||
-    Object.keys(chitChat).length < 2 ||
-    !onlineChitChatUsersArray ||
-    !chitChatRSVPs
-  ) {
+  if (appLoading || Object.keys(chitChat).length < 2 || !chitChatRSVPs) {
     return <Loading />
   }
 
@@ -112,6 +105,7 @@ const ChitChat = () => {
   const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
   console.log('🚀 ~ ChitChat ~ fanIsRSVPed', fanIsRSVPed)
 
+  // TODO also check for the status field and don't count people who have already met the celeb
   const fansQueueNumber = chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
   console.log('🚀 ~ ChitChat ~ fansQueueNumber', fansQueueNumber)
 
