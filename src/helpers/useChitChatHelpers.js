@@ -5,7 +5,7 @@ const useChitChatHelpers = () => {
   const [updateChitChatStatusMutation] = useMutation(updateChitChatStatus)
   const [updateFanStatusMutation] = useMutation(updateFanStatus)
 
-  const startNextChitChat = async ({ onlineFansData, chitChatId, userId }) => {
+  const startNextChitChat = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
     try {
       await updateChitChatStatusMutation({
         variables: {
@@ -15,7 +15,7 @@ const useChitChatHelpers = () => {
         },
         // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
       })
-      const firstFanToMeet = onlineFansData.online_event_users_new[0].user_id
+      const firstFanToMeet = onlineChitChatUsersArray[0].user_id
 
       await updateFanStatusMutation({
         variables: {

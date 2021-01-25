@@ -70,15 +70,18 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }
 
   const getTimeElapsedInRoundAlready = () => {
-    const timeUserEnteredRound = new Date(userUpdatedAt).getTime() + 50
+    const timeUserEnteredRound = new Date(userUpdatedAt).getTime()
 
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
+    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ eventUpdatedAt', eventUpdatedAt)
+    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ userUpdatedAt', userUpdatedAt)
 
     return timeUserEnteredRound - timeRoundStarted
   }
 
   const getPercentElapsedThroughRound = () => {
     const timeElapsedInRoundAlready = getTimeElapsedInRoundAlready()
+    console.log('timeElapsedInRoundAlready', timeElapsedInRoundAlready)
 
     const duration = getRoundDuration()
 
@@ -119,21 +122,28 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const interval = setInterval(() => {
       setProgressBarValue((oldVal) => {
         const newPct = oldVal + oneSecInPct
+        if (newPct > 100) {
+          clearInterval(interval)
+          return 100
+        }
+
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
-          const isLast15Seconds = oneRoundInMs - timeRightNow < 15000
+          const isLast30Seconds = oneRoundInMs - timeRightNow < 30000
           const isLast3Seconds = oneRoundInMs - timeRightNow < 3000
-          if (isLast3Seconds) {
+          // dont show 3.2.1. for meet and greet app
+          if (isLast3Seconds && eventStatus !== 'call-in-progress') {
             setCountdown321(Math.ceil((oneRoundInMs - timeRightNow) / 1000))
             if (!animateBackdrop) {
               setAnimateBackdrop(true)
             }
           }
-          if (isLast15Seconds) {
+          if (isLast30Seconds) {
             setShow20SecondsLeftSnack(true)
             setShowRoundStartedSnack(false)
           }
         }
+
         return newPct
       })
     }, 1000)

@@ -3,7 +3,6 @@ import FeatherIcon from 'feather-icons-react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { useSubscription, useMutation } from 'react-apollo'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
@@ -14,9 +13,13 @@ import {
   WhatToExpectChitChat,
 } from '.'
 import { Loading } from '../../common'
-import { useAppContext, useChitChatContext, useUserContext } from '../../context'
+import {
+  useAppContext,
+  useChitChatContext,
+  useUserContext,
+  useChitChatUserStatusContext,
+} from '../../context'
 import { makeStyles } from '@material-ui/styles'
-import { listenToOnlineFansByChitChatId } from '../../gql/subscriptions'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -47,28 +50,13 @@ const ChitChat = () => {
   } = useUserContext()
 
   const { chitChat, setEventNewId } = useChitChatContext()
-  const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
+  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
+  const { host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-  const fanIsRSVPed =
-    event_users_new && event_users_new.some((eventUser) => eventUser.user.id === userId)
-
-  const fansQueueNumber =
-    event_users_new &&
-    event_users_new.findIndex((u) => {
-      return u.user.id === userId
-    })
 
   const history = useHistory()
-  const { data: onlineFansData, loading: fansLoading } = useSubscription(
-    listenToOnlineFansByChitChatId,
-    {
-      variables: {
-        chitChatId,
-      },
-      skip: !chitChatId,
-    }
-  )
+
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
       setEventNewId(parseInt(chitChatId, 10))
@@ -82,26 +70,38 @@ const ChitChat = () => {
   }, [event_status, userIsHost])
 
   useEffect(() => {
-    if (!userIsHost && event_status === 'call-in-progress' && event_users_new.length && userId) {
-      const currentFanStatus = event_users_new.find((eventUser) => eventUser.user.id === userId)
-        .status
+    if (
+      !userIsHost &&
+      event_status === 'call-in-progress' &&
+      onlineChitChatUsersArray.length &&
+      userId
+    ) {
+      const currentFanStatus = onlineChitChatUsersArray.find(
+        (eventUser) => eventUser.user_id === userId
+      ).status
 
       if (currentFanStatus === 'in-chat') {
         console.log('push me to chat')
         history.push(`/chit-chat/${chitChatId}/video-room`)
       }
     }
-  }, [event_status, event_users_new, userId])
+  }, [event_status, onlineChitChatUsersArray, userId])
 
-  if (appLoading || Object.keys(chitChat).length < 2) {
+  if (appLoading || Object.keys(chitChat).length < 2 || !onlineChitChatUsersArray) {
     return <Loading />
   }
 
+  const fanIsRSVPed = onlineChitChatUsersArray.some((eventUser) => eventUser.user_id === userId)
+
+  const fansQueueNumber = onlineChitChatUsersArray.findIndex(
+    (eventUser) => eventUser.user_id === userId
+  )
+
   const renderCTAButton = () => {
-    if (userIsHost && event_users_new.length) {
+    if (userIsHost && onlineChitChatUsersArray.length) {
       return (
         <StartChitChatButton
-          onlineFansData={onlineFansData}
+          onlineChitChatUsersArray={onlineChitChatUsersArray}
           chitChatId={chitChatId}
           userId={userId}
         />
@@ -131,7 +131,11 @@ const ChitChat = () => {
 
   return (
     <Grid container direction="column" style={{ position: 'relative' }}>
-      <ChitChatCard chitChat={chitChat} userIsHost={userIsHost} />
+      <ChitChatCard
+        chitChat={chitChat}
+        userIsHost={userIsHost}
+        onlineChitChatUsersArray={onlineChitChatUsersArray}
+      />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
         <FanQueueCard
