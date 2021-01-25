@@ -18,7 +18,7 @@ const defaultState = {
   chitChatId: null,
   chitChat: {},
   userHasEnabledCameraAndMic: false,
-  numRSVPs: null,
+  chitChatRSVPs: null,
 }
 
 const useChitChatContext = () => {
@@ -82,7 +82,6 @@ const ChitChatProvider = ({ children }) => {
     },
     skip: !chitChatId,
   })
-  console.log('🚀 ~ ChitChatProvider ~ chitChatRSVPsData', chitChatRSVPsData)
 
   useEffect(() => {
     const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
@@ -96,7 +95,7 @@ const ChitChatProvider = ({ children }) => {
   useEffect(() => {
     if (chitChatRSVPsData && chitChatRSVPsData.event_users_new.length) {
       dispatch((draft) => {
-        draft.numRSVPs = chitChatRSVPsData.event_users_new.length
+        draft.chitChatRSVPs = chitChatRSVPsData.event_users_new
       })
     }
   }, [chitChatRSVPsData])

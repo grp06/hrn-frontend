@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChitChatCard = ({ chitChat, userIsHost, numRSVPs }) => {
+const ChitChatCard = ({ chitChat, userIsHost, chitChatRSVPs }) => {
   const classes = useStyles()
   const history = useHistory()
   const {
@@ -86,7 +86,7 @@ const ChitChatCard = ({ chitChat, userIsHost, numRSVPs }) => {
         alignItems="center"
         className={classes.numberOfRSVPsBadge}
       >
-        <Typography variant="h2">{numRSVPs}</Typography>
+        <Typography variant="h2">{chitChatRSVPs.length || '0'}</Typography>
         <Typography variant="subtitle2">RSVPed</Typography>
       </Grid>
       {renderEditEventButton()}

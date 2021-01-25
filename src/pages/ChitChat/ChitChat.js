@@ -50,7 +50,12 @@ const ChitChat = () => {
     user: { id: userId },
   } = useUserContext()
 
-  const { chitChat, setEventNewId, userHasEnabledCameraAndMic, numRSVPs } = useChitChatContext()
+  const {
+    chitChat,
+    setEventNewId,
+    userHasEnabledCameraAndMic,
+    chitChatRSVPs,
+  } = useChitChatContext()
   const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
@@ -88,8 +93,15 @@ const ChitChat = () => {
       }
     }
   }, [eventStatus, onlineChitChatUsersArray, userId])
+  console.log('🚀 ~ ChitChat ~ chitChatRSVPs', chitChatRSVPs)
+  console.log('🚀 ~ ChitChat ~ onlineChitChatUsersArray', onlineChitChatUsersArray)
 
-  if (appLoading || Object.keys(chitChat).length < 2 || !onlineChitChatUsersArray) {
+  if (
+    appLoading ||
+    Object.keys(chitChat).length < 2 ||
+    !onlineChitChatUsersArray ||
+    !chitChatRSVPs
+  ) {
     return <Loading />
   }
 
@@ -97,11 +109,11 @@ const ChitChat = () => {
     return eventInProgress && <CameraAndMicSetupScreen chitChatEvent />
   }
 
-  const fanIsRSVPed = onlineChitChatUsersArray.some((eventUser) => eventUser.user_id === userId)
+  const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
+  console.log('🚀 ~ ChitChat ~ fanIsRSVPed', fanIsRSVPed)
 
-  const fansQueueNumber = onlineChitChatUsersArray.findIndex(
-    (eventUser) => eventUser.user_id === userId
-  )
+  const fansQueueNumber = chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
+  console.log('🚀 ~ ChitChat ~ fansQueueNumber', fansQueueNumber)
 
   const renderCTAButton = () => {
     if (userIsHost) {
@@ -141,7 +153,7 @@ const ChitChat = () => {
       <ChitChatCard
         chitChat={chitChat}
         userIsHost={userIsHost}
-        numRSVPs={numRSVPs}
+        chitChatRSVPs={chitChatRSVPs}
         onlineChitChatUsersArray={onlineChitChatUsersArray}
       />
       <Grid container direction="column" className={classes.bodyContainer}>

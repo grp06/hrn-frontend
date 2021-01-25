@@ -60,7 +60,6 @@ const EventProvider = ({ children }) => {
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
-  console.log('🚀 ~ EventProvider ~ userOnEventPage', userOnEventPage)
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
   // TODO this check should be better ... it still thinks its an eventId if we're on a chitchat
