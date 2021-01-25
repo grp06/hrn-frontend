@@ -100,15 +100,14 @@ const ChitChatUserStatusProvider = ({ children }) => {
   // update last_seen on the user object every X seconds so users show up as "online" for host
   // make sure we've got a hostId, and the the user is not the host before starting the interval
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ userInChitChatEvent', userInChitChatEvent)
     if (userId && userInChitChatEvent && hostId && !userIsHost) {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
-            const lastSeenUpdated = await updateEventUsersNewLastSeenMutation()
+            await updateEventUsersNewLastSeenMutation()
             // TODO do the onCOmpleted style here
-            setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].updated_at)
+            // setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].updated_at)
           }
         } catch (error) {
           console.log('interval -> error', error)
