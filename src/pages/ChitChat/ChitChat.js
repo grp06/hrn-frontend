@@ -50,8 +50,8 @@ const ChitChat = () => {
     user: { id: userId },
   } = useUserContext()
 
-  const { chitChat, setEventNewId } = useChitChatContext()
-  const { onlineChitChatUsersArray, userHasEnabledCameraAndMic } = useChitChatUserStatusContext()
+  const { chitChat, setEventNewId, userHasEnabledCameraAndMic } = useChitChatContext()
+  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
   const { host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
@@ -93,6 +93,7 @@ const ChitChat = () => {
   }
 
   if (!userHasEnabledCameraAndMic) {
+    console.log('SHOW MEET SCREEN')
     return <CameraAndMicSetupScreen chitChatEvent />
   }
 

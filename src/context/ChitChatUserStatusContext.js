@@ -21,7 +21,6 @@ const ChitChatUserStatusContext = createContext()
 const defaultState = {
   chitChatUserStatus: 'in-queue',
   onlineChitChatUsersArray: [],
-  userHasEnabledCameraAndMic: false,
 }
 
 const useChitChatUserStatusContext = () => {
@@ -38,23 +37,16 @@ const useChitChatUserStatusContext = () => {
     })
   }
 
-  const setUserHasEnabledCameraAndMic = (userHasEnabledCameraAndMic) => {
-    dispatch((draft) => {
-      draft.userHasEnabledCameraAndMic = userHasEnabledCameraAndMic
-    })
-  }
-
   return {
     ...state,
     setUserEventStatus,
-    setUserHasEnabledCameraAndMic,
   }
 }
 
 const ChitChatUserStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { chitChatUserStatus, userHasEnabledCameraAndMic } = state
-  const { user, setUserUpdatedAt, userInChitChatEvent } = useUserContext()
+  const { chitChatUserStatus } = state
+  const { user, userInChitChatEvent } = useUserContext()
   const { chitChat } = useChitChatContext()
   const { host_id: hostId } = chitChat
 
@@ -64,7 +56,6 @@ const ChitChatUserStatusProvider = ({ children }) => {
   const userIsHost = parseInt(hostId, 10) === parseInt(userId, 10)
 
   const history = useHistory()
-
   const [updateEventUsersNewLastSeenMutation] = useMutation(updateEventUsersNewLastSeen, {
     variables: {
       chitChatId,
@@ -100,6 +91,9 @@ const ChitChatUserStatusProvider = ({ children }) => {
   // update last_seen on the user object every X seconds so users show up as "online" for host
   // make sure we've got a hostId, and the the user is not the host before starting the interval
   useEffect(() => {
+    console.log('🚀 ~ useEffect ~ userIsHost', userIsHost)
+    console.log('🚀 ~ useEffect ~ userInChitChatEvent', userInChitChatEvent)
+    console.log('🚀 ~ useEffect ~ userId', userId)
     if (userId && userInChitChatEvent && hostId && !userIsHost) {
       const interval = setInterval(async () => {
         console.log('last seen')

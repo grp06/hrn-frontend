@@ -107,7 +107,7 @@ const UserProvider = ({ children }) => {
   const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
-  const eventRoutes = ['video-room', 'lobby', 'group-vide-chat']
+  const eventRoutes = ['video-room', 'lobby', 'group-video-chat']
 
   const userInEvent = eventRoutes.some((route) => pathname.includes(route))
 
