@@ -61,6 +61,7 @@ const ChitChatProvider = ({ children }) => {
 
   const { pathname } = window.location
   const { chitChat, chitChatId } = state
+  const { status: eventStatus } = chitChat
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
@@ -75,12 +76,13 @@ const ChitChatProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    if (userId && userHasWorkingTech) {
+    const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
+    if (userId && userHasWorkingTech && eventInProgress) {
       dispatch((draft) => {
         draft.userHasEnabledCameraAndMic = true
       })
     }
-  }, [userId, userHasWorkingTech])
+  }, [userId, userHasWorkingTech, eventStatus])
 
   useEffect(() => {
     // if on chitChat page and its a valid chitChat

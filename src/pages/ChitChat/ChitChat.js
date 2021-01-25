@@ -52,9 +52,10 @@ const ChitChat = () => {
 
   const { chitChat, setEventNewId, userHasEnabledCameraAndMic } = useChitChatContext()
   const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
-  const { host, host_id, start_at, status: event_status } = chitChat
+  const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
+  const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
 
   const history = useHistory()
 
@@ -65,15 +66,15 @@ const ChitChat = () => {
   }, [chitChatId, chitChat, setEventNewId])
 
   useEffect(() => {
-    if (userIsHost && event_status === 'call-in-progress') {
+    if (userIsHost && eventStatus === 'call-in-progress') {
       history.push(`/chit-chat/${chitChatId}/video-room`)
     }
-  }, [event_status, userIsHost])
+  }, [eventStatus, userIsHost])
 
   useEffect(() => {
     if (
       !userIsHost &&
-      event_status === 'call-in-progress' &&
+      eventStatus === 'call-in-progress' &&
       onlineChitChatUsersArray.length &&
       userId
     ) {
@@ -86,14 +87,14 @@ const ChitChat = () => {
         history.push(`/chit-chat/${chitChatId}/video-room`)
       }
     }
-  }, [event_status, onlineChitChatUsersArray, userId])
+  }, [eventStatus, onlineChitChatUsersArray, userId])
 
   if (appLoading || Object.keys(chitChat).length < 2 || !onlineChitChatUsersArray) {
     return <Loading />
   }
 
-  if (!userHasEnabledCameraAndMic) {
-    return <CameraAndMicSetupScreen chitChatEvent />
+  if (!userHasEnabledCameraAndMic && eventInProgress) {
+    return eventInProgress && <CameraAndMicSetupScreen chitChatEvent />
   }
 
   const fanIsRSVPed = onlineChitChatUsersArray.some((eventUser) => eventUser.user_id === userId)
@@ -145,7 +146,7 @@ const ChitChat = () => {
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
         <FanQueueCard
-          eventStatus={event_status}
+          eventStatus={eventStatus}
           fanIsRSVPed={fanIsRSVPed}
           fansQueueNumber={fansQueueNumber}
           hostName={hostName}
