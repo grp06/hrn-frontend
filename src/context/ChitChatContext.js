@@ -68,6 +68,7 @@ const ChitChatProvider = ({ children }) => {
     if (userOnChitChatPage && chitChatData) {
       // chitChat doesn't exist - redirect user
       if (!chitChatData.events_new.length) {
+        console.log('🚀 ~ useEffect ~ chitChatData', chitChatData)
         setAppLoading(false)
         return history.push('/events-new')
       }
@@ -86,6 +87,7 @@ const ChitChatProvider = ({ children }) => {
           window.location.reload()
         }
         dispatch((draft) => {
+          console.log('chitChatData.events_new[0] = ', chitChatData.events_new[0])
           draft.chitChat = chitChatData.events_new[0]
         })
         return setAppLoading(false)

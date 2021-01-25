@@ -44,11 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChitChatCard = ({ chitChat, userIsHost }) => {
+const ChitChatCard = ({ chitChat, userIsHost, onlineChitChatUsersArray }) => {
   const classes = useStyles()
   const history = useHistory()
   const {
-    event_users_new,
     host: { name: hostName },
     id: chitChatId,
     start_at,
@@ -87,7 +86,7 @@ const ChitChatCard = ({ chitChat, userIsHost }) => {
         alignItems="center"
         className={classes.numberOfRSVPsBadge}
       >
-        <Typography variant="h2">{event_users_new.length}</Typography>
+        <Typography variant="h2">{onlineChitChatUsersArray.length}</Typography>
         <Typography variant="subtitle2">RSVPed</Typography>
       </Grid>
       {renderEditEventButton()}

@@ -156,7 +156,6 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (location) {
-      console.log('userOnSpecificChitChatPage = ', userOnSpecificChitChatPage)
       dispatch((draft) => {
         draft.userOnAuthRoute = isUserOnAuth
         draft.userInEvent = userInEvent
