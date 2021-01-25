@@ -88,20 +88,18 @@ const ChitChat = () => {
   const currentUserIsRSVPd = event_users_new.some((eventUser) => eventUser.user.id === userId)
 
   const renderCTAButton = () => {
-    return (
-      !currentUserIsRSVPd && (
-        <Grid container direction="row" className={classes.CTAButton}>
-          {userIsHost ? (
-            <StartChitChatButton chitChatId={chitChatId} userId={userId} />
-          ) : (
-            <MeetCelebButton
-              hostName={hostName}
-              modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
-            />
-          )}
-        </Grid>
+    if (userIsHost && event_users_new.length) {
+      return <StartChitChatButton chitChatId={chitChatId} userId={userId} />
+    }
+
+    if (!currentUserIsRSVPd && !userIsHost) {
+      return (
+        <MeetCelebButton
+          hostName={hostName}
+          modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
+        />
       )
-    )
+    }
   }
 
   const renderCopyLinkButton = () =>
@@ -125,7 +123,7 @@ const ChitChat = () => {
   })
 
   const renderQueueText = () => {
-    if (queueNumber === 0) {
+    if (queueNumber === 0 && event_status !== 'not-started') {
       return `You're up next! You'll speak with ${hostName} soon!`
     }
     return (
@@ -134,8 +132,13 @@ const ChitChat = () => {
       </>
     )
   }
+
+  const fanIsRSVPd =
+    event_users_new.length && event_users_new.findIndex((u) => u.user.id === userId) > -1
+
   const renderFanMainContent = () =>
-    !userIsHost && (
+    !userIsHost &&
+    fanIsRSVPd && (
       <Grid direction="column" container className={classes.fanMainContent}>
         <Typography variant="h3">You are now in the queue</Typography>
         <div className={classes.queueCard}>
@@ -155,7 +158,9 @@ const ChitChat = () => {
         {renderFanMainContent()}
         <Typography variant="h4">What to expect</Typography>
         <WhatToExpectChitChat userIsHost={userIsHost} />
-        {renderCTAButton()}
+        <Grid container direction="row" className={classes.CTAButton}>
+          {renderCTAButton()}
+        </Grid>
       </Grid>
     </Grid>
   )

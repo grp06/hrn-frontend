@@ -50,6 +50,7 @@ const ChitChatProvider = ({ children }) => {
   const { setAppLoading } = useAppContext()
   const { pathname } = window.location
   const { chitChat, chitChatId } = state
+  console.log('🚀 ~ ChitChatProvider ~ chitChatId', chitChatId)
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
@@ -62,6 +63,7 @@ const ChitChatProvider = ({ children }) => {
     },
     skip: !chitChatId,
   })
+  console.log('🚀 ~ ChitChatProvider ~ chitChatData', chitChatData)
 
   useEffect(() => {
     // if on chitChat page and its a valid chitChat
