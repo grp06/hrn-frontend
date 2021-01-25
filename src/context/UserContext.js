@@ -37,11 +37,14 @@ const useUserContext = () => {
 
   const setUserUpdatedAt = (updatedAt) => {
     dispatch((draft) => {
+      console.log('Date.now === in context', Date.now())
       draft.user.updated_at = updatedAt
     })
   }
 
+  // TODO we gotta actually use this function somewhere
   const setUserInChitChatEvent = (boolean) => {
+    console.log('🚀 ~ setUserInChitChatEvent ~ boolean', boolean)
     dispatch((draft) => {
       draft.userInChitChatEvent = boolean
     })
@@ -99,7 +102,8 @@ const UserProvider = ({ children }) => {
 
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
   const userOnEventsPage = Boolean(pathname.match(eventsPageRegex))
-  const userOnSpecificChitChatPage = Boolean(pathname.match(specificChitChatPageRegex))
+  // any reason to use a regex below? We really just to know if they're on a chit-chat page
+  const userOnSpecificChitChatPage = Boolean(pathname.includes('/chit-chat'))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
   const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
@@ -154,6 +158,7 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (location) {
+      console.log('userOnSpecificChitChatPage = ', userOnSpecificChitChatPage)
       dispatch((draft) => {
         draft.userOnAuthRoute = isUserOnAuth
         draft.userInEvent = userInEvent

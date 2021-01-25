@@ -10,6 +10,7 @@ const updateEventUsersNewLastSeen = gql`
         event_id
         last_seen
         user_id
+        updated_at
       }
     }
   }

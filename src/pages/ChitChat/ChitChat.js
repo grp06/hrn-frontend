@@ -3,7 +3,7 @@ import FeatherIcon from 'feather-icons-react'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-
+import { useSubscription, useMutation } from 'react-apollo'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
@@ -15,6 +15,8 @@ import {
 import { Loading } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
+import { listenToOnlineFansByChitChatId } from '../../gql/subscriptions'
+import { updateFanStatus } from '../../gql/mutations'
 
 const useStyles = makeStyles((theme) => ({
   copyEventLinkButton: {
@@ -52,19 +54,31 @@ const ChitChat = () => {
   const {
     user: { id: userId },
   } = useUserContext()
+  const [updateFanStatusMutation] = useMutation(updateFanStatus)
+
   const { chitChat, setEventNewId } = useChitChatContext()
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const currentUserIsRSVPd =
     event_users_new && event_users_new.some((eventUser) => eventUser.user.id === userId)
+
   const usersQueueNumber =
     event_users_new &&
     event_users_new.findIndex((u) => {
       return u.user.id === userId
     })
-  const history = useHistory()
 
+  const history = useHistory()
+  const { data: onlineFansData, loading: fansLoading } = useSubscription(
+    listenToOnlineFansByChitChatId,
+    {
+      variables: {
+        chitChatId,
+      },
+      skip: !chitChatId,
+    }
+  )
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
       setEventNewId(parseInt(chitChatId, 10))
@@ -73,7 +87,14 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (userIsHost && event_status === 'call-in-progress') {
-      history.push(`/chit-chat/${chitChatId}/video-room`)
+      const firstFanToMeet = onlineFansData.online_event_users_new[0].user_id
+
+      updateFanStatusMutation({
+        variables: {
+          userId: firstFanToMeet,
+          status: 'in-chat',
+        },
+      })
     }
   }, [event_status, userIsHost])
 

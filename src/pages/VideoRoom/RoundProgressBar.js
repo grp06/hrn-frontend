@@ -52,7 +52,8 @@ const useStyles = makeStyles((theme) => ({
 
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const classes = useStyles()
-  const { id: eventId, round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
+  const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
+
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
@@ -72,7 +73,9 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const timeUserEnteredRound = new Date(userUpdatedAt).getTime() + 50
 
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
-
+    console.log('Date.now == ', Date.now())
+    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ eventUpdatedAt', eventUpdatedAt)
+    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ userUpdatedAt', userUpdatedAt)
     return timeUserEnteredRound - timeRoundStarted
   }
 
@@ -104,17 +107,21 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
       return (1000 / (round_length * 60000)) * 100
     }
 
+    const oneSecInPct = getOneSecondInPct()
+
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      setProgressBarValue(percentElapsedThroughRound + getOneSecondInPct())
-      if (eventStatus === 'room-in-progress') {
+      console.log('🚀 ~ useEffect ~ percentElapsedThroughRound', percentElapsedThroughRound)
+      setProgressBarValue(percentElapsedThroughRound + oneSecInPct)
+      if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
         setShowRoundStartedSnack(true)
       }
     }
 
     const interval = setInterval(() => {
       setProgressBarValue((oldVal) => {
-        const newPct = oldVal + getOneSecondInPct()
+        console.log('🚀 ~ setProgressBarValue ~ oldVal', oldVal)
+        const newPct = oldVal + oneSecInPct
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
           const isLast15Seconds = oneRoundInMs - timeRightNow < 15000

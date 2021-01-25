@@ -80,7 +80,6 @@ const ChitChatUserStatusProvider = ({ children }) => {
     },
     skip: !chitChatId,
   })
-
   // check if need to push to chitChatComplete
   // TODO create chitChatComplete page
   useEffect(() => {
@@ -101,20 +100,15 @@ const ChitChatUserStatusProvider = ({ children }) => {
   // update last_seen on the user object every X seconds so users show up as "online" for host
   // make sure we've got a hostId, and the the user is not the host before starting the interval
   useEffect(() => {
-    if (
-      userId &&
-      chitChatUserStatus === 'in-queue' &&
-      userInChitChatEvent &&
-      hostId &&
-      !userIsHost
-    ) {
-      console.log('🚀 ~ useEffect ~ userIsHost', userIsHost)
+    console.log('🚀 ~ useEffect ~ userInChitChatEvent', userInChitChatEvent)
+    if (userId && userInChitChatEvent && hostId && !userIsHost) {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
             const lastSeenUpdated = await updateEventUsersNewLastSeenMutation()
-            setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].last_seen)
+            // TODO do the onCOmpleted style here
+            setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].updated_at)
           }
         } catch (error) {
           console.log('interval -> error', error)
@@ -124,7 +118,7 @@ const ChitChatUserStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId, chitChatUserStatus, userInChitChatEvent])
+  }, [userId, userInChitChatEvent])
 
   return (
     <ChitChatUserStatusContext.Provider value={[state, dispatch]}>
