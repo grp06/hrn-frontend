@@ -126,7 +126,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
           clearInterval(interval)
           return 100
         }
-        console.log('🚀 ~ setProgressBarValue ~ newPct', newPct)
+
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
           const isLast30Seconds = oneRoundInMs - timeRightNow < 30000

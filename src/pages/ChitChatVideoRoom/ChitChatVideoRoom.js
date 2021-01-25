@@ -41,9 +41,7 @@ const ChitChatVideoRoom = () => {
       history.push(`/chit-chat/${chitChatId}`)
     }
   }, [event_status])
-  if (currentFan) {
-    console.log('updating current fan updated_at ', currentFan.updated_at)
-  }
+
   return (
     <div>
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
