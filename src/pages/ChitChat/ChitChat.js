@@ -126,8 +126,13 @@ const ChitChat = () => {
     )
 
   const renderQueueText = () => {
-    if (usersQueueNumber === 0 && event_status !== 'not-started') {
-      return `You're up next! You'll speak with ${hostName} soon!`
+    const hostFirstName = hostName && hostName.split(' ')[0]
+
+    if (usersQueueNumber === 0) {
+      if (event_status === 'not-started') {
+        return `${hostFirstName} hasn't started the event yet. But When it's time you're the first in line!`
+      }
+      return `You're up next! You'll speak with ${hostFirstName} soon!`
     }
     return (
       <>

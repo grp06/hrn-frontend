@@ -56,17 +56,22 @@ const ChitChatUserStatusProvider = ({ children }) => {
   const { chitChatUserStatus, userHasEnabledCameraAndMic } = state
   const { user, setUserUpdatedAt, userInChitChatEvent } = useUserContext()
   const { chitChat } = useChitChatContext()
+  const { host_id: hostId } = chitChat
+
   const { id: chitChatId } = chitChat
-  const { id: user_id } = user
+  const { id: userId } = user
+
+  const userIsHost = parseInt(hostId, 10) === parseInt(userId, 10)
+
   const history = useHistory()
 
   const [updateEventUsersNewLastSeenMutation] = useMutation(updateEventUsersNewLastSeen, {
     variables: {
       chitChatId,
       now: new Date().toISOString(),
-      user_id,
+      user_id: userId,
     },
-    skip: !user_id || !chitChatId,
+    skip: !userId || !chitChatId,
   })
 
   const { data: onlineChitChatUsersData } = useSubscription(listenToOnlineFansByChitChatId, {
@@ -94,12 +99,20 @@ const ChitChatUserStatusProvider = ({ children }) => {
   }, [onlineChitChatUsersData])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
+  // make sure we've got a hostId, and the the user is not the host before starting the interval
   useEffect(() => {
-    if (user_id && chitChatUserStatus === 'in-queue' && userInChitChatEvent) {
+    if (
+      userId &&
+      chitChatUserStatus === 'in-queue' &&
+      userInChitChatEvent &&
+      hostId &&
+      !userIsHost
+    ) {
+      console.log('🚀 ~ useEffect ~ userIsHost', userIsHost)
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
-          if (!bannedUserIds.includes(user_id)) {
+          if (!bannedUserIds.includes(userId)) {
             const lastSeenUpdated = await updateEventUsersNewLastSeenMutation()
             setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].last_seen)
           }
@@ -111,7 +124,7 @@ const ChitChatUserStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [user_id, chitChatUserStatus, userInChitChatEvent])
+  }, [userId, chitChatUserStatus, userInChitChatEvent])
 
   return (
     <ChitChatUserStatusContext.Provider value={[state, dispatch]}>
