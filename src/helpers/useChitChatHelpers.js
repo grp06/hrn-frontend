@@ -1,18 +1,33 @@
-import { updateChitChatStatus } from '../gql/mutations'
+import { updateChitChatStatus, updateFanStatus } from '../gql/mutations'
 import { useMutation } from 'react-apollo'
 
 const useChitChatHelpers = () => {
   const [updateChitChatStatusMutation] = useMutation(updateChitChatStatus)
-  const startNextChitChat = async ({ chitChatId, userId }) => {
-    await updateChitChatStatusMutation({
-      variables: {
-        chitChatId,
-        userId,
-        status: 'call-in-progress',
-      },
-      // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
-    })
+  const [updateFanStatusMutation] = useMutation(updateFanStatus)
+
+  const startNextChitChat = async ({ onlineFansData, chitChatId, userId }) => {
+    try {
+      await updateChitChatStatusMutation({
+        variables: {
+          chitChatId,
+          userId,
+          status: 'call-in-progress',
+        },
+        // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
+      })
+      const firstFanToMeet = onlineFansData.online_event_users_new[0].user_id
+
+      await updateFanStatusMutation({
+        variables: {
+          userId: firstFanToMeet,
+          status: 'in-chat',
+        },
+      })
+    } catch (error) {
+      console.log('🚀 ~ startNextChitChat ~ error', error)
+    }
   }
+
   return { startNextChitChat }
 }
 
