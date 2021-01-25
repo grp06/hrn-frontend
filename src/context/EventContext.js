@@ -52,6 +52,7 @@ const useEventContext = () => {
 }
 
 const EventProvider = ({ children }) => {
+  // TODO shouldn't this not render at all if we're on a chitchat?
   const [state, dispatch] = useImmer({ ...defaultState })
   const { setAppLoading } = useAppContext()
   const { pathname } = window.location
@@ -59,8 +60,10 @@ const EventProvider = ({ children }) => {
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
+  console.log('🚀 ~ EventProvider ~ userOnEventPage', userOnEventPage)
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
+  // TODO this check should be better ... it still thinks its an eventId if we're on a chitchat
   const eventId = parseInt(pathnameArray[2], 10)
 
   // subscribe to the Event only if we have an eventId
@@ -68,14 +71,14 @@ const EventProvider = ({ children }) => {
     variables: {
       event_id: eventId,
     },
-    skip: !eventId,
+    skip: !eventId || !userOnEventPage,
   })
 
   const { data: chatMessages } = useSubscription(listenToEventChatMessages, {
     variables: {
       event_id: eventId,
     },
-    skip: !eventId,
+    skip: !eventId || !userOnEventPage,
   })
 
   useEffect(() => {

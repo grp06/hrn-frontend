@@ -31,7 +31,6 @@ const useChitChatUserStatusContext = () => {
   }
 
   const setUserEventStatus = (status) => {
-    console.log('setUSerEventStatus ->', status)
     dispatch((draft) => {
       draft.userEventStatus = status
     })
@@ -91,9 +90,6 @@ const ChitChatUserStatusProvider = ({ children }) => {
   // update last_seen on the user object every X seconds so users show up as "online" for host
   // make sure we've got a hostId, and the the user is not the host before starting the interval
   useEffect(() => {
-    console.log('🚀 ~ useEffect ~ userIsHost', userIsHost)
-    console.log('🚀 ~ useEffect ~ userInChitChatEvent', userInChitChatEvent)
-    console.log('🚀 ~ useEffect ~ userId', userId)
     if (userId && userInChitChatEvent && hostId && !userIsHost) {
       const interval = setInterval(async () => {
         console.log('last seen')

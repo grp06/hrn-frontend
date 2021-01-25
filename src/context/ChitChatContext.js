@@ -4,7 +4,7 @@ import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 import { useAppContext, useUserContext } from '.'
-import { listenToChitChat } from '../gql/subscriptions'
+import { listenToChitChat, listenToChitChatRSVPs } from '../gql/subscriptions'
 
 const ChitChatContext = createContext()
 
@@ -18,6 +18,7 @@ const defaultState = {
   chitChatId: null,
   chitChat: {},
   userHasEnabledCameraAndMic: false,
+  numRSVPs: null,
 }
 
 const useChitChatContext = () => {
@@ -75,6 +76,14 @@ const ChitChatProvider = ({ children }) => {
     skip: !chitChatId,
   })
 
+  const { data: chitChatRSVPsData } = useSubscription(listenToChitChatRSVPs, {
+    variables: {
+      chitChatId,
+    },
+    skip: !chitChatId,
+  })
+  console.log('🚀 ~ ChitChatProvider ~ chitChatRSVPsData', chitChatRSVPsData)
+
   useEffect(() => {
     const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
     if (userId && userHasWorkingTech && eventInProgress) {
@@ -83,6 +92,14 @@ const ChitChatProvider = ({ children }) => {
       })
     }
   }, [userId, userHasWorkingTech, eventStatus])
+
+  useEffect(() => {
+    if (chitChatRSVPsData && chitChatRSVPsData.event_users_new.length) {
+      dispatch((draft) => {
+        draft.numRSVPs = chitChatRSVPsData.event_users_new.length
+      })
+    }
+  }, [chitChatRSVPsData])
 
   useEffect(() => {
     // if on chitChat page and its a valid chitChat

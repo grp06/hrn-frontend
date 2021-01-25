@@ -50,7 +50,7 @@ const ChitChat = () => {
     user: { id: userId },
   } = useUserContext()
 
-  const { chitChat, setEventNewId, userHasEnabledCameraAndMic } = useChitChatContext()
+  const { chitChat, setEventNewId, userHasEnabledCameraAndMic, numRSVPs } = useChitChatContext()
   const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
@@ -141,6 +141,7 @@ const ChitChat = () => {
       <ChitChatCard
         chitChat={chitChat}
         userIsHost={userIsHost}
+        numRSVPs={numRSVPs}
         onlineChitChatUsersArray={onlineChitChatUsersArray}
       />
       <Grid container direction="column" className={classes.bodyContainer}>
