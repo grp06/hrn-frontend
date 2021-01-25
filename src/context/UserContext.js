@@ -9,6 +9,7 @@ const defaultState = {
   user: {
     tags_users: [],
   },
+  userInChitChatEvent: false,
   userInEvent: false,
   userOnAuthRoute: false,
 }
@@ -37,6 +38,12 @@ const useUserContext = () => {
   const setUserUpdatedAt = (updatedAt) => {
     dispatch((draft) => {
       draft.user.updated_at = updatedAt
+    })
+  }
+
+  const setUserInChitChatEvent = (boolean) => {
+    dispatch((draft) => {
+      draft.userInChitChatEvent = boolean
     })
   }
 
@@ -72,6 +79,7 @@ const useUserContext = () => {
     setUserUpdatedAt,
     updateUserObject,
     updateUserNewObject,
+    setUserInChitChatEvent,
     setUserInEvent,
   }
 }
@@ -149,6 +157,7 @@ const UserProvider = ({ children }) => {
       dispatch((draft) => {
         draft.userOnAuthRoute = isUserOnAuth
         draft.userInEvent = userInEvent
+        draft.userInChitChatEvent = userOnSpecificChitChatPage
       })
     }
   }, [location])

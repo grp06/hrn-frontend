@@ -56,6 +56,13 @@ const ChitChat = () => {
   const { event_users_new, host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
+  const currentUserIsRSVPd =
+    event_users_new && event_users_new.some((eventUser) => eventUser.user.id === userId)
+  const usersQueueNumber =
+    event_users_new &&
+    event_users_new.findIndex((u) => {
+      return u.user.id === userId
+    })
   const history = useHistory()
 
   useEffect(() => {
@@ -85,7 +92,6 @@ const ChitChat = () => {
   if (appLoading || Object.keys(chitChat).length < 2) {
     return <Loading />
   }
-  const currentUserIsRSVPd = event_users_new.some((eventUser) => eventUser.user.id === userId)
 
   const renderCTAButton = () => {
     if (userIsHost && event_users_new.length) {
@@ -118,17 +124,15 @@ const ChitChat = () => {
         </Grid>
       </Button>
     )
-  const queueNumber = event_users_new.findIndex((u) => {
-    return u.user.id === userId
-  })
 
   const renderQueueText = () => {
-    if (queueNumber === 0 && event_status !== 'not-started') {
+    if (usersQueueNumber === 0 && event_status !== 'not-started') {
       return `You're up next! You'll speak with ${hostName} soon!`
     }
     return (
       <>
-        <span className={classes.queueNumber}>{queueNumber}</span> people in front of you
+        <span className={classes.queueNumber}>{usersQueueNumber}</span>{' '}
+        {usersQueueNumber > 1 ? 'people' : 'person'} in front of you
       </>
     )
   }
