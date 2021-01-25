@@ -19,6 +19,7 @@ import {
   useUserContext,
   useChitChatUserStatusContext,
 } from '../../context'
+import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -50,7 +51,7 @@ const ChitChat = () => {
   } = useUserContext()
 
   const { chitChat, setEventNewId } = useChitChatContext()
-  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
+  const { onlineChitChatUsersArray, userHasEnabledCameraAndMic } = useChitChatUserStatusContext()
   const { host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
@@ -91,6 +92,10 @@ const ChitChat = () => {
     return <Loading />
   }
 
+  if (!userHasEnabledCameraAndMic) {
+    return <CameraAndMicSetupScreen chitChatEvent />
+  }
+
   const fanIsRSVPed = onlineChitChatUsersArray.some((eventUser) => eventUser.user_id === userId)
 
   const fansQueueNumber = onlineChitChatUsersArray.findIndex(
@@ -98,12 +103,13 @@ const ChitChat = () => {
   )
 
   const renderCTAButton = () => {
-    if (userIsHost && onlineChitChatUsersArray.length) {
+    if (userIsHost) {
       return (
         <StartChitChatButton
           onlineChitChatUsersArray={onlineChitChatUsersArray}
           chitChatId={chitChatId}
           userId={userId}
+          disabled={!onlineChitChatUsersArray.length}
         />
       )
     }
