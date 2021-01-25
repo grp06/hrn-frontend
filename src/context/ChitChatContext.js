@@ -75,14 +75,12 @@ const ChitChatProvider = ({ children }) => {
   })
 
   useEffect(() => {
-    if (userId) {
-      if (userHasWorkingTech) {
-        dispatch((draft) => {
-          draft.userHasEnabledCameraAndMic = true
-        })
-      }
+    if (userId && userHasWorkingTech) {
+      dispatch((draft) => {
+        draft.userHasEnabledCameraAndMic = true
+      })
     }
-  }, [userId])
+  }, [userId, userHasWorkingTech])
 
   useEffect(() => {
     // if on chitChat page and its a valid chitChat

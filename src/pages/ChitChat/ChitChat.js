@@ -93,7 +93,6 @@ const ChitChat = () => {
   }
 
   if (!userHasEnabledCameraAndMic) {
-    console.log('SHOW MEET SCREEN')
     return <CameraAndMicSetupScreen chitChatEvent />
   }
 
