@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
 import { useChitChatHelpers } from '../../helpers'
 
-const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, userId }) => {
+const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, disabled, userId }) => {
   const { startNextChitChat } = useChitChatHelpers()
 
   return (
@@ -17,6 +17,7 @@ const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, userId }) =
           buttonStyle: {
             width: '100%',
           },
+          disabled: disabled,
         },
         modalBody: (
           <Typography variant="h3">

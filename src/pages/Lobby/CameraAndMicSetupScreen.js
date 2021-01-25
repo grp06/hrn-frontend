@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { SetupMicAndCamera } from '.'
+import { SetupMicAndCameraChitChat } from '../ChitChat'
 
 const useStyles = makeStyles((theme) => ({
   previewVideo: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CameraAndMicSetupScreen = ({ usersName }) => {
+const CameraAndMicSetupScreen = ({ chitChatEvent, usersName }) => {
   const classes = useStyles()
   return (
     <Grid container justify="center" alignItems="center" className={classes.screenContainer}>
@@ -45,7 +46,11 @@ const CameraAndMicSetupScreen = ({ usersName }) => {
           <video autoPlay id="videoElement" muted className={classes.previewVideo} />
         </Grid>
         <Grid item md={6}>
-          <SetupMicAndCamera usersName={usersName} />
+          {chitChatEvent ? (
+            <SetupMicAndCameraChitChat />
+          ) : (
+            <SetupMicAndCamera usersName={usersName} />
+          )}
         </Grid>
       </Grid>
     </Grid>
