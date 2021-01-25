@@ -73,9 +73,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const timeUserEnteredRound = new Date(userUpdatedAt).getTime() + 50
 
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
-    console.log('Date.now == ', Date.now())
-    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ eventUpdatedAt', eventUpdatedAt)
-    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ userUpdatedAt', userUpdatedAt)
+
     return timeUserEnteredRound - timeRoundStarted
   }
 
@@ -111,7 +109,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
 
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
-      console.log('🚀 ~ useEffect ~ percentElapsedThroughRound', percentElapsedThroughRound)
+
       setProgressBarValue(percentElapsedThroughRound + oneSecInPct)
       if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
         setShowRoundStartedSnack(true)
@@ -120,7 +118,6 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
 
     const interval = setInterval(() => {
       setProgressBarValue((oldVal) => {
-        console.log('🚀 ~ setProgressBarValue ~ oldVal', oldVal)
         const newPct = oldVal + oneSecInPct
         if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
