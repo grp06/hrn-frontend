@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import {
-  useAppContext,
-  useChitChatContext,
-  useUserContext,
-  useChitChatUserStatusContext,
-} from '../../context'
+import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
 import { RoundProgressBar } from '../VideoRoom'
 
@@ -15,7 +10,7 @@ const ChitChatVideoRoom = () => {
   const classes = useStyles()
   const { id: chitChatId } = useParams()
   const { appLoading } = useAppContext()
-  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
+  const { onlineChitChatUsersArray } = useChitChatContext()
 
   const {
     user: { id: userId },

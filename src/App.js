@@ -44,7 +44,6 @@ import {
 import {
   AppProvider,
   ChitChatProvider,
-  ChitChatUserStatusProvider,
   EventProvider,
   TwilioProvider,
   UserProvider,
@@ -149,14 +148,12 @@ const App = () => {
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <ChitChatProvider>
-                        <ChitChatUserStatusProvider>
-                          <Route exact path="/chit-chat/:id" component={ChitChat} />
-                          <Route
-                            exact
-                            path="/chit-chat/:id/video-room"
-                            component={ChitChatVideoRoom}
-                          />
-                        </ChitChatUserStatusProvider>
+                        <Route exact path="/chit-chat/:id" component={ChitChat} />
+                        <Route
+                          exact
+                          path="/chit-chat/:id/video-room"
+                          component={ChitChatVideoRoom}
+                        />
                       </ChitChatProvider>
                       <EventProvider>
                         <Route

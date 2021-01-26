@@ -13,12 +13,7 @@ import {
   WhatToExpectChitChat,
 } from '.'
 import { Loading } from '../../common'
-import {
-  useAppContext,
-  useChitChatContext,
-  useUserContext,
-  useChitChatUserStatusContext,
-} from '../../context'
+import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
@@ -55,8 +50,9 @@ const ChitChat = () => {
     setEventNewId,
     userHasEnabledCameraAndMic,
     chitChatRSVPs,
+    onlineChitChatUsersArray,
   } = useChitChatContext()
-  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
+
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
