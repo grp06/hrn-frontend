@@ -17,8 +17,8 @@ const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, disabled, u
           buttonStyle: {
             width: '100%',
           },
-          disabled: disabled,
         },
+        disabled: disabled,
         modalBody: (
           <Typography variant="h3">
             You&apos;re about to meet your awesome fans{' '}

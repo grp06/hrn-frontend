@@ -10,6 +10,7 @@ const listenToChitChat = gql`
         email
         name
         profile_pic_url
+        venmo
       }
       id
       num_rounds

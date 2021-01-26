@@ -61,7 +61,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const [animateBackdrop, setAnimateBackdrop] = useState(false)
   const oneRoundInMs = round_length * 60000
   const getRoundDuration = () => {
-    if (eventStatus === 'room-in-progress') {
+    if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
       return round_length * 60000
     }
     // needs to match round_interval on the backend
@@ -73,15 +73,12 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const timeUserEnteredRound = new Date(userUpdatedAt).getTime()
 
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
-    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ eventUpdatedAt', eventUpdatedAt)
-    console.log('🚀 ~ getTimeElapsedInRoundAlready ~ userUpdatedAt', userUpdatedAt)
 
     return timeUserEnteredRound - timeRoundStarted
   }
 
   const getPercentElapsedThroughRound = () => {
     const timeElapsedInRoundAlready = getTimeElapsedInRoundAlready()
-    console.log('timeElapsedInRoundAlready', timeElapsedInRoundAlready)
 
     const duration = getRoundDuration()
 
@@ -98,13 +95,14 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   useEffect(() => {
     const getOneSecondInPct = () => {
       if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
-        // ex: one tick of the progress bar is 10%
+        // if its the last roond, the round length is 1/2
         return (1000 / (betweenRoundsDelay / 2)) * 100
       }
       if (eventStatus === 'in-between-rounds') {
         // ex: one tick of the progress bar is 5%
         return (1000 / betweenRoundsDelay) * 100
       }
+
       return (1000 / (round_length * 60000)) * 100
     }
 
@@ -114,6 +112,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
 
       setProgressBarValue(percentElapsedThroughRound + oneSecInPct)
+
       if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
         setShowRoundStartedSnack(true)
       }

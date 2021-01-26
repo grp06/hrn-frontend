@@ -37,6 +37,17 @@ const useStyles = makeStyles((theme) => ({
     left: 'auto',
     width: 'auto',
   },
+  numberOfOnlineUsersBadge: {
+    backgroundColor: theme.palette.common.basePurple,
+    borderRadius: '4px',
+    padding: theme.spacing(1),
+    position: 'absolute',
+    top: '20px',
+    right: '80px',
+    bottom: 'auto',
+    left: 'auto',
+    width: 'auto',
+  },
   subtitle: {
     lineHeight: '1',
     marginLeft: theme.spacing(0.5),
@@ -44,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChitChatCard = ({ chitChat, userIsHost, onlineChitChatUsersArray }) => {
+const ChitChatCard = ({ chitChat, userIsHost, chitChatRSVPs, onlineChitChatUsersArray }) => {
   const classes = useStyles()
   const history = useHistory()
   const {
@@ -86,8 +97,18 @@ const ChitChatCard = ({ chitChat, userIsHost, onlineChitChatUsersArray }) => {
         alignItems="center"
         className={classes.numberOfRSVPsBadge}
       >
-        <Typography variant="h2">{onlineChitChatUsersArray.length}</Typography>
-        <Typography variant="subtitle2">RSVPed</Typography>
+        <Typography variant="h2">{chitChatRSVPs.length || '0'}</Typography>
+        <Typography variant="subtitle2">RSVPs</Typography>
+      </Grid>
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        className={classes.numberOfOnlineUsersBadge}
+      >
+        <Typography variant="h2">{onlineChitChatUsersArray.length || '0'}</Typography>
+        <Typography variant="subtitle2">Online</Typography>
       </Grid>
       {renderEditEventButton()}
     </Grid>

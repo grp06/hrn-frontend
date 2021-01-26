@@ -13,12 +13,7 @@ import {
   WhatToExpectChitChat,
 } from '.'
 import { Loading } from '../../common'
-import {
-  useAppContext,
-  useChitChatContext,
-  useUserContext,
-  useChitChatUserStatusContext,
-} from '../../context'
+import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
@@ -45,17 +40,26 @@ const useStyles = makeStyles((theme) => ({
 const ChitChat = () => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
-  const { id: chitChatId } = useParams()
+  const { id } = useParams()
+  const chitChatId = parseInt(id, 10)
+
   const {
     user: { id: userId },
   } = useUserContext()
 
-  const { chitChat, setEventNewId } = useChitChatContext()
-  const { onlineChitChatUsersArray, userHasEnabledCameraAndMic } = useChitChatUserStatusContext()
-  const { host, host_id, start_at, status: event_status } = chitChat
+  const {
+    chitChat,
+    setEventNewId,
+    userHasEnabledCameraAndMic,
+    chitChatRSVPs,
+    onlineChitChatUsersArray,
+  } = useChitChatContext()
+
+  const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-
+  // const startTime = new Date(start_at).getTime()
+  // const diff = startTime - Date.now()
   const history = useHistory()
 
   useEffect(() => {
@@ -65,41 +69,41 @@ const ChitChat = () => {
   }, [chitChatId, chitChat, setEventNewId])
 
   useEffect(() => {
-    if (userIsHost && event_status === 'call-in-progress') {
+    if (userIsHost && eventStatus === 'call-in-progress') {
       history.push(`/chit-chat/${chitChatId}/video-room`)
     }
-  }, [event_status, userIsHost])
+  }, [eventStatus, userIsHost])
 
   useEffect(() => {
     if (
       !userIsHost &&
-      event_status === 'call-in-progress' &&
+      eventStatus === 'call-in-progress' &&
       onlineChitChatUsersArray.length &&
       userId
     ) {
-      const currentFanStatus = onlineChitChatUsersArray.find(
-        (eventUser) => eventUser.user_id === userId
-      ).status
-
-      if (currentFanStatus === 'in-chat') {
-        console.log('push me to chat')
+      const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
+      if (currentFan && currentFan.status === 'in-chat') {
         history.push(`/chit-chat/${chitChatId}/video-room`)
       }
     }
-  }, [event_status, onlineChitChatUsersArray, userId])
+  }, [eventStatus, onlineChitChatUsersArray, userId])
 
-  if (appLoading || Object.keys(chitChat).length < 2 || !onlineChitChatUsersArray) {
+  if (appLoading || Object.keys(chitChat).length < 2 || !chitChatRSVPs) {
     return <Loading />
   }
 
-  if (!userHasEnabledCameraAndMic) {
+  const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
+
+  if (!userHasEnabledCameraAndMic && (fanIsRSVPed || userIsHost)) {
     return <CameraAndMicSetupScreen chitChatEvent />
   }
 
-  const fanIsRSVPed = onlineChitChatUsersArray.some((eventUser) => eventUser.user_id === userId)
-
-  const fansQueueNumber = onlineChitChatUsersArray.findIndex(
+  const currentUsersIndexInQueue = chitChatRSVPs.findIndex(
     (eventUser) => eventUser.user_id === userId
+  )
+
+  const indexOfFanNextInQueue = chitChatRSVPs.findIndex(
+    (eventUser) => eventUser.status === 'in-queue'
   )
 
   const renderCTAButton = () => {
@@ -140,14 +144,15 @@ const ChitChat = () => {
       <ChitChatCard
         chitChat={chitChat}
         userIsHost={userIsHost}
+        chitChatRSVPs={chitChatRSVPs}
         onlineChitChatUsersArray={onlineChitChatUsersArray}
       />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
         <FanQueueCard
-          eventStatus={event_status}
           fanIsRSVPed={fanIsRSVPed}
-          fansQueueNumber={fansQueueNumber}
+          eventStatus={eventStatus}
+          fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
           hostName={hostName}
         />
         <Typography variant="h4">What to expect</Typography>
