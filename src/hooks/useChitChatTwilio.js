@@ -1,14 +1,14 @@
-import { useParticipantConnected } from '.'
+import { useChitChatParticipantConnected } from '.'
 import { useChitChatContext } from '../context'
 import { constants } from '../utils'
 
-const useTwilio = () => {
+const useChitChatTwilio = () => {
   const { setFanDisconnectedFromChat, setFanNeverConnected } = useChitChatContext()
   const { partnerCameraIssueTimeout } = constants
 
-  const { participantConnected } = useParticipantConnected()
+  const { chitChatParticipantConnected } = useChitChatParticipantConnected()
 
-  const startTwilio = (room) => {
+  const startChitChatTwilio = (room) => {
     setFanNeverConnected(false)
     // check to see if your partner joins within 30 seconds. If not, we assume
     // that they are having trouble connecting (camera permission issues)
@@ -30,16 +30,16 @@ const useTwilio = () => {
         }
       })
 
-      // when we connect to a room, run 'participantConnected'
+      // when we connect to a room, run 'chitChatParticipantConnected'
       // for each person who is already in the room when we arrive
-      room.participants.forEach(participantConnected)
+      room.participants.forEach(chitChatParticipantConnected)
 
       // set up a listener to do some stuff when new people join the room
-      room.on('participantConnected', (remoteParticipant) => {
-        console.log('participantConnected', remoteParticipant)
+      room.on('chitChatParticipantConnected', (remoteParticipant) => {
+        console.log('chitChatParticipantConnected', remoteParticipant)
         setFanNeverConnected(false)
         setFanDisconnectedFromChat(false)
-        participantConnected(remoteParticipant)
+        chitChatParticipantConnected(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
@@ -92,7 +92,7 @@ const useTwilio = () => {
     }
   }
 
-  return { startTwilio }
+  return { startChitChatTwilio }
 }
 
-export default useTwilio
+export default useChitChatTwilio

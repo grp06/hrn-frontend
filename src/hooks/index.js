@@ -9,3 +9,6 @@ export { default as useRemoteTrackPublishedToGroupVideoChat } from './useRemoteT
 export { default as usePreEventTwilio } from './usePreEventTwilio'
 export { default as useSetupUserPreEvent } from './useSetupUserPreEvent'
 export { default as useIsUserActive } from './useIsUserActive'
+export { default as useChitChatTwilio } from './useChitChatTwilio'
+export { default as useChitChatParticipantConnected } from './useChitChatParticipantConnected'
+export { default as useChitChatRemoteTrackPublished } from './useChitChatRemoteTrackPublished'

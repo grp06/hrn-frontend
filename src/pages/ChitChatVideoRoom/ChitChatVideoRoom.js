@@ -3,7 +3,7 @@ import { useParams, useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { getToken, useChitChatHelpers } from '../../helpers'
-import { useTwilio } from '../../hooks'
+import { useChitChatTwilio } from '../../hooks'
 import { RoundProgressBar } from '../VideoRoom'
 import { makeStyles } from '@material-ui/styles'
 const { connect } = require('twilio-video')
@@ -34,7 +34,7 @@ const ChitChatVideoRoom = () => {
   const classes = useStyles()
   const { id } = useParams()
   const chitChatId = parseInt(id, 10)
-  // const { startTwilio } = useTwilio()
+  const { startChitChatTwilio } = useChitChatTwilio()
 
   const { appLoading } = useAppContext()
   const { onlineChitChatUsersArray } = useChitChatContext()
@@ -81,7 +81,10 @@ const ChitChatVideoRoom = () => {
           console.log('👅 token ->', token)
           return getChitChatRoom(token)
         })
-        .then((room) => console.log('🥶 chitChatRoom ->', room))
+        .then((room) => {
+          console.log('🥶 chitChatRoom ->', room)
+          startChitChatTwilio(room)
+        })
     }
   }, [chitChatId, userId])
 
@@ -112,7 +115,7 @@ const ChitChatVideoRoom = () => {
         reset
       </Button>
       <div id="local-video" className={classes.localVideo} />
-      <div id="remote-video" className={classes.remoteVido} />
+      <div id="remote-video" className={classes.remoteVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
     </div>
   )
