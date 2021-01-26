@@ -10,6 +10,7 @@ import {
   MeetCelebButton,
   RSVPForChitChatForm,
   StartChitChatButton,
+  VisualQueue,
   WhatToExpectChitChat,
 } from '.'
 import { Loading } from '../../common'
@@ -149,6 +150,13 @@ const ChitChat = () => {
       />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
+        {/* TODO only show VisualQueue if they are rsvped and if event is going on */}
+        <VisualQueue
+          chitChatRSVPs={chitChatRSVPs}
+          hostName={hostName}
+          onlineChitChatUsers={onlineChitChatUsersArray}
+          userId={userId}
+        />
         <FanQueueCard
           fanIsRSVPed={fanIsRSVPed}
           eventStatus={eventStatus}
