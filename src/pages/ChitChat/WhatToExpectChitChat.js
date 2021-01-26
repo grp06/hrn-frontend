@@ -9,57 +9,31 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 
 const hostSteps = [
   {
-    title: 'Starting the Event',
-    text:
-      "When it's time for the event to start, come back to the event page and you will see the event controls on the bottom of your screen ",
+    title: 'Share your event link on social media',
+    text: 'After you create your event, share the event link where you can reach your fans.',
   },
   {
-    title: 'Giving Welcoming Remarks',
-    text:
-      'Prior to the speed-networking portion of the event, you will share a few words with your attendees via a live stream to get them hyped for the event!',
+    title: 'Chat with your fans',
+    text: 'Effortlessly connect with your fans over a series of 1:1 video chats.',
   },
   {
-    title: '1 on 1 Conversations',
-    text:
-      'Our algorithm will match your attendees to their most relevant matches. Sit back and watch your community engage with one another or join the fun by participating in the event (default) ',
-  },
-  {
-    title: 'Post Event Debrief',
-    text:
-      'When the event is over you can start a group video chat for everyone to mingle together as a group!',
+    title: 'Get paid',
+    text: 'Get rewarded for your time connecting with your fans.',
   },
 ]
 
 const attendeeSteps = [
   {
-    title: 'Attending the event',
-    text:
-      'Come back to this page a few minutes before the event is slated to start. You will see a countdown clock and the event will go live shortly after the clock expires.',
+    title: 'Sign up with your phone number',
+    text: 'Input your phone number to RSVP for the event.',
   },
   {
-    title: 'Welcome Remarks from the Host',
-    text:
-      'Before the event starts, the event host will share a few words with you via a live stream to get you hyped for the event!',
+    title: 'Get an SMS reminder',
+    text: `10 minutes before your turn, you'll get an SMS reminder. Click on it to show up.`,
   },
   {
-    title: '1 on 1 Conversations',
-    text:
-      "Once the event starts, you'll be put into a private video chat with another event attendee. Throughout the event, you'll have a series of several minute conversations with someone new every round.",
-  },
-  {
-    title: 'Share contact details (or not)',
-    text:
-      "If you're vibing with your partner, you can share your contact details with them at any point during or directly after the chat. Don't worry, your information won't be handed unless you elect to.",
-  },
-  {
-    title: 'Help us help you',
-    text:
-      'After each chat we ask how excited you would be to match with your partner again. We use this information to help better understand your preferences in people and curate better matches for you in the future.',
-  },
-  {
-    title: 'Post Event Mingle',
-    text:
-      'Join all the other event attendees in a group video chat after the event to debrief and hang out.',
+    title: 'Reward the creator',
+    text: 'Make sure to thank the creator via Venmo or Cash App.',
   },
 ]
 
