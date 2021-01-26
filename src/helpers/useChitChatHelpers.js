@@ -29,8 +29,6 @@ const useChitChatHelpers = () => {
   }
 
   const resetChitChat = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
-    console.log('🚀 ~ resetChitChat ~ userId', userId)
-    console.log('🚀 ~ resetChitChat ~ chitChatId', chitChatId)
     try {
       const fanCurrentlyInChat = onlineChitChatUsersArray.find(
         (eventUser) => eventUser.status === 'in-chat'
