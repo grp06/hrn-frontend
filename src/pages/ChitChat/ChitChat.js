@@ -61,7 +61,8 @@ const ChitChat = () => {
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
-
+  // const startTime = new Date(start_at).getTime()
+  // const diff = startTime - Date.now()
   const history = useHistory()
 
   useEffect(() => {
@@ -103,11 +104,9 @@ const ChitChat = () => {
   }
 
   const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
-  console.log('🚀 ~ ChitChat ~ fanIsRSVPed', fanIsRSVPed)
 
   // TODO also check for the status field and don't count people who have already met the celeb
   const fansQueueNumber = chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
-  console.log('🚀 ~ ChitChat ~ fansQueueNumber', fansQueueNumber)
 
   const renderCTAButton = () => {
     if (userIsHost) {

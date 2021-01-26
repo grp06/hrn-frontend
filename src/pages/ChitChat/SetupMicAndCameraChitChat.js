@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import Video from 'twilio-video'
 
-import { useChitChatUserStatusContext } from '../../context'
+import { useChitChatContext } from '../../context'
 import { GUMErrorModal } from '../../common'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SetupMicAndCameraChitChat = ({ usersName = 'fan' }) => {
   const classes = useStyles()
-  const { setUserHasEnabledCameraAndMic } = useChitChatUserStatusContext()
+  const { setUserHasEnabledCameraAndMic } = useChitChatContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
   const [videoDevices, setVideoDevices] = useState([])

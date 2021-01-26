@@ -49,7 +49,7 @@ const ChitChatUserStatusProvider = ({ children }) => {
   const { chitChat } = useChitChatContext()
   const { host_id: hostId } = chitChat
 
-  const { id: chitChatId } = chitChat
+  const { id: chitChatId, status: eventStatus } = chitChat
   const { id: userId } = user
 
   const userIsHost = parseInt(hostId, 10) === parseInt(userId, 10)
@@ -68,7 +68,7 @@ const ChitChatUserStatusProvider = ({ children }) => {
     variables: {
       chitChatId,
     },
-    skip: !userId || !chitChatId,
+    skip: !userId || !chitChatId || eventStatus === 'not-started' || eventStatus === 'completed',
   })
   // check if need to push to chitChatComplete
   // TODO create chitChatComplete page
