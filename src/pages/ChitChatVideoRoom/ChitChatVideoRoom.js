@@ -3,18 +3,22 @@ import { useParams, useHistory } from 'react-router-dom'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
 import { RoundProgressBar } from '../VideoRoom'
+import Button from '@material-ui/core/Button'
+import { useChitChatHelpers } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({}))
 
 const ChitChatVideoRoom = () => {
   const classes = useStyles()
-  const { id: chitChatId } = useParams()
+  const { id } = useParams()
   const { appLoading } = useAppContext()
   const { onlineChitChatUsersArray } = useChitChatContext()
-
+  const { resetChitChat } = useChitChatHelpers()
+  const chitChatId = parseInt(id, 10)
   const {
     user: { id: userId },
   } = useUserContext()
+  console.log('🚀 ~ ChitChatVideoRoom ~ userId', userId)
 
   const { chitChat, setEventNewId } = useChitChatContext()
   const { host, host_id, start_at, status: event_status } = chitChat
@@ -26,7 +30,7 @@ const ChitChatVideoRoom = () => {
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
-      setEventNewId(parseInt(chitChatId, 10))
+      setEventNewId(chitChatId)
     }
   }, [chitChatId, chitChat, setEventNewId])
 
@@ -38,6 +42,13 @@ const ChitChatVideoRoom = () => {
 
   return (
     <div>
+      <Button
+        variant="contained"
+        color="secondary"
+        onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId, userId })}
+      >
+        reset
+      </Button>
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
     </div>
   )

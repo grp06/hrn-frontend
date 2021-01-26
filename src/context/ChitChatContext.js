@@ -50,6 +50,7 @@ const useChitChatContext = () => {
   }
 
   const setEventNewId = (chitChatId) => {
+    console.log('🚀 ~ setEventNewId ~ chitChatId', chitChatId)
     dispatch((draft) => {
       draft.chitChatId = chitChatId
     })

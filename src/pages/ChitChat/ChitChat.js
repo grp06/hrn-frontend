@@ -95,12 +95,13 @@ const ChitChat = () => {
   if (!userHasEnabledCameraAndMic && (fanIsRSVPed || userIsHost)) {
     return <CameraAndMicSetupScreen chitChatEvent />
   }
-  const indexOfFanNextInQueue = chitChatRSVPs.findIndex(
-    (eventUser) => eventUser.status === 'in-queue'
+
+  const currentUsersIndexInQueue = chitChatRSVPs.findIndex(
+    (eventUser) => eventUser.user_id === userId
   )
 
-  const currentUsersPositionInQueue = chitChatRSVPs.findIndex(
-    (eventUser) => eventUser.user_id === userId
+  const indexOfFanNextInQueue = chitChatRSVPs.findIndex(
+    (eventUser) => eventUser.status === 'in-queue'
   )
 
   const renderCTAButton = () => {
@@ -149,7 +150,7 @@ const ChitChat = () => {
         <FanQueueCard
           fanIsRSVPed={fanIsRSVPed}
           eventStatus={eventStatus}
-          fansQueueNumber={currentUsersPositionInQueue - indexOfFanNextInQueue}
+          fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
           hostName={hostName}
         />
         <Typography variant="h4">What to expect</Typography>
