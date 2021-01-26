@@ -23,11 +23,13 @@ const ChitChatContext = createContext()
 // 4) completed
 const defaultState = {
   // chitChatId is for chitChat subscriptions
-  chitChatId: null,
   chitChat: {},
-  userHasEnabledCameraAndMic: true,
+  chitChatId: null,
   chitChatRSVPs: null,
+  fanNeverConnected: false,
+  fanDisconnectedFromChat: false,
   onlineChitChatUsersArray: [],
+  userHasEnabledCameraAndMic: true,
 }
 
 const useChitChatContext = () => {
@@ -55,10 +57,24 @@ const useChitChatContext = () => {
     })
   }
 
+  const setFanNeverConnected = (didFanEverConnect) => {
+    dispatch((draft) => {
+      draft.fanNeverConnected = didFanEverConnect
+    })
+  }
+
+  const setFanDisconnectedFromChat = (didFanDisconnect) => {
+    dispatch((draft) => {
+      draft.fanDisconnectedFromChat = didFanDisconnect
+    })
+  }
+
   return {
     ...state,
     resetEventNew,
     setEventNewId,
+    setFanNeverConnected,
+    setFanDisconnectedFromChat,
     setUserHasEnabledCameraAndMic,
   }
 }
