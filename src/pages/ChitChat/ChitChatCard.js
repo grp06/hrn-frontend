@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     width: 'auto',
   },
   numberOfOnlineUsersBadge: {
-    backgroundColor: theme.palette.common.basePurple,
+    backgroundColor: theme.palette.common.basePink,
     borderRadius: '4px',
     padding: theme.spacing(1),
     position: 'absolute',
