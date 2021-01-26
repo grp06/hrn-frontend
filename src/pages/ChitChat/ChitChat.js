@@ -79,13 +79,8 @@ const ChitChat = () => {
       onlineChitChatUsersArray.length &&
       userId
     ) {
-      console.log('🚀 ~ useEffect ~ onlineChitChatUsersArray', onlineChitChatUsersArray)
-      const currentFanStatus = onlineChitChatUsersArray.find(
-        (eventUser) => eventUser.user_id === userId
-      ).status
-
-      if (currentFanStatus === 'in-chat') {
-        console.log('push me to chat')
+      const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
+      if (currentFan && currentFan.status === 'in-chat') {
         history.push(`/chit-chat/${chitChatId}/video-room`)
       }
     }
@@ -100,8 +95,13 @@ const ChitChat = () => {
   if (!userHasEnabledCameraAndMic && (fanIsRSVPed || userIsHost)) {
     return <CameraAndMicSetupScreen chitChatEvent />
   }
+  const indexOfFanNextInQueue = chitChatRSVPs.findIndex(
+    (eventUser) => eventUser.status === 'in-queue'
+  )
 
-  const fansQueueNumber = chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
+  const currentUsersPositionInQueue = chitChatRSVPs.findIndex(
+    (eventUser) => eventUser.user_id === userId
+  )
 
   const renderCTAButton = () => {
     if (userIsHost) {
@@ -149,7 +149,7 @@ const ChitChat = () => {
         <FanQueueCard
           fanIsRSVPed={fanIsRSVPed}
           eventStatus={eventStatus}
-          fansQueueNumber={fansQueueNumber}
+          fansQueueNumber={currentUsersPositionInQueue - indexOfFanNextInQueue}
           hostName={hostName}
         />
         <Typography variant="h4">What to expect</Typography>

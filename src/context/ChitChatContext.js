@@ -25,7 +25,7 @@ const defaultState = {
   // chitChatId is for chitChat subscriptions
   chitChatId: null,
   chitChat: {},
-  userHasEnabledCameraAndMic: false,
+  userHasEnabledCameraAndMic: true,
   chitChatRSVPs: null,
   onlineChitChatUsersArray: [],
 }
@@ -117,6 +117,7 @@ const ChitChatProvider = ({ children }) => {
   }, [onlineChitChatUsersData])
 
   useEffect(() => {
+    // TODO sending last seen for host but it's not doing anything. Do we need to send for host?
     if (userId && userInChitChatEvent && userHasEnabledCameraAndMic) {
       const interval = setInterval(async () => {
         console.log('last seen')

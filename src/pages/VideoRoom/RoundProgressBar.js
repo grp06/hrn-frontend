@@ -51,6 +51,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
+  console.log('🚀 ~ RoundProgressBar ~ userUpdatedAt', userUpdatedAt)
+  console.log('🚀 ~ RoundProgressBar ~ event', event)
   const classes = useStyles()
   const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
 
@@ -84,6 +86,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     console.log('timeElapsedInRoundAlready', timeElapsedInRoundAlready)
 
     const duration = getRoundDuration()
+    console.log('🚀 ~ getPercentElapsedThroughRound ~ duration', duration)
 
     return (timeElapsedInRoundAlready / duration) * 100
   }
@@ -98,13 +101,15 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   useEffect(() => {
     const getOneSecondInPct = () => {
       if (eventStatus === 'in-between-rounds' && event.current_round === event.num_rounds) {
-        // ex: one tick of the progress bar is 10%
+        // if its the last roond, the round length is 1/2
         return (1000 / (betweenRoundsDelay / 2)) * 100
       }
       if (eventStatus === 'in-between-rounds') {
         // ex: one tick of the progress bar is 5%
         return (1000 / betweenRoundsDelay) * 100
       }
+      console.log('🚀 ~ getOneSecondInPct ~ round_length', round_length)
+      console.log('(1000 / (round_length * 60000)) * 100 = ', (1000 / (round_length * 60000)) * 100)
       return (1000 / (round_length * 60000)) * 100
     }
 
@@ -112,8 +117,10 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
 
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
+      console.log('🚀 ~ useEffect ~ percentElapsedThroughRound', percentElapsedThroughRound)
 
       setProgressBarValue(percentElapsedThroughRound + oneSecInPct)
+      console.log('🚀 ~ useEffect ~ oneSecInPct', oneSecInPct)
       if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
         setShowRoundStartedSnack(true)
       }
