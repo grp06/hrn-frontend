@@ -18,7 +18,6 @@ const ChitChatVideoRoom = () => {
   const {
     user: { id: userId },
   } = useUserContext()
-  console.log('🚀 ~ ChitChatVideoRoom ~ userId', userId)
 
   const { chitChat, setEventNewId } = useChitChatContext()
   const { host, host_id, start_at, status: event_status } = chitChat
