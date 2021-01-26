@@ -20,7 +20,11 @@ const MyProfile = () => {
   const { appLoading } = useAppContext()
   const { id: userId } = user
 
-  const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)
+  // ! Remove after we migrate the pivot app to another project
+  const { data: databaseTags = { tags: [] }, loading: databaseTagsLoading } = useQuery(
+    getAllTags,
+    {}
+  )
 
   useEffect(() => {
     window.analytics.page('/my-profile')
