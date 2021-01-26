@@ -97,7 +97,7 @@ const ChitChat = () => {
 
   const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
 
-  if (!userHasEnabledCameraAndMic && fanIsRSVPed) {
+  if (!userHasEnabledCameraAndMic && (fanIsRSVPed || userIsHost)) {
     return <CameraAndMicSetupScreen chitChatEvent />
   }
 

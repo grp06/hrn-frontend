@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme) => ({
   youLookGoodContainer: {
     marginBottom: theme.spacing(4),
   },
+  lookinGood: {
+    textAlign: 'center',
+  },
 }))
 
 const SetupMicAndCameraChitChat = ({ usersName = 'fan' }) => {
@@ -195,18 +198,19 @@ const SetupMicAndCameraChitChat = ({ usersName = 'fan' }) => {
         >
           {usersName ? (
             <>
-              <Typography variant="h2" style={{ marginBottom: '12px' }}>
+              <Typography variant="h4" className={classes.lookinGood}>
                 Damn, {usersFirstName && usersFirstName[0].toUpperCase() + usersFirstName.slice(1)}.
-                You look good{''}
+              </Typography>
+              <Typography variant="h4">
+                You look good
                 <span
-                  style={{ margin: '0px 10px', fontSize: 30 }}
+                  style={{ margin: '0px 10px', fontSize: 26 }}
                   role="img"
                   aria-label="woozy face emoji"
                 >
                   🤩
                 </span>
               </Typography>
-              <Typography variant="h4">You&apos;re all set to join the event!</Typography>
             </>
           ) : (
             <Typography variant="h3" className={classes.modalText}>
