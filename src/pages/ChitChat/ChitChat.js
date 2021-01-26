@@ -13,12 +13,7 @@ import {
   WhatToExpectChitChat,
 } from '.'
 import { Loading } from '../../common'
-import {
-  useAppContext,
-  useChitChatContext,
-  useUserContext,
-  useChitChatUserStatusContext,
-} from '../../context'
+import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
@@ -55,12 +50,12 @@ const ChitChat = () => {
     setEventNewId,
     userHasEnabledCameraAndMic,
     chitChatRSVPs,
+    onlineChitChatUsersArray,
   } = useChitChatContext()
-  const { onlineChitChatUsersArray } = useChitChatUserStatusContext()
+
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-  const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
   // const startTime = new Date(start_at).getTime()
   // const diff = startTime - Date.now()
   const history = useHistory()
@@ -84,6 +79,7 @@ const ChitChat = () => {
       onlineChitChatUsersArray.length &&
       userId
     ) {
+      console.log('🚀 ~ useEffect ~ onlineChitChatUsersArray', onlineChitChatUsersArray)
       const currentFanStatus = onlineChitChatUsersArray.find(
         (eventUser) => eventUser.user_id === userId
       ).status
@@ -99,13 +95,12 @@ const ChitChat = () => {
     return <Loading />
   }
 
-  if (!userHasEnabledCameraAndMic && eventInProgress) {
-    return eventInProgress && <CameraAndMicSetupScreen chitChatEvent />
-  }
-
   const fanIsRSVPed = chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
 
-  // TODO also check for the status field and don't count people who have already met the celeb
+  if (!userHasEnabledCameraAndMic && fanIsRSVPed) {
+    return <CameraAndMicSetupScreen chitChatEvent />
+  }
+
   const fansQueueNumber = chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
 
   const renderCTAButton = () => {
@@ -152,8 +147,8 @@ const ChitChat = () => {
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
         <FanQueueCard
-          eventStatus={eventStatus}
           fanIsRSVPed={fanIsRSVPed}
+          eventStatus={eventStatus}
           fansQueueNumber={fansQueueNumber}
           hostName={hostName}
         />

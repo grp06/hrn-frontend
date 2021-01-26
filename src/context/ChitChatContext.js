@@ -1,11 +1,19 @@
 import React, { useEffect, createContext, useContext } from 'react'
 
-import { useSubscription } from '@apollo/react-hooks'
+import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 import { useAppContext, useUserContext } from '.'
-import { listenToChitChat, listenToChitChatRSVPs } from '../gql/subscriptions'
+import {
+  listenToChitChat,
+  listenToChitChatRSVPs,
+  listenToOnlineFansByChitChatId,
+} from '../gql/subscriptions'
+import { updateEventUsersNewLastSeen } from '../gql/mutations'
 
+import { constants } from '../utils'
+
+const { lastSeenDuration, bannedUserIds } = constants
 const ChitChatContext = createContext()
 
 // types of status for event-new include
@@ -19,6 +27,7 @@ const defaultState = {
   chitChat: {},
   userHasEnabledCameraAndMic: false,
   chitChatRSVPs: null,
+  onlineChitChatUsersArray: [],
 }
 
 const useChitChatContext = () => {
@@ -57,16 +66,15 @@ const useChitChatContext = () => {
 const ChitChatProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { setAppLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userInChitChatEvent } = useUserContext()
   const { id: userId } = user
 
   const { pathname } = window.location
-  const { chitChat, chitChatId } = state
+  const { chitChat, chitChatId, userHasEnabledCameraAndMic } = state
   const { status: eventStatus } = chitChat
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
-  const userHasWorkingTech = localStorage.getItem('userHasWorkingTech')
 
   // subscribe to the Event only if we have an chitChatId
   const { data: chitChatData } = useSubscription(listenToChitChat, {
@@ -83,14 +91,48 @@ const ChitChatProvider = ({ children }) => {
     skip: !chitChatId,
   })
 
+  const [updateEventUsersNewLastSeenMutation] = useMutation(updateEventUsersNewLastSeen, {
+    variables: {
+      chitChatId,
+      now: new Date().toISOString(),
+      user_id: userId,
+    },
+    skip: !userId || !chitChatId,
+  })
+
+  const { data: onlineChitChatUsersData } = useSubscription(listenToOnlineFansByChitChatId, {
+    variables: {
+      chitChatId,
+    },
+    skip: !userId || !chitChatId,
+  })
+
+  // check the online user for events
   useEffect(() => {
-    const eventInProgress = eventStatus !== 'not-started' && eventStatus !== 'completed'
-    if (userId && userHasWorkingTech && eventInProgress) {
+    if (onlineChitChatUsersData) {
       dispatch((draft) => {
-        draft.userHasEnabledCameraAndMic = true
+        draft.onlineChitChatUsersArray = onlineChitChatUsersData.online_event_users_new
       })
     }
-  }, [userId, userHasWorkingTech, eventStatus])
+  }, [onlineChitChatUsersData])
+
+  useEffect(() => {
+    if (userId && userInChitChatEvent && userHasEnabledCameraAndMic) {
+      const interval = setInterval(async () => {
+        console.log('last seen')
+        try {
+          if (!bannedUserIds.includes(userId)) {
+            await updateEventUsersNewLastSeenMutation()
+          }
+        } catch (error) {
+          console.log('interval -> error', error)
+        }
+      }, lastSeenDuration)
+      return () => {
+        clearInterval(interval)
+      }
+    }
+  })
 
   useEffect(() => {
     if (chitChatRSVPsData && chitChatRSVPsData.event_users_new) {

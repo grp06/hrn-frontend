@@ -267,7 +267,6 @@ const SetupMicAndCameraChitChat = ({ usersName = 'fan' }) => {
   }
 
   const handleJoinEventClick = () => {
-    localStorage.setItem('userHasWorkingTech', 'true')
     setUserHasEnabledCameraAndMic(true)
   }
 
