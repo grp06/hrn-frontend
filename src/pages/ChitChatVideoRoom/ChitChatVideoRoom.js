@@ -10,23 +10,31 @@ const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
   localVideo: {
-    width: '100vw',
-    height: '50vw',
+    width: '100%',
+    height: '50vh',
     position: 'fixed',
-    top: 'auto',
     bottom: '0',
     backgroundColor: 'red',
+    '& video': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'cover',
+    },
   },
   pageContainer: {
     position: 'relative',
   },
   remoteVideo: {
-    width: '100vw',
-    height: '50vw',
+    width: '100%',
+    height: '50vh',
     position: 'fixed',
     top: '0',
-    bottom: 'auto',
     backgroundColor: 'blue',
+    '& video': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'cover',
+    },
   },
 }))
 
