@@ -75,6 +75,7 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
         {chitChatDetails ? 'Edit Your Event' : 'Create Event'}
       </Typography>
+      <Typography variant="subtitle2">cancel</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{

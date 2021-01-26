@@ -51,8 +51,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
-  console.log('🚀 ~ RoundProgressBar ~ userUpdatedAt', userUpdatedAt)
-  console.log('🚀 ~ RoundProgressBar ~ event', event)
   const classes = useStyles()
   const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
 
@@ -63,7 +61,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const [animateBackdrop, setAnimateBackdrop] = useState(false)
   const oneRoundInMs = round_length * 60000
   const getRoundDuration = () => {
-    if (eventStatus === 'room-in-progress') {
+    if (eventStatus === 'room-in-progress' || eventStatus === 'call-in-progress') {
       return round_length * 60000
     }
     // needs to match round_interval on the backend
