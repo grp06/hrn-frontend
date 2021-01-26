@@ -47,8 +47,7 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
       }, {})
 
       if (usersRSVPObject) {
-        onlineUser.name = usersRSVPObject.name
-        onlineUser.RSVPNumber = usersRSVPObject.RSVPNumber
+        return { ...onlineUser, ...usersRSVPObject }
       }
       return onlineUser
     })
@@ -66,10 +65,10 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
         <Typography variant="h4">Queue to meet {hostFirstName}</Typography>
         <VisualQueueInstructionModal />
       </Grid>
-      {onlineChitChatUsers && onlineChitChatUsers.length ? (
+      {sanitizedOnlineChitChatUsers && sanitizedOnlineChitChatUsers.length ? (
         <>
           <List dense style={{ width: '100%' }}>
-            {onlineChitChatUsers
+            {sanitizedOnlineChitChatUsers
               .sort((userA, userB) => {
                 return userA.RSVPNumber < userB.RSVPNumber
               })
