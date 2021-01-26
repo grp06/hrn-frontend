@@ -11,10 +11,11 @@ const useStyles = makeStyles((theme) => ({}))
 const ChitChatVideoRoom = () => {
   const classes = useStyles()
   const { id } = useParams()
+  const chitChatId = parseInt(id, 10)
+
   const { appLoading } = useAppContext()
   const { onlineChitChatUsersArray } = useChitChatContext()
   const { resetChitChat } = useChitChatHelpers()
-  const chitChatId = parseInt(id, 10)
   const {
     user: { id: userId },
   } = useUserContext()

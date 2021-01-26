@@ -40,7 +40,9 @@ const useStyles = makeStyles((theme) => ({
 const ChitChat = () => {
   const classes = useStyles()
   const { appLoading } = useAppContext()
-  const { id: chitChatId } = useParams()
+  const { id } = useParams()
+  const chitChatId = parseInt(id, 10)
+
   const {
     user: { id: userId },
   } = useUserContext()
