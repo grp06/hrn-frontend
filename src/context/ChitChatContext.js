@@ -70,13 +70,11 @@ const ChitChatProvider = ({ children }) => {
   const { id: userId } = user
 
   const { pathname } = window.location
-  const { chitChat, chitChatId } = state
+  const { chitChat, chitChatId, userHasEnabledCameraAndMic } = state
   const { status: eventStatus } = chitChat
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
-  const { host_id: hostId } = chitChat
-  const userIsHost = parseInt(hostId, 10) === parseInt(userId, 10)
 
   // subscribe to the Event only if we have an chitChatId
   const { data: chitChatData } = useSubscription(listenToChitChat, {
@@ -92,6 +90,7 @@ const ChitChatProvider = ({ children }) => {
     },
     skip: !chitChatId,
   })
+
   const [updateEventUsersNewLastSeenMutation] = useMutation(updateEventUsersNewLastSeen, {
     variables: {
       chitChatId,
@@ -105,7 +104,7 @@ const ChitChatProvider = ({ children }) => {
     variables: {
       chitChatId,
     },
-    skip: !userId || !chitChatId || eventStatus === 'not-started' || eventStatus === 'completed',
+    skip: !userId || !chitChatId,
   })
 
   // check the online user for events
@@ -118,14 +117,12 @@ const ChitChatProvider = ({ children }) => {
   }, [onlineChitChatUsersData])
 
   useEffect(() => {
-    if (userId && userInChitChatEvent && hostId && !userIsHost) {
+    if (userId && userInChitChatEvent && userHasEnabledCameraAndMic) {
       const interval = setInterval(async () => {
         console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
             await updateEventUsersNewLastSeenMutation()
-            // TODO do the onCOmpleted style here
-            // setUserUpdatedAt(lastSeenUpdated.data.update_event_users_new.returning[0].updated_at)
           }
         } catch (error) {
           console.log('interval -> error', error)

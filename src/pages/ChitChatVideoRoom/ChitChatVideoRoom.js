@@ -19,7 +19,6 @@ const ChitChatVideoRoom = () => {
   const { chitChat, setEventNewId } = useChitChatContext()
   const { host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
-  const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const history = useHistory()
 
   // const { firstUpdate } = location.state
