@@ -15,9 +15,7 @@ const CreateChitChat = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const chitChatIdFromURL = searchParams.get('chitChatId')
-
   const [chitChatDetails, setChitChatDetails] = useState(null)
-  const [showCancelButton, setShowCancelButton] = useState(null)
   const {
     user: { id: user_id, role },
   } = useUserContext()
@@ -31,7 +29,6 @@ const CreateChitChat = () => {
 
   useEffect(() => {
     if (chitChatIdFromURL) {
-      setShowCancelButton(true)
       getChitChatFormDetailsQuery({ variables: { chit_chat_id: chitChatIdFromURL } })
     }
   }, [])
@@ -47,11 +44,7 @@ const CreateChitChat = () => {
       justify="center"
       style={{ marginTop: '75px' }}
     >
-      <CreateChitChatForm
-        chitChatDetails={chitChatDetails}
-        userId={user_id}
-        showCancelButton={showCancelButton}
-      />
+      <CreateChitChatForm chitChatDetails={chitChatDetails} userId={user_id} />
     </Grid>
   )
 }

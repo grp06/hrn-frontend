@@ -6,7 +6,7 @@ const upsertChitChat = gql`
       objects: $event_details
       on_conflict: {
         constraint: events_new_pkey
-        update_columns: [num_rounds, round_length, start_at]
+        update_columns: [num_rounds, round_length, start_at, suggested_donation]
       }
     ) {
       returning {
@@ -15,6 +15,7 @@ const upsertChitChat = gql`
         num_rounds
         round_length
         start_at
+        suggested_donation
       }
     }
   }

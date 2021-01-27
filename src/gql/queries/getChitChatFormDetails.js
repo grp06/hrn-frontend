@@ -5,8 +5,9 @@ const getChitChatFormDetails = gql`
     events_new(where: { id: { _eq: $chit_chat_id } }) {
       id
       num_rounds
-      start_at
       round_length
+      start_at
+      suggested_donation
     }
   }
 `
