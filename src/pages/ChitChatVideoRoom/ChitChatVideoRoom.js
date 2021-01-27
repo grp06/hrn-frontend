@@ -9,18 +9,6 @@ import { makeStyles } from '@material-ui/styles'
 const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
-  localVideo: {
-    width: '100%',
-    height: '50vh',
-    position: 'fixed',
-    bottom: '0',
-    backgroundColor: 'red',
-    '& video': {
-      height: '100%',
-      width: '100%',
-      objectFit: 'cover',
-    },
-  },
   pageContainer: {
     position: 'relative',
   },
@@ -29,7 +17,17 @@ const useStyles = makeStyles((theme) => ({
     height: '50vh',
     position: 'fixed',
     top: '0',
-    backgroundColor: 'blue',
+    '& video': {
+      height: '100%',
+      width: '100%',
+      objectFit: 'cover',
+    },
+  },
+  localVideo: {
+    width: '100%',
+    height: '50vh',
+    position: 'fixed',
+    bottom: '0',
     '& video': {
       height: '100%',
       width: '100%',
@@ -122,8 +120,8 @@ const ChitChatVideoRoom = () => {
       >
         reset
       </Button>
-      <div id="local-video" className={classes.localVideo} />
       <div id="remote-video" className={classes.remoteVideo} />
+      <div id="local-video" className={classes.localVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
     </div>
   )
