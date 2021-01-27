@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const LoginFormNew = () => {
+const LoginCreatorForm = () => {
   const classes = useStyles()
   const history = useHistory()
 
@@ -169,4 +169,4 @@ const LoginFormNew = () => {
   )
 }
 
-export default LoginFormNew
+export default LoginCreatorForm
