@@ -35,8 +35,8 @@ const useChitChatTwilio = () => {
       room.participants.forEach(chitChatParticipantConnected)
 
       // set up a listener to do some stuff when new people join the room
-      room.on('chitChatParticipantConnected', (remoteParticipant) => {
-        console.log('chitChatParticipantConnected', remoteParticipant)
+      room.on('participantConnected', (remoteParticipant) => {
+        console.log('participantConnected', remoteParticipant)
         setFanNeverConnected(false)
         setFanDisconnectedFromChat(false)
         chitChatParticipantConnected(remoteParticipant)

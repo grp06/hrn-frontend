@@ -45,7 +45,6 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
         }
         return acc
       }, {})
-      console.log('🚀 ~ usersRSVPObject ~ usersRSVPObject', usersRSVPObject)
 
       if (usersRSVPObject) {
         return { ...onlineUser, ...usersRSVPObject }
@@ -54,7 +53,6 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
     })
     .filter((user) => user.status === 'in-queue')
 
-  console.log('🚀 ~ VisualQueue ~ sanitizedOnlineChitChatUsers', sanitizedOnlineChitChatUsers)
   return (
     <Grid
       container

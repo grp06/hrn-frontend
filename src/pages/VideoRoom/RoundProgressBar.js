@@ -152,6 +152,8 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     }
   }, [eventStatus])
 
+  const snackPosition = eventStatus === 'call-in-progress' ? 'top' : 'bottom'
+
   return (
     <>
       <Grid
@@ -160,6 +162,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         justify="center"
         alignItems="center"
         className={classes.roundProgressBarContainer}
+        style={eventStatus === 'call-in-progress' ? { bottom: 0 } : {}}
       >
         {countdown321 ? (
           <motion.div
@@ -184,7 +187,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
       <Snack
         open={showRoundStartedSnack}
         onClose={() => setShowRoundStartedSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: snackPosition, horizontal: 'center' }}
         duration={10000}
         severity="success"
         snackIcon={<TimerIcon />}
@@ -193,7 +196,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
       <Snack
         open={show20SecondsLeftSnack}
         onClose={() => setShow20SecondsLeftSnack(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: snackPosition, horizontal: 'center' }}
         duration={15000}
         severity="error"
         snackMessage="15 seconds left!"
