@@ -6,11 +6,15 @@ import { getToken, useChitChatHelpers } from '../../helpers'
 import { useChitChatTwilio } from '../../hooks'
 import { RoundProgressBar } from '../VideoRoom'
 import { makeStyles } from '@material-ui/styles'
+import endCall from '../../assets/end-call.png'
+
 const { connect } = require('twilio-video')
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
     position: 'relative',
+    height: '100vh',
+    width: '100%',
   },
   remoteVideo: {
     width: '100%',
@@ -33,6 +37,17 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       objectFit: 'cover',
     },
+  },
+  endCall: {
+    width: '50px',
+    height: '50px',
+    backgroundImage: `url(${endCall})`,
+    backgroundPosition: '50% 50%',
+    backgroundSize: 'cover',
+    position: 'fixed',
+    bottom: '10px',
+    margin: '0 auto',
+    left: 'calc(50% - 25px)',
   },
 }))
 
@@ -123,6 +138,7 @@ const ChitChatVideoRoom = () => {
       <div id="remote-video" className={classes.remoteVideo} />
       <div id="local-video" className={classes.localVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
+      <div className={classes.endCall} />
     </div>
   )
 }
