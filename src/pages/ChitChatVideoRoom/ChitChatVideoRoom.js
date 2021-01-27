@@ -62,7 +62,6 @@ const ChitChatVideoRoom = () => {
 
     const getTwilioToken = async () => {
       const res = await getToken(uniqueRoomName, userId).then((response) => response.json())
-      console.log('getTwilioToken res ->', res)
       return res.token
     }
 
@@ -76,13 +75,13 @@ const ChitChatVideoRoom = () => {
     }
 
     if (chitChatId && userId) {
+      console.log('getting twilio token')
       getTwilioToken()
         .then((token) => {
           console.log('👅 token ->', token)
           return getChitChatRoom(token)
         })
         .then((room) => {
-          console.log('🥶 chitChatRoom ->', room)
           startChitChatTwilio(room)
         })
     }
