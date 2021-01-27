@@ -110,7 +110,7 @@ const CreatorHome = () => {
             <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
-        {chitChatsData.events_new.map((chitChat) => (
+        {chitChatsData.chit_chats.map((chitChat) => (
           <ChitChatCard key={chitChat.id} chitChat={chitChat} />
         ))}
       </>
@@ -120,7 +120,7 @@ const CreatorHome = () => {
   return (
     <>
       <Grid container className={classes.pageContainer} alignItems="center" direction="column">
-        {!chitChatsData.events_new.length ? renderCreateChitChat() : renderChitChats()}
+        {!chitChatsData.chit_chats.length ? renderCreateChitChat() : renderChitChats()}
         <Button
           color="primary"
           type="submit"

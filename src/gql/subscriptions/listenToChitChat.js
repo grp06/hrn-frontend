@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 const listenToChitChat = gql`
   subscription listenToChitChat($event_id: Int!) {
-    events_new(where: { id: { _eq: $event_id } }) {
+    chit_chats(where: { id: { _eq: $event_id } }) {
       ended_at
       host_id
       host {

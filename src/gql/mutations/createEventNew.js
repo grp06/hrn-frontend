@@ -7,7 +7,7 @@ const createEventNew = gql`
     $round_length: Int!
     $start_at: timestamptz!
   ) {
-    insert_events_new(
+    insert_chit_chats(
       objects: {
         host_id: $host_id
         num_rounds: $num_rounds

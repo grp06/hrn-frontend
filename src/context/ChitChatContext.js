@@ -9,7 +9,7 @@ import {
   listenToChitChatRSVPs,
   listenToOnlineFansByChitChatId,
 } from '../gql/subscriptions'
-import { updateEventUsersNewLastSeen } from '../gql/mutations'
+import { updateChitChatUsersLastSeen } from '../gql/mutations'
 
 import { constants } from '../utils'
 
@@ -107,7 +107,7 @@ const ChitChatProvider = ({ children }) => {
     skip: !chitChatId,
   })
 
-  const [updateEventUsersNewLastSeenMutation] = useMutation(updateEventUsersNewLastSeen, {
+  const [updateChitChatUsersLastSeenMutation] = useMutation(updateChitChatUsersLastSeen, {
     variables: {
       chitChatId,
       now: new Date().toISOString(),
@@ -127,7 +127,7 @@ const ChitChatProvider = ({ children }) => {
   useEffect(() => {
     if (onlineChitChatUsersData) {
       dispatch((draft) => {
-        draft.onlineChitChatUsersArray = onlineChitChatUsersData.online_event_users_new
+        draft.onlineChitChatUsersArray = onlineChitChatUsersData.online_chit_chat_users
       })
     }
   }, [onlineChitChatUsersData])
@@ -151,7 +151,7 @@ const ChitChatProvider = ({ children }) => {
         console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
-            await updateEventUsersNewLastSeenMutation()
+            await updateChitChatUsersLastSeenMutation()
           }
         } catch (error) {
           console.log('interval -> error', error)
@@ -164,9 +164,9 @@ const ChitChatProvider = ({ children }) => {
   }, [userId, userInChitChatEvent, userHasEnabledCameraAndMic])
 
   useEffect(() => {
-    if (chitChatRSVPsData && chitChatRSVPsData.event_users_new) {
+    if (chitChatRSVPsData && chitChatRSVPsData.chit_chat_users) {
       dispatch((draft) => {
-        draft.chitChatRSVPs = chitChatRSVPsData.event_users_new
+        draft.chitChatRSVPs = chitChatRSVPsData.chit_chat_users
       })
     }
   }, [chitChatRSVPsData])
@@ -175,7 +175,7 @@ const ChitChatProvider = ({ children }) => {
     // if on chitChat page and its a valid chitChat
     if (userOnChitChatPage && chitChatData) {
       // chitChat doesn't exist - redirect user
-      if (!chitChatData.events_new.length) {
+      if (!chitChatData.chit_chats.length) {
         setAppLoading(false)
         return history.push('/creator-home')
       }
@@ -183,12 +183,12 @@ const ChitChatProvider = ({ children }) => {
       const eventWasReset =
         chitChat.status &&
         chitChat.status !== 'not-started' &&
-        chitChatData.events_new[0].status === 'not-started'
+        chitChatData.chit_chats[0].status === 'not-started'
       if (eventWasReset) {
         window.location.reload()
       }
       dispatch((draft) => {
-        draft.chitChat = chitChatData.events_new[0]
+        draft.chitChat = chitChatData.chit_chats[0]
       })
       return setAppLoading(false)
     }
