@@ -55,6 +55,7 @@ const CreatorHome = () => {
     },
     skip: !userId,
   })
+  console.log('🚀 ~ CreatorHome ~ chitChatsData', chitChatsData)
   useEffect(() => {
     window.analytics.page('/creator-home')
   }, [])
@@ -68,7 +69,7 @@ const CreatorHome = () => {
   }
 
   if (!userId) {
-    return <Redirect to="/login-new" />
+    return <Redirect to="/creator-login" />
   }
 
   const renderCreateChitChat = () => {

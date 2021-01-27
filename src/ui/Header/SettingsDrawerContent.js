@@ -36,7 +36,7 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
     history.push('/')
   }
 
-  const loginRoute = onNewApp ? '/login-new' : '/'
+  const loginRoute = onNewApp ? '/creator-login' : '/'
   const renderLoginOrLogout = () => {
     return userId ? (
       <ListItem button disableRipple onClick={() => handleLogout()} className={classes.listItem}>
