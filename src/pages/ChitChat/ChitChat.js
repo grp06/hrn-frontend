@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react'
 import FeatherIcon from 'feather-icons-react'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Button, Grid, Typography } from '@material-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
-  FanQueueCard,
+  FanRSVPCard,
   MeetCelebButton,
   RSVPForChitChatForm,
   StartChitChatButton,
@@ -19,6 +17,9 @@ import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  bodyContainer: {
+    padding: theme.spacing(2),
+  },
   copyEventLinkButton: {
     color: theme.palette.common.ghostWhite,
     margin: theme.spacing(3, 'auto'),
@@ -33,8 +34,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3, 1.5),
     backgroundColor: theme.palette.common.greyCard,
   },
-  bodyContainer: {
-    padding: theme.spacing(2),
+  pageContainer: {
+    marginBottom: '125px',
+    position: 'relative',
   },
 }))
 
@@ -134,7 +136,7 @@ const ChitChat = () => {
   )
 
   return (
-    <Grid container direction="column" style={{ position: 'relative' }}>
+    <Grid container direction="column" className={classes.pageContainer}>
       <ChitChatCard
         chitChat={chitChat}
         userIsHost={userIsHost}
@@ -143,19 +145,22 @@ const ChitChat = () => {
       />
       <Grid container direction="column" className={classes.bodyContainer}>
         {renderCopyLinkButton()}
-        {/* TODO only show VisualQueue if they are rsvped and if event is going on */}
-        <VisualQueue
-          chitChatRSVPs={chitChatRSVPs}
-          hostName={hostName}
-          onlineChitChatUsers={onlineChitChatUsersArray}
-          userId={userId}
-        />
-        <FanQueueCard
-          fanIsRSVPed={fanIsRSVPed}
-          eventStatus={eventStatus}
-          fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
-          hostName={hostName}
-        />
+        {eventStatus === 'not-started' ? (
+          <FanRSVPCard
+            fanIsRSVPed={fanIsRSVPed}
+            eventStatus={eventStatus}
+            fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
+            hostName={hostName}
+          />
+        ) : null}
+        {eventStatus !== 'not-started' && fanIsRSVPed ? (
+          <VisualQueue
+            chitChatRSVPs={chitChatRSVPs}
+            hostName={hostName}
+            onlineChitChatUsers={onlineChitChatUsersArray}
+            userId={userId}
+          />
+        ) : null}
         <Typography variant="h4">What to expect</Typography>
         <WhatToExpectChitChat userIsHost={userIsHost} />
       </Grid>

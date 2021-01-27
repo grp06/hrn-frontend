@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: 'auto',
     padding: theme.spacing(1.5),
+    margin: theme.spacing(2, 0, 4, 0),
   },
   highlightMyRow: {
     backgroundColor: theme.palette.common.greyHover,
@@ -121,6 +122,13 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
       ) : (
         <Typography variant="body1">No one is online yet</Typography>
       )}
+      <Typography variant="subtitle1">
+        You can leave this page, but if you’re not here when it’s your turn, you will be skipped.
+        Don&apos;t worry, we&apos;ll send you a SMS text when your turn is coming up!{' '}
+        <span role="img" aria-label="thumbs up">
+          👍
+        </span>
+      </Typography>
     </Grid>
   )
 })
