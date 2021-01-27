@@ -115,6 +115,7 @@ const ChitChatVideoRoom = () => {
       <Button
         variant="contained"
         color="secondary"
+        style={{ zIndex: 9999 }}
         onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId, userId })}
       >
         reset
