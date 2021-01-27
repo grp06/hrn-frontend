@@ -70,7 +70,6 @@ const CreatorHome = () => {
   if (!userId) {
     return <Redirect to="/login-new" />
   }
-  console.log('🚀 ~ CreatorHome ~ chitChatsData', chitChatsData)
 
   const renderCreateChitChat = () => {
     return (

@@ -82,7 +82,7 @@ const ChitChatCard = ({ chitChat }) => {
   const { host, id, start_at, ended_at, status: event_status } = chitChat
   const { name: hostName } = host
   const startTime = new Date(start_at).getTime()
-  const eventIsLive = event_status !== 'not-started' && event_status !== 'complete'
+  const eventIsLive = event_status !== 'not-started' && event_status !== 'completed'
   const history = useHistory()
 
   const ChitChatCardContent = (

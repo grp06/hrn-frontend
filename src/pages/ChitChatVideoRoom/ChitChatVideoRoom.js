@@ -136,17 +136,12 @@ const ChitChatVideoRoom = () => {
     }
   }, [chitChatId, userId])
 
-  // useEffect(() => {
-  //   if (chitChatToken) {
-  //   }
-  // }, [chitChatToken])
-
   useEffect(() => {
     if (userId && !userIsHost && onlineChitChatUsersArray.length) {
       const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
       if (currentFan && currentFan.status === 'completed') {
         chitChatRoom.disconnect()
-        history.push(`/chit-chat/${chitChatId}/call-complete`)
+        history.push(`/chit-chat/${chitChatId}/call-completed`)
       }
     }
   }, [onlineChitChatUsersArray, userId])
@@ -156,7 +151,7 @@ const ChitChatVideoRoom = () => {
       if (chitChatRoom) {
         chitChatRoom.disconnect()
       }
-      history.push(`/chit-chat/${chitChatId}/call-complete`)
+      history.push(`/chit-chat/${chitChatId}/call-completed`)
     }
   }, [eventStatus, chitChatRoom])
 

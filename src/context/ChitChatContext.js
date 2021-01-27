@@ -177,7 +177,7 @@ const ChitChatProvider = ({ children }) => {
       // chitChat doesn't exist - redirect user
       if (!chitChatData.events_new.length) {
         setAppLoading(false)
-        return history.push('/events-new')
+        return history.push('/creator-home')
       }
 
       const eventWasReset =

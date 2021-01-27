@@ -40,7 +40,7 @@ import {
   CreateChitChat,
   CreatorHome,
   ChitChatVideoRoom,
-  CallComplete,
+  CallCompleted,
 } from './pages'
 import {
   AppProvider,
@@ -155,7 +155,11 @@ const App = () => {
                           path="/chit-chat/:id/video-room"
                           component={ChitChatVideoRoom}
                         />
-                        <Route exact path="/chit-chat/:id/call-complete" component={CallComplete} />
+                        <Route
+                          exact
+                          path="/chit-chat/:id/call-completed"
+                          component={CallCompleted}
+                        />
                       </ChitChatProvider>
                       <EventProvider>
                         <Route

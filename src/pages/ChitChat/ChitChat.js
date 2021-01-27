@@ -81,6 +81,12 @@ const ChitChat = () => {
   }, [eventStatus, userIsHost])
 
   useEffect(() => {
+    if (eventStatus === 'completed') {
+      history.push(`/chit-chat/${chitChatId}/call-completed`)
+    }
+  }, [eventStatus])
+
+  useEffect(() => {
     if (
       !userIsHost &&
       eventStatus === 'call-in-progress' &&
