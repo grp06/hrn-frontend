@@ -54,7 +54,33 @@ const useChitChatHelpers = () => {
     }
   }
 
-  return { startNextChitChat, resetChitChat }
+  const endCall = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
+    try {
+      const fanCurrentlyInChat = onlineChitChatUsersArray.find(
+        (eventUser) => eventUser.status === 'in-chat'
+      ).user_id
+
+      await updateFanStatusMutation({
+        variables: {
+          userId: fanCurrentlyInChat,
+          status: 'completed',
+        },
+      })
+
+      await updateChitChatStatusMutation({
+        variables: {
+          chitChatId,
+          userId,
+          status: 'paused',
+        },
+        // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
+      })
+    } catch (error) {
+      console.log('🚀 ~ endCall ~ error', error)
+    }
+  }
+
+  return { startNextChitChat, resetChitChat, endCall }
 }
 
 export default useChitChatHelpers

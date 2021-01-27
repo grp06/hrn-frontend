@@ -59,7 +59,7 @@ const ChitChatVideoRoom = () => {
 
   const { appLoading } = useAppContext()
   const { onlineChitChatUsersArray } = useChitChatContext()
-  const { resetChitChat } = useChitChatHelpers()
+  const { resetChitChat, endCall } = useChitChatHelpers()
   const {
     user: { id: userId },
   } = useUserContext()
@@ -70,6 +70,7 @@ const ChitChatVideoRoom = () => {
   const { host, host_id, start_at, status: event_status } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const history = useHistory()
+  const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
 
   // const { firstUpdate } = location.state
   const currentFan = onlineChitChatUsersArray.find((fan) => fan.status === 'in-chat')
@@ -92,6 +93,7 @@ const ChitChatVideoRoom = () => {
         video: { deviceId: localStoragePreferredVideoId },
         audio: audioDevice,
       })
+      setChitChatRoom(room)
       return room
     }
 
@@ -112,6 +114,17 @@ const ChitChatVideoRoom = () => {
     if (chitChatToken) {
     }
   }, [chitChatToken])
+
+  useEffect(() => {
+    if (userId && !userIsHost && onlineChitChatUsersArray.length) {
+      const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
+      if (currentFan && currentFan.status === 'completed') {
+        console.log('🚀 ~ useEffect ~ chitChatRoom', chitChatRoom)
+        chitChatRoom.disconnect()
+        history.push(`/chit-chat/${chitChatId}/call-complete`)
+      }
+    }
+  }, [onlineChitChatUsersArray, userId])
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
@@ -138,7 +151,10 @@ const ChitChatVideoRoom = () => {
       <div id="remote-video" className={classes.remoteVideo} />
       <div id="local-video" className={classes.localVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
-      <div className={classes.endCall} />
+      <div
+        className={classes.endCall}
+        onClick={() => endCall({ onlineChitChatUsersArray, chitChatId, userId })}
+      />
     </div>
   )
 }
