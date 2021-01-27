@@ -2,6 +2,33 @@ import { useChitChatParticipantConnected } from '.'
 import { useChitChatContext } from '../context'
 import { constants } from '../utils'
 
+// got these functions from here: https://github.com/twilio/twilio-video.js/issues/497
+// seems like an alternative way to do things
+
+// const detachTracks = (tracks) => {
+//   for (let track of tracks) {
+//     const htmlElements = track.detach()
+//     for (let htmlElement of htmlElements) {
+//       htmlElement.remove()
+//     }
+//   }
+// }
+
+// const getTracks = (participant) => {
+//   return Array.from(participant.tracks.values())
+//     .filter(function (publication) {
+//       return publication.track
+//     })
+//     .map(function (publication) {
+//       return publication.track
+//     })
+// }
+
+// const detachParticipantTracks = (participant) => {
+//   var tracks = getTracks(participant)
+//   detachTracks(tracks)
+// }
+
 const useChitChatTwilio = () => {
   const { setFanDisconnectedFromChat, setFanNeverConnected } = useChitChatContext()
   const { partnerCameraIssueTimeout } = constants

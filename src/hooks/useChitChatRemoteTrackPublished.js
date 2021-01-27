@@ -15,7 +15,10 @@ const useChitChatRemoteTrackPublished = () => {
       if (publication.kind === 'video') {
         attachedTrack.muted = true
         console.log('subscribed, attaching track')
-        document.getElementById('remote-video').appendChild(attachedTrack)
+        const remoteVideo = document.getElementById('remote-video')
+        if (remoteVideo) {
+          remoteVideo.appendChild(attachedTrack)
+        }
       }
     })
 

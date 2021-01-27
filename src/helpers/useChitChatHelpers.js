@@ -10,16 +10,15 @@ const useChitChatHelpers = () => {
       await updateChitChatStatusMutation({
         variables: {
           chitChatId,
-          userId,
           status: 'call-in-progress',
         },
         // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
       })
-      const firstFanToMeet = onlineChitChatUsersArray[0].user_id
+      const nextFanToMeet = onlineChitChatUsersArray[0].user_id
 
       await updateFanStatusMutation({
         variables: {
-          userId: firstFanToMeet,
+          userId: nextFanToMeet,
           status: 'in-chat',
         },
       })
@@ -31,7 +30,7 @@ const useChitChatHelpers = () => {
   const resetChitChat = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
     try {
       const fanCurrentlyInChat = onlineChitChatUsersArray.find(
-        (eventUser) => eventUser.status === 'in-chat'
+        (eventUser) => eventUser.status === 'in-chat' || eventUser.status == 'completed'
       ).user_id
 
       await updateFanStatusMutation({
@@ -44,7 +43,6 @@ const useChitChatHelpers = () => {
       await updateChitChatStatusMutation({
         variables: {
           chitChatId,
-          userId,
           status: 'not-started',
         },
         // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
@@ -54,7 +52,34 @@ const useChitChatHelpers = () => {
     }
   }
 
-  return { startNextChitChat, resetChitChat }
+  const endCall = async ({ onlineChitChatUsersArray, chitChatId, userId, chitChatRSVPs }) => {
+    try {
+      const currentFanChatting = onlineChitChatUsersArray.find(
+        (eventUser) => eventUser.status === 'in-chat'
+      )
+
+      await updateFanStatusMutation({
+        variables: {
+          userId: currentFanChatting.user_id,
+          status: 'completed',
+        },
+      })
+
+      const wasFinalFan =
+        chitChatRSVPs[chitChatRSVPs.length - 1].user_id === currentFanChatting.user_id
+
+      await updateChitChatStatusMutation({
+        variables: {
+          chitChatId,
+          status: wasFinalFan ? 'completed' : 'paused',
+        },
+      })
+    } catch (error) {
+      console.log('🚀 ~ endCall ~ error', error)
+    }
+  }
+
+  return { startNextChitChat, resetChitChat, endCall }
 }
 
 export default useChitChatHelpers

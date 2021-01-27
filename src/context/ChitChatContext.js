@@ -78,6 +78,7 @@ const useChitChatContext = () => {
     setUserHasEnabledCameraAndMic,
   }
 }
+let interval
 
 const ChitChatProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
@@ -86,12 +87,11 @@ const ChitChatProvider = ({ children }) => {
   const { id: userId } = user
 
   const { pathname } = window.location
-  const { chitChat, chitChatId, userHasEnabledCameraAndMic } = state
+  const { chitChat, chitChatId, chitChatRSVPs, userHasEnabledCameraAndMic } = state
   const { status: eventStatus } = chitChat
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
-
   // subscribe to the Event only if we have an chitChatId
   const { data: chitChatData } = useSubscription(listenToChitChat, {
     variables: {
@@ -132,10 +132,22 @@ const ChitChatProvider = ({ children }) => {
     }
   }, [onlineChitChatUsersData])
 
+  //
+  useEffect(() => {
+    if (chitChatRSVPs && userId) {
+      const currentUser = chitChatRSVPs.find((eventUser) => eventUser.user_id === userId)
+      if (currentUser && currentUser.status === 'completed') {
+        console.log('cleared interval ', interval)
+        clearInterval(interval)
+      }
+    }
+  }, [chitChatRSVPs, userId])
+
   useEffect(() => {
     // TODO sending last seen for host but it's not doing anything. Do we need to send for host?
     if (userId && userInChitChatEvent && userHasEnabledCameraAndMic) {
-      const interval = setInterval(async () => {
+      console.log('GOT INTO LAST SEEN BLOCK')
+      interval = setInterval(async () => {
         console.log('last seen')
         try {
           if (!bannedUserIds.includes(userId)) {
@@ -149,7 +161,7 @@ const ChitChatProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  })
+  }, [userId, userInChitChatEvent, userHasEnabledCameraAndMic])
 
   useEffect(() => {
     if (chitChatRSVPsData && chitChatRSVPsData.event_users_new) {
