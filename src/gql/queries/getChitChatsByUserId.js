@@ -10,6 +10,7 @@ const getChitChatsByUserId = gql`
       round_length
       start_at
       status
+      suggested_donation
       event_users_new {
         id
       }

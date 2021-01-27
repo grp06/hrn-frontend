@@ -17,6 +17,7 @@ const listenToChitChat = gql`
       round_length
       start_at
       status
+      suggested_donation
       updated_at
     }
   }

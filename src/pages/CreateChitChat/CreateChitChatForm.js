@@ -16,6 +16,14 @@ import { upsertChitChat } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  cancelButton: {
+    margin: theme.spacing(1.5, 0),
+    backgroundColor: theme.palette.common.greyButton,
+    color: theme.palette.common.ghostWhite,
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
+  },
   formContainer: {
     width: '85%',
     height: 'auto',
@@ -47,17 +55,24 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
   const [showCreateChitChatSuccess, setShowCreateChitChatSuccess] = useState(false)
   const [upsertChitChatMutation] = useMutation(upsertChitChat, {
     onCompleted: async (data) => {
-      const { id: event_id, num_rounds, round_length } = data.insert_events_new.returning[0]
+      const {
+        id: event_id,
+        num_rounds,
+        round_length,
+        suggested_donation,
+      } = data.insert_events_new.returning[0]
       window.analytics.track('Event New created', {
         num_rounds,
         round_length,
+        suggested_donation,
       })
       setShowCreateChitChatSuccess(true)
       await sleep(800)
       history.push(`/chit-chat/${event_id}`)
     },
   })
-  const { id: chitChatId, num_rounds, round_length, start_at } = chitChatDetails || {}
+  const { id: chitChatId, num_rounds, round_length, start_at, suggested_donation } =
+    chitChatDetails || {}
 
   const getEventStartAt = (eventDate, eventTime) => {
     const dateISOString = eventDate.toISOString()
@@ -70,24 +85,35 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
     return formattedDate
   }
 
+  const handleCancelClick = () => {
+    if (chitChatId) return history.push(`/chit-chat/${chitChatId}`)
+    return history.push('/creator-home')
+  }
+
   return (
     <>
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
         {chitChatDetails ? 'Edit Your Event' : 'Create Event'}
       </Typography>
-      <Typography variant="subtitle2">cancel</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{
             event_date: new Date(start_at) || new Date(),
             event_time: new Date(start_at) || new Date(),
-            round_length: round_length || 2,
             num_rounds: num_rounds || 15,
+            round_length: round_length || 2,
+            suggested_donation: suggested_donation || 5,
           }}
           onSubmit={async (values, { setSubmitting }) => {
-            const { event_date, event_time, num_rounds, round_length } = values
+            const { event_date, event_time, num_rounds, round_length, suggested_donation } = values
             const start_at = getEventStartAt(event_date, event_time)
-            const event_details = { host_id: userId, num_rounds, round_length, start_at }
+            const event_details = {
+              host_id: userId,
+              num_rounds,
+              round_length,
+              start_at,
+              suggested_donation,
+            }
             // this is for adding the chit chat id if we are editing, instead of creating
             if (chitChatId) event_details.id = chitChatId
             try {
@@ -128,6 +154,14 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                       required
                     />
                   </Grid>
+                  <Grid item xs={12} md={6} className={classes.formInputMargin}>
+                    <Field
+                      component={TextField}
+                      name="suggested_donation"
+                      label="Suggested Donation Value (USD)"
+                      fullWidth
+                    />
+                  </Grid>
                 </Grid>
                 <Grid
                   container
@@ -137,7 +171,6 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                   className={classes.sectionContainer}
                 >
                   <Typography variant="h3">Duration</Typography>
-
                   <Grid container direction="row">
                     <Grid item xs={12} md={6} className={classes.formInputMargin}>
                       <Field
@@ -150,6 +183,10 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                       />
                     </Grid>
                   </Grid>
+                  <Typography variant="subtitle2" style={{ padding: '0 8px' }}>
+                    This is a suggested length so you have enough time to make a good impression and
+                    get donations!
+                  </Typography>
                 </Grid>
               </Grid>
               <Grid container justify="center" alignItems="center">
@@ -160,6 +197,14 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                   onClick={submitForm}
                 >
                   Submit
+                </Button>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  className={classes.cancelButton}
+                  onClick={handleCancelClick}
+                >
+                  Cancel
                 </Button>
               </Grid>
             </Form>

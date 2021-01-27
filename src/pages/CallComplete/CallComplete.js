@@ -47,7 +47,7 @@ const CallComplete = () => {
   const history = useHistory()
   const { id } = useParams()
   const { chitChat, setEventNewId } = useChitChatContext()
-  const { host, status: eventStatus } = chitChat
+  const { host, status: eventStatus, suggested_donation } = chitChat
   const { name: hostName } = host || {}
   const chitChatId = parseInt(id, 10)
   const hostFirstName = hostName && hostName.split(' ')[0]
@@ -77,8 +77,9 @@ const CallComplete = () => {
       </Typography>
       <Typography variant="body1" className={classes.bodyText}>
         {hostFirstName} doesn&apos;t want to say bye just yet! They suggest a{' '}
-        <span style={{ fontWeight: 600 }}>donation of $10</span> so they can continue saying hi to
-        their fans. But any amount you feel comfortable with will go a long way{' '}
+        <span style={{ fontWeight: 600 }}>donation of ${suggested_donation}</span> so they can
+        continue saying hi to their fans. But any amount you feel comfortable with will go a long
+        way{' '}
         <span role="img" aria-label="hands raised">
           🙌
         </span>
