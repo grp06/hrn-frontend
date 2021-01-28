@@ -50,6 +50,10 @@ const HeaderDrawer = () => {
     setOpenDrawer(!openDrawer)
   }
 
+  const closeDrawer = () => {
+    setOpenDrawer(false)
+  }
+
   return (
     !userOnAuthRoute &&
     !userInEvent && (
@@ -84,7 +88,7 @@ const HeaderDrawer = () => {
               keepMounted: true,
             }}
           >
-            <DrawerContent />
+            <DrawerContent closeDrawer={closeDrawer} />
           </Drawer>
         </Hidden>
         {/* This is the desktop drawer/sidebar */}

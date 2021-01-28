@@ -25,7 +25,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ routes: { loggedInRoutes, loggedOutRoutes }, role, userId }) => {
+const UserDrawerContent = ({
+  routes: { loggedInRoutes, loggedOutRoutes },
+  role,
+  userId,
+  closeDrawer,
+}) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
@@ -40,7 +45,10 @@ const UserDrawerContent = ({ routes: { loggedInRoutes, loggedOutRoutes }, role, 
       disabled={eventRunning}
       className={classes.listItem}
       key="Home"
-      onClick={() => history.push('/creator-home')}
+      onClick={() => {
+        closeDrawer()
+        history.push('/creator-home')
+      }}
     >
       <Grid container direction="row" justify="flex-start" alignItems="center">
         <ListItemIcon>
@@ -59,7 +67,10 @@ const UserDrawerContent = ({ routes: { loggedInRoutes, loggedOutRoutes }, role, 
         disabled={eventRunning}
         className={classes.listItem}
         key={route.label}
-        onClick={() => history.push(route.url)}
+        onClick={() => {
+          closeDrawer()
+          history.push(route.url)
+        }}
       >
         <Grid container direction="row" justify="flex-start" alignItems="center">
           <ListItemIcon>
