@@ -25,17 +25,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({
-  routes: { loggedInRoutes, loggedOutRoutes },
-  role,
-  userId,
-  userName,
-}) => {
+const UserDrawerContent = ({ routes: { loggedInRoutes, loggedOutRoutes }, role, userId }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
     window.location.pathname.includes('pre-event') ||
       window.location.pathname.includes('video-room')
+  )
+
+  const creatorHome = (
+    <ListItem
+      button
+      disableRipple
+      disabled={eventRunning}
+      className={classes.listItem}
+      key="Home"
+      onClick={() => history.push('/creator-home')}
+    >
+      <Grid container direction="row" justify="flex-start" alignItems="center">
+        <ListItemIcon>
+          <FeatherIcon icon="home" stroke="#f4f6fa" size="24" />
+        </ListItemIcon>
+        <ListItemText primary="Home" className={classes.listItemText} />
+      </Grid>
+    </ListItem>
   )
 
   const renderDrawers = (routes) => {
@@ -61,10 +74,12 @@ const UserDrawerContent = ({
   const renderContent = () => {
     return userId ? renderDrawers(loggedInRoutes) : renderDrawers(loggedOutRoutes)
   }
-
   return (
     <div>
-      <List disablePadding>{renderContent()}</List>
+      <List disablePadding>
+        {renderContent()}
+        {role === 'celeb' && creatorHome}
+      </List>
     </div>
   )
 }
