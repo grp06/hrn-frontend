@@ -120,7 +120,7 @@ const CreatorHome = () => {
   return (
     <>
       <Grid container className={classes.pageContainer} alignItems="center" direction="column">
-        {!chitChatsData.chit_chats.length ? renderCreateChitChat() : renderChitChats()}
+        {!chitChatsData?.chit_chats.length ? renderCreateChitChat() : renderChitChats()}
         <Button
           color="primary"
           type="submit"
