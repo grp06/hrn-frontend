@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 const upsertChitChat = gql`
-  mutation upsertChitChat($event_details: [events_new_insert_input!]!) {
-    insert_events_new(
+  mutation upsertChitChat($event_details: [chit_chats_insert_input!]!) {
+    insert_chit_chats(
       objects: $event_details
       on_conflict: {
         constraint: events_new_pkey

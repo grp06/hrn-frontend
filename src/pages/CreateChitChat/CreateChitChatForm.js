@@ -60,7 +60,7 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
         num_rounds,
         round_length,
         suggested_donation,
-      } = data.insert_events_new.returning[0]
+      } = data.insert_chit_chats.returning[0]
       window.analytics.track('Event New created', {
         num_rounds,
         round_length,

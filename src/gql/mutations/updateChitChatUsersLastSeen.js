@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
-const updateEventUsersNewLastSeen = gql`
-  mutation updateEventUsersNewLastSeen($chitChatId: Int!, $now: timestamptz!, $user_id: Int!) {
-    update_event_users_new(
+const updateChitChatUsersLastSeen = gql`
+  mutation updateChitChatUsersLastSeen($chitChatId: Int!, $now: timestamptz!, $user_id: Int!) {
+    update_chit_chat_users(
       where: { user_id: { _eq: $user_id }, event_id: { _eq: $chitChatId } }
       _set: { last_seen: $now }
     ) {
@@ -15,4 +15,4 @@ const updateEventUsersNewLastSeen = gql`
     }
   }
 `
-export default updateEventUsersNewLastSeen
+export default updateChitChatUsersLastSeen

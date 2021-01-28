@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const CreatorHome = () => {
+const FanHome = () => {
   const classes = useStyles()
   const { user } = useUserContext()
   const history = useHistory()
@@ -55,9 +55,9 @@ const CreatorHome = () => {
     },
     skip: !userId,
   })
-  console.log('🚀 ~ CreatorHome ~ chitChatsData', chitChatsData)
+  console.log('🚀 ~ FanHome ~ chitChatsData', chitChatsData)
   useEffect(() => {
-    window.analytics.page('/creator-home')
+    window.analytics.page('/fan-home')
   }, [])
 
   const renderHello = () => {
@@ -69,7 +69,7 @@ const CreatorHome = () => {
   }
 
   if (!userId) {
-    return <Redirect to="/creator-login" />
+    return <Redirect to="/fan-login" />
   }
 
   const renderCreateChitChat = () => {
@@ -135,4 +135,4 @@ const CreatorHome = () => {
   )
 }
 
-export default CreatorHome
+export default FanHome

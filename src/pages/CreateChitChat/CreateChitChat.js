@@ -22,7 +22,7 @@ const CreateChitChat = () => {
 
   const [getChitChatFormDetailsQuery] = useLazyQuery(getChitChatFormDetails, {
     onCompleted: (data) => {
-      const [chitChatDetails] = data.events_new
+      const [chitChatDetails] = data.chit_chats
       setChitChatDetails(chitChatDetails)
     },
   })

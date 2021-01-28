@@ -26,7 +26,8 @@ import {
   HRNAnalytics,
   Lobby,
   LoginForm,
-  LoginNew,
+  CreatorLogin,
+  FanLogin,
   MyProfile,
   MyConnections,
   VideoRoom,
@@ -39,8 +40,9 @@ import {
   CelebSignUp,
   CreateChitChat,
   CreatorHome,
+  FanHome,
   ChitChatVideoRoom,
-  CallComplete,
+  CallCompleted,
 } from './pages'
 import {
   AppProvider,
@@ -125,7 +127,8 @@ const App = () => {
                   <Switch>
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
-                      <Route exact path="/login-new" component={LoginNew} />
+                      <Route exact path="/creator-login" component={CreatorLogin} />
+                      <Route exact path="/fan-login" component={FanLogin} />
                       <Route exact path="/sign-up" component={SignUp} />
                       <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
@@ -142,6 +145,7 @@ const App = () => {
                       <Route exact path="/create-event" component={CreateEvent} />
                       <Route exact path="/create-chit-chat" component={CreateChitChat} />
                       <Route exact path="/creator-home" component={CreatorHome} />
+                      <Route exact path="/fan-home" component={FanHome} />
                       <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
@@ -155,7 +159,11 @@ const App = () => {
                           path="/chit-chat/:id/video-room"
                           component={ChitChatVideoRoom}
                         />
-                        <Route exact path="/chit-chat/:id/call-complete" component={CallComplete} />
+                        <Route
+                          exact
+                          path="/chit-chat/:id/call-completed"
+                          component={CallCompleted}
+                        />
                       </ChitChatProvider>
                       <EventProvider>
                         <Route

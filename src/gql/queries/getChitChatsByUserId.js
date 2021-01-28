@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 
 const getChitChatsByUserId = gql`
   query getChitChatsByUserId($userId: Int!) {
-    events_new(where: { host_id: { _eq: $userId } }, order_by: { start_at: desc }) {
+    chit_chats(where: { host_id: { _eq: $userId } }, order_by: { start_at: desc }) {
       id
       ended_at
       host_id
@@ -11,7 +11,7 @@ const getChitChatsByUserId = gql`
       start_at
       status
       suggested_donation
-      event_users_new {
+      chit_chat_users {
         id
       }
       host {

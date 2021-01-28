@@ -104,7 +104,8 @@ const UserProvider = ({ children }) => {
   const userOnSpecificChitChatPage = Boolean(pathname.includes('/chit-chat'))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
-  const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
+  const userOnCreatorLoginPage = Boolean(pathname.includes('creator-login'))
+  const userOnFanLoginPage = Boolean(pathname.includes('fan-login'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
   const eventRoutes = ['video-room', 'lobby', 'group-video-chat']
@@ -119,10 +120,11 @@ const UserProvider = ({ children }) => {
     'host-onboarding',
     'checkout-success',
     'sign-up-new',
-    'login-new',
+    'creator-login',
   ]
 
   const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
+  console.log('🚀 ~ UserProvider ~ isUserOnAuth', isUserOnAuth)
 
   useEffect(() => {
     const role = localStorage.getItem('role')
@@ -181,9 +183,11 @@ const UserProvider = ({ children }) => {
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
           userOnSubscriptionPage ||
-          userOnLoginNewPage
+          userOnCreatorLoginPage ||
+          userOnFanLoginPage
         )
       ) {
+        console.log('pushing')
         history.push('/')
       }
     } else {
