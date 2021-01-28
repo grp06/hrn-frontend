@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { makeStyles } from '@material-ui/styles'
+import { Link } from 'react-router-dom'
+
 import { Snack } from '../../common'
 import { signupUserNew } from '../../helpers'
 import { constants } from '../../utils'
@@ -36,10 +38,21 @@ const useStyles = makeStyles((theme) => ({
   sectionContainer: {
     margin: theme.spacing(4, 0),
   },
+  linkRedirectToLogin: {
+    color: theme.palette.common.ghostWhite,
+    fontFamily: 'Muli',
+    textDecoration: 'none',
+    marginTop: theme.spacing(2.5),
+    '&:hover': {
+      color: theme.palette.common.basePink,
+    },
+  },
 }))
 
 const RSVPSchema = Yup.object().shape({
-  name: Yup.string().min(2, 'Too Short!').required('Required'),
+  username: Yup.string().min(4, 'Too Short!').required('Required'),
+  password: Yup.string().min(8, 'Too Short!').required('Required'),
+  passwordRepeated: Yup.string().min(8, 'Too Short!').required('Required'),
   phone_number: Yup.string().min(7, 'Too Short!').required('Required'),
 })
 
@@ -55,14 +68,16 @@ const RSVPForChitChatForm = ({ chitChat }) => {
       <Formik
         initialValues={{
           phone_number: '',
-          name: '',
+          username: '',
+          password: '',
+          passwordRepeated: '',
         }}
         onSubmit={async (values, { setSubmitting }) => {
           setFormSubmitting(true)
-          const { phone_number, name } = values
+          const { phone_number, username, password, passwordRepeated } = values
 
-          if (!phone_number || !name) {
-            setRSVPFormErrorMessage('something seems to be empty  🧐')
+          if (password !== passwordRepeated) {
+            setRSVPFormErrorMessage('Passwords must match')
             setFormSubmitting(false)
             return
           }
@@ -70,7 +85,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           try {
             signupResponse = await signupUserNew({
               role: 'fan',
-              userInfo: { name, phone_number: `+${phone_number}` },
+              userInfo: { username, password, phone_number: `+${phone_number}` },
               chitChat,
             })
 
@@ -81,14 +96,13 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           } catch (err) {
             console.log('err === ', err)
             setRSVPFormErrorMessage(err)
-            // returning because we dont wanna do the below stuff if we error our
             setFormSubmitting(false)
             return
           }
 
           const { token, id, role } = signupResponse
           window.analytics.identify(id, {
-            name,
+            username,
             phone_number,
             role,
           })
@@ -120,8 +134,33 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               </Typography>
               <Grid container direction="row">
                 <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field component={TextField} name="name" label="Your name" type="text" required />
+                  <Field
+                    component={TextField}
+                    name="username"
+                    label="Username"
+                    type="text"
+                    required
+                  />
                 </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="password"
+                    label="Password"
+                    type="password"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="passwordRepeated"
+                    label="Repeat Password"
+                    type="password"
+                    required
+                  />
+                </Grid>
+
                 <Grid item xs={12} className={classes.formInputMargin}>
                   <Field name="phone_number" label="Your phone number" required>
                     {({ form }) => (
@@ -164,6 +203,9 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               >
                 Sign me up!
               </Button>
+              <Link className={classes.linkRedirectToLogin} to="/fan-sign-up">
+                Already have an account?
+              </Link>
             </Grid>
           </Form>
         )}

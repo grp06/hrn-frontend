@@ -105,6 +105,7 @@ const UserProvider = ({ children }) => {
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
   const userOnCreatorLoginPage = Boolean(pathname.includes('creator-login'))
+  const userOnFanLoginPage = Boolean(pathname.includes('fan-login'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
   const eventRoutes = ['video-room', 'lobby', 'group-video-chat']
@@ -182,9 +183,11 @@ const UserProvider = ({ children }) => {
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
           userOnSubscriptionPage ||
-          userOnCreatorLoginPage
+          userOnCreatorLoginPage ||
+          userOnFanLoginPage
         )
       ) {
+        console.log('pushing')
         history.push('/')
       }
     } else {

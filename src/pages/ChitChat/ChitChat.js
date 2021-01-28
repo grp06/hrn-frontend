@@ -46,9 +46,11 @@ const ChitChat = () => {
   const { appLoading } = useAppContext()
   const { id } = useParams()
   const chitChatId = parseInt(id, 10)
+
   const {
     user: { id: userId },
   } = useUserContext()
+
   const {
     chitChat,
     setEventNewId,
@@ -56,15 +58,17 @@ const ChitChat = () => {
     chitChatRSVPs,
     onlineChitChatUsersArray,
   } = useChitChatContext()
+
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-  // const startTime = new Date(start_at).getTime()
-  // const diff = startTime - Date.now()
+
   const fanIsRSVPed =
     chitChatRSVPs && chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
+
   const currentUsersIndexInQueue =
     chitChatRSVPs && chitChatRSVPs.findIndex((eventUser) => eventUser.user_id === userId)
+
   const indexOfFanNextInQueue =
     chitChatRSVPs && chitChatRSVPs.findIndex((eventUser) => eventUser.status === 'in-queue')
 

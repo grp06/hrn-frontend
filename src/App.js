@@ -27,6 +27,7 @@ import {
   Lobby,
   LoginForm,
   CreatorLogin,
+  FanLogin,
   MyProfile,
   MyConnections,
   VideoRoom,
@@ -39,6 +40,7 @@ import {
   CelebSignUp,
   CreateChitChat,
   CreatorHome,
+  FanHome,
   ChitChatVideoRoom,
   CallCompleted,
 } from './pages'
@@ -126,6 +128,7 @@ const App = () => {
                     <MarginLeftAppWrapper>
                       <Route exact path="/" component={LoginForm} />
                       <Route exact path="/creator-login" component={CreatorLogin} />
+                      <Route exact path="/fan-login" component={FanLogin} />
                       <Route exact path="/sign-up" component={SignUp} />
                       <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
@@ -142,6 +145,7 @@ const App = () => {
                       <Route exact path="/create-event" component={CreateEvent} />
                       <Route exact path="/create-chit-chat" component={CreateChitChat} />
                       <Route exact path="/creator-home" component={CreatorHome} />
+                      <Route exact path="/fan-home" component={FanHome} />
                       <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
