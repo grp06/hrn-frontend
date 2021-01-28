@@ -21,6 +21,9 @@ const constants = {
   safariCameraPermissionHowTo:
     'https://support.apple.com/guide/safari/customize-settings-per-website-ibrw7f78f7fe/13.0/mac/10.15',
   bannedUserIds: [3477, 2329],
+  USER_ID: 'userId',
+  TOKEN: 'token',
+  ROLE: 'role',
 }
 
 export default constants
