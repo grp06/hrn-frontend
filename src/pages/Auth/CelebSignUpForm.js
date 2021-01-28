@@ -24,7 +24,6 @@ const useStyles = makeStyles((theme) => ({
     height: 'auto',
     marginRight: 'auto',
     marginLeft: 'auto',
-    marginBottom: '75px',
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
     [theme.breakpoints.down('xs')]: {
@@ -33,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
   },
   wrapper: {
     width: '100vw',
-    height: '100vh',
+    minHeight: '100vh',
+    padding: theme.spacing('75px', 0),
     backgroundImage: `url(${confettiDoodles})`,
   },
   formContainer: {

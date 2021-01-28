@@ -17,11 +17,14 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   cancelButton: {
-    margin: theme.spacing(1.5, 0),
+    margin: theme.spacing(2, 0),
     backgroundColor: theme.palette.common.greyButton,
     color: theme.palette.common.ghostWhite,
     '&:hover': {
       backgroundColor: theme.palette.common.greyButtonHover,
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: theme.spacing(2),
     },
   },
   formContainer: {

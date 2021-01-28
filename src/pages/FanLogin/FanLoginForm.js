@@ -28,6 +28,9 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 'auto'),
     padding: theme.spacing(5),
   },
+  formHeader: {
+    textAlign: 'center',
+  },
   formInputMargin: {
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
@@ -68,141 +71,153 @@ const FanLoginForm = ({ chitChat }) => {
     <Grid container justidy="center" alignItems="center" className={classes.wrapper}>
       <FloatCardMedium>
         <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
-          <Formik
-            initialValues={{
-              phone_number: '',
-              username: '',
-              password: '',
-            }}
-            onSubmit={async (values, { setSubmitting }) => {
-              setFormSubmitting(true)
-              const { phone_number, username, password } = values
+          <Grid item>
+            <Typography variant="h2" className={classes.formHeader}>
+              Welcome{' '}
+              <span role="img" aria-label="hand wave">
+                👋
+              </span>
+            </Typography>
+          </Grid>
+          <Grid item container direction="column" alignItems="center">
+            <Formik
+              initialValues={{
+                phone_number: '',
+                username: '',
+                password: '',
+              }}
+              onSubmit={async (values, { setSubmitting }) => {
+                setFormSubmitting(true)
+                const { phone_number, username, password } = values
 
-              if (!phone_number && !username) {
-                setRSVPFormErrorMessage('You must login with a phone number or a username')
-                setFormSubmitting(false)
-                return
-              }
-
-              if (!password) {
-                setRSVPFormErrorMessage('Please enter a password')
-                setFormSubmitting(false)
-                return
-              }
-              let loginResponse
-              try {
-                loginResponse = await phoneOrUsernameLogin({ username, password, phone_number })
-                const { id, token, role } = loginResponse
-
-                if (loginResponse.error) {
-                  setRSVPFormErrorMessage(loginResponse.error)
-                  throw loginResponse.error
+                if (!phone_number && !username) {
+                  setRSVPFormErrorMessage('You must login with a phone number or a username')
+                  setFormSubmitting(false)
+                  return
                 }
-              } catch (err) {
-                console.log('err === ', err)
-                setRSVPFormErrorMessage(err)
+
+                if (!password) {
+                  setRSVPFormErrorMessage('Please enter a password')
+                  setFormSubmitting(false)
+                  return
+                }
+                let loginResponse
+                try {
+                  loginResponse = await phoneOrUsernameLogin({ username, password, phone_number })
+                  const { id, token, role } = loginResponse
+
+                  if (loginResponse.error) {
+                    setRSVPFormErrorMessage(loginResponse.error)
+                    throw loginResponse.error
+                  }
+                } catch (err) {
+                  console.log('err === ', err)
+                  setRSVPFormErrorMessage(err)
+                  setFormSubmitting(false)
+                  return
+                }
+
+                const { token, id, role } = loginResponse
+                window.analytics.identify(id, {
+                  username,
+                  phone_number,
+                  role,
+                })
+                window.analytics.track('Fan sign in')
+                localStorage.setItem(USER_ID, id)
+                localStorage.setItem(ROLE, role)
+                localStorage.setItem(TOKEN, token)
+
                 setFormSubmitting(false)
-                return
-              }
-
-              const { token, id, role } = loginResponse
-              window.analytics.identify(id, {
-                username,
-                phone_number,
-                role,
-              })
-              window.analytics.track('Fan sign in')
-              localStorage.setItem(USER_ID, id)
-              localStorage.setItem(ROLE, role)
-              localStorage.setItem(TOKEN, token)
-
-              setFormSubmitting(false)
-              // I'm confused by this transition modal stuff so I'm just reloading for now - George
-              window.location.reload()
-            }}
-            validationSchema={RSVPSchema}
-          >
-            {({ dirty, isValid, submitForm }) => (
-              <Form className={classes.formContainer}>
-                <Grid
-                  container
-                  direction="column"
-                  justify="center"
-                  alignItems="center"
-                  className={classes.sectionContainer}
-                >
-                  <Grid container direction="row">
-                    <Grid item xs={12} className={classes.formInputMargin}>
-                      <Field
-                        component={TextField}
-                        name="username"
-                        label="Username"
-                        type="text"
-                        required
-                      />
-                    </Grid>
-                    <Grid item xs={12} className={classes.formInputMargin}>
-                      <Field name="phone_number" label="Your phone number" required>
-                        {({ form }) => (
-                          <PhoneInput
-                            inputProps={{ name: 'phone_number', required: true, autoFocus: true }}
-                            inputStyle={{
-                              width: '100%',
-                              background: '#262626',
-                              color: '#E2E8F2',
-                              border: 'none',
-                              borderBottom: '2px solid #3e4042',
-                            }}
-                            buttonStyle={{
-                              background: '#262626',
-                              border: '1px solid #3e4042',
-                            }}
-                            dropdownStyle={{
-                              width: '200px',
-                              background: '#262626',
-                              color: '#E2E8F2',
-                            }}
-                            country="us"
-                            value={form.values.phone_number}
-                            onChange={(phoneNumber) => {
-                              form.setFieldValue('phone_number', phoneNumber)
-                            }}
-                          />
-                        )}
-                      </Field>
-                    </Grid>
-                    <Grid item xs={12} className={classes.formInputMargin}>
-                      <Field
-                        component={TextField}
-                        name="password"
-                        label="Password"
-                        type="password"
-                        required
-                      />
+                // I'm confused by this transition modal stuff so I'm just reloading for now - George
+                window.location.reload()
+              }}
+              validationSchema={RSVPSchema}
+            >
+              {({ dirty, isValid, submitForm }) => (
+                <Form>
+                  <Grid
+                    container
+                    direction="column"
+                    justify="center"
+                    alignItems="center"
+                    className={classes.sectionContainer}
+                  >
+                    <Grid container direction="row">
+                      <Grid item xs={12} className={classes.formInputMargin}>
+                        <Field
+                          component={TextField}
+                          name="username"
+                          label="Username"
+                          type="text"
+                          required
+                          style={{ width: '100%' }}
+                        />
+                      </Grid>
+                      <Grid item xs={12} className={classes.formInputMargin}>
+                        <Field name="phone_number" label="Your phone number" required>
+                          {({ form }) => (
+                            <PhoneInput
+                              inputProps={{ name: 'phone_number', required: true, autoFocus: true }}
+                              inputStyle={{
+                                width: '100%',
+                                background: '#262626',
+                                color: '#E2E8F2',
+                                border: 'none',
+                                borderBottom: '2px solid #3e4042',
+                              }}
+                              buttonStyle={{
+                                background: '#262626',
+                                border: '1px solid #3e4042',
+                              }}
+                              dropdownStyle={{
+                                width: '200px',
+                                background: '#262626',
+                                color: '#E2E8F2',
+                              }}
+                              country="us"
+                              value={form.values.phone_number}
+                              onChange={(phoneNumber) => {
+                                form.setFieldValue('phone_number', phoneNumber)
+                              }}
+                            />
+                          )}
+                        </Field>
+                      </Grid>
+                      <Grid item xs={12} className={classes.formInputMargin}>
+                        <Field
+                          component={TextField}
+                          name="password"
+                          label="Password"
+                          type="password"
+                          required
+                          style={{ width: '100%' }}
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid container justify="center" alignItems="center">
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
-                    disabled={formSubmitting || !isValid || !dirty}
-                    onClick={submitForm}
-                  >
-                    Sign in
-                  </Button>
-                </Grid>
-              </Form>
-            )}
-          </Formik>
-          <Snack
-            open={Boolean(RSVPFormErrorMessage)}
-            onClose={() => setRSVPFormErrorMessage('')}
-            severity="error"
-            duration={3000}
-            snackMessage={RSVPFormErrorMessage}
-          />
+                  <Grid container justify="center" alignItems="center">
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
+                      disabled={formSubmitting || !isValid || !dirty}
+                      onClick={submitForm}
+                    >
+                      Sign in
+                    </Button>
+                  </Grid>
+                </Form>
+              )}
+            </Formik>
+            <Snack
+              open={Boolean(RSVPFormErrorMessage)}
+              onClose={() => setRSVPFormErrorMessage('')}
+              severity="error"
+              duration={3000}
+              snackMessage={RSVPFormErrorMessage}
+            />
+          </Grid>
         </Grid>
       </FloatCardMedium>
     </Grid>

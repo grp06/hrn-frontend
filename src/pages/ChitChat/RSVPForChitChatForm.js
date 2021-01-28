@@ -140,6 +140,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                     label="Username"
                     type="text"
                     required
+                    style={{ width: '100%' }}
                   />
                 </Grid>
                 <Grid item xs={12} className={classes.formInputMargin}>
@@ -149,6 +150,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                     label="Password"
                     type="password"
                     required
+                    style={{ width: '100%' }}
                   />
                 </Grid>
                 <Grid item xs={12} className={classes.formInputMargin}>
@@ -158,6 +160,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                     label="Repeat Password"
                     type="password"
                     required
+                    style={{ width: '100%' }}
                   />
                 </Grid>
 
@@ -193,7 +196,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container justify="center" alignItems="center">
+            <Grid container direction="column" justify="center" alignItems="center">
               <Button
                 variant="contained"
                 color="primary"

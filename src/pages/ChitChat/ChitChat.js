@@ -18,7 +18,9 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   bodyContainer: {
-    padding: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(2),
+    },
   },
   copyEventLinkButton: {
     color: theme.palette.common.ghostWhite,
@@ -33,10 +35,19 @@ const useStyles = makeStyles((theme) => ({
     bottom: 0,
     padding: theme.spacing(3, 1.5),
     backgroundColor: theme.palette.common.greyCard,
+    [theme.breakpoints.up('sm')]: {
+      width: '75vw',
+      backgroundColor: 'transparent',
+    },
   },
   pageContainer: {
     marginBottom: '125px',
     position: 'relative',
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '1560px',
+      width: '75vw',
+      margin: theme.spacing(0, 'auto', 0, 'auto'),
+    },
   },
 }))
 
