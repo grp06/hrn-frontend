@@ -35,8 +35,13 @@ const useStyles = makeStyles((theme) => ({
   pinkText: {
     color: theme.palette.common.basePink,
   },
-  sectionContainer: {
-    margin: theme.spacing(4, 0),
+  phoneNumberLabel: {
+    fontSize: 12,
+    paddingBottom: theme.spacing(1),
+    textAlign: 'left',
+  },
+  orLabel: {
+    paddingLeft: theme.spacing(2),
   },
   linkRedirectToLogin: {
     color: theme.palette.common.ghostWhite,
@@ -50,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const RSVPSchema = Yup.object().shape({
-  username: Yup.string().min(4, 'Too Short!').required('Required'),
+  phone_number: Yup.string().min(10, 'Too Short!'),
+  username: Yup.string().min(4, 'Too Short!'),
   password: Yup.string().min(8, 'Too Short!').required('Required'),
   passwordRepeated: Yup.string().min(8, 'Too Short!').required('Required'),
-  phone_number: Yup.string().min(7, 'Too Short!').required('Required'),
 })
 
 const RSVPForChitChatForm = ({ chitChat }) => {
@@ -119,49 +124,18 @@ const RSVPForChitChatForm = ({ chitChat }) => {
       >
         {({ dirty, isValid, submitForm }) => (
           <Form className={classes.formContainer}>
-            <Grid
-              container
-              direction="column"
-              justify="center"
-              alignItems="center"
-              className={classes.sectionContainer}
-            >
+            <Grid container direction="column" justify="center" alignItems="center">
               <Typography variant="h3">
-                Get the chance to meet {hostName}{' '}
+                Signup to meet {hostName}{' '}
                 <span role="img" aria-label="hooray smiley">
                   🥳
                 </span>
               </Typography>
               <Grid container direction="row">
                 <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="username"
-                    label="Username"
-                    type="text"
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="passwordRepeated"
-                    label="Repeat Password"
-                    type="password"
-                    required
-                  />
-                </Grid>
-
-                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Typography variant="subtitle2" className={classes.phoneNumberLabel}>
+                    Phone number
+                  </Typography>
                   <Field name="phone_number" label="Your phone number" required>
                     {({ form }) => (
                       <PhoneInput
@@ -191,6 +165,30 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                     )}
                   </Field>
                 </Grid>
+                <Typography variant="h3" className={classes.orLabel}>
+                  OR
+                </Typography>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field component={TextField} name="username" label="Username" type="text" />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="password"
+                    label="Password"
+                    type="password"
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="passwordRepeated"
+                    label="Repeat Password"
+                    type="password"
+                    required
+                  />
+                </Grid>
               </Grid>
             </Grid>
             <Grid container justify="center" alignItems="center">
@@ -203,7 +201,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               >
                 Sign me up!
               </Button>
-              <Link className={classes.linkRedirectToLogin} to="/fan-sign-in">
+              <Link className={classes.linkRedirectToLogin} to="/login-new">
                 Already have an account?
               </Link>
             </Grid>

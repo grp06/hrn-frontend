@@ -11,7 +11,6 @@ const createStyles = makeStyles((theme) => ({
     height: 'auto',
     marginRight: 'auto',
     marginLeft: 'auto',
-    marginBottom: '75px',
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
     [theme.breakpoints.down('xs')]: {
@@ -20,10 +19,15 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const FloatCardMedium = ({ children }) => {
+const FloatCardMedium = ({ children }, noMarginBottom) => {
   const classes = createStyles()
   return (
-    <Grid container direction="column" className={classes.cardContainer}>
+    <Grid
+      container
+      direction="column"
+      className={classes.cardContainer}
+      style={{ marginBottom: noMarginBottom ? 0 : 75 }}
+    >
       {children}
     </Grid>
   )

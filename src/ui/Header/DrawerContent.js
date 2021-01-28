@@ -66,24 +66,24 @@ const useStyles = makeStyles((theme) => ({
 const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
-  const { name, role, id: userId } = user
+  const { name, role, id: userId, username } = user
   const userIsHost = role && role.includes('host')
   const onNewApp = window.location.pathname.includes('chit-chat')
 
-  const usersFirstName = name?.split(' ')[0]
+  const nameToCallUser = name ? name.split(' ')[0] : username
 
   const loggedInRoutes =
     role === 'celeb' || role === 'fan'
       ? [
           {
-            label: usersFirstName,
+            label: nameToCallUser,
             url: '/my-profile',
             icon: 'user',
           },
         ]
       : [
           {
-            label: usersFirstName,
+            label: nameToCallUser,
             url: '/my-profile',
             icon: 'user',
           },

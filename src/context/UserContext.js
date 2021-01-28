@@ -104,8 +104,7 @@ const UserProvider = ({ children }) => {
   const userOnSpecificChitChatPage = Boolean(pathname.includes('/chit-chat'))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
-  const userOnCreatorLoginPage = Boolean(pathname.includes('creator-login'))
-  const userOnFanLoginPage = Boolean(pathname.includes('fan-login'))
+  const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
   const eventRoutes = ['video-room', 'lobby', 'group-video-chat']
@@ -120,7 +119,7 @@ const UserProvider = ({ children }) => {
     'host-onboarding',
     'checkout-success',
     'sign-up-new',
-    'creator-login',
+    'login-new',
   ]
 
   const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
@@ -183,8 +182,7 @@ const UserProvider = ({ children }) => {
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
           userOnSubscriptionPage ||
-          userOnCreatorLoginPage ||
-          userOnFanLoginPage
+          userOnLoginNewPage
         )
       ) {
         console.log('pushing')

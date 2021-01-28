@@ -69,31 +69,8 @@ const FanHome = () => {
   }
 
   if (!userId) {
+    console.log('redirect to fan login')
     return <Redirect to="/fan-login" />
-  }
-
-  const renderCreateChitChat = () => {
-    return (
-      <>
-        <img alt="company-logo" className={classes.logo} src={user.profile_pic_url || logo} />
-        <Typography variant="h4" className={classes.creatorSignUpTitle}>
-          {renderHello()}
-        </Typography>
-        <Typography variant="h3">Thanks for signing up!</Typography>
-        <Typography variant="subtitle1" className={classes.clickBelowSubtitle}>
-          Click below to create your first event.
-        </Typography>
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-          className={classes.createEventButton}
-          onClick={() => history.push('/create-chit-chat')}
-        >
-          Create Event
-        </Button>
-      </>
-    )
   }
 
   const renderChitChats = () => {
@@ -120,16 +97,7 @@ const FanHome = () => {
   return (
     <>
       <Grid container className={classes.pageContainer} alignItems="center" direction="column">
-        {!chitChatsData.chit_chats.length ? renderCreateChitChat() : renderChitChats()}
-        <Button
-          color="primary"
-          type="submit"
-          variant="contained"
-          className={classes.createEventButton}
-          onClick={() => history.push('/create-chit-chat')}
-        >
-          Create Event
-        </Button>
+        {renderChitChats()}
       </Grid>
     </>
   )

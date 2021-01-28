@@ -31,9 +31,14 @@ const SettingsDrawerContent = ({ resetUser, userId }) => {
 
   const handleLogout = () => {
     window.analytics && window.analytics.track('logged out')
+    const role = localStorage.getItem('role')
     localStorage.clear()
     resetUser()
-    history.push('/')
+    if (role === 'celeb' || role == 'fan') {
+      history.push('/login-new')
+    } else {
+      history.push('/')
+    }
   }
 
   const loginRoute = onNewApp ? '/creator-login' : '/'

@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   input: {
     marginBottom: theme.spacing(2),
   },
+
   linkRedirectToSignUp: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
