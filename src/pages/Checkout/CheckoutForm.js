@@ -12,6 +12,8 @@ import { makeStyles } from '@material-ui/core/styles'
 
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
 import { Snack } from '../../common'
+import { constants } from '../../utils'
+const { ROLE, TOKEN } = constants
 
 const useStyles = makeStyles((theme) => ({
   cardElementContainer: {
@@ -85,7 +87,9 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = async (result, stripeCustomerId) => {
-    localStorage.setItem('token', result.token)
+    const role = result.plan.includes('STARTER') ? 'host_starter' : 'host_premium'
+    localStorage.setItem(ROLE, role)
+    localStorage.setItem(TOKEN, result.token)
     // means that we had to retry the invoice so lets clear our local storage
     // and set the subscription to the invoice
     if (result && !result.subscription) {

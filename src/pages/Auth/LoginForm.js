@@ -7,8 +7,11 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '../../common'
+import { constants } from '../../utils'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
+
+const { ROLE, TOKEN, USER_ID } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -88,9 +91,10 @@ const LoginForm = () => {
     setShowLoginSuccessSnack(true)
     // await sleep(500)
 
-    const { id, token } = loginResponse
-    localStorage.setItem('token', token)
-    localStorage.setItem('userId', id)
+    const { id, token, role } = loginResponse
+    localStorage.setItem(ROLE, role)
+    localStorage.setItem(TOKEN, token)
+    localStorage.setItem(USER_ID, id)
     const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
     const eventIdInLocalStorage = localStorage.getItem('eventId')
 

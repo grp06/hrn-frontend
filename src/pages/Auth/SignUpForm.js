@@ -11,6 +11,8 @@ import { FloatCardMedium, Snack } from '../../common'
 import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
+import { constants } from '../../utils'
+const { ROLE, TOKEN, USER_ID } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -104,8 +106,9 @@ const SignUpForm = () => {
       role,
     })
     window.analytics.track('Sign up')
-    localStorage.setItem('userId', id)
-    localStorage.setItem('token', token)
+    localStorage.setItem(ROLE, role)
+    localStorage.setItem(TOKEN, token)
+    localStorage.setItem(USER_ID, id)
     const subscriptionCheckoutObject = localStorage.getItem('subscriptionCheckoutObject')
 
     if (subscriptionCheckoutObject) {
