@@ -46,7 +46,7 @@ const UserDrawerContent = ({
       className={classes.listItem}
       key="Home"
       onClick={() => {
-        closeDrawer()
+        closeDrawer && closeDrawer()
         history.push('/creator-home')
       }}
     >
@@ -68,7 +68,7 @@ const UserDrawerContent = ({
         className={classes.listItem}
         key={route.label}
         onClick={() => {
-          closeDrawer()
+          closeDrawer && closeDrawer()
           history.push(route.url)
         }}
       >
