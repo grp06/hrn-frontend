@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
-
+import * as Yup from 'yup'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 import Button from '@material-ui/core/Button'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, Link, useHistory } from 'react-router-dom'
-import { Snack, FloatCardMedium } from '../../common'
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
+import { makeStyles } from '@material-ui/styles'
+import { Link } from 'react-router-dom'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
-import { sleep, loginCreator } from '../../helpers'
+import { Snack, FloatCardMedium } from '../../common'
+
+import { phoneOrUsernameLogin } from '../../helpers'
 import { constants } from '../../utils'
 
-const { TOKEN, USER_ID, ROLE } = constants
+const { USER_ID, TOKEN, ROLE } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -23,16 +28,21 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 'auto'),
     padding: theme.spacing(5),
   },
-  formHeader: {
-    textAlign: 'center',
+  formInputMargin: {
+    margin: theme.spacing(2, 0),
+    padding: theme.spacing(0, 1),
   },
-  inputContainer: {
+  phoneInputClass: {
+    width: '100%',
+    background: 'blue',
+  },
+  pinkText: {
+    color: theme.palette.common.basePink,
+  },
+  sectionContainer: {
     margin: theme.spacing(4, 0),
   },
-  input: {
-    marginBottom: theme.spacing(2),
-  },
-  linkRedirectToSignUp: {
+  linkRedirectToLogin: {
     color: theme.palette.common.ghostWhite,
     fontFamily: 'Muli',
     textDecoration: 'none',
@@ -41,131 +51,162 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.common.basePink,
     },
   },
-  privacyPolicyText: {
-    marginTop: theme.spacing(3),
-    textAlign: 'center',
-  },
-  privacyPolicyLink: {
-    textDecoration: 'none',
-    color: theme.palette.common.sunray,
-  },
 }))
 
-const LoginFanForm = () => {
+const RSVPSchema = Yup.object().shape({
+  username: Yup.string().min(4, 'Too Short!'),
+  phone_number: Yup.string().min(7, 'Too Short!'),
+  password: Yup.string().min(8, 'Too Short!').required('Required'),
+})
+
+const FanLoginForm = ({ chitChat }) => {
   const classes = useStyles()
-  const history = useHistory()
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showErrorSnack, setShowErrorSnack] = useState(false)
-  const [showLoginSuccessSnack, setShowLoginSuccessSnack] = useState(false)
-
-  const userIdInLocalStorage = localStorage.getItem(USER_ID)
-  // check to see if a user is already logged in, if so redirect
-  if (userIdInLocalStorage && userIdInLocalStorage !== undefined) {
-    console.log('redirecting to events')
-    return <Redirect to="/events" />
-  }
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault()
-    const loginResponse = await loginCreator({ email, password })
-    const { id, token, role } = loginResponse
-
-    if (!loginResponse.token) {
-      setShowErrorSnack(true)
-      return
-    }
-    localStorage.setItem(TOKEN, token)
-    localStorage.setItem(USER_ID, id)
-    localStorage.setItem(ROLE, role)
-
-    setShowLoginSuccessSnack(true)
-    await sleep(500)
-
-    console.log('🚀 ~ handleFormSubmit ~ loginResponse', loginResponse)
-    history.push('/fan-home')
-    // I'm only doing this here because in DrawerContent role is undefined at this point.
-    // and you have to reload to make the sidebar work correctly. Lazy but I don't wanna work on that noow - George
-    window.location.reload()
-  }
+  const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
+  const [formSubmitting, setFormSubmitting] = useState(false)
 
   return (
     <Grid container justidy="center" alignItems="center" className={classes.wrapper}>
       <FloatCardMedium>
         <Grid item container direction="column" md={9} xs={12} className={classes.formContainer}>
-          <form onSubmit={handleFormSubmit}>
-            <Grid item container direction="column" alignItems="center">
-              <Grid item>
-                <Typography variant="h2" className={classes.formHeader}>
-                  Fan Login
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid item container direction="column" className={classes.inputContainer}>
-              <Grid item>
-                <TextField
-                  id="email"
-                  label="Email"
-                  required
-                  fullWidth
-                  className={classes.input}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </Grid>
-              <Grid item>
-                <TextField
-                  id="password"
-                  label="Password"
-                  type="password"
-                  required
-                  fullWidth
-                  className={classes.input}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </Grid>
-            </Grid>
-            <Grid container direction="column" justify="center" alignItems="center">
-              <Button
-                disabled={showLoginSuccessSnack}
-                color="primary"
-                type="submit"
-                variant="contained"
-              >
-                Log In
-              </Button>
+          <Formik
+            initialValues={{
+              phone_number: '',
+              username: '',
+              password: '',
+            }}
+            onSubmit={async (values, { setSubmitting }) => {
+              setFormSubmitting(true)
+              const { phone_number, username, password } = values
 
-              <Typography variant="subtitle2" className={classes.privacyPolicyText}>
-                By logging into our app you acknoweldge that you have read and accept our{' '}
-                <Link
-                  to="/privacy-policy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={classes.privacyPolicyLink}
+              if (!phone_number && !username) {
+                setRSVPFormErrorMessage('You must login with a phone number or a username')
+                setFormSubmitting(false)
+                return
+              }
+
+              if (!password) {
+                setRSVPFormErrorMessage('Please enter a password')
+                setFormSubmitting(false)
+                return
+              }
+              let loginResponse
+              try {
+                loginResponse = await phoneOrUsernameLogin({ username, password, phone_number })
+                const { id, token, role } = loginResponse
+
+                if (loginResponse.error) {
+                  setRSVPFormErrorMessage(loginResponse.error)
+                  throw loginResponse.error
+                }
+              } catch (err) {
+                console.log('err === ', err)
+                setRSVPFormErrorMessage(err)
+                setFormSubmitting(false)
+                return
+              }
+
+              const { token, id, role } = loginResponse
+              window.analytics.identify(id, {
+                username,
+                phone_number,
+                role,
+              })
+              window.analytics.track('Fan sign in')
+              localStorage.setItem(USER_ID, id)
+              localStorage.setItem(ROLE, role)
+              localStorage.setItem(TOKEN, token)
+
+              setFormSubmitting(false)
+              // I'm confused by this transition modal stuff so I'm just reloading for now - George
+              window.location.reload()
+            }}
+            validationSchema={RSVPSchema}
+          >
+            {({ dirty, isValid, submitForm }) => (
+              <Form className={classes.formContainer}>
+                <Grid
+                  container
+                  direction="column"
+                  justify="center"
+                  alignItems="center"
+                  className={classes.sectionContainer}
                 >
-                  privacy policy
-                </Link>
-              </Typography>
-              <Snack
-                open={showErrorSnack}
-                onClose={() => setShowErrorSnack(false)}
-                severity="error"
-                snackMessage="Incorrect password or email"
-              />
-              <Snack
-                open={showLoginSuccessSnack}
-                onClose={() => setShowLoginSuccessSnack(false)}
-                severity="success"
-                snackMessage="Welcome Home 🏡"
-              />
-            </Grid>
-          </form>
+                  <Grid container direction="row">
+                    <Grid item xs={12} className={classes.formInputMargin}>
+                      <Field
+                        component={TextField}
+                        name="username"
+                        label="Username"
+                        type="text"
+                        required
+                      />
+                    </Grid>
+                    <Grid item xs={12} className={classes.formInputMargin}>
+                      <Field name="phone_number" label="Your phone number" required>
+                        {({ form }) => (
+                          <PhoneInput
+                            inputProps={{ name: 'phone_number', required: true, autoFocus: true }}
+                            inputStyle={{
+                              width: '100%',
+                              background: '#262626',
+                              color: '#E2E8F2',
+                              border: 'none',
+                              borderBottom: '2px solid #3e4042',
+                            }}
+                            buttonStyle={{
+                              background: '#262626',
+                              border: '1px solid #3e4042',
+                            }}
+                            dropdownStyle={{
+                              width: '200px',
+                              background: '#262626',
+                              color: '#E2E8F2',
+                            }}
+                            country="us"
+                            value={form.values.phone_number}
+                            onChange={(phoneNumber) => {
+                              form.setFieldValue('phone_number', phoneNumber)
+                            }}
+                          />
+                        )}
+                      </Field>
+                    </Grid>
+                    <Grid item xs={12} className={classes.formInputMargin}>
+                      <Field
+                        component={TextField}
+                        name="password"
+                        label="Password"
+                        type="password"
+                        required
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid container justify="center" alignItems="center">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={formSubmitting ? <CircularProgress size="1rem" /> : null}
+                    disabled={formSubmitting || !isValid || !dirty}
+                    onClick={submitForm}
+                  >
+                    Sign in
+                  </Button>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+          <Snack
+            open={Boolean(RSVPFormErrorMessage)}
+            onClose={() => setRSVPFormErrorMessage('')}
+            severity="error"
+            duration={3000}
+            snackMessage={RSVPFormErrorMessage}
+          />
         </Grid>
       </FloatCardMedium>
     </Grid>
   )
 }
 
-export default LoginFanForm
+export default FanLoginForm

@@ -7,7 +7,7 @@ const listenToChitChatRSVPs = gql`
       status
       id
       user {
-        name
+        username
       }
     }
   }

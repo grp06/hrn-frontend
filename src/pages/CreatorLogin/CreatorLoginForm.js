@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '../../common'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
-import { sleep, loginCreator } from '../../helpers'
+import { sleep, emailLogin } from '../../helpers'
 import { constants } from '../../utils'
 
 const { TOKEN, USER_ID, ROLE } = constants
@@ -68,7 +68,7 @@ const LoginCreatorForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const loginResponse = await loginCreator({ email, password })
+    const loginResponse = await emailLogin({ email, password })
     const { id, token, role } = loginResponse
 
     if (!loginResponse.token) {

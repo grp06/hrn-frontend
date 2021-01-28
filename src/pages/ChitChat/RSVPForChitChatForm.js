@@ -203,7 +203,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               >
                 Sign me up!
               </Button>
-              <Link className={classes.linkRedirectToLogin} to="/fan-sign-up">
+              <Link className={classes.linkRedirectToLogin} to="/fan-sign-in">
                 Already have an account?
               </Link>
             </Grid>

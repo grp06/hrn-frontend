@@ -120,7 +120,7 @@ const ChitChatProvider = ({ children }) => {
     variables: {
       chitChatId,
     },
-    skip: !userId || !chitChatId,
+    skip: !chitChatId,
   })
 
   // check the online user for events
