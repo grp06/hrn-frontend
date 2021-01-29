@@ -4,6 +4,7 @@ import { Button, Grid, Typography, Container } from '@material-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
+  ChitChatCountdown,
   FanRSVPCard,
   MeetCelebButton,
   RSVPForChitChatForm,
@@ -184,6 +185,7 @@ const ChitChat = () => {
       </Grid>
       <Grid container direction="row" className={classes.CTAButton}>
         <Container maxWidth="sm">{renderCTAButton()}</Container>
+        {fanIsRSVPed ? <ChitChatCountdown eventStartTime={start_at} /> : null}
       </Grid>
     </Grid>
   )

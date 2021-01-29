@@ -193,27 +193,6 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                     )}
                   </Field>
                 </Grid>
-                <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field component={TextField} name="username" label="Username" type="text" />
-                </Grid>
-                <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="password"
-                    label="Password"
-                    type="password"
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} className={classes.formInputMargin}>
-                  <Field
-                    component={TextField}
-                    name="passwordRepeated"
-                    label="Repeat Password"
-                    type="password"
-                    required
-                  />
-                </Grid>
               </Grid>
             </Grid>
             <Grid container direction="column" justify="center" alignItems="center">
