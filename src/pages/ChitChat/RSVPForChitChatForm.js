@@ -133,9 +133,37 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               </Typography>
               <Grid container direction="row">
                 <Grid item xs={12} className={classes.formInputMargin}>
-                  <Typography variant="subtitle2" className={classes.phoneNumberLabel}>
-                    Phone number
-                  </Typography>
+                  <Field
+                    component={TextField}
+                    name="username"
+                    label="Username"
+                    type="text"
+                    required
+                    style={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="password"
+                    label="Password"
+                    type="password"
+                    required
+                    style={{ width: '100%' }}
+                  />
+                </Grid>
+                <Grid item xs={12} className={classes.formInputMargin}>
+                  <Field
+                    component={TextField}
+                    name="passwordRepeated"
+                    label="Repeat Password"
+                    type="password"
+                    required
+                    style={{ width: '100%' }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} className={classes.formInputMargin}>
                   <Field name="phoneNumber" label="Your phone number" required>
                     {({ form }) => (
                       <PhoneInput
@@ -188,7 +216,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container justify="center" alignItems="center">
+            <Grid container direction="column" justify="center" alignItems="center">
               <Button
                 variant="contained"
                 color="primary"
