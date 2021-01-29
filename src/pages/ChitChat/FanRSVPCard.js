@@ -30,14 +30,19 @@ const FanRSVPCard = ({ eventStatus, fanIsRSVPed, fansQueueNumber, hostName }) =>
     if (fansQueueNumber === 0) {
       return (
         <Typography variant="h6">
-          {hostFirstName} hasn't started the event yet. But when it's time you're the first in line!
+          You're the first in line{' '}
+          <span role="img" aria-label="party smiley">
+            🥳
+          </span>
         </Typography>
       )
     }
     return (
       <Typography variant="h6">
-        {hostFirstName} hasn't started the event yet. But when it's time you're number{' '}
-        <span className={classes.queueNumber}>{fansQueueNumber + 1}</span> in line!
+        You're number <span className={classes.queueNumber}>{fansQueueNumber + 1}</span> in line!
+        <span role="img" aria-label="sparkle">
+          ✨
+        </span>
       </Typography>
     )
   }
@@ -45,15 +50,12 @@ const FanRSVPCard = ({ eventStatus, fanIsRSVPed, fansQueueNumber, hostName }) =>
   const renderFanRSVPCardContent = () =>
     fanIsRSVPed ? (
       <Grid direction="column" container className={classes.fanMainContent}>
-        <Typography variant="h3">
-          You&apos;re all set to meet {hostFirstName}{' '}
-          <span role="img" aria-label="party smiley">
-            🥳
-          </span>{' '}
-        </Typography>
         <div className={classes.queueCard}>{renderQueueText()}</div>
         <Typography variant="subtitle1">
-          You can leave this page, but if you’re not here when it’s your turn, you will be skipped.
+          You can leave this page, but{' '}
+          <span style={{ fontWeight: '700', color: '#FF99AD' }}>
+            if you’re not here when it’s your turn, you will be skipped.
+          </span>{' '}
           Don&apos;t worry, we&apos;ll send you a SMS text when your turn is coming up!{' '}
           <span role="img" aria-label="thumbs up">
             👍
