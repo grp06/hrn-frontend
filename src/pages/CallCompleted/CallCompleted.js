@@ -9,9 +9,17 @@ import { makeStyles } from '@material-ui/styles'
 const useStyles = makeStyles((theme) => ({
   bodyText: {
     marginBottom: theme.spacing(0.75),
+    [theme.breakpoints.up('sm')]: {
+      width: '70%',
+      fontSize: '1.25rem',
+    },
   },
   buttonContainer: {
     marginTop: '75px',
+    [theme.breakpoints.up('sm')]: {
+      alignItems: 'flex-start',
+      width: '40%',
+    },
   },
   cashAppButton: {
     backgroundColor: theme.palette.common.greyButton,
@@ -22,13 +30,23 @@ const useStyles = makeStyles((theme) => ({
     height: '125px',
     margin: theme.spacing(1.5, 0),
     width: '75%',
+    '&:hover': {
+      backgroundColor: theme.palette.common.greyButton,
+      border: '2px solid #61d152',
+    },
   },
   header: {
     marginBottom: theme.spacing(1.5),
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '2.125rem',
+    },
   },
   pageContainer: {
     marginTop: '150px',
     padding: theme.spacing(0, 4),
+    [theme.breakpoints.up('sm')]: {
+      padding: theme.spacing(0, 12),
+    },
   },
   venmoButton: {
     backgroundColor: 'white',
@@ -39,6 +57,10 @@ const useStyles = makeStyles((theme) => ({
     height: '125px',
     margin: theme.spacing(1.5, 0),
     width: '75%',
+    '&:hover': {
+      backgroundColor: 'white',
+      border: '2px solid #5c96ca',
+    },
   },
 }))
 
@@ -48,11 +70,10 @@ const CallComplete = () => {
   const { id } = useParams()
   const { chitChat, setEventNewId } = useChitChatContext()
   const { host, status: eventStatus, suggested_donation } = chitChat
-  const { name: hostName } = host || {}
+  const { cash_app, hostsCashAppLink, name: hostName, venmo: hostsVenmoLink } = host || {}
   const chitChatId = parseInt(id, 10)
   const hostFirstName = hostName && hostName.split(' ')[0]
-
-  useEffect(() => {
+  const venmoLink = useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
       setEventNewId(parseInt(chitChatId, 10))
     }
@@ -94,8 +115,26 @@ const CallComplete = () => {
         className={classes.buttonContainer}
       >
         <Typography variant="h4">Donate via:</Typography>
-        <Button variant="contained" size="large" className={classes.venmoButton} />
-        <Button variant="contained" size="large" className={classes.cashAppButton} />
+        {hostsVenmoLink ? (
+          <Button
+            variant="contained"
+            size="large"
+            className={classes.venmoButton}
+            href={`https://venmo.com/${hostsVenmoLink}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ) : null}
+        {hostsCashAppLink ? (
+          <Button
+            variant="contained"
+            size="large"
+            className={classes.cashAppButton}
+            href={`https://cash.app/$${hostsCashAppLink}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        ) : null}
       </Grid>
     </Grid>
   )
