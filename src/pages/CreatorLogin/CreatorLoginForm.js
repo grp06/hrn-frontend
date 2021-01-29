@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     width: '100vw',
     height: '100vh',
+    padding: theme.spacing('75px', 0),
     backgroundImage: `url(${confettiDoodles})`,
   },
   formContainer: {
