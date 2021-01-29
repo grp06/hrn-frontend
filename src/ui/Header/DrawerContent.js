@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const DrawerContent = () => {
+const DrawerContent = ({ closeDrawer }) => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId, username } = user
@@ -141,6 +141,7 @@ const DrawerContent = () => {
           <Divider />
           {userIsHost && <CreateEventSidebarButton />}
           <UserDrawerContent
+            closeDrawer={closeDrawer}
             routes={{ loggedInRoutes, loggedOutRoutes }}
             userId={userId}
             userName={name}
