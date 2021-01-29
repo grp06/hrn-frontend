@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import FeatherIcon from 'feather-icons-react'
-import { Button, Grid, Typography } from '@material-ui/core'
+import { Button, Grid, Typography, Container } from '@material-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
 import {
   ChitChatCard,
@@ -17,10 +17,14 @@ import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
+  pageContainer: {
+    marginBottom: '125px',
+    position: 'relative',
+    backgroundColor: theme.palette.common.greyCard,
+  },
   bodyContainer: {
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
-    },
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.common.bodyBlack,
   },
   copyEventLinkButton: {
     color: theme.palette.common.ghostWhite,
@@ -29,24 +33,13 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   CTAButton: {
-    width: '100vw',
+    width: '100%',
     position: 'fixed',
-    top: 'auto',
     bottom: 0,
+    left: 85,
     padding: theme.spacing(3, 1.5),
-    backgroundColor: theme.palette.common.greyCard,
-    [theme.breakpoints.up('sm')]: {
-      width: '75vw',
-      backgroundColor: 'transparent',
-    },
-  },
-  pageContainer: {
-    marginBottom: '125px',
-    position: 'relative',
-    [theme.breakpoints.up('sm')]: {
-      maxWidth: '1560px',
-      width: '75vw',
-      margin: theme.spacing(0, 'auto', 0, 'auto'),
+    [theme.breakpoints.down('xs')]: {
+      left: 0,
     },
   },
 }))
@@ -158,35 +151,39 @@ const ChitChat = () => {
 
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <ChitChatCard
-        chitChat={chitChat}
-        userIsHost={userIsHost}
-        chitChatRSVPs={chitChatRSVPs}
-        onlineChitChatUsersArray={onlineChitChatUsersArray}
-      />
+      <Container maxWidth="sm">
+        <ChitChatCard
+          chitChat={chitChat}
+          userIsHost={userIsHost}
+          chitChatRSVPs={chitChatRSVPs}
+          onlineChitChatUsersArray={onlineChitChatUsersArray}
+        />
+      </Container>
       <Grid container direction="column" className={classes.bodyContainer}>
-        {renderCopyLinkButton()}
-        {eventStatus === 'not-started' ? (
-          <FanRSVPCard
-            fanIsRSVPed={fanIsRSVPed}
-            eventStatus={eventStatus}
-            fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
-            hostName={hostName}
-          />
-        ) : null}
-        {eventStatus !== 'not-started' && fanIsRSVPed ? (
-          <VisualQueue
-            chitChatRSVPs={chitChatRSVPs}
-            hostName={hostName}
-            onlineChitChatUsers={onlineChitChatUsersArray}
-            userId={userId}
-          />
-        ) : null}
-        <Typography variant="h4">What to expect</Typography>
-        <WhatToExpectChitChat userIsHost={userIsHost} />
+        <Container maxWidth="sm">
+          {renderCopyLinkButton()}
+          {eventStatus === 'not-started' ? (
+            <FanRSVPCard
+              fanIsRSVPed={fanIsRSVPed}
+              eventStatus={eventStatus}
+              fansQueueNumber={currentUsersIndexInQueue - indexOfFanNextInQueue}
+              hostName={hostName}
+            />
+          ) : null}
+          {eventStatus !== 'not-started' && fanIsRSVPed ? (
+            <VisualQueue
+              chitChatRSVPs={chitChatRSVPs}
+              hostName={hostName}
+              onlineChitChatUsers={onlineChitChatUsersArray}
+              userId={userId}
+            />
+          ) : null}
+          <Typography variant="h4">What to expect</Typography>
+          <WhatToExpectChitChat userIsHost={userIsHost} />
+        </Container>
       </Grid>
       <Grid container direction="row" className={classes.CTAButton}>
-        {renderCTAButton()}
+        <Container maxWidth="sm">{renderCTAButton()}</Container>
       </Grid>
     </Grid>
   )
