@@ -21,6 +21,7 @@ import {
   EventGroupVideoChat,
   EventsPublic,
   ForgotPassword,
+  ForgotPasswordNew,
   HostDashboard,
   HostOnboarding,
   HRNAnalytics,
@@ -35,6 +36,7 @@ import {
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
+  SetNewPasswordForPhoneNumber,
   SignUp,
   CelebSignUp,
   CreateChitChat,
@@ -130,10 +132,16 @@ const App = () => {
                       <Route exact path="/sign-up" component={SignUp} />
                       <Route exact path="/creator-sign-up" component={CelebSignUp} />
                       <Route exact path="/forgot-password" component={ForgotPassword} />
+                      <Route exact path="/forgot-password-new" component={ForgotPasswordNew} />
                       <Route
                         exact
                         path="/set-new-password/:userId/:token"
                         component={SetNewPassword}
+                      />
+                      <Route
+                        exact
+                        path="/set-new-password-for-phone-number/:userId/:token"
+                        component={SetNewPasswordForPhoneNumber}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/celeb-profile" component={CelebProfile} />

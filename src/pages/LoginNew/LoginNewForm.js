@@ -101,9 +101,6 @@ const LoginNewForm = () => {
               onSubmit={async (values, { setSubmitting }) => {
                 setFormSubmitting(true)
                 const { phone_number, usernameOrEmail, password } = values
-                console.log('🚀 ~ onSubmit={ ~ password', password)
-                console.log('🚀 ~ onSubmit={ ~ usernameOrEmail', usernameOrEmail)
-                console.log('🚀 ~ onSubmit={ ~ phone_number', phone_number)
 
                 if (!phone_number && !usernameOrEmail) {
                   setRSVPFormErrorMessage('You forgot a phone number, email, or username')
@@ -239,7 +236,7 @@ const LoginNewForm = () => {
                     >
                       Log in
                     </Button>
-                    <Link className={classes.linkRedirectToSignUp} to="/forgot-password">
+                    <Link className={classes.linkRedirectToSignUp} to="/forgot-password-new">
                       Forgot Password?
                     </Link>
                     <Typography variant="subtitle2" className={classes.privacyPolicyText}>

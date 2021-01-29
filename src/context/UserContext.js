@@ -104,6 +104,7 @@ const UserProvider = ({ children }) => {
   const userOnSpecificChitChatPage = Boolean(pathname.includes('/chit-chat'))
   const userOnSetNewPasswordPage = Boolean(pathname.match(setNewPasswordPageRegex))
   const userOnSignUpPage = Boolean(pathname.includes('sign-up'))
+  const userOnForgotPasswordNewPage = Boolean(pathname.includes('forgot-password-new'))
   const userOnLoginNewPage = Boolean(pathname.includes('login-new'))
   const userOnSubscriptionPage = Boolean(pathname.includes('/subscription'))
 
@@ -114,6 +115,7 @@ const UserProvider = ({ children }) => {
   const authRoutes = [
     'sign-up',
     'forgot-password',
+    'forgot-password-new',
     'set-new-password',
     'onboarding',
     'host-onboarding',
@@ -123,7 +125,6 @@ const UserProvider = ({ children }) => {
   ]
 
   const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
-  console.log('🚀 ~ UserProvider ~ isUserOnAuth', isUserOnAuth)
 
   useEffect(() => {
     const role = localStorage.getItem('role')
@@ -182,7 +183,8 @@ const UserProvider = ({ children }) => {
           userOnSetNewPasswordPage ||
           userOnSignUpPage ||
           userOnSubscriptionPage ||
-          userOnLoginNewPage
+          userOnLoginNewPage ||
+          userOnForgotPasswordNewPage
         )
       ) {
         console.log('pushing')

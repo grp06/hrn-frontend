@@ -55,8 +55,8 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const RSVPSchema = Yup.object().shape({
-  phone_number: Yup.string().min(10, 'Too Short!'),
-  username: Yup.string().min(4, 'Too Short!'),
+  phoneNumber: Yup.string().min(10, 'Too Short!').required('Required'),
+  username: Yup.string().min(4, 'Too Short!').required('Required'),
   password: Yup.string().min(8, 'Too Short!').required('Required'),
   passwordRepeated: Yup.string().min(8, 'Too Short!').required('Required'),
 })
@@ -72,14 +72,14 @@ const RSVPForChitChatForm = ({ chitChat }) => {
     <div>
       <Formik
         initialValues={{
-          phone_number: '',
+          phoneNumber: '',
           username: '',
           password: '',
           passwordRepeated: '',
         }}
         onSubmit={async (values, { setSubmitting }) => {
           setFormSubmitting(true)
-          const { phone_number, username, password, passwordRepeated } = values
+          const { phoneNumber, username, password, passwordRepeated } = values
 
           if (password !== passwordRepeated) {
             setRSVPFormErrorMessage('Passwords must match')
@@ -90,7 +90,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           try {
             signupResponse = await signupUserNew({
               role: 'fan',
-              userInfo: { username, password, phone_number: `+${phone_number}` },
+              userInfo: { username, password, phoneNumber: `+${phoneNumber}` },
               chitChat,
             })
 
@@ -108,7 +108,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
           const { token, id, role } = signupResponse
           window.analytics.identify(id, {
             username,
-            phone_number,
+            phoneNumber,
             role,
           })
           window.analytics.track('Sign up fan new')
@@ -136,10 +136,10 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                   <Typography variant="subtitle2" className={classes.phoneNumberLabel}>
                     Phone number
                   </Typography>
-                  <Field name="phone_number" label="Your phone number" required>
+                  <Field name="phoneNumber" label="Your phone number" required>
                     {({ form }) => (
                       <PhoneInput
-                        inputProps={{ name: 'phone_number', required: true, autoFocus: true }}
+                        inputProps={{ name: 'phoneNumber', required: true, autoFocus: true }}
                         inputStyle={{
                           width: '100%',
                           background: '#262626',
@@ -157,17 +157,14 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                           color: '#E2E8F2',
                         }}
                         country="us"
-                        value={form.values.phone_number}
+                        value={form.values.phoneNumber}
                         onChange={(phoneNumber) => {
-                          form.setFieldValue('phone_number', phoneNumber)
+                          form.setFieldValue('phoneNumber', phoneNumber)
                         }}
                       />
                     )}
                   </Field>
                 </Grid>
-                <Typography variant="h3" className={classes.orLabel}>
-                  OR
-                </Typography>
                 <Grid item xs={12} className={classes.formInputMargin}>
                   <Field component={TextField} name="username" label="Username" type="text" />
                 </Grid>
