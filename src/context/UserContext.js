@@ -121,6 +121,7 @@ const UserProvider = ({ children }) => {
     'checkout-success',
     'sign-up-new',
     'creator-login',
+    'fan-login',
   ]
 
   const isUserOnAuth = pathname === '/' || authRoutes.some((route) => pathname.includes(route))
