@@ -23,9 +23,10 @@ const SignUp = () => {
   // check to see if a user is already logged in, if so redirect
   if (checkedSCOInLS && localStorage.getItem('userId')) {
     const subCheckoutObjectFromLS = JSON.parse(localStorage.getItem('subscriptionCheckoutObject'))
-    const userClickedFreePlan = subCheckoutObjectFromLS.plan.includes('FREE')
+    const userClickedFreePlan =
+      subCheckoutObjectFromLS && subCheckoutObjectFromLS.plan.includes('FREE')
     const usersRole = localStorage.getItem('role')
-    if (usersRole.includes('host') && userClickedFreePlan) {
+    if (usersRole && usersRole.includes('host') && userClickedFreePlan) {
       // redirect to create event because they clicked host an event from webflow
       return <Redirect to={{ pathname: '/create-event' }} />
     }
