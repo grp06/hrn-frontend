@@ -121,16 +121,19 @@ const SetNewPasswordForm = ({ match }) => {
             token,
             role,
           })
+          console.log('🚀 ~ onSubmit={ ~ role', role)
+          console.log('🚀 ~ onSubmit={ ~ token', token)
+          console.log('🚀 ~ onSubmit={ ~ id', id)
 
-          // if (role === 'fan') {
-          //   history.push('/fan-home')
-          // } else {
-          //   history.push('/creator-home')
-          // }
-          // window.analytics.track('Reset password for phone number')
-          // localStorage.setItem(USER_ID, id)
-          // localStorage.setItem(ROLE, role)
-          // localStorage.setItem(TOKEN, newPasswordToken)
+          if (role === 'fan') {
+            history.push('/fan-home')
+          } else {
+            history.push('/creator-home')
+          }
+          window.analytics.track('Reset password for phone number')
+          localStorage.setItem(USER_ID, id)
+          localStorage.setItem(ROLE, role)
+          localStorage.setItem(TOKEN, newPasswordToken)
 
           setFormSubmitting(false)
           // I'm confused by this transition modal stuff so I'm just reloading for now - George
