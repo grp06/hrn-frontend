@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 
 import { Snack } from '../../common'
-import { setNewPasswordForPhoneNumber } from '../../helpers'
+import { setNewPasswordPhone } from '../../helpers'
 import { constants } from '../../utils'
 
 const { USER_ID, TOKEN, ROLE } = constants
@@ -74,12 +74,13 @@ const CheckoutSchema = Yup.object().shape({
   passwordRepeated: Yup.string().min(8, 'Too Short!').required('Required'),
 })
 
-const CheckoutForm = ({ match }) => {
+const SetNewPasswordForm = ({ match }) => {
   const classes = useStyles()
   const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const { userId, token } = match.params
+  console.log('🚀 ~ SetNewPasswordForm ~ token.length', token.length)
 
   return (
     <Grid container direction="column" className={classes.formContainer}>
@@ -101,7 +102,7 @@ const CheckoutForm = ({ match }) => {
           }
           let newPasswordSetResponse
           try {
-            newPasswordSetResponse = await setNewPasswordForPhoneNumber({
+            newPasswordSetResponse = await setNewPasswordPhone({
               password,
               userId,
               token,
@@ -188,4 +189,4 @@ const CheckoutForm = ({ match }) => {
   )
 }
 
-export default CheckoutForm
+export default SetNewPasswordForm
