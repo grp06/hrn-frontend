@@ -39,7 +39,7 @@ const FanRSVPCard = ({ eventStatus, fanIsRSVPed, fansQueueNumber, hostName }) =>
     }
     return (
       <Typography variant="h6">
-        You're number <span className={classes.queueNumber}>{fansQueueNumber + 1}</span> in line!
+        You're number <span className={classes.queueNumber}>{fansQueueNumber + 1}</span> in line!{' '}
         <span role="img" aria-label="sparkle">
           ✨
         </span>

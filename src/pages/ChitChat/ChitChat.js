@@ -58,7 +58,7 @@ const ChitChat = () => {
 
   const {
     chitChat,
-    setEventNewId,
+    setChitChatId,
     userHasEnabledCameraAndMic,
     chitChatRSVPs,
     onlineChitChatUsersArray,
@@ -79,9 +79,9 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
-      setEventNewId(parseInt(chitChatId, 10))
+      setChitChatId(parseInt(chitChatId, 10))
     }
-  }, [chitChatId, chitChat, setEventNewId])
+  }, [chitChatId, chitChat, setChitChatId])
 
   useEffect(() => {
     if (userIsHost && eventStatus === 'call-in-progress') {

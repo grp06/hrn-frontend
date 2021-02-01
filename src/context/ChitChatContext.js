@@ -51,7 +51,7 @@ const useChitChatContext = () => {
     })
   }
 
-  const setEventNewId = (chitChatId) => {
+  const setChitChatId = (chitChatId) => {
     dispatch((draft) => {
       draft.chitChatId = chitChatId
     })
@@ -72,7 +72,7 @@ const useChitChatContext = () => {
   return {
     ...state,
     resetEventNew,
-    setEventNewId,
+    setChitChatId,
     setFanNeverConnected,
     setFanDisconnectedFromChat,
     setUserHasEnabledCameraAndMic,

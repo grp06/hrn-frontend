@@ -68,16 +68,16 @@ const CallComplete = () => {
   const classes = useStyles()
   const history = useHistory()
   const { id } = useParams()
-  const { chitChat, setEventNewId } = useChitChatContext()
+  const { chitChat, setChitChatId } = useChitChatContext()
   const { host, status: eventStatus, suggested_donation } = chitChat
   const { cash_app, hostsCashAppLink, name: hostName, venmo: hostsVenmoLink } = host || {}
   const chitChatId = parseInt(id, 10)
   const hostFirstName = hostName && hostName.split(' ')[0]
   const venmoLink = useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
-      setEventNewId(parseInt(chitChatId, 10))
+      setChitChatId(parseInt(chitChatId, 10))
     }
-  }, [chitChatId, chitChat, setEventNewId])
+  }, [chitChatId, chitChat, setChitChatId])
 
   useEffect(() => {
     if (eventStatus === 'not-started') {

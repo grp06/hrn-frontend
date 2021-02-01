@@ -3,13 +3,14 @@ import { useParams, useHistory } from 'react-router-dom'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
+import { CelebStatusMessageScreen, FanStatusMessageScreen } from '.'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { getToken, useChitChatHelpers } from '../../helpers'
 import { useChitChatTwilio } from '../../hooks'
 import { RoundProgressBar } from '../VideoRoom'
-import { makeStyles } from '@material-ui/styles'
 import endCall from '../../assets/end-call.png'
 import meetNextFan from '../../assets/meet-next-fan.png'
+import { makeStyles } from '@material-ui/styles'
 
 const { connect } = require('twilio-video')
 
@@ -29,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
       width: '100%',
       objectFit: 'cover',
     },
+    [theme.breakpoints.up('sm')]: {
+      height: '100vh',
+      display: 'flex',
+    },
   },
   localVideo: {
     width: '100%',
@@ -39,6 +44,20 @@ const useStyles = makeStyles((theme) => ({
       height: '100%',
       width: '100%',
       objectFit: 'cover',
+    },
+    [theme.breakpoints.up('sm')]: {
+      width: '200px',
+      height: '200px',
+      position: 'absolute',
+      top: '3%',
+      right: '1%',
+      left: 'auto',
+      bottom: 'auto',
+      zIndex: 99,
+      '& video': {
+        borderRadius: 4,
+        width: '200px',
+      },
     },
   },
   endCall: {
@@ -63,38 +82,35 @@ const useStyles = makeStyles((theme) => ({
     margin: '0 auto',
     left: 'calc(50% - 150px)',
   },
-  breather: {
-    height: '50vh',
-    position: 'fixed',
-    top: '0',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    padding: theme.spacing(0, 2),
-  },
 }))
 
 const ChitChatVideoRoom = () => {
   const classes = useStyles()
   const { id } = useParams()
   const chitChatId = parseInt(id, 10)
-  const { startChitChatTwilio } = useChitChatTwilio()
 
+  const { startChitChatTwilio } = useChitChatTwilio()
   const { appLoading } = useAppContext()
-  const { onlineChitChatUsersArray } = useChitChatContext()
   const { resetChitChat, endCall, startNextChitChat } = useChitChatHelpers()
   const {
     user: { id: userId },
   } = useUserContext()
 
-  const { chitChat, setEventNewId, chitChatRSVPs } = useChitChatContext()
+  const {
+    chitChat,
+    chitChatRSVPs,
+    fanNeverConnected,
+    fanDisconnectedFromChat,
+    onlineChitChatUsersArray,
+    setChitChatId,
+  } = useChitChatContext()
   const [chitChatToken, setChitChatToken] = useState(null)
   const [chitChatRoom, setChitChatRoom] = useState(null)
-  const { host, host_id, start_at, status: eventStatus } = chitChat
+  const { host, host_id, start_at, status: chitChatStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const history = useHistory()
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
+  const hostFirstName = hostName && hostName.split(' ')[0]
 
   // const { firstUpdate } = location.state
   const currentFan = onlineChitChatUsersArray.find((fan) => fan.status === 'in-chat')
@@ -147,25 +163,25 @@ const ChitChatVideoRoom = () => {
   }, [onlineChitChatUsersArray, userId])
 
   useEffect(() => {
-    if (eventStatus === 'completed') {
+    if (chitChatStatus === 'completed') {
       if (chitChatRoom) {
         chitChatRoom.disconnect()
       }
       history.push(`/chit-chat/${chitChatId}/call-completed`)
     }
-  }, [eventStatus, chitChatRoom])
+  }, [chitChatStatus, chitChatRoom])
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
-      setEventNewId(chitChatId)
+      setChitChatId(chitChatId)
     }
-  }, [chitChatId, chitChat, setEventNewId])
+  }, [chitChatId, chitChat, setChitChatId])
 
   useEffect(() => {
-    if (eventStatus === 'not-started') {
+    if (chitChatStatus === 'not-started') {
       history.push(`/chit-chat/${chitChatId}`)
     }
-  }, [eventStatus])
+  }, [chitChatStatus])
 
   return (
     <div className={classes.pageContainer}>
@@ -177,21 +193,30 @@ const ChitChatVideoRoom = () => {
       >
         reset
       </Button>
-      {eventStatus === 'paused' && (
-        <Typography className={classes.breather}>
-          We hope you enjoyed the call. Take a breather and get ready to meet your next fan!
-        </Typography>
+      {userIsHost ? (
+        <CelebStatusMessageScreen
+          chitChatStatus={chitChatStatus}
+          fanNeverConnected={fanNeverConnected}
+          fanDisconnectedFromChat={fanDisconnectedFromChat}
+        />
+      ) : (
+        <FanStatusMessageScreen
+          chitChatStatus={chitChatStatus}
+          fanNeverConnected={fanNeverConnected}
+          fanDisconnectedFromChat={fanDisconnectedFromChat}
+          hostName={hostFirstName || 'the host'}
+        />
       )}
       <div id="remote-video" className={classes.remoteVideo}></div>
       <div id="local-video" className={classes.localVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
-      {eventStatus === 'call-in-progress' && (
+      {chitChatStatus === 'call-in-progress' && (
         <div
           className={classes.endCall}
           onClick={() => endCall({ onlineChitChatUsersArray, chitChatId, chitChatRSVPs })}
         />
       )}
-      {eventStatus === 'paused' && (
+      {chitChatStatus === 'paused' && (
         <div
           className={classes.meetNextFan}
           onClick={() => startNextChitChat({ onlineChitChatUsersArray, chitChatId })}

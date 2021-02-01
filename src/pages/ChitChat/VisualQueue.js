@@ -42,7 +42,7 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
     .map((onlineUser) => {
       const usersRSVPObject = chitChatRSVPs.reduce((acc, RSVPedUser, idx) => {
         if (RSVPedUser.user_id === onlineUser.user_id) {
-          return (acc = { name: RSVPedUser.user.name, RSVPNumber: idx + 1 })
+          return (acc = { username: RSVPedUser.user.username, RSVPNumber: idx + 1 })
         }
         return acc
       }, {})
@@ -84,7 +84,7 @@ const VisualQueue = React.memo(({ chitChatRSVPs, hostName, onlineChitChatUsers, 
                       <Grid container direction="row" alignItems="center" justify="space-between">
                         <Typography variant="body1" style={{ fontWeight: 500 }}>
                           <span className={classes.queueNumber}>{idx + 1}. </span>
-                          {user.name}
+                          {user.username}
                         </Typography>
                         <Typography variant="subtitle1">RSVP # {user.RSVPNumber}</Typography>
                       </Grid>
