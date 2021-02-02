@@ -8,7 +8,7 @@ import { getToken, useChitChatHelpers } from '../../helpers'
 import { useChitChatTwilio } from '../../hooks'
 import { RoundProgressBar } from '../VideoRoom'
 import { makeStyles } from '@material-ui/styles'
-import endCall from '../../assets/end-call.png'
+import endCallIcon from '../../assets/end-call.png'
 import meetNextFan from '../../assets/meet-next-fan.png'
 
 const { connect } = require('twilio-video')
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   endCall: {
     width: '50px',
     height: '50px',
-    backgroundImage: `url(${endCall})`,
+    backgroundImage: `url(${endCallIcon})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     position: 'fixed',
@@ -173,7 +173,7 @@ const ChitChatVideoRoom = () => {
         variant="contained"
         color="secondary"
         style={{ zIndex: 9999 }}
-        onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId })}
+        onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRoom })}
       >
         reset
       </Button>

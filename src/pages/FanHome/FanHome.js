@@ -1,14 +1,12 @@
 import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import { Redirect, useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery } from '@apollo/react-hooks'
 import { useAppContext, useUserContext } from '../../context'
-import logo from '../../assets/logoWhite.svg'
 import { Loading, ChitChatCard } from '../../common'
-import { getChitChatsByUserId } from '../../gql/queries'
+import { getChitChatUsersByUserId } from '../../gql/queries'
 import blurryBackground from '../../assets/blurryBackground.png'
 
 const useStyles = makeStyles((theme) => ({
@@ -45,24 +43,21 @@ const useStyles = makeStyles((theme) => ({
 const FanHome = () => {
   const classes = useStyles()
   const { user } = useUserContext()
-  const history = useHistory()
   const { appLoading } = useAppContext()
   const { id: userId } = user
 
-  const { data: chitChatsData, loading: chitChatsLoading } = useQuery(getChitChatsByUserId, {
-    variables: {
-      userId: userId,
-    },
-    skip: !userId,
-  })
-  console.log('🚀 ~ FanHome ~ chitChatsData', chitChatsData)
+  const { data: chitChatUsersData, loading: chitChatsLoading } = useQuery(
+    getChitChatUsersByUserId,
+    {
+      variables: {
+        userId: userId,
+      },
+      skip: !userId,
+    }
+  )
   useEffect(() => {
     window.analytics.page('/fan-home')
   }, [])
-
-  const renderHello = () => {
-    return user && user.name ? `Hi, ${user.name.split(' ')[0]} 👋` : ''
-  }
 
   if (appLoading || chitChatsLoading) {
     return <Loading />
@@ -87,9 +82,13 @@ const FanHome = () => {
             <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
-        {chitChatsData.chit_chats.map((chitChat) => (
-          <ChitChatCard key={chitChat.id} chitChat={chitChat} />
-        ))}
+        {!chitChatUsersData.chit_chat_users.length ? (
+          <Typography variant="h3">No upcoming events </Typography>
+        ) : (
+          chitChatUsersData.chit_chat_users.map((chitChat) => (
+            <ChitChatCard key={chitChat.id} chitChat={chitChat.event} />
+          ))
+        )}
       </>
     )
   }

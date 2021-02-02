@@ -27,12 +27,12 @@ const useChitChatHelpers = () => {
     }
   }
 
-  const resetChitChat = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
+  const resetChitChat = async ({ onlineChitChatUsersArray, chitChatId, chitChatRoom }) => {
     try {
       const fanCurrentlyInChat = onlineChitChatUsersArray.find(
         (eventUser) => eventUser.status === 'in-chat' || eventUser.status == 'completed'
       ).user_id
-
+      chitChatRoom.disconnect()
       await updateFanStatusMutation({
         variables: {
           userId: fanCurrentlyInChat,
