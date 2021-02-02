@@ -1,6 +1,8 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 import ChitChatSignUpSmall from '../../assets/ChitChatSignUpSmall.png'
+import ChitChatSignUpLarge from '../../assets/ChitChatSignUpLarge.png'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -16,11 +18,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     height: '50vh',
     width: '100vw',
+    [theme.breakpoints.up('sm')]: {
+      backgroundImage: `url(${ChitChatSignUpLarge})`,
+      backgroundPosition: '50% 50%',
+    },
   },
   loginLink: {
     color: theme.palette.common.basePink,
     '&:hover': {
       color: theme.palette.common.ghostWhite,
+      cursor: 'pointer',
     },
   },
   signUpButton: {
@@ -36,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const SignUpLanding = ({ setShowSignUpForm }) => {
   const classes = useStyles()
+  const history = useHistory()
 
   return (
     <Grid container direction="column" alignItems="flex-start" justify="center">
@@ -77,7 +85,10 @@ export const SignUpLanding = ({ setShowSignUpForm }) => {
             Sign up
           </Button>
           <Typography variant="subtitle1">
-            Already have an account? <span className={classes.loginLink}>Log in</span>
+            Already have an account?{' '}
+            <span className={classes.loginLink} onClick={() => history.push('/login-new')}>
+              Log in
+            </span>
           </Typography>
         </Grid>
       </Grid>

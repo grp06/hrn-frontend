@@ -189,7 +189,7 @@ const LoginNewForm = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid container justify="center" alignItems="center">
+                  <Grid container direction="column" justify="center" alignItems="center">
                     <Button
                       variant="contained"
                       color="primary"
