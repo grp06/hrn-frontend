@@ -6,7 +6,8 @@ import {
   ChitChatCard,
   ChitChatCountdown,
   FanRSVPCard,
-  MeetCelebButton,
+  SignUpAndRSVPForChitChatButton,
+  RSVPForChitChatButton,
   RSVPForChitChatForm,
   StartChitChatButton,
   VisualQueue,
@@ -58,7 +59,7 @@ const ChitChat = () => {
 
   const {
     chitChat,
-    setEventNewId,
+    setChitChatId,
     userHasEnabledCameraAndMic,
     chitChatRSVPs,
     onlineChitChatUsersArray,
@@ -67,7 +68,6 @@ const ChitChat = () => {
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-
   const fanIsRSVPed =
     chitChatRSVPs && chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
 
@@ -79,9 +79,9 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
-      setEventNewId(parseInt(chitChatId, 10))
+      setChitChatId(parseInt(chitChatId, 10))
     }
-  }, [chitChatId, chitChat, setEventNewId])
+  }, [chitChatId, chitChat, setChitChatId])
 
   useEffect(() => {
     if (userIsHost && eventStatus === 'call-in-progress') {
@@ -130,11 +130,13 @@ const ChitChat = () => {
     }
 
     if (!fanIsRSVPed && !userIsHost) {
-      return (
-        <MeetCelebButton
+      return !userId ? (
+        <SignUpAndRSVPForChitChatButton
           hostName={hostName}
           modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
         />
+      ) : (
+        <RSVPForChitChatButton chitChatId={chitChatId} hostName={hostName} userId={userId} />
       )
     }
   }
