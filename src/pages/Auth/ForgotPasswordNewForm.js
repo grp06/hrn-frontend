@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import * as Yup from 'yup'
-import { resetPassword } from '../../helpers'
+import PhoneInput from 'react-phone-input-2'
 import Button from '@material-ui/core/Button'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import { FloatCardMedium, Snack } from '../../common'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import PhoneInput from 'react-phone-input-2'
+import { resetPassword } from '../../helpers'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -52,8 +52,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const RSVPSchema = Yup.object().shape({
-  email: Yup.string().min(4, 'Too Short!'),
+const ForgotPasswordSchema = Yup.object().shape({
+  usernameOrEmail: Yup.string().min(4, 'Too Short!'),
   phoneNumber: Yup.string().min(7, 'Too Short!'),
 })
 
@@ -78,27 +78,33 @@ const ForgotPasswordNewForm = () => {
             <Formik
               initialValues={{
                 phoneNumber: '',
-                email: '',
+                usernameOrEmail: '',
               }}
               onSubmit={async (values, { setSubmitting }) => {
                 setFormSubmitting(true)
-                const { phoneNumber, email } = values
-                if (!phoneNumber && !email) {
+                const { phoneNumber, usernameOrEmail } = values
+                if (!phoneNumber && !usernameOrEmail) {
                   setForgotPasswordFormErrorMessage('You forgot a phone number or email')
                   setFormSubmitting(false)
                   return
                 }
                 try {
-                  await resetPassword({ phoneNumber: `+${phoneNumber}`, email })
+                  const resetPasswordResponse = await resetPassword({
+                    phoneNumber: `+${phoneNumber}`,
+                    usernameOrEmail,
+                  })
+
+                  if (resetPasswordResponse.error) {
+                    throw resetPasswordResponse.error
+                  }
                 } catch (error) {
                   setFormSubmitting(false)
-                  console.log('error = ', error)
                 }
                 window.analytics.track('Reset password')
 
                 setShowSentEmail(true)
               }}
-              validationSchema={RSVPSchema}
+              validationSchema={ForgotPasswordSchema}
             >
               {({ dirty, isValid, submitForm }) => (
                 <Form>
@@ -149,10 +155,9 @@ const ForgotPasswordNewForm = () => {
                       <Grid item xs={12} className={classes.inputMargin}>
                         <Field
                           component={TextField}
-                          name="email"
+                          name="usernameOrEmail"
                           label="Username or Email"
                           type="text"
-                          // shouldnt have to do this but I don't know whats restricting the width
                           style={{ width: '100%' }}
                         />
                       </Grid>

@@ -1,10 +1,15 @@
-const resetPassword = async ({ phoneNumber, email }) => {
+const resetPassword = async ({ phoneNumber, usernameOrEmail }) => {
+  console.log('🚀 ~ resetPassword ~ email', usernameOrEmail)
+  let email
+  if (usernameOrEmail.indexOf('@') > -1) {
+    email = usernameOrEmail
+  }
+
   const resetURL = email
     ? `${process.env.REACT_APP_API_URL}/api/email/reset_password/user/${email}`
     : `${process.env.REACT_APP_API_URL}/api/sms/reset-password`
 
   const body = email ? { email } : { phoneNumber }
-  console.log('🚀 ~ resetPassword ~ body', body)
 
   return fetch(`${resetURL}`, {
     method: 'POST',

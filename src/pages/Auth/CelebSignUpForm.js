@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     width: '100vw',
     minHeight: '100vh',
-    padding: theme.spacing('75px', 0),
+    padding: theme.spacing(2, 0),
     backgroundImage: `url(${confettiDoodles})`,
   },
   formContainer: {
@@ -139,7 +139,7 @@ const CelebSignUpForm = () => {
             <Grid item container direction="column" alignItems="center">
               <Grid item>
                 <Typography variant="h2" className={classes.formHeader}>
-                  Glad to have you join us!{' '}
+                  Welcome!{' '}
                   <span role="img" aria-label="hands up">
                     🙌
                   </span>
@@ -213,7 +213,7 @@ const CelebSignUpForm = () => {
               >
                 Signup
               </Button>
-              <Link className={classes.linkRedirectToLogin} to="/">
+              <Link className={classes.linkRedirectToLogin} to="/login-new">
                 Already have an account?
               </Link>
               <Typography variant="subtitle2" className={classes.privacyPolicyText}>

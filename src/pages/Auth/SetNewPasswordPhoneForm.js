@@ -80,7 +80,6 @@ const SetNewPasswordForm = ({ match }) => {
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('')
   const { userId, token } = match.params
-  console.log('🚀 ~ SetNewPasswordForm ~ token.length', token.length)
 
   return (
     <Grid container direction="column" className={classes.formContainer}>
@@ -92,8 +91,6 @@ const SetNewPasswordForm = ({ match }) => {
         onSubmit={async (values) => {
           setFormSubmitting(true)
           const { password, passwordRepeated } = values
-          console.log('🚀 ~ onSubmit={ ~ values', values)
-          console.log('🚀 ~ onSubmit={ ~ password', password)
 
           if (password !== passwordRepeated) {
             setPasswordErrorMessage('Passwords must match')
@@ -108,22 +105,16 @@ const SetNewPasswordForm = ({ match }) => {
               token,
             })
           } catch (err) {
-            console.log('error = ', err)
+            console.log('🚀 ~ onSubmit={ ~ err', err)
           }
 
           const { id, token: newPasswordToken, role } = newPasswordSetResponse
-          console.log('🚀 ~ onSubmit={ ~ role', role)
-          console.log('🚀 ~ onSubmit={ ~ newPasswordToken', newPasswordToken)
-          console.log('🚀 ~ onSubmit={ ~ id', id)
 
           window.analytics.identify(id, {
             id,
             token,
             role,
           })
-          console.log('🚀 ~ onSubmit={ ~ role', role)
-          console.log('🚀 ~ onSubmit={ ~ token', token)
-          console.log('🚀 ~ onSubmit={ ~ id', id)
 
           if (role === 'fan') {
             history.push('/fan-home')
@@ -159,7 +150,7 @@ const SetNewPasswordForm = ({ match }) => {
                   <Field
                     component={TextField}
                     name="passwordRepeated"
-                    label="Repeat password"
+                    label="Confirm password"
                     type="password"
                     fullWidth
                     required

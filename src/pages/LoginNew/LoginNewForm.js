@@ -35,10 +35,6 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2, 0),
     padding: theme.spacing(0, 1),
   },
-  phoneInputClass: {
-    width: '100%',
-    background: 'blue',
-  },
   pinkText: {
     color: theme.palette.common.basePink,
   },
@@ -169,39 +165,6 @@ const LoginNewForm = () => {
                     className={classes.sectionContainer}
                   >
                     <Grid container direction="row">
-                      <Grid item xs={12} className={classes.formInputMargin}>
-                        <Typography variant="subtitle2" className={classes.phoneNumberLabel}>
-                          Phone number
-                        </Typography>
-                        <Field name="phone_number" label="Your phone number">
-                          {({ form }) => (
-                            <PhoneInput
-                              inputProps={{ name: 'phone_number', autoFocus: true }}
-                              inputStyle={{
-                                width: '100%',
-                                background: '#262626',
-                                color: '#E2E8F2',
-                                border: 'none',
-                                borderBottom: '2px solid #3e4042',
-                              }}
-                              buttonStyle={{
-                                background: '#262626',
-                                border: '1px solid #3e4042',
-                              }}
-                              dropdownStyle={{
-                                width: '200px',
-                                background: '#262626',
-                                color: '#E2E8F2',
-                              }}
-                              country="us"
-                              value={form.values.phone_number}
-                              onChange={(phoneNumber) => {
-                                form.setFieldValue('phone_number', phoneNumber)
-                              }}
-                            />
-                          )}
-                        </Field>
-                      </Grid>
                       <Grid item xs={12} className={classes.formInputMargin}>
                         <Field
                           component={TextField}
