@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 
 import { Snack } from '../../common'
-import { setNewPasswordForPhoneNumber } from '../../helpers'
+import { setNewPasswordPhone } from '../../helpers'
 import { constants } from '../../utils'
 
 const { USER_ID, TOKEN, ROLE } = constants
@@ -74,7 +74,7 @@ const CheckoutSchema = Yup.object().shape({
   passwordRepeated: Yup.string().min(8, 'Too Short!').required('Required'),
 })
 
-const CheckoutForm = ({ match }) => {
+const SetNewPasswordForm = ({ match }) => {
   const classes = useStyles()
   const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
@@ -91,8 +91,6 @@ const CheckoutForm = ({ match }) => {
         onSubmit={async (values) => {
           setFormSubmitting(true)
           const { password, passwordRepeated } = values
-          console.log('🚀 ~ onSubmit={ ~ values', values)
-          console.log('🚀 ~ onSubmit={ ~ password', password)
 
           if (password !== passwordRepeated) {
             setPasswordErrorMessage('Passwords must match')
@@ -101,19 +99,16 @@ const CheckoutForm = ({ match }) => {
           }
           let newPasswordSetResponse
           try {
-            newPasswordSetResponse = await setNewPasswordForPhoneNumber({
+            newPasswordSetResponse = await setNewPasswordPhone({
               password,
               userId,
               token,
             })
           } catch (err) {
-            console.log('error = ', err)
+            console.log('🚀 ~ onSubmit={ ~ err', err)
           }
 
           const { id, token: newPasswordToken, role } = newPasswordSetResponse
-          console.log('🚀 ~ onSubmit={ ~ role', role)
-          console.log('🚀 ~ onSubmit={ ~ newPasswordToken', newPasswordToken)
-          console.log('🚀 ~ onSubmit={ ~ id', id)
 
           window.analytics.identify(id, {
             id,
@@ -121,15 +116,15 @@ const CheckoutForm = ({ match }) => {
             role,
           })
 
-          // if (role === 'fan') {
-          //   history.push('/fan-home')
-          // } else {
-          //   history.push('/creator-home')
-          // }
-          // window.analytics.track('Reset password for phone number')
-          // localStorage.setItem(USER_ID, id)
-          // localStorage.setItem(ROLE, role)
-          // localStorage.setItem(TOKEN, newPasswordToken)
+          if (role === 'fan') {
+            history.push('/fan-home')
+          } else {
+            history.push('/creator-home')
+          }
+          window.analytics.track('Reset password for phone number')
+          localStorage.setItem(USER_ID, id)
+          localStorage.setItem(ROLE, role)
+          localStorage.setItem(TOKEN, newPasswordToken)
 
           setFormSubmitting(false)
           // I'm confused by this transition modal stuff so I'm just reloading for now - George
@@ -155,7 +150,7 @@ const CheckoutForm = ({ match }) => {
                   <Field
                     component={TextField}
                     name="passwordRepeated"
-                    label="Repeat password"
+                    label="Confirm password"
                     type="password"
                     fullWidth
                     required
@@ -188,4 +183,4 @@ const CheckoutForm = ({ match }) => {
   )
 }
 
-export default CheckoutForm
+export default SetNewPasswordForm

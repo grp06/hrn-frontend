@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const SetNewPasswordForm = ({ match }) => {
   const classes = useStyles()
   const { userId, token } = match.params
+  console.log('🚀 ~ SetNewPasswordForm ~ token.length', token.length)
   const history = useHistory()
   const [newPassword, setNewPassword] = useState('')
   const [repeatedPassword, setRepeatedPassword] = useState('')

@@ -69,7 +69,7 @@ const CreatorHome = () => {
   }
 
   if (!userId) {
-    return <Redirect to="/creator-login" />
+    return <Redirect to="/login-new" />
   }
 
   const renderCreateChitChat = () => {
