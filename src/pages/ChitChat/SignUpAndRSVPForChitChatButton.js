@@ -1,7 +1,7 @@
 import React from 'react'
 import { TransitionModal } from '../../common'
 
-const MeetCelebButton = ({ hostName, modalBody }) => {
+const SignUpAndRSVPForChitChatButton = ({ hostName, modalBody }) => {
   return (
     <div style={{ width: '100%' }}>
       {TransitionModal({
@@ -19,4 +19,4 @@ const MeetCelebButton = ({ hostName, modalBody }) => {
   )
 }
 
-export default MeetCelebButton
+export default SignUpAndRSVPForChitChatButton

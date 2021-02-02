@@ -6,7 +6,8 @@ import {
   ChitChatCard,
   ChitChatCountdown,
   FanRSVPCard,
-  MeetCelebButton,
+  SignUpAndRSVPForChitChatButton,
+  RSVPForChitChatButton,
   RSVPForChitChatForm,
   StartChitChatButton,
   VisualQueue,
@@ -67,7 +68,6 @@ const ChitChat = () => {
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
-
   const fanIsRSVPed =
     chitChatRSVPs && chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
 
@@ -130,11 +130,13 @@ const ChitChat = () => {
     }
 
     if (!fanIsRSVPed && !userIsHost) {
-      return (
-        <MeetCelebButton
+      return !userId ? (
+        <SignUpAndRSVPForChitChatButton
           hostName={hostName}
           modalBody={<RSVPForChitChatForm chitChat={chitChat} />}
         />
+      ) : (
+        <RSVPForChitChatButton chitChatId={chitChatId} hostName={hostName} userId={userId} />
       )
     }
   }
