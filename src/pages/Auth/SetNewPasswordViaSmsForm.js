@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 
 import { Snack } from '../../common'
-import { setNewPasswordPhone } from '../../helpers'
+import { setNewPasswordViaSms } from '../../helpers'
 import { constants } from '../../utils'
 
 const { USER_ID, TOKEN, ROLE } = constants
@@ -99,7 +99,7 @@ const SetNewPasswordForm = ({ match }) => {
           }
           let newPasswordSetResponse
           try {
-            newPasswordSetResponse = await setNewPasswordPhone({
+            newPasswordSetResponse = await setNewPasswordViaSms({
               password,
               userId,
               token,

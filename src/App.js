@@ -36,7 +36,7 @@ import {
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
-  SetNewPasswordPhone,
+  SetNewPasswordViaSms,
   SignUp,
   CelebSignUp,
   CreateChitChat,
@@ -141,7 +141,7 @@ const App = () => {
                       <Route
                         exact
                         path="/set-new-password-phone/:userId/:token"
-                        component={SetNewPasswordPhone}
+                        component={SetNewPasswordViaSms}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/celeb-profile" component={CelebProfile} />
