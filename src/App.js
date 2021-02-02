@@ -140,7 +140,7 @@ const App = () => {
                       />
                       <Route
                         exact
-                        path="/set-new-password-phone/:userId/:token"
+                        path="/set-new-password-via-sms/:userId/:token"
                         component={SetNewPasswordViaSms}
                       />
                       <Route exact path="/onboarding" component={Onboarding} />

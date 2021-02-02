@@ -1,6 +1,6 @@
 const setNewPasswordViaSms = async ({ userId, token, password }) => {
   return fetch(
-    `${process.env.REACT_APP_API_URL}/api/sms/set-new-password-phone/${userId}/${token}`,
+    `${process.env.REACT_APP_API_URL}/api/sms/set-new-password-via-sms/${userId}/${token}`,
     {
       method: 'POST',
       headers: {
