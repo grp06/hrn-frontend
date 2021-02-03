@@ -230,7 +230,7 @@ const EventGroupVideoChat = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState === true) {
+      if (prevState === true && eventChatMessages && eventChatMessages.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState
