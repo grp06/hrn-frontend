@@ -74,7 +74,13 @@ const VideoRoom = ({ match }) => {
   const { appLoading } = useAppContext()
   const { user, setUserUpdatedAt } = useUserContext()
   const { event } = useEventContext()
-  const { userEventStatus, setUserEventStatus } = useUserEventStatusContext()
+  const {
+    personalChatMessagesWithCurrentPartner,
+    numberOfUnreadMessagesFromMyPartner,
+    setNumberOfReadMessagesFromMyPartner,
+    setUserEventStatus,
+    userEventStatus,
+  } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
   const { id: userId, updated_at: userUpdatedAt } = user
@@ -102,6 +108,24 @@ const VideoRoom = ({ match }) => {
     skip:
       !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
   })
+
+  const toggleChat = () => {
+    setChatIsOpen((prevState) => {
+      if (prevState === true) {
+        if (
+          personalChatMessagesWithCurrentPartner &&
+          personalChatMessagesWithCurrentPartner.length
+        ) {
+          setNumberOfReadMessagesFromMyPartner(
+            personalChatMessagesWithCurrentPartner.filter(
+              (message) => message.recipient_id === userId && message.read
+            ).length
+          )
+        }
+      }
+      return !prevState
+    })
+  }
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
@@ -276,13 +300,18 @@ const VideoRoom = ({ match }) => {
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
         {myRoundPartnerData && myRoundPartnerData.partners.length && chatIsOpen ? (
-          <ChatBox myRound={myRoundPartnerData.partners[0]} />
+          <ChatBox
+            chatIsOpen={chatIsOpen}
+            messages={personalChatMessagesWithCurrentPartner}
+            myRound={myRoundPartnerData.partners[0]}
+          />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}
         <InVideoBottomControlPanel
-          myRound={myRound}
           chatIsOpen={chatIsOpen}
-          toggleChat={() => setChatIsOpen((prevState) => !prevState)}
+          numberOfUnreadMessagesFromMyPartner={numberOfUnreadMessagesFromMyPartner}
+          myRound={myRound}
+          toggleChat={toggleChat}
         />
       </div>
     </div>

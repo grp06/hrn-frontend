@@ -8,6 +8,7 @@ const listenToChitChatRSVPs = gql`
       id
       user {
         username
+        phone_number
       }
     }
   }

@@ -102,20 +102,6 @@ const ChitChat = () => {
     }
   }, [eventStatus])
 
-  useEffect(() => {
-    if (
-      !userIsHost &&
-      eventStatus === 'call-in-progress' &&
-      onlineChitChatUsersArray.length &&
-      userId
-    ) {
-      const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
-      if (currentFan && currentFan.status === 'in-chat') {
-        history.push(`/chit-chat/${chitChatId}/video-room`)
-      }
-    }
-  }, [eventStatus, onlineChitChatUsersArray, userId])
-
   if (appLoading || Object.keys(chitChat).length < 2 || !chitChatRSVPs) {
     return <Loading />
   }
@@ -132,6 +118,8 @@ const ChitChat = () => {
           chitChatId={chitChatId}
           userId={userId}
           disabled={!onlineChitChatUsersArray.length}
+          chitChat={chitChat}
+          chitChatRSVPs={chitChatRSVPs}
         />
       )
     }
