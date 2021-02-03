@@ -184,6 +184,9 @@ const CelebSignUpForm = () => {
               <Divider />
               <Typography variant="subtitle2" className={classes.recievePaymentsTypography}>
                 How would you like to recieve payments?
+                <span aria-hidden="true" class="MuiFormLabel-asterisk MuiInputLabel-asterisk">
+                   *
+                </span>
               </Typography>
               <Grid item>
                 <TextField
