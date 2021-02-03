@@ -170,7 +170,7 @@ const VideoRoom = ({ match }) => {
         try {
           const lastSeenUpdated = await updateEventUsersLastSeenMutation()
           console.log('i sent the last seen mutation')
-          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].updated_at)
         } catch (err) {
           console.log(err)
         }
