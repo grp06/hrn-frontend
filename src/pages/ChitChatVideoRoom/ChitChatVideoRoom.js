@@ -184,14 +184,6 @@ const ChitChatVideoRoom = () => {
 
   return (
     <div className={classes.pageContainer}>
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{ zIndex: 9999 }}
-        onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRoom })}
-      >
-        reset
-      </Button>
       {userIsHost ? (
         <CelebStatusMessageScreen
           chitChatStatus={chitChatStatus}
