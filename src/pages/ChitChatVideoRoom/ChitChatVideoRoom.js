@@ -152,14 +152,14 @@ const ChitChatVideoRoom = () => {
   }, [chitChatId, userId])
 
   useEffect(() => {
-    if (userId && !userIsHost && onlineChitChatUsersArray.length) {
-      const currentFan = onlineChitChatUsersArray.find((eventUser) => eventUser.user_id === userId)
-      if (currentFan && currentFan.status === 'completed') {
+    if (userId && !userIsHost && chitChatRSVPs) {
+      const currentFanRsvpObj = chitChatRSVPs.find((eventUser) => eventUser.user_id === userId)
+      if (currentFanRsvpObj && currentFanRsvpObj.status === 'completed') {
         chitChatRoom.disconnect()
         history.push(`/chit-chat/${chitChatId}/call-completed`)
       }
     }
-  }, [onlineChitChatUsersArray, userId])
+  }, [chitChatRSVPs, userId, userIsHost])
 
   useEffect(() => {
     if (chitChatStatus === 'completed') {
@@ -188,7 +188,9 @@ const ChitChatVideoRoom = () => {
         variant="contained"
         color="secondary"
         style={{ zIndex: 9999 }}
-        onClick={() => resetChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRoom })}
+        onClick={() =>
+          resetChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRoom, chitChatRSVPs })
+        }
       >
         reset
       </Button>
@@ -210,15 +212,20 @@ const ChitChatVideoRoom = () => {
       <div id="local-video" className={classes.localVideo} />
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
       {chitChatStatus === 'call-in-progress' && (
-        <div
-          className={classes.endCall}
-          onClick={() => endCall({ onlineChitChatUsersArray, chitChatId, chitChatRSVPs })}
-        />
+        <div className={classes.endCall} onClick={() => endCall({ chitChatId, chitChatRSVPs })} />
       )}
       {chitChatStatus === 'paused' && (
         <div
           className={classes.meetNextFan}
-          onClick={() => startNextChitChat({ onlineChitChatUsersArray, chitChatId })}
+          onClick={() =>
+            startNextChitChat({
+              onlineChitChatUsersArray,
+              chitChatId,
+              startOfEvent: true,
+              chitChatRSVPs,
+              chitChat,
+            })
+          }
         />
       )}
     </div>

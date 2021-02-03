@@ -92,6 +92,12 @@ const ChitChatProvider = ({ children }) => {
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
   const userOnChitChatPage = Boolean(pathname.match(chitChatRegex))
+
+  const currentUser =
+    chitChatRSVPs && chitChatRSVPs.find((eventUser) => eventUser.user_id === userId)
+
+  const currentUserStatus = currentUser ? currentUser.status : null
+
   // subscribe to the Event only if we have an chitChatId
   const { data: chitChatData } = useSubscription(listenToChitChat, {
     variables: {
@@ -110,7 +116,7 @@ const ChitChatProvider = ({ children }) => {
   const [updateChitChatUsersLastSeenMutation] = useMutation(updateChitChatUsersLastSeen, {
     variables: {
       chitChatId,
-      now: new Date().toISOString(),
+      now: currentUserStatus === 'in-chat' ? null : new Date().toISOString(),
       user_id: userId,
     },
     skip: !userId || !chitChatId,
@@ -134,14 +140,16 @@ const ChitChatProvider = ({ children }) => {
 
   //
   useEffect(() => {
-    if (chitChatRSVPs && userId) {
-      const currentUser = chitChatRSVPs.find((eventUser) => eventUser.user_id === userId)
-      if (currentUser && currentUser.status === 'completed') {
-        console.log('cleared interval ', interval)
+    if (userId && currentUserStatus) {
+      if (currentUserStatus === 'in-chat') {
+        history.push(`/chit-chat/${chitChatId}/video-room`)
+        clearInterval(interval)
+      }
+      if (currentUserStatus === 'completed') {
         clearInterval(interval)
       }
     }
-  }, [chitChatRSVPs, userId])
+  }, [currentUserStatus, userId])
 
   useEffect(() => {
     // TODO sending last seen for host but it's not doing anything. Do we need to send for host?

@@ -4,7 +4,13 @@ import Typography from '@material-ui/core/Typography'
 import { TransitionModal } from '../../common'
 import { useChitChatHelpers } from '../../helpers'
 
-const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, disabled, userId }) => {
+const StartChitChatButton = ({
+  onlineChitChatUsersArray,
+  chitChatId,
+  disabled,
+  chitChatRSVPs,
+  chitChat,
+}) => {
   const { startNextChitChat } = useChitChatHelpers()
 
   return (
@@ -29,7 +35,14 @@ const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, disabled, u
           </Typography>
         ),
         onAcceptButtonText: 'Lets Start!',
-        onAcceptFunction: () => startNextChitChat({ onlineChitChatUsersArray, chitChatId, userId }),
+        onAcceptFunction: () =>
+          startNextChitChat({
+            onlineChitChatUsersArray,
+            chitChatId,
+            startOfEvent: true,
+            chitChat,
+            chitChatRSVPs,
+          }),
       })}
     </div>
   )
