@@ -13,6 +13,8 @@ const listenToChatMessages = gql`
     ) {
       content
       created_at
+      id
+      read
       recipient {
         id
         name

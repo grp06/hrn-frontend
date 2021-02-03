@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { useMutation } from '@apollo/react-hooks'
 import Grid from '@material-ui/core/Grid'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -8,8 +8,7 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/styles'
 
-import { insertPersonalChatMessage } from '../gql/mutations'
-import { listenToChatMessages } from '../gql/subscriptions'
+import { bulkUpsertReadPersonalChatMessage, insertPersonalChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
 
@@ -62,21 +61,13 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const ChatBox = ({ myRound }) => {
+const ChatBox = ({ chatIsOpen, messages, myRound }) => {
   const classes = createStyles()
   const { event_id, partner: myPartner, partner_id, user_id } = myRound
-  const { name: myPartnersName } = myPartner
+  const { name: myPartnersName } = (myPartner && Object.keys(myPartner).length && myPartner) || ''
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
   const myPartnersFirstName = myPartnersName && myPartnersName.split(' ')[0]
-
-  const { data: chatMessages } = useSubscription(listenToChatMessages, {
-    variables: {
-      user_id,
-      partner_id,
-    },
-    skip: !event_id,
-  })
 
   const [insertPersonalChatMessageMutation] = useMutation(insertPersonalChatMessage, {
     user_id,
@@ -84,13 +75,46 @@ const ChatBox = ({ myRound }) => {
     content: message,
   })
 
+  const [bulkUpsertReadChatMessages] = useMutation(bulkUpsertReadPersonalChatMessage)
+
   useEffect(() => {
     const chatList = document.getElementById('chat-list')
     chatList.scrollTop = chatList.scrollHeight
-    if (chatMessages && !list) {
-      setList(chatMessages)
+    if (messages && !list) {
+      setList(messages)
     }
-  }, [chatMessages])
+  }, [messages])
+
+  useEffect(() => {
+    const bulkUpsertMessages = async (messages) => {
+      try {
+        await bulkUpsertReadChatMessages({
+          variables: {
+            messages,
+          },
+        })
+      } catch (err) {
+        console.log('bulkUpsertReadPersonalChatMessages error ->', err)
+      }
+    }
+
+    if (chatIsOpen && messages && messages.length) {
+      const freshlyReadMessages = messages.reduce((unreadMessagesArray, message) => {
+        // get all the unread messages that have been sent to you
+        if (message.recipient_id === user_id && !message.read) {
+          // pull off all keys except user and recipient
+          const { content, id, recipient_id, sender_id } = message
+          const messageToBeUpserted = { content, id, read: true, recipient_id, sender_id }
+          unreadMessagesArray.push(messageToBeUpserted)
+        }
+        return unreadMessagesArray
+      }, [])
+
+      if (freshlyReadMessages && freshlyReadMessages.length) {
+        bulkUpsertMessages(freshlyReadMessages)
+      }
+    }
+  }, [chatIsOpen, messages])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -124,9 +148,9 @@ const ChatBox = ({ myRound }) => {
         Chat with {myPartnersFirstName}
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
-        {chatMessages &&
-          chatMessages.personal_chat_messages.length &&
-          chatMessages.personal_chat_messages.map((message) => {
+        {messages &&
+          messages.length &&
+          messages.map((message) => {
             const { content: messageContent, created_at, user } = message
             const sendersFirstName = user.name && user.name.split(' ')[0]
             const messageSentAt = formatChatMessagesDate(created_at)
