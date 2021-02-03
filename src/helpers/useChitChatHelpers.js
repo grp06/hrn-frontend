@@ -1,11 +1,18 @@
 import { updateChitChatStatus, updateFanStatus } from '../gql/mutations'
 import { useMutation } from 'react-apollo'
+import { sendEventStartedReminder, sendReminderToUpcomingParticipants } from '.'
 
 const useChitChatHelpers = () => {
   const [updateChitChatStatusMutation] = useMutation(updateChitChatStatus)
   const [updateFanStatusMutation] = useMutation(updateFanStatus)
 
-  const startNextChitChat = async ({ onlineChitChatUsersArray, chitChatId, userId }) => {
+  const startNextChitChat = async ({
+    onlineChitChatUsersArray,
+    chitChatId,
+    startOfEvent,
+    chitChatRSVPs,
+    chitChat,
+  }) => {
     try {
       await updateChitChatStatusMutation({
         variables: {
@@ -14,28 +21,35 @@ const useChitChatHelpers = () => {
         },
         // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
       })
-      const nextFanToMeet = onlineChitChatUsersArray[0].user_id
+      const userIdOfNextFanToMeet = onlineChitChatUsersArray[0].user_id
+      console.log('🚀 ~ useChitChatHelpers ~ userIdOfNextFanToMeet', userIdOfNextFanToMeet)
 
       await updateFanStatusMutation({
         variables: {
-          userId: nextFanToMeet,
+          userId: userIdOfNextFanToMeet,
           status: 'in-chat',
         },
       })
+
+      await sendReminderToUpcomingParticipants({ chitChatRSVPs, chitChat })
+
+      if (startOfEvent) {
+        await sendEventStartedReminder({ chitChatRSVPs, chitChat })
+      }
     } catch (error) {
       console.log('🚀 ~ startNextChitChat ~ error', error)
     }
   }
 
-  const resetChitChat = async ({ onlineChitChatUsersArray, chitChatId, chitChatRoom }) => {
+  const resetChitChat = async ({ chitChatId, chitChatRoom, chitChatRSVPs }) => {
     try {
-      const fanCurrentlyInChat = onlineChitChatUsersArray.find(
+      const userIdOfFanCurrentlyInChat = chitChatRSVPs.find(
         (eventUser) => eventUser.status === 'in-chat' || eventUser.status == 'completed'
       ).user_id
       chitChatRoom.disconnect()
       await updateFanStatusMutation({
         variables: {
-          userId: fanCurrentlyInChat,
+          userId: userIdOfFanCurrentlyInChat,
           status: 'in-queue',
         },
       })
@@ -52,11 +66,9 @@ const useChitChatHelpers = () => {
     }
   }
 
-  const endCall = async ({ onlineChitChatUsersArray, chitChatId, userId, chitChatRSVPs }) => {
+  const endCall = async ({ chitChatId, chitChatRSVPs }) => {
     try {
-      const currentFanChatting = onlineChitChatUsersArray.find(
-        (eventUser) => eventUser.status === 'in-chat'
-      )
+      const currentFanChatting = chitChatRSVPs.find((eventUser) => eventUser.status === 'in-chat')
 
       await updateFanStatusMutation({
         variables: {
