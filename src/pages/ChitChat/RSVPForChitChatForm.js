@@ -80,7 +80,11 @@ const RSVPForChitChatForm = ({ chitChat }) => {
         onSubmit={async (values, { setSubmitting }) => {
           setFormSubmitting(true)
           const { phoneNumber, username, password, passwordRepeated } = values
-
+          if (username.indexOf('@') > -1) {
+            setRSVPFormErrorMessage('Please pick a username, not an email')
+            setFormSubmitting(false)
+            return
+          }
           if (password !== passwordRepeated) {
             setRSVPFormErrorMessage('Passwords must match')
             setFormSubmitting(false)

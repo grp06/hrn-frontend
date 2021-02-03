@@ -64,6 +64,7 @@ const useUserEventStatusContext = () => {
 }
 
 const UserEventStatusProvider = ({ children }) => {
+  console.log('INSIDE EVENT STATUS PROVIDER')
   const [state, dispatch] = useImmer({ ...defaultState })
   const {
     numberOfReadMessagesFromMyPartner,

@@ -166,7 +166,7 @@ const SetNewPasswordForm = ({ match }) => {
                 disabled={formSubmitting || !isValid || !dirty}
                 onClick={submitForm}
               >
-                {formSubmitting ? 'Updating Our Ledgers ...' : 'Complete Payment'}
+                {formSubmitting ? 'Updating Our Ledgers ...' : 'Update password'}
               </Button>
             </Grid>
           </Form>
