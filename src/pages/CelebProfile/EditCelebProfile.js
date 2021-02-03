@@ -10,6 +10,7 @@ import {
   Typography as Typ,
   Avatar,
 } from '@material-ui/core'
+import { ArrowBack } from '@material-ui/icons'
 import { Snack } from '../../common'
 import { updateUserNew } from '../../gql/mutations'
 import { sleep } from '../../helpers'
@@ -78,17 +79,29 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 35,
     },
   },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
+  backButton: {
+    position: 'absolute',
+    top: '80px',
+    left: '40px',
+    textTransform: 'none',
+    padding: 0,
+    fontWeight: '300',
     '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
+      backgroundColor: 'transparent',
     },
   },
   divider: {
     marginTop: 35,
     marginBottom: 25,
+  },
+  submitButton: {
+    position: 'fixed',
+    top: 'auto',
+    bottom: '0',
+    width: '100vw',
+    borderRadius: 0,
+    height: '75px',
+    maxHeight: 'none',
   },
 }))
 
@@ -269,20 +282,23 @@ const EditCelebProfile = ({ celeb, setIsEditing, updateUserNewObjectInContext })
               <Button
                 fullWidth
                 startIcon={isSubmitting ? <CircularProgress size="1rem" /> : null}
+                disableRipple
                 disabled={isSubmitting}
                 variant="contained"
                 color="primary"
                 type="submit"
+                className={classes.submitButton}
               >
                 {isSubmitting ? 'Saving' : 'Confirm'}
               </Button>
               <Button
-                fullWidth
-                variant="outlined"
-                className={classes.cancelButton}
+                variant="text"
+                disableRipple
+                className={classes.backButton}
                 onClick={handleFormClose}
+                startIcon={<ArrowBack />}
               >
-                Cancel
+                Back
               </Button>
             </Grid>
           </Form>

@@ -13,9 +13,10 @@ import blurryBackground from '../../assets/blurryBackground.png'
 
 const useStyles = makeStyles((theme) => ({
   pageContainer: {
-    marginTop: theme.spacing(10),
+    // This is the the height of the drawer
+    marginTop: 56,
     position: 'relative',
-    height: `calc(100vh - ${theme.spacing(10)}px)`,
+    minHeight: '100%',
   },
   logo: {
     width: '62px',
@@ -28,9 +29,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   createEventButton: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    margin: '0 auto',
+    position: 'fixed',
+    top: 'auto',
+    bottom: '0',
+    width: '100vw',
+    borderRadius: 0,
+    height: '75px',
+    maxHeight: 'none',
   },
   pageBanner: {
     width: '100%',
@@ -39,6 +44,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
     marginBottom: '40px',
+  },
+  title: {
+    paddingBottom: 20,
+    width: '85vw',
+    margin: '0 auto',
   },
 }))
 
@@ -107,7 +117,9 @@ const CreatorHome = () => {
           className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h1">My Events</Typography>
+            <Typography className={classes.title} variant="h1">
+              My Events
+            </Typography>
           </Grid>
         </Grid>
         {chitChatsData.chit_chats.map((chitChat) => (

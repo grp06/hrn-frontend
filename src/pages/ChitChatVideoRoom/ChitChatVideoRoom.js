@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
+import { PhoneDisabled } from '@material-ui/icons'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Grid from '@material-ui/core/Grid'
@@ -20,11 +21,17 @@ const useStyles = makeStyles((theme) => ({
     height: '100vh',
     width: '100%',
   },
+  videosAndButtons: {
+    height: '100%',
+    display: 'grid',
+    gridTemplate: `"local-video" 1fr 
+    "remote-video" 1fr
+    "button" 70px / 1fr`,
+  },
   remoteVideo: {
     width: '100%',
-    height: '50vh',
-    position: 'fixed',
-    top: '0',
+    gridArea: 'remote-video',
+    height: '100%',
     '& video': {
       height: '100%',
       width: '100%',
@@ -37,9 +44,8 @@ const useStyles = makeStyles((theme) => ({
   },
   localVideo: {
     width: '100%',
-    height: '50vh',
-    position: 'fixed',
-    bottom: '0',
+    gridArea: 'local-video',
+    height: '100%',
     '& video': {
       height: '100%',
       width: '100%',
@@ -61,15 +67,19 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   endCall: {
-    width: '50px',
-    height: '50px',
-    backgroundImage: `url(${endCallIcon})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    position: 'fixed',
-    bottom: '10px',
-    margin: '0 auto',
-    left: 'calc(50% - 25px)',
+    width: '100%',
+    gridArea: 'button',
+    height: '100%',
+    backgroundColor: theme.palette.common.red,
+    boxSizing: 'border-box',
+    border: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: theme.palette.common.ghostWhite,
+    '& > *:nth-child(1)': {
+      marginRight: 12,
+    },
   },
   meetNextFan: {
     width: '300px',
@@ -182,18 +192,10 @@ const ChitChatVideoRoom = () => {
     }
   }, [chitChatStatus])
 
+  const handleEndCall = () => endCall({ onlineChitChatUsersArray, chitChatId, chitChatRSVPs })
+
   return (
     <div className={classes.pageContainer}>
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{ zIndex: 9999 }}
-        onClick={() =>
-          resetChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRoom, chitChatRSVPs })
-        }
-      >
-        reset
-      </Button>
       {userIsHost ? (
         <CelebStatusMessageScreen
           chitChatStatus={chitChatStatus}
@@ -208,26 +210,23 @@ const ChitChatVideoRoom = () => {
           hostName={hostFirstName || 'the host'}
         />
       )}
-      <div id="remote-video" className={classes.remoteVideo}></div>
-      <div id="local-video" className={classes.localVideo} />
+      <section className={classes.videosAndButtons}>
+        <div id="remote-video" className={classes.remoteVideo}></div>
+        <div id="local-video" className={classes.localVideo} />
+        {chitChatStatus === 'call-in-progress' && (
+          <button className={classes.endCall} onClick={handleEndCall}>
+            <PhoneDisabled />
+            End this chat
+          </button>
+        )}
+        {chitChatStatus === 'paused' && (
+          <div
+            className={classes.meetNextFan}
+            onClick={() => startNextChitChat({ onlineChitChatUsersArray, chitChatId })}
+          />
+        )}
+      </section>
       {currentFan && <RoundProgressBar userUpdatedAt={currentFan.updated_at} event={chitChat} />}
-      {chitChatStatus === 'call-in-progress' && (
-        <div className={classes.endCall} onClick={() => endCall({ chitChatId, chitChatRSVPs })} />
-      )}
-      {chitChatStatus === 'paused' && (
-        <div
-          className={classes.meetNextFan}
-          onClick={() =>
-            startNextChitChat({
-              onlineChitChatUsersArray,
-              chitChatId,
-              startOfEvent: true,
-              chitChatRSVPs,
-              chitChat,
-            })
-          }
-        />
-      )}
     </div>
   )
 }

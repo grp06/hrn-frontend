@@ -35,7 +35,8 @@ const UserDrawerContent = ({
   const history = useHistory()
   const eventRunning = Boolean(
     window.location.pathname.includes('pre-event') ||
-      window.location.pathname.includes('video-room')
+      window.location.pathname.includes('video-room') ||
+      window.location.pathname.includes('convo')
   )
 
   const creatorHome = (

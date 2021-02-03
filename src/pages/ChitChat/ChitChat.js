@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import { Button, Grid, Typography, Container } from '@material-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
+import blurryBackground from '../../assets/blurryBackground.png'
 import {
   ChitChatCard,
   ChitChatCountdown,
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 'auto'),
     textTransform: 'none',
     width: '100%',
+    border: '2px solid #8C57DB',
   },
   CTAButton: {
     width: '100%',
@@ -43,6 +45,11 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       left: 0,
     },
+  },
+  titleContainer: {
+    backgroundImage: `url(${blurryBackground})`,
+    backgroundPosition: '50% 50%',
+    backgroundSize: 'cover',
   },
 }))
 
@@ -85,7 +92,7 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (userIsHost && eventStatus === 'call-in-progress') {
-      history.push(`/chit-chat/${chitChatId}/video-room`)
+      history.push(`/chit-chat/${chitChatId}/convo`)
     }
   }, [eventStatus, userIsHost])
 
@@ -142,7 +149,7 @@ const ChitChat = () => {
 
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <Container maxWidth="sm">
+      <Container className={classes.titleContainer} maxWidth="sm">
         <ChitChatCard
           chitChat={chitChat}
           userIsHost={userIsHost}
@@ -175,7 +182,9 @@ const ChitChat = () => {
       </Grid>
       <Grid container direction="row" className={classes.CTAButton}>
         <Container maxWidth="sm">{renderCTAButton()}</Container>
-        {fanIsRSVPed ? <ChitChatCountdown eventStartTime={start_at} /> : null}
+        {fanIsRSVPed && eventStatus === 'not-started' ? (
+          <ChitChatCountdown eventStartTime={start_at} />
+        ) : null}
       </Grid>
     </Grid>
   )
