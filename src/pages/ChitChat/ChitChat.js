@@ -194,7 +194,9 @@ const ChitChat = () => {
       </Grid>
       <Grid container direction="row" className={classes.CTAButton}>
         <Container maxWidth="sm">{renderCTAButton()}</Container>
-        {fanIsRSVPed ? <ChitChatCountdown eventStartTime={start_at} /> : null}
+        {fanIsRSVPed && eventStatus === 'not-started' ? (
+          <ChitChatCountdown eventStartTime={start_at} />
+        ) : null}
       </Grid>
     </Grid>
   )

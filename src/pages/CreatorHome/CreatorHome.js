@@ -29,9 +29,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   createEventButton: {
-    position: 'absolute',
-    bottom: theme.spacing(2),
-    margin: '0 auto',
+    position: 'fixed',
+    top: 'auto',
+    bottom: '0',
+    width: '100vw',
+    borderRadius: 0,
+    height: '75px',
+    maxHeight: 'none',
   },
   pageBanner: {
     width: '100%',

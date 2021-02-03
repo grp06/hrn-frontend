@@ -42,7 +42,7 @@ const CreateChitChat = () => {
       direction="column"
       alignItems="center"
       justify="center"
-      style={{ marginTop: '75px' }}
+      style={{ marginTop: '120px', marginBottom: '75px' }}
     >
       <CreateChitChatForm chitChatDetails={chitChatDetails} userId={user_id} />
     </Grid>

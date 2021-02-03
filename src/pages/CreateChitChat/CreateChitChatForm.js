@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Button, Grid, Typography } from '@material-ui/core'
+import { ArrowBack } from '@material-ui/icons'
 import DateFnsUtils from '@date-io/date-fns'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -16,15 +15,15 @@ import { upsertChitChat } from '../../gql/mutations'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
-  cancelButton: {
-    margin: theme.spacing(2, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
+  backButton: {
+    position: 'absolute',
+    top: '80px',
+    left: '34px',
+    textTransform: 'none',
+    padding: 0,
+    fontWeight: '300',
     '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(2),
+      backgroundColor: 'transparent',
     },
   },
   formContainer: {
@@ -49,6 +48,15 @@ const useStyles = makeStyles((theme) => ({
   },
   sectionContainer: {
     margin: theme.spacing(4, 0, 2, 0),
+  },
+  submitButton: {
+    position: 'fixed',
+    top: 'auto',
+    bottom: '0',
+    width: '100vw',
+    borderRadius: 0,
+    height: '75px',
+    maxHeight: 'none',
   },
 }))
 
@@ -198,16 +206,18 @@ const CreateChitChatForm = ({ chitChatDetails, userId }) => {
                   color="primary"
                   disabled={isSubmitting}
                   onClick={submitForm}
+                  className={classes.submitButton}
                 >
                   Submit
                 </Button>
                 <Button
-                  variant="contained"
-                  color="inherit"
-                  className={classes.cancelButton}
+                  variant="text"
+                  disableRipple
+                  className={classes.backButton}
                   onClick={handleCancelClick}
+                  startIcon={<ArrowBack />}
                 >
-                  Cancel
+                  Back
                 </Button>
               </Grid>
             </Form>

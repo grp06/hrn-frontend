@@ -77,7 +77,7 @@ const DrawerContent = ({ closeDrawer }) => {
       ? [
           {
             label: nameToCallUser,
-            url: '/my-profile',
+            url: role === 'celeb' ? '/celeb-profile' : '/fan-home',
             icon: 'user',
           },
         ]

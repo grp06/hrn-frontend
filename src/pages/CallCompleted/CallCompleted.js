@@ -4,6 +4,7 @@ import { Button, Grid, Typography } from '@material-ui/core'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import cashAppLogo from '../../assets/cashAppLogo.png'
 import venmoLogo from '../../assets/venmoLogo.png'
+import { CelebCallCompletedScreen, FanCallCompletedScreen } from '.'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -69,73 +70,38 @@ const CallComplete = () => {
   const history = useHistory()
   const { id } = useParams()
   const { chitChat, setChitChatId } = useChitChatContext()
+  const {
+    user: { role: usersRole },
+  } = useUserContext()
   const { host, status: eventStatus, suggested_donation } = chitChat
-  const { cash_app, hostsCashAppLink, name: hostName, venmo: hostsVenmoLink } = host || {}
+  const { cash_app: hostsCashAppLink, name: hostName, venmo: hostsVenmoLink } = host || {}
   const chitChatId = parseInt(id, 10)
-  const hostFirstName = hostName && hostName.split(' ')[0]
-  const venmoLink = useEffect(() => {
+  const hostsFirstName = hostName && hostName.split(' ')[0]
+
+  useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {
       setChitChatId(parseInt(chitChatId, 10))
     }
   }, [chitChatId, chitChat, setChitChatId])
 
-  useEffect(() => {
-    if (eventStatus === 'not-started') {
-      history.push(`/chit-chat/${chitChatId}`)
-    }
-  }, [eventStatus])
+  // useEffect(() => {
+  //   if (eventStatus === 'not-started') {
+  //     history.push(`/chit-chat/${chitChatId}`)
+  //   }
+  // }, [eventStatus])
 
   return (
     <Grid container direction="column" justify="center" className={classes.pageContainer}>
-      <Typography variant="h3" className={classes.header}>
-        Help {hostFirstName} out!{' '}
-        <span role="img" aria-label="hug arms">
-          🤗
-        </span>
-      </Typography>
-      <Typography variant="body1" className={classes.bodyText}>
-        We hope you enjoyed your chat!
-      </Typography>
-      <Typography variant="body1" className={classes.bodyText}>
-        {hostFirstName} doesn&apos;t want to say bye just yet! They suggest a{' '}
-        <span style={{ fontWeight: 600 }}>donation of ${suggested_donation}</span> so they can
-        continue saying hi to their fans. But any amount you feel comfortable with will go a long
-        way{' '}
-        <span role="img" aria-label="hands raised">
-          🙌
-        </span>
-        .
-      </Typography>
-
-      <Grid
-        container
-        direction="column"
-        justify="center"
-        alignItems="center"
-        className={classes.buttonContainer}
-      >
-        <Typography variant="h4">Donate via:</Typography>
-        {hostsVenmoLink ? (
-          <Button
-            variant="contained"
-            size="large"
-            className={classes.venmoButton}
-            href={`https://venmo.com/${hostsVenmoLink}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-        ) : null}
-        {hostsCashAppLink ? (
-          <Button
-            variant="contained"
-            size="large"
-            className={classes.cashAppButton}
-            href={`https://cash.app/$${hostsCashAppLink}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-        ) : null}
-      </Grid>
+      {usersRole === 'fan' ? (
+        <FanCallCompletedScreen
+          hostsCashAppLink={hostsCashAppLink}
+          hostsFirstName={hostsFirstName}
+          hostsVenmoLink={hostsVenmoLink}
+          suggestedDontation={suggested_donation}
+        />
+      ) : (
+        <CelebCallCompletedScreen />
+      )}
     </Grid>
   )
 }
