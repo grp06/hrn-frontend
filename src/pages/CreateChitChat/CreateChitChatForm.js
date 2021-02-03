@@ -57,6 +57,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0,
     height: '75px',
     maxHeight: 'none',
+    zIndex: 999,
   },
 }))
 
