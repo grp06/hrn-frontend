@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   orLabel: {
+    fontSize: '1rem',
+    fontWeight: 600,
     padding: theme.spacing(2, 0),
   },
   resetButton: {
@@ -149,8 +151,8 @@ const ForgotPasswordNewForm = () => {
                           )}
                         </Field>
                       </Grid>
-                      <Typography variant="h3" className={classes.orLabel}>
-                        OR
+                      <Typography variant="subtitle2" className={classes.orLabel}>
+                        or
                       </Typography>
                       <Grid item xs={12} className={classes.inputMargin}>
                         <Field

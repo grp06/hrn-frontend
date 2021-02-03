@@ -52,6 +52,7 @@ const useEventContext = () => {
 }
 
 const EventProvider = ({ children }) => {
+  console.log('INSIDE EVENT PROVIDER')
   // TODO shouldn't this not render at all if we're on a chitchat?
   const [state, dispatch] = useImmer({ ...defaultState })
   const { setAppLoading } = useAppContext()

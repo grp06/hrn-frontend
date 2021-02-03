@@ -1,9 +1,6 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
-import { Avatar, Button, Grid, TextField } from '@material-ui/core'
+import { Avatar, Grid, TextField } from '@material-ui/core'
 import logo from '../../assets/logoWhite.svg'
-import FeatherIcon from 'feather-icons-react'
-
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -21,12 +18,6 @@ const useStyles = makeStyles((theme) => ({
     width: 88,
     height: 88,
   },
-  buttonContainer: {
-    width: '50%',
-    [theme.breakpoints.down('md')]: {
-      width: '50%',
-    },
-  },
   cancelButton: {
     margin: theme.spacing(1.5, 0),
     backgroundColor: theme.palette.common.greyButton,
@@ -34,9 +25,6 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.common.greyButtonHover,
     },
-  },
-  editProfileButton: {
-    margin: theme.spacing(2, 0),
   },
   form: {
     boxSizing: 'border-box',
@@ -49,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
       marginTop: '16px',
     },
   },
-
   overlay: {
     position: 'absolute',
     top: 0,
@@ -80,22 +67,14 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     width: 88,
     height: 88,
-    marginBottom: theme.spacing(2),
+    margin: theme.spacing(4, 0),
     cursor: 'pointer',
-  },
-  icon: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    transform: 'translateX(100%)',
   },
 }))
 
-const CelebProfilePreview = ({ celeb, setIsEditing }) => {
+const CelebProfilePreview = ({ celeb }) => {
   const classes = useStyles()
-  const history = useHistory()
   const { cash_app, email, name, profile_pic_url, venmo } = celeb
-  const eventIdInLS = localStorage.getItem('eventId')
 
   const readonly = {
     readOnly: true,
@@ -111,13 +90,6 @@ const CelebProfilePreview = ({ celeb, setIsEditing }) => {
             <img alt="company-logo" className={classes.avatarLogo} src={logo} />
           )}
         </Avatar>
-        <FeatherIcon
-          className={classes.icon}
-          icon="edit"
-          stroke="#f4f6fa"
-          size="22"
-          onClick={() => setIsEditing(true)}
-        />
       </div>
       <form className={classes.form}>
         <TextField label="Full name" value={name} InputProps={readonly} />
@@ -125,22 +97,6 @@ const CelebProfilePreview = ({ celeb, setIsEditing }) => {
         <TextField label="Venmo" value={venmo} InputProps={readonly} />
         <TextField label="Cash App" value={cash_app} InputProps={readonly} />
       </form>
-      <Grid
-        container
-        justify="space-around"
-        alignItems="center"
-        className={classes.buttonContainer}
-      >
-        <Button
-          variant="contained"
-          color="secondary"
-          disabled={!eventIdInLS}
-          className={classes.editProfileButton}
-          onClick={() => history.push(`/events/${eventIdInLS}`)}
-        >
-          Back to Event
-        </Button>
-      </Grid>
     </Grid>
   )
 }

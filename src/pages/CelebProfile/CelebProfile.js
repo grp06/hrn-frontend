@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Grid from '@material-ui/core/Grid'
+import { Button, Grid } from '@material-ui/core'
 import { useAppContext, useUserContext } from '../../context'
 import { makeStyles } from '@material-ui/styles'
 import { CelebProfileCard, EditCelebProfile } from '.'
@@ -8,8 +8,18 @@ import constants from '../../utils/constants'
 import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
+  editProfileButton: {
+    position: 'fixed',
+    top: 'auto',
+    bottom: '0',
+    width: '100vw',
+    borderRadius: 0,
+    height: '75px',
+    maxHeight: 'none',
+  },
   container: {
     marginTop: '75px',
+    position: 'relative',
   },
 }))
 
@@ -32,7 +42,18 @@ const CelebProfile = () => {
       updateUserNewObjectInContext={updateUserNewObject}
     />
   ) : (
-    <CelebProfileCard celeb={user} setIsEditing={setIsEditing} />
+    <>
+      <CelebProfileCard celeb={user} setIsEditing={setIsEditing} />
+      <Button
+        variant="contained"
+        color="primary"
+        size="large"
+        className={classes.editProfileButton}
+        onClick={() => setIsEditing(true)}
+      >
+        Edit Profile
+      </Button>
+    </>
   )
 
   // ! /chitchat is not implemented yet

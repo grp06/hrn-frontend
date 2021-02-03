@@ -142,7 +142,7 @@ const ChitChatProvider = ({ children }) => {
   useEffect(() => {
     if (userId && currentUserStatus) {
       if (currentUserStatus === 'in-chat') {
-        history.push(`/chit-chat/${chitChatId}/video-room`)
+        history.push(`/chit-chat/${chitChatId}/convo`)
         clearInterval(interval)
       }
       if (currentUserStatus === 'completed') {

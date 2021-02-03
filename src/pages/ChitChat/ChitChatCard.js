@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
+    backgroundColor: 'transparent',
     height: '250px',
     marginTop: '75px',
     padding: theme.spacing(2),
