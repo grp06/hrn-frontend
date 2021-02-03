@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     position: 'relative',
     borderRadius: '4px',
+    marginBottom: 20,
   },
   chitChatEndedOverlay: {
     position: 'absolute',

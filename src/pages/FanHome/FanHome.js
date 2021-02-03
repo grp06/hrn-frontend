@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   pageContainer: {
     marginTop: theme.spacing(10),
     position: 'relative',
-    height: `calc(100vh - ${theme.spacing(10)}px)`,
+    minHeight: '100%',
   },
   logo: {
     width: '62px',
