@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
     backgroundSize: 'cover',
     marginBottom: '40px',
   },
+  title: {
+    paddingBottom: 20,
+    width: '85vw',
+    margin: '0 auto',
+  },
 }))
 
 const FanHome = () => {
@@ -79,7 +84,9 @@ const FanHome = () => {
           className={classes.pageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
-            <Typography variant="h1">My Events</Typography>
+            <Typography className={classes.title} variant="h1">
+              My Events
+            </Typography>
           </Grid>
         </Grid>
         {!chitChatUsersData.chit_chat_users.length ? (
