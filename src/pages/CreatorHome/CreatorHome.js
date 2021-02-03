@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '40px',
   },
   title: {
-    // paddingLeft: 50,
     paddingBottom: 20,
     width: '85vw',
     margin: '0 auto',
