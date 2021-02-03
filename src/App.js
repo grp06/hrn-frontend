@@ -160,11 +160,7 @@ const App = () => {
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <ChitChatProvider>
                         <Route exact path="/chit-chat/:id" component={ChitChat} />
-                        <Route
-                          exact
-                          path="/chit-chat/:id/video-room"
-                          component={ChitChatVideoRoom}
-                        />
+                        <Route exact path="/chit-chat/:id/convo" component={ChitChatVideoRoom} />
                         <Route
                           exact
                           path="/chit-chat/:id/call-completed"

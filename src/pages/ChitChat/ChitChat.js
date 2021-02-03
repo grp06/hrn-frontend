@@ -92,7 +92,7 @@ const ChitChat = () => {
 
   useEffect(() => {
     if (userIsHost && eventStatus === 'call-in-progress') {
-      history.push(`/chit-chat/${chitChatId}/video-room`)
+      history.push(`/chit-chat/${chitChatId}/convo`)
     }
   }, [eventStatus, userIsHost])
 
