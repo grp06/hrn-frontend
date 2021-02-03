@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3, 'auto'),
     textTransform: 'none',
     width: '100%',
+    border: '2px solid #8C57DB',
   },
   CTAButton: {
     width: '100%',

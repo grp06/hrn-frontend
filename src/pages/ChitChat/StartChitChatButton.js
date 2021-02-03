@@ -16,6 +16,7 @@ const StartChitChatButton = ({ onlineChitChatUsersArray, chitChatId, disabled, u
           buttonSize: 'large',
           buttonStyle: {
             width: '100%',
+            backgroundColor: 'rgba(36, 37, 38, 1)',
           },
         },
         disabled: disabled,
