@@ -5,11 +5,11 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   queueCard: {
+    backgroundColor: '#262626',
     margin: theme.spacing(2, 0),
     padding: theme.spacing(1),
     background: theme.palette.common.greyCard,
     borderRadius: '4px',
-    border: '1px solid #3e4042',
     textAlign: 'center',
   },
   queueNumber: {
