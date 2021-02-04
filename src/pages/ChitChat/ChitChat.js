@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import copy from 'copy-to-clipboard'
 import FeatherIcon from 'feather-icons-react'
-import { Button, Grid, Typography, Container } from '@material-ui/core'
 import { useParams, useHistory } from 'react-router-dom'
+import { Button, Grid, Typography, Container } from '@material-ui/core'
 import blurryBackground from '../../assets/blurryBackground.png'
 import {
   ChitChatCard,
@@ -14,7 +15,7 @@ import {
   VisualQueue,
   WhatToExpectChitChat,
 } from '.'
-import { Loading } from '../../common'
+import { Loading, Snack } from '../../common'
 import { useAppContext, useChitChatContext, useUserContext } from '../../context'
 import { CameraAndMicSetupScreen } from '../Lobby'
 import { makeStyles } from '@material-ui/styles'
@@ -72,6 +73,7 @@ const ChitChat = () => {
     onlineChitChatUsersArray,
   } = useChitChatContext()
 
+  const [showCopyURLSnack, setShowCopyURLSnack] = useState(false)
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
@@ -110,6 +112,11 @@ const ChitChat = () => {
     return <CameraAndMicSetupScreen chitChatEvent />
   }
 
+  const handleShareEventClick = () => {
+    copy(window.location.href)
+    setShowCopyURLSnack(true)
+  }
+
   const renderCTAButton = () => {
     if (userIsHost) {
       return (
@@ -137,7 +144,14 @@ const ChitChat = () => {
   }
 
   const renderCopyLinkButton = () => (
-    <Button variant="outlined" color="primary" size="large" className={classes.copyEventLinkButton}>
+    <Button
+      variant="outlined"
+      color="primary"
+      size="large"
+      disableRipple
+      className={classes.copyEventLinkButton}
+      onClick={handleShareEventClick}
+    >
       <Grid item container direction="row" alignItems="center" justify="center">
         <FeatherIcon icon="share-2" stroke="#f4f6fa" size="18" />
         <Typography variant="body1" style={{ marginLeft: '8px' }}>
@@ -186,6 +200,21 @@ const ChitChat = () => {
           <ChitChatCountdown eventStartTime={start_at} />
         ) : null}
       </Grid>
+      <Snack
+        open={showCopyURLSnack}
+        duration={1800}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => setShowCopyURLSnack(false)}
+        severity="info"
+        snackMessage={
+          <div>
+            Event Link Copied{' '}
+            <span role="img" aria-label="floppy disk">
+              💾
+            </span>
+          </div>
+        }
+      />
     </Grid>
   )
 }
