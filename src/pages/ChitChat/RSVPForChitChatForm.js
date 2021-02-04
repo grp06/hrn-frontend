@@ -171,7 +171,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
                   <Field name="phoneNumber" label="Your phone number" required>
                     {({ form }) => (
                       <PhoneInput
-                        inputProps={{ name: 'phoneNumber', required: true, autoFocus: true }}
+                        inputProps={{ name: 'phoneNumber', required: true }}
                         inputStyle={{
                           width: '100%',
                           background: '#262626',
