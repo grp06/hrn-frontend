@@ -21,17 +21,16 @@ const useChitChatHelpers = () => {
         },
         // onCompleted not working, so I'm doing this https://github.com/apollographql/react-apollo/issues/3781
       })
-      const userIdOfNextFanToMeet = onlineChitChatUsersArray[0].user_id
-      console.log('🚀 ~ useChitChatHelpers ~ userIdOfNextFanToMeet', userIdOfNextFanToMeet)
+      const userIdOfFanToUpdate = onlineChitChatUsersArray[0].user_id
 
-      await updateFanStatusMutation({
+      const updateFanStatusRes = await updateFanStatusMutation({
         variables: {
-          userId: userIdOfNextFanToMeet,
+          userId: userIdOfFanToUpdate,
           status: 'in-chat',
         },
       })
 
-      await sendReminderToUpcomingParticipants({ chitChatRSVPs, chitChat })
+      await sendReminderToUpcomingParticipants({ userIdOfFanToUpdate, chitChatRSVPs, chitChat })
 
       if (startOfEvent) {
         await sendEventStartedReminder({ chitChatRSVPs, chitChat })

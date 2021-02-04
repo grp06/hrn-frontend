@@ -120,7 +120,6 @@ const ChitChatVideoRoom = () => {
   const history = useHistory()
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const hostFirstName = hostName && hostName.split(' ')[0]
-
   // const { firstUpdate } = location.state
   const currentFan = onlineChitChatUsersArray.find((fan) => fan.status === 'in-chat')
 
@@ -149,9 +148,6 @@ const ChitChatVideoRoom = () => {
     if (chitChatId && userId && !chitChatToken) {
       getTwilioToken()
         .then((token) => {
-          console.log('👅 token ->', token)
-          // doing this because sometimes we already have a token then we call get token again
-          // this is the only way I can think of getting into this IF at the moment
           setChitChatToken(token)
           return getChitChatRoom(token)
         })
@@ -222,7 +218,9 @@ const ChitChatVideoRoom = () => {
         {chitChatStatus === 'paused' && (
           <div
             className={classes.meetNextFan}
-            onClick={() => startNextChitChat({ onlineChitChatUsersArray, chitChatId })}
+            onClick={() =>
+              startNextChitChat({ onlineChitChatUsersArray, chitChatId, chitChatRSVPs })
+            }
           />
         )}
       </section>

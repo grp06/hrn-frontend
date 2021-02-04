@@ -29,7 +29,7 @@ const defaultState = {
   fanNeverConnected: false,
   fanDisconnectedFromChat: false,
   onlineChitChatUsersArray: [],
-  userHasEnabledCameraAndMic: false,
+  userHasEnabledCameraAndMic: true,
 }
 
 const useChitChatContext = () => {
@@ -88,7 +88,6 @@ const ChitChatProvider = ({ children }) => {
 
   const { pathname } = window.location
   const { chitChat, chitChatId, chitChatRSVPs, userHasEnabledCameraAndMic } = state
-  console.log('🚀 ~ ChitChatProvider ~ userHasEnabledCameraAndMic', userHasEnabledCameraAndMic)
   const { status: eventStatus } = chitChat
   const chitChatRegex = /\/chit-chat\/\d+/
   const history = useHistory()
