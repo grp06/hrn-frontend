@@ -29,7 +29,7 @@ const defaultState = {
   fanNeverConnected: false,
   fanDisconnectedFromChat: false,
   onlineChitChatUsersArray: [],
-  userHasEnabledCameraAndMic: false,
+  userHasEnabledCameraAndMic: true,
 }
 
 const useChitChatContext = () => {

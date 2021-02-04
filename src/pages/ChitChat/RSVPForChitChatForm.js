@@ -65,7 +65,7 @@ const RSVPForChitChatForm = ({ chitChat }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
-  const { host } = chitChat
+  const { host, id: chitChatId } = chitChat
   const { name: hostName } = host
 
   return (
@@ -209,7 +209,10 @@ const RSVPForChitChatForm = ({ chitChat }) => {
               >
                 Sign me up!
               </Button>
-              <Link className={classes.linkRedirectToLogin} to="/login-new">
+              <Link
+                className={classes.linkRedirectToLogin}
+                to={`/login-new?chitChatId=${chitChatId}`}
+              >
                 Already have an account?
               </Link>
             </Grid>
