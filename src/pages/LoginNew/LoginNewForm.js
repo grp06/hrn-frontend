@@ -67,7 +67,7 @@ const RSVPSchema = Yup.object().shape({
   password: Yup.string().min(8, 'Too Short!').required('Required'),
 })
 
-const LoginNewForm = () => {
+const LoginNewForm = ({ chitChatIdFromSearchParams }) => {
   const classes = useStyles()
   const [RSVPFormErrorMessage, setRSVPFormErrorMessage] = useState('')
   const [formSubmitting, setFormSubmitting] = useState(false)
@@ -130,9 +130,6 @@ const LoginNewForm = () => {
                 }
 
                 const { token, id, role } = loginResponse
-                console.log('🚀 ~ onSubmit={ ~ role', role)
-                console.log('🚀 ~ onSubmit={ ~ id', id)
-                console.log('🚀 ~ onSubmit={ ~ token', token)
                 window.analytics.identify(id, {
                   usernameOrEmail,
                   phone_number,
@@ -145,13 +142,13 @@ const LoginNewForm = () => {
 
                 setFormSubmitting(false)
 
-                if (role === 'fan') {
-                  history.push('/fan-home')
-                } else {
-                  history.push('/creator-home')
-                }
+                const usersRoleToPutInHistoryPush = role === 'fan' ? 'fan' : 'creator'
 
-                window.location.reload()
+                const urlToPushTo = chitChatIdFromSearchParams
+                  ? `/${usersRoleToPutInHistoryPush}-home/?redirectToChitChatId=${chitChatIdFromSearchParams}`
+                  : `/${usersRoleToPutInHistoryPush}-home/`
+
+                window.location.assign(urlToPushTo).reload()
               }}
               validationSchema={RSVPSchema}
             >

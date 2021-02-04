@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { Redirect, useHistory } from 'react-router-dom'
+import { Redirect, useHistory, useLocation } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useQuery } from '@apollo/react-hooks'
 import { useAppContext, useUserContext } from '../../context'
@@ -47,9 +47,13 @@ const useStyles = makeStyles((theme) => ({
 
 const FanHome = () => {
   const classes = useStyles()
+  const location = useLocation()
+  const history = useHistory()
   const { user } = useUserContext()
   const { appLoading } = useAppContext()
   const { id: userId } = user
+  const searchParams = new URLSearchParams(location.search)
+  const redirectToChitChatId = searchParams.get('redirectToChitChatId')
 
   const { data: chitChatUsersData, loading: chitChatsLoading } = useQuery(
     getChitChatUsersByUserId,
@@ -68,9 +72,8 @@ const FanHome = () => {
     return <Loading />
   }
 
-  if (!userId) {
-    console.log('redirect to fan login')
-    return <Redirect to="/fan-login" />
+  if (redirectToChitChatId) {
+    history.push(`/chit-chat/${redirectToChitChatId}`)
   }
 
   const renderChitChats = () => {

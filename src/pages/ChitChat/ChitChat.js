@@ -76,6 +76,7 @@ const ChitChat = () => {
   const [showCopyURLSnack, setShowCopyURLSnack] = useState(false)
   const { host, host_id, start_at, status: eventStatus } = chitChat
   const { name: hostName, profile_pic_url: hostProfilePicUrl } = host || {}
+
   const userIsHost = parseInt(host_id, 10) === parseInt(userId, 10)
   const fanIsRSVPed =
     chitChatRSVPs && chitChatRSVPs.some((eventUser) => eventUser.user_id === userId)
