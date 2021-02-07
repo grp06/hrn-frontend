@@ -69,7 +69,7 @@ const CallComplete = () => {
   const classes = useStyles()
   const history = useHistory()
   const { id } = useParams()
-  const { chitChat, setChitChatId } = useChitChatContext()
+  const { chitChat, resetChitChat, setChitChatId } = useChitChatContext()
   const {
     user: { role: usersRole },
   } = useUserContext()
@@ -77,6 +77,12 @@ const CallComplete = () => {
   const { cash_app: hostsCashAppLink, name: hostName, venmo: hostsVenmoLink } = host || {}
   const chitChatId = parseInt(id, 10)
   const hostsFirstName = hostName && hostName.split(' ')[0]
+
+  useEffect(() => {
+    return () => {
+      resetChitChat()
+    }
+  }, [])
 
   useEffect(() => {
     if (!Object.keys(chitChat).length && chitChatId) {

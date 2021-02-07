@@ -47,7 +47,7 @@ const CameraAndMicSetupScreen = ({ chitChatEvent, usersName }) => {
         </Grid>
         <Grid item md={6}>
           {chitChatEvent ? (
-            <SetupMicAndCameraChitChat />
+            <SetupMicAndCameraChitChat usersName={usersName} />
           ) : (
             <SetupMicAndCamera usersName={usersName} />
           )}

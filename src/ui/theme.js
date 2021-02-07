@@ -19,7 +19,7 @@ const greyHighlight = '#2d2d2d'
 const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
 const black2dp = '#212121'
-const red = '#ff3333'
+const red = '#D0454C'
 
 const theme = createMuiTheme({
   palette: {

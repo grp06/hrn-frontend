@@ -39,7 +39,7 @@ const useChitChatContext = () => {
     throw new Error('Must have dispatch defined')
   }
 
-  const resetEventNew = () => {
+  const resetChitChat = () => {
     dispatch((draft) => {
       draft.chitChat = {}
     })
@@ -71,7 +71,7 @@ const useChitChatContext = () => {
 
   return {
     ...state,
-    resetEventNew,
+    resetChitChat,
     setChitChatId,
     setFanNeverConnected,
     setFanDisconnectedFromChat,

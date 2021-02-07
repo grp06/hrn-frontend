@@ -73,7 +73,7 @@ const GUMErrorModal = ({ onComplete, errorName }) => {
           className={classes.paper}
         >
           <Grid container item justy="center" alignItems="center" className={classes.modalBody}>
-            {errorMessage || 'Hey There'}
+            {errorName || 'Hey There'}
           </Grid>
           <Grid
             container

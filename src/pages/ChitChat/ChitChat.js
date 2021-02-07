@@ -62,7 +62,7 @@ const ChitChat = () => {
   const chitChatId = parseInt(id, 10)
 
   const {
-    user: { id: userId },
+    user: { id: userId, username: usersUsername },
   } = useUserContext()
 
   const {
@@ -110,7 +110,9 @@ const ChitChat = () => {
   }
 
   if (!userHasEnabledCameraAndMic && (fanIsRSVPed || userIsHost)) {
-    return <CameraAndMicSetupScreen chitChatEvent />
+    return (
+      <CameraAndMicSetupScreen chitChatEvent usersName={userIsHost ? hostName : usersUsername} />
+    )
   }
 
   const handleShareEventClick = () => {

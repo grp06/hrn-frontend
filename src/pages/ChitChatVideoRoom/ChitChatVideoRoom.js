@@ -24,14 +24,14 @@ const useStyles = makeStyles((theme) => ({
   videosAndButtons: {
     height: '100%',
     display: 'grid',
-    gridTemplate: `"local-video" 1fr 
-    "remote-video" 1fr
-    "button" 70px / 1fr`,
+    gridTemplate: `"remote-video" 50vh 
+    "local-video" 50vh`,
   },
   remoteVideo: {
     width: '100%',
     gridArea: 'remote-video',
     height: '100%',
+    zIndex: 99,
     '& video': {
       height: '100%',
       width: '100%',
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
       right: '1%',
       left: 'auto',
       bottom: 'auto',
-      zIndex: 99,
+      zIndex: 9999,
       '& video': {
         borderRadius: 4,
         width: '200px',
@@ -67,30 +67,40 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   endCall: {
+    position: 'fixed',
+    top: 'auto',
+    bottom: 0,
     width: '100%',
     gridArea: 'button',
-    height: '100%',
+    height: '70px',
     backgroundColor: theme.palette.common.red,
     boxSizing: 'border-box',
     border: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    fontSize: '1.125rem',
+    fontFamily: 'Muli',
     color: theme.palette.common.ghostWhite,
     '& > *:nth-child(1)': {
       marginRight: 12,
     },
   },
   meetNextFan: {
-    width: '300px',
-    height: '50px',
+    width: '100%',
+    height: '70px',
     backgroundImage: `url(${meetNextFan})`,
     backgroundPosition: '50% 50%',
     backgroundSize: 'cover',
+    backgroundColor: '#529E66',
     position: 'fixed',
-    bottom: '10px',
-    margin: '0 auto',
-    left: 'calc(50% - 150px)',
+    bottom: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: theme.palette.common.ghostWhite,
+    fontSize: '1.125rem',
+    fontFamily: 'Muli',
   },
 }))
 

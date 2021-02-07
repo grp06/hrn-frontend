@@ -134,6 +134,9 @@ const SetupMicAndCameraChitChat = ({ usersName = 'fan' }) => {
       }
     }
     try {
+      // video.setAttribute('autoPlay', '')
+      // video.setAttribute('muted', '')
+      // video.setAttribute('playsinline', '')
       localMediaStream = await navigator.mediaDevices.getUserMedia(
         constraints || { audio: true, video: true }
       )
