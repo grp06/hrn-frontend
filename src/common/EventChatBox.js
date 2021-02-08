@@ -41,6 +41,10 @@ const createStyles = makeStyles((theme) => ({
     overflow: 'scroll',
     padding: theme.spacing(0, 1),
   },
+  hiRightNowTeamName: {
+    color: theme.palette.common.sunray,
+    fontWeight: 700,
+  },
   hostTag: {
     marginLeft: theme.spacing(0.5),
     color: theme.palette.common.basePink,
@@ -113,29 +117,45 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
         Chat with Everyone
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
-        {messages && messages.length
-          ? messages.map((message) => {
-              const { content: messageContent, created_at, sender_id, user } = message
-              const sendersFirstName = user.name && user.name.split(' ')[0]
-              const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
-              const messageSentAt = formatChatMessagesDate(created_at)
-              return (
-                <ListItem dense>
-                  <ListItemText
-                    primary={
-                      <Grid container alignItems="flex-end">
-                        <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
-                        {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
-                        <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
-                      </Grid>
-                    }
-                    secondary={<span className={classes.messageContent}>{messageContent}</span>}
-                    secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
-                  />
-                </ListItem>
-              )
-            })
-          : null}
+        {messages && messages.length ? (
+          messages.map((message) => {
+            const { content: messageContent, created_at, sender_id, user } = message
+            const sendersFirstName = user.name && user.name.split(' ')[0]
+            const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
+            const messageSentAt = formatChatMessagesDate(created_at)
+            return (
+              <ListItem dense>
+                <ListItemText
+                  primary={
+                    <Grid container alignItems="flex-end">
+                      <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
+                      {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
+                      <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                    </Grid>
+                  }
+                  secondary={<span className={classes.messageContent}>{messageContent}</span>}
+                  secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
+                />
+              </ListItem>
+            )
+          })
+        ) : (
+          <ListItem dense>
+            <ListItemText
+              primary={
+                <Grid container alignItems="flex-end">
+                  <span className={classes.hiRightNowTeamName}>✨ Hi Right Now Team ✨</span>{' '}
+                </Grid>
+              }
+              secondary={
+                <span className={classes.messageContent}>
+                  Welcome to the Event! Be the first one to say hi and get the conversation going :)
+                </span>
+              }
+              secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
+            />
+          </ListItem>
+        )}
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField

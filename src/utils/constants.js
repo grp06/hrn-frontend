@@ -2,6 +2,8 @@ const constants = {
   // change me back to 20000?
   // george, stephen, max, lenny, zhen, sandra, ash, azul, jasper
   adminUserIds: [8, 12, 115, 506, 3091, 3552, 3974, 4939, 5218],
+  // seibo, parker
+  hrnFriendsUserIds: [2926, 4888],
   lastSeenDuration: 5000,
   roundLength: 300,
   betweenRoundsDelay: 20000,
@@ -19,6 +21,9 @@ const constants = {
   safariCameraPermissionHowTo:
     'https://support.apple.com/guide/safari/customize-settings-per-website-ibrw7f78f7fe/13.0/mac/10.15',
   bannedUserIds: [3477, 2329],
+  USER_ID: 'userId',
+  TOKEN: 'token',
+  ROLE: 'role',
 }
 
 export default constants

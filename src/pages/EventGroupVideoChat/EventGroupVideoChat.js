@@ -169,6 +169,7 @@ const EventGroupVideoChat = () => {
         videoGrid.insertBefore(newDivElement, videoGrid.firstChild)
       } else {
         videoGrid.appendChild(newDivElement)
+        usersMicOffDiv.style.display = 'inline'
       }
     })
   }
@@ -196,7 +197,7 @@ const EventGroupVideoChat = () => {
     console.log('calling CONNECT')
     const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
     const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
-    const audioDevice = { deviceId: localStoragePreferredAudioId }
+    const audioDevice = userIsHost ? { deviceId: localStoragePreferredAudioId } : false
     const videoDevice = { deviceId: localStoragePreferredVideoId }
     const myRoom = await connect(groupChatToken, {
       maxAudioBitrate: 16000,
@@ -229,7 +230,7 @@ const EventGroupVideoChat = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState === true) {
+      if (prevState === true && eventChatMessages && eventChatMessages.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState

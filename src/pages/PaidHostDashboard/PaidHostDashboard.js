@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 const PaidHostDashboard = () => {
   const classes = useStyles()
   const user = useUserContext()
-  const { adminUserIds } = constants
+  const { adminUserIds, hrnFriendsUserIds } = constants
   const { id: userId } = user
   const [numberOfDaysToCompare, setNumberOfDaysToCompare] = useState(1)
   const now = useRef(new Date().toISOString())
@@ -82,7 +82,7 @@ const PaidHostDashboard = () => {
 
     if (hostStarterData) {
       paidStarterPlanNumbers = hostStarterData.users
-        .filter((user) => !adminUserIds.includes(user.id))
+        .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
         .reduce(
           (total, user) => {
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
@@ -100,7 +100,7 @@ const PaidHostDashboard = () => {
 
     if (hostPremiumData) {
       paidPremiumPlanNumbers = hostPremiumData.users
-        .filter((user) => !adminUserIds.includes(user.id))
+        .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
         .reduce(
           (total, user) => {
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
@@ -130,7 +130,7 @@ const PaidHostDashboard = () => {
   const getArrayOfHostsBetweenTimeFrame = (userArray) => {
     return userArray.users && userArray.users.length
       ? userArray.users
-          .filter((user) => !adminUserIds.includes(user.id))
+          .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
           .filter((user) => {
             const compareDate = moment(new Date(user.became_host_at))
             const dateTo = moment().endOf('day').format('YYYY-MM-DD')
@@ -197,7 +197,9 @@ const PaidHostDashboard = () => {
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#FF99AD' }}>
             {hostStarterData &&
-              hostStarterData.users.filter((user) => !adminUserIds.includes(user.id)).length}
+              hostStarterData.users.filter(
+                (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
+              ).length}
           </Typography>
         </Grid>
         <Grid
@@ -214,7 +216,9 @@ const PaidHostDashboard = () => {
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#fabb5b' }}>
             {hostPremiumData &&
-              hostPremiumData.users.filter((user) => !adminUserIds.includes(user.id)).length}
+              hostPremiumData.users.filter(
+                (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
+              ).length}
           </Typography>
         </Grid>
       </Grid>

@@ -3,7 +3,7 @@ import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/styles'
 
-import { OnlineAttendeesCard } from '.'
+import { OnlineAttendeesCard, SittingOutCard, UserEventStatusCard } from '.'
 import {
   AboutTheHostCard,
   EventPhotoBanner,
@@ -13,7 +13,6 @@ import {
   WhatToExpect,
 } from '../Event'
 import { PreEvent } from '../PreEvent'
-import { getUserEventStatusMessage } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   eventContentContainer: {
@@ -133,7 +132,11 @@ const LobbyContent = React.memo(
 
                 <Grid container direction="row" justify="space-between">
                   <Grid className={classes.whatToExpectContainer}>
-                    {getUserEventStatusMessage(setUserEventStatus, userEventStatus)}
+                    {userEventStatus && userEventStatus === 'sitting out' ? (
+                      <SittingOutCard setUserEventStatus={setUserEventStatus} />
+                    ) : (
+                      <UserEventStatusCard userEventStatus={userEventStatus} />
+                    )}
                   </Grid>
                   <Grid className={classes.podcastContainer}>
                     <PodcastCard />

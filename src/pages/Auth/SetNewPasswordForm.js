@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography'
 import { Link, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium } from '../../common'
+import { constants } from '../../utils'
+const { ROLE, TOKEN, USER_ID } = constants
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -85,10 +87,11 @@ const SetNewPasswordForm = ({ match }) => {
       return setError(err)
     }
 
-    const { id, token: newPasswordToken } = newPasswordSetResponse
+    const { id, role, token: newPasswordToken } = newPasswordSetResponse
 
-    localStorage.setItem('token', newPasswordToken)
-    localStorage.setItem('userId', id)
+    localStorage.setItem(ROLE, role)
+    localStorage.setItem(TOKEN, newPasswordToken)
+    localStorage.setItem(USER_ID, id)
     history.push('/events')
     window.location.reload()
   }

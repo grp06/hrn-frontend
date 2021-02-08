@@ -65,9 +65,14 @@ const GroupVideoChatBottomPanel = React.memo(
     useEffect(() => {
       setParticipantHasEnabledVideo(true)
       setParticipantsVideoIsOn(true)
-      setParticipantHasEnabledAudio(true)
-      setParticipantsAudioIsOn(true)
     }, [])
+
+    useEffect(() => {
+      if (userIsHost) {
+        setParticipantHasEnabledAudio(true)
+        setParticipantsAudioIsOn(true)
+      }
+    }, [userIsHost])
 
     const handleEnableVideo = () => {
       const { localParticipant } = twilioGroupChatRoom
@@ -89,6 +94,7 @@ const GroupVideoChatBottomPanel = React.memo(
 
     const handleEnableAudio = () => {
       const { localParticipant } = twilioGroupChatRoom
+      const { identity } = localParticipant
       const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
 
       Video.createLocalAudioTrack({
@@ -97,6 +103,8 @@ const GroupVideoChatBottomPanel = React.memo(
         localParticipant.publishTrack(localAudioTrack)
         setParticipantHasEnabledAudio(true)
         setParticipantsAudioIsOn(true)
+        const usersMicOffIconDiv = document.getElementById(`${identity}-mic-off-icon-div`)
+        usersMicOffIconDiv.style.display = 'none'
       })
     }
 

@@ -12,6 +12,8 @@ import confettiDoodles from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { ToggleGroup } from '../../common'
 import { useUserContext } from '../../context'
 import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
+import { constants } from '../../utils'
+const { ROLE, TOKEN } = constants
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -91,7 +93,8 @@ const Subscription = () => {
     if (userId) {
       try {
         const upgradeToHostResponse = await upgradeToHost(userId)
-        localStorage.setItem('token', upgradeToHostResponse.token)
+        localStorage.setItem(ROLE, 'host')
+        localStorage.setItem(TOKEN, upgradeToHostResponse.token)
         window.analytics.track('upgrade to free host')
         await sleep(500)
         history.push('/checkout-success', { freeHost: true })

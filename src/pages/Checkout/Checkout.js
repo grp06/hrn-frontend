@@ -5,7 +5,8 @@ import { CheckoutCard, CheckoutForm } from '.'
 import { useAppContext, useUserContext } from '../../context'
 import { Loading } from '../../common'
 import { sleep, upgradeToHost } from '../../helpers'
-import { createStripeCustomer } from '../../utils'
+import { constants, createStripeCustomer } from '../../utils'
+const { ROLE, TOKEN } = constants
 
 const Checkout = ({ location }) => {
   const history = useHistory()
@@ -46,7 +47,8 @@ const Checkout = ({ location }) => {
       if (user && user.id) {
         try {
           const upgradeToHostResponse = await upgradeToHost(user.id)
-          localStorage.setItem('token', upgradeToHostResponse.token)
+          localStorage.setItem(ROLE, 'host')
+          localStorage.setItem(TOKEN, upgradeToHostResponse.token)
           await sleep(400)
           history.push('/checkout-success', { freeHost: true })
           return window.location.reload()

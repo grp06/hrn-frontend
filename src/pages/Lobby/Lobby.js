@@ -81,7 +81,7 @@ const Lobby = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState) {
+      if (prevState === true && eventChatMessages && eventChatMessages.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState
