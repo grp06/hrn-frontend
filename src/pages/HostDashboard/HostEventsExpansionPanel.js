@@ -14,6 +14,17 @@ import formatDate from '../../utils/formatDate'
 import { getEventAnalytics } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
+  aTag: {
+    textDecoration: 'none',
+    fontFamily: 'Muli',
+    textAlign: 'center',
+    fontSize: '1.25rem',
+    color: theme.palette.common.sunray,
+    cursor: 'pointer',
+    '&:hover': {
+      color: theme.palette.common.ghostWhite,
+    },
+  },
   detailsHeading: {
     textAlign: 'center',
     padding: theme.spacing(1),
@@ -140,6 +151,19 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }
             <Typography variant="subtitle1" className={classes.detailsHeading}>
               Total Attendees: {attendeesCSVofEvent.data.length}
             </Typography>
+          </Grid>
+          <Grid container justify="center" alignItems="center">
+            <a
+              className={classes.aTag}
+              href={`https://launch.hirightnow.co/events/${event.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Take me to the event page{' '}
+              <span role="img" aria-label="man running">
+                🏃‍♂️
+              </span>
+            </a>
           </Grid>
         </Grid>
       </Grid>
