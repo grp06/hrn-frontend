@@ -40,6 +40,13 @@ const getAllEvents = gql`
       round_length
       group_video_chat
       banner_photo_url
+      host {
+        city
+        email
+        id
+        name
+        linkedIn_url
+      }
     }
   }
 `
