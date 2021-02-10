@@ -1,4 +1,5 @@
 import React from 'react'
+import moment from 'moment-timezone'
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
@@ -30,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const HostInfoTable = ({ arrayOfHosts }) => {
+const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
   const classes = useStyles()
 
   const renderLinkedInLink = (linkedInURL) => {
@@ -60,8 +61,9 @@ const HostInfoTable = ({ arrayOfHosts }) => {
               <TableCell>Name</TableCell>
               <TableCell align="right">email</TableCell>
               <TableCell align="right">city</TableCell>
-              <TableCell align="right">role</TableCell>
               <TableCell align="right">linkedIn</TableCell>
+              <TableCell align="right">became host</TableCell>
+              {!hideSubPeriodEnd ? <TableCell align="right">sub ends</TableCell> : null}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -72,8 +74,15 @@ const HostInfoTable = ({ arrayOfHosts }) => {
                 </TableCell>
                 <TableCell align="right">{host.email}</TableCell>
                 <TableCell align="right">{host.city}</TableCell>
-                <TableCell align="right">{host.role}</TableCell>
                 <TableCell align="right">{renderLinkedInLink(host.linkedIn_url)}</TableCell>
+                <TableCell align="right">
+                  {moment(host.became_host_at).format('MMM Do YY')}
+                </TableCell>
+                {!hideSubPeriodEnd ? (
+                  <TableCell align="right">
+                    {moment(host.sub_period_end).format('MMM Do YY')}
+                  </TableCell>
+                ) : null}
               </TableRow>
             ))}
           </TableBody>
