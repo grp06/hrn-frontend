@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '10rem',
     marginTop: '-20px',
   },
-  mrrNumber: {
+  revenueNumber: {
     fontSize: '5rem',
     fontWeight: '500',
     color: '#00ff00',
@@ -77,7 +77,7 @@ const PaidHostDashboard = () => {
     return <Loading />
   }
 
-  const getCurrentMRR = () => {
+  const getCurrentRevenueStats = () => {
     let paidStarterPlanNumbers, paidPremiumPlanNumbers
 
     if (hostStarterData) {
@@ -119,12 +119,20 @@ const PaidHostDashboard = () => {
     const totalMRR =
       paidStarterPlanNumbers && paidPremiumPlanNumbers
         ? paidStarterPlanNumbers.starterMonthlyPlans * 59 +
+          paidStarterPlanNumbers.starterYearlyPlans * 49 +
+          paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
+          paidPremiumPlanNumbers.premiumYearlyPlans * 149
+        : 0
+
+    const totalRevenue =
+      paidStarterPlanNumbers && paidPremiumPlanNumbers
+        ? paidStarterPlanNumbers.starterMonthlyPlans * 59 +
           paidStarterPlanNumbers.starterYearlyPlans * 588 +
           paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
           paidPremiumPlanNumbers.premiumYearlyPlans * 1788
         : 0
 
-    return { totalMRR, paidStarterPlanNumbers, paidPremiumPlanNumbers }
+    return { totalMRR, totalRevenue, paidStarterPlanNumbers, paidPremiumPlanNumbers }
   }
 
   const getArrayOfHostsBetweenTimeFrame = (userArray) => {
@@ -145,25 +153,30 @@ const PaidHostDashboard = () => {
 
   const renderHostTables = () => {
     const unpaidHosts = hostData && getArrayOfHostsBetweenTimeFrame(hostData)
-    const starterHosts = hostStarterData && getArrayOfHostsBetweenTimeFrame(hostStarterDataLoading)
+    const starterHosts = hostStarterData && getArrayOfHostsBetweenTimeFrame(hostStarterData)
     const premiumHosts = hostPremiumData && getArrayOfHostsBetweenTimeFrame(hostPremiumData)
 
     return (
       <Grid container direction="column">
-        {unpaidHosts && unpaidHosts.length ? <HostInfoTable arrayOfHosts={unpaidHosts} /> : null}
+        {unpaidHosts && unpaidHosts.length ? (
+          <HostInfoTable arrayOfHosts={unpaidHosts} hideSubPeriodEnd />
+        ) : null}
         {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
         {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
       </Grid>
     )
   }
 
-  const mrrStats = getCurrentMRR()
+  const revenueStats = getCurrentRevenueStats()
 
   return (
     <Grid container>
-      <Grid container direction="row" alignItem="center" justify="center">
-        <Typography variant="h1" className={classes.mrrNumber}>
-          $ {mrrStats.totalMRR} MRR
+      <Grid container direction="row" alignItem="center" justify="space-around">
+        <Typography variant="h1" className={classes.revenueNumber}>
+          $ {revenueStats.totalRevenue} TR
+        </Typography>
+        <Typography variant="h1" className={classes.revenueNumber}>
+          $ {revenueStats.totalMRR} MRR
         </Typography>
       </Grid>
       <Grid container direction="row" className={classes.numbersContainer}>
@@ -249,6 +262,15 @@ const PaidHostDashboard = () => {
           className={numberOfDaysToCompare === 30 ? classes.activeTimeframeButton : null}
         >
           Last 30 days
+        </Button>
+        <Button
+          variant="contained"
+          color="default"
+          onClick={() => setNumberOfDaysToCompare(99999)}
+          disableRipple
+          className={numberOfDaysToCompare === 99999 ? classes.activeTimeframeButton : null}
+        >
+          Inception
         </Button>
         {renderHostTables()}
       </Grid>
