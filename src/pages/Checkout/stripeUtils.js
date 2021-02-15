@@ -99,6 +99,7 @@ const createSubscription = async ({
   // if the card is declined, display an error to the user
   if (subscriptionResponse.error) {
     console.log('[createSubscription error]', subscriptionResponse.error)
+    throw subscriptionResponse.error
   }
 
   console.log('subscriptionResponse ->', subscriptionResponse)
@@ -157,6 +158,7 @@ const retryInvoiceWithNewPaymentMethod = async ({
   if (retryResponse.error) {
     // the card had an error when trying to attach it to the customer
     console.log('[retryInvoiceWithNewPaymentMethod error]', retryResponse.error)
+    throw retryResponse.error
   }
 
   await handlePaymentThatRequiresCustomerAction({

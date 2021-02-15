@@ -152,28 +152,42 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     if (latestInvoicePaymentIntentStatus === 'requires_payment_method') {
       // Update the payment method and retry invoice payment
       const invoiceId = localStorage.getItem('latestInvoiceId')
-      const retrySubResult = retryInvoiceWithNewPaymentMethod({
-        invoiceId,
+      try {
+        const retrySubResult = retryInvoiceWithNewPaymentMethod({
+          invoiceId,
+          paymentMethodId,
+          plan,
+          stripeCustomerId,
+          userId,
+          userEmail,
+        })
+        onSubscriptionComplete(retrySubResult, stripeCustomerId)
+        setFormSubmitting(false)
+        return
+      } catch (err) {
+        console.log('[retryInvoiceWithNewPaymentMethod error] ->', err)
+        setPaymentErrorMessage(err.message)
+        setFormSubmitting(false)
+        return
+      }
+    }
+    // First time submitting the form
+    try {
+      const subResult = await createSubscription({
         paymentMethodId,
         plan,
         stripeCustomerId,
+        stripe,
         userId,
         userEmail,
       })
-      onSubscriptionComplete(retrySubResult, stripeCustomerId)
-      setFormSubmitting(false)
-      return
+
+      onSubscriptionComplete(subResult, stripeCustomerId)
+    } catch (err) {
+      console.log('[createSubscription error] ->', err)
+      setPaymentErrorMessage(err.message)
     }
-    // First time submitting the form
-    const subResult = await createSubscription({
-      paymentMethodId,
-      plan,
-      stripeCustomerId,
-      stripe,
-      userId,
-      userEmail,
-    })
-    onSubscriptionComplete(subResult, stripeCustomerId)
+
     setFormSubmitting(false)
   }
 
