@@ -7,7 +7,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
-import { updateLastSeenToNull } from '../../gql/mutations'
+import { updateEventUsersLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
 import {
   useAppContext,
@@ -94,7 +94,15 @@ const VideoRoom = ({ match }) => {
   const eventStatusRef = useRef()
   const showControls = useIsUserActive()
 
-  const [updateLastSeenToNullMutation] = useMutation(updateLastSeenToNull)
+  const [updateEventUsersLastSeenMutation] = useMutation(updateEventUsersLastSeen, {
+    variables: {
+      now: null,
+      user_id: userId,
+      event_id: eventId,
+    },
+    skip: !userId || !eventId,
+  })
+
   const {
     data: myRoundPartnerData,
     loading: myRoundPartnerDataLoading,
@@ -161,11 +169,8 @@ const VideoRoom = ({ match }) => {
     if (userId) {
       const asyncUpdateLastSeen = async () => {
         try {
-          const lastSeenUpdated = await updateLastSeenToNullMutation({
-            variables: {
-              userId,
-            },
-          })
+          const lastSeenUpdated = await updateEventUsersLastSeenMutation()
+
           console.log('I set last on event_users to null')
           setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].updated_at)
         } catch (err) {
