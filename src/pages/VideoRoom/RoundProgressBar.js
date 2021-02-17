@@ -107,7 +107,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     if (!progressBarValue) {
       const percentElapsedThroughRound = getPercentElapsedThroughRound()
       setProgressBarValue(percentElapsedThroughRound + getOneSecondInPct())
-      if (eventStatus === 'room-in-progress') {
+      if (eventStatus === 'room-in-progress' && percentElapsedThroughRound < 10) {
         setShowRoundStartedSnack(true)
       }
     }
