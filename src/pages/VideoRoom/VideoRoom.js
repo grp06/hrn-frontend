@@ -7,7 +7,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
 import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
-import { updateLastSeen } from '../../gql/mutations'
+import { updateLastSeenToNull } from '../../gql/mutations'
 import { getToken } from '../../helpers'
 import {
   useAppContext,
@@ -72,7 +72,7 @@ const VideoRoom = ({ match }) => {
   const { id: eventId } = match.params
   const classes = useStyles()
   const { appLoading } = useAppContext()
-  const { user, setUserUpdatedAt } = useUserContext()
+  const { user } = useUserContext()
   const { event } = useEventContext()
   const {
     personalChatMessagesWithCurrentPartner,
@@ -83,17 +83,18 @@ const VideoRoom = ({ match }) => {
   } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
-  const { id: userId, updated_at: userUpdatedAt } = user
+  const { id: userId } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
+  const [userUpdatedAt, setUserUpdatedAt] = useState(null)
   const [chatIsOpen, setChatIsOpen] = useState(false)
   const history = useHistory()
   const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
   const showControls = useIsUserActive()
 
-  const [updateLastSeenMutation] = useMutation(updateLastSeen)
+  const [updateLastSeenToNullMutation] = useMutation(updateLastSeenToNull)
   const {
     data: myRoundPartnerData,
     loading: myRoundPartnerDataLoading,
@@ -160,14 +161,13 @@ const VideoRoom = ({ match }) => {
     if (userId) {
       const asyncUpdateLastSeen = async () => {
         try {
-          const lastSeenUpdated = await updateLastSeenMutation({
+          const lastSeenUpdated = await updateLastSeenToNullMutation({
             variables: {
-              now: null,
-              id: userId,
+              userId,
             },
           })
-          console.log('i sent the last seen mutation')
-          setUserUpdatedAt(lastSeenUpdated.data.update_users.returning[0].updated_at)
+          console.log('I set last on event_users to null')
+          setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].updated_at)
         } catch (err) {
           console.log(err)
         }
