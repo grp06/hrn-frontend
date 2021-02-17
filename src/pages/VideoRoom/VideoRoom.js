@@ -166,7 +166,7 @@ const VideoRoom = ({ match }) => {
   // this ensures when you refresh your userObject gets updated
   // and the roundProgressBar will be correct
   useEffect(() => {
-    if (userId) {
+    if (userId && room) {
       const asyncUpdateLastSeen = async () => {
         try {
           const lastSeenUpdated = await updateEventUsersLastSeenMutation()
@@ -179,7 +179,7 @@ const VideoRoom = ({ match }) => {
       }
       asyncUpdateLastSeen()
     }
-  }, [userId])
+  }, [userId, room])
 
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
