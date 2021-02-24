@@ -164,6 +164,7 @@ const Lobby = () => {
           eventId={eventId}
           hostId={hostId}
           messages={eventChatMessages}
+          toggleChat={toggleChat}
           userId={user_id}
         />
       ) : null}
