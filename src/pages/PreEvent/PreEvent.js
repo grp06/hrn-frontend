@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Grid, Typography } from '@material-ui/core'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { AnimatedHostNameCard } from '.'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { usePreEventTwilio } from '../../hooks'
@@ -28,27 +27,6 @@ const useStyles = makeStyles((theme) => ({
   },
   preEventWrapper: {
     height: '94vh',
-  },
-  hostEmojiiContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(1),
-  },
-  hostNameCard: {
-    position: 'absolute',
-    top: 'auto',
-    bottom: '90px',
-    left: 'auto',
-    right: '0',
-    borderRadius: '4px',
-    width: 'auto',
-    minWidth: '300px',
-    height: '80px',
-  },
-  hostNameContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.basePurple,
-    padding: theme.spacing(1),
   },
   liveAndViewersContainer: {
     position: 'absolute',
@@ -238,38 +216,7 @@ const PreEvent = ({ onlineEventUsers }) => {
           </Grid>
         ) : null}
       </Grid>
-      <motion.div
-        initial={{ x: 500, y: 40 }}
-        animate={{ x: 0, y: 40 }}
-        transition={{ delay: 3, ease: 'easeOut', duration: 2 }}
-      >
-        <Grid container alignItems="center" className={classes.hostNameCard}>
-          <Grid
-            container
-            item
-            justify="center"
-            alignItems="center"
-            xs={3}
-            className={classes.hostEmojiiContainer}
-          >
-            <Typography variant="h2">
-              <span role="img" aria-label="champage bottle" style={{ fontSize: '3rem' }}>
-                🍾
-              </span>
-            </Typography>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={9}
-            justify="center"
-            alignItems="center"
-            className={classes.hostNameContainer}
-          >
-            <Typography variant="h2">{hostsFirstName}</Typography>
-          </Grid>
-        </Grid>
-      </motion.div>
+      <AnimatedHostNameCard hostsFirstName={hostsFirstName} />
     </Grid>
   )
 }
