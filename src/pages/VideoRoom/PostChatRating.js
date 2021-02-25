@@ -1,14 +1,12 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import Button from '@material-ui/core/Button'
-import Fab from '@material-ui/core/Fab'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Button, Fab, Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-import { addFriend, updatePartnerRating, updatePartnerSharedDetails } from '../../gql/mutations'
-import { sleep } from '../../helpers'
 import { Snack } from '../../common'
 import { useEventContext } from '../../context'
+import { addFriend, updatePartnerRating, updatePartnerSharedDetails } from '../../gql/mutations'
+import { sleep } from '../../helpers'
+import { constants } from '../../utils'
 
 const useStyles = makeStyles((theme) => ({
   CTAButton: {
@@ -74,8 +72,10 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const { event } = useEventContext()
   const { current_round, group_video_chat, num_rounds } = event
   const { event_id, partner_id, user_id } = myRound
+  const { postChatRatingSnackMessagesArray } = constants
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
+  const [ratingSnackMessage, setRatingSnackMessage] = useState('')
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
 
   const [addFriendMutation] = useMutation(addFriend, {
@@ -114,12 +114,19 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
         await partnerSharedDetailsMutation()
       }
 
+      const randomMessage = Math.floor(Math.random() * postChatRatingSnackMessagesArray.length)
+      setRatingSnackMessage(postChatRatingSnackMessagesArray[randomMessage])
       setShowRatingSnack(true)
     } catch (err) {
       console.log(err)
     }
     sleep(300)
     setShowRatingForm(false)
+  }
+
+  const closeRatingSnack = () => {
+    setRatingSnackMessage('')
+    setShowRatingSnack(false)
   }
 
   const handleTakeABreak = () => {
@@ -269,19 +276,11 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
         {renderPostChatRating()}
         <Snack
           open={showRatingSnack}
-          onClose={() => setShowRatingSnack(false)}
+          onClose={closeRatingSnack}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
           duration={6000}
           severity="success"
-          snackMessage={
-            // eslint-disable-next-line react/jsx-wrap-multilines
-            <div>
-              Carrier pigeon sent{' '}
-              <span role="img" aria-label="dove">
-                🕊
-              </span>
-            </div>
-          }
+          snackMessage={ratingSnackMessage}
         />
       </Grid>
     </div>
