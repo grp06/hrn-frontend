@@ -302,6 +302,7 @@ const EventGroupVideoChat = () => {
           eventId={event_id}
           hostId={host_id}
           messages={eventChatMessages}
+          toggleChat={toggleChat}
           userId={user_id}
         />
       ) : null}

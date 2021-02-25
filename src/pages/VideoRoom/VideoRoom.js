@@ -309,6 +309,7 @@ const VideoRoom = ({ match }) => {
             chatIsOpen={chatIsOpen}
             messages={personalChatMessagesWithCurrentPartner}
             myRound={myRoundPartnerData.partners[0]}
+            toggleChat={toggleChat}
           />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}

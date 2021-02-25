@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
+import { Grid, List, ListItem, ListItemText, TextField } from '@material-ui/core'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { makeStyles } from '@material-ui/styles'
-
 import { insertEventChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
@@ -64,13 +60,24 @@ const createStyles = makeStyles((theme) => ({
     fontSize: '0.75rem',
     marginLeft: theme.spacing(0.5),
   },
+  minimizeChatIcon: {
+    color: theme.palette.common.ghostWhite,
+    fontSize: '2rem',
+    position: 'absolute',
+    left: 'auto',
+    right: 10,
+    '&:hover': {
+      color: theme.palette.common.basePink,
+      cursor: 'pointer',
+    },
+  },
   sendersName: {
     color: theme.palette.common.ghostWhite,
     fontWeight: 700,
   },
 }))
 
-const EventChatBox = ({ eventId, hostId, messages, userId }) => {
+const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
   const classes = createStyles()
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
@@ -115,6 +122,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
         className={classes.chatBoxTitle}
       >
         Chat with Everyone
+        <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
         {messages && messages.length ? (
