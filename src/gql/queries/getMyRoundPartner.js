@@ -19,6 +19,7 @@ const getMyRoundPartner = gql`
           tag {
             name
             tag_id
+            category
           }
         }
       }

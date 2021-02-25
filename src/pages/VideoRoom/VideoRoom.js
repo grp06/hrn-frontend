@@ -83,7 +83,7 @@ const VideoRoom = ({ match }) => {
   } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
   const { id: event_id, current_round, status: eventStatus } = event
-  const { id: userId } = user
+  const { id: userId, tags_users: myTagsArray } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
@@ -300,7 +300,7 @@ const VideoRoom = ({ match }) => {
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
       />
-      <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
+      <VideoRoomSidebar event={event} myRound={myRound} myTagsArray={myTagsArray} userId={userId} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
