@@ -24,6 +24,13 @@ const constants = {
   USER_ID: 'userId',
   TOKEN: 'token',
   ROLE: 'role',
+  postChatRatingSnackMessagesArray: [
+    'Carrier pigeon sent 🕊',
+    "We've put in the good word 🤗",
+    'Snail mail delivered 🐌',
+    'Sent via pony express 🐴',
+    "Hedwig's on her way 🦉",
+  ],
 }
 
 export default constants
