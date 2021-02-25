@@ -49,7 +49,10 @@ const PartnerTagsList = ({ myRound, myTagsArray }) => {
               key={tag.tag_id}
               label={tag.name}
               id={tag.tag_id}
-              color={isThisAnOverlappingTag ? 'secondary' : 'primary'}
+              style={{
+                backgroundColor: isThisAnOverlappingTag ? '#8C57DB' : '#191919',
+                color: '#f4f6fa',
+              }}
             />
           )
         })}

@@ -15,8 +15,6 @@ const useStyles = makeStyles((theme) => ({
     width: '250px',
     height: 'auto',
     borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
     backgroundColor: theme.palette.common.greyCard,
     padding: theme.spacing(1),
     marginBottom: theme.spacing(2),
