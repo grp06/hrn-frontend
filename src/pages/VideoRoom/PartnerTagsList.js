@@ -1,7 +1,5 @@
 import React from 'react'
-
-import Chip from '@material-ui/core/Chip'
-import Grid from '@material-ui/core/Grid'
+import { Chip, Grid } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
@@ -11,12 +9,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const PartnerTagsList = ({ myRound, userId }) => {
+const PartnerTagsList = ({ myRound, myTagsArray }) => {
   const classes = useStyles()
   const remoteVideoDiv = document.getElementById('remote-video')
   const partnerVideoDivExists = remoteVideoDiv && remoteVideoDiv.innerHTML
+  const myPartnersTagsArray = myRound.partner ? myRound.partner.tags_users : []
+  const myTagsArrayOnlyIds =
+    myTagsArray && myTagsArray.length ? myTagsArray.map((tagObject) => tagObject.tag.tag_id) : []
 
-  return partnerVideoDivExists && myRound.partner.tags_users.length > 0 ? (
+  const overlappingTagsOnlyIds =
+    myTagsArrayOnlyIds.length && myPartnersTagsArray.length
+      ? myPartnersTagsArray.reduce((all, partnersTabObject) => {
+          if (myTagsArrayOnlyIds.includes(partnersTabObject.tag.tag_id))
+            all.push(partnersTabObject.tag.tag_id)
+          return all
+        }, [])
+      : []
+
+  return partnerVideoDivExists && myPartnersTagsArray.length ? (
     <Grid
       container
       direction="row"
@@ -31,7 +41,20 @@ const PartnerTagsList = ({ myRound, userId }) => {
         })
         .map((tagObject) => {
           const { tag } = tagObject
-          return <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" />
+          const isThisAnOverlappingTag = overlappingTagsOnlyIds.length
+            ? overlappingTagsOnlyIds.includes(tag.tag_id)
+            : false
+          return (
+            <Chip
+              key={tag.tag_id}
+              label={tag.name}
+              id={tag.tag_id}
+              style={{
+                backgroundColor: isThisAnOverlappingTag ? '#8C57DB' : '#191919',
+                color: '#f4f6fa',
+              }}
+            />
+          )
         })}
     </Grid>
   ) : null

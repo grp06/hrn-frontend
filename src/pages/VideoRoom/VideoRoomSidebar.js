@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoomSidebar = ({ event, myRound, userId }) => {
+const VideoRoomSidebar = ({ event, myRound, myTagsArray, userId }) => {
   const classes = useStyles()
   const { host_id } = event
   return (
@@ -33,7 +33,7 @@ const VideoRoomSidebar = ({ event, myRound, userId }) => {
           myRound={myRound}
           addFriendButton={<AddFriendButton myRound={myRound} />}
         />
-        <PartnerTagsList myRound={myRound} userId={userId} />
+        <PartnerTagsList myRound={myRound} myTagsArray={myTagsArray} />
       </Grid>
     </>
   )

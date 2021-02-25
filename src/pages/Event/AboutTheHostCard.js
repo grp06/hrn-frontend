@@ -35,8 +35,6 @@ const AboutTheHostCard = React.memo(({ host, userIsHost }) => {
   const classes = useStyles()
   const history = useHistory()
   const { short_bio: hostBio } = host
-  console.log('host ->', host)
-  console.log('hostBio ->', hostBio)
 
   const handleEditBioClick = () => history.push('/my-profile')
 
