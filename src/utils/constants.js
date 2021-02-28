@@ -1,9 +1,9 @@
 const constants = {
   // change me back to 20000?
-  // george, stephen, max, lenny, zhen, sandra, ash, azul, jasper
-  adminUserIds: [8, 12, 115, 506, 3091, 3552, 3974, 4939, 5218],
-  // seibo, parker
-  hrnFriendsUserIds: [2926, 4888],
+  // george, stephen, max, jasper
+  adminUserIds: [8, 12, 115, 5218],
+  // seibo, parker, karl, nino
+  hrnFriendsUserIds: [2926, 4888, 5895, 6246],
   lastSeenDuration: 5000,
   roundLength: 300,
   betweenRoundsDelay: 20000,
