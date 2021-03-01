@@ -1,41 +1,14 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    margin: theme.spacing(0, 'auto'),
-    width: '80%',
-    maxWidth: '800px',
-  },
-  heading: { fontWeight: 700, marginBottom: theme.spacing(3) },
-  subheading: {
-    fontWeight: 300,
-    width: '80%',
-    marginBottom: theme.spacing(1),
-    [theme.breakpoints.down('md')]: {
-      width: '90%',
-    },
-  },
-  upgradeButton: {
-    maxWidth: '200px',
-    marginTop: theme.spacing(2),
-  },
-}))
+import { Button, Grid, Typography } from '@material-ui/core'
+import { useCreateEventStyles } from '.'
 
 const UpgradePlanCard = () => {
-  const classes = useStyles()
+  const classes = useCreateEventStyles()
   const history = useHistory()
   return (
-    <Grid container direction="column" className={classes.cardContainer}>
-      <Typography variant="h2" className={classes.heading}>
+    <Grid container direction="column" className={classes.subEndedAndUpgradePlanCardContainer}>
+      <Typography variant="h2" className={classes.cardHeading}>
         You&apos;ve run out of free events{' '}
         <span role="img" aria-label="distraught face">
           😫
@@ -52,7 +25,7 @@ const UpgradePlanCard = () => {
         color="primary"
         size="large"
         disableRipple
-        className={classes.upgradeButton}
+        className={classes.reactiveAndUpgradeButton}
         onClick={() => history.push('/subscription')}
       >
         Upgrade my plan
