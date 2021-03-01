@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/styles'
 
 const usePrivacyPolicyStyles = makeStyles((theme) => ({
+  // *****************************
+  // Privacy Policy
+  // *****************************
   privacyPolicyContainer: {
     width: '80%',
     margin: theme.spacing(2, 'auto', 6, 'auto'),
