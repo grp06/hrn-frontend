@@ -3,7 +3,7 @@ import { Grid, Typography } from '@material-ui/core'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { AnimatedHostNameCard } from '.'
+import { AnimatedHostNameCard, usePreEventStyles } from '.'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { usePreEventTwilio } from '../../hooks'
@@ -13,52 +13,9 @@ const { maxNumUsersPerRoom } = constants
 
 const { connect } = require('twilio-video')
 
-const useStyles = makeStyles((theme) => ({
-  hostVid: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    '& video': {
-      width: '100%',
-      // height: 'calc(100vh)',
-      height: '100%',
-      objectFit: 'cover',
-    },
-  },
-  preEventWrapper: {
-    height: '94vh',
-  },
-  liveAndViewersContainer: {
-    position: 'absolute',
-    top: '3%',
-    left: '2%',
-    bottom: 'auto',
-    right: 'auto',
-  },
-  liveLogo: {
-    width: '60px',
-    height: 'auto',
-    color: theme.palette.common.ghostWhite,
-    fontWeight: 'bold',
-    backgroundColor: theme.palette.common.red,
-    borderRadius: '4px',
-    textAlign: 'center',
-  },
-  viewersContainer: {
-    marginTop: theme.spacing(1),
-    backgroundColor: 'rgba(36,37,38,0.7)',
-    borderRadius: '4px',
-    width: '60px',
-  },
-  viewersNumber: {
-    color: theme.palette.common.ghostWhite,
-    marginLeft: theme.spacing(0.5),
-  },
-}))
-
 const PreEvent = ({ onlineEventUsers }) => {
   // const { id: eventId } = match.params
-  const classes = useStyles()
+  const classes = usePreEventStyles()
   const history = useHistory()
   const { user } = useUserContext()
 
