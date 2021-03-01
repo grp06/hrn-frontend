@@ -2,64 +2,23 @@ import React, { useState } from 'react'
 import FeatherIcon from 'feather-icons-react'
 import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
+import { Grid, Button, Typography } from '@material-ui/core'
 
-import { getPricingPlanDetails, getSubscriptionCheckoutObject, PricingPlanCard } from '.'
-import confettiDoodles from '../../assets/ConfettiDoodlesSmallerScale.svg'
+import {
+  getPricingPlanDetails,
+  getSubscriptionCheckoutObject,
+  PricingPlanCard,
+  useSubscriptionStyles,
+} from '.'
 import { ToggleGroup } from '../../common'
 import { useUserContext } from '../../context'
 import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
 import { constants } from '../../utils'
+
 const { ROLE, TOKEN } = constants
 
-const useStyles = makeStyles((theme) => ({
-  divider: {
-    width: '80vw',
-    margin: theme.spacing(6, 'auto'),
-    [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(5, 'auto'),
-    },
-  },
-  manageSubButton: {
-    textTransform: 'none',
-    '&:hover': {
-      backgroundColor: 'transparent',
-      color: theme.palette.common.basePink,
-    },
-    [theme.breakpoints.down('sm')]: {
-      marginBottom: theme.spacing(3),
-    },
-  },
-  sectionHeading: {
-    marginBottom: theme.spacing(4),
-    [theme.breakpoints.down('md')]: {
-      marginBottom: theme.spacing(3),
-      textAlign: 'center',
-    },
-  },
-  subButtonGridContainer: {
-    [theme.breakpoints.down('sm')]: {
-      justifyContent: 'center',
-    },
-  },
-  subscriptionContainer: {
-    width: '80%',
-    maxWidth: '1550px',
-    margin: theme.spacing('75px', 'auto'),
-  },
-  pageContainer: {
-    backgroundImage: `url(${confettiDoodles})`,
-    backgroundSize: 'auto',
-    backgroundRepeat: 'repeat',
-    position: 'relative',
-  },
-}))
-
 const Subscription = () => {
-  const classes = useStyles()
+  const classes = useSubscriptionStyles()
   const history = useHistory()
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id, sub_period_end } = user

@@ -1,56 +1,9 @@
 import React from 'react'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
-
-import blurryBackground from '../../assets/blurryBackground.png'
-
-const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 50%, rgba(0,212,255,0) 100%)',
-    height: 'auto',
-    minHeight: '45vh',
-    width: '100%',
-    position: 'absolute',
-    top: '0%',
-    bottom: 'auto',
-  },
-  blurBackground: {
-    width: '100%',
-    height: 'auto',
-    minHeight: '45vh',
-    position: 'absolute',
-    zIndex: '-3',
-    backgroundPosition: '50% 50% !important',
-    backgroundSize: 'cover !important',
-    backgroundImage: `url(${blurryBackground})`,
-  },
-  contentPadding: {
-    position: 'relative',
-    zIndex: 9999,
-    width: '80%',
-    maxWidth: '1550px',
-    height: '45vh',
-    margin: theme.spacing(0, 'auto'),
-  },
-  heading: { fontWeight: 700, marginBottom: '32px' },
-  joinBasicButton: { maxWidth: '200px' },
-  pinkText: { color: '#FF99AD', fontWeight: '500' },
-  subheading: {
-    fontWeight: 300,
-    width: '55%',
-    marginBottom: '32px',
-    [theme.breakpoints.down('md')]: {
-      width: '90%',
-    },
-  },
-  subheadingLessMargin: { fontWeight: 300, marginBottom: '16px' },
-}))
+import { Grid, Button, Typography } from '@material-ui/core'
+import { useSubscriptionStyles } from '.'
 
 const PricingHero = () => {
-  const classes = useStyles()
+  const classes = useSubscriptionStyles()
 
   return (
     <Grid container direction="column">
