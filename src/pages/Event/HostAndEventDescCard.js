@@ -1,72 +1,15 @@
 import React from 'react'
-import Avatar from '@material-ui/core/Avatar'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { Avatar, Grid, Typography } from '@material-ui/core'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-  avatarContainer: {
-    width: '70px',
-    height: '70px',
-  },
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
-  },
-  hostAndRSVPContainer: {
-    marginBottom: theme.spacing(2),
-  },
-  hostContainer: {
-    height: '70px',
-  },
-  hostNameAndTitleContainer: {
-    width: 'auto',
-    height: '100%',
-    marginLeft: theme.spacing(2),
-    padding: theme.spacing(0.5, 0),
-  },
-  hostName: {
-    margin: '0',
-  },
-  largeNumber: {
-    ...theme.typography.largeNumber,
-  },
-  rsvpAndOnlineNumberContainer: {
-    [theme.breakpoints.down('xs')]: {
-      justifyContent: 'flex-start',
-      marginTop: theme.spacing(3),
-    },
-  },
-  rsvpedNumberContainer: {
-    width: 'auto',
-  },
-  onlineAttendeesNumberContainer: {
-    width: 'auto',
-    marginLeft: theme.spacing(8),
-  },
-  subtitle: {
-    marginBottom: theme.spacing(1),
-  },
-}))
+import { useEventStyles } from '.'
 
 const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHost }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const { description: eventDescription, event_users, host } = event
   const { name: hostName, profile_pic_url } = host
 
   return (
-    <Grid container direction="column" className={classes.cardContainer}>
+    <Grid container direction="column" className={classes.hostAndEventDescCardContainer}>
       <Grid
         container
         direction="row"
@@ -74,7 +17,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
         className={classes.hostAndRSVPContainer}
       >
         <Grid container item direction="column" xs={12} sm={6}>
-          <Typography variant="subtitle1" className={classes.subtitle}>
+          <Typography variant="subtitle1" className={classes.onlineAndRSVPedTypography}>
             Hosted By /
           </Typography>
           <Grid
@@ -84,8 +27,12 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
             justify="flex-start"
             className={classes.hostContainer}
           >
-            <Avatar className={classes.avatarContainer}>
-              <img alt="company-logo" className={classes.avatar} src={profile_pic_url || logo} />
+            <Avatar className={classes.hostAvatarContainer}>
+              <img
+                alt="company-logo"
+                className={classes.hostAvatar}
+                src={profile_pic_url || logo}
+              />
             </Avatar>
             <Grid
               container
@@ -97,7 +44,6 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
               <Typography variant="h3" className={classes.hostName}>
                 {hostName}
               </Typography>
-              {/* <Typography variant="subtitle1">European Gigaloo</Typography> */}
             </Grid>
           </Grid>
         </Grid>
@@ -118,7 +64,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
               alignItems="center"
               className={classes.rsvpedNumberContainer}
             >
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" className={classes.onlineAndRSVPedTypography}>
                 RSVP&apos;ed /
               </Typography>
               <Typography className={classes.largeNumber}>{event_users.length}</Typography>
@@ -132,7 +78,7 @@ const HostAndEventDescCard = React.memo(({ event, showOnlineAttendees, userIsHos
               alignItems="center"
               className={classes.onlineAttendeesNumberContainer}
             >
-              <Typography variant="subtitle1" className={classes.subtitle}>
+              <Typography variant="subtitle1" className={classes.onlineAndRSVPedTypography}>
                 Online Now /
               </Typography>
               <Typography className={classes.largeNumber}>{showOnlineAttendees}</Typography>

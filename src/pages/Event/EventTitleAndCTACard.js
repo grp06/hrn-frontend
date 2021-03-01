@@ -1,53 +1,17 @@
 import React, { useState } from 'react'
-
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { useMutation } from '@apollo/react-hooks'
 import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
 import debounce from 'lodash.debounce'
-import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
-import { DeleteEventButton } from '.'
+import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { DeleteEventButton, useEventStyles } from '.'
 import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  buttonContainer: {
-    marginBottom: theme.spacing(1),
-    [theme.breakpoints.down('md')]: {
-      justifyContent: 'flex-start',
-      alignItems: 'flex-start',
-      marginTop: theme.spacing(1),
-    },
-  },
-  cardContainer: {
-    marginBottom: theme.spacing(2),
-  },
-  shareEventButton: {
-    width: '50px !important',
-    height: '50px !important',
-    backgroundColor: theme.palette.common.greyButton,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyHighlight,
-    },
-    marginRight: theme.spacing(1.5),
-  },
-  subtitle: {
-    margin: theme.spacing(1),
-    marginBottom: '10px',
-    width: '75%',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-  },
-}))
 
 const EventTitleAndCTACard = React.memo(({ event, user, eventId }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
   const [showComeBackSnack, setShowComeBackSnack] = useState(false)
@@ -143,13 +107,13 @@ const EventTitleAndCTACard = React.memo(({ event, user, eventId }) => {
       direction="row"
       justify="space-between"
       alignItems="flex-end"
-      className={classes.cardContainer}
+      className={classes.eventTitleAndCTACardContainer}
     >
       <Grid container item xs={12} lg={8} direction="column">
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
           <CalendarIconIcs event={event} />
-          <Typography variant="body1" className={classes.subtitle}>
+          <Typography variant="body1" className={classes.eventDateTypography}>
             {formatDate(startTime)}
           </Typography>
         </Grid>
@@ -164,7 +128,7 @@ const EventTitleAndCTACard = React.memo(({ event, user, eventId }) => {
           direction="row"
           justify="flex-end"
           alignItems="flex-end"
-          className={classes.buttonContainer}
+          className={classes.ctaCardButtonContainer}
         >
           <Button
             variant="outlined"

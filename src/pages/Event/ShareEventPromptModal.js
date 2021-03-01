@@ -1,33 +1,12 @@
 import React, { useState } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import Divider from '@material-ui/core/Divider'
-import { makeStyles } from '@material-ui/styles'
 import copy from 'copy-to-clipboard'
-import formatDate from '../../utils/formatDate'
+import { Divider, Grid, List, ListItem, Typography } from '@material-ui/core'
+import { useEventStyles } from '.'
 import { TransitionModal, Snack } from '../../common'
-
-const useStyles = makeStyles((theme) => ({
-  eventPromptHeader: {
-    textAlign: 'center',
-  },
-  divider: {
-    width: '25%',
-    marginTop: '10px',
-    marginBottom: '20px',
-  },
-  eventPromptBody: {
-    marginBottom: '20px',
-  },
-  eventPromptParagraph: {
-    marginBottom: theme.spacing(1.5),
-  },
-}))
+import formatDate from '../../utils/formatDate'
 
 const ShareEventPromptModal = ({ event, renderHostMessage }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const { start_at, id } = event
   const eventStartTime = formatDate(start_at)
 
@@ -116,7 +95,7 @@ const ShareEventPromptModal = ({ event, renderHostMessage }) => {
             We&apos;ve curated a message for you to easily share the event!
           </Typography>
         </Grid>
-        <Divider variant="middle" className={classes.divider} />
+        <Divider variant="middle" className={classes.shareEventPromptModalDivider} />
         <Grid container item direction="column" md={9}>
           <div className={classes.eventPromptBody} id="eventPrompt">
             {eventPromptBody}

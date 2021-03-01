@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
+import { Button, Grid, MobileStepper, Typography } from '@material-ui/core'
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft'
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight'
-import MobileStepper from '@material-ui/core/MobileStepper'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { useTheme } from '@material-ui/core/styles'
+import { useEventStyles } from '.'
 
 const hostSteps = [
   {
@@ -63,35 +61,8 @@ const attendeeSteps = [
   },
 ]
 
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
-  },
-  stepBodyText: {
-    width: '90%',
-  },
-  stepperBody: {
-    height: '130px',
-    width: '90%',
-    [theme.breakpoints.down('md')]: {
-      height: 'auto',
-    },
-    margin: theme.spacing(2, 'auto', 0, 'auto'),
-  },
-  stepperBar: {
-    width: '50%',
-    margin: theme.spacing(0, 'auto'),
-  },
-}))
-
 function WhatToExpect({ userIsHost }) {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const theme = useTheme()
   const [activeStep, setActiveStep] = useState(0)
   const maxSteps = userIsHost ? hostSteps.length : attendeeSteps.length
@@ -105,7 +76,12 @@ function WhatToExpect({ userIsHost }) {
   }
 
   return (
-    <Grid container direction="column" justify="flex-start" className={classes.cardContainer}>
+    <Grid
+      container
+      direction="column"
+      justify="flex-start"
+      className={classes.whatToExpectCardContainer}
+    >
       <Typography variant="h3">
         {userIsHost ? 'What to expect as a host' : 'What to expect from the event'}
       </Typography>
