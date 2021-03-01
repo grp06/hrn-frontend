@@ -31,7 +31,7 @@ const Event = () => {
   localStorage.setItem('eventId', eventId)
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
+  const isEventParticipant = event?.event_users.find((u) => u.user.id === user_id)
 
   return (
     <>
