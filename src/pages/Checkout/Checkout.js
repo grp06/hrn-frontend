@@ -44,7 +44,7 @@ const Checkout = ({ location }) => {
 
     const makeUserFreeHost = async () => {
       // TODO: we can probably use userContextLoading to know if the user is here.
-      if (user && user.id) {
+      if (user?.id) {
         try {
           const upgradeToHostResponse = await upgradeToHost(user.id)
           localStorage.setItem(ROLE, 'host')
@@ -57,7 +57,6 @@ const Checkout = ({ location }) => {
         }
       }
     }
-    console.log('plan ->', plan)
 
     if (plan && plan === 'FREE_FOREVER') {
       makeUserFreeHost()
