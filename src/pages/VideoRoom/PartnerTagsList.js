@@ -1,16 +1,9 @@
 import React from 'react'
 import { Chip, Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  tagsContainer: {
-    margin: theme.spacing(1.5, 'auto', 0, 'auto'),
-    padding: theme.spacing(0, 1),
-  },
-}))
+import { useVideoRoomStyles } from '.'
 
 const PartnerTagsList = ({ myRound, myTagsArray }) => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const remoteVideoDiv = document.getElementById('remote-video')
   const partnerVideoDivExists = remoteVideoDiv && remoteVideoDiv.innerHTML
   const myPartnersTagsArray = myRound.partner ? myRound.partner.tags_users : []
@@ -33,7 +26,7 @@ const PartnerTagsList = ({ myRound, myTagsArray }) => {
       justify="flex-start"
       alignItems="center"
       wrap="wrap"
-      className={classes.tagsContainer}
+      className={classes.partnerTagsListContainer}
     >
       {myRound.partner.tags_users
         .sort((tagA, tagB) => {

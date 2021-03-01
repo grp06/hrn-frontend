@@ -1,36 +1,19 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import { Button } from '@material-ui/core'
 import SpeedDial from '@material-ui/lab/SpeedDial'
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ReportOutlinedIcon from '@material-ui/icons/ReportOutlined'
 import BugReportIcon from '@material-ui/icons/BugReport'
-import { ConnectionIssuesModal, ReportUserModal, SetupMicAndCameraModal } from '.'
-
-const useStyles = makeStyles((theme) => ({
-  fabButton: {
-    backgroundColor: 'transparent',
-    boxShadow: 'none',
-    '&:hover': {
-      borderRadius: '4px',
-      backgroundColor: '#41444A',
-    },
-  },
-  root: {
-    height: 380,
-    transform: 'translateZ(0px)',
-    flexGrow: 1,
-  },
-  speedDial: {
-    position: 'absolute',
-    top: -20,
-    minHeight: '40px',
-  },
-}))
+import {
+  ConnectionIssuesModal,
+  ReportUserModal,
+  SetupMicAndCameraModal,
+  useVideoRoomStyles,
+} from '.'
 
 const MoreActionsButton = ({ myRound }) => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const [open, setOpen] = useState(false)
   const [showConnectionIssuesModal, setShowConnectionIssuesModal] = useState(false)
   const [showReportUserModal, setShowReportUserModal] = useState(false)
@@ -64,7 +47,7 @@ const MoreActionsButton = ({ myRound }) => {
 
   // for some reason we need the Button for it to work
   return (
-    <div className={classes.root}>
+    <div className={classes.moreActionsButtonContainer}>
       <Button onClick={() => console.log('your boy')} />
       <SpeedDial
         ariaLabel="SpeedDial More actions"

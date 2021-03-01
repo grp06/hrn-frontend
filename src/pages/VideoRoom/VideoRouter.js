@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTwilioContext } from '../../context'
-import { PostChatRating, StartupFuelInBetweenRounds } from '.'
+import { PostChatRating } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 
-const VideoRouter = ({ eventId, eventStatus, myRound, setUserEventStatus }) => {
+const VideoRouter = ({ eventStatus, myRound, setUserEventStatus }) => {
   const {
     partnerDisconnected,
     partnerNeverConnected,
