@@ -123,17 +123,17 @@ const App = () => {
                         path="/set-new-password/:userId/:token"
                         component={SetNewPassword}
                       />
-                      <Route exact path="/onboarding" component={Onboarding} />
-                      <Route exact path="/host-onboarding" component={HostOnboarding} />
-                      <Route exact path="/my-profile" component={MyProfile} />
-                      <Route exact path="/my-connections" component={MyConnections} />
-                      <Route exact path="/create-event" component={CreateEvent} />
-                      <Route exact path="/subscription" component={Subscription} />
                       <Route exact path="/checkout" component={Checkout} />
                       <Route exact path="/checkout-success" component={CheckoutSuccess} />
+                      <Route exact path="/create-event" component={CreateEvent} />
                       <Route exact path="/host-dashboard" component={HostDashboard} />
+                      <Route exact path="/host-onboarding" component={HostOnboarding} />
                       <Route exact path="/hrn-analytics" component={HRNAnalytics} />
+                      <Route exact path="/my-connections" component={MyConnections} />
+                      <Route exact path="/my-profile" component={MyProfile} />
+                      <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
+                      <Route exact path="/subscription" component={Subscription} />
                       <EventProvider>
                         <Route
                           exact

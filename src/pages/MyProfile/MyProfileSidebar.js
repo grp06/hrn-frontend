@@ -162,10 +162,10 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
   }
 
   useEffect(() => {
-    if (usersTags.length === 0) {
+    if (usersTags?.length === 0) {
       setContentState('edit-profile')
     }
-  }, [])
+  }, [usersTags])
 
   const renderContent = () => {
     switch (contentState) {

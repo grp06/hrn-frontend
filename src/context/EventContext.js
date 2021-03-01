@@ -90,6 +90,7 @@ const EventProvider = ({ children }) => {
     if (userOnEventPage && eventData) {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
+        console.log('set app loading false no events')
         setAppLoading(false)
         return history.push('/events')
       }
@@ -110,10 +111,11 @@ const EventProvider = ({ children }) => {
         dispatch((draft) => {
           draft.event = eventData.events[0]
         })
+        console.log('set app loading false, set the event')
         return setAppLoading(false)
       }
     }
-  }, [eventData, dispatch, event, userOnEventPage, history])
+  }, [eventData, dispatch, event, userOnEventPage, history, setAppLoading])
 
   // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {
@@ -129,17 +131,18 @@ const EventProvider = ({ children }) => {
         })
       }
     }
-  }, [chatMessages, userOnLobbyOrGroupChat])
+  }, [chatMessages, userOnLobbyOrGroupChat, dispatch, eventChatMessages, numberOfReadChatMessages])
 
   // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
   useEffect(() => {
-    if (numberOfReadChatMessages) {
+    if (numberOfReadChatMessages && chatMessages) {
+      console.log('got in thereee')
       dispatch((draft) => {
         draft.numberOfUnreadChatMessages =
           chatMessages.event_group_chat_messages.length - numberOfReadChatMessages
       })
     }
-  }, [numberOfReadChatMessages])
+  }, [numberOfReadChatMessages, chatMessages, dispatch])
 
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }

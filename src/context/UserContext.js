@@ -116,6 +116,7 @@ const UserProvider = ({ children }) => {
           draft.user = userData.users[0]
           draft.userInEvent = userInEvent
         })
+        console.log('set app loading false, set the user data')
         return setAppLoading(false)
       }
     }
@@ -123,9 +124,6 @@ const UserProvider = ({ children }) => {
 
   useEffect(() => {
     if (location) {
-      console.log('i should be getting in here')
-      console.log('isUserOnAuth ->', isUserOnAuth)
-      console.log('userInEvent ->', userInEvent)
       dispatch((draft) => {
         draft.userOnAuthRoute = isUserOnAuth
         draft.userInEvent = userInEvent
