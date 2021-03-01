@@ -72,32 +72,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const Event = ({ match }) => {
-  const { id: eventId } = match.params
+const Event = () => {
   const classes = useStyles()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { event, setEventId } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
   const { id: user_id } = user
-  const {
-    banner_photo_url,
-    event_users,
-    host,
-    host_id,
-    id: event_id,
-    start_at,
-    status: event_status,
-  } = event
-  const eventSet = Object.keys(event).length > 1
+  const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
+  // get rid of this
 
-  useEffect(() => {
-    if (!Object.keys(event).length && eventId) {
-      setEventId(parseInt(eventId, 10))
-    }
-  }, [eventId, event, setEventId])
-
-  // clean up this check?
-  if (appLoading || Object.keys(event).length < 2) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
@@ -108,18 +91,13 @@ const Event = ({ match }) => {
 
   return (
     <>
-      <EventStatusRedirect
-        isEventParticipant={isEventParticipant}
-        userId={user_id}
-        eventSet={eventSet}
-        event={event}
-      />
+      <EventStatusRedirect isEventParticipant={isEventParticipant} event={event} />
       {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
         <JoinEventBanner />
       ) : null}
       <EventPhotoBanner
         bannerPhotoURL={banner_photo_url}
-        event_id={event_id}
+        eventId={eventId}
         userIsHost={userIsHost}
       />
       <Grid
@@ -128,7 +106,7 @@ const Event = ({ match }) => {
         justify="flex-start"
         className={classes.eventContentContainer}
       >
-        <EventTitleAndCTACard event={event} user={user} />
+        <EventTitleAndCTACard event={event} user={user} eventId={eventId} />
         <HostAndEventDescCard event={event} userIsHost={userIsHost} />
         <Grid
           container

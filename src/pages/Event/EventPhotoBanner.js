@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventPhotoBanner = ({ bannerPhotoURL, event_id, userIsHost }) => {
+const EventPhotoBanner = ({ bannerPhotoURL, eventId, userIsHost }) => {
   const classes = useStyles()
   const [bannerBackground, setBannerBackground] = useState(
     bannerPhotoURL ? `url("${bannerPhotoURL}")` : `url("${mountainBanner}")`
@@ -42,7 +42,7 @@ const EventPhotoBanner = ({ bannerPhotoURL, event_id, userIsHost }) => {
     <Grid container style={{ position: 'relative' }}>
       {userIsHost && !userInLobbyOrEventComplete ? (
         <ChangeEventPhotoBanner
-          event_id={event_id}
+          eventId={eventId}
           setBannerBackground={(photo_url) => setBannerBackground(photo_url)}
         />
       ) : null}

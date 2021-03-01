@@ -70,8 +70,8 @@ const useStyles = makeStyles((theme) => ({
 const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const classes = useStyles()
   const { event } = useEventContext()
-  const { current_round, group_video_chat, num_rounds } = event
-  const { event_id, partner_id, user_id } = myRound
+  const { current_round, group_video_chat, num_rounds, id: eventId } = event
+  const { partner_id, user_id } = myRound
   const { postChatRatingSnackMessagesArray } = constants
   const [showRatingForm, setShowRatingForm] = useState(true)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
@@ -80,7 +80,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
 
   const [addFriendMutation] = useMutation(addFriend, {
     variables: {
-      event_id,
+      event_id: eventId,
       user_id,
       partner_id,
     },
@@ -88,7 +88,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
 
   const [partnerSharedDetailsMutation] = useMutation(updatePartnerSharedDetails, {
     variables: {
-      event_id,
+      event_id: eventId,
       user_id: partner_id,
       partner_id: user_id,
     },
@@ -101,7 +101,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
     try {
       await updatePartnerRatingMutation({
         variables: {
-          event_id,
+          event_id: eventId,
           partner_id,
           user_id,
           rating: ratingValue,

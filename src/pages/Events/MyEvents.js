@@ -61,6 +61,7 @@ const MyEvents = () => {
 
   useEffect(() => {
     resetEvent()
+    // TODO instead of setting eventId null, we should reset to initial state somewhere on a cleanup function
     setEventId(null)
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')

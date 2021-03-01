@@ -2,7 +2,6 @@ import React, { useEffect, createContext, useContext } from 'react'
 import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useAppContext } from '.'
 import { findUserById } from '../gql/queries'
 
 const UserContext = createContext()
@@ -11,6 +10,7 @@ const defaultState = {
   user: {},
   userInEvent: false,
   userOnAuthRoute: false,
+  userContextLoading: true,
 }
 
 const useUserContext = () => {
@@ -73,7 +73,6 @@ const useUserContext = () => {
 
 const UserProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { setAppLoading } = useAppContext()
   const history = useHistory()
   const location = useLocation()
   const { userId } = state.user
@@ -115,9 +114,9 @@ const UserProvider = ({ children }) => {
         dispatch((draft) => {
           draft.user = userData.users[0]
           draft.userInEvent = userInEvent
+          draft.userContextLoading = false
         })
-        console.log('set app loading false, set the user data')
-        return setAppLoading(false)
+        console.log('we get here if theres no userId')
       }
     }
   }, [userData, userId])
@@ -148,9 +147,14 @@ const UserProvider = ({ children }) => {
           userOnSubscriptionPage
         )
       ) {
-        history.push('/')
+        return history.push('/')
       }
+      console.log('set user context false')
+      dispatch((draft) => {
+        draft.userContextLoading = false
+      })
     } else {
+      console.log('setting user id')
       dispatch((draft) => {
         draft.user.userId = parseInt(localStorageUserId, 10)
       })

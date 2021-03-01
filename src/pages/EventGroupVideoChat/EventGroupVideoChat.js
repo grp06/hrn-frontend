@@ -92,14 +92,14 @@ const useStyles = makeStyles((theme) => ({
 const EventGroupVideoChat = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
   const {
     event,
     eventChatMessages,
     numberOfUnreadChatMessages,
     setNumberOfReadChatMessages,
+    eventContextLoading,
   } = useEventContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const {
     onlineEventUsers,
     setUserHasEnabledCameraAndMic,
@@ -110,7 +110,7 @@ const EventGroupVideoChat = () => {
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
-  const { host_id, id: event_id, status: event_status } = event
+  const { host_id, status: event_status, id: eventId } = event
   const { id: user_id, name: usersName } = user
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
@@ -209,9 +209,7 @@ const EventGroupVideoChat = () => {
   }
 
   const getTwilioToken = async () => {
-    const res = await getToken(`${event_id}-post-event`, user_id).then((response) =>
-      response.json()
-    )
+    const res = await getToken(`${eventId}-post-event`, user_id).then((response) => response.json())
     console.log('getTwilioToken res ->', res)
     setGroupChatToken(res.token)
   }
@@ -238,9 +236,9 @@ const EventGroupVideoChat = () => {
   }
 
   useEffect(() => {
-    if (event && event_id) {
+    if (event && eventId) {
       if (event_status === 'complete') {
-        return history.push(`/events/${event_id}/event-complete`)
+        return history.push(`/events/${eventId}/event-complete`)
       }
     }
   }, [event_status])
@@ -256,10 +254,10 @@ const EventGroupVideoChat = () => {
 
   // get the token
   useEffect(() => {
-    if (event_id && user_id && userHasEnabledCameraAndMic) {
+    if (eventId && user_id && userHasEnabledCameraAndMic) {
       getTwilioToken()
     }
-  }, [event_id, user_id, userHasEnabledCameraAndMic])
+  }, [eventId, user_id, userHasEnabledCameraAndMic])
 
   // After getting your token you get the permissions and create localTracks
   // You also get your groupChatRoom
@@ -280,7 +278,7 @@ const EventGroupVideoChat = () => {
     }
   }, [groupChatRoom])
 
-  if (appLoading || Object.keys(event).length < 2) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
@@ -299,7 +297,7 @@ const EventGroupVideoChat = () => {
       />
       {chatIsOpen ? (
         <EventChatBox
-          eventId={event_id}
+          eventId={eventId}
           hostId={host_id}
           messages={eventChatMessages}
           toggleChat={toggleChat}
@@ -308,7 +306,7 @@ const EventGroupVideoChat = () => {
       ) : null}
       <GroupVideoChatBottomPanel
         chatIsOpen={chatIsOpen}
-        event_id={event_id}
+        event_id={eventId}
         numberOfUnreadChatMessages={numberOfUnreadChatMessages}
         setUserHasEnabledCameraAndMic={setUserHasEnabledCameraAndMic}
         userIsHost={userIsHost}

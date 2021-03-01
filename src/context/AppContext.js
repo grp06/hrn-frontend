@@ -5,7 +5,7 @@ const AppContext = createContext()
 
 const defaultState = {
   redirect: null,
-  appLoading: true,
+  appLoading: false,
 }
 
 const useAppContext = () => {

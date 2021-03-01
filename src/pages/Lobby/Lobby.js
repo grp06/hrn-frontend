@@ -10,12 +10,7 @@ import {
   NextRoundIn,
   LobbyContent,
 } from '.'
-import {
-  useAppContext,
-  useEventContext,
-  useUserContext,
-  useUserEventStatusContext,
-} from '../../context'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { EventChatBox, Loading } from '../../common'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
@@ -31,14 +26,14 @@ const useStyles = makeStyles((theme) => ({
 const Lobby = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
   const {
     event,
     eventChatMessages,
     numberOfUnreadChatMessages,
     setNumberOfReadChatMessages,
+    eventContextLoading,
   } = useEventContext()
-  const { user, setUserInEvent } = useUserContext()
+  const { user, setUserInEvent, userContextLoading } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
@@ -51,11 +46,11 @@ const Lobby = () => {
     current_round: round,
     event_users,
     host_id: hostId,
-    id: eventId,
     round_length,
     start_at: eventStartTime,
     status: eventStatus,
     updated_at: eventUpdatedAt,
+    id: eventId,
   } = event
   const { id: user_id, name: usersName } = user
 
@@ -127,13 +122,11 @@ const Lobby = () => {
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
-      console.log('myRoundData ->', myRoundData)
-      console.log('userEventStatus ->', userEventStatus)
       history.push(`/events/${eventId}/video-room`)
     }
   }, [eventStatus, userEventStatus, myRoundData])
 
-  if (appLoading || Object.keys(event).length < 2 || Object.keys(user).length < 2) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
@@ -158,6 +151,7 @@ const Lobby = () => {
         setUserEventStatus={setUserEventStatus}
         userEventStatus={userEventStatus}
         user={user}
+        eventId={eventId}
       />
       {chatIsOpen ? (
         <EventChatBox

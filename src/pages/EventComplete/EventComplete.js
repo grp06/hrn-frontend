@@ -75,18 +75,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventComplete = ({ match }) => {
-  const { id: eventId } = match.params
+const EventComplete = () => {
   const classes = useStyles()
-  const { appLoading } = useAppContext()
-  const { event, resetEvent } = useEventContext()
-  const { user, setUserInEvent } = useUserContext()
+  const { event, resetEvent, eventContextLoading } = useEventContext()
+  const { user, setUserInEvent, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId, role } = user
-  const { banner_photo_url, id: event_id } = event
+  const { banner_photo_url, id: eventId } = event
 
   const history = useHistory()
-  const eventSet = Object.keys(event).length > 1
 
   const {
     data: myConnectionAfterEventData,
@@ -110,12 +107,13 @@ const EventComplete = ({ match }) => {
   }, [])
 
   useEffect(() => {
-    if (eventSet && event.status === 'not-started') {
+    // just used for resetting
+    if (eventId && event.status === 'not-started') {
       history.push(`/events/${eventId}`)
     }
-  }, [event])
+  }, [event, eventId])
 
-  if (appLoading || Object.keys(event).length < 2 || myConnectionAfterEventLoading) {
+  if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
     return <Loading />
   }
 
@@ -141,7 +139,7 @@ const EventComplete = ({ match }) => {
 
   return (
     <div>
-      <EventPhotoBanner bannerPhotoURL={banner_photo_url} event_id={event_id} />
+      <EventPhotoBanner bannerPhotoURL={banner_photo_url} eventId={eventId} />
       <Grid container direction="column" justify="flex-start" className={classes.contentContainer}>
         <EventTitleAndCTACard event={event} user={user} />
         <Grid container direction="row" justify="space-between">

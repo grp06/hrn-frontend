@@ -66,8 +66,6 @@ const useUserEventStatusContext = () => {
 const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const {
-    numberOfReadMessagesFromMyPartner,
-    numberOfUnreadMessagesFromMyPartner,
     personalChatMessagesWithCurrentPartner,
     userEventStatus,
     userHasEnabledCameraAndMic,

@@ -46,14 +46,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventTitleAndCTACard = React.memo(({ event, user }) => {
+const EventTitleAndCTACard = React.memo(({ event, user, eventId }) => {
   const classes = useStyles()
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
   const [showComeBackSnack, setShowComeBackSnack] = useState(false)
   const [rsvpButtonLoading, setRsvpButtonLoading] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
-  const { event_name, event_users, host_id, id: event_id, start_at, status: event_status } = event
+  const { event_name, event_users, host_id, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
@@ -64,7 +64,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
-      event_id,
+      event_id: eventId,
       user_id,
     },
   })
@@ -96,7 +96,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const handleRSVPClick = async () => {
     setRsvpButtonLoading(true)
     if (!user_id) {
-      localStorage.setItem('eventId', event_id)
+      localStorage.setItem('eventId', eventId)
       history.push('/sign-up')
     } else {
       if (!userAlreadyRSVPed) {
@@ -174,7 +174,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           >
             <FeatherIcon icon="share-2" stroke="#f4f6fa" size="30" />
           </Button>
-          {userIsHost ? <DeleteEventButton eventId={event_id} /> : null}
+          {userIsHost ? <DeleteEventButton eventId={eventId} /> : null}
           {renderRSVPOrEditButton()}
         </Grid>
       )}
