@@ -3,7 +3,7 @@ import React, { useEffect, createContext, useContext } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
-import { useAppContext } from '.'
+import { useUserContext } from '.'
 import { listenToEvent, listenToEventChatMessages } from '../gql/subscriptions'
 
 const EventContext = createContext()
@@ -15,6 +15,7 @@ const defaultState = {
   eventChatMessages: [],
   numberOfReadChatMessages: 0,
   numberOfUnreadChatMessages: 0,
+  eventContextLoading: true,
 }
 
 const useEventContext = () => {
@@ -53,15 +54,18 @@ const useEventContext = () => {
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { setAppLoading } = useAppContext()
+  const { user, userContextLoading } = useUserContext()
+  const { id: userId } = user
   const { pathname } = window.location
-  const { event, eventChatMessages, numberOfReadChatMessages } = state
+
+  const { event, eventChatMessages, numberOfReadChatMessages, eventId, eventContextLoading } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
-  const eventId = parseInt(pathnameArray[2], 10)
+
+  const eventIdFromUrl = parseInt(pathnameArray[2], 10)
 
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
@@ -75,8 +79,26 @@ const EventProvider = ({ children }) => {
     variables: {
       event_id: eventId,
     },
-    skip: !eventId,
+    skip: !eventId || !userId,
   })
+
+  useEffect(() => {
+    // TODO we might want to wait for chatMessages to load here... but we dont have them for anonymous users
+    if (!userContextLoading && eventData && eventContextLoading) {
+      console.log('setting eventContextLoading to false')
+      dispatch((draft) => {
+        draft.eventContextLoading = false
+      })
+    }
+  }, [userContextLoading, eventData, chatMessages, eventContextLoading])
+
+  useEffect(() => {
+    if (!eventId && eventIdFromUrl) {
+      dispatch((draft) => {
+        draft.eventId = parseInt(eventIdFromUrl, 10)
+      })
+    }
+  }, [eventIdFromUrl])
 
   useEffect(() => {
     if (event.status === 'in-between-rounds' && window.room) {
@@ -91,31 +113,33 @@ const EventProvider = ({ children }) => {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         console.log('set app loading false no events')
-        setAppLoading(false)
+        dispatch((draft) => {
+          draft.eventContextLoading = false
+        })
         return history.push('/events')
       }
+      const eventObjectFromSub = eventData?.events[0]
       // cases to set event data:
       // 1) no event data set yet
       // 2) incoming data from subscription is different from existing
       const existingData = JSON.stringify(event)
-      const incomingData = JSON.stringify(eventData.events[0])
+      const incomingData = JSON.stringify(eventObjectFromSub)
 
       if (existingData !== incomingData) {
         const eventWasReset =
           event.status &&
           event.status !== 'not-started' &&
-          eventData.events[0].status === 'not-started'
+          eventObjectFromSub.status === 'not-started'
         if (eventWasReset) {
           window.location.reload()
         }
         dispatch((draft) => {
-          draft.event = eventData.events[0]
+          draft.event = eventObjectFromSub
         })
-        console.log('set app loading false, set the event')
-        return setAppLoading(false)
+        console.log('didnt set eventContextLoading false because data didnt change')
       }
     }
-  }, [eventData, dispatch, event, userOnEventPage, history, setAppLoading])
+  }, [eventData, dispatch, event, userOnEventPage, history])
 
   // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {

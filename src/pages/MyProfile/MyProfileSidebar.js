@@ -114,6 +114,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
 
   const submitProfilePicture = async (file) => {
     if (file.length) {
+      // TODO: handle this in a different way
       setAppLoading(true)
       try {
         if (!file) {

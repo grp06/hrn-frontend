@@ -52,9 +52,9 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 const LobbyContent = React.memo(
-  ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user }) => {
+  ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user, eventId }) => {
     const classes = useStyles()
-    const { banner_photo_url, host, host_id, id: event_id, status: eventStatus } = event
+    const { banner_photo_url, host, host_id, status: eventStatus } = event
     const { id: user_id } = user
     const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
@@ -65,7 +65,7 @@ const LobbyContent = React.memo(
             <>
               <EventPhotoBanner
                 bannerPhotoURL={banner_photo_url}
-                event_id={event_id}
+                eventId={eventId}
                 userIsHost={userIsHost}
               />
               <Grid
@@ -119,7 +119,7 @@ const LobbyContent = React.memo(
             <>
               <EventPhotoBanner
                 bannerPhotoURL={banner_photo_url}
-                event_id={event_id}
+                eventId={eventId}
                 userIsHost={userIsHost}
               />
               <Grid

@@ -30,6 +30,8 @@ const Checkout = ({ location }) => {
 
   useEffect(() => {
     const prepareStripeId = async () => {
+      // TODO: we can probably use userContextLoading to know if the user is here.
+      // not sure why it needs to be lenght of 4 here.. put a comment for that
       if (user && Object.keys(user).length > 4) {
         const { email, id: userId, name, stripe_customer_id } = user
         if (!stripe_customer_id) {
@@ -41,8 +43,7 @@ const Checkout = ({ location }) => {
     }
 
     const makeUserFreeHost = async () => {
-      console.log('user ->', user)
-      console.log('user.id ->', user.id)
+      // TODO: we can probably use userContextLoading to know if the user is here.
       if (user && user.id) {
         try {
           const upgradeToHostResponse = await upgradeToHost(user.id)

@@ -101,7 +101,7 @@ const buttonVariants = {
   },
 }
 
-const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
+const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
   const classes = useStyles()
   const [bannerSearchTerm, setBannerSearchTerm] = useState('community')
   const [searchedImageURL, setSearcedImageURL] = useState(null)
@@ -143,7 +143,7 @@ const ChangeEventPhotoBanner = ({ event_id, setBannerBackground }) => {
     try {
       await updateEventBannerPhotoMutation({
         variables: {
-          event_id,
+          event_id: eventId,
           banner_photo_url: searchedImageURL,
         },
       })

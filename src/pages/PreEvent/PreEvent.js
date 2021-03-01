@@ -64,22 +64,20 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   const { event } = useEventContext()
   const { id: userId, role } = user
-  const { id: eventId, host } = event
+  const { host, id: eventId, status } = event
   const { name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
-  const eventSet = Object.keys(event).length > 1
   const { startPreEventTwilio } = usePreEventTwilio()
   const hostsFirstName = hostName && hostName.split(' ')[0]
   const userIsHost = event.host_id === userId
 
   useEffect(() => {
-    if (eventSet) {
-      const { status } = event
-
+    if (event) {
       if (status === 'in-between-rounds') {
-        console.log('force to video room')
+        // not sure why we'd ever have 'in-between-rounds' on PreEvent
+        console.log('DO WE EVER GET HERE?')
         return history.push(`/events/${eventId}/video-room`)
       }
 

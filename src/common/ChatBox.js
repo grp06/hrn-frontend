@@ -70,7 +70,7 @@ const createStyles = makeStyles((theme) => ({
 
 const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
   const classes = createStyles()
-  const { event_id, partner: myPartner, partner_id, user_id } = myRound
+  const { partner: myPartner, partner_id, user_id } = myRound
   const { name: myPartnersName } = (myPartner && Object.keys(myPartner).length && myPartner) || ''
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)

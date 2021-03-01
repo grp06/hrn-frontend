@@ -68,12 +68,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const VideoRoom = ({ match }) => {
-  const { id: eventId } = match.params
+const VideoRoom = () => {
   const classes = useStyles()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { event } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
   const {
     personalChatMessagesWithCurrentPartner,
     numberOfUnreadMessagesFromMyPartner,
@@ -82,7 +80,7 @@ const VideoRoom = ({ match }) => {
     userEventStatus,
   } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
-  const { id: event_id, current_round, status: eventStatus } = event
+  const { id: eventId, current_round, status: eventStatus } = event
   const { id: userId, tags_users: myTagsArray } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
@@ -90,7 +88,6 @@ const VideoRoom = ({ match }) => {
   const [userUpdatedAt, setUserUpdatedAt] = useState(null)
   const [chatIsOpen, setChatIsOpen] = useState(false)
   const history = useHistory()
-  const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
   const showControls = useIsUserActive()
 
@@ -108,12 +105,12 @@ const VideoRoom = ({ match }) => {
     {
       variables: {
         user_id: userId,
-        event_id,
+        event_id: eventId,
         round: current_round,
       },
       fetchPolicy: 'network-only',
       skip:
-        !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
+        !userId || !eventId || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
     }
   )
 
@@ -137,23 +134,21 @@ const VideoRoom = ({ match }) => {
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
-    if (eventSet) {
-      const { status } = event
-
-      if (status === 'not-started') {
+    if (eventId && eventStatus) {
+      if (eventStatus === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
 
-      if (status === 'group-video-chat') {
+      if (eventStatus === 'group-video-chat') {
         return history.push(`/events/${eventId}/group-video-chat`)
       }
       // we will hit this when the user is on the Thumbing screen, then new assignments are made
       // and there are no new pairings left, and we end the event
-      if (status === 'complete') {
+      if (eventStatus === 'complete') {
         return history.push(`/events/${eventId}/event-complete`)
       }
     }
-  }, [event, userId])
+  }, [eventId, eventStatus])
 
   useEffect(() => {
     if (userEventStatus === 'sitting out') {
@@ -217,7 +212,7 @@ const VideoRoom = ({ match }) => {
         : `${eventId}-${myRound.partner_id}-${myRound.user_id}`
       if (
         hasPartner &&
-        eventSet &&
+        eventId &&
         event.status !== 'in-between-rounds'
         //   event.current_round === myRound.round_number
       ) {
@@ -234,6 +229,8 @@ const VideoRoom = ({ match }) => {
         history.push(`/events/${eventId}/lobby`)
       }
     }
+    // TODO we probably should put way more dependencies here...
+    // but that'll likely fuck things up, so we'll need more checks in the "if"
   }, [myRound])
 
   // After getting your token you get the permissions and create localTracks
@@ -270,7 +267,7 @@ const VideoRoom = ({ match }) => {
     }
   }, [room])
 
-  if (appLoading || !eventSet || !myRound) {
+  if (userContextLoading || eventContextLoading || !myRound) {
     return <Loading />
   }
 
@@ -294,7 +291,7 @@ const VideoRoom = ({ match }) => {
   return (
     <div>
       <VideoRouter
-        eventId={event_id}
+        eventId={eventId}
         myRound={myRound}
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
