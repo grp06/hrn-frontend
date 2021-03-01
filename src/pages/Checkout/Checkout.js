@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Grid from '@material-ui/core/Grid'
 import { CheckoutCard, CheckoutForm } from '.'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 import { Loading } from '../../common'
 import { sleep, upgradeToHost } from '../../helpers'
 import { constants, createStripeCustomer } from '../../utils'
@@ -10,7 +10,6 @@ const { ROLE, TOKEN } = constants
 
 const Checkout = ({ location }) => {
   const history = useHistory()
-  const { appLoading } = useAppContext()
   const { user } = useUserContext()
   const { id: userId, email: userEmail } = user
   const [stripeCustomerId, setStripeCustomerId] = useState('')

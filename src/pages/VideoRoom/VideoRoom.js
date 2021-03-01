@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
 import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
@@ -103,20 +103,19 @@ const VideoRoom = ({ match }) => {
     skip: !userId || !eventId,
   })
 
-  const {
-    data: myRoundPartnerData,
-    loading: myRoundPartnerDataLoading,
-    error: myRoundPartnerDataError,
-  } = useQuery(getMyRoundPartner, {
-    variables: {
-      user_id: userId,
-      event_id,
-      round: current_round,
-    },
-    fetchPolicy: 'network-only',
-    skip:
-      !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
-  })
+  const { data: myRoundPartnerData, loading: myRoundPartnerDataLoading } = useQuery(
+    getMyRoundPartner,
+    {
+      variables: {
+        user_id: userId,
+        event_id,
+        round: current_round,
+      },
+      fetchPolicy: 'network-only',
+      skip:
+        !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
+    }
+  )
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
