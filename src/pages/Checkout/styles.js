@@ -1,5 +1,4 @@
 import { makeStyles } from '@material-ui/styles'
-import blurryBackground from '../../assets/blurryBackground.png'
 
 const useCheckoutStyles = makeStyles((theme) => ({
   // *****************************
