@@ -1,45 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, Button, CircularProgress } from '@material-ui/core'
 import { useMutation } from '@apollo/react-hooks'
 import { TextField } from 'formik-material-ui'
+import { useMyProfileStyles } from '.'
 import { deleteUsersTags, insertUserTags, updateUser } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { OnboardingInterestTagInput } from '../Onboarding'
 import { useUserContext } from '../../context'
 import { GeosuggestCityInput, Snack } from '../../common'
 
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    width: '80%',
-    margin: theme.spacing(3, 'auto'),
-  },
-  tagsContainer: {
-    width: '100%',
-    marginTop: theme.spacing(5),
-  },
-  buttonContainer: {
-    width: '65%',
-    [theme.breakpoints.down('md')]: {
-      width: '50%',
-    },
-    margin: theme.spacing(0, 'auto'),
-  },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
-  },
-}))
-
 const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
-  const classes = useStyles()
+  const classes = useMyProfileStyles()
   const { setUsersTags, updateUserObject, user } = useUserContext()
   const {
     id: userId,
@@ -58,9 +30,10 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const [deleteUsersTagsMutation] = useMutation(deleteUsersTags)
   const linkedInRegex = /linkedin/
 
-  const usersTagsAsFormInput = usersTags.map((tagObject) => {
-    return { tag_id: tagObject.tag.tag_id, user_id: userId }
-  })
+  const usersTagsAsFormInput = usersTags.map((tagObject) => ({
+    tag_id: tagObject.tag.tag_id,
+    user_id: userId,
+  }))
 
   const handleFormClose = () => {
     if (onClose) {
@@ -170,7 +143,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
         }}
       >
         {({ isSubmitting, values }) => (
-          <Form autoComplete="off" className={classes.formContainer}>
+          <Form autoComplete="off" className={classes.myProfileSidebarFormContainer}>
             <div>
               <Field
                 name="name"
