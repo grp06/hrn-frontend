@@ -1,46 +1,33 @@
 import React, { useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
 import PersonIcon from '@material-ui/icons/Person'
-import Typography from '@material-ui/core/Typography'
-
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-  },
-  seeAllButton: {
-    backgroundColor: 'transparent',
-    borderColor: 'transparent',
-    textTransform: 'none',
-  },
-}))
+import {
+  Avatar,
+  Button,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@material-ui/core'
+import { useLobbyStyles } from '.'
 
 const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
   const [seeMore, setSeeMore] = useState(false)
-  const classes = useStyles()
+  const classes = useLobbyStyles()
   return (
     <Grid
       container
       direction="column"
       justify="flex-start"
       alignItems="flex-start"
-      className={classes.cardContainer}
+      className={classes.onlineAttendeesCardContainer}
     >
-      {onlineEventUsers && onlineEventUsers.length ? (
+      {onlineEventUsers?.length ? (
         <>
-          <Typography variant="h3">Online Attendeess {`(${onlineEventUsers.length})`}</Typography>
+          <Typography variant="h3">Online Attendees {`(${onlineEventUsers.length})`}</Typography>
           <List dense>
             {onlineEventUsers
               .sort((userA, userB) => {

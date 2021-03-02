@@ -1,27 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, Typography } from '@material-ui/core/'
+import { useLobbyStyles } from '.'
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'fixed',
-    zIndex: 999,
-    bottom: 'auto',
-    width: '100%',
-    height: 'auto',
-    top: '0',
-    backgroundColor: 'rgb(36,37,38,0.7)',
-    padding: theme.spacing(2),
-  },
-  normalText: {
-    fontWeight: '200',
-    color: theme.palette.common.ghostWhiteDark,
-  },
-}))
-
-const NextRoundIn = ({ currentRound, eventId, eventStatus, eventUpdatedAt, roundLength }) => {
-  const classes = useStyles()
+const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength }) => {
+  const classes = useLobbyStyles()
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 
   const calculateMinutesUntilNextRound = () => {
@@ -74,7 +56,7 @@ const NextRoundIn = ({ currentRound, eventId, eventStatus, eventUpdatedAt, round
   }
 
   return eventStatus ? (
-    <div className={classes.container}>
+    <div className={classes.nextRoundInContainer}>
       <Grid container direction="column" justify="center" alignItems="center">
         {renderMessage()}
       </Grid>
