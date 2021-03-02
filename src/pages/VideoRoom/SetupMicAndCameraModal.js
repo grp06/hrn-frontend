@@ -1,67 +1,11 @@
 import React, { useState } from 'react'
-import Modal from '@material-ui/core/Modal'
-import Backdrop from '@material-ui/core/Backdrop'
-import Fade from '@material-ui/core/Fade'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/core/styles'
-
+import { Backdrop, Button, Fade, Grid, Modal } from '@material-ui/core'
 import { SetupMicAndCamera } from '../Lobby'
 import { useUserEventStatusContext } from '../../context'
-
-const useStyles = makeStyles((theme) => ({
-  acceptButton: {
-    margin: theme.spacing(1.5, 0),
-  },
-  buttonContainer: {
-    width: '50%',
-    [theme.breakpoints.down('md')]: {
-      width: '80%',
-    },
-  },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
-  },
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  modalBody: {
-    ...theme.typography.modalBody,
-    marginBottom: '20px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    textAlign: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    border: '2px solid #8C57DB',
-    boxShadow: '4px 4px 0 #8C57DB',
-    width: '55vw',
-    minWidth: '20vw',
-    height: 'auto',
-    padding: '40px',
-    [theme.breakpoints.down('sm')]: {
-      width: '90vw',
-    },
-  },
-  previewVideo: {
-    width: '400px',
-    height: 'auto',
-    backgroundColor: 'black',
-    borderRadius: '4px',
-  },
-}))
+import { useVideoRoomStyles } from '.'
 
 const SetupMicAndCameraModal = ({ open, setOpen }) => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const [openModal, setOpenModal] = useState(open)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState(false)

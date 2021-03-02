@@ -1,58 +1,14 @@
 import React, { useState } from 'react'
+import { Backdrop, Button, Fade, Grid, Modal, Typography } from '@material-ui/core'
 import { useMutation } from '@apollo/react-hooks'
-import Modal from '@material-ui/core/Modal'
-import Backdrop from '@material-ui/core/Backdrop'
-import Typography from '@material-ui/core/Typography'
-import Fade from '@material-ui/core/Fade'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-
-import { makeStyles } from '@material-ui/core/styles'
-
 import { useHistory } from 'react-router-dom'
 import { useTwilioContext, useUserEventStatusContext } from '../../context'
 import { updateLeftChat } from '../../gql/mutations'
-
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  paper: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    border: '2px solid #8C57DB',
-    boxShadow: '4px 4px 0 #8C57DB',
-    width: '55vw',
-    minWidth: '20vw',
-    height: 'auto',
-    padding: '40px',
-    [theme.breakpoints.down('sm')]: {
-      width: '90vw',
-    },
-  },
-  modalBody: {
-    ...theme.typography.modalBody,
-    marginBottom: '20px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    width: '50%',
-    [theme.breakpoints.down('md')]: {
-      width: '80%',
-    },
-  },
-  acceptButton: {
-    margin: theme.spacing(1.5, 0),
-  },
-}))
+import { useVideoRoomStyles } from '.'
 
 const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
   const { event_id, id: row_id } = myRound
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const history = useHistory()
   const { setUserEventStatus } = useUserEventStatusContext()
   const { setMyRound } = useTwilioContext()

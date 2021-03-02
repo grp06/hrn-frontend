@@ -1,24 +1,15 @@
 import React, { useEffect } from 'react'
 import { useQuery } from 'react-apollo'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { Grid } from '@material-ui/core'
 import { useAppContext, useUserContext } from '../../context'
 import { getAllTags } from '../../gql/queries'
 import { Loading } from '../../common'
-import { MyProfileSidebar } from '.'
-
-const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    marginTop: '150px',
-  },
-}))
+import { MyProfileSidebar, useMyProfileStyles } from '.'
 
 const MyProfile = () => {
-  const classes = useStyles()
+  const classes = useMyProfileStyles()
   const { user } = useUserContext()
   const { appLoading } = useAppContext()
-  const { id: userId } = user
 
   const { data: databaseTags, loading: databaseTagsLoading } = useQuery(getAllTags)
 
@@ -33,7 +24,7 @@ const MyProfile = () => {
   return (
     <Grid
       container
-      className={classes.pageContainer}
+      className={classes.myProfileContainer}
       alignItems="flex-start"
       justify="space-around"
     >

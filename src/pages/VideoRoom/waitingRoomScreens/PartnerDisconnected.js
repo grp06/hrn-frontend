@@ -1,37 +1,14 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
+import { Grid, Button, Typography } from '@material-ui/core'
 import { useMutation } from '@apollo/react-hooks'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import { useTwilioContext, useUserEventStatusContext } from '../../../context'
 import { updateLeftChat } from '../../../gql/mutations'
-
-const useStyles = makeStyles((theme) => ({
-  CTAButton: {
-    marginTop: theme.spacing(1.5),
-  },
-  inEventScreenText: {
-    ...theme.typography.inEventScreenText,
-  },
-  waitingRoom: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    background: '#111',
-    height: '100vh',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  dancingMan: {
-    fontSize: '50px',
-  },
-}))
+import { useVideoRoomStyles } from '..'
 
 const PartnerDisconnected = React.memo(({ myRound }) => {
   const { event_id, id: row_id } = myRound
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const history = useHistory()
   const { setMyRound } = useTwilioContext()
   const { setUserEventStatus } = useUserEventStatusContext()

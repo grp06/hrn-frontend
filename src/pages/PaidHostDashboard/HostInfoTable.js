@@ -1,38 +1,20 @@
 import React from 'react'
 import moment from 'moment-timezone'
-import Paper from '@material-ui/core/Paper'
-import Table from '@material-ui/core/Table'
-import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableContainer from '@material-ui/core/TableContainer'
-import TableHead from '@material-ui/core/TableHead'
-import TableRow from '@material-ui/core/TableRow'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
-  aTag: {
-    textDecoration: 'none',
-    color: theme.palette.common.sunray,
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.common.ghostWhite,
-    },
-  },
-  container: {
-    margin: theme.spacing(4, 'auto'),
-    width: '75vw',
-    [theme.breakpoints.down('sm')]: {
-      width: '90vw',
-    },
-  },
-  table: {
-    minWidth: 650,
-  },
-}))
+import { usePaidHostDashboardStyles } from '.'
 
 const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
-  const classes = useStyles()
+  const classes = usePaidHostDashboardStyles()
 
   const renderLinkedInLink = (linkedInURL) => {
     if (linkedInURL) {
@@ -50,7 +32,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
     return 'N/A'
   }
   return (
-    <div className={classes.container}>
+    <div className={classes.hostInfoContainer}>
       <Typography variant="h3" style={{ marginBottom: '16px' }}>
         {arrayOfHosts[0].role}:
       </Typography>

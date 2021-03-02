@@ -1,26 +1,9 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
-import Chip from '@material-ui/core/Chip'
-import Grid from '@material-ui/core/Grid'
-import { TagsForm } from '.'
-
-const createStyles = makeStyles((theme) => ({
-  sidebarTagsContainer: {
-    width: '100%',
-    margin: theme.spacing(2, 0, 3, 0),
-  },
-  tagsContainer: {
-    width: '100%',
-    margin: theme.spacing(2, 0),
-  },
-  editTagsIcon: {
-    cursor: 'pointer',
-    marginLeft: theme.spacing(1),
-  },
-}))
+import { Grid, Chip } from '@material-ui/core'
+import { TagsForm, useMyProfileStyles } from '.'
 
 const SidebarTags = ({ userId, usersTags, databaseTags }) => {
-  const classes = createStyles()
+  const classes = useMyProfileStyles()
   const [showTagsForm, setShowTagsForm] = useState(false)
 
   const renderUserTags = () => {
@@ -62,7 +45,7 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
         alignItems="center"
         justify="center"
         wrap="wrap"
-        className={classes.tagsContainer}
+        className={classes.sidebarTagsWrapper}
       >
         {renderUserTags()}
         {renderTagsForm()}

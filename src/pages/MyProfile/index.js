@@ -1,7 +1,7 @@
 export { default as EditProfileSidebarForm } from './EditProfileSidebarForm'
 export { default as MyProfile } from './MyProfile'
 export { default as MyProfileSidebar } from './MyProfileSidebar'
-export { default as MyProfileDashboard } from './MyProfileDashboard'
 export { default as SidebarAchievements } from './SidebarAchievements'
 export { default as SidebarTags } from './SidebarTags'
 export { default as TagsForm } from './TagsForm'
+export { default as useMyProfileStyles } from './styles'

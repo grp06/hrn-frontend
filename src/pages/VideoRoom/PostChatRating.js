@@ -1,74 +1,15 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { Button, Fab, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
 import { Snack } from '../../common'
 import { useEventContext } from '../../context'
 import { addFriend, updatePartnerRating, updatePartnerSharedDetails } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { constants } from '../../utils'
-
-const useStyles = makeStyles((theme) => ({
-  CTAButton: {
-    marginTop: theme.spacing(1.5),
-  },
-  inEventScreenText: {
-    ...theme.typography.inEventScreenText,
-  },
-  emoji: {
-    fontSize: '50px',
-    padding: theme.spacing(0, 2),
-  },
-  pageContainer: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    background: '#111',
-    height: '100vh',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  ratingContainer: {
-    margin: theme.spacing(0, 'auto'),
-    width: '70%',
-    [theme.breakpoints.down('sm')]: {
-      width: '90vw',
-    },
-  },
-  buttonContainer: {
-    width: '60%',
-    margin: theme.spacing(5, 0, 0, 0),
-    [theme.breakpoints.down('md')]: {
-      width: '80%',
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-  },
-  fabButton: {
-    width: '120px',
-    height: '120px',
-    lineHeight: 1.25,
-    '&:hover': {
-      backgroundColor: theme.palette.common.basePurple,
-      color: theme.palette.common.ghostWhite,
-    },
-    '&:hover .MuiFab-label .MuiGrid-root .MuiTypography-subtitle2': {
-      color: theme.palette.common.ghostWhite,
-      fontWeight: '700',
-    },
-  },
-  fabButtonGrid: {
-    height: '75%',
-  },
-  fabText: {
-    color: theme.palette.common.basePurple,
-    fontWeight: '700',
-  },
-}))
+import { useVideoRoomStyles } from '.'
 
 const PostChatRating = ({ myRound, setUserEventStatus }) => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const { event } = useEventContext()
   const { current_round, group_video_chat, num_rounds, id: eventId } = event
   const { partner_id, user_id } = myRound
@@ -148,9 +89,13 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
           container
           justify="space-around"
           alignItems="center"
-          className={classes.buttonContainer}
+          className={classes.postChatRatingButtonContainer}
         >
-          <Fab disableRipple onClick={() => handleUpdateRating(1)} className={classes.fabButton}>
+          <Fab
+            disableRipple
+            onClick={() => handleUpdateRating(1)}
+            className={classes.postChatRatingFabButton}
+          >
             <Grid
               container
               direction="column"
@@ -166,7 +111,11 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
               </Typography>
             </Grid>
           </Fab>
-          <Fab disableRipple onClick={() => handleUpdateRating(3)} className={classes.fabButton}>
+          <Fab
+            disableRipple
+            onClick={() => handleUpdateRating(3)}
+            className={classes.postChatRatingFabButton}
+          >
             <Grid
               container
               direction="column"
@@ -182,7 +131,11 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
               </Typography>
             </Grid>
           </Fab>
-          <Fab disableRipple onClick={() => handleUpdateRating(5)} className={classes.fabButton}>
+          <Fab
+            disableRipple
+            onClick={() => handleUpdateRating(5)}
+            className={classes.postChatRatingFabButton}
+          >
             <Grid
               container
               direction="column"

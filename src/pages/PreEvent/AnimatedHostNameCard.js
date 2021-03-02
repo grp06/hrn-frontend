@@ -2,33 +2,10 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Grid, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  hostEmojiiContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(1),
-  },
-  hostNameCard: {
-    position: 'absolute',
-    top: 'auto',
-    bottom: '90px',
-    right: 'auto',
-    left: '0',
-    borderRadius: '4px',
-    width: 'auto',
-    minWidth: '300px',
-    height: '80px',
-  },
-  hostNameContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.basePurple,
-    padding: theme.spacing(1),
-  },
-}))
+import { usePreEventStyles } from '.'
 
 const AnimatedHostNameCard = ({ hostsFirstName }) => {
-  const classes = useStyles()
+  const classes = usePreEventStyles()
   return (
     <motion.div
       initial={{ x: -500, y: 40 }}

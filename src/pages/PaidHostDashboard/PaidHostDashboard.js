@@ -2,47 +2,16 @@ import React, { useRef, useState } from 'react'
 import moment from 'moment'
 import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { Button, Grid, Typography } from '@material-ui/core'
 
-import { HostInfoTable } from '.'
+import { HostInfoTable, usePaidHostDashboardStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'
 import { constants } from '../../utils'
 
-const useStyles = makeStyles((theme) => ({
-  activeTimeframeButton: {
-    backgroundColor: theme.palette.common.basePink,
-  },
-  largeNumber: {
-    fontSize: '10rem',
-    marginTop: '-20px',
-  },
-  revenueNumber: {
-    fontSize: '5rem',
-    fontWeight: '500',
-    color: '#00ff00',
-    marginTop: '100px',
-  },
-  numberContainer: {
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(2, 0),
-    },
-  },
-  numbersContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    width: '90%',
-    padding: theme.spacing(3, 5),
-    margin: theme.spacing('100px', 'auto'),
-  },
-}))
-
 const PaidHostDashboard = () => {
-  const classes = useStyles()
+  const classes = usePaidHostDashboardStyles()
   const user = useUserContext()
   const { adminUserIds, hrnFriendsUserIds } = constants
   const { id: userId } = user
@@ -78,7 +47,8 @@ const PaidHostDashboard = () => {
   }
 
   const getCurrentRevenueStats = () => {
-    let paidStarterPlanNumbers, paidPremiumPlanNumbers
+    let paidStarterPlanNumbers
+    let paidPremiumPlanNumbers
 
     if (hostStarterData) {
       paidStarterPlanNumbers = hostStarterData.users
@@ -135,8 +105,8 @@ const PaidHostDashboard = () => {
     return { totalMRR, totalRevenue, paidStarterPlanNumbers, paidPremiumPlanNumbers }
   }
 
-  const getArrayOfHostsBetweenTimeFrame = (userArray) => {
-    return userArray.users && userArray.users.length
+  const getArrayOfHostsBetweenTimeFrame = (userArray) =>
+    userArray.users && userArray.users.length
       ? userArray.users
           .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
           .filter((user) => {
@@ -149,7 +119,6 @@ const PaidHostDashboard = () => {
             return compareDate.isBetween(dateFrom, dateTo, 'days', '[]')
           })
       : []
-  }
 
   const renderHostTables = () => {
     const unpaidHosts = hostData && getArrayOfHostsBetweenTimeFrame(hostData)

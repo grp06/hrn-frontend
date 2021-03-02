@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-
-import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import {
+  InVideoBottomControlPanel,
+  RoundProgressBar,
+  VideoRoomSidebar,
+  VideoRouter,
+  useVideoRoomStyles,
+} from '.'
 import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateEventUsersLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
 import {
-  useAppContext,
   useEventContext,
   useTwilioContext,
   useUserContext,
@@ -20,56 +23,8 @@ import { useTwilio, useIsUserActive } from '../../hooks'
 
 const { connect } = require('twilio-video')
 
-const useStyles = makeStyles((theme) => ({
-  videoWrapper: {
-    background: theme.palette.common.blackBody,
-  },
-  screenOverlay: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 99,
-    width: '100vw',
-    height: '100vh',
-  },
-  mainVid: {
-    width: '100%',
-    display: 'flex',
-    '& video': {
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-    },
-  },
-  myVideo: {
-    width: '200px',
-    position: 'absolute',
-    top: '3%',
-    right: '1%',
-    left: 'auto',
-    bottom: 'auto',
-    zIndex: 99,
-    opacity: 0,
-    transition: '.6s',
-    '&.showControls, &:hover': {
-      transition: 'opacity 0.6s',
-      opacity: 1,
-    },
-    '& video': {
-      borderRadius: 4,
-      width: '200px',
-    },
-  },
-
-  cameraDisabledWrapper: {
-    height: '100vh',
-  },
-}))
-
 const VideoRoom = () => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const { user, userContextLoading } = useUserContext()
   const { event, eventContextLoading } = useEventContext()
   const {

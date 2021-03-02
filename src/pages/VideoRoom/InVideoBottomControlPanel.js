@@ -1,48 +1,12 @@
 import React from 'react'
-import Badge from '@material-ui/core/Badge'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
+import { Grid, Badge, IconButton } from '@material-ui/core'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import NoteIcon from '@material-ui/icons/Note'
-import { makeStyles } from '@material-ui/styles'
 
-import { MoreActionsButton } from '.'
-import { constants } from '../../utils'
-
-const { bottomNavBarHeight } = constants
-
-const useStyles = makeStyles((theme) => ({
-  activeButton: {
-    borderRadius: '4px',
-    backgroundColor: '#41444A !important',
-    '&:hover': {
-      backgroundColor: 'transparent !important',
-    },
-  },
-  iconButton: {
-    backgroundColor: 'transparent',
-    boxShadow: 'none',
-    '&:hover': {
-      borderRadius: '4px',
-      backgroundColor: '#41444A',
-    },
-  },
-  container: {
-    position: 'fixed',
-    zIndex: 3,
-    width: '100%',
-    height: bottomNavBarHeight,
-    top: 'auto',
-    bottom: '0%',
-    padding: theme.spacing(2, 4),
-    paddingRight: '6vw',
-    backgroundColor: theme.palette.common.grey10,
-  },
-}))
+import { MoreActionsButton, useVideoRoomStyles } from '.'
 
 const InVideoBottomControlPanel = React.memo(
   ({ chatIsOpen, myRound, numberOfUnreadMessagesFromMyPartner, toggleChat }) => {
-    const classes = useStyles()
+    const classes = useVideoRoomStyles()
     return (
       <Grid
         container
@@ -50,7 +14,7 @@ const InVideoBottomControlPanel = React.memo(
         justify="flex-end"
         alignItems="center"
         wrap="nowrap"
-        className={classes.container}
+        className={classes.inVideoBottomControlPanelContainer}
       >
         <Grid item>
           <IconButton
