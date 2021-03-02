@@ -1,96 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Grid from '@material-ui/core/Grid'
 import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/styles'
+import { Grid } from '@material-ui/core'
 
-import { GroupVideoChatBottomPanel } from '.'
-import PersonIcon from '../../assets/greyPerson.svg'
-import MicOffIcon from '../../assets/micOff.svg'
+import { GroupVideoChatBottomPanel, useEventGroupVideoChatStyles } from '.'
 import { EventChatBox, Loading } from '../../common'
-import {
-  useAppContext,
-  useEventContext,
-  useUserContext,
-  useUserEventStatusContext,
-} from '../../context'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
 import { useGroupVideoChatTwilio } from '../../hooks'
 import { CameraAndMicSetupScreen } from '../Lobby'
 
 const { connect } = require('twilio-video')
 
-const useStyles = makeStyles((theme) => ({
-  box: {
-    position: 'relative',
-    backgroundImage: `url(${PersonIcon})`,
-    backgroundPosition: '50% 50%',
-    backgroundRepeat: 'no-repeat',
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    '& video': {
-      width: '100%',
-      height: '100%',
-      objectFit: 'cover',
-    },
-    margin: theme.spacing(0.5),
-  },
-  usersNameContainer: {
-    position: 'absolute',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    zIndex: 9,
-    top: 'auto',
-    left: '1%',
-    right: 'auto',
-    bottom: '1%',
-    width: 'auto',
-    height: '25px',
-    borderRadius: '4px',
-    backgroundColor: 'rgb(36,37,38,0.7)',
-    padding: theme.spacing(0.5, 1),
-  },
-  usersNameDiv: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-  },
-  usersNameInVideo: {
-    fontFamily: 'Muli',
-    fontSize: '1.25rem',
-    fontWeight: '400',
-    color: theme.palette.common.ghostWhite,
-    margin: 0,
-  },
-  videoBox: {
-    width: '95%',
-    height: '90vh',
-    borderRadius: '4px',
-    padding: theme.spacing(3),
-    overflowY: 'scroll',
-    margin: theme.spacing(0, 'auto'),
-  },
-  micOffIconDiv: {
-    backgroundImage: `url(${MicOffIcon})`,
-    backgroundPosition: '50% 50%',
-    backgroundRepeat: 'no-repeat',
-    width: '25px',
-    height: '25px',
-    marginRight: '-4px',
-    marginLeft: '4px',
-    display: 'none',
-  },
-  hostTag: {
-    color: theme.palette.common.basePink,
-    fontWeight: 700,
-    fontFamily: 'Muli',
-    marginRight: '5px',
-    fontSize: '1.25rem',
-  },
-}))
-
 const EventGroupVideoChat = () => {
-  const classes = useStyles()
+  const classes = useEventGroupVideoChatStyles()
   const history = useHistory()
   const {
     event,
@@ -138,8 +60,8 @@ const EventGroupVideoChat = () => {
         return
       }
       const newDivElement = document.createElement('div')
-      const usersNameContainer = document.createElement('div')
-      const usersNameDiv = document.createElement('div')
+      const attendeesNameContainer = document.createElement('div')
+      const attendeesNameDiv = document.createElement('div')
       const usersNamePTag = document.createElement('p')
       const usersNameNode = document.createTextNode(usersFirstName)
       const usersMicOffDiv = document.createElement('div')
@@ -148,23 +70,23 @@ const EventGroupVideoChat = () => {
         const hostTagNode = document.createTextNode('• Host')
         hostTagPTag.setAttribute('class', classes.hostTag)
         hostTagPTag.appendChild(hostTagNode)
-        usersNameDiv.appendChild(hostTagPTag)
+        attendeesNameDiv.appendChild(hostTagPTag)
       }
       usersNamePTag.appendChild(usersNameNode)
-      usersNamePTag.setAttribute('class', classes.usersNameInVideo)
-      usersNameDiv.setAttribute('class', classes.usersNameDiv)
-      usersNameDiv.appendChild(usersNamePTag)
+      usersNamePTag.setAttribute('class', classes.attendeesNameInVideo)
+      attendeesNameDiv.setAttribute('class', classes.attendeesNameDiv)
+      attendeesNameDiv.appendChild(usersNamePTag)
       usersMicOffDiv.setAttribute('id', `${usersId}-mic-off-icon-div`)
       usersMicOffDiv.setAttribute('class', classes.micOffIconDiv)
-      usersNameContainer.appendChild(usersNameDiv)
-      usersNameContainer.appendChild(usersMicOffDiv)
-      usersNameContainer.setAttribute('class', classes.usersNameContainer)
-      usersNameContainer.setAttribute('id', `${usersId}-name-container`)
+      attendeesNameContainer.appendChild(attendeesNameDiv)
+      attendeesNameContainer.appendChild(usersMicOffDiv)
+      attendeesNameContainer.setAttribute('class', classes.attendeesNameContainer)
+      attendeesNameContainer.setAttribute('id', `${usersId}-name-container`)
       newDivElement.setAttribute('id', usersId)
-      newDivElement.setAttribute('class', classes.box)
+      newDivElement.setAttribute('class', classes.attendeeVideoBox)
       newDivElement.style.height = height
       newDivElement.style.width = width
-      newDivElement.appendChild(usersNameContainer)
+      newDivElement.appendChild(attendeesNameContainer)
       if (thisIsHostDiv) {
         videoGrid.insertBefore(newDivElement, videoGrid.firstChild)
       } else {
@@ -228,7 +150,7 @@ const EventGroupVideoChat = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState === true && eventChatMessages && eventChatMessages.length) {
+      if (prevState === true && eventChatMessages?.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState
@@ -244,7 +166,7 @@ const EventGroupVideoChat = () => {
   }, [event_status])
 
   useEffect(() => {
-    if (onlineEventUsers && onlineEventUsers.length && userHasEnabledCameraAndMic) {
+    if (onlineEventUsers?.length && userHasEnabledCameraAndMic) {
       createIndividualVideoDiv()
       cleanupEmptyVideoDivs()
       resizeActiveVideoDivs(onlineEventUsers.length)
