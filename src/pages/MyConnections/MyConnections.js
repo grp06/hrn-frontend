@@ -1,91 +1,15 @@
 import React, { useEffect } from 'react'
-
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import ToggleButton from '@material-ui/lab/ToggleButton'
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup'
 import { useSubscription } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
-import { makeStyles } from '@material-ui/styles'
-import { listenToAllMyConnections } from '../../gql/subscriptions'
-import blurryBackground from '../../assets/blurryBackground.png'
-import { useAppContext, useUserContext } from '../../context'
-import { ConnectionCard } from '.'
+import { Button, Grid, Typography } from '@material-ui/core'
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
+import { ConnectionCard, useMyConnectionsStyles } from '.'
 import { FloatCardMedium, Loading } from '../../common'
-
-const useStyles = makeStyles((theme) => ({
-  connectionsContainer: {
-    margin: theme.spacing(0, 'auto'),
-    width: '800px',
-    [theme.breakpoints.down('sm')]: {
-      width: '500px',
-    },
-    [theme.breakpoints.down('xs')]: {
-      width: '85vw',
-    },
-  },
-  nullDataContainer: {
-    padding: theme.spacing(5),
-  },
-  nullDataHeader: {
-    marginBottom: theme.spacing(1),
-    textAlign: 'center',
-  },
-  nullDataSub: {
-    textAlign: 'center',
-  },
-  pageBanner: {
-    width: '100%',
-    height: '30vh',
-    backgroundImage: `url(${blurryBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    marginBottom: '40px',
-  },
-  pageBannerContentContainer: {
-    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
-    width: '70%',
-  },
-  sectionHeader: {
-    textAlign: 'center',
-    margin: theme.spacing(0, 'auto', 3, 'auto'),
-  },
-  toggleButtonActive: {
-    width: '125px',
-    '&.Mui-selected': {
-      color: theme.palette.common.basePink,
-      borderRadius: 0,
-      border: 'none',
-      borderBottom: `2px solid ${theme.palette.common.basePink}`,
-      backgroundColor: 'transparent',
-      '&:hover': {
-        backgroundColor: 'transparent',
-      },
-    },
-  },
-  toggleButtonInactive: {
-    width: '125px',
-    color: theme.palette.common.ghostWhite,
-    borderRadius: 0,
-    border: 'none',
-    borderBottom: '2px solid #3e4042',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  toggleButtonGroup: {
-    margin: theme.spacing(0, 0, 12, 0),
-  },
-  toggleGrid: {
-    width: '70%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  },
-}))
+import { useAppContext, useUserContext } from '../../context'
+import { listenToAllMyConnections } from '../../gql/subscriptions'
 
 const MyConnections = () => {
-  const classes = useStyles()
+  const classes = useMyConnectionsStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
@@ -145,7 +69,7 @@ const MyConnections = () => {
   }
 
   const renderContactCards = (contactGroup, emptyGroupMessage) => {
-    if (allMyConnectionsData && allMyConnectionsData.partners.length) {
+    if (allMyConnectionsData?.partners.length) {
       const group =
         contactGroup === 'friends'
           ? allMyConnectionsData.partners
@@ -192,7 +116,7 @@ const MyConnections = () => {
           direction="column"
           justify="flex-end"
           alignItems="center"
-          className={classes.pageBanner}
+          className={classes.myConnectionsPageBanner}
         >
           <Grid item container direction="column" className={classes.pageBannerContentContainer}>
             <Typography variant="h1">My Connections</Typography>
@@ -235,7 +159,7 @@ const MyConnections = () => {
         direction="column"
         justify="center"
         alignItems="center"
-        className={classes.connectionsContainer}
+        className={classes.myConnectionsContainer}
       >
         {connectionToggleValue === 'friends'
           ? renderContactCards('friends', "Looks like you haven't connected with anyone yet 😢")
