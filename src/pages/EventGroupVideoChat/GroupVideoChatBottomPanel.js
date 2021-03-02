@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Grid, IconButton } from '@material-ui/core'
-import {
-  ChatBubbleIcon,
-  MicIcon,
-  MicOffIcon,
-  VideocamIcon,
-  VideocamOffIcon,
-} from '@material-ui/icons'
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
+import MicIcon from '@material-ui/icons/Mic'
+import MicOffIcon from '@material-ui/icons/MicOff'
+import VideocamIcon from '@material-ui/icons/Videocam'
+import VideocamOffIcon from '@material-ui/icons/VideocamOff'
 import Video from 'twilio-video'
 
 import { EndEventButton, LeaveEventButton, useEventGroupVideoChatStyles } from '.'
@@ -22,7 +20,7 @@ const GroupVideoChatBottomPanel = React.memo(
     twilioGroupChatRoom,
     userIsHost,
   }) => {
-    const classes = useStyles()
+    const classes = useEventGroupVideoChatStyles()
     const [participantHasEnabledAudio, setParticipantHasEnabledAudio] = useState(false)
     const [participantHasEnabledVideo, setParticipantHasEnabledVideo] = useState(false)
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
