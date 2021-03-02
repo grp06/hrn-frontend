@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Badge, Grid, IconButton } from '@material-ui/core'
-import { ChatBubbleIcon, MicIcon, MicOffIcon, VideocamIcon, VideocamIcon } from '@material-ui/icons'
+import {
+  ChatBubbleIcon,
+  MicIcon,
+  MicOffIcon,
+  VideocamIcon,
+  VideocamOffIcon,
+} from '@material-ui/icons'
 import Video from 'twilio-video'
 
 import { EndEventButton, LeaveEventButton, useEventGroupVideoChatStyles } from '.'
