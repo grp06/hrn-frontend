@@ -1,33 +1,19 @@
 import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
 import { useQuery, useMutation } from '@apollo/react-hooks'
 import { Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import { useHistory } from 'react-router-dom'
 import { FloatCardMediumLarge, GeosuggestCityInput, Loading, Snack } from '../../common'
-import { FormikOnboardingStepper, OnboardingInterestTagInput } from '.'
+import { FormikOnboardingStepper, OnboardingInterestTagInput, useOnboardingStyles } from '.'
 import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
 import { rsvpForEvent } from '../../utils'
 import { sleep } from '../../helpers'
 import { useAppContext, useUserContext } from '../../context'
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: '100px',
-  },
-  cityInputContainer: {
-    padding: theme.spacing(0, 2.5),
-  },
-  shortBioInputContainer: {
-    padding: theme.spacing(0, 2.5),
-    marginBottom: theme.spacing(1),
-  },
-}))
-
 const Onboarding = () => {
-  const classes = useStyles()
+  const classes = useOnboardingStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { updateUserObject, setUsersTags, user } = useUserContext()
@@ -44,7 +30,9 @@ const Onboarding = () => {
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
 
-  let eventIdInLocalStorage, eventData, event
+  let eventIdInLocalStorage
+  let eventData
+  let event
 
   if (localStorage.getItem('eventId') && localStorage.getItem('event')) {
     eventIdInLocalStorage = localStorage.getItem('eventId')
@@ -131,7 +119,7 @@ const Onboarding = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className={classes.onboardingContainer}>
       <FloatCardMediumLarge>
         <FormikOnboardingStepper
           initialValues={{

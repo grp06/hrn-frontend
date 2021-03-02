@@ -1,26 +1,10 @@
 import React, { useState } from 'react'
 import { Formik, Form } from 'formik'
-import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/styles'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Grid from '@material-ui/core/Grid'
-import Stepper from '@material-ui/core/Stepper'
-import Step from '@material-ui/core/Step'
-import StepLabel from '@material-ui/core/StepLabel'
-
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    padding: theme.spacing(3),
-  },
-  backResetButton: {
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    marginRight: theme.spacing(1),
-  },
-}))
+import { Grid, Button, CircularProgress, Stepper, Step, StepLabel } from '@material-ui/core'
+import { useOnboardingStyles } from '.'
 
 const FormikOnboardingStepper = ({ children, ...props }) => {
-  const classes = useStyles()
+  const classes = useOnboardingStyles()
   const stepArray = React.Children.toArray(children)
   const [step, setStep] = useState(0)
   const currentStep = stepArray[step]
