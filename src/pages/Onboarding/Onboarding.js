@@ -65,7 +65,7 @@ const Onboarding = () => {
   }
 
   // Onboarding should only be displayed directly after signing up
-  if (usersCityInContext || usersTagsInContext.length) {
+  if (usersCityInContext || usersTagsInContext?.length) {
     history.push('/events')
   }
 

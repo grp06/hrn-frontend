@@ -101,12 +101,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     window.analytics.track(`successfully paid for ${result.plan}`)
     console.log('stripeCustomerId = ', stripeCustomerId)
 
-    window.$FPROM.trackSignup({
-      uid: stripeCustomerId,
-      function(arg) {
-        console.log('Callback received! = ', arg)
-      },
-    })
     setTimeout(() => {
       console.log('after tracking before push')
       history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })

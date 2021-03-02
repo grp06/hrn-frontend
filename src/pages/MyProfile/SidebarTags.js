@@ -28,11 +28,11 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
       return null
     }
 
-    if (usersTags.length === 0) {
+    if (usersTags?.length === 0) {
       return setShowTagsForm(true)
     }
 
-    if (usersTags.length > 1) {
+    if (usersTags?.length > 1) {
       usersTags = usersTags.sort((tagA, tagB) => {
         return tagA.tag.name.toLowerCase() > tagB.tag.name.toLowerCase()
       })
