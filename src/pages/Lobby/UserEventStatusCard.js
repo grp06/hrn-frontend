@@ -1,23 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    width: '100%',
-  },
-  messageGrid: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import { useLobbyStyles } from '.'
 
 const UserEventStatusCard = ({ userEventStatus }) => {
-  const classes = useStyles()
+  const classes = useLobbyStyles()
 
   const eventStatusVariants = {
     glow: {
@@ -41,7 +28,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
                 🧢
               </span>
             </Typography>
-            <Grid className={classes.messageGrid}>
+            <Grid className={classes.sittingOutAndStatusMessageGrid}>
               <Typography variant="body1">
                 But don&apos;t worry! We&apos;ve penciled you in and we&apos;ll pair you with
                 someone as soon as we can.
@@ -59,7 +46,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
                 😭
               </span>
             </Typography>
-            <Grid className={classes.messageGrid}>
+            <Grid className={classes.sittingOutAndStatusMessageGrid}>
               <Typography variant="body1">
                 We&apos;ve put your name back into the hat and we&apos;ll pair you with someone as
                 soon as we can.
@@ -77,7 +64,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
                 👑
               </span>
             </Typography>
-            <Grid className={classes.messageGrid}>
+            <Grid className={classes.sittingOutAndStatusMessageGrid}>
               <Typography variant="body1">
                 Sometimes we have an odd number of people and need someone to sit out.
               </Typography>
@@ -104,7 +91,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
                 🤗
               </span>
             </Typography>
-            <Grid className={classes.messageGrid}>
+            <Grid className={classes.sittingOutAndStatusMessageGrid}>
               <Typography variant="body1">
                 We&apos;ve penciled you in and we&apos;ll pair you with someone as soon as we can.
               </Typography>
@@ -124,7 +111,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
-        className={classes.cardContainer}
+        className={classes.sittingOutAndStatusCardContainer}
       >
         {renderMessage()}
       </Grid>

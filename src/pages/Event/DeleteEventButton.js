@@ -2,7 +2,7 @@ import React from 'react'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import FeatherIcon from 'feather-icons-react'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import { TransitionModal } from '../../common'
 import { deleteEvent } from '../../gql/mutations'
 

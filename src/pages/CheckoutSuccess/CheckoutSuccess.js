@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import moment from 'moment'
 import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
+import { Grid } from '@material-ui/core'
 
 import { CongratsCard, PaymentConfirmationCard } from '.'
 import { Loading } from '../../common'
@@ -17,7 +17,6 @@ const CheckoutSuccess = ({ location }) => {
   // if the user is a paid host locationState should be an object with
   // keys paymentMethodId, plan, and subscription
   // If the user is a free host locationState will have {freeHost: true}
-  console.log(locationState)
 
   const { data: hostQuestionnaireQuery, loading: hostQuestionnaireQueryLoading } = useQuery(
     getHostQuestionnaire,
@@ -59,14 +58,13 @@ const CheckoutSuccess = ({ location }) => {
 
   const planItem = `${planName} ${planPeriod}`
 
-  const planPrice = locationState.subscription && locationState.subscription.plan.amount / 100
+  const planPrice = locationState.subscription?.plan.amount / 100
 
   if (hostQuestionnaireQueryLoading) {
     return <Loading />
   }
 
-  const userHasDoneHostQuestionnaire =
-    hostQuestionnaireQuery && hostQuestionnaireQuery.host_questionnaire.length >= 1
+  const userHasDoneHostQuestionnaire = hostQuestionnaireQuery?.host_questionnaire.length >= 1
 
   return (
     <Grid container justify="center" alignItems="center" style={{ paddingTop: '100px' }}>

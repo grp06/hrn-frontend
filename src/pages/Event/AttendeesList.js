@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
-
-import Avatar from '@material-ui/core/Avatar'
-import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemAvatar from '@material-ui/core/ListItemAvatar'
-import ListItemText from '@material-ui/core/ListItemText'
-import Typography from '@material-ui/core/Typography'
+import {
+  Avatar,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Typography,
+} from '@material-ui/core'
 import { useSubscription } from '@apollo/react-hooks'
-import { makeStyles } from '@material-ui/styles'
 
+import { useEventStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { displayOnlineUsers } from '../../gql/subscriptions'
 import { constants } from '../../utils'
@@ -17,18 +18,8 @@ import { useEventContext } from '../../context'
 
 const { lastSeenDuration } = constants
 
-const useStyles = makeStyles((theme) => ({
-  attendeesList: {
-    alignSelf: 'flex-start',
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-}))
-
 const AttendeesList = ({ eventId, timeState }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const [oldOnlineUsers, setOldOnlineUsers] = useState([])
   const { event } = useEventContext()
   const { data: onlineUsersData, loading: onlineUsersLoading } = useSubscription(
@@ -48,7 +39,7 @@ const AttendeesList = ({ eventId, timeState }) => {
   }, [event])
 
   useEffect(() => {
-    if (!onlineUsersLoading && onlineUsersData.event_users.length && !timeState !== 'future') {
+    if (!onlineUsersLoading && onlineUsersData?.event_users.length && !timeState !== 'future') {
       const allUsers = onlineUsersData.event_users
       // users who've submitted a mutation within the last x seconds
       const freshOnlineUsers = allUsers.filter((user) => {
@@ -71,15 +62,13 @@ const AttendeesList = ({ eventId, timeState }) => {
       <Typography variant="h3">Online Attendees</Typography>
       <List dense>
         {oldOnlineUsers.map(({ user }) => {
-          // const formattedDate = user.updated_at.slice(0, 10)
-          // const lastSeen = moment(formattedDate, 'YYYY-MM-DD').fromNow()
           return (
             <ListItem key={user.id}>
               <ListItemAvatar>
                 <Avatar>
                   <img
                     alt="company-logo"
-                    className={classes.avatar}
+                    className={classes.attendeesAvatar}
                     src={user.profile_pic_url || logo}
                   />
                 </Avatar>

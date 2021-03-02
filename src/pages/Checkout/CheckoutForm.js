@@ -4,52 +4,13 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import { makeStyles } from '@material-ui/core/styles'
+import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
 
+import { useCheckoutStyles } from '.'
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
 import { Snack } from '../../common'
 import { constants } from '../../utils'
 const { ROLE, TOKEN } = constants
-
-const useStyles = makeStyles((theme) => ({
-  cardElementContainer: {
-    backgroundColor: theme.palette.common.grey10,
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1.5),
-    borderRadius: '4px',
-    margin: theme.spacing(2, 0),
-  },
-  formContainer: {
-    height: 'auto',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(3),
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
-    },
-  },
-  formInputMargin: {
-    margin: theme.spacing(2, 0),
-    padding: theme.spacing(0, 1),
-  },
-  formSection: {
-    margin: theme.spacing(4, 0),
-    padding: theme.spacing(0, 1),
-  },
-  sectionContainer: {
-    marginBottom: theme.spacing(3),
-    width: '100%',
-  },
-  subtitleHeading: {
-    color: theme.palette.common.ghostWhiteDark,
-    fontWeight: 600,
-    textTransform: 'uppercase',
-  },
-}))
 
 const cardElementOptions = {
   style: {
@@ -79,7 +40,7 @@ const CheckoutSchema = Yup.object().shape({
 })
 
 const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
-  const classes = useStyles()
+  const classes = useCheckoutStyles()
   const stripe = useStripe()
   const elements = useElements()
   const history = useHistory()
@@ -186,7 +147,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   }
 
   return (
-    <Grid container direction="column" className={classes.formContainer}>
+    <Grid container direction="column" className={classes.checkoutFormContainer}>
       <Formik
         initialValues={{
           name: '',
@@ -203,11 +164,11 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         {({ submitForm, dirty, isValid, values }) => (
           <Form>
             <div className={classes.sectionContainer}>
-              <Grid container direction="column" className={classes.formSection}>
+              <Grid container direction="column" className={classes.checkoutFormSection}>
                 <Typography variant="subtitle2" className={classes.subtitleHeading}>
                   Payment Details
                 </Typography>
-                <Grid container className={classes.formInputMargin}>
+                <Grid container className={classes.checkoutFormInputMargin}>
                   <Field
                     component={TextField}
                     name="name"
@@ -220,11 +181,11 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                   <CardElement options={cardElementOptions} />
                 </div>
               </Grid>
-              <Grid container className={classes.formSection}>
+              <Grid container className={classes.checkoutFormSection}>
                 <Typography variant="subtitle2" className={classes.subtitleHeading}>
                   Billing Address
                 </Typography>
-                <Grid container className={classes.formInputMargin}>
+                <Grid container className={classes.checkoutFormInputMargin}>
                   <Field
                     component={TextField}
                     name="addressLine1"
@@ -233,7 +194,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                     required
                   />
                 </Grid>
-                <Grid container className={classes.formInputMargin}>
+                <Grid container className={classes.checkoutFormInputMargin}>
                   <Field component={TextField} name="city" label="City" fullWidth required />
                 </Grid>
                 <Grid
@@ -241,7 +202,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                   item
                   md={6}
                   style={{ paddingRight: '4px' }}
-                  className={classes.formInputMargin}
+                  className={classes.checkoutFormInputMargin}
                 >
                   <Field component={TextField} name="state" label="State" fullWidth required />
                 </Grid>
@@ -250,7 +211,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                   item
                   md={6}
                   style={{ paddingLeft: '4px' }}
-                  className={classes.formInputMargin}
+                  className={classes.checkoutFormInputMargin}
                 >
                   <Field
                     component={TextField}

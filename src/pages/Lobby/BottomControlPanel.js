@@ -1,51 +1,12 @@
 import React from 'react'
-import Badge from '@material-ui/core/Badge'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
-import Typography from '@material-ui/core/Typography'
+import { Badge, Grid, IconButton, Typography } from '@material-ui/core'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
-import { makeStyles } from '@material-ui/styles'
-import { getTimeUntilEvent } from '../../utils'
-import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
-import { StartEventButton } from '../PreEvent'
-import { PreEventInstructionModal } from '.'
-
+import { PreEventInstructionModal, useLobbyStyles } from '.'
 import { TransitionModal } from '../../common'
+import { SetupMicAndCameraButton, StartPreEventButton } from '../Event'
 import { startEvent } from '../../helpers'
-import { constants } from '../../utils'
-
-const { bottomNavBarHeight } = constants
-
-const useStyles = makeStyles((theme) => ({
-  activeButton: {
-    borderRadius: '4px',
-    backgroundColor: '#41444A !important',
-    '&:hover': {
-      backgroundColor: 'transparent !important',
-    },
-  },
-  container: {
-    position: 'fixed',
-    zIndex: 999,
-    width: '100%',
-    height: bottomNavBarHeight,
-    top: 'auto',
-    bottom: '0%',
-    padding: theme.spacing(2, 4),
-    backgroundColor: theme.palette.common.grey10,
-  },
-  iconButton: {
-    backgroundColor: 'transparent',
-    boxShadow: 'none',
-    '&:hover': {
-      borderRadius: '4px',
-      backgroundColor: '#41444A',
-    },
-  },
-  settingsAndChatGrid: {
-    paddingRight: '6vw',
-  },
-}))
+import { StartEventButton } from '../PreEvent'
+import { getTimeUntilEvent } from '../../utils'
 
 const BottomControlPanel = ({
   chatIsOpen,
@@ -56,7 +17,7 @@ const BottomControlPanel = ({
   userId,
   userHasEnabledCameraAndMic,
 }) => {
-  const classes = useStyles()
+  const classes = useLobbyStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
@@ -89,7 +50,7 @@ const BottomControlPanel = ({
       justify="flex-start"
       alignItems="center"
       wrap="nowrap"
-      className={classes.container}
+      className={classes.bottomControlPanelContainer}
     >
       {userIsHost && eventStatus === 'not-started' && (
         <Grid container direction="column">
@@ -139,7 +100,9 @@ const BottomControlPanel = ({
           <IconButton
             disableRipple
             className={
-              chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+              chatIsOpen
+                ? ` ${classes.activeBottomControlButton} ${classes.iconButton}`
+                : classes.iconButton
             }
           >
             <Badge badgeContent={chatIsOpen ? 0 : numberOfUnreadChatMessages} color="secondary">

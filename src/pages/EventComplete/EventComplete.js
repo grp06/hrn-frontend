@@ -1,82 +1,20 @@
 import React, { useEffect } from 'react'
-
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { useSubscription } from '@apollo/react-hooks'
-import { makeStyles } from '@material-ui/core/styles'
 import { useHistory } from 'react-router-dom'
+import { Button, Grid, Typography } from '@material-ui/core'
 
-import { BecomeAHostCard } from '.'
-import {
-  useAppContext,
-  useEventContext,
-  useUserContext,
-  useUserEventStatusContext,
-} from '../../context'
+import { BecomeAHostCard, useEventCompleteStyles } from '.'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { Loading } from '../../common'
+import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
 import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
 import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
-import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
 
-const { giveFeedbackTypeform, becomeAHostTypeform } = constants
-
-const useStyles = makeStyles((theme) => ({
-  buttonCard: {
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(3, 5),
-    borderRadius: '4px',
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(2),
-    },
-  },
-  buttonContainer: {
-    width: '44%',
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('md')]: {
-      width: '34%',
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-    },
-  },
-  cardTitle: {
-    marginBottom: theme.spacing(3),
-  },
-  connectionsContainer: {
-    padding: theme.spacing(3, 5),
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    width: '54%',
-    [theme.breakpoints.down('md')]: {
-      width: '64%',
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '100%',
-      padding: theme.spacing(2),
-    },
-    marginBottom: theme.spacing(3),
-  },
-  contentContainer: {
-    position: 'relative',
-    zIndex: '99',
-    width: '75vw',
-    maxWidth: '1560px',
-    margin: theme.spacing(-20, 'auto', 0, 'auto'),
-    paddingBottom: '40px',
-    [theme.breakpoints.down('xs')]: {
-      width: '85vw',
-    },
-  },
-  sideButton: {
-    width: '100%',
-  },
-}))
+const { giveFeedbackTypeform } = constants
 
 const EventComplete = () => {
-  const classes = useStyles()
+  const classes = useEventCompleteStyles()
   const { event, resetEvent, eventContextLoading } = useEventContext()
   const { user, setUserInEvent, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
@@ -118,7 +56,7 @@ const EventComplete = () => {
   }
 
   const renderAllMyEventConnection = () => {
-    if (myConnectionAfterEventData && myConnectionAfterEventData.partners.length > 0) {
+    if (myConnectionAfterEventData?.partners.length > 0) {
       return myConnectionAfterEventData.partners
         .sort((partnerA, partnerB) =>
           partnerA.partner.name.toLowerCase().localeCompare(partnerB.partner.name.toLowerCase())
@@ -140,24 +78,29 @@ const EventComplete = () => {
   return (
     <div>
       <EventPhotoBanner bannerPhotoURL={banner_photo_url} eventId={eventId} />
-      <Grid container direction="column" justify="flex-start" className={classes.contentContainer}>
+      <Grid
+        container
+        direction="column"
+        justify="flex-start"
+        className={classes.eventCompleteContentContainer}
+      >
         <EventTitleAndCTACard event={event} user={user} />
         <Grid container direction="row" justify="space-between">
           <Grid item direction="column" className={classes.connectionsContainer}>
-            <Typography variant="h3" className={classes.cardTitle}>
+            <Typography variant="h3" className={classes.eventCompleteCardTitle}>
               Connections
             </Typography>
             {renderAllMyEventConnection()}
           </Grid>
-          <Grid item direction="column" className={classes.buttonContainer}>
+          <Grid item direction="column" className={classes.eventCompleteButtonContainer}>
             <Grid
               container
               direction="column"
               justify="flex-start"
               alignItems="flex-start"
-              className={classes.buttonCard}
+              className={classes.eventCompleteButtonCard}
             >
-              <Typography variant="h3" className={classes.cardTitle}>
+              <Typography variant="h3" className={classes.eventCompleteCardTitle}>
                 Leave Us a Tip!
               </Typography>
               <Button
@@ -168,7 +111,7 @@ const EventComplete = () => {
                 href={giveFeedbackTypeform}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={classes.sideButton}
+                style={{ width: '100%' }}
               >
                 Give Feedback
               </Button>

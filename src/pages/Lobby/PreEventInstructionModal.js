@@ -1,5 +1,5 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { TransitionModal } from '../../common'
 

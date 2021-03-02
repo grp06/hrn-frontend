@@ -1,22 +1,13 @@
 import React from 'react'
 
-import Grid from '@material-ui/core/Grid'
+import { Grid } from '@material-ui/core'
 import SettingsIcon from '@material-ui/icons/Settings'
+import { useEventStyles } from '.'
 import { SetupMicAndCamera } from '../Lobby'
 import { TransitionModal } from '../../common'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  previewVideo: {
-    width: '400px',
-    height: 'auto',
-    backgroundColor: 'black',
-    borderRadius: '4px',
-  },
-}))
 
 const SetupMicAndCameraButton = ({ setUserHasEnabledCameraAndMic }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const iconButton = {
     iconButtonIcon: <SettingsIcon style={{ color: 'ghostWhite', fontSize: '2rem' }} />,
     iconButtonColor: 'inherit',

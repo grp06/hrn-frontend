@@ -1,6 +1,6 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
+import { Typography } from '@material-ui/core'
 import { TransitionModal } from '../../common'
 
 const LeaveEventButton = ({ event_id }) => {

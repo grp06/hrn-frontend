@@ -1,81 +1,16 @@
 import React, { useState } from 'react'
 
-import Avatar from '@material-ui/core/Avatar'
-import Chip from '@material-ui/core/Chip'
-import Grid from '@material-ui/core/Grid'
-import Fab from '@material-ui/core/Fab'
-import Typography from '@material-ui/core/Typography'
 import copy from 'copy-to-clipboard'
+import { Avatar, Chip, Grid, Fab, Typography } from '@material-ui/core'
 import EmailIcon from '@material-ui/icons/Email'
 import LinkedInIcon from '@material-ui/icons/LinkedIn'
-import { makeStyles } from '@material-ui/core/styles'
 import logo from '../../assets/HRNlogoNoFrame.svg'
+import { useMyConnectionsStyles } from '.'
 import { Snack } from '../../common'
 import { AddFriendButton } from '../VideoRoom'
 
-const useStyles = makeStyles((theme) => ({
-  addFriendButtonContainer: {
-    width: '160px',
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-  avatarContainer: {
-    width: '100px',
-    height: '100px',
-  },
-  avatarGridContainer: {
-    height: '110px',
-  },
-  buttonContainer: {
-    paddingTop: theme.spacing(1),
-  },
-  cardContainer: {
-    backgroundColor: theme.palette.common.grey10,
-    borderRadius: '4px',
-    padding: theme.spacing(3, 5),
-    position: 'relative',
-    bottom: '0%',
-    display: 'block',
-    width: '100%',
-    height: 'auto',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    marginBottom: '40px',
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(1.5),
-    },
-  },
-  circleButton: {
-    border: `2px solid ${theme.palette.common.basePink}`,
-    backgroundColor: 'transparent',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-    marginRight: theme.spacing(2),
-    width: '35px',
-    height: '35px',
-  },
-  cityNameEmailGrid: {
-    height: '100%',
-    width: 'auto',
-    marginLeft: theme.spacing(3),
-  },
-  connectionContentContainer: {
-    margin: theme.spacing(2, 0),
-  },
-  shortBioDesc: {
-    margin: theme.spacing(2, 0, 1, 0),
-  },
-  tagsContainer: {
-    marginTop: theme.spacing(0.5),
-    marginLeft: '-5px',
-  },
-}))
-
 const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, userId }) => {
-  const classes = useStyles()
+  const classes = useMyConnectionsStyles()
   const {
     name,
     city,
@@ -107,7 +42,7 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
 
   const renderContactButtons = () => {
     return i_shared_details ? (
-      <div className={classes.buttonContainer}>
+      <div className={classes.connectionCardButtonContainer}>
         <Fab
           color="inherit"
           size="small"
@@ -146,20 +81,20 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
         alignItems="center"
         justify="space-around"
         wrap="wrap"
-        className={classes.cardContainer}
+        className={classes.connectionCardContainer}
       >
         <Grid
           container
           item
           alignItems="center"
           justify="flex-start"
-          className={classes.avatarGridContainer}
+          className={classes.connectionAvatarGridContainer}
         >
           {profile_pic_url ? (
-            <Avatar src={profile_pic_url} className={classes.avatarContainer} />
+            <Avatar src={profile_pic_url} className={classes.connectionAvatarContainer} />
           ) : (
-            <Avatar className={classes.avatarContainer}>
-              <img alt="company-logo" className={classes.avatar} src={logo} />
+            <Avatar className={classes.connectionAvatarContainer}>
+              <img alt="company-logo" className={classes.connectionAvatar} src={logo} />
             </Avatar>
           )}
           <Grid container direction="column" className={classes.cityNameEmailGrid}>

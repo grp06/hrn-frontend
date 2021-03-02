@@ -1,28 +1,14 @@
 import React from 'react'
+import { Field } from 'formik'
 import { motion } from 'framer-motion'
 import { useMutation } from 'react-apollo'
-import { Field } from 'formik'
-import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/styles'
+import { Button } from '@material-ui/core'
 
-import { HostOnboardingStep } from '.'
+import { HostOnboardingStep, useHostOnboardingStyles } from '.'
 import { FloatCardMediumLarge } from '../../common'
 import { insertHostQuestionnaire } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { FormikOnboardingStepper } from '../Onboarding'
-
-const useStyles = makeStyles((theme) => ({
-  skipButton: {
-    position: 'absolute',
-    left: 'auto',
-    right: '0%',
-    bottom: 'auto',
-    top: '0%',
-    textTransform: 'none',
-    color: theme.palette.common.ghostWhiteDark,
-    fontWeight: 200,
-  },
-}))
 
 const communityTypeOptions = [
   'Free community',
@@ -47,7 +33,7 @@ const currentlyOrganizeOptions = [
 const frequencyOptions = ['Weekly', 'Bi-weekly', 'Monthly', 'A few times a year']
 
 const HostOnboardingForm = ({ onFormSkip, onFormSubmit, userId }) => {
-  const classes = useStyles()
+  const classes = useHostOnboardingStyles()
   const [insertHostQuestionnaireMutation] = useMutation(insertHostQuestionnaire)
 
   const handleSubmit = (values) => {

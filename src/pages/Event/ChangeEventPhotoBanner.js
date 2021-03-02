@@ -1,77 +1,13 @@
 import React, { useState } from 'react'
 
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import PanoramaIcon from '@material-ui/icons/Panorama'
-import { makeStyles } from '@material-ui/styles'
-import { useMutation } from 'react-apollo'
 import { motion } from 'framer-motion'
+import { useMutation } from 'react-apollo'
+import { Button, Grid, TextField, Typography } from '@material-ui/core'
+import PanoramaIcon from '@material-ui/icons/Panorama'
 
+import { useEventStyles } from '.'
 import { Snack } from '../../common'
 import { updateEventBannerPhoto } from '../../gql/mutations'
-
-const useStyles = makeStyles((theme) => ({
-  animateButtonDiv: {
-    position: 'absolute',
-    top: 15,
-    right: '7vw',
-    left: 'auto',
-    zIndex: 999,
-    [theme.breakpoints.down('xs')]: {
-      top: 65,
-      left: 10,
-    },
-    borderRadius: '4px',
-  },
-  bannerSearchForm: {
-    position: 'absolute',
-    top: 15,
-    right: '7vw',
-    left: 'auto',
-    background: 'rgba(0,0,0,.7)',
-    width: '50%',
-    margin: theme.spacing(0, 'auto'),
-    borderRadius: '4px',
-    padding: theme.spacing(2),
-    zIndex: 999,
-    [theme.breakpoints.down('xs')]: {
-      top: 65,
-      left: 10,
-      width: '85%',
-    },
-  },
-  changeBannerButton: {
-    background: 'rgba(0,0,0,.5)',
-    '&:hover': {
-      background: 'rgba(0,0,0,.7)',
-    },
-    borderRadius: '4px',
-  },
-  closeSearchFormButton: {
-    position: 'absolute',
-    fontWeight: '300',
-    top: '2%',
-    right: '2%',
-    left: 'auto',
-    width: '25px',
-    height: 'auto',
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  searchInput: {
-    margin: theme.spacing(0, 0, 2, 0),
-  },
-  suggestedSearchTermButton: {
-    width: 'auto',
-    color: theme.palette.common.ghostWhite,
-    margin: theme.spacing(0.5),
-    textTransform: 'lowercase',
-    fontWeight: '300',
-  },
-}))
 
 const buttonVariants = {
   shake: {
@@ -102,7 +38,7 @@ const buttonVariants = {
 }
 
 const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
-  const classes = useStyles()
+  const classes = useEventStyles()
   const [bannerSearchTerm, setBannerSearchTerm] = useState('community')
   const [searchedImageURL, setSearcedImageURL] = useState(null)
   const [showBannerSearch, setShowBannerSearch] = useState(false)
@@ -181,7 +117,11 @@ const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
   return (
     <div>
       {showChangeBannerButton ? (
-        <motion.div className={classes.animateButtonDiv} variants={buttonVariants} animate="shake">
+        <motion.div
+          className={classes.animateChangeBannerButtonDiv}
+          variants={buttonVariants}
+          animate="shake"
+        >
           <Button
             className={classes.changeBannerButton}
             size="large"

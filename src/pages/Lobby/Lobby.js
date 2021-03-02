@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
 import { useSubscription } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
 
 import {
   BottomControlPanel,
@@ -15,16 +14,7 @@ import { EventChatBox, Loading } from '../../common'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
 
-// the overflow hidden in broadcastContainer is to help hide the scrollbar
-const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    overflowX: 'hidden',
-    overflowY: 'hidden',
-  },
-}))
-
 const Lobby = () => {
-  const classes = useStyles()
   const history = useHistory()
   const {
     event,
@@ -76,7 +66,7 @@ const Lobby = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState === true && eventChatMessages && eventChatMessages.length) {
+      if (prevState === true && eventChatMessages?.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState
@@ -95,7 +85,7 @@ const Lobby = () => {
 
   // some redirecting stuff
   useEffect(() => {
-    if (event_users && event_users.length && user_id) {
+    if (event_users?.length && user_id) {
       const alreadyAttending = event_users.find((u) => u.user.id === user_id)
       if (!alreadyAttending) {
         history.push(`/events/${eventId}`)
@@ -117,8 +107,7 @@ const Lobby = () => {
     if (
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
-        myRoundData &&
-        myRoundData.partners.length &&
+        myRoundData?.partners.length &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
@@ -135,7 +124,7 @@ const Lobby = () => {
   }
 
   return (
-    <div className={classes.pageContainer}>
+    <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
       {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
       {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
         <NextRoundIn

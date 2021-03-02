@@ -1,47 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-
-import Typography from '@material-ui/core/Typography'
 import { useQuery } from '@apollo/react-hooks'
-import { Redirect } from 'react-router-dom'
-import { makeStyles } from '@material-ui/styles'
-
-import { ExpansionPanel } from '@material-ui/core'
+import { useHistory, Redirect } from 'react-router-dom'
+import { Typography } from '@material-ui/core'
+import { HostMetricsSnapshot, HostEventsExpansionPanel, useHostDashboardStyles } from '.'
 import { useAppContext, useUserContext } from '../../context'
-import { HostMetricsSnapshot, HostEventsExpansionPanel } from '.'
 import { FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds, getHostEventsAndPartners } from '../../gql/queries'
 
-const useStyles = makeStyles((theme) => ({
-  expansionPanelContent: {
-    width: '75vw',
-    margin: theme.spacing(0, 'auto'),
-    [theme.breakpoints.down('md')]: {
-      width: '60vw',
-    },
-    [theme.breakpoints.down('xs')]: {
-      width: '85vw',
-    },
-  },
-  noEventsContainer: {
-    marginTop: '150px',
-  },
-  noEventsMessage: {
-    textAlign: 'center',
-    padding: theme.spacing(2, 0, 1, 0),
-  },
-  pageContainer: {
-    marginTop: '100px',
-    paddingLeft: '25px',
-    paddingRight: '25px',
-  },
-  sectionHeader: {
-    marginBottom: theme.spacing(3),
-  },
-}))
-
 const HostDashboard = () => {
-  const classes = useStyles()
+  const classes = useHostDashboardStyles()
   const history = useHistory()
   const { appLoading } = useAppContext()
   const { user } = useUserContext()
@@ -68,8 +35,6 @@ const HostDashboard = () => {
       skip: !userId || (role && !role.includes('host')),
     }
   )
-
-  // console.log('event partner data', eventsAndPartnersData)
 
   useEffect(() => {
     window.analytics.page('/host-dashbaord')
@@ -147,14 +112,14 @@ const HostDashboard = () => {
   const totalMetrics = [{ allTimeRSVPed, allTimeMutualThumbs, avgThumbsPerEvent }]
 
   return (
-    <div className={classes.pageContainer}>
-      <Typography variant="h1" className={classes.sectionHeader}>
+    <div className={classes.hostDashboardPageContainer}>
+      <Typography variant="h1" className={classes.dashboardSectionHeader}>
         Your Progress as a Host:
       </Typography>
       <FloatCardLarge>
         <HostMetricsSnapshot totalMetrics={totalMetrics} />
       </FloatCardLarge>
-      <Typography variant="h1" className={classes.sectionHeader}>
+      <Typography variant="h1" className={classes.dashboardSectionHeader}>
         Your Past Events:
       </Typography>
       <div className={classes.expansionPanelContent}>
