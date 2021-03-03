@@ -34,7 +34,7 @@ const createStyles = makeStyles((theme) => ({
   chatList: {
     flexDirection: 'column',
     height: '83%',
-    overflow: 'scroll',
+    overflow: 'auto',
     padding: theme.spacing(0, 1),
   },
   hiRightNowTeamName: {

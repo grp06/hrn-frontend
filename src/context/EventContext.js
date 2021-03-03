@@ -82,15 +82,16 @@ const EventProvider = ({ children }) => {
     skip: !eventId || !userId,
   })
 
-  useEffect(() => {
-    // TODO we might want to wait for chatMessages to load here... but we dont have them for anonymous users
-    if (!userContextLoading && eventData && eventContextLoading) {
-      console.log('setting eventContextLoading to false')
-      dispatch((draft) => {
-        draft.eventContextLoading = false
-      })
-    }
-  }, [userContextLoading, eventData, chatMessages, eventContextLoading])
+  // useEffect(() => {
+  //   // TODO we might want to wait for chatMessages to load here... but we dont have them for anonymous users
+  //   if (!userContextLoading && eventData && eventContextLoading) {
+  //     console.log('🚀 ~ useEffect ~ eventData', eventData)
+  //     console.log('🚀 ~ useEffect ~ eventContextLoading setting to false', eventContextLoading)
+  //     dispatch((draft) => {
+  //       draft.eventContextLoading = false
+  //     })
+  //   }
+  // }, [userContextLoading, eventData, eventContextLoading])
 
   useEffect(() => {
     if (!eventId && eventIdFromUrl) {
@@ -112,8 +113,8 @@ const EventProvider = ({ children }) => {
     if (userOnEventPage && eventData) {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
-        console.log('set app loading false no events')
         dispatch((draft) => {
+          console.log('🚀 ~ useEffect ~ eventContextLoading setting to false', eventContextLoading)
           draft.eventContextLoading = false
         })
         return history.push('/events')
@@ -133,8 +134,10 @@ const EventProvider = ({ children }) => {
         if (eventWasReset) {
           window.location.reload()
         }
+        console.log('set event data from sub')
         dispatch((draft) => {
           draft.event = eventObjectFromSub
+          draft.eventContextLoading = false
         })
         console.log('didnt set eventContextLoading false because data didnt change')
       }
@@ -160,7 +163,6 @@ const EventProvider = ({ children }) => {
   // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
   useEffect(() => {
     if (numberOfReadChatMessages && chatMessages) {
-      console.log('got in thereee')
       dispatch((draft) => {
         draft.numberOfUnreadChatMessages =
           chatMessages.event_group_chat_messages.length - numberOfReadChatMessages

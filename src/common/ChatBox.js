@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { bulkUpsertReadPersonalChatMessage, insertPersonalChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
+
 const { bottomNavBarHeight } = constants
 
 const createStyles = makeStyles((theme) => ({
@@ -34,7 +35,7 @@ const createStyles = makeStyles((theme) => ({
   chatList: {
     flexDirection: 'column',
     height: '83%',
-    overflow: 'scroll',
+    overflow: 'auto',
     padding: theme.spacing(0, 1),
   },
   inputContainer: {

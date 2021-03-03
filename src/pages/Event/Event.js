@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { Grid } from '@material-ui/core'
 import {
@@ -19,10 +19,16 @@ import { useEventContext, useUserContext } from '../../context'
 const Event = () => {
   const classes = useEventStyles()
   const { user, userContextLoading } = useUserContext()
-  const { event, eventContextLoading } = useEventContext()
+  const { event, eventContextLoading, resetEvent } = useEventContext()
   const { id: user_id } = user
   const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
-  // get rid of this
+
+  useEffect(() => {
+    return () => {
+      console.log('resetting event provider')
+      resetEvent()
+    }
+  }, [event])
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />

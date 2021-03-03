@@ -9,7 +9,6 @@ import { getEventStartedOver24HoursAgo } from '../../utils'
 
 const EventsPublic = () => {
   const classes = useEventsPublicStyles()
-  const { setEventId, resetEvent } = useEventContext()
 
   const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
     getAllPublicEvents,
@@ -20,8 +19,6 @@ const EventsPublic = () => {
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')
     // TODO instead of setting eventId null, we should reset to initial state somewhere on a cleanup function
-    setEventId(null)
-    resetEvent()
   }, [])
 
   if (allPublicEventsDataLoading) {

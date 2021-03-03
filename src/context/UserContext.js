@@ -116,7 +116,6 @@ const UserProvider = ({ children }) => {
           draft.userInEvent = userInEvent
           draft.userContextLoading = false
         })
-        console.log('we get here if theres no userId')
       }
     }
   }, [userData, userId])
