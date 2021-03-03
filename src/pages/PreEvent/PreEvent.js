@@ -20,7 +20,7 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   const { event } = useEventContext()
   const { id: userId, role } = user
-  const { host, id: eventId, status } = event
+  const { host, id: eventId } = event
   const { name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
@@ -31,17 +31,11 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   useEffect(() => {
     if (event) {
-      if (status === 'in-between-rounds') {
-        // not sure why we'd ever have 'in-between-rounds' on PreEvent
-        console.log('DO WE EVER GET HERE?')
-        return history.push(`/events/${eventId}/video-room`)
-      }
-
-      if (status !== 'pre-event') {
-        return history.push(`/events/${eventId}`)
+      if (event.status !== 'pre-event') {
+        return history.push(`/events/${event.id}`)
       }
     }
-  }, [event])
+  }, [event, history])
 
   useEffect(() => {
     if (onlineEventUsers && onlineEventUsers.length) {
@@ -64,7 +58,7 @@ const PreEvent = ({ onlineEventUsers }) => {
       setMyRoomNumber(roomNumber)
       setNumRooms(numberOfRooms)
     }
-  }, [onlineEventUsers])
+  }, [onlineEventUsers, userId])
 
   useEffect(() => {
     if (userId && myRoomNumber !== null) {
@@ -92,7 +86,7 @@ const PreEvent = ({ onlineEventUsers }) => {
 
       setupTokens()
     }
-  }, [userId, role, myRoomNumber, numRooms])
+  }, [eventId, event.host_id, userId, role, myRoomNumber, numRooms])
 
   // get online event users
   // set room number
@@ -147,7 +141,7 @@ const PreEvent = ({ onlineEventUsers }) => {
       }
       setupRoom()
     }
-  }, [roomTokens])
+  }, [event.host_id, roomTokens, startPreEventTwilio, userId])
 
   return (
     <Grid className={classes.preEventWrapper} container direction="column" justify="center">

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
 import { BecomeAHostCard, useEventCompleteStyles } from '.'
@@ -20,6 +21,8 @@ const EventComplete = () => {
   const { id: userId, role } = user
   const { banner_photo_url, id: eventId } = event
 
+  const history = useHistory()
+
   const {
     data: myConnectionAfterEventData,
     loading: myConnectionAfterEventLoading,
@@ -36,6 +39,13 @@ const EventComplete = () => {
     localStorage.setItem('preferredVideoId', '')
     localStorage.setItem('preferredAudioId', '')
   }, []) //eslint-disable-line
+
+  useEffect(() => {
+    // just used for resetting
+    if (event?.id && event?.status !== 'complete') {
+      history.push(`/events/${event.id}`)
+    }
+  }, [event, history])
 
   if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
     return <Loading />
