@@ -157,7 +157,7 @@ const NewEventForm = () => {
                       Is this a public (any user can join) or private event?{' '}
                       <span className={classes.pinkText}>*</span>
                     </FormLabel>
-                    <Field component={RadioGroup} name="public_event" fullWidth required>
+                    <Field component={RadioGroup} name="public_event" required>
                       <Grid container direction="row" className={classes.eventFormInputMargin}>
                         <FormControlLabel
                           value="private"

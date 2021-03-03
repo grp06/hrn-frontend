@@ -9,6 +9,9 @@ const useCheckoutStyles = makeStyles((theme) => ({
     margin: theme.spacing(0, 'auto'),
     backgroundColor: theme.palette.common.grey10,
     borderRadius: '4px',
+    [theme.breakpoints.down('sm')]: {
+      width: '85vw',
+    },
   },
   divider: {
     margin: theme.spacing(3, 0),

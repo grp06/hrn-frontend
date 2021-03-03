@@ -132,10 +132,16 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }
           aria-controls={`${id}-content`}
           id={`${id}-header`}
         >
-          <Typography variant="h3" className={classes.eventPanelHeading}>
-            {event.event_name}
-          </Typography>
-          <Typography variant="h6">{startTime}</Typography>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={12} md={4}>
+              <Typography variant="h3" className={classes.eventPanelHeading}>
+                {event.event_name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Typography variant="h6">{startTime}</Typography>
+            </Grid>
+          </Grid>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {event.status === 'complete' ? (

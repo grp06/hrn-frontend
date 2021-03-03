@@ -50,7 +50,7 @@ const Event = () => {
         justify="flex-start"
         className={classes.eventContentContainer}
       >
-        <EventTitleAndCTACard event={event} user={user} eventId={eventId} />
+        <EventTitleAndCTACard event={event} user={user} />
         <HostAndEventDescCard event={event} userIsHost={userIsHost} />
         <Grid
           container

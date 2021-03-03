@@ -171,6 +171,9 @@ const useLobbyStyles = makeStyles((theme) => ({
     width: '100%',
   },
   permissionsContainer: {
+    [theme.breakpoints.down('sm')]: {
+      flexDirection: 'row',
+    },
     margin: 'auto',
     width: '95%',
   },
