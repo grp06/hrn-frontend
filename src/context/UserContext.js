@@ -9,7 +9,7 @@ const UserContext = createContext()
 const defaultState = {
   user: {},
   userInEvent: false,
-  userOnAuthRoute: false,
+  userOnAuthOrOnboarding: false,
   userContextLoading: true,
 }
 
@@ -99,7 +99,7 @@ const UserProvider = ({ children }) => {
       pathname.includes('lobby') ||
       pathname.includes('group-video-chat')
   )
-  const isUserOnAuth = Boolean(
+  const isUserOnAuthOrOnboarding = Boolean(
     pathname === '/' ||
       pathname.includes('sign-up') ||
       pathname.includes('forgot-password') ||
@@ -120,7 +120,6 @@ const UserProvider = ({ children }) => {
       if (userData.users.length) {
         dispatch((draft) => {
           draft.user = userData.users[0]
-          draft.userInEvent = userInEvent
           draft.userContextLoading = false
         })
       }
@@ -130,7 +129,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (location) {
       dispatch((draft) => {
-        draft.userOnAuthRoute = isUserOnAuth
+        draft.userOnAuthOrOnboarding = isUserOnAuthOrOnboarding
         draft.userInEvent = userInEvent
       })
     }
@@ -155,12 +154,11 @@ const UserProvider = ({ children }) => {
       ) {
         return history.push('/')
       }
-      console.log('set user context false')
+
       dispatch((draft) => {
         draft.userContextLoading = false
       })
     } else {
-      console.log('setting user id')
       dispatch((draft) => {
         draft.user.userId = parseInt(localStorageUserId, 10)
       })
