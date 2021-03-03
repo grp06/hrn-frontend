@@ -145,7 +145,7 @@ const UserEventStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic])
+  }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic]) //eslint-disable-line
 
   // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {
