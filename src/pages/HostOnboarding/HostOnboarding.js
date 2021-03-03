@@ -3,17 +3,16 @@ import { useHistory } from 'react-router-dom'
 
 import { HostOnboardingForm, ThankYouCard } from '.'
 import { Loading } from '../../common'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 
 const HostOnboarding = () => {
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: user_id, city: user_city, tags_users } = user
   const [showThankYouCard, setShowThankYouCard] = useState(false)
   const userHasBeenOnboarded = user_city && tags_users.length
 
-  if (appLoading) {
+  if (userContextLoading) {
     return <Loading />
   }
 

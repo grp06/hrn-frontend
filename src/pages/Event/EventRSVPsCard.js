@@ -31,7 +31,6 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
           <List dense>
             {eventUsers.map(({ user }, idx) => {
               if (idx >= 4 && !seeMore) return null
-              console.log(user)
               return (
                 <ListItem key={user.id}>
                   <ListItemAvatar>
@@ -55,27 +54,29 @@ const EventRSVPsCard = React.memo(({ eventUsers }) => {
               )
             })}
           </List>
-          <Button
-            variant="text"
-            size="small"
-            disableRipple
-            className={classes.seeAllRSVPsButton}
-            onClick={() => setSeeMore((prevValue) => !prevValue)}
-          >
-            <Grid container direction="row" alignItems="center" justify="space-around">
-              {!seeMore ? (
-                <>
-                  <Typography variant="body1">See All{`  (${eventUsers.length})`}</Typography>
-                  <ArrowDropDownIcon fontSize="large" />
-                </>
-              ) : (
-                <>
-                  <Typography variant="body1">See Less</Typography>
-                  <ArrowDropUpIcon fontSize="large" />
-                </>
-              )}
-            </Grid>
-          </Button>
+          {eventUsers?.length > 5 ? (
+            <Button
+              variant="text"
+              size="small"
+              disableRipple
+              className={classes.seeAllRSVPsButton}
+              onClick={() => setSeeMore((prevValue) => !prevValue)}
+            >
+              <Grid container direction="row" alignItems="center" justify="space-around">
+                {!seeMore ? (
+                  <>
+                    <Typography variant="body1">See All{`  (${eventUsers.length})`}</Typography>
+                    <ArrowDropDownIcon fontSize="large" />
+                  </>
+                ) : (
+                  <>
+                    <Typography variant="body1">See Less</Typography>
+                    <ArrowDropUpIcon fontSize="large" />
+                  </>
+                )}
+              </Grid>
+            </Button>
+          ) : null}
         </>
       ) : (
         <Typography variant="body1">No one has signed up yet!</Typography>

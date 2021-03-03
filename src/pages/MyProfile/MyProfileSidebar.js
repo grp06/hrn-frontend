@@ -5,14 +5,14 @@ import { motion } from 'framer-motion'
 import { DropzoneArea } from 'material-ui-dropzone'
 import { Grid, Button, Typography, Avatar } from '@material-ui/core'
 import { FloatCardNarrow } from '../../common'
-import { useAppContext } from '../../context'
+import { useUserContext } from '../../context'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { SidebarTags, EditProfileSidebarForm, useMyProfileStyles } from '.'
 
 const MyProfileSidebar = ({ user, databaseTags }) => {
   const classes = useMyProfileStyles()
   const history = useHistory()
-  const { setAppLoading } = useAppContext()
+  const { setUserContextLoading } = useUserContext()
 
   const {
     id: userId,
@@ -23,6 +23,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
     linkedIn_url,
     profile_pic_url,
   } = user
+  console.log('🚀 ~ MyProfileSidebar ~ usersTags', usersTags)
   // my-profile, edit-picture, edit-profile
   const [contentState, setContentState] = useState('my-profile')
 
@@ -31,7 +32,8 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
   const submitProfilePicture = async (file) => {
     if (file.length) {
       // TODO: handle this in a different way
-      setAppLoading(true)
+      console.log('SETTING APP LOADING TO TRUE')
+      setUserContextLoading(true)
       try {
         if (!file) {
           throw new Error('Select a file first!')
@@ -39,7 +41,6 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         const formData = new FormData()
         formData.append('file', file[0])
         formData.append('userId', userId)
-        console.log('hitting ', `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`)
         const urlAndFile = await await fetch(
           `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
           {

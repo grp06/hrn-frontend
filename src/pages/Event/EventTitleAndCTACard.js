@@ -20,7 +20,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const { event_name, event_users, host_id, id: eventId, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const startTime = new Date(start_at).getTime()
-  const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)
+  const userAlreadyRSVPed = event_users?.find((u) => u.user.id === user_id)
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
   const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))

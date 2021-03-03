@@ -1,7 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/styles'
 import { usePreEventStyles } from '.'
 
 const AnimatedHostNameCard = ({ hostsFirstName }) => {

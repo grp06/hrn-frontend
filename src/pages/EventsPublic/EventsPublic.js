@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/react-hooks'
 import { Grid, Typography } from '@material-ui/core'
 import { useEventsPublicStyles } from '.'
 import { FloatCardLarge, EventCard, Loading } from '../../common'
-import { useEventContext } from '../../context'
 import { getAllPublicEvents } from '../../gql/queries'
 import { getEventStartedOver24HoursAgo } from '../../utils'
 

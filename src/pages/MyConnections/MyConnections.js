@@ -5,30 +5,26 @@ import { Button, Grid, Typography } from '@material-ui/core'
 import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab'
 import { ConnectionCard, useMyConnectionsStyles } from '.'
 import { FloatCardMedium, Loading } from '../../common'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 import { listenToAllMyConnections } from '../../gql/subscriptions'
 
 const MyConnections = () => {
   const classes = useMyConnectionsStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId } = user
   const [connectionToggleValue, setConnectionToggleValue] = React.useState('friends')
-  const { data: allMyConnectionsData, loading: allMyConnectionsDataLoading } = useSubscription(
-    listenToAllMyConnections,
-    {
-      variables: {
-        user_id: userId,
-      },
-    }
-  )
+  const { data: allMyConnectionsData } = useSubscription(listenToAllMyConnections, {
+    variables: {
+      user_id: userId,
+    },
+  })
 
   useEffect(() => {
     window.analytics.page('/my-connections')
   }, [])
 
-  if (appLoading || allMyConnectionsDataLoading) {
+  if (userContextLoading || !allMyConnectionsData) {
     return <Loading />
   }
 

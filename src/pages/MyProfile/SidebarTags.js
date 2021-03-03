@@ -20,7 +20,7 @@ const SidebarTags = ({ userId, usersTags, databaseTags }) => {
         return tagA.tag.name.toLowerCase() > tagB.tag.name.toLowerCase()
       })
     }
-    return usersTags.map((tagObject) => {
+    return usersTags?.map((tagObject) => {
       const { tag } = tagObject
       return <Chip key={tag.tag_id} label={tag.name} id={tag.id} color="primary" clickable />
     })

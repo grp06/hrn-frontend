@@ -10,13 +10,12 @@ import { getAllTags } from '../../gql/queries'
 import { insertUserTags, updateUser, insertEventUser } from '../../gql/mutations'
 import { rsvpForEvent } from '../../utils'
 import { sleep } from '../../helpers'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 
 const Onboarding = () => {
   const classes = useOnboardingStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { updateUserObject, setUsersTags, user } = useUserContext()
+  const { updateUserObject, setUsersTags, user, userContextLoading } = useUserContext()
   const {
     id: user_id,
     city: usersCityInContext,
@@ -26,7 +25,7 @@ const Onboarding = () => {
     role,
   } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
-  const { data: tagsData, loading: tagsLoading } = useQuery(getAllTags)
+  const { data: tagsData } = useQuery(getAllTags)
   const [updateUserMutation] = useMutation(updateUser)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
 
@@ -48,7 +47,7 @@ const Onboarding = () => {
 
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
-  if (appLoading || tagsLoading) {
+  if (userContextLoading || !tagsData) {
     return <Loading />
   }
 

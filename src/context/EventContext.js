@@ -54,7 +54,7 @@ const useEventContext = () => {
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { user, userContextLoading } = useUserContext()
+  const { user } = useUserContext()
   const { id: userId } = user
   const { pathname } = window.location
 
@@ -95,17 +95,6 @@ const EventProvider = ({ children }) => {
     }
   }, [userOnEventPage, eventId])
 
-  // useEffect(() => {
-  //   // TODO we might want to wait for chatMessages to load here... but we dont have them for anonymous users
-  //   if (!userContextLoading && eventData && eventContextLoading) {
-  //     console.log('🚀 ~ useEffect ~ eventData', eventData)
-  //     console.log('🚀 ~ useEffect ~ eventContextLoading setting to false', eventContextLoading)
-  //     dispatch((draft) => {
-  //       draft.eventContextLoading = false
-  //     })
-  //   }
-  // }, [userContextLoading, eventData, eventContextLoading])
-
   useEffect(() => {
     if (!eventId && eventIdFromUrl) {
       dispatch((draft) => {
@@ -127,7 +116,6 @@ const EventProvider = ({ children }) => {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
         dispatch((draft) => {
-          console.log('🚀 ~ useEffect ~ eventContextLoading setting to false', eventContextLoading)
           draft.eventContextLoading = false
         })
         return history.push('/events')
@@ -147,12 +135,10 @@ const EventProvider = ({ children }) => {
         if (eventWasReset) {
           window.location.reload()
         }
-        console.log('set event data from sub')
         dispatch((draft) => {
           draft.event = eventObjectFromSub
           draft.eventContextLoading = false
         })
-        console.log('didnt set eventContextLoading false because data didnt change')
       }
     }
   }, [eventData, dispatch, event, userOnEventPage, history])

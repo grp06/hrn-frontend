@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Geosuggest from 'react-geosuggest'
 import { makeStyles } from '@material-ui/styles'
 import './geosuggest.css'
