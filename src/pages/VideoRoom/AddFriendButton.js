@@ -43,7 +43,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
     if (partner_id && user_id) {
       getSharedDetailsInPrevEventData()
     }
-  }, [partner_id, user_id])
+  }, [partner_id, user_id]) //eslint-disable-line
 
   useEffect(() => {
     if (sharedDetailsInPrevEventData && sharedDetailsInPrevEventData.partners.length) {
