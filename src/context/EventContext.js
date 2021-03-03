@@ -82,6 +82,19 @@ const EventProvider = ({ children }) => {
     skip: !eventId || !userId,
   })
 
+  useEffect(() => {
+    if (!userOnEventPage && eventId) {
+      dispatch((draft) => {
+        draft.eventId = null
+        draft.event = {}
+        draft.eventChatMessages = []
+        draft.numberOfReadChatMessages = 0
+        draft.numberOfUnreadChatMessages = 0
+        draft.eventContextLoading = true
+      })
+    }
+  }, [userOnEventPage, eventId])
+
   // useEffect(() => {
   //   // TODO we might want to wait for chatMessages to load here... but we dont have them for anonymous users
   //   if (!userContextLoading && eventData && eventContextLoading) {
