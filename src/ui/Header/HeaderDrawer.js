@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const HeaderDrawer = () => {
   const classes = useStyles()
-  const { userInEvent, userOnAuthRoute } = useUserContext()
+  const { userInEvent, userOnAuthOrOnboarding } = useUserContext()
   const [openDrawer, setOpenDrawer] = useState(false)
   const container = window !== undefined ? () => window.document.body : undefined
 
@@ -51,7 +51,7 @@ const HeaderDrawer = () => {
   }
 
   return (
-    !userOnAuthRoute &&
+    !userOnAuthOrOnboarding &&
     !userInEvent && (
       <div className={classes.root}>
         <Hidden mdUp implementation="css">

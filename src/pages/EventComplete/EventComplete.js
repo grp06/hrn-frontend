@@ -15,8 +15,8 @@ const { giveFeedbackTypeform } = constants
 
 const EventComplete = () => {
   const classes = useEventCompleteStyles()
-  const { event, resetEvent, eventContextLoading } = useEventContext()
-  const { user, setUserInEvent, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId, role } = user
   const { banner_photo_url, id: eventId } = event
@@ -35,13 +35,9 @@ const EventComplete = () => {
   })
 
   useEffect(() => {
-    setUserInEvent(false)
     setUserHasEnabledCameraAndMic(false)
     localStorage.setItem('preferredVideoId', '')
     localStorage.setItem('preferredAudioId', '')
-    return () => {
-      resetEvent()
-    }
   }, [])
 
   useEffect(() => {
