@@ -85,8 +85,8 @@ const UserProvider = ({ children }) => {
   const { userId } = state.user
   const { pathname } = location
 
-  const specificEventPageRegex = /\/events\/\d+[\/]?$/
-  const eventsPageRegex = /\/events[\/]?$/
+  const specificEventPageRegex = /\/events\/\d+?$/
+  const eventsPageRegex = /\/events?$/
   const setNewPasswordPageRegex = /set-new-password/
 
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
