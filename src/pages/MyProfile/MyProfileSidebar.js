@@ -23,7 +23,6 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
     linkedIn_url,
     profile_pic_url,
   } = user
-  console.log('🚀 ~ MyProfileSidebar ~ usersTags', usersTags)
   // my-profile, edit-picture, edit-profile
   const [contentState, setContentState] = useState('my-profile')
 

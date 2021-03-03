@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import Video from 'twilio-video'
 import { Button, FormControl, Grid, InputLabel, Select, Typography } from '@material-ui/core'
 import { useLobbyStyles } from '.'
@@ -19,7 +19,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   const [usersLocalMediaStream, setUsersLocalMediaStream] = useState(null)
   const [gumErrorName, setGumErrorName] = useState('')
 
-  const getDevices = async () => {
+  const getDevices = useCallback(async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
@@ -59,7 +59,7 @@ const SetupMicAndCamera = ({ usersName }) => {
         setCurrentAudioDeviceId(localStoragePreferredAudioId)
       }
     }
-  }
+  }, [audioStreamLabel, videoStreamLabel])
 
   const stopUsersCurrentTracks = async () => {
     usersLocalMediaStream.getTracks().forEach((track) => track.stop())
@@ -102,14 +102,12 @@ const SetupMicAndCamera = ({ usersName }) => {
   }
 
   useEffect(() => {
-    if (videoStreamLabel || audioStreamLabel) {
-      getDevices()
-    }
-  }, [videoStreamLabel, audioStreamLabel])
+    getDevices()
+  }, [getDevices])
 
   useEffect(() => {
     getMedia()
-  }, [])
+  }, []) //eslint-disable-line
 
   const getPermissionDenied = () => {
     if (permissionDenied) {
