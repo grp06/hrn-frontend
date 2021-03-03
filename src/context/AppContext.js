@@ -16,6 +16,7 @@ const useAppContext = () => {
   }
 
   const setAppLoading = (loading) => {
+    console.log('🚀 ~ setAppLoading ~ loading', loading)
     dispatch((draft) => {
       draft.appLoading = loading
     })
