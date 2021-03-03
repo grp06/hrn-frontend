@@ -5,15 +5,13 @@ import { Button, Grid, Typography } from '@material-ui/core'
 
 import { useEventsStyles } from '.'
 import { EventCard, Loading, FloatCardLarge } from '../../common'
-import { useAppContext, useEventContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 import { getEventsByUserId } from '../../gql/queries'
 
 const MyEvents = () => {
   const classes = useEventsStyles()
   const history = useHistory()
-  const { user } = useUserContext()
-  const { appLoading } = useAppContext()
-  const { resetEvent, setEventId } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
@@ -24,14 +22,12 @@ const MyEvents = () => {
   })
 
   useEffect(() => {
-    resetEvent()
     // TODO instead of setting eventId null, we should reset to initial state somewhere on a cleanup function
-    setEventId(null)
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')
   }, [])
 
-  if (appLoading || eventsLoading) {
+  if (userContextLoading || eventsLoading) {
     return <Loading />
   }
 
@@ -115,7 +111,7 @@ const MyEvents = () => {
           })
           .map(({ event }) => {
             return (
-              <div style={{ marginBottom: '75px' }}>
+              <div key={event.id} style={{ marginBottom: '75px' }}>
                 <EventCard key={event.id} event={event} />
               </div>
             )
@@ -131,7 +127,7 @@ const MyEvents = () => {
           })
           .map(({ event }) => {
             return (
-              <div style={{ marginBottom: '75px' }}>
+              <div key={event.id} style={{ marginBottom: '75px' }}>
                 <EventCard key={event.id} event={event} />
               </div>
             )

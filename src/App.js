@@ -96,14 +96,14 @@ const App = () => {
                       <Route exact path="/onboarding" component={Onboarding} />
                       <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
                       <Route exact path="/subscription" component={Subscription} />
+                      <Route exact path="/my-events" component={MyEvents} />
+                      <Route exact path="/events" component={EventsPublic} />
                       <EventProvider>
                         <Route
                           exact
                           path="/events/public"
                           component={() => <Redirect to={{ pathname: '/events' }} />}
                         />
-                        <Route exact path="/my-events" component={MyEvents} />
-                        <Route exact path="/events" component={EventsPublic} />
                         <Route exact path="/events/:id" component={Event} />
                         <TwilioProvider>
                           <UserEventStatusProvider>
