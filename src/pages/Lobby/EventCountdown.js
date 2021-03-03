@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import moment from 'moment-timezone'
 import { Grid, LinearProgress, Typography } from '@material-ui/core'
 import { useLobbyStyles } from '.'
@@ -8,12 +8,16 @@ const EventCountdown = ({ eventStartTime }) => {
   const [seconds, setSeconds] = useState(null)
   const [isTimerActive, setIsTimerActive] = useState(true)
 
-  useEffect(() => {
+  const getSecondsUntilEventStarts = useCallback(() => {
     const now = moment()
     const duration = moment.duration(moment(eventStartTime).diff(now))
-    const secondsUntilEvent = Math.trunc(duration._milliseconds / 1000)
+    return Math.trunc(duration._milliseconds / 1000)
+  }, [eventStartTime])
+
+  useEffect(() => {
+    const secondsUntilEvent = getSecondsUntilEventStarts()
     setSeconds(secondsUntilEvent)
-  }, [])
+  }, [getSecondsUntilEventStarts])
 
   useEffect(() => {
     let interval = null
