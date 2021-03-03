@@ -123,7 +123,6 @@ const UserEventStatusProvider = ({ children }) => {
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
-    console.log('🌽 getting into here')
     if (
       userId &&
       userEventStatus !== 'in chat' &&
@@ -164,7 +163,7 @@ const UserEventStatusProvider = ({ children }) => {
         })
       }
     }
-  }, [chatMessages, partner_id])
+  }, [chatMessages, dispatch, personalChatMessagesWithCurrentPartner, partner_id, userId])
 
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>
