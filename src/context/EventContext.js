@@ -58,7 +58,7 @@ const EventProvider = ({ children }) => {
   const { id: userId } = user
   const { pathname } = window.location
 
-  const { event, eventChatMessages, numberOfReadChatMessages, eventId, eventContextLoading } = state
+  const { event, eventChatMessages, numberOfReadChatMessages, eventId } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
@@ -93,7 +93,7 @@ const EventProvider = ({ children }) => {
         draft.eventContextLoading = true
       })
     }
-  }, [userOnEventPage, eventId])
+  }, [dispatch, eventId, userOnEventPage])
 
   useEffect(() => {
     if (!eventId && eventIdFromUrl) {
@@ -101,7 +101,7 @@ const EventProvider = ({ children }) => {
         draft.eventId = parseInt(eventIdFromUrl, 10)
       })
     }
-  }, [eventIdFromUrl])
+  }, [dispatch, eventId, eventIdFromUrl])
 
   useEffect(() => {
     if (event.status === 'in-between-rounds' && window.room) {

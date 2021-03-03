@@ -15,8 +15,8 @@ const { giveFeedbackTypeform } = constants
 
 const EventComplete = () => {
   const classes = useEventCompleteStyles()
-  const { event, resetEvent, eventContextLoading } = useEventContext()
-  const { user, setUserInEvent, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId, role } = user
   const { banner_photo_url, id: eventId } = event
@@ -35,13 +35,9 @@ const EventComplete = () => {
   })
 
   useEffect(() => {
-    setUserInEvent(false)
     setUserHasEnabledCameraAndMic(false)
     localStorage.setItem('preferredVideoId', '')
     localStorage.setItem('preferredAudioId', '')
-    return () => {
-      resetEvent()
-    }
   }, [])
 
   useEffect(() => {
@@ -62,15 +58,16 @@ const EventComplete = () => {
           partnerA.partner.name.toLowerCase().localeCompare(partnerB.partner.name.toLowerCase())
         )
         .map((partner) => (
-          <ConnectionCard
-            key={partner.id}
-            connection={partner.partner}
-            eventId={partner.event_id}
-            i_shared_details={partner.i_shared_details}
-            partnerId={partner.partner_id}
-            smallSize
-            userId={partner.user_id}
-          />
+          <div key={partner.id}>
+            <ConnectionCard
+              connection={partner.partner}
+              eventId={partner.event_id}
+              i_shared_details={partner.i_shared_details}
+              partnerId={partner.partner_id}
+              smallSize
+              userId={partner.user_id}
+            />
+          </div>
         ))
     }
   }
@@ -86,13 +83,13 @@ const EventComplete = () => {
       >
         <EventTitleAndCTACard event={event} user={user} />
         <Grid container direction="row" justify="space-between">
-          <Grid item direction="column" className={classes.connectionsContainer}>
+          <Grid container direction="column" className={classes.connectionsContainer}>
             <Typography variant="h3" className={classes.eventCompleteCardTitle}>
               Connections
             </Typography>
             {renderAllMyEventConnection()}
           </Grid>
-          <Grid item direction="column" className={classes.eventCompleteButtonContainer}>
+          <Grid container direction="column" className={classes.eventCompleteButtonContainer}>
             <Grid
               container
               direction="column"

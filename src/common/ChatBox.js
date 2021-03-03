@@ -91,7 +91,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
     if (messages && !list) {
       setList(messages)
     }
-  }, [messages])
+  }, [list, messages])
 
   useEffect(() => {
     const bulkUpsertMessages = async (messages) => {
@@ -106,7 +106,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
       }
     }
 
-    if (chatIsOpen && messages && messages.length) {
+    if (chatIsOpen && messages?.length) {
       const freshlyReadMessages = messages.reduce((unreadMessagesArray, message) => {
         // get all the unread messages that have been sent to you
         if (message.recipient_id === user_id && !message.read) {
@@ -118,11 +118,11 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
         return unreadMessagesArray
       }, [])
 
-      if (freshlyReadMessages && freshlyReadMessages.length) {
+      if (freshlyReadMessages?.length) {
         bulkUpsertMessages(freshlyReadMessages)
       }
     }
-  }, [chatIsOpen, messages])
+  }, [bulkUpsertReadChatMessages, chatIsOpen, messages, user_id])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -145,7 +145,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+    <Grid container direction="column" className={classes.chatContainer}>
       <Grid
         container
         direction="row"
@@ -181,7 +181,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           id="message"
           required
           fullWidth

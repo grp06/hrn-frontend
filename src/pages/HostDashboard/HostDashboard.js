@@ -37,7 +37,7 @@ const HostDashboard = () => {
     if (role && !role.includes('premium')) {
       history.push('/events')
     }
-  }, [role])
+  }, [history, role])
 
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Grid, Typography } from '@material-ui/core/'
 import { useLobbyStyles } from '.'
 
@@ -6,18 +6,18 @@ const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength })
   const classes = useLobbyStyles()
   const [minutesUntilNextRound, setMinutesUntilNextRound] = useState(null)
 
-  const calculateMinutesUntilNextRound = () => {
+  const calculateMinutesUntilNextRound = useCallback(() => {
     const timeRoundStarted = new Date(eventUpdatedAt).getTime()
     const timeRoundEndsAt = timeRoundStarted + roundLength * 60000
     const secondsUntilNextRound = timeRoundEndsAt - Date.now()
     const minutesLeft = Math.ceil(secondsUntilNextRound / 60000)
     const message = minutesLeft > 1 ? `under ${minutesLeft} minutes` : `under ${minutesLeft} minute`
     setMinutesUntilNextRound(message)
-  }
+  }, [eventUpdatedAt, roundLength])
 
   useEffect(() => {
     calculateMinutesUntilNextRound()
-  }, [currentRound, eventUpdatedAt])
+  }, [calculateMinutesUntilNextRound, currentRound])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -27,7 +27,7 @@ const NextRoundIn = ({ currentRound, eventStatus, eventUpdatedAt, roundLength })
     return () => {
       clearInterval(interval)
     }
-  }, [minutesUntilNextRound])
+  }, [calculateMinutesUntilNextRound, minutesUntilNextRound])
 
   const renderMessage = () => {
     return eventStatus === 'room-in-progress' ? (

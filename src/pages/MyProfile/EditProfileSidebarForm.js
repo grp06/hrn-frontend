@@ -72,7 +72,6 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
             linkedIn_url: values.linkedIn_url,
           },
         })
-        console.log('handleFormSubmit -> updateUserMutationResponse', updateUserMutationResponse)
         // add email to segment call once we eventually enable users to update their email address
         window.analytics.identify(userId, {
           name: values.name,
@@ -138,8 +137,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
           name: usersName,
           city: usersCity,
           selectedTags: usersTags,
-          short_bio: usersShortBio,
-          linkedIn_url: usersLinkedIn,
+          short_bio: usersShortBio || '',
+          linkedIn_url: usersLinkedIn || '',
         }}
       >
         {({ isSubmitting, values }) => (

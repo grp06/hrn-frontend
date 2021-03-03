@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import Grid from '@material-ui/core/Grid'
+import { Grid } from '@material-ui/core'
 import { CheckoutCard, CheckoutForm } from '.'
 import { useUserContext } from '../../context'
 import { Loading } from '../../common'
@@ -10,7 +10,7 @@ const { ROLE, TOKEN } = constants
 
 const Checkout = ({ location }) => {
   const history = useHistory()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId, email: userEmail } = user
   const [stripeCustomerId, setStripeCustomerId] = useState('')
   // we pass the planType, price and higlights when we history.push to checkout
@@ -18,52 +18,57 @@ const Checkout = ({ location }) => {
   // locationState = typeof locationState === 'object' ? locationState : JSON.parse(locationState)
   const { plan, planPrice, planHighlights } = locationState
 
-  useEffect(() => {
+  const clearLS = useCallback(() => {
+    location.state = {}
+    localStorage.setItem('subscriptionCheckoutObject', '')
+  }, [location.state])
+
+  const redirectUserBackToSubscription = useCallback(() => {
     if (!Object.keys(locationState).length) {
       return history.push('/subscription')
     }
-    return () => {
-      location.state = {}
-      localStorage.setItem('subscriptionCheckoutObject', '')
+  }, [history, locationState])
+
+  const makeUserFreeHost = useCallback(async () => {
+    if (userId) {
+      try {
+        const upgradeToHostResponse = await upgradeToHost(userId)
+        localStorage.setItem(ROLE, 'host')
+        localStorage.setItem(TOKEN, upgradeToHostResponse.token)
+        await sleep(400)
+        history.push('/checkout-success', { freeHost: true })
+        return window.location.reload()
+      } catch (err) {
+        console.log(err)
+      }
     }
-  }, [])
+  }, [history, userId])
+
+  const prepareStripeId = useCallback(async () => {
+    if (!userContextLoading) {
+      const { email, id: userId, name, stripe_customer_id } = user
+      if (!stripe_customer_id) {
+        const stripeCustomer = await createStripeCustomer(email, name, userId)
+        return setStripeCustomerId(stripeCustomer.customer.id)
+      }
+      return setStripeCustomerId(stripe_customer_id)
+    }
+  }, [user, userContextLoading])
 
   useEffect(() => {
-    const prepareStripeId = async () => {
-      // TODO: we can probably use userContextLoading to know if the user is here.
-      // not sure why it needs to be lenght of 4 here.. put a comment for that
-      if (user && Object.keys(user).length > 4) {
-        const { email, id: userId, name, stripe_customer_id } = user
-        if (!stripe_customer_id) {
-          const stripeCustomer = await createStripeCustomer(email, name, userId)
-          return setStripeCustomerId(stripeCustomer.customer.id)
-        }
-        return setStripeCustomerId(stripe_customer_id)
-      }
+    redirectUserBackToSubscription()
+    return () => {
+      clearLS()
     }
+  }, [clearLS, redirectUserBackToSubscription])
 
-    const makeUserFreeHost = async () => {
-      // TODO: we can probably use userContextLoading to know if the user is here.
-      if (user?.id) {
-        try {
-          const upgradeToHostResponse = await upgradeToHost(user.id)
-          localStorage.setItem(ROLE, 'host')
-          localStorage.setItem(TOKEN, upgradeToHostResponse.token)
-          await sleep(400)
-          history.push('/checkout-success', { freeHost: true })
-          return window.location.reload()
-        } catch (err) {
-          console.log(err)
-        }
-      }
-    }
-
+  useEffect(() => {
     if (plan && plan === 'FREE_FOREVER') {
       makeUserFreeHost()
     } else {
       prepareStripeId()
     }
-  }, [user, plan])
+  }, [makeUserFreeHost, plan, prepareStripeId])
 
   if (!stripeCustomerId || plan === 'FREE_FOREVER') {
     return <Loading />

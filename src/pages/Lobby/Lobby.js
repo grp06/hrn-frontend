@@ -23,7 +23,7 @@ const Lobby = () => {
     setNumberOfReadChatMessages,
     eventContextLoading,
   } = useEventContext()
-  const { user, setUserInEvent, userContextLoading } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
@@ -72,10 +72,6 @@ const Lobby = () => {
       return !prevState
     })
   }
-
-  useEffect(() => {
-    setUserInEvent(true)
-  }, [])
 
   useEffect(() => {
     if (getTimeUntilEvent(eventStartTime) > 900000) {

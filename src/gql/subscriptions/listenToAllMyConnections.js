@@ -16,6 +16,7 @@ const getAllMyConnections = gql`
         tags_users {
           tag {
             name
+            tag_id
           }
           user_id
         }
