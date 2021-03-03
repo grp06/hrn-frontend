@@ -3,15 +3,14 @@ import { useQuery } from '@apollo/react-hooks'
 import { useHistory, Redirect } from 'react-router-dom'
 import { Typography } from '@material-ui/core'
 import { HostMetricsSnapshot, HostEventsExpansionPanel, useHostDashboardStyles } from '.'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 import { FloatCardLarge, Loading } from '../../common'
 import { getHostEventsAndRounds, getHostEventsAndPartners } from '../../gql/queries'
 
 const HostDashboard = () => {
   const classes = useHostDashboardStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId, role } = user
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
@@ -23,15 +22,12 @@ const HostDashboard = () => {
     },
     skip: !userId || (role && !role.includes('host')),
   })
-  const { data: eventsAndPartnersData, loading: eventsAndPartnersLoading } = useQuery(
-    getHostEventsAndPartners,
-    {
-      variables: {
-        user_id: userId,
-      },
-      skip: !userId || (role && !role.includes('host')),
-    }
-  )
+  const { data: eventsAndPartnersData } = useQuery(getHostEventsAndPartners, {
+    variables: {
+      user_id: userId,
+    },
+    skip: !userId || (role && !role.includes('host')),
+  })
 
   useEffect(() => {
     window.analytics.page('/host-dashbaord')
@@ -46,7 +42,7 @@ const HostDashboard = () => {
   useEffect(() => {
     // TODO: abstract to its own function that returns three variables
     // totalRSVP, totalThumbs, avgThumbs
-    if (eventsAndPartnersData && !eventsAndPartnersLoading) {
+    if (eventsAndPartnersData) {
       // calculate all the RSVPed people in all your events
       const totalRSVP = eventsAndPartnersData.events.reduce((total, event) => {
         total += event.event_users.length
@@ -76,13 +72,13 @@ const HostDashboard = () => {
       setAllTimeMutualThumbs(totalThumbs)
       setAvgThumbsPerEvent(averageThumbs)
     }
-  }, [eventsAndPartnersData, eventsAndPartnersLoading])
+  }, [eventsAndPartnersData])
 
   if (role && !role.includes('host')) {
     return <Redirect to="/events" />
   }
 
-  if (eventsAndPartnersLoading || appLoading) {
+  if (!eventsAndPartnersData || userContextLoading) {
     return <Loading />
   }
 
