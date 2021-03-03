@@ -36,7 +36,11 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
       })
       .map((tagObject) => {
         const { tag } = tagObject
-        return <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" />
+        return (
+          <div key={tag.tag_id}>
+            <Chip label={tag.name} id={tag.tag_id} color="primary" />
+          </div>
+        )
       })
   }
 
