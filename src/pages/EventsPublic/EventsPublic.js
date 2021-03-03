@@ -62,8 +62,8 @@ const EventsPublic = () => {
 
       if (group.length > 0) {
         return group.map((event) => (
-          <div style={{ marginBottom: '75px' }}>
-            <EventCard key={event.id} event={event} />
+          <div style={{ marginBottom: '75px' }} key={event.id}>
+            <EventCard event={event} />
           </div>
         ))
       }
