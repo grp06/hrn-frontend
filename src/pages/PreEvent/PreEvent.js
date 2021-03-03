@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
-import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { AnimatedHostNameCard, usePreEventStyles } from '.'
 import { useEventContext, useUserContext } from '../../context'

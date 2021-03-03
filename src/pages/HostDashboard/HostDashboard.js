@@ -17,15 +17,12 @@ const HostDashboard = () => {
   const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
   const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
 
-  const { data: eventsAndRoundsData, loading: eventsAndRoundsLoading } = useQuery(
-    getHostEventsAndRounds,
-    {
-      variables: {
-        userId: userId,
-      },
-      skip: !userId || (role && !role.includes('host')),
-    }
-  )
+  const { data: eventsAndRoundsData } = useQuery(getHostEventsAndRounds, {
+    variables: {
+      userId: userId,
+    },
+    skip: !userId || (role && !role.includes('host')),
+  })
   const { data: eventsAndPartnersData, loading: eventsAndPartnersLoading } = useQuery(
     getHostEventsAndPartners,
     {

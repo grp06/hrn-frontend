@@ -87,7 +87,6 @@ const EventForm = ({ eventData, match }) => {
         start_at,
         round_length,
         num_rounds,
-        post_event_link,
         public_event,
       } = eventData
       setDescription(eventDescription)

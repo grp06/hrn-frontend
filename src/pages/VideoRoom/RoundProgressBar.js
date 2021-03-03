@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import TimerIcon from '@material-ui/icons/Timer'
 import { motion } from 'framer-motion'

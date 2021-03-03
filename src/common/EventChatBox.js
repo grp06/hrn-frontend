@@ -152,7 +152,15 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
             <ListItemText
               primary={
                 <Grid container alignItems="flex-end">
-                  <span className={classes.hiRightNowTeamName}>✨ Hi Right Now Team ✨</span>{' '}
+                  <span className={classes.hiRightNowTeamName}>
+                    <span role="img" aria-label="sparkle">
+                      ✨
+                    </span>{' '}
+                    Hi Right Now Team{' '}
+                    <span role="img" aria-label="sparkle">
+                      ✨
+                    </span>
+                  </span>{' '}
                 </Grid>
               }
               secondary={

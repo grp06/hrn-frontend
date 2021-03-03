@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { Grid } from '@material-ui/core'
 import {
@@ -19,16 +19,9 @@ import { useEventContext, useUserContext } from '../../context'
 const Event = () => {
   const classes = useEventStyles()
   const { user, userContextLoading } = useUserContext()
-  const { event, eventContextLoading, resetEvent } = useEventContext()
+  const { event, eventContextLoading } = useEventContext()
   const { id: user_id } = user
   const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
-
-  useEffect(() => {
-    return () => {
-      console.log('resetting event provider')
-      resetEvent()
-    }
-  }, [event])
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
@@ -37,7 +30,7 @@ const Event = () => {
   localStorage.setItem('eventId', eventId)
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const isEventParticipant = event?.event_users.find((u) => u.user.id === user_id)
+  const isEventParticipant = event?.event_users?.find((u) => u.user.id === user_id)
 
   return (
     <>
