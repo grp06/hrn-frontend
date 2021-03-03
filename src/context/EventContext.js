@@ -133,7 +133,8 @@ const EventProvider = ({ children }) => {
           event.status !== 'not-started' &&
           eventObjectFromSub.status === 'not-started'
         if (eventWasReset) {
-          window.location.reload()
+          // MAX TOOK THIS OUT ON MARCH 3
+          // window.location.reload()
         }
         dispatch((draft) => {
           draft.event = eventObjectFromSub

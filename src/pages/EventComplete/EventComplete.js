@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
-import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
 import { BecomeAHostCard, useEventCompleteStyles } from '.'
@@ -21,8 +20,6 @@ const EventComplete = () => {
   const { id: userId, role } = user
   const { banner_photo_url, id: eventId } = event
 
-  const history = useHistory()
-
   const {
     data: myConnectionAfterEventData,
     loading: myConnectionAfterEventLoading,
@@ -38,14 +35,7 @@ const EventComplete = () => {
     setUserHasEnabledCameraAndMic(false)
     localStorage.setItem('preferredVideoId', '')
     localStorage.setItem('preferredAudioId', '')
-  }, [])
-
-  useEffect(() => {
-    // just used for resetting
-    if (eventId && event.status === 'not-started') {
-      history.push(`/events/${eventId}`)
-    }
-  }, [event, eventId])
+  }, []) //eslint-disable-line
 
   if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
     return <Loading />
