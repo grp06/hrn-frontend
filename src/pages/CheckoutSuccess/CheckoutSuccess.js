@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import moment from 'moment'
 import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
@@ -28,15 +28,18 @@ const CheckoutSuccess = ({ location }) => {
     }
   )
 
-  useEffect(() => {
+  const redirectUserBackToSubscription = useCallback(() => {
     if (!Object.keys(locationState).length) {
       return history.push('/subscription')
     }
+  }, [history, locationState])
 
+  useEffect(() => {
+    redirectUserBackToSubscription()
     return () => {
       window.history.replaceState({}, '')
     }
-  }, [])
+  }, [redirectUserBackToSubscription])
 
   const subscriptionStarts =
     locationState.subscription &&
