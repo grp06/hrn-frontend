@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { Grid, Chip, Typography } from '@material-ui/core'
 import { Snack } from '../../common'
 import { useOnboardingStyles } from '.'
@@ -10,7 +10,7 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
 
   // user has tags in database and has clicked to edit their tags
   // change color of these tags to purple
-  const toggleAlreadySelectedTags = () => {
+  const toggleAlreadySelectedTags = useCallback(() => {
     const arrayOfSelectedTagsIds = selectedTags?.map((tag) => tag.tag_id)
     const arrayOfDOMElementChips = Array.from(document.getElementsByClassName('MuiChip-root'))
     arrayOfDOMElementChips.forEach((chip) => {
@@ -20,17 +20,17 @@ const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTa
         chip.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
       }
     })
-  }
+  }, [classes.toggleTagActive, selectedTags])
 
   useEffect(() => {
     if (usersTags) {
       toggleAlreadySelectedTags()
     }
-  }, [usersTags])
+  }, [toggleAlreadySelectedTags, usersTags])
 
   useEffect(() => {
     onChange(selectedTags)
-  }, [selectedTags])
+  }, [selectedTags]) //eslint-disable-line
 
   const toggleTag = (event) => {
     const elementClicked = event.target
