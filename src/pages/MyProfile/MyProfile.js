@@ -11,7 +11,6 @@ const MyProfile = () => {
   const { user, userContextLoading } = useUserContext()
 
   const { data: databaseTags } = useQuery(getAllTags)
-  console.log('🚀 ~ MyProfile ~ databaseTags', databaseTags)
 
   useEffect(() => {
     window.analytics.page('/my-profile')

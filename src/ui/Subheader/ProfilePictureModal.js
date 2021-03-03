@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   acceptButton: {
@@ -70,8 +70,7 @@ const useStyles = makeStyles((theme) => ({
 const ProfilePictureModal = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId, profile_pic_url } = user
   const [showModal, setShowModal] = useState(true)
   const EventHomeRegex = /\/events\/\d+/
@@ -96,7 +95,7 @@ const ProfilePictureModal = () => {
     setShowModal(false)
   }, [onEventInProgressPage, showProfilePicModal])
 
-  if (appLoading || !showProfilePicModal) {
+  if (userContextLoading || !showProfilePicModal) {
     return null
   }
 

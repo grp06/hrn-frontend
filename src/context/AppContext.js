@@ -5,7 +5,6 @@ const AppContext = createContext()
 
 const defaultState = {
   redirect: null,
-  appLoading: false,
 }
 
 const useAppContext = () => {
@@ -13,13 +12,6 @@ const useAppContext = () => {
 
   if (dispatch === undefined) {
     throw new Error('Must have dispatch defined')
-  }
-
-  const setAppLoading = (loading) => {
-    console.log('🚀 ~ setAppLoading ~ loading', loading)
-    dispatch((draft) => {
-      draft.appLoading = loading
-    })
   }
 
   const setRedirect = (redirect) => {
@@ -30,7 +22,6 @@ const useAppContext = () => {
 
   return {
     ...state,
-    setAppLoading,
     setRedirect,
   }
 }

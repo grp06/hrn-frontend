@@ -52,6 +52,12 @@ const useUserContext = () => {
     })
   }
 
+  const setUserContextLoading = (boolean) => {
+    dispatch((draft) => {
+      draft.userContextLoading = boolean
+    })
+  }
+
   const updateUserObject = (userObject) => {
     dispatch((draft) => {
       draft.user.name = userObject.name
@@ -68,6 +74,7 @@ const useUserContext = () => {
     setUserUpdatedAt,
     updateUserObject,
     setUserInEvent,
+    setUserContextLoading,
   }
 }
 
