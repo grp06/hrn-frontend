@@ -38,7 +38,7 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
               .map(({ user }, idx) => {
                 if (idx >= 4 && !seeMore) return null
                 return (
-                  <ListItem key={user.id}>
+                  <ListItem key={user[0].id}>
                     <ListItemAvatar>
                       {user[0].profile_pic_url ? (
                         <Avatar

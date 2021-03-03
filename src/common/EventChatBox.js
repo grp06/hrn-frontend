@@ -113,7 +113,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+    <Grid container direction="column" className={classes.chatContainer}>
       <Grid
         container
         direction="row"
@@ -132,7 +132,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
             const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
             const messageSentAt = formatChatMessagesDate(created_at)
             return (
-              <ListItem dense>
+              <ListItem key={created_at} dense>
                 <ListItemText
                   primary={
                     <Grid container alignItems="flex-end">
@@ -148,7 +148,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
             )
           })
         ) : (
-          <ListItem dense>
+          <ListItem key="hrn-default-message" dense>
             <ListItemText
               primary={
                 <Grid container alignItems="flex-end">
@@ -175,7 +175,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           id="message"
           required
           fullWidth

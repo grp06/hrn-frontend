@@ -145,7 +145,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+    <Grid container direction="column" className={classes.chatContainer}>
       <Grid
         container
         direction="row"
@@ -181,7 +181,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           id="message"
           required
           fullWidth
