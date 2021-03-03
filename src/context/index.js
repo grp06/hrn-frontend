@@ -1,4 +1,3 @@
-export * from './AppContext'
 export * from './EventContext'
 export * from './TwilioContext'
 export * from './UserContext'
