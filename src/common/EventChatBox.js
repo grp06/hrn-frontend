@@ -90,7 +90,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
     if (messages && !list) {
       setList(messages)
     }
-  }, [messages])
+  }, [messages, list])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
