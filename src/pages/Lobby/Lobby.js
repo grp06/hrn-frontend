@@ -77,7 +77,7 @@ const Lobby = () => {
     if (getTimeUntilEvent(eventStartTime) > 900000) {
       history.push(`/events/${eventId}`)
     }
-  }, [eventStartTime])
+  }, [eventId, eventStartTime, history])
 
   // some redirecting stuff
   useEffect(() => {
@@ -93,7 +93,7 @@ const Lobby = () => {
     if (eventStatus === 'complete') {
       history.push(`/events/${eventId}/event-complete`)
     }
-  }, [event_users, eventStatus, user_id])
+  }, [eventId, event_users, eventStatus, history, user_id])
 
   // redirect you when you have a partner
   // the round ===1 and waiting for match is to make sure that you get pushed into
@@ -109,7 +109,15 @@ const Lobby = () => {
     ) {
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [eventStatus, userEventStatus, myRoundData])
+  }, [
+    eventId,
+    eventStatus,
+    history,
+    myRoundData,
+    round,
+    userEventStatus,
+    userHasEnabledCameraAndMic,
+  ])
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
