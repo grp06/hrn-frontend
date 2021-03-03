@@ -89,8 +89,8 @@ const HostDashboard = () => {
     return <Loading />
   }
 
-  const hostHasEvents = eventsAndPartnersData && eventsAndPartnersData.events.length
-  const hostHasCompletedEvents = eventsAndPartnersData.events.some(
+  const hostHasEvents = eventsAndPartnersData?.events.length
+  const hostHasCompletedEvents = eventsAndPartnersData?.events.some(
     (event) => event.status === 'complete'
   )
 

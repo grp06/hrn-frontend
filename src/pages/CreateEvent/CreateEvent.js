@@ -3,13 +3,14 @@ import { Redirect } from 'react-router-dom'
 import { useQuery } from 'react-apollo'
 import { Grid } from '@material-ui/core'
 
-import { NewEventForm, SubscriptionEndedCard, UpgradePlanCard } from '.'
+import { NewEventForm, SubscriptionEndedCard, UpgradePlanCard, useCreateEventStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getHostEventsAndPartners } from '../../gql/queries'
 import { getIsSubPeriodOver } from '../../utils'
 
 const CreatEvent = () => {
+  const classes = useCreateEventStyles()
   const { user } = useUserContext()
   const { id: user_id, role, sub_period_end } = user
   const [componentToShow, setComponentToShow] = useState('event-form')
@@ -70,7 +71,7 @@ const CreatEvent = () => {
       direction="column"
       alignItems="center"
       justify="center"
-      style={{ paddingTop: '32px', paddingBottom: '32px' }}
+      className={classes.createEventPageContainer}
     >
       {renderComponentToShow()}
     </Grid>

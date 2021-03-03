@@ -10,14 +10,14 @@ import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common
 import { insertEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
 
-const EventTitleAndCTACard = React.memo(({ event, user, eventId }) => {
+const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const classes = useEventStyles()
   const history = useHistory()
   const [showCopyURLSnack, setCopyURLSnack] = useState(false)
   const [showComeBackSnack, setShowComeBackSnack] = useState(false)
   const [rsvpButtonLoading, setRsvpButtonLoading] = useState(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
-  const { event_name, event_users, host_id, start_at, status: event_status } = event
+  const { event_name, event_users, host_id, id: eventId, start_at, status: event_status } = event
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users.find((u) => u.user.id === user_id)

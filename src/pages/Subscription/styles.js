@@ -176,7 +176,7 @@ const useSubscriptionStyles = makeStyles((theme) => ({
   // *****************************
 
   divider: {
-    width: '80vw',
+    width: '80%',
     margin: theme.spacing(6, 'auto'),
     [theme.breakpoints.down('md')]: {
       margin: theme.spacing(5, 'auto'),
@@ -208,6 +208,9 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     width: '80%',
     maxWidth: '1550px',
     margin: theme.spacing('75px', 'auto'),
+    [theme.breakpoints.down('sm')]: {
+      width: '85%',
+    },
   },
   pageContainer: {
     backgroundImage: `url(${confettiDoodles})`,

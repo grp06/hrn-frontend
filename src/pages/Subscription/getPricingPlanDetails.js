@@ -5,7 +5,7 @@ const getPricingPlanDetails = (billingPeriod, role) => {
     price: 'Free!',
     maxAttendees: 'Unlimiited',
     prevPlanHighlights: [],
-    highlights: ['Relevant Mathing AI', 'Group Video Chat', '1 Event'],
+    highlights: ['Relevant Matching AI', 'Group Video Chat', '1 Event'],
     isActivePlan: role === 'host',
     disableButton: role ? role.includes('host') : false,
   }
@@ -15,7 +15,7 @@ const getPricingPlanDetails = (billingPeriod, role) => {
     subtitle: 'Best for small communities',
     price: billingPeriod === 'monthly' ? '$59 / month' : '$49 / month',
     maxAttendees: 'Unlimited',
-    prevPlanHighlights: ['Relevant Mathing AI', 'Group Video Chat'],
+    prevPlanHighlights: ['Relevant Matching AI', 'Group Video Chat'],
     highlights: ['Unlimited Events', 'Event Branding', '1 Host Account'],
     isActivePlan: role === 'host_starter',
     disableButton: role === 'host_premium',

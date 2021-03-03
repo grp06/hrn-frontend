@@ -64,10 +64,11 @@ const useHostDashboardStyles = makeStyles((theme) => ({
     },
   },
   eventPanelHeading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
     marginBottom: 0,
     color: theme.palette.common.ghostWhite,
+    [theme.breakpoints.down('md')]: {
+      marginBottom: theme.spacing(1),
+    },
   },
   expansionPanel: {
     borderRadius: '4px',
@@ -88,9 +89,9 @@ const useHostDashboardStyles = makeStyles((theme) => ({
   metricHeader: {
     marginBottom: 0,
     textAlign: 'center',
+    fontSize: '1.5rem',
     [theme.breakpoints.down('md')]: {
       width: '70%',
-      fontSize: '1.5rem',
       margin: theme.spacing(0, 'auto'),
     },
     [theme.breakpoints.down('xs')]: {
@@ -106,7 +107,7 @@ const useHostDashboardStyles = makeStyles((theme) => ({
     },
   },
   purpleText: {
-    color: theme.palette.common.lightPurple,
+    color: theme.palette.common.basePurple,
   },
   pinkText: {
     color: theme.palette.common.basePink,

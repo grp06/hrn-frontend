@@ -2,6 +2,15 @@ import { makeStyles } from '@material-ui/styles'
 
 const useCreateEventStyles = makeStyles((theme) => ({
   // *****************************
+  //   CreateEvent
+  // *****************************
+  createEventPageContainer: {
+    padding: theme.spacing(4, 0),
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(10, 0),
+    },
+  },
+  // *****************************
   //   NewEventForm
   // *****************************
   eventFormContainer: {

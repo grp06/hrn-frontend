@@ -49,7 +49,7 @@ const EventCountdown = ({ eventStartTime }) => {
       ) : (
         <div>
           <Grid container item direction="column" justify="center" alignItems="center">
-            <Typography variant="h3" className={classes.centerText}>
+            <Typography variant="h3" style={{ textAlign: 'center' }}>
               The host will begin the event shortly
             </Typography>
           </Grid>
