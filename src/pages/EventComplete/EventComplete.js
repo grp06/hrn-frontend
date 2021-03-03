@@ -38,14 +38,14 @@ const EventComplete = () => {
     setUserHasEnabledCameraAndMic(false)
     localStorage.setItem('preferredVideoId', '')
     localStorage.setItem('preferredAudioId', '')
-  }, [])
+  }, []) //eslint-disable-line
 
   useEffect(() => {
     // just used for resetting
-    if (eventId && event.status === 'not-started') {
-      history.push(`/events/${eventId}`)
+    if (event?.id && event?.status !== 'complete') {
+      history.push(`/events/${event.id}`)
     }
-  }, [event, eventId])
+  }, [event, history])
 
   if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
     return <Loading />

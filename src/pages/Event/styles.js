@@ -31,16 +31,6 @@ const useEventStyles = makeStyles((theme) => ({
     },
   },
   // *****************************
-  //   AttendeesList
-  // *****************************
-  attendeesList: {
-    alignSelf: 'flex-start',
-  },
-  attendeesAvatar: {
-    width: '100%',
-    height: '100%',
-  },
-  // *****************************
   //   ChangeEventPhotoBanner
   // *****************************
   animateChangeBannerButtonDiv: {

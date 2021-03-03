@@ -108,6 +108,13 @@ const UserProvider = ({ children }) => {
       pathname.includes('host-onboarding') ||
       pathname.includes('checkout-success')
   )
+  const isUserAllowedToBeAnonymousOnPage = Boolean(
+    userOnEventsPage ||
+      userOnSpecificEventPage ||
+      userOnSetNewPasswordPage ||
+      userOnSignUpPage ||
+      userOnSubscriptionPage
+  )
 
   const { data: userData } = useQuery(findUserById, {
     variables: { id: userId },
@@ -124,7 +131,7 @@ const UserProvider = ({ children }) => {
         })
       }
     }
-  }, [userData, userId])
+  }, [dispatch, userData, userId])
 
   useEffect(() => {
     if (location) {
@@ -133,7 +140,7 @@ const UserProvider = ({ children }) => {
         draft.userInEvent = userInEvent
       })
     }
-  }, [location])
+  }, [dispatch, userInEvent, isUserOnAuthOrOnboarding, location])
 
   // once we get on the app check to see if theres a userID in local storage
   // if there is then we want to set user.userId so that findByUserId query can be called
@@ -143,18 +150,9 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
     if (!localStorageUserId) {
-      if (
-        !(
-          userOnEventsPage ||
-          userOnSpecificEventPage ||
-          userOnSetNewPasswordPage ||
-          userOnSignUpPage ||
-          userOnSubscriptionPage
-        )
-      ) {
+      if (!isUserAllowedToBeAnonymousOnPage) {
         return history.push('/')
       }
-
       dispatch((draft) => {
         draft.userContextLoading = false
       })
@@ -163,7 +161,7 @@ const UserProvider = ({ children }) => {
         draft.user.userId = parseInt(localStorageUserId, 10)
       })
     }
-  }, [])
+  }, [dispatch, history, isUserAllowedToBeAnonymousOnPage])
 
   return <UserContext.Provider value={[state, dispatch]}>{children}</UserContext.Provider>
 }

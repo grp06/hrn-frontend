@@ -9,10 +9,10 @@ import { getEventStartedOver24HoursAgo } from '../../utils'
 const EventsPublic = () => {
   const classes = useEventsPublicStyles()
 
-  const { data: allPublicEventsData, loading: allPublicEventsDataLoading } = useQuery(
-    getAllPublicEvents,
-    {}
-  )
+  const {
+    data: allPublicEventsData,
+    loading: allPublicEventsDataLoading,
+  } = useQuery(getAllPublicEvents, { fetchPolicy: 'no-cache' })
 
   useEffect(() => {
     localStorage.setItem('eventId', '')
@@ -56,14 +56,14 @@ const EventsPublic = () => {
             if (Date.parse(eventB.start_at) < Date.parse(eventA.start_at)) {
               return 1
             }
-            return -1
           }
+          return -1
         })
 
       if (group.length > 0) {
         return group.map((event) => (
-          <div style={{ marginBottom: '75px' }}>
-            <EventCard key={event.id} event={event} />
+          <div style={{ marginBottom: '75px' }} key={event.id}>
+            <EventCard event={event} />
           </div>
         ))
       }

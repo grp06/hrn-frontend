@@ -20,7 +20,7 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   const { event } = useEventContext()
   const { id: userId, role } = user
-  const { host, id: eventId, status } = event
+  const { host, id: eventId } = event
   const { name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
@@ -31,17 +31,11 @@ const PreEvent = ({ onlineEventUsers }) => {
 
   useEffect(() => {
     if (event) {
-      if (status === 'in-between-rounds') {
-        // not sure why we'd ever have 'in-between-rounds' on PreEvent
-        console.log('DO WE EVER GET HERE?')
-        return history.push(`/events/${eventId}/video-room`)
-      }
-
-      if (status !== 'pre-event') {
-        return history.push(`/events/${eventId}`)
+      if (event.status !== 'pre-event') {
+        return history.push(`/events/${event.id}`)
       }
     }
-  }, [event])
+  }, [event, history])
 
   useEffect(() => {
     if (onlineEventUsers && onlineEventUsers.length) {
@@ -62,18 +56,15 @@ const PreEvent = ({ onlineEventUsers }) => {
       const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
 
       setMyRoomNumber(roomNumber)
-      console.log('PreEvent -> roomNumber', roomNumber)
       setNumRooms(numberOfRooms)
-      console.log('PreEvent -> numberOfRooms', numberOfRooms)
     }
-  }, [onlineEventUsers])
+  }, [onlineEventUsers, userId])
 
   useEffect(() => {
     if (userId && myRoomNumber !== null) {
       const setupTokens = async () => {
         const isEventHost = event.host_id === userId
         if (!isEventHost) {
-          console.log('getting pre-event token')
           const tokenResp = await getToken(`${eventId}-pre-event-${myRoomNumber}`, userId)
           const tokenJson = await tokenResp.json()
           return setRoomTokens([tokenJson.token])
@@ -95,7 +86,7 @@ const PreEvent = ({ onlineEventUsers }) => {
 
       setupTokens()
     }
-  }, [userId, role, myRoomNumber, numRooms])
+  }, [eventId, event.host_id, userId, role, myRoomNumber, numRooms])
 
   // get online event users
   // set room number
@@ -117,7 +108,6 @@ const PreEvent = ({ onlineEventUsers }) => {
             ? { deviceId: localStoragePreferredAudioId }
             : false
 
-        console.log('audioDevice', audioDevice)
         // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
@@ -145,14 +135,13 @@ const PreEvent = ({ onlineEventUsers }) => {
           )
         })
         // Ask Mike: should we await here?
-        console.log('setupRoom -> roomCreationPromises.length', roomCreationPromises.length)
         Promise.all(roomCreationPromises).then((res) => {
           res.forEach((room) => startPreEventTwilio(room, isEventHost))
         })
       }
       setupRoom()
     }
-  }, [roomTokens])
+  }, [event.host_id, roomTokens, startPreEventTwilio, userId])
 
   return (
     <Grid className={classes.preEventWrapper} container direction="column" justify="center">
