@@ -119,8 +119,6 @@ const VideoRoom = () => {
       const asyncUpdateLastSeen = async () => {
         try {
           const lastSeenUpdated = await updateEventUsersLastSeenMutation()
-
-          console.log('I set last on event_users to null')
           setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].updated_at)
         } catch (err) {
           console.log(err)
@@ -133,8 +131,6 @@ const VideoRoom = () => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
-      console.log('myRoundPartnerData ->', myRoundPartnerData)
-      console.log('myRoundPartnerData.partners ->', myRoundPartnerData.partners)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
@@ -173,7 +169,6 @@ const VideoRoom = () => {
       ) {
         const getTwilioToken = async () => {
           const res = await getToken(uniqueRoomName, userId).then((response) => response.json())
-          console.log('getTwilioToken res ->', res)
           setToken(res.token)
         }
         getTwilioToken()
@@ -193,21 +188,16 @@ const VideoRoom = () => {
   useEffect(() => {
     if (token) {
       const setupRoom = async () => {
-        console.log('calling CONNECT')
         const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
         const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
         const audioDevice =
           process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
-
-        console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-        console.log('audioDevice', audioDevice)
 
         const myRoom = await connect(token, {
           maxAudioBitrate: 16000,
           video: { deviceId: localStoragePreferredVideoId },
           audio: audioDevice,
         })
-        console.log('setting room')
         setRoom(myRoom)
       }
       setupRoom()
