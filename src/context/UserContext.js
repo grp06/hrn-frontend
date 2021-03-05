@@ -113,7 +113,8 @@ const UserProvider = ({ children }) => {
       userOnSpecificEventPage ||
       userOnSetNewPasswordPage ||
       userOnSignUpPage ||
-      userOnSubscriptionPage
+      userOnSubscriptionPage ||
+      pathname.includes('lobby')
   )
 
   const { data: userData } = useQuery(findUserById, {
