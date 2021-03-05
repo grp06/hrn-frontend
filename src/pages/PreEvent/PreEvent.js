@@ -141,7 +141,7 @@ const PreEvent = ({ onlineEventUsers }) => {
       }
       setupRoom()
     }
-  }, [event.host_id, roomTokens, startPreEventTwilio, userId])
+  }, [event.host_id, roomTokens, userId])
 
   return (
     <Grid className={classes.preEventWrapper} container direction="column" justify="center">
