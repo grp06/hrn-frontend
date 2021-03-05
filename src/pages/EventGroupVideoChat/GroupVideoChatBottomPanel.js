@@ -1,49 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import Badge from '@material-ui/core/Badge'
-import Grid from '@material-ui/core/Grid'
-import IconButton from '@material-ui/core/IconButton'
+import { Badge, Grid, IconButton } from '@material-ui/core'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import MicIcon from '@material-ui/icons/Mic'
 import MicOffIcon from '@material-ui/icons/MicOff'
 import VideocamIcon from '@material-ui/icons/Videocam'
 import VideocamOffIcon from '@material-ui/icons/VideocamOff'
-import { makeStyles } from '@material-ui/styles'
 import Video from 'twilio-video'
 
-import { EndEventButton, LeaveEventButton } from '.'
+import { EndEventButton, LeaveEventButton, useEventGroupVideoChatStyles } from '.'
 import { SetupMicAndCameraButton } from '../Event'
-
-const useStyles = makeStyles((theme) => ({
-  activeButton: {
-    borderRadius: '4px',
-    backgroundColor: '#41444A !important',
-    '&:hover': {
-      backgroundColor: 'transparent !important',
-    },
-  },
-  container: {
-    position: 'fixed',
-    zIndex: 999,
-    width: '100%',
-    height: '80px',
-    top: 'auto',
-    bottom: '0%',
-    padding: theme.spacing(2, 4),
-    backgroundColor: theme.palette.common.grey10,
-  },
-  greySquareIconButton: {
-    borderRadius: '4px',
-    backgroundColor: 'transparent',
-    '&:hover': {
-      borderRadius: '4px',
-      backgroundColor: '#41444A',
-    },
-    margin: theme.spacing(0, 1),
-  },
-  settingsAndChatGrid: {
-    paddingRight: '6vw',
-  },
-}))
 
 const GroupVideoChatBottomPanel = React.memo(
   ({
@@ -55,7 +20,7 @@ const GroupVideoChatBottomPanel = React.memo(
     twilioGroupChatRoom,
     userIsHost,
   }) => {
-    const classes = useStyles()
+    const classes = useEventGroupVideoChatStyles()
     const [participantHasEnabledAudio, setParticipantHasEnabledAudio] = useState(false)
     const [participantHasEnabledVideo, setParticipantHasEnabledVideo] = useState(false)
     const [participantsVideoTracks, setParticipantsVideoTracks] = useState([])
@@ -166,7 +131,7 @@ const GroupVideoChatBottomPanel = React.memo(
         justify="flex-start"
         alignItems="center"
         wrap="nowrap"
-        className={classes.container}
+        className={classes.bottomControlPanelContainer}
       >
         <Grid container direction="column">
           <Grid container direction="row" alignItems="flex-end">
@@ -214,7 +179,9 @@ const GroupVideoChatBottomPanel = React.memo(
             <IconButton
               disableRipple
               className={
-                chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+                chatIsOpen
+                  ? ` ${classes.activeChatButton} ${classes.iconButton}`
+                  : classes.iconButton
               }
             >
               <Badge badgeContent={chatIsOpen ? 0 : numberOfUnreadChatMessages} color="secondary">

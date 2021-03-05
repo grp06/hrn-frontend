@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
 
-import Button from '@material-ui/core/Button'
-import FormLabel from '@material-ui/core/FormLabel'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Grid from '@material-ui/core/Grid'
-import Radio from '@material-ui/core/Radio'
-import Typography from '@material-ui/core/Typography'
 import DateFnsUtils from '@date-io/date-fns'
 import { Formik, Form, Field } from 'formik'
 import { TextField, RadioGroup } from 'formik-material-ui'
@@ -13,39 +7,18 @@ import { TimePicker, DatePicker } from 'formik-material-ui-pickers'
 import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
+import { Button, FormLabel, FormControlLabel, Grid, Radio, Typography } from '@material-ui/core'
+import { useCreateEventStyles } from '.'
 import { Snack } from '../../common'
 import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
 import { createEvent, insertEventUser } from '../../gql/mutations'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    width: '85%',
-    height: 'auto',
-    maxWidth: '1560px',
-    margin: theme.spacing(0, 'auto', 0, 'auto'),
-  },
-  formInputMargin: {
-    margin: theme.spacing(2, 0),
-    padding: theme.spacing(0, 1),
-  },
-  pinkText: {
-    color: theme.palette.common.basePink,
-  },
-  publicEventLabel: {
-    fontSize: '0.75rem',
-  },
-  sectionContainer: {
-    margin: theme.spacing(4, 0),
-  },
-}))
 
 const NewEventForm = () => {
-  const classes = useStyles()
+  const classes = useCreateEventStyles()
   const history = useHistory()
   const { user } = useUserContext()
-  const { id: user_id, role } = user
+  const { id: user_id } = user
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState(false)
   const [createEventMutation] = useMutation(createEvent)
   const [insertEventUserMutation] = useMutation(insertEventUser)
@@ -132,7 +105,7 @@ const NewEventForm = () => {
           }}
         >
           {({ submitForm, isSubmitting, values }) => (
-            <Form className={classes.formContainer}>
+            <Form className={classes.eventFormContainer}>
               <Grid
                 container
                 direction="column"
@@ -142,7 +115,7 @@ const NewEventForm = () => {
               >
                 <Typography variant="h3">Basics</Typography>
                 <Grid container direction="row">
-                  <Grid container className={classes.formInputMargin}>
+                  <Grid container className={classes.eventFormInputMargin}>
                     <Field
                       component={TextField}
                       name="event_name"
@@ -151,7 +124,7 @@ const NewEventForm = () => {
                       required
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} className={classes.formInputMargin}>
+                  <Grid item xs={12} md={6} className={classes.eventFormInputMargin}>
                     <Field
                       component={DatePicker}
                       name="event_date"
@@ -160,7 +133,7 @@ const NewEventForm = () => {
                       required
                     />
                   </Grid>
-                  <Grid item xs={12} md={6} className={classes.formInputMargin}>
+                  <Grid item xs={12} md={6} className={classes.eventFormInputMargin}>
                     <Field
                       component={TimePicker}
                       name="event_time"
@@ -169,7 +142,7 @@ const NewEventForm = () => {
                       required
                     />
                   </Grid>
-                  <Grid container className={classes.formInputMargin}>
+                  <Grid container className={classes.eventFormInputMargin}>
                     <Field
                       component={TextField}
                       multiline
@@ -179,13 +152,13 @@ const NewEventForm = () => {
                       required
                     />
                   </Grid>
-                  <Grid container direction="column" className={classes.formInputMargin}>
+                  <Grid container direction="column" className={classes.eventFormInputMargin}>
                     <FormLabel className={classes.publicEventLabel}>
                       Is this a public (any user can join) or private event?{' '}
                       <span className={classes.pinkText}>*</span>
                     </FormLabel>
-                    <Field component={RadioGroup} name="public_event" fullWidth required>
-                      <Grid container direction="row" className={classes.formInputMargin}>
+                    <Field component={RadioGroup} name="public_event" required>
+                      <Grid container direction="row" className={classes.eventFormInputMargin}>
                         <FormControlLabel
                           value="private"
                           control={<Radio disabled={isSubmitting} />}
@@ -221,7 +194,7 @@ const NewEventForm = () => {
                       alignItems="flex-end"
                       xs={12}
                       md={3}
-                      className={classes.formInputMargin}
+                      className={classes.eventFormInputMargin}
                     >
                       <Field
                         component={TextField}
@@ -231,7 +204,7 @@ const NewEventForm = () => {
                         required
                       />
                     </Grid>
-                    <Grid item xs={12} md={3} className={classes.formInputMargin}>
+                    <Grid item xs={12} md={3} className={classes.eventFormInputMargin}>
                       <Field
                         component={TextField}
                         name="num_rounds"
@@ -243,19 +216,6 @@ const NewEventForm = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              {/* <Grid
-                container
-                direction="column"
-                justify="flex-start"
-                alignItems="flex-start"
-                className={classes.sectionContainer}
-              >
-                <Typography variant="h3">Post Event</Typography>
-                <Grid container direction="row">
-                  <Grid item xs={12} md={6} className={classes.formInputMargin}>
-                  </Grid>
-                </Grid>
-              </Grid> */}
               <Grid container justify="center" alignItems="center">
                 <Button
                   variant="contained"

@@ -1,43 +1,29 @@
 import React, { useState } from 'react'
 import { Formik, Form, Field } from 'formik'
-import Button from '@material-ui/core/Button'
-import CircularProgress from '@material-ui/core/CircularProgress'
-import Grid from '@material-ui/core/Grid'
-import { Snack } from '../../common'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, CircularProgress, Button } from '@material-ui/core'
 import { useMutation } from '@apollo/react-hooks'
 import { insertUserTags } from '../../gql/mutations'
 import { sleep } from '../../helpers'
 import { OnboardingInterestTagInput } from '../Onboarding'
 import { useUserContext } from '../../context'
-
-const useStyles = makeStyles((theme) => ({
-  formContainer: {
-    padding: theme.spacing(3),
-    width: '100%',
-  },
-  backResetButton: {
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    marginRight: theme.spacing(1),
-  },
-}))
+import { useMyProfileStyles } from '.'
+import { Snack } from '../../common'
 
 const TagsForm = ({ tags, userId, onClose }) => {
-  const classes = useStyles()
+  const classes = useMyProfileStyles()
   const { setUsersTags, user } = useUserContext()
   const { tags_users: usersTags } = user
   const [showSubmitSuccessSnack, setShowSubmitSuccessSnack] = useState(false)
   const [insertUserTagsMutation] = useMutation(insertUserTags)
 
-  const usersTagsAsFormInput = usersTags.map((tagObject) => {
+  const usersTagsAsFormInput = usersTags?.map((tagObject) => {
     return { tag_id: tagObject.tag.tag_id, user_id: userId }
   })
 
   return (
     <div>
       <Formik
-        onSubmit={async (values, helpers) => {
+        onSubmit={async (values) => {
           let insertTagMutationResponse
           try {
             insertTagMutationResponse = await insertUserTagsMutation({
@@ -66,7 +52,7 @@ const TagsForm = ({ tags, userId, onClose }) => {
         }}
       >
         {({ isSubmitting, values }) => (
-          <Form autoComplete="off" className={classes.formContainer}>
+          <Form autoComplete="off" className={classes.tagsFormContainer}>
             <Field name="selectedTags">
               {({ field, form }) => (
                 <OnboardingInterestTagInput

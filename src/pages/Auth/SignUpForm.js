@@ -1,17 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
+import { Button, Grid, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
-import { Link, Redirect, useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { FloatCardMedium, Snack } from '../../common'
-import { useAppContext } from '../../context'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
 import { sleep } from '../../helpers'
 import { constants } from '../../utils'
+
 const { ROLE, TOKEN, USER_ID } = constants
 
 const useStyles = makeStyles((theme) => ({
@@ -55,7 +52,6 @@ const useStyles = makeStyles((theme) => ({
 const SignUpForm = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { redirect, setRedirect } = useAppContext()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -64,13 +60,8 @@ const SignUpForm = () => {
   const [showSignupSuccessSnack, setShowSignupSuccessSnack] = useState(false)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    setRedirect(false)
-  }, [redirect])
-
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    // setError(false)
 
     let signUpResponse
     try {

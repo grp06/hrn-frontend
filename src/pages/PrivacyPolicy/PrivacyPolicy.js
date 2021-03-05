@@ -1,23 +1,12 @@
 import React from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, Typography } from '@material-ui/core'
 
-const useStyles = makeStyles((theme) => ({
-  gridContainer: {
-    width: '80%',
-    margin: theme.spacing(2, 'auto', 6, 'auto'),
-  },
-  sectionHeader: {
-    marginTop: theme.spacing(2),
-    color: theme.palette.common.ghostWhite,
-  },
-}))
+import { usePrivacyPolicyStyles } from '.'
 
 const PrivacyPolicy = () => {
-  const classes = useStyles()
+  const classes = usePrivacyPolicyStyles()
   return (
-    <Grid container direction="column" className={classes.gridContainer}>
+    <Grid container direction="column" className={classes.privacyPolicyContainer}>
       <Typography variant="h6" className={classes.sectionHeader}>
         Privacy Policy
       </Typography>

@@ -1,25 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Button from '@material-ui/core/Button'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, Button } from '@material-ui/core'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Snack } from '../../common'
 import { addFriend, updatePartnerSharedDetails } from '../../gql/mutations'
 import { didIShareDetailsInPrevEvent } from '../../gql/queries'
-
-const useStyles = makeStyles((theme) => ({
-  addFriendButton: {
-    margin: theme.spacing(1, 0),
-    backgroundColor: theme.palette.common.sunray,
-    '&:hover': {
-      backgroundColor: '#FCD08C',
-    },
-    color: 'black',
-  },
-}))
+import { useVideoRoomStyles } from '.'
 
 const AddFriendButton = React.memo(({ myRound }) => {
-  const classes = useStyles()
+  const classes = useVideoRoomStyles()
   const { event_id, partner_id, user_id } = myRound
 
   const [addedAsFriend, setAddedAsFriend] = useState(false)
@@ -55,7 +43,7 @@ const AddFriendButton = React.memo(({ myRound }) => {
     if (partner_id && user_id) {
       getSharedDetailsInPrevEventData()
     }
-  }, [partner_id, user_id])
+  }, [partner_id, user_id]) //eslint-disable-line
 
   useEffect(() => {
     if (sharedDetailsInPrevEventData && sharedDetailsInPrevEventData.partners.length) {

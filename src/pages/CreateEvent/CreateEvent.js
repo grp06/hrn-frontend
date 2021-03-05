@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { useQuery } from 'react-apollo'
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/styles'
+import { Grid } from '@material-ui/core'
 
-import { NewEventForm, SubscriptionEndedCard, UpgradePlanCard } from '.'
+import { NewEventForm, SubscriptionEndedCard, UpgradePlanCard, useCreateEventStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getHostEventsAndPartners } from '../../gql/queries'
 import { getIsSubPeriodOver } from '../../utils'
 
-const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    padding: theme.spacing(4, 0),
-  },
-}))
-
 const CreatEvent = () => {
-  const classes = useStyles()
+  const classes = useCreateEventStyles()
   const { user } = useUserContext()
   const { id: user_id, role, sub_period_end } = user
   const [componentToShow, setComponentToShow] = useState('event-form')
@@ -32,8 +25,7 @@ const CreatEvent = () => {
   })
 
   useEffect(() => {
-    console.log('eventsData ->', eventsData)
-    if (role && role === 'host' && eventsData && eventsData.events.length) {
+    if (role && role === 'host' && eventsData?.events.length) {
       setComponentToShow('upgrade-plan')
     }
   }, [eventsData, role])
@@ -79,7 +71,7 @@ const CreatEvent = () => {
       direction="column"
       alignItems="center"
       justify="center"
-      className={classes.pageContainer}
+      className={classes.createEventPageContainer}
     >
       {renderComponentToShow()}
     </Grid>

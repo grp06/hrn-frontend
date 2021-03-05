@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useContext } from 'react'
+import React, { useCallback, useEffect, createContext, useContext } from 'react'
 
 import { useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
@@ -66,19 +66,20 @@ const useUserEventStatusContext = () => {
 const UserEventStatusProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const {
-    numberOfReadMessagesFromMyPartner,
-    numberOfUnreadMessagesFromMyPartner,
     personalChatMessagesWithCurrentPartner,
     userEventStatus,
     userHasEnabledCameraAndMic,
   } = state
+  const history = useHistory()
   const { user, setUserUpdatedAt, userInEvent } = useUserContext()
   const { event } = useEventContext()
   const { myRound } = useTwilioContext()
   const { id: eventId } = event
   const { id: userId } = user
   const { partner_id } = (myRound && Object.keys(myRound).length && myRound) || {}
-  const history = useHistory()
+  const pushUserToLobby = useCallback(() => {
+    history.push(`/events/${event.id}/lobby`)
+  }, [event.id, history])
 
   const [updateEventUsersLastSeenMutation] = useMutation(updateEventUsersLastSeen, {
     variables: {
@@ -107,9 +108,9 @@ const UserEventStatusProvider = ({ children }) => {
   // check if need to push back to lobby
   useEffect(() => {
     if (userEventStatus === 'no partner' || userEventStatus === 'late') {
-      history.push(`/events/${event.id}/lobby`)
+      pushUserToLobby()
     }
-  }, [userEventStatus])
+  }, [pushUserToLobby, userEventStatus])
 
   // check the online user for events
   useEffect(() => {
@@ -118,7 +119,7 @@ const UserEventStatusProvider = ({ children }) => {
         draft.onlineEventUsers = onlineEventUsersData.online_event_users
       })
     }
-  }, [onlineEventUsersData])
+  }, [onlineEventUsersData, dispatch])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
@@ -144,7 +145,7 @@ const UserEventStatusProvider = ({ children }) => {
         clearInterval(interval)
       }
     }
-  }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic])
+  }, [userId, userEventStatus, userInEvent, userHasEnabledCameraAndMic]) //eslint-disable-line
 
   // whenever we get new messages, update the messages array and calculate the number of unread messages
   useEffect(() => {
@@ -162,7 +163,7 @@ const UserEventStatusProvider = ({ children }) => {
         })
       }
     }
-  }, [chatMessages, partner_id])
+  }, [chatMessages, dispatch, personalChatMessagesWithCurrentPartner, partner_id, userId])
 
   return (
     <UserEventStatusContext.Provider value={[state, dispatch]}>

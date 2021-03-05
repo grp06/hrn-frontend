@@ -1,20 +1,9 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/styles'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-
-const createStyles = makeStyles((theme) => ({
-  achievementsContainer: {
-    width: '100%',
-    margin: theme.spacing(4, 0, 2, 0),
-  },
-  numbersContainer: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import { Grid, Typography } from '@material-ui/core'
+import { useMyProfileStyles } from '.'
 
 const SidebarAchievements = () => {
-  const classes = createStyles()
+  const classes = useMyProfileStyles()
   return (
     <Grid
       container

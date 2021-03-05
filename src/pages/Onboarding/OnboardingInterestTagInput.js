@@ -1,52 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import Chip from '@material-ui/core/Chip'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import React, { useCallback, useState, useEffect } from 'react'
+import { Grid, Chip, Typography } from '@material-ui/core'
 import { Snack } from '../../common'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  toggleTagActive: {
-    '&.MuiChip-clickable:focus': {
-      backgroundColor: theme.palette.common.basePurple,
-    },
-  },
-  container: {
-    // padding: theme.spacing(0, 2.5),
-  },
-  gridItemContainer: {
-    marginBottom: theme.spacing(2.5),
-  },
-}))
+import { useOnboardingStyles } from '.'
 
 const OnboardingInterestTagInput = ({ tagsData, value, onChange, userId, usersTags }) => {
-  const classes = useStyles()
+  const classes = useOnboardingStyles()
   const [selectedTags, setSelectedTags] = useState(usersTags || value)
   const [showTooManyTagsSnack, setShowTooManyTagsSnack] = useState(false)
 
   // user has tags in database and has clicked to edit their tags
   // change color of these tags to purple
-  const toggleAlreadySelectedTags = () => {
-    const arrayOfSelectedTagsIds = selectedTags.map((tag) => tag.tag_id)
+  const toggleAlreadySelectedTags = useCallback(() => {
+    const arrayOfSelectedTagsIds = selectedTags?.map((tag) => tag.tag_id)
     const arrayOfDOMElementChips = Array.from(document.getElementsByClassName('MuiChip-root'))
     arrayOfDOMElementChips.forEach((chip) => {
-      const indexOfSelectedTagInDOMChips = arrayOfSelectedTagsIds.indexOf(parseInt(chip.id, 10))
+      const indexOfSelectedTagInDOMChips = arrayOfSelectedTagsIds?.indexOf(parseInt(chip.id, 10))
 
       if (indexOfSelectedTagInDOMChips >= 0) {
         chip.classList.add('MuiChip-colorPrimary', classes.toggleTagActive)
       }
     })
-  }
+  }, [classes.toggleTagActive, selectedTags])
 
   useEffect(() => {
     if (usersTags) {
       toggleAlreadySelectedTags()
     }
-  }, [usersTags])
+  }, [toggleAlreadySelectedTags, usersTags])
 
   useEffect(() => {
     onChange(selectedTags)
-  }, [selectedTags])
+  }, [selectedTags]) //eslint-disable-line
 
   const toggleTag = (event) => {
     const elementClicked = event.target

@@ -1,16 +1,19 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import clsx from 'clsx'
-import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
 import { useQuery, useMutation } from '@apollo/react-hooks'
-
-import { InVideoBottomControlPanel, VideoRouter, RoundProgressBar, VideoRoomSidebar } from '.'
+import {
+  InVideoBottomControlPanel,
+  RoundProgressBar,
+  VideoRoomSidebar,
+  VideoRouter,
+  useVideoRoomStyles,
+} from '.'
 import { Loading, ChatBox } from '../../common'
 import { getMyRoundPartner } from '../../gql/queries'
 import { updateEventUsersLastSeen } from '../../gql/mutations'
 import { getToken } from '../../helpers'
 import {
-  useAppContext,
   useEventContext,
   useTwilioContext,
   useUserContext,
@@ -20,60 +23,10 @@ import { useTwilio, useIsUserActive } from '../../hooks'
 
 const { connect } = require('twilio-video')
 
-const useStyles = makeStyles((theme) => ({
-  videoWrapper: {
-    background: theme.palette.common.blackBody,
-  },
-  screenOverlay: {
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 99,
-    width: '100vw',
-    height: '100vh',
-  },
-  mainVid: {
-    width: '100%',
-    display: 'flex',
-    '& video': {
-      width: '100vw',
-      height: '100vh',
-      objectFit: 'cover',
-    },
-  },
-  myVideo: {
-    width: '200px',
-    position: 'absolute',
-    top: '3%',
-    right: '1%',
-    left: 'auto',
-    bottom: 'auto',
-    zIndex: 99,
-    opacity: 0,
-    transition: '.6s',
-    '&.showControls, &:hover': {
-      transition: 'opacity 0.6s',
-      opacity: 1,
-    },
-    '& video': {
-      borderRadius: 4,
-      width: '200px',
-    },
-  },
-
-  cameraDisabledWrapper: {
-    height: '100vh',
-  },
-}))
-
-const VideoRoom = ({ match }) => {
-  const { id: eventId } = match.params
-  const classes = useStyles()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { event } = useEventContext()
+const VideoRoom = () => {
+  const classes = useVideoRoomStyles()
+  const { user, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
   const {
     personalChatMessagesWithCurrentPartner,
     numberOfUnreadMessagesFromMyPartner,
@@ -82,15 +35,14 @@ const VideoRoom = ({ match }) => {
     userEventStatus,
   } = useUserEventStatusContext()
   const { setHasPartnerAndIsConnecting, myRound, setMyRound } = useTwilioContext()
-  const { id: event_id, current_round, status: eventStatus } = event
-  const { id: userId } = user
+  const { id: eventId, current_round, status: eventStatus } = event
+  const { id: userId, tags_users: myTagsArray } = user
   const { startTwilio } = useTwilio()
   const [token, setToken] = useState(null)
   const [room, setRoom] = useState(null)
   const [userUpdatedAt, setUserUpdatedAt] = useState(null)
   const [chatIsOpen, setChatIsOpen] = useState(false)
   const history = useHistory()
-  const eventSet = Object.keys(event).length > 1
   const eventStatusRef = useRef()
   const showControls = useIsUserActive()
 
@@ -103,20 +55,19 @@ const VideoRoom = ({ match }) => {
     skip: !userId || !eventId,
   })
 
-  const {
-    data: myRoundPartnerData,
-    loading: myRoundPartnerDataLoading,
-    error: myRoundPartnerDataError,
-  } = useQuery(getMyRoundPartner, {
-    variables: {
-      user_id: userId,
-      event_id,
-      round: current_round,
-    },
-    fetchPolicy: 'network-only',
-    skip:
-      !userId || !eventSet || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
-  })
+  const { data: myRoundPartnerData, loading: myRoundPartnerDataLoading } = useQuery(
+    getMyRoundPartner,
+    {
+      variables: {
+        user_id: userId,
+        event_id: eventId,
+        round: current_round,
+      },
+      fetchPolicy: 'network-only',
+      skip:
+        !userId || !eventId || (eventStatusRef && eventStatusRef.current === 'in-between-rounds'),
+    }
+  )
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
@@ -138,23 +89,21 @@ const VideoRoom = ({ match }) => {
 
   // Redirect back to /event/id if the event has not started
   useEffect(() => {
-    if (eventSet) {
-      const { status } = event
-
-      if (status === 'not-started') {
+    if (eventId && eventStatus) {
+      if (eventStatus === 'not-started') {
         return history.push(`/events/${eventId}`)
       }
 
-      if (status === 'group-video-chat') {
+      if (eventStatus === 'group-video-chat') {
         return history.push(`/events/${eventId}/group-video-chat`)
       }
       // we will hit this when the user is on the Thumbing screen, then new assignments are made
       // and there are no new pairings left, and we end the event
-      if (status === 'complete') {
+      if (eventStatus === 'complete') {
         return history.push(`/events/${eventId}/event-complete`)
       }
     }
-  }, [event, userId])
+  }, [eventId, eventStatus])
 
   useEffect(() => {
     if (userEventStatus === 'sitting out') {
@@ -170,8 +119,6 @@ const VideoRoom = ({ match }) => {
       const asyncUpdateLastSeen = async () => {
         try {
           const lastSeenUpdated = await updateEventUsersLastSeenMutation()
-
-          console.log('I set last on event_users to null')
           setUserUpdatedAt(lastSeenUpdated.data.update_event_users.returning[0].updated_at)
         } catch (err) {
           console.log(err)
@@ -184,8 +131,6 @@ const VideoRoom = ({ match }) => {
   // After the getMyRoundById, if there is a response, setMyRound
   useEffect(() => {
     if (!myRoundPartnerDataLoading && myRoundPartnerData) {
-      console.log('myRoundPartnerData ->', myRoundPartnerData)
-      console.log('myRoundPartnerData.partners ->', myRoundPartnerData.partners)
       // if you're on this page and you don't have roundData, you either
       // 1. arrived late
       // 2. didn't get put into matching algorithm since your camera is off
@@ -218,13 +163,12 @@ const VideoRoom = ({ match }) => {
         : `${eventId}-${myRound.partner_id}-${myRound.user_id}`
       if (
         hasPartner &&
-        eventSet &&
+        eventId &&
         event.status !== 'in-between-rounds'
         //   event.current_round === myRound.round_number
       ) {
         const getTwilioToken = async () => {
           const res = await getToken(uniqueRoomName, userId).then((response) => response.json())
-          console.log('getTwilioToken res ->', res)
           setToken(res.token)
         }
         getTwilioToken()
@@ -235,6 +179,8 @@ const VideoRoom = ({ match }) => {
         history.push(`/events/${eventId}/lobby`)
       }
     }
+    // TODO we probably should put way more dependencies here...
+    // but that'll likely fuck things up, so we'll need more checks in the "if"
   }, [myRound])
 
   // After getting your token you get the permissions and create localTracks
@@ -242,21 +188,16 @@ const VideoRoom = ({ match }) => {
   useEffect(() => {
     if (token) {
       const setupRoom = async () => {
-        console.log('calling CONNECT')
         const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
         const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
         const audioDevice =
           process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
-
-        console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-        console.log('audioDevice', audioDevice)
 
         const myRoom = await connect(token, {
           maxAudioBitrate: 16000,
           video: { deviceId: localStoragePreferredVideoId },
           audio: audioDevice,
         })
-        console.log('setting room')
         setRoom(myRoom)
       }
       setupRoom()
@@ -271,7 +212,7 @@ const VideoRoom = ({ match }) => {
     }
   }, [room])
 
-  if (appLoading || !eventSet || !myRound) {
+  if (userContextLoading || eventContextLoading || !myRound) {
     return <Loading />
   }
 
@@ -295,12 +236,12 @@ const VideoRoom = ({ match }) => {
   return (
     <div>
       <VideoRouter
-        eventId={event_id}
+        eventId={eventId}
         myRound={myRound}
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
       />
-      <VideoRoomSidebar event={event} myRound={myRound} userId={userId} />
+      <VideoRoomSidebar event={event} myRound={myRound} myTagsArray={myTagsArray} userId={userId} />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />
@@ -309,6 +250,7 @@ const VideoRoom = ({ match }) => {
             chatIsOpen={chatIsOpen}
             messages={personalChatMessagesWithCurrentPartner}
             myRound={myRoundPartnerData.partners[0]}
+            toggleChat={toggleChat}
           />
         ) : null}
         {userUpdatedAt && <RoundProgressBar userUpdatedAt={userUpdatedAt} event={event} />}

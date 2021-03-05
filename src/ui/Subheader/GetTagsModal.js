@@ -7,7 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import Modal from '@material-ui/core/Modal'
 import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
-import { useAppContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 
 const useStyles = makeStyles((theme) => ({
   acceptButton: {
@@ -62,8 +62,7 @@ const useStyles = makeStyles((theme) => ({
 const GetTagsModal = () => {
   const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const { tags_users: usersTags, id: userId } = user
   const [showModal, setShowModal] = useState(true)
   const EventHomeRegex = /\/events\/\d+/
@@ -87,7 +86,7 @@ const GetTagsModal = () => {
     setShowModal(false)
   }, [onEventsPage, onEventHomePage, onEventInProgressPage, showGetTagsModal])
 
-  if (appLoading || !showGetTagsModal) {
+  if (userContextLoading || !showGetTagsModal) {
     return null
   }
 

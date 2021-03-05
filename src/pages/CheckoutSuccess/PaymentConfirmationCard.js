@@ -1,29 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
+import { Grid, Typography } from '@material-ui/core'
+import { useCheckoutSuccessStyles } from '.'
 import { createStripeCustomerPortal } from '../../helpers'
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    height: 'auto',
-    margin: theme.spacing(0, 'auto'),
-    padding: theme.spacing(3),
-    width: '70vw',
-    marginTop: '75px',
-  },
-  sectionMargin: {
-    margin: theme.spacing(1, 0),
-  },
-  updatePaymentLink: {
-    color: theme.palette.common.basePurple,
-    textDecoration: 'underline',
-    '&:hover': {
-      cursor: 'pointer',
-    },
-  },
-}))
 
 const PaymentConfirmationCard = ({
   planItem,
@@ -32,7 +11,7 @@ const PaymentConfirmationCard = ({
   stripeCustomerId,
   subscriptionEnds,
 }) => {
-  const classes = useStyles()
+  const classes = useCheckoutSuccessStyles()
 
   const handleCreateCustomerPortal = async () => {
     const portal = await createStripeCustomerPortal(stripeCustomerId)
@@ -43,7 +22,7 @@ const PaymentConfirmationCard = ({
     <motion.div
       initial={{ x: 2000 }}
       animate={{ x: 0, transition: { duration: 0.55 } }}
-      className={classes.cardContainer}
+      className={classes.paymentConfirmationCardContainer}
     >
       <Grid container direction="column">
         <Typography variant="h2">Payment Confirmation</Typography>

@@ -15,10 +15,12 @@ const useStyles = makeStyles((theme) => ({
 
 const MarginLeftAppWrapper = ({ children }) => {
   const classes = useStyles()
-  const { userInEvent, userOnAuthRoute } = useUserContext()
+  const { userInEvent, userOnAuthOrOnboarding } = useUserContext()
 
   return (
-    <div className={!userInEvent && !userOnAuthRoute ? classes.pageWrapper : ''}>{children}</div>
+    <div className={!userInEvent && !userOnAuthOrOnboarding ? classes.pageWrapper : ''}>
+      {children}
+    </div>
   )
 }
 

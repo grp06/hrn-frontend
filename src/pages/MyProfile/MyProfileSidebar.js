@@ -1,102 +1,18 @@
 import React, { useState, useEffect } from 'react'
-
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
 import { useHistory } from 'react-router-dom'
 import LinkedInIcon from '@material-ui/icons/LinkedIn'
-import { makeStyles } from '@material-ui/styles'
-
 import { motion } from 'framer-motion'
 import { DropzoneArea } from 'material-ui-dropzone'
-
+import { Grid, Button, Typography, Avatar } from '@material-ui/core'
 import { FloatCardNarrow } from '../../common'
-import { useAppContext } from '../../context'
+import { useUserContext } from '../../context'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { SidebarTags, EditProfileSidebarForm } from '.'
-
-const createStyles = makeStyles((theme) => ({
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-  avatarContainer: {
-    width: '125px',
-    height: '125px',
-  },
-  buttonContainer: {
-    width: '50%',
-    [theme.breakpoints.down('md')]: {
-      width: '50%',
-    },
-  },
-  cancelButton: {
-    margin: theme.spacing(1.5, 0),
-    backgroundColor: theme.palette.common.greyButton,
-    color: theme.palette.common.ghostWhite,
-    '&:hover': {
-      backgroundColor: theme.palette.common.greyButtonHover,
-    },
-  },
-  editProfileButton: {
-    margin: theme.spacing(2, 0),
-  },
-  fileForm: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  linkedInIcon: {
-    marginTop: theme.spacing(1),
-    fontSize: '32px',
-    color: '#3176b0',
-  },
-  overlay: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-    background: 'rgba(0, 0, 0, .7)',
-    color: '#fff',
-    opacity: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-  },
-  shortBio: {
-    marginTop: theme.spacing(3),
-    width: '75%',
-    textAlign: 'center',
-  },
-  uploadImageText: {
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    cursor: 'pointer',
-    textAlign: 'center',
-  },
-  wrap: {
-    position: 'relative',
-    width: '125px',
-    height: '125px',
-    marginBottom: theme.spacing(2),
-    cursor: 'pointer',
-  },
-}))
+import { SidebarTags, EditProfileSidebarForm, useMyProfileStyles } from '.'
 
 const MyProfileSidebar = ({ user, databaseTags }) => {
-  const classes = createStyles()
+  const classes = useMyProfileStyles()
   const history = useHistory()
-  const { setAppLoading } = useAppContext()
+  const { setUserContextLoading } = useUserContext()
 
   const {
     id: userId,
@@ -114,7 +30,9 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
 
   const submitProfilePicture = async (file) => {
     if (file.length) {
-      setAppLoading(true)
+      // TODO: handle this in a different way
+      console.log('SETTING APP LOADING TO TRUE')
+      setUserContextLoading(true)
       try {
         if (!file) {
           throw new Error('Select a file first!')
@@ -122,7 +40,6 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
         const formData = new FormData()
         formData.append('file', file[0])
         formData.append('userId', userId)
-        console.log('hitting ', `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`)
         const urlAndFile = await await fetch(
           `${process.env.REACT_APP_API_URL}/api/upload/get-signed-url`,
           {
@@ -162,10 +79,10 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
   }
 
   useEffect(() => {
-    if (usersTags.length === 0) {
+    if (usersTags?.length === 0) {
       setContentState('edit-profile')
     }
-  }, [])
+  }, [usersTags])
 
   const renderContent = () => {
     switch (contentState) {

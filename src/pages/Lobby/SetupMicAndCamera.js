@@ -1,62 +1,12 @@
-import React, { useEffect, useState } from 'react'
-
-import Button from '@material-ui/core/Button'
-import FormControl from '@material-ui/core/FormControl'
-import Grid from '@material-ui/core/Grid'
-import InputLabel from '@material-ui/core/InputLabel'
-import Select from '@material-ui/core/Select'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
+import React, { useCallback, useEffect, useState } from 'react'
 import Video from 'twilio-video'
-
-import { useUserEventStatusContext } from '../../context'
+import { Button, FormControl, Grid, InputLabel, Select, Typography } from '@material-ui/core'
+import { useLobbyStyles } from '.'
 import { GUMErrorModal } from '../../common'
-import cameraBlocked from '../../assets/cameraBlocked.png'
-
-const useStyles = makeStyles((theme) => ({
-  blockedText: {
-    position: 'fixed',
-    bottom: '40%',
-    width: '100%',
-  },
-  cameraBlocked: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100vh',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '50%',
-    background: `url("${cameraBlocked}")`,
-    backgroundPosition: 'top center',
-  },
-  joinEventButton: {
-    marginTop: theme.spacing(4),
-    width: '100%',
-  },
-  modalText: {
-    width: 'auto',
-    margin: theme.spacing(2.5, 'auto', 0, 'auto'),
-    textAlign: 'center',
-  },
-  permissionsContainer: {
-    width: '95%',
-    margin: 'auto',
-  },
-  permissionsContent: {
-    width: '90%',
-    margin: 'auto',
-  },
-  selectBox: {
-    margin: theme.spacing(0.5, 0),
-  },
-  youLookGoodContainer: {
-    marginBottom: theme.spacing(4),
-  },
-}))
+import { useUserEventStatusContext } from '../../context'
 
 const SetupMicAndCamera = ({ usersName }) => {
-  const classes = useStyles()
+  const classes = useLobbyStyles()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const [permissionDenied, setPermissionDenied] = useState(false)
   const [permissionNotYetAllowed, setPermissionNotYetAllowed] = useState(true)
@@ -69,7 +19,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   const [usersLocalMediaStream, setUsersLocalMediaStream] = useState(null)
   const [gumErrorName, setGumErrorName] = useState('')
 
-  const getDevices = async () => {
+  const getDevices = useCallback(async () => {
     const devices = await navigator.mediaDevices.enumerateDevices()
     const availableVideoDevices = devices.filter((device) => device.kind === 'videoinput')
     const availableAudioDevices = devices.filter((device) => device.kind === 'audioinput')
@@ -109,7 +59,7 @@ const SetupMicAndCamera = ({ usersName }) => {
         setCurrentAudioDeviceId(localStoragePreferredAudioId)
       }
     }
-  }
+  }, [audioStreamLabel, videoStreamLabel])
 
   const stopUsersCurrentTracks = async () => {
     usersLocalMediaStream.getTracks().forEach((track) => track.stop())
@@ -117,7 +67,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   }
 
   const getMedia = async () => {
-    if (usersLocalMediaStream && usersLocalMediaStream.active) {
+    if (usersLocalMediaStream?.active) {
       await stopUsersCurrentTracks()
     }
     let localMediaStream = null
@@ -151,20 +101,13 @@ const SetupMicAndCamera = ({ usersName }) => {
     }
   }
 
-  // navigator.mediaDevices.ondevicechange = () => {
-  //   console.log('on device change')
-  //   getDevices()
-  // }
-
   useEffect(() => {
-    if (videoStreamLabel || audioStreamLabel) {
-      getDevices()
-    }
-  }, [videoStreamLabel, audioStreamLabel])
+    getDevices()
+  }, [getDevices])
 
   useEffect(() => {
     getMedia()
-  }, [])
+  }, []) //eslint-disable-line
 
   const getPermissionDenied = () => {
     if (permissionDenied) {
@@ -183,7 +126,7 @@ const SetupMicAndCamera = ({ usersName }) => {
   }
 
   const getDamnYouLookGood = () => {
-    const usersFirstName = usersName && usersName.split(' ')[0]
+    const usersFirstName = usersName?.split(' ')[0]
     return (
       !permissionNotYetAllowed &&
       !permissionDenied && (
@@ -209,7 +152,7 @@ const SetupMicAndCamera = ({ usersName }) => {
               <Typography variant="h4">You&apos;re all set to join the event!</Typography>
             </>
           ) : (
-            <Typography variant="h3" className={classes.modalText}>
+            <Typography variant="h3" className={classes.setupMicAndCameraModalText}>
               Select the video/audio source you would like to use
             </Typography>
           )}
@@ -275,7 +218,7 @@ const SetupMicAndCamera = ({ usersName }) => {
       !permissionNotYetAllowed &&
       !permissionDenied && (
         <Grid container direction="column" justify="space-between" alignItems="center">
-          <FormControl fullWidth className={classes.selectBox}>
+          <FormControl fullWidth className={classes.selectInputBox}>
             <InputLabel>Camera</InputLabel>
             <Select native value={currentVideoDeviceId} onChange={handleVideoDeviceChange}>
               {videoDevices.map((device) => (
@@ -285,7 +228,7 @@ const SetupMicAndCamera = ({ usersName }) => {
               ))}
             </Select>
           </FormControl>
-          <FormControl fullWidth className={classes.selectBox}>
+          <FormControl fullWidth className={classes.selectInputBox}>
             <InputLabel>Microphone</InputLabel>
             <Select native value={currentAudioDeviceId} onChange={handleAudioDeviceChange}>
               {audioDevices.map((device) => (
@@ -327,7 +270,7 @@ const SetupMicAndCamera = ({ usersName }) => {
         </Grid>
       ) : (
         <>
-          <Typography variant="h3" className={classes.modalText}>
+          <Typography variant="h3" className={classes.setupMicAndCameraModalText}>
             Please select your preferred camera and mic and press &apos;allow&apos;
           </Typography>
         </>

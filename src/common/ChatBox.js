@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
-import Typography from '@material-ui/core/Typography'
+import { Grid, List, ListItem, ListItemText, TextField } from '@material-ui/core'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { makeStyles } from '@material-ui/styles'
 
 import { bulkUpsertReadPersonalChatMessage, insertPersonalChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
+
 const { bottomNavBarHeight } = constants
 
 const createStyles = makeStyles((theme) => ({
@@ -38,7 +35,7 @@ const createStyles = makeStyles((theme) => ({
   chatList: {
     flexDirection: 'column',
     height: '83%',
-    overflow: 'scroll',
+    overflow: 'auto',
     padding: theme.spacing(0, 1),
   },
   inputContainer: {
@@ -55,15 +52,26 @@ const createStyles = makeStyles((theme) => ({
     fontSize: '0.75rem',
     marginLeft: theme.spacing(0.5),
   },
+  minimizeChatIcon: {
+    color: theme.palette.common.ghostWhite,
+    fontSize: '2rem',
+    position: 'absolute',
+    left: 'auto',
+    right: 10,
+    '&:hover': {
+      color: theme.palette.common.basePink,
+      cursor: 'pointer',
+    },
+  },
   sendersName: {
     color: theme.palette.common.ghostWhite,
     fontWeight: 700,
   },
 }))
 
-const ChatBox = ({ chatIsOpen, messages, myRound }) => {
+const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
   const classes = createStyles()
-  const { event_id, partner: myPartner, partner_id, user_id } = myRound
+  const { partner: myPartner, partner_id, user_id } = myRound
   const { name: myPartnersName } = (myPartner && Object.keys(myPartner).length && myPartner) || ''
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
@@ -83,7 +91,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
     if (messages && !list) {
       setList(messages)
     }
-  }, [messages])
+  }, [list, messages])
 
   useEffect(() => {
     const bulkUpsertMessages = async (messages) => {
@@ -98,7 +106,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
       }
     }
 
-    if (chatIsOpen && messages && messages.length) {
+    if (chatIsOpen && messages?.length) {
       const freshlyReadMessages = messages.reduce((unreadMessagesArray, message) => {
         // get all the unread messages that have been sent to you
         if (message.recipient_id === user_id && !message.read) {
@@ -110,11 +118,11 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
         return unreadMessagesArray
       }, [])
 
-      if (freshlyReadMessages && freshlyReadMessages.length) {
+      if (freshlyReadMessages?.length) {
         bulkUpsertMessages(freshlyReadMessages)
       }
     }
-  }, [chatIsOpen, messages])
+  }, [bulkUpsertReadChatMessages, chatIsOpen, messages, user_id])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -137,7 +145,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+    <Grid container direction="column" className={classes.chatContainer}>
       <Grid
         container
         direction="row"
@@ -146,6 +154,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
         className={classes.chatBoxTitle}
       >
         Chat with {myPartnersFirstName}
+        <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
         {messages &&
@@ -172,7 +181,7 @@ const ChatBox = ({ chatIsOpen, messages, myRound }) => {
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           id="message"
           required
           fullWidth

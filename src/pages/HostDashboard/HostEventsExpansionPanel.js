@@ -1,80 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
-import Grid from '@material-ui/core/Grid'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { CSVLink } from 'react-csv'
-import { makeStyles } from '@material-ui/styles'
+import {
+  Grid,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Typography,
+} from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
-import formatDate from '../../utils/formatDate'
-import { getEventAnalytics } from '../../utils'
-
-const useStyles = makeStyles((theme) => ({
-  aTag: {
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    textAlign: 'center',
-    fontSize: '1.25rem',
-    color: theme.palette.common.sunray,
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.common.ghostWhite,
-    },
-  },
-  detailsHeading: {
-    textAlign: 'center',
-    padding: theme.spacing(1),
-  },
-  downloadButton: {
-    backgroundColor: theme.palette.common.basePurple,
-    color: theme.palette.common.ghostWhite,
-    padding: '8px 20px',
-    margin: `0 8px 8px 8px`,
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    borderRadius: 4,
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
-    textAlign: 'center',
-    '& svg': {
-      marginLeft: theme.spacing(1),
-    },
-  },
-  downloadAttendees: {
-    backgroundColor: theme.palette.common.basePurple,
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1, 2.5),
-    margin: theme.spacing(0, 1, 1, 1),
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    borderRadius: 4,
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'center',
-    '& svg': {
-      marginLeft: theme.spacing(1),
-    },
-  },
-  eventPanelHeading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
-    marginBottom: 0,
-    color: theme.palette.common.ghostWhite,
-  },
-  expansionPanel: {
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '4px 4px 0 #3e4042',
-  },
-}))
+import { useHostDashboardStyles } from '.'
+import { getEventAnalytics, formatDate } from '../../utils'
 
 const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }) => {
-  const classes = useStyles()
+  const classes = useHostDashboardStyles()
 
   const [sortedEvents, setSortedEvents] = useState(null)
 
@@ -191,10 +132,16 @@ const HostEventsExpansionPanel = ({ eventsAndRoundsData, eventsAndPartnersData }
           aria-controls={`${id}-content`}
           id={`${id}-header`}
         >
-          <Typography variant="h3" className={classes.eventPanelHeading}>
-            {event.event_name}
-          </Typography>
-          <Typography variant="h6">{startTime}</Typography>
+          <Grid container direction="row" alignItems="center">
+            <Grid item xs={12} md={4}>
+              <Typography variant="h3" className={classes.eventPanelHeading}>
+                {event.event_name}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Typography variant="h6">{startTime}</Typography>
+            </Grid>
+          </Grid>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           {event.status === 'complete' ? (

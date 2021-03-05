@@ -1,55 +1,17 @@
 import React, { useEffect } from 'react'
-
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
-import { Redirect, useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
+import { Redirect, useHistory } from 'react-router-dom'
+import { Button, Grid, Typography } from '@material-ui/core'
 
+import { useEventsStyles } from '.'
 import { EventCard, Loading, FloatCardLarge } from '../../common'
-import { useAppContext, useEventContext, useUserContext } from '../../context'
+import { useUserContext } from '../../context'
 import { getEventsByUserId } from '../../gql/queries'
-import blurryBackground from '../../assets/blurryBackground.png'
-
-const useStyles = makeStyles((theme) => ({
-  eventsContainer: {
-    marginTop: '2em',
-    marginBottom: '2em',
-  },
-  cardContainer: {
-    maxWidth: 500,
-  },
-  pageBanner: {
-    width: '100%',
-    height: '30vh',
-    backgroundImage: `url(${blurryBackground})`,
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    marginBottom: '40px',
-  },
-  pageBannerContentContainer: {
-    margin: theme.spacing(0, 'auto', 1.5, 'auto'),
-    width: '70%',
-  },
-  nullDataContainer: {
-    padding: theme.spacing(5),
-  },
-  nullDataHeader: {
-    marginBottom: theme.spacing(1),
-    textAlign: 'center',
-  },
-  nullDataSub: {
-    textAlign: 'center',
-  },
-}))
 
 const MyEvents = () => {
-  const classes = useStyles()
+  const classes = useEventsStyles()
   const history = useHistory()
-  const { user } = useUserContext()
-  const { appLoading } = useAppContext()
-  const { resetEvent, setEventId } = useEventContext()
+  const { user, userContextLoading } = useUserContext()
   const { id: userId } = user
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getEventsByUserId, {
@@ -60,13 +22,12 @@ const MyEvents = () => {
   })
 
   useEffect(() => {
-    resetEvent()
-    setEventId(null)
+    // TODO instead of setting eventId null, we should reset to initial state somewhere on a cleanup function
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')
   }, [])
 
-  if (appLoading || eventsLoading) {
+  if (userContextLoading || eventsLoading) {
     return <Loading />
   }
 
@@ -125,49 +86,52 @@ const MyEvents = () => {
           direction="column"
           justify="flex-end"
           alignItems="center"
-          className={classes.pageBanner}
+          className={classes.eventsPageBanner}
         >
-          <Grid item container direction="column" className={classes.pageBannerContentContainer}>
+          <Grid
+            item
+            container
+            direction="column"
+            className={classes.eventsPageBannerContentContainer}
+          >
             <Typography variant="h1">My Events</Typography>
           </Grid>
         </Grid>
       </Grid>
       {renderNullDataText()}
       <Grid container direction="column" justify="center" alignItems="center">
-        {eventsData &&
-          eventsData.event_users
-            .filter((event) => {
-              return !event.event.ended_at
-            })
-            .sort((eventA, eventB) => {
-              if (eventA && eventB) {
-                return Date.parse(eventA.event.start_at) - Date.parse(eventB.event.start_at)
-              }
-            })
-            .map(({ event }) => {
-              return (
-                <div style={{ marginBottom: '75px' }}>
-                  <EventCard key={event.id} event={event} />
-                </div>
-              )
-            })}
-        {eventsData &&
-          eventsData.event_users
-            .filter((event) => {
-              return event.event.ended_at
-            })
-            .sort((eventA, eventB) => {
-              if (eventA && eventB) {
-                return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
-              }
-            })
-            .map(({ event }) => {
-              return (
-                <div style={{ marginBottom: '75px' }}>
-                  <EventCard key={event.id} event={event} />
-                </div>
-              )
-            })}
+        {eventsData?.event_users
+          .filter((event) => {
+            return !event.event.ended_at
+          })
+          .sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              return Date.parse(eventA.event.start_at) - Date.parse(eventB.event.start_at)
+            }
+          })
+          .map(({ event }) => {
+            return (
+              <div key={event.id} style={{ marginBottom: '75px' }}>
+                <EventCard key={event.id} event={event} />
+              </div>
+            )
+          })}
+        {eventsData?.event_users
+          .filter((event) => {
+            return event.event.ended_at
+          })
+          .sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              return Date.parse(eventB.event.start_at) - Date.parse(eventA.event.start_at)
+            }
+          })
+          .map(({ event }) => {
+            return (
+              <div key={event.id} style={{ marginBottom: '75px' }}>
+                <EventCard key={event.id} event={event} />
+              </div>
+            )
+          })}
       </Grid>
     </>
   )

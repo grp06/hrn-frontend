@@ -1,29 +1,32 @@
 import React from 'react'
+import { Chip, Grid } from '@material-ui/core'
+import { useVideoRoomStyles } from '.'
 
-import Chip from '@material-ui/core/Chip'
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles((theme) => ({
-  tagsContainer: {
-    margin: theme.spacing(1.5, 'auto', 0, 'auto'),
-    padding: theme.spacing(0, 1),
-  },
-}))
-
-const PartnerTagsList = ({ myRound, userId }) => {
-  const classes = useStyles()
+const PartnerTagsList = ({ myRound, myTagsArray }) => {
+  const classes = useVideoRoomStyles()
   const remoteVideoDiv = document.getElementById('remote-video')
   const partnerVideoDivExists = remoteVideoDiv && remoteVideoDiv.innerHTML
+  const myPartnersTagsArray = myRound.partner ? myRound.partner.tags_users : []
+  const myTagsArrayOnlyIds =
+    myTagsArray && myTagsArray.length ? myTagsArray.map((tagObject) => tagObject.tag.tag_id) : []
 
-  return partnerVideoDivExists && myRound.partner.tags_users.length > 0 ? (
+  const overlappingTagsOnlyIds =
+    myTagsArrayOnlyIds.length && myPartnersTagsArray.length
+      ? myPartnersTagsArray.reduce((all, partnersTabObject) => {
+          if (myTagsArrayOnlyIds.includes(partnersTabObject.tag.tag_id))
+            all.push(partnersTabObject.tag.tag_id)
+          return all
+        }, [])
+      : []
+
+  return partnerVideoDivExists && myPartnersTagsArray.length ? (
     <Grid
       container
       direction="row"
       justify="flex-start"
       alignItems="center"
       wrap="wrap"
-      className={classes.tagsContainer}
+      className={classes.partnerTagsListContainer}
     >
       {myRound.partner.tags_users
         .sort((tagA, tagB) => {
@@ -31,7 +34,20 @@ const PartnerTagsList = ({ myRound, userId }) => {
         })
         .map((tagObject) => {
           const { tag } = tagObject
-          return <Chip key={tag.tag_id} label={tag.name} id={tag.tag_id} color="primary" />
+          const isThisAnOverlappingTag = overlappingTagsOnlyIds.length
+            ? overlappingTagsOnlyIds.includes(tag.tag_id)
+            : false
+          return (
+            <Chip
+              key={tag.tag_id}
+              label={tag.name}
+              id={tag.tag_id}
+              style={{
+                backgroundColor: isThisAnOverlappingTag ? '#8C57DB' : '#191919',
+                color: '#f4f6fa',
+              }}
+            />
+          )
         })}
     </Grid>
   ) : null

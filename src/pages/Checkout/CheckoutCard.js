@@ -1,59 +1,10 @@
 import React, { useState } from 'react'
-import Button from '@material-ui/core/Button'
-import Divider from '@material-ui/core/Divider'
-import Grid from '@material-ui/core/Grid'
-import Hidden from '@material-ui/core/Hidden'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
+import { Button, Divider, Grid, Hidden, Typography } from '@material-ui/core'
 import { motion } from 'framer-motion'
-
-const useStyles = makeStyles((theme) => ({
-  checkoutCardContainer: {
-    width: '70vw',
-    margin: theme.spacing(0, 'auto'),
-    backgroundColor: theme.palette.common.grey10,
-    borderRadius: '4px',
-  },
-  divider: {
-    margin: theme.spacing(3, 0),
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      width: '75%',
-      margin: theme.spacing(2, 'auto'),
-    },
-  },
-  pinkCostText: {
-    marginTop: theme.spacing(1),
-    color: theme.palette.common.basePink,
-    fontSize: '1.7rem',
-  },
-  planHighlightTypography: {
-    marginBottom: theme.spacing(0.5),
-  },
-  planNameContainer: {
-    width: '100%',
-    height: '25%',
-    padding: theme.spacing(4),
-    [theme.breakpoints.down('sm')]: {
-      alignItems: 'center',
-      borderRadius: '4px',
-      padding: theme.spacing(3),
-    },
-  },
-  showPlanDetailsButton: {
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  spanSubtitle: {
-    fontFamily: 'Muli',
-    color: theme.palette.common.greySubtitle,
-    fontWeight: '300',
-  },
-}))
+import { useCheckoutStyles } from '.'
 
 const CheckoutCard = ({ form, plan, price, planHighlights }) => {
-  const classes = useStyles()
+  const classes = useCheckoutStyles()
   const [showMobilePlanDetails, setShowMobilePlanDetails] = useState(false)
 
   const renderPlanHighlights = () => {

@@ -9,7 +9,6 @@ import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '../../common'
 import { constants } from '../../utils'
 import confettiDoodles from '../../assets/confettiDoodles.svg'
-import { sleep } from '../../helpers'
 
 const { ROLE, TOKEN, USER_ID } = constants
 

@@ -1,13 +1,13 @@
 import React from 'react'
 import { Redirect } from 'react-router-dom'
 
-const EventStatusRedirect = ({ isEventParticipant, event, eventSet, userId }) => {
+const EventStatusRedirect = ({ isEventParticipant, event }) => {
   const { start_at } = event
   const now = Date.now()
   const startTime = new Date(start_at).getTime()
   const diff = startTime - now
 
-  if (eventSet && userId && isEventParticipant) {
+  if (isEventParticipant) {
     // push user to lobby if time is less than 15 mins.
     if (diff < 900000 && event.status === 'not-started') {
       return <Redirect to={`/events/${event.id}/lobby`} />

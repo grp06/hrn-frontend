@@ -1,35 +1,14 @@
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/styles'
 import { useQuery } from '@apollo/react-hooks'
-
 import { TransitionModal } from '../../common'
 import { startEvent } from '../../helpers'
 import { getAllPartnersForRound } from '../../gql/queries'
+import { useVideoRoomStyles } from '.'
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    position: 'relative',
-    zIndex: 9999,
-    width: '250px',
-    height: 'auto',
-    borderRadius: '4px',
-    border: '2px solid #3e4042',
-    boxShadow: '5px 5px 0 #3e4042',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(1),
-    marginBottom: theme.spacing(2),
-  },
-  onlineUsersText: {
-    color: theme.palette.common.sunray,
-    textAlign: 'center',
-    marginBottom: theme.spacing(1),
-  },
-}))
-
-const HostEventControlsCard = React.memo(({ event, userId }) => {
-  const classes = useStyles()
+const HostEventControlsCard = React.memo(({ event }) => {
+  const classes = useVideoRoomStyles()
   const { host_id, id: eventId, current_round: round } = event
   const { data: allPartnersData } = useQuery(getAllPartnersForRound, {
     variables: { event_id: eventId, round },

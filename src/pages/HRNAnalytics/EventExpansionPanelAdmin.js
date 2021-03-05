@@ -1,81 +1,22 @@
 import React, { useState, useEffect } from 'react'
-
-import Grid from '@material-ui/core/Grid'
-import ExpansionPanel from '@material-ui/core/ExpansionPanel'
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import Typography from '@material-ui/core/Typography'
 import FeatherIcon from 'feather-icons-react'
 import { CSVLink } from 'react-csv'
-import { makeStyles } from '@material-ui/styles'
-
-import formatDate from '../../utils/formatDate'
-import { getEventAnalytics } from '../../utils'
-
-const useStyles = makeStyles((theme) => ({
-  aTag: {
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    color: theme.palette.common.sunray,
-    cursor: 'pointer',
-    '&:hover': {
-      color: theme.palette.common.ghostWhite,
-    },
-  },
-  eventPanelHeading: {
-    flexBasis: '33.33%',
-    flexShrink: 0,
-    marginBottom: 0,
-    color: theme.palette.common.ghostWhite,
-  },
-  detailsHeading: {
-    textAlign: 'center',
-    padding: theme.spacing(1),
-  },
-  downloadButton: {
-    backgroundColor: theme.palette.common.basePurple,
-    color: theme.palette.common.ghostWhite,
-    padding: '8px 20px',
-    margin: `0 8px 8px 8px`,
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    borderRadius: 4,
-    display: 'flex',
-    flexWrap: 'nowrap',
-    alignItems: 'center',
-    textAlign: 'center',
-    '& svg': {
-      marginLeft: theme.spacing(1),
-    },
-  },
-  downloadAttendees: {
-    backgroundColor: theme.palette.common.basePurple,
-    color: theme.palette.common.ghostWhite,
-    padding: theme.spacing(1, 2.5),
-    margin: theme.spacing(0, 1, 1, 1),
-    textDecoration: 'none',
-    fontFamily: 'Muli',
-    borderRadius: 4,
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'center',
-    '& svg': {
-      marginLeft: theme.spacing(1),
-    },
-  },
-  sectionHeading: {
-    textDecoration: 'underline',
-    margin: theme.spacing(2),
-  },
-}))
+import {
+  Grid,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  Typography,
+} from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { useHRNAnalyticsStyles } from '.'
+import { getEventAnalytics, formatDate } from '../../utils'
 
 const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
-  const classes = useStyles()
-
+  const classes = useHRNAnalyticsStyles()
   const [sortedEvents, setSortedEvents] = useState(null)
-
   const [eventPanelExpanded, setEventPanelExpanded] = useState(null)
+
   const handlePanelPress = (panel) => (event, isExpanded) => {
     setEventPanelExpanded(isExpanded ? panel : false)
   }
@@ -134,85 +75,85 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
         </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid container justify="flex-start">
-            <Typography variant="h4" className={classes.sectionHeading}>
+            <Typography variant="h4" className={classes.expansionPanelSectionHeading}>
               Event Information:
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Event ID: {event.id}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Total RSVPs: {event_users.length}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Total Participants: {numberOfEventParticipants}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Attendance Rate: {attendanceRateForEvent} %
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Total Number of Mutual Connections: {numberOfMutualThumbsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Drop Offs:
               {numberOfDropOffsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Total Number of Rounds: {numberOfTotalRoundsInEvent}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Length of Rounds: {roundLengthOfEvent} mins
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Relevancy of event: {relevancyOfEvent} %
             </Typography>
           </Grid>
         </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid container justify="flex-start">
-            <Typography variant="h4" className={classes.sectionHeading}>
+            <Typography variant="h4" className={classes.expansionPanelSectionHeading}>
               Host Information:
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               User ID: {hostObject.id}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Name: {hostObject.name}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Email: {hostObject.email}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               City: {hostObject.city}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>
-            <Typography variant="subtitle1" className={classes.detailsHeading}>
+            <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
               Linked In:{' '}
               {hostObject.linkedIn_url ? (
                 <a
@@ -266,7 +207,7 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
               <Grid container justify="center" alignItems="center">
                 <Typography
                   variant="subtitle1"
-                  className={classes.detailsHeading}
+                  className={classes.expansionPanelDetailsHeading}
                   style={{ fontSize: '1.25rem', textAlign: 'center' }}
                 >
                   This event has not started. Come back when it is over and we&rsquo;ll have some

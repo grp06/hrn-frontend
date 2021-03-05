@@ -1,23 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Button, Grid, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-  cardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    width: '100%',
-  },
-  messageGrid: {
-    marginTop: theme.spacing(3),
-  },
-}))
+import { useLobbyStyles } from '.'
 
 const SittingOutCard = ({ setUserEventStatus }) => {
-  const classes = useStyles()
+  const classes = useLobbyStyles()
 
   const eventStatusVariants = {
     glow: {
@@ -41,7 +28,7 @@ const SittingOutCard = ({ setUserEventStatus }) => {
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
-        className={classes.cardContainer}
+        className={classes.sittingOutAndStatusCardContainer}
       >
         <Typography variant="h3">
           You are sitting out of the event{' '}
@@ -49,7 +36,7 @@ const SittingOutCard = ({ setUserEventStatus }) => {
             😢
           </span>
         </Typography>
-        <Grid className={classes.messageGrid}>
+        <Grid className={classes.sittingOutAndStatusMessageGrid}>
           <Typography variant="body1">
             Your name won&apos;t be thrown in the hat for the matching algorithm. Whenever
             you&apos;re ready to join again, just hit the button below.

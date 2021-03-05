@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import Grid from '@material-ui/core/Grid'
-import { makeStyles } from '@material-ui/styles'
-
+import { Grid } from '@material-ui/core'
 import {
   AboutTheHostCard,
   EventPhotoBanner,
@@ -13,113 +11,36 @@ import {
   JoinEventBanner,
   PodcastCard,
   WhatToExpect,
+  useEventStyles,
 } from '.'
 import { Loading } from '../../common'
-import { useAppContext, useEventContext, useUserContext } from '../../context'
+import { useEventContext, useUserContext } from '../../context'
 
-const useStyles = makeStyles((theme) => ({
-  bannerGradient: {
-    background:
-      'linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 58%, rgba(0,212,255,0) 100%)',
-    height: 'auto',
-    minHeight: '55vh',
-    width: '100%',
-    position: 'absolute',
-    top: '0%',
-    bottom: 'auto',
-  },
-  eventBanner: {
-    width: '100%',
-    height: 'auto',
-    minHeight: '55vh',
-    zIndex: '-3',
-    marginBottom: '80px',
-    backgroundPosition: '50% 50% !important',
-    backgroundSize: 'cover !important',
-  },
-  eventContentContainer: {
-    position: 'relative',
-    zIndex: '99',
-    width: '75vw',
-    maxWidth: '1560px',
-    margin: theme.spacing(-20, 'auto', 0, 'auto'),
-    paddingBottom: '40px',
-    [theme.breakpoints.down('sm')]: {
-      width: '90vw',
-    },
-  },
-  podcastContainer: {
-    width: '44%',
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-    },
-  },
-  subtitle: {
-    margin: theme.spacing(1),
-    marginBottom: '10px',
-    width: '75%',
-    [theme.breakpoints.down('sm')]: {
-      width: '90%',
-    },
-  },
-  whatToExpectContainer: {
-    width: '54%',
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-    },
-    marginBottom: theme.spacing(3),
-  },
-}))
-
-const Event = ({ match }) => {
-  const { id: eventId } = match.params
-  const classes = useStyles()
-  const { appLoading } = useAppContext()
-  const { user } = useUserContext()
-  const { event, setEventId } = useEventContext()
+const Event = () => {
+  const classes = useEventStyles()
+  const { user, userContextLoading } = useUserContext()
+  const { event, eventContextLoading } = useEventContext()
   const { id: user_id } = user
-  const {
-    banner_photo_url,
-    event_users,
-    host,
-    host_id,
-    id: event_id,
-    start_at,
-    status: event_status,
-  } = event
-  const eventSet = Object.keys(event).length > 1
+  const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
 
-  useEffect(() => {
-    if (!Object.keys(event).length && eventId) {
-      setEventId(parseInt(eventId, 10))
-    }
-  }, [eventId, event, setEventId])
-
-  // clean up this check?
-  if (appLoading || Object.keys(event).length < 2) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
   localStorage.setItem('eventId', eventId)
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const isEventParticipant = event.event_users.find((u) => u.user.id === user_id)
+  const isEventParticipant = event?.event_users?.find((u) => u.user.id === user_id)
 
   return (
     <>
-      <EventStatusRedirect
-        isEventParticipant={isEventParticipant}
-        userId={user_id}
-        eventSet={eventSet}
-        event={event}
-      />
+      <EventStatusRedirect isEventParticipant={isEventParticipant} event={event} />
       {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
         <JoinEventBanner />
       ) : null}
       <EventPhotoBanner
         bannerPhotoURL={banner_photo_url}
-        event_id={event_id}
+        eventId={eventId}
         userIsHost={userIsHost}
       />
       <Grid

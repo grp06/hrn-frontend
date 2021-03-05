@@ -1,58 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 
-import Grid from '@material-ui/core/Grid'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Typography from '@material-ui/core/Typography'
 import TimerIcon from '@material-ui/icons/Timer'
-import { makeStyles } from '@material-ui/styles'
 import { motion } from 'framer-motion'
+import { Grid, LinearProgress, Typography } from '@material-ui/core'
 import { constants } from '../../utils'
 import { Snack } from '../../common'
+import { useVideoRoomStyles } from '.'
 
-const { betweenRoundsDelay, bottomNavBarHeight } = constants
-
-const useStyles = makeStyles((theme) => ({
-  animatedCountdown: {
-    position: 'fixed',
-    zIndex: 9999999,
-    height: '500px',
-    width: '500px',
-    borderRadius: 360,
-    backgroundColor: theme.palette.common.basePurple,
-    margin: 'auto',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-  },
-  animatedBackdrop: {
-    position: 'fixed',
-    zIndex: 9999988,
-    height: '100vh',
-    width: '100vw',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    backgroundColor: 'black',
-    opacity: 0,
-  },
-  countdownNumber: {
-    fontSize: '20rem',
-    textAlign: 'center',
-    color: theme.palette.common.ghostWhite,
-  },
-  roundProgressBarContainer: {
-    width: '100%',
-    // height: 20,
-    position: 'fixed',
-    bottom: bottomNavBarHeight,
-  },
-}))
+const { betweenRoundsDelay } = constants
 
 const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
-  const classes = useStyles()
-  const { id: eventId, round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
+  const classes = useVideoRoomStyles()
+  const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
   const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)

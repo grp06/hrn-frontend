@@ -1,8 +1,6 @@
 const setupHostPreEvent = (room) => {
   const { localParticipant } = room
   localParticipant.tracks.forEach((publication) => {
-    console.log('local tracks looping')
-
     const hostVideoDiv = document.getElementById('host-video')
     if (hostVideoDiv && !hostVideoDiv.children.length && publication.track.kind === 'video') {
       const attachedTrack = publication.track.attach()

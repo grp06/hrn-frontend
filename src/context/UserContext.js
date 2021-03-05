@@ -2,7 +2,6 @@ import React, { useEffect, createContext, useContext } from 'react'
 import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
-import { useAppContext } from '.'
 import { findUserById } from '../gql/queries'
 
 const UserContext = createContext()
@@ -10,7 +9,8 @@ const UserContext = createContext()
 const defaultState = {
   user: {},
   userInEvent: false,
-  userOnAuthRoute: false,
+  userOnAuthOrOnboarding: false,
+  userContextLoading: true,
 }
 
 const useUserContext = () => {
@@ -52,6 +52,12 @@ const useUserContext = () => {
     })
   }
 
+  const setUserContextLoading = (boolean) => {
+    dispatch((draft) => {
+      draft.userContextLoading = boolean
+    })
+  }
+
   const updateUserObject = (userObject) => {
     dispatch((draft) => {
       draft.user.name = userObject.name
@@ -68,19 +74,19 @@ const useUserContext = () => {
     setUserUpdatedAt,
     updateUserObject,
     setUserInEvent,
+    setUserContextLoading,
   }
 }
 
 const UserProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { setAppLoading } = useAppContext()
   const history = useHistory()
   const location = useLocation()
   const { userId } = state.user
   const { pathname } = location
 
-  const specificEventPageRegex = /\/events\/\d+[\/]?$/
-  const eventsPageRegex = /\/events[\/]?$/
+  const specificEventPageRegex = /\/events\/\d+?$/
+  const eventsPageRegex = /\/events?$/
   const setNewPasswordPageRegex = /set-new-password/
 
   const userOnSpecificEventPage = Boolean(pathname.match(specificEventPageRegex))
@@ -93,7 +99,7 @@ const UserProvider = ({ children }) => {
       pathname.includes('lobby') ||
       pathname.includes('group-video-chat')
   )
-  const isUserOnAuth = Boolean(
+  const isUserOnAuthOrOnboarding = Boolean(
     pathname === '/' ||
       pathname.includes('sign-up') ||
       pathname.includes('forgot-password') ||
@@ -101,6 +107,14 @@ const UserProvider = ({ children }) => {
       pathname.includes('onboarding') ||
       pathname.includes('host-onboarding') ||
       pathname.includes('checkout-success')
+  )
+  const isUserAllowedToBeAnonymousOnPage = Boolean(
+    userOnEventsPage ||
+      userOnSpecificEventPage ||
+      userOnSetNewPasswordPage ||
+      userOnSignUpPage ||
+      userOnSubscriptionPage ||
+      pathname.includes('lobby')
   )
 
   const { data: userData } = useQuery(findUserById, {
@@ -114,24 +128,20 @@ const UserProvider = ({ children }) => {
       if (userData.users.length) {
         dispatch((draft) => {
           draft.user = userData.users[0]
-          draft.userInEvent = userInEvent
+          draft.userContextLoading = false
         })
-        return setAppLoading(false)
       }
     }
-  }, [userData, userId])
+  }, [dispatch, userData, userId])
 
   useEffect(() => {
     if (location) {
-      console.log('i should be getting in here')
-      console.log('isUserOnAuth ->', isUserOnAuth)
-      console.log('userInEvent ->', userInEvent)
       dispatch((draft) => {
-        draft.userOnAuthRoute = isUserOnAuth
+        draft.userOnAuthOrOnboarding = isUserOnAuthOrOnboarding
         draft.userInEvent = userInEvent
       })
     }
-  }, [location])
+  }, [dispatch, userInEvent, isUserOnAuthOrOnboarding, location])
 
   // once we get on the app check to see if theres a userID in local storage
   // if there is then we want to set user.userId so that findByUserId query can be called
@@ -141,23 +151,18 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     const localStorageUserId = localStorage.getItem('userId')
     if (!localStorageUserId) {
-      if (
-        !(
-          userOnEventsPage ||
-          userOnSpecificEventPage ||
-          userOnSetNewPasswordPage ||
-          userOnSignUpPage ||
-          userOnSubscriptionPage
-        )
-      ) {
-        history.push('/')
+      if (!isUserAllowedToBeAnonymousOnPage) {
+        return history.push('/')
       }
+      dispatch((draft) => {
+        draft.userContextLoading = false
+      })
     } else {
       dispatch((draft) => {
         draft.user.userId = parseInt(localStorageUserId, 10)
       })
     }
-  }, [])
+  }, [dispatch, history, isUserAllowedToBeAnonymousOnPage])
 
   return <UserContext.Provider value={[state, dispatch]}>{children}</UserContext.Provider>
 }

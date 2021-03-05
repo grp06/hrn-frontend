@@ -1,5 +1,5 @@
 import React from 'react'
-import Typography from '@material-ui/core/Typography'
+import { Typography } from '@material-ui/core'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { TransitionModal } from '../../common'
 
@@ -23,7 +23,12 @@ const PreEventInstructionModal = () => {
           When you're ready to start the event after your speech just go ahead and press the 'start
           event button' that will be on the bottom left of your screen.
         </Typography>
-        <Typography variant="body1">Enjoy the event ✨</Typography>
+        <Typography variant="body1">
+          Enjoy the event{' '}
+          <span role="img" aria-label="sparkle">
+            ✨
+          </span>
+        </Typography>
       </div>
     ),
     iconButton: {

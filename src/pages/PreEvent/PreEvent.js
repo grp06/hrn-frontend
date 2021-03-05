@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import React, { useState, useEffect } from 'react'
+import { Grid, Typography } from '@material-ui/core'
 import VisibilityOutlinedIcon from '@material-ui/icons/VisibilityOutlined'
-import { makeStyles } from '@material-ui/styles'
 import { useHistory } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { AnimatedHostNameCard, usePreEventStyles } from '.'
 import { useEventContext, useUserContext } from '../../context'
 import { getToken } from '../../helpers'
 import { usePreEventTwilio } from '../../hooks'
@@ -14,102 +12,30 @@ const { maxNumUsersPerRoom } = constants
 
 const { connect } = require('twilio-video')
 
-const useStyles = makeStyles((theme) => ({
-  hostVid: {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    '& video': {
-      width: '100%',
-      // height: 'calc(100vh)',
-      height: '100%',
-      objectFit: 'cover',
-    },
-  },
-  preEventWrapper: {
-    height: '94vh',
-  },
-  hostEmojiiContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.greyCard,
-    padding: theme.spacing(1),
-  },
-  hostNameCard: {
-    position: 'absolute',
-    top: 'auto',
-    bottom: '90px',
-    left: 'auto',
-    right: '0',
-    borderRadius: '4px',
-    width: 'auto',
-    minWidth: '300px',
-    height: '80px',
-  },
-  hostNameContainer: {
-    height: '100%',
-    backgroundColor: theme.palette.common.basePurple,
-    padding: theme.spacing(1),
-  },
-  liveAndViewersContainer: {
-    position: 'absolute',
-    top: '3%',
-    left: '2%',
-    bottom: 'auto',
-    right: 'auto',
-  },
-  liveLogo: {
-    width: '60px',
-    height: 'auto',
-    color: theme.palette.common.ghostWhite,
-    fontWeight: 'bold',
-    backgroundColor: theme.palette.common.red,
-    borderRadius: '4px',
-    textAlign: 'center',
-  },
-  viewersContainer: {
-    marginTop: theme.spacing(1),
-    backgroundColor: 'rgba(36,37,38,0.7)',
-    borderRadius: '4px',
-    width: '60px',
-  },
-  viewersNumber: {
-    color: theme.palette.common.ghostWhite,
-    marginLeft: theme.spacing(0.5),
-  },
-}))
-
 const PreEvent = ({ onlineEventUsers }) => {
   // const { id: eventId } = match.params
-  const classes = useStyles()
+  const classes = usePreEventStyles()
   const history = useHistory()
   const { user } = useUserContext()
 
   const { event } = useEventContext()
   const { id: userId, role } = user
-  const { id: eventId, host } = event
+  const { host, id: eventId } = event
   const { name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
-  const eventSet = Object.keys(event).length > 1
   const { startPreEventTwilio } = usePreEventTwilio()
   const hostsFirstName = hostName && hostName.split(' ')[0]
   const userIsHost = event.host_id === userId
 
   useEffect(() => {
-    if (eventSet) {
-      const { status } = event
-
-      if (status === 'in-between-rounds') {
-        console.log('force to video room')
-        return history.push(`/events/${eventId}/video-room`)
-      }
-
-      if (status !== 'pre-event') {
-        return history.push(`/events/${eventId}`)
+    if (event) {
+      if (event.status !== 'pre-event') {
+        return history.push(`/events/${event.id}`)
       }
     }
-  }, [event])
+  }, [event, history])
 
   useEffect(() => {
     if (onlineEventUsers && onlineEventUsers.length) {
@@ -130,18 +56,15 @@ const PreEvent = ({ onlineEventUsers }) => {
       const roomNumber = Math.floor(currentUserIndex / usersPerRoom) + 1
 
       setMyRoomNumber(roomNumber)
-      console.log('PreEvent -> roomNumber', roomNumber)
       setNumRooms(numberOfRooms)
-      console.log('PreEvent -> numberOfRooms', numberOfRooms)
     }
-  }, [onlineEventUsers])
+  }, [onlineEventUsers, userId])
 
   useEffect(() => {
     if (userId && myRoomNumber !== null) {
       const setupTokens = async () => {
         const isEventHost = event.host_id === userId
         if (!isEventHost) {
-          console.log('getting pre-event token')
           const tokenResp = await getToken(`${eventId}-pre-event-${myRoomNumber}`, userId)
           const tokenJson = await tokenResp.json()
           return setRoomTokens([tokenJson.token])
@@ -163,7 +86,7 @@ const PreEvent = ({ onlineEventUsers }) => {
 
       setupTokens()
     }
-  }, [userId, role, myRoomNumber, numRooms])
+  }, [eventId, event.host_id, userId, role, myRoomNumber, numRooms])
 
   // get online event users
   // set room number
@@ -185,7 +108,6 @@ const PreEvent = ({ onlineEventUsers }) => {
             ? { deviceId: localStoragePreferredAudioId }
             : false
 
-        console.log('audioDevice', audioDevice)
         // if theres only 1 room, or if you're a non-host:  do this
         if (roomTokens.length === 1) {
           const myRoom = await connect(roomTokens[0], {
@@ -213,14 +135,13 @@ const PreEvent = ({ onlineEventUsers }) => {
           )
         })
         // Ask Mike: should we await here?
-        console.log('setupRoom -> roomCreationPromises.length', roomCreationPromises.length)
         Promise.all(roomCreationPromises).then((res) => {
           res.forEach((room) => startPreEventTwilio(room, isEventHost))
         })
       }
       setupRoom()
     }
-  }, [roomTokens])
+  }, [event.host_id, roomTokens, userId])
 
   return (
     <Grid className={classes.preEventWrapper} container direction="column" justify="center">
@@ -238,38 +159,7 @@ const PreEvent = ({ onlineEventUsers }) => {
           </Grid>
         ) : null}
       </Grid>
-      <motion.div
-        initial={{ x: 500, y: 40 }}
-        animate={{ x: 0, y: 40 }}
-        transition={{ delay: 3, ease: 'easeOut', duration: 2 }}
-      >
-        <Grid container alignItems="center" className={classes.hostNameCard}>
-          <Grid
-            container
-            item
-            justify="center"
-            alignItems="center"
-            xs={3}
-            className={classes.hostEmojiiContainer}
-          >
-            <Typography variant="h2">
-              <span role="img" aria-label="champage bottle" style={{ fontSize: '3rem' }}>
-                🍾
-              </span>
-            </Typography>
-          </Grid>
-          <Grid
-            container
-            item
-            xs={9}
-            justify="center"
-            alignItems="center"
-            className={classes.hostNameContainer}
-          >
-            <Typography variant="h2">{hostsFirstName}</Typography>
-          </Grid>
-        </Grid>
-      </motion.div>
+      <AnimatedHostNameCard hostsFirstName={hostsFirstName} />
     </Grid>
   )
 }

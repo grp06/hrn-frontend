@@ -3,7 +3,7 @@ import React, { useEffect, createContext, useContext } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
-import { useAppContext } from '.'
+import { useUserContext } from '.'
 import { listenToEvent, listenToEventChatMessages } from '../gql/subscriptions'
 
 const EventContext = createContext()
@@ -15,6 +15,7 @@ const defaultState = {
   eventChatMessages: [],
   numberOfReadChatMessages: 0,
   numberOfUnreadChatMessages: 0,
+  eventContextLoading: true,
 }
 
 const useEventContext = () => {
@@ -53,15 +54,18 @@ const useEventContext = () => {
 
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
-  const { setAppLoading } = useAppContext()
+  const { user } = useUserContext()
+  const { id: userId } = user
   const { pathname } = window.location
-  const { event, eventChatMessages, numberOfReadChatMessages } = state
+
+  const { event, eventChatMessages, numberOfReadChatMessages, eventId } = state
   const eventRegex = /\/events\/\d+/
   const history = useHistory()
   const userOnEventPage = Boolean(pathname.match(eventRegex))
   const userOnLobbyOrGroupChat = pathname.includes('lobby') || pathname.includes('group-video-chat')
   const pathnameArray = pathname.split('/')
-  const eventId = parseInt(pathnameArray[2], 10)
+
+  const eventIdFromUrl = parseInt(pathnameArray[2], 10)
 
   // subscribe to the Event only if we have an eventId
   const { data: eventData } = useSubscription(listenToEvent, {
@@ -75,8 +79,29 @@ const EventProvider = ({ children }) => {
     variables: {
       event_id: eventId,
     },
-    skip: !eventId,
+    skip: !eventId || !userId,
   })
+
+  useEffect(() => {
+    if (!userOnEventPage && eventId) {
+      dispatch((draft) => {
+        draft.eventId = null
+        draft.event = {}
+        draft.eventChatMessages = []
+        draft.numberOfReadChatMessages = 0
+        draft.numberOfUnreadChatMessages = 0
+        draft.eventContextLoading = true
+      })
+    }
+  }, [dispatch, eventId, userOnEventPage])
+
+  useEffect(() => {
+    if (!eventId && eventIdFromUrl) {
+      dispatch((draft) => {
+        draft.eventId = parseInt(eventIdFromUrl, 10)
+      })
+    }
+  }, [dispatch, eventId, eventIdFromUrl])
 
   useEffect(() => {
     if (event.status === 'in-between-rounds' && window.room) {
@@ -90,27 +115,31 @@ const EventProvider = ({ children }) => {
     if (userOnEventPage && eventData) {
       // event doesn't exist - redirect user
       if (!eventData.events.length) {
-        setAppLoading(false)
+        dispatch((draft) => {
+          draft.eventContextLoading = false
+        })
         return history.push('/events')
       }
+      const eventObjectFromSub = eventData?.events[0]
       // cases to set event data:
       // 1) no event data set yet
       // 2) incoming data from subscription is different from existing
       const existingData = JSON.stringify(event)
-      const incomingData = JSON.stringify(eventData.events[0])
+      const incomingData = JSON.stringify(eventObjectFromSub)
 
       if (existingData !== incomingData) {
         const eventWasReset =
           event.status &&
           event.status !== 'not-started' &&
-          eventData.events[0].status === 'not-started'
+          eventObjectFromSub.status === 'not-started'
         if (eventWasReset) {
-          window.location.reload()
+          // MAX TOOK THIS OUT ON MARCH 3
+          // window.location.reload()
         }
         dispatch((draft) => {
-          draft.event = eventData.events[0]
+          draft.event = eventObjectFromSub
+          draft.eventContextLoading = false
         })
-        return setAppLoading(false)
       }
     }
   }, [eventData, dispatch, event, userOnEventPage, history])
@@ -129,17 +158,17 @@ const EventProvider = ({ children }) => {
         })
       }
     }
-  }, [chatMessages, userOnLobbyOrGroupChat])
+  }, [chatMessages, userOnLobbyOrGroupChat, dispatch, eventChatMessages, numberOfReadChatMessages])
 
   // whenever we update the number of read messages (when we close the chat), then set the number of unread messages
   useEffect(() => {
-    if (numberOfReadChatMessages) {
+    if (numberOfReadChatMessages && chatMessages) {
       dispatch((draft) => {
         draft.numberOfUnreadChatMessages =
           chatMessages.event_group_chat_messages.length - numberOfReadChatMessages
       })
     }
-  }, [numberOfReadChatMessages])
+  }, [numberOfReadChatMessages, chatMessages, dispatch])
 
   return <EventContext.Provider value={[state, dispatch]}>{children}</EventContext.Provider>
 }

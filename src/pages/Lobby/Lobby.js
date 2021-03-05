@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
-import { useHistory } from 'react-router-dom'
 import { useSubscription } from '@apollo/react-hooks'
+import { useHistory } from 'react-router-dom'
 
 import {
   BottomControlPanel,
@@ -10,35 +9,21 @@ import {
   NextRoundIn,
   LobbyContent,
 } from '.'
-import {
-  useAppContext,
-  useEventContext,
-  useUserContext,
-  useUserEventStatusContext,
-} from '../../context'
+import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { EventChatBox, Loading } from '../../common'
 import { listenToPartnersTable } from '../../gql/subscriptions'
 import { getTimeUntilEvent } from '../../utils'
 
-// the overflow hidden in broadcastContainer is to help hide the scrollbar
-const useStyles = makeStyles((theme) => ({
-  pageContainer: {
-    overflowX: 'hidden',
-    overflowY: 'hidden',
-  },
-}))
-
 const Lobby = () => {
-  const classes = useStyles()
   const history = useHistory()
-  const { appLoading } = useAppContext()
   const {
     event,
     eventChatMessages,
     numberOfUnreadChatMessages,
     setNumberOfReadChatMessages,
+    eventContextLoading,
   } = useEventContext()
-  const { user, setUserInEvent } = useUserContext()
+  const { user, userContextLoading } = useUserContext()
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
@@ -51,11 +36,11 @@ const Lobby = () => {
     current_round: round,
     event_users,
     host_id: hostId,
-    id: eventId,
     round_length,
     start_at: eventStartTime,
     status: eventStatus,
     updated_at: eventUpdatedAt,
+    id: eventId,
   } = event
   const { id: user_id, name: usersName } = user
 
@@ -81,38 +66,39 @@ const Lobby = () => {
 
   const toggleChat = () => {
     setChatIsOpen((prevState) => {
-      if (prevState === true && eventChatMessages && eventChatMessages.length) {
+      if (prevState === true && eventChatMessages?.length) {
         setNumberOfReadChatMessages(eventChatMessages.length)
       }
       return !prevState
     })
   }
 
-  useEffect(() => {
-    setUserInEvent(true)
-  }, [])
+  const appLoading = userContextLoading || eventContextLoading
 
   useEffect(() => {
     if (getTimeUntilEvent(eventStartTime) > 900000) {
       history.push(`/events/${eventId}`)
     }
-  }, [eventStartTime])
+  }, [eventId, eventStartTime, history])
 
   // some redirecting stuff
   useEffect(() => {
-    if (event_users && event_users.length && user_id) {
+    if (!appLoading) {
       const alreadyAttending = event_users.find((u) => u.user.id === user_id)
-      if (!alreadyAttending) {
+      if (!user_id || !alreadyAttending) {
         history.push(`/events/${eventId}`)
       }
     }
-    if (eventStatus === 'group-video-chat') {
-      return history.push(`/events/${eventId}/group-video-chat`)
+
+    switch (eventStatus) {
+      case 'group-video-chat':
+        return history.push(`/events/${eventId}/group-video-chat`)
+      case 'complete':
+        return history.push(`/events/${eventId}/event-complete`)
+      default:
+      // do nothing
     }
-    if (eventStatus === 'complete') {
-      history.push(`/events/${eventId}/event-complete`)
-    }
-  }, [event_users, eventStatus, user_id])
+  }, [eventId, event_users, eventStatus, history, user_id, appLoading])
 
   // redirect you when you have a partner
   // the round ===1 and waiting for match is to make sure that you get pushed into
@@ -122,18 +108,23 @@ const Lobby = () => {
     if (
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
-        myRoundData &&
-        myRoundData.partners.length &&
+        myRoundData?.partners.length &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
-      console.log('myRoundData ->', myRoundData)
-      console.log('userEventStatus ->', userEventStatus)
       history.push(`/events/${eventId}/video-room`)
     }
-  }, [eventStatus, userEventStatus, myRoundData])
+  }, [
+    eventId,
+    eventStatus,
+    history,
+    myRoundData,
+    round,
+    userEventStatus,
+    userHasEnabledCameraAndMic,
+  ])
 
-  if (appLoading || Object.keys(event).length < 2 || Object.keys(user).length < 2) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
@@ -142,7 +133,7 @@ const Lobby = () => {
   }
 
   return (
-    <div className={classes.pageContainer}>
+    <div style={{ overflowX: 'hidden', overflowY: 'hidden' }}>
       {eventStatus === 'not-started' ? <EventCountdown eventStartTime={eventStartTime} /> : null}
       {eventStatus !== 'not-started' && eventStatus !== 'pre-event' ? (
         <NextRoundIn
@@ -158,12 +149,14 @@ const Lobby = () => {
         setUserEventStatus={setUserEventStatus}
         userEventStatus={userEventStatus}
         user={user}
+        eventId={eventId}
       />
       {chatIsOpen ? (
         <EventChatBox
           eventId={eventId}
           hostId={hostId}
           messages={eventChatMessages}
+          toggleChat={toggleChat}
           userId={user_id}
         />
       ) : null}

@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/react-hooks'
-import Grid from '@material-ui/core/Grid'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemText from '@material-ui/core/ListItemText'
-import TextField from '@material-ui/core/TextField'
+import { Grid, List, ListItem, ListItemText, TextField } from '@material-ui/core'
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { makeStyles } from '@material-ui/styles'
-
 import { insertEventChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
 const { bottomNavBarHeight } = constants
@@ -38,7 +34,7 @@ const createStyles = makeStyles((theme) => ({
   chatList: {
     flexDirection: 'column',
     height: '83%',
-    overflow: 'scroll',
+    overflow: 'auto',
     padding: theme.spacing(0, 1),
   },
   hiRightNowTeamName: {
@@ -64,13 +60,24 @@ const createStyles = makeStyles((theme) => ({
     fontSize: '0.75rem',
     marginLeft: theme.spacing(0.5),
   },
+  minimizeChatIcon: {
+    color: theme.palette.common.ghostWhite,
+    fontSize: '2rem',
+    position: 'absolute',
+    left: 'auto',
+    right: 10,
+    '&:hover': {
+      color: theme.palette.common.basePink,
+      cursor: 'pointer',
+    },
+  },
   sendersName: {
     color: theme.palette.common.ghostWhite,
     fontWeight: 700,
   },
 }))
 
-const EventChatBox = ({ eventId, hostId, messages, userId }) => {
+const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
   const classes = createStyles()
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
@@ -83,7 +90,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
     if (messages && !list) {
       setList(messages)
     }
-  }, [messages])
+  }, [messages, list])
 
   const getNumberOfRows = () => {
     const charsPerLine = 40
@@ -106,7 +113,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
   }
 
   return (
-    <Grid container direction="column" alignItems="space-between" className={classes.chatContainer}>
+    <Grid container direction="column" className={classes.chatContainer}>
       <Grid
         container
         direction="row"
@@ -115,6 +122,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
         className={classes.chatBoxTitle}
       >
         Chat with Everyone
+        <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
       </Grid>
       <List dense className={classes.chatList} id="chat-list">
         {messages && messages.length ? (
@@ -124,7 +132,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
             const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
             const messageSentAt = formatChatMessagesDate(created_at)
             return (
-              <ListItem dense>
+              <ListItem key={created_at} dense>
                 <ListItemText
                   primary={
                     <Grid container alignItems="flex-end">
@@ -140,11 +148,19 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
             )
           })
         ) : (
-          <ListItem dense>
+          <ListItem key="hrn-default-message" dense>
             <ListItemText
               primary={
                 <Grid container alignItems="flex-end">
-                  <span className={classes.hiRightNowTeamName}>✨ Hi Right Now Team ✨</span>{' '}
+                  <span className={classes.hiRightNowTeamName}>
+                    <span role="img" aria-label="sparkle">
+                      ✨
+                    </span>{' '}
+                    Hi Right Now Team{' '}
+                    <span role="img" aria-label="sparkle">
+                      ✨
+                    </span>
+                  </span>{' '}
                 </Grid>
               }
               secondary={
@@ -159,7 +175,7 @@ const EventChatBox = ({ eventId, hostId, messages, userId }) => {
       </List>
       <Grid container direction="column" className={classes.inputContainer}>
         <TextField
-          autoComplete={false}
+          autoComplete="off"
           id="message"
           required
           fullWidth
