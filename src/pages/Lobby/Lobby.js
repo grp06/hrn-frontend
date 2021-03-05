@@ -73,6 +73,8 @@ const Lobby = () => {
     })
   }
 
+  const appLoading = userContextLoading || eventContextLoading
+
   useEffect(() => {
     if (getTimeUntilEvent(eventStartTime) > 900000) {
       history.push(`/events/${eventId}`)
@@ -81,19 +83,22 @@ const Lobby = () => {
 
   // some redirecting stuff
   useEffect(() => {
-    if (event_users?.length && user_id) {
+    if (!appLoading) {
       const alreadyAttending = event_users.find((u) => u.user.id === user_id)
-      if (!alreadyAttending) {
+      if (!user_id || !alreadyAttending) {
         history.push(`/events/${eventId}`)
       }
     }
-    if (eventStatus === 'group-video-chat') {
-      return history.push(`/events/${eventId}/group-video-chat`)
+
+    switch (eventStatus) {
+      case 'group-video-chat':
+        return history.push(`/events/${eventId}/group-video-chat`)
+      case 'complete':
+        return history.push(`/events/${eventId}/event-complete`)
+      default:
+      // do nothing
     }
-    if (eventStatus === 'complete') {
-      history.push(`/events/${eventId}/event-complete`)
-    }
-  }, [eventId, event_users, eventStatus, history, user_id])
+  }, [eventId, event_users, eventStatus, history, user_id, appLoading])
 
   // redirect you when you have a partner
   // the round ===1 and waiting for match is to make sure that you get pushed into
