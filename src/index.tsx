@@ -15,7 +15,7 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 const { intercomAppId } = constants
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY)
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY!)
 
 ReactDOM.render(
   <IntercomProvider appId={intercomAppId}>
