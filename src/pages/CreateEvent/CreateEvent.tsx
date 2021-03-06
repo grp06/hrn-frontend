@@ -9,12 +9,12 @@ import { useUserContext } from '../../context'
 import { getHostEventsAndPartners } from '../../gql/queries'
 import { getIsSubPeriodOver } from '../../utils'
 
-const CreatEvent = () => {
+const CreatEvent: React.FC<{}> = () => {
   const classes = useCreateEventStyles()
   const { user } = useUserContext()
   const { id: user_id, role, sub_period_end } = user
-  const [componentToShow, setComponentToShow] = useState('event-form')
-  const [timeSinceSubEnded, setTimeSinceSubEnded] = useState(null)
+  const [componentToShow, setComponentToShow] = useState<string>('event-form')
+  const [timeSinceSubEnded, setTimeSinceSubEnded] = useState<string>('')
   const userIsAPaidHost = role && (role.includes('starter') || role.includes('premium'))
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getHostEventsAndPartners, {

@@ -2,12 +2,30 @@ import React, { useState } from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
 import MuiAlert from '@material-ui/lab/Alert'
 
-const Alert = (props) => <MuiAlert elevation={6} variant="filled" {...props} />
+interface SnackProps {
+  anchorOrigin?: any // getting crazy errors if i try to figure this out
+  duration?: number
+  onClose: Function
+  open: boolean
+  severity?: string
+  snackIcon?: React.ReactNode
+  snackMessage: string
+}
 
-const Snack = ({ open, anchorOrigin, snackMessage, snackIcon, duration, onClose, severity }) => {
+const Alert = (props: any) => <MuiAlert elevation={6} variant="filled" {...props} />
+
+const Snack: React.FC<SnackProps> = ({
+  open,
+  anchorOrigin,
+  snackMessage,
+  snackIcon,
+  duration,
+  onClose,
+  severity,
+}) => {
   const [showSnack, setShowSnack] = useState(false)
 
-  const handleOnClose = (event, reason) => {
+  const handleOnClose = (event: object, reason: string) => {
     if (reason === 'clickaway') {
       return
     }

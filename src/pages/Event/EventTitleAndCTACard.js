@@ -148,14 +148,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setCopyURLSnack(false)}
         severity="info"
-        snackMessage={
-          <div>
-            Event URL Copied{' '}
-            <span role="img" aria-label="floppy disk">
-              💾
-            </span>
-          </div>
-        }
+        snackMessage="Event URL Copied 💾"
       />
       <Snack
         open={showComeBackSnack}
@@ -163,14 +156,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setShowComeBackSnack(false)}
         severity="info"
-        snackMessage={
-          <div>
-            To attend this event, come back to this page 5 minutes before the event starts{' '}
-            <span role="img" aria-label="alarm clock">
-              ⏰
-            </span>
-          </div>
-        }
+        snackMessage="To attend this event, come back to this page 5 minutes before the event starts ⏰"
       />
     </Grid>
   )

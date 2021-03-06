@@ -14,16 +14,22 @@ import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
 import { createEvent, insertEventUser } from '../../gql/mutations'
 
-const NewEventForm = () => {
+declare global {
+  interface Window {
+    analytics: any
+  }
+}
+
+const NewEventForm: React.FC<{}> = () => {
   const classes = useCreateEventStyles()
   const history = useHistory()
   const { user } = useUserContext()
   const { id: user_id } = user
-  const [showCreateEventSuccess, setShowCreateEventSuccess] = useState(false)
+  const [showCreateEventSuccess, setShowCreateEventSuccess] = useState<boolean>(false)
   const [createEventMutation] = useMutation(createEvent)
   const [insertEventUserMutation] = useMutation(insertEventUser)
 
-  const getEventStartAt = (eventDate, eventTime) => {
+  const getEventStartAt = (eventDate: Date, eventTime: Date) => {
     const dateISOString = eventDate.toISOString()
     const timeISOString = eventTime.toISOString()
     const indexOfTinEventDate = dateISOString.indexOf('T')
@@ -86,7 +92,7 @@ const NewEventForm = () => {
             } catch (error) {
               console.log('error')
             }
-            const { id: event_id } = createEventResponse.data.insert_events.returning[0]
+            const { id: event_id } = createEventResponse?.data.insert_events.returning[0]
             try {
               await insertEventUserMutation({
                 variables: {

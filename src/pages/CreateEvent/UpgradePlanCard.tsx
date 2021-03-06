@@ -3,25 +3,22 @@ import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 import { useCreateEventStyles } from '.'
 
-const SubscriptionEndedCard = ({ timeSinceSubEnded }) => {
+const UpgradePlanCard: React.FC<{}> = () => {
   const classes = useCreateEventStyles()
   const history = useHistory()
   return (
     <Grid container direction="column" className={classes.subEndedAndUpgradePlanCardContainer}>
       <Typography variant="h2" className={classes.cardHeading}>
-        You&apos;re subscription ended {timeSinceSubEnded}{' '}
-        <span role="img" aria-label="distraught cat">
-          🙀
+        You&apos;ve run out of free events{' '}
+        <span role="img" aria-label="distraught face">
+          😫
         </span>
       </Typography>
       <Typography variant="h4" className={classes.subheading}>
-        We would love for you to keep throwing your awesome events.
+        With a free host account you only get one free event.
       </Typography>
       <Typography variant="h4" className={classes.subheading}>
-        Click the button below to come back to the party{' '}
-        <span role="img" aria-label="confetti ball">
-          🎊
-        </span>
+        Click the button below to view our plan options and upgrade your account!
       </Typography>
       <Button
         variant="contained"
@@ -31,10 +28,10 @@ const SubscriptionEndedCard = ({ timeSinceSubEnded }) => {
         className={classes.reactivateAndUpgradeButton}
         onClick={() => history.push('/subscription')}
       >
-        Reactivate my plan
+        Upgrade my plan
       </Button>
     </Grid>
   )
 }
 
-export default SubscriptionEndedCard
+export default UpgradePlanCard

@@ -125,14 +125,7 @@ const ShareEventPromptModal = ({ event, renderHostMessage }) => {
         duration={1800}
         onClose={() => setShowSnack(false)}
         severity="info"
-        snackMessage={
-          <div>
-            Copied{' '}
-            <span role="img" aria-label="floppy disk">
-              💾
-            </span>
-          </div>
-        }
+        snackMessage="Copied 💾"
       />
     </div>
   )
