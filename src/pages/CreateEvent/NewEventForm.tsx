@@ -12,9 +12,8 @@ import { MatchingOptionCard, useCreateEventStyles } from '.'
 import relevantMatching from '../../assets/relevantMatchingIcon.svg'
 import twoSidedMatching from '../../assets/twoSidedMatchingIcon.svg'
 import { Snack } from '../../common'
-import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
-import { createEvent, insertEventUser } from '../../gql/mutations'
+import { upsertEvent, insertEventUser } from '../../gql/mutations'
 
 declare global {
   interface Window {
@@ -22,14 +21,53 @@ declare global {
   }
 }
 
-const NewEventForm: React.FC<{}> = () => {
+interface NewEventFormProps {
+  eventDetails: object
+  userId: number
+}
+
+const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => {
   const classes = useCreateEventStyles()
   const history = useHistory()
-  const { user } = useUserContext()
-  const { id: user_id } = user
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState<boolean>(false)
-  const [createEventMutation] = useMutation(createEvent)
   const [insertEventUserMutation] = useMutation(insertEventUser)
+  const [upsertEventMutation] = useMutation(upsertEvent, {
+    onCompleted: async (data) => {
+      const [upsertEventResponse] = data?.insert_events.returning
+      const { host_id, id: event_id, num_rounds, public_event, round_length } = upsertEventResponse
+      window.analytics.track('Event created', {
+        num_rounds,
+        round_length,
+        public_event,
+      })
+      // if we are getting passed eventDetails then the user is editing the event
+      // so dont re-insert them
+      if (!Object.keys(eventDetails).length)
+        try {
+          await insertEventUserMutation({
+            variables: {
+              event_id,
+              user_id: host_id,
+            },
+          })
+        } catch (error) {
+          console.log('error = ', error)
+        }
+      setShowCreateEventSuccess(true)
+      await sleep(800)
+      history.push(`/events/${event_id}`)
+    },
+  })
+
+  const {
+    event_name,
+    description,
+    id: eventId,
+    num_rounds,
+    public_event,
+    round_length,
+    start_at,
+  } = Object(eventDetails)
 
   const getEventStartAt = (eventDate: Date, eventTime: Date) => {
     const dateISOString = eventDate.toISOString()
@@ -45,71 +83,44 @@ const NewEventForm: React.FC<{}> = () => {
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
-        Host An Event
+        {eventDetails ? 'Edit Your Event' : 'Host An Event'}
       </Typography>
       <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
           initialValues={{
-            event_name: 'My Awesome Event 🎉',
-            event_date: new Date(),
-            event_time: new Date(),
+            event_date: start_at ? new Date(start_at) : new Date(),
+            event_name: event_name || 'My Awesome Event 🎉',
+            event_time: start_at ? new Date(start_at) : new Date(),
             description:
+              description ||
               "Welcome to Hi Right Now 🎉 ! We'll go through a series of 6 min, 1 on 1 chats to expand your network with growth-minded and entrepreneurial professionals. This could be professional or casual or anything in between! Keep it fun and let's meet some new people. 💃",
-            public_event: 'private',
-            round_length: 6,
-            num_rounds: 9,
+            num_rounds: num_rounds || 9,
+            public_event: public_event ? 'public' : 'private',
+            round_length: round_length || 6,
           }}
           onSubmit={async (values, { setSubmitting }) => {
-            const {
-              description,
-              event_name,
-              event_date,
-              event_time,
-              num_rounds,
-              public_event,
-              round_length,
-            } = values
-            let createEventResponse
-            const start_at = getEventStartAt(event_date, event_time)
-            const isPublicEvent = public_event === 'public'
-            console.log('formattedDate ->', start_at)
-            try {
-              createEventResponse = await createEventMutation({
-                variables: {
-                  description,
-                  event_name,
-                  host_id: user_id,
-                  num_rounds,
-                  public_event: isPublicEvent,
-                  round_length,
-                  start_at,
-                },
-              })
-              window.analytics.track('Event created', {
-                num_rounds,
-                round_length,
-                public_event,
-              })
-            } catch (error) {
-              console.log('error')
+            const start_at = getEventStartAt(values.event_date, values.event_time)
+            const isPublicEvent = values.public_event === 'public'
+            const event_details = {
+              description: values.description,
+              event_name: values.event_name,
+              id: eventId || null,
+              host_id: userId,
+              num_rounds: values.num_rounds,
+              public_event: isPublicEvent,
+              round_length: values.round_length,
+              start_at,
             }
-            const { id: event_id } = createEventResponse?.data.insert_events.returning[0]
+            // if theres no eventId, then we cannot upsert a new event because id is nonNullable
+            // so lets just delete the id altogether. Doing this because TS yells at me
+            // if I do it another way
+            if (event_details.id === null) delete event_details.id
             try {
-              await insertEventUserMutation({
-                variables: {
-                  event_id,
-                  user_id,
-                },
-              })
+              await upsertEventMutation({ variables: { event_details } })
             } catch (error) {
-              console.log('error = ', error)
+              console.log('error', error)
             }
-
-            setShowCreateEventSuccess(true)
-            await sleep(800)
-            setSubmitting(false)
-            history.push(`/events/${event_id}`)
           }}
         >
           {({ submitForm, isSubmitting, values }) => (

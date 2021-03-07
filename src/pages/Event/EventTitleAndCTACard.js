@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
 import { DeleteEventButton, useEventStyles } from '.'
-import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
+import { CalendarIconIcs, Snack } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
 
@@ -30,17 +30,6 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
     variables: {
       event_id: eventId,
       user_id,
-    },
-  })
-
-  const editFormModal = TransitionModal({
-    modalBody: <EventForm eventData={event} />,
-    button: {
-      buttonColor: editFormButtonColor,
-      buttonVariant: 'contained',
-      buttonSize: 'large',
-      buttonStyle: { width: '100%' },
-      buttonText: 'Edit Event',
     },
   })
 
@@ -81,7 +70,17 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
 
   const renderRSVPOrEditButton = () => {
     if (userIsHost && event_status === 'not-started') {
-      return <div>{editFormModal}</div>
+      return (
+        <Button
+          variant="contained"
+          size="large"
+          color="primary"
+          disableRipple
+          onClick={() => history.push(`/create-event?eventId=${eventId}`)}
+        >
+          Edit Event
+        </Button>
+      )
     }
     if (userIsOnLobbyPage && userAlreadyRSVPed) {
       return null
