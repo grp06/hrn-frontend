@@ -8,7 +8,9 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import { Button, FormLabel, FormControlLabel, Grid, Radio, Typography } from '@material-ui/core'
-import { useCreateEventStyles } from '.'
+import { MatchingOptionCard, useCreateEventStyles } from '.'
+import relevantMatching from '../../assets/relevantMatchingIcon.svg'
+import twoSidedMatching from '../../assets/twoSidedMatchingIcon.svg'
 import { Snack } from '../../common'
 import { useUserContext } from '../../context'
 import { sleep } from '../../helpers'
@@ -179,6 +181,29 @@ const NewEventForm: React.FC<{}> = () => {
                         />
                       </Grid>
                     </Field>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="column"
+                  justify="flex-start"
+                  alignItems="flex-start"
+                  className={classes.sectionContainer}
+                >
+                  <Typography variant="h3">Matching Options</Typography>
+                  <Grid container>
+                    <MatchingOptionCard
+                      description="Attendees will be matched based on common interests"
+                      imageURL={relevantMatching}
+                      isSelected
+                      optionName="Relevant Matching"
+                    />
+                    <MatchingOptionCard
+                      description="Split the attendees into 2 subgroups. Members of one subgroup will only match with the other, whenever possible. "
+                      imageURL={twoSidedMatching}
+                      isSelected={false}
+                      optionName="Two-Sided"
+                    />
                   </Grid>
                 </Grid>
                 <Grid
