@@ -9,11 +9,11 @@ import { useHistory } from 'react-router-dom'
 import { useMutation } from 'react-apollo'
 import { Button, FormLabel, FormControlLabel, Grid, Radio, Typography } from '@material-ui/core'
 import { MatchingOptionCard, useCreateEventStyles } from '.'
-import relevantMatching from '../../assets/relevantMatchingIcon.svg'
-import twoSidedMatching from '../../assets/twoSidedMatchingIcon.svg'
 import { Snack } from '../../common'
 import { sleep } from '../../helpers'
 import { upsertEvent, insertEventUser } from '../../gql/mutations'
+import { constants } from '../../utils'
+import clsx from 'clsx'
 
 declare global {
   interface Window {
@@ -29,6 +29,7 @@ interface NewEventFormProps {
 const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => {
   const classes = useCreateEventStyles()
   const history = useHistory()
+  const { matchingOptionCardObjects } = constants
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState<boolean>(false)
   const [insertEventUserMutation] = useMutation(insertEventUser)
   const [upsertEventMutation] = useMutation(upsertEvent, {
@@ -63,6 +64,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
     event_name,
     description,
     id: eventId,
+    matching_type,
     num_rounds,
     public_event,
     round_length,
@@ -80,6 +82,30 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
     return formattedDate
   }
 
+  const renderMatchingOptionCards = (field: any, form: any) => {
+    return matchingOptionCardObjects.map((matchingOption) => {
+      const { allowedRoles, description, databaseValue, imageURL, name } = matchingOption
+      return (
+        <div
+          key={databaseValue}
+          className={clsx({
+            [classes.selectedMatchingOption]: field.value === databaseValue,
+            [classes.matchingOptionCardContainer]: true,
+          })}
+        >
+          <MatchingOptionCard
+            description={description}
+            imageURL={imageURL}
+            isSelected={field.value === databaseValue}
+            onClick={(databaseValue) => form.setFieldValue('matching_type', databaseValue)}
+            optionName={name}
+            value={databaseValue}
+          />
+        </div>
+      )
+    })
+  }
+
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
@@ -95,6 +121,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
             description:
               description ||
               "Welcome to Hi Right Now 🎉 ! We'll go through a series of 6 min, 1 on 1 chats to expand your network with growth-minded and entrepreneurial professionals. This could be professional or casual or anything in between! Keep it fun and let's meet some new people. 💃",
+            matching_type: matching_type || 'relevant',
             num_rounds: num_rounds || 9,
             public_event: public_event ? 'public' : 'private',
             round_length: round_length || 6,
@@ -202,20 +229,18 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
                   className={classes.sectionContainer}
                 >
                   <Typography variant="h3">Matching Options</Typography>
-                  <Grid container>
-                    <MatchingOptionCard
-                      description="Attendees will be matched based on common interests"
-                      imageURL={relevantMatching}
-                      isSelected
-                      optionName="Relevant Matching"
-                    />
-                    <MatchingOptionCard
-                      description="Split the attendees into 2 subgroups. Members of one subgroup will only match with the other, whenever possible. "
-                      imageURL={twoSidedMatching}
-                      isSelected={false}
-                      optionName="Two-Sided"
-                    />
-                  </Grid>
+                  <Field name="matching_type" required>
+                    {({ field, form }: { field: any; form: any }) => (
+                      <Grid
+                        container
+                        direction="row"
+                        className={classes.matchingOptionCardGrid}
+                        wrap="nowrap"
+                      >
+                        {renderMatchingOptionCards(field, form)}
+                      </Grid>
+                    )}
+                  </Field>
                 </Grid>
                 <Grid
                   container

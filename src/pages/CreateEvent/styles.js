@@ -33,6 +33,11 @@ const useCreateEventStyles = makeStyles((theme) => ({
       height: 'auto',
     },
   },
+  matchingOptionCardGrid: {
+    [theme.breakpoints.down('md')]: {
+      flexWrap: 'wrap',
+    },
+  },
   selectedMatchingOption: {
     border: '2px solid #FF99AD',
   },
