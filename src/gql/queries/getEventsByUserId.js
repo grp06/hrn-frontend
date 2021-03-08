@@ -19,6 +19,7 @@ const getEventsByUserId = gql`
         public_event
         group_video_chat
         banner_photo_url
+        matching_type
         event_users {
           user {
             id

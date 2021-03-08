@@ -23,6 +23,7 @@ const upsertEvent = gql`
         num_rounds
         public_event
         round_length
+        matching_type
       }
     }
   }

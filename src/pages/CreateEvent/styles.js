@@ -37,6 +37,7 @@ const useCreateEventStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       flexWrap: 'wrap',
     },
+    marginBottom: theme.spacing(2),
   },
   selectedMatchingOption: {
     border: '2px solid #FF99AD',

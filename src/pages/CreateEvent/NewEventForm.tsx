@@ -68,6 +68,8 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
     num_rounds,
     public_event,
     round_length,
+    sideA,
+    sideB,
     start_at,
   } = Object(eventDetails)
 
@@ -200,8 +202,8 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
                   </Grid>
                   <Grid container direction="column" className={classes.eventFormInputMargin}>
                     <FormLabel className={classes.publicEventLabel}>
-                      Is this a public (any user can join) or private event?{' '}
-                      <span className={classes.pinkText}>*</span>
+                      Is this a public (any user can join) or private event (only users with the
+                      link can join)? <span className={classes.pinkText}>*</span>
                     </FormLabel>
                     <Field component={RadioGroup} name="public_event" required>
                       <Grid container direction="row" className={classes.eventFormInputMargin}>
@@ -241,6 +243,33 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
                       </Grid>
                     )}
                   </Field>
+                  {values.matching_type === 'two-sided' ? (
+                    <>
+                      <Typography variant="body1" className={classes.pinkText}>
+                        Give names to each side. Ex: 'Startup' and 'VC', or 'Mentors' and 'Mentees'
+                      </Typography>
+                      <Grid container direction="row">
+                        <Grid xs={12} md={6} container className={classes.eventFormInputMargin}>
+                          <Field
+                            component={TextField}
+                            name="sideA"
+                            label="Side A Name"
+                            fullWidth
+                            required={values.matching_type === 'two-sided'}
+                          />
+                        </Grid>
+                        <Grid xs={12} md={6} container className={classes.eventFormInputMargin}>
+                          <Field
+                            component={TextField}
+                            name="sideB"
+                            label="Side B Name"
+                            fullWidth
+                            required={values.matching_type === 'two-sided'}
+                          />
+                        </Grid>
+                      </Grid>
+                    </>
+                  ) : null}
                 </Grid>
                 <Grid
                   container
