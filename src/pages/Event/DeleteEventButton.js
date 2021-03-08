@@ -39,17 +39,19 @@ const DeleteEventButton = ({ eventId }) => {
     <Typography variant="h4">Are you sure you want to delete your event?</Typography>
   )
 
-  return TransitionModal({
-    modalBody,
-    button: {
-      buttonVariant: 'outlined',
-      buttonSize: 'large',
-      buttonStyle,
-      buttonText: <FeatherIcon icon="trash-2" stroke="#f4f6fa" size="30" />,
-    },
-    onAcceptButtonText: "I'm sure",
-    onAcceptFunction: handleDeleteEventClick,
-  })
+  return (
+    <TransitionModal
+      modalBody={modalBody}
+      button={{
+        buttonVariant: 'outlined',
+        buttonSize: 'large',
+        buttonStyle,
+        buttonText: <FeatherIcon icon="trash-2" stroke="#f4f6fa" size="30" />,
+      }}
+      onAcceptButtonText="I'm sure"
+      onAcceptFunction={handleDeleteEventClick}
+    />
+  )
 }
 
 export default DeleteEventButton

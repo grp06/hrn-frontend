@@ -14,25 +14,27 @@ const SetupMicAndCameraButton = ({ setUserHasEnabledCameraAndMic }) => {
     iconButtonSize: 'small',
   }
 
-  return TransitionModal({
-    iconButton,
-    modalBody: (
-      <Grid container direction="column" justify="center" alignItems="center">
-        <video autoPlay id="videoElement" muted className={classes.previewVideo} />
-        <SetupMicAndCamera />
-      </Grid>
-    ),
-    onAcceptButtonText: 'Done',
-    onAcceptFunction: async () => {
-      window.analytics.track('Opened test camera')
-      const video = document.getElementById('videoElement')
-      setUserHasEnabledCameraAndMic(true)
-      if (video) {
-        video.remove()
+  return (
+    <TransitionModal
+      iconButton={iconButton}
+      modalBody={
+        <Grid container direction="column" justify="center" alignItems="center">
+          <video autoPlay id="videoElement" muted className={classes.previewVideo} />
+          <SetupMicAndCamera />
+        </Grid>
       }
-    },
-    hideNoWay: true,
-  })
+      onAcceptButtonText="Done"
+      onAcceptFunction={async () => {
+        window.analytics.track('Opened test camera')
+        const video = document.getElementById('videoElement')
+        setUserHasEnabledCameraAndMic(true)
+        if (video) {
+          video.remove()
+        }
+      }}
+      hideNoWay
+    />
+  )
 }
 
 export default SetupMicAndCameraButton

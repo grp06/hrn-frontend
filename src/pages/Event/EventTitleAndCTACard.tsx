@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
 import { DeleteEventButton, useEventStyles } from '.'
-import { CalendarIconIcs, Snack } from '../../common'
+import { CalendarIconIcs, Snack, TransitionModal } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { EventObjectInterface, formatDate, rsvpForEvent, UserObjectInterface } from '../../utils'
 
@@ -23,7 +23,15 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
   const [showComeBackSnack, setShowComeBackSnack] = useState<boolean>(false)
   const [rsvpButtonLoading, setRsvpButtonLoading] = useState<boolean>(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
-  const { event_name, event_users, host_id, id: eventId, start_at, status: event_status } = event
+  const {
+    event_name,
+    event_users,
+    host_id,
+    id: eventId,
+    matching_type,
+    start_at,
+    status: event_status,
+  } = event
   const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users?.find((u) => u.user.id === user_id)
@@ -90,6 +98,19 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
     }
     if (userIsOnLobbyPage && userAlreadyRSVPed) {
       return null
+    }
+    if (matching_type === 'two-sided') {
+      return (
+        <TransitionModal
+          button={{
+            buttonText: 'RSVP',
+            buttonColor: 'primary',
+            buttonSize: 'large',
+          }}
+          modalBody={<Typography variant="h2">hi</Typography>}
+          onAcceptFunction={() => console.log('hey')}
+        ></TransitionModal>
+      )
     }
     return (
       <Button

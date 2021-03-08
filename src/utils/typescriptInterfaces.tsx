@@ -1,3 +1,6 @@
+import { JsxElement } from 'typescript'
+import { StringSchema } from 'yup'
+
 export interface UserObjectInterface {
   id: number
   name: string
@@ -32,4 +35,26 @@ export interface EventObjectInterface {
   start_at: string
   status: string
   updated_at: string
+}
+
+export interface TransitionModalInterface {
+  button?: {
+    buttonColor?: string
+    buttonSize?: string
+    buttonStyle?: object
+    buttonText?: string | JSX.Element
+    buttonVariant?: string
+  }
+  disabled?: boolean
+  hideNoWay?: boolean
+  iconButton?: {
+    iconButtonColor?: string
+    iconButtonIcon?: JSX.Element
+    iconButtonSize?: string
+  }
+  modalBody: JSX.Element
+  onAcceptButtonText?: string
+  onAcceptFunction: Function
+  onCloseButtonText?: string
+  onCloseFunction?: Function
 }
