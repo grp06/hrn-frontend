@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { makeStyles } from '@material-ui/styles'
 import { constants } from '../../utils'
 

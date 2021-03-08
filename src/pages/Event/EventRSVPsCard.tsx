@@ -13,10 +13,15 @@ import {
 } from '@material-ui/core'
 import { useEventStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
+import { UserObjectInterface } from '../../utils'
 
-const EventRSVPsCard = React.memo(({ eventUsers }) => {
+interface EventRSVPsCardProps {
+  eventUsers: { [user: string]: UserObjectInterface }[]
+}
+
+const EventRSVPsCard: React.FC<EventRSVPsCardProps> = React.memo(({ eventUsers }) => {
   const classes = useEventStyles()
-  const [seeMore, setSeeMore] = useState(false)
+  const [seeMore, setSeeMore] = useState<boolean>(false)
   return (
     <Grid
       container

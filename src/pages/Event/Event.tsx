@@ -30,7 +30,7 @@ const Event: React.FC<{}> = () => {
 
   localStorage.setItem('eventId', eventId)
   localStorage.setItem('event', JSON.stringify(event))
-  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const isEventParticipant = event?.event_users?.find(
     (u: { [user: string]: UserObjectInterface }) => u.user.id === user_id
   )
@@ -50,7 +50,6 @@ const Event: React.FC<{}> = () => {
         container
         direction="column"
         justify="flex-start"
-        // @ts-ignore
         className={classes.eventContentContainer}
       >
         <EventTitleAndCTACard event={event} user={user} />

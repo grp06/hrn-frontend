@@ -112,7 +112,6 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
       direction="row"
       justify="space-between"
       alignItems="flex-end"
-      // @ts-ignore
       className={classes.eventTitleAndCTACardContainer}
     >
       <Grid container item xs={12} lg={8} direction="column">
@@ -120,11 +119,7 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
         <Grid item container direction="row" alignItems="center">
           <CalendarIconIcs event={event} />
 
-          <Typography
-            variant="body1"
-            // @ts-ignore
-            className={classes.eventDateTypography}
-          >
+          <Typography variant="body1" className={classes.eventDateTypography}>
             {formatDate(startTime)}
           </Typography>
         </Grid>
@@ -139,13 +134,11 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
           direction="row"
           justify="flex-end"
           alignItems="flex-end"
-          // @ts-ignore
           className={classes.ctaCardButtonContainer}
         >
           <Button
             variant="outlined"
             size="large"
-            // @ts-ignore
             className={classes.shareEventButton}
             onClick={handleShareEventClick}
           >

@@ -6,7 +6,7 @@ import { EventObjectInterface } from '../../utils'
 
 interface HostAndEventDescCardProps {
   event: EventObjectInterface
-  showOnlineAttendees: boolean
+  showOnlineAttendees?: boolean
   userIsHost: boolean
 }
 
