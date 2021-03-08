@@ -24,7 +24,6 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
   const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
-  const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import * as Yup from 'yup'
 import DateFnsUtils from '@date-io/date-fns'
 import { Formik, Form, Field } from 'formik'
 import { TextField, RadioGroup } from 'formik-material-ui'
@@ -26,20 +26,38 @@ interface NewEventFormProps {
   userId: number
 }
 
+const EventSchema = Yup.object().shape({
+  description: Yup.string().min(5, 'Too Short!').required('Required'),
+  event_name: Yup.string().min(5, 'Too Short!').required('Required'),
+  num_rounds: Yup.number().positive('Must be more than 0').required('Required'),
+  round_length: Yup.number().positive('Must be more than 0').required('Required'),
+  side_a: Yup.string().min(2, 'Too Short!'),
+  side_b: Yup.string().min(2, 'Too Short!'),
+})
+
 const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => {
   const classes = useCreateEventStyles()
   const history = useHistory()
   const { matchingOptionCardObjects } = constants
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState<boolean>(false)
+  const [formValidationErrorMessage, setFormValidationErrorMessage] = useState<string>('')
   const [insertEventUserMutation] = useMutation(insertEventUser)
   const [upsertEventMutation] = useMutation(upsertEvent, {
     onCompleted: async (data) => {
       const [upsertEventResponse] = data?.insert_events.returning
-      const { host_id, id: event_id, num_rounds, public_event, round_length } = upsertEventResponse
+      const {
+        host_id,
+        id: event_id,
+        matching_type,
+        num_rounds,
+        public_event,
+        round_length,
+      } = upsertEventResponse
       window.analytics.track('Event created', {
         num_rounds,
         round_length,
         public_event,
+        matching_type,
       })
       // if we are getting passed eventDetails then the user is editing the event
       // so dont re-insert them
@@ -68,8 +86,8 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
     num_rounds,
     public_event,
     round_length,
-    sideA,
-    sideB,
+    side_a,
+    side_b,
     start_at,
   } = Object(eventDetails)
 
@@ -108,6 +126,13 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
     })
   }
 
+  const validateTwoSidedNames = (value: string): void => {
+    if (value.length < 2)
+      return setFormValidationErrorMessage(
+        'Side A and Side B need to be at least 2 characters long'
+      )
+  }
+
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
@@ -116,6 +141,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
       <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Formik
+          validationSchema={EventSchema}
           initialValues={{
             event_date: start_at ? new Date(start_at) : new Date(),
             event_name: event_name || 'My Awesome Event 🎉',
@@ -127,8 +153,17 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
             num_rounds: num_rounds || 9,
             public_event: public_event ? 'public' : 'private',
             round_length: round_length || 6,
+            side_a: side_a || '',
+            side_b: side_b || '',
           }}
-          onSubmit={async (values, { setSubmitting }) => {
+          onSubmit={async (values) => {
+            if (
+              values.matching_type === 'two-sided' &&
+              values.side_a?.length < 2 &&
+              values.side_b?.length < 2
+            ) {
+              return
+            }
             const start_at = getEventStartAt(values.event_date, values.event_time)
             const isPublicEvent = values.public_event === 'public'
             const event_details = {
@@ -136,15 +171,20 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
               event_name: values.event_name,
               id: eventId || null,
               host_id: userId,
+              matching_type: values.matching_type,
               num_rounds: values.num_rounds,
               public_event: isPublicEvent,
               round_length: values.round_length,
+              side_a: values.side_a,
+              side_b: values.side_b,
               start_at,
             }
             // if theres no eventId, then we cannot upsert a new event because id is nonNullable
             // so lets just delete the id altogether. Doing this because TS yells at me
             // if I do it another way
             if (event_details.id === null) delete event_details.id
+            // if (event_details.side_a === null) delete event_details.side_a
+            // if (event_details.side_b === null) delete event_details.side_b
             try {
               await upsertEventMutation({ variables: { event_details } })
             } catch (error) {
@@ -246,25 +286,42 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
                   {values.matching_type === 'two-sided' ? (
                     <>
                       <Typography variant="body1" className={classes.pinkText}>
-                        Give names to each side. Ex: 'Startup' and 'VC', or 'Mentors' and 'Mentees'
+                        Give names to each side. Ex: 'Startup' and 'VC', or 'Mentor' and 'Mentee'.
+                      </Typography>
+                      <Typography variant="body1" className={classes.pinkText}>
+                        Your attendees will pick their side when they RSVP.
                       </Typography>
                       <Grid container direction="row">
-                        <Grid xs={12} md={6} container className={classes.eventFormInputMargin}>
+                        <Grid
+                          item
+                          xs={12}
+                          md={6}
+                          container
+                          className={classes.eventFormInputMargin}
+                        >
                           <Field
                             component={TextField}
-                            name="sideA"
+                            name="side_a"
                             label="Side A Name"
                             fullWidth
                             required={values.matching_type === 'two-sided'}
+                            validate={validateTwoSidedNames}
                           />
                         </Grid>
-                        <Grid xs={12} md={6} container className={classes.eventFormInputMargin}>
+                        <Grid
+                          item
+                          xs={12}
+                          md={6}
+                          container
+                          className={classes.eventFormInputMargin}
+                        >
                           <Field
                             component={TextField}
-                            name="sideB"
+                            name="side_b"
                             label="Side B Name"
                             fullWidth
                             required={values.matching_type === 'two-sided'}
+                            validate={validateTwoSidedNames}
                           />
                         </Grid>
                       </Grid>
@@ -330,6 +387,13 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
           onClose={() => setShowCreateEventSuccess(false)}
           severity="success"
           snackMessage="Event Created/Updated"
+        />
+        <Snack
+          open={Boolean(formValidationErrorMessage)}
+          onClose={() => setFormValidationErrorMessage('')}
+          severity="error"
+          duration={3000}
+          snackMessage={formValidationErrorMessage}
         />
       </MuiPickersUtilsProvider>
     </Grid>
