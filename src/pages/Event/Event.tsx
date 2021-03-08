@@ -15,8 +15,9 @@ import {
 } from '.'
 import { Loading } from '../../common'
 import { useEventContext, useUserContext } from '../../context'
+import { UserObjectInterface } from '../../utils'
 
-const Event = () => {
+const Event: React.FC<{}> = () => {
   const classes = useEventStyles()
   const { user, userContextLoading } = useUserContext()
   const { event, eventContextLoading } = useEventContext()
@@ -30,7 +31,9 @@ const Event = () => {
   localStorage.setItem('eventId', eventId)
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const isEventParticipant = event?.event_users?.find((u) => u.user.id === user_id)
+  const isEventParticipant = event?.event_users?.find(
+    (u: { [user: string]: UserObjectInterface }) => u.user.id === user_id
+  )
 
   return (
     <>
@@ -47,6 +50,7 @@ const Event = () => {
         container
         direction="column"
         justify="flex-start"
+        // @ts-ignore
         className={classes.eventContentContainer}
       >
         <EventTitleAndCTACard event={event} user={user} />

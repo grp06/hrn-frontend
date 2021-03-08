@@ -9,7 +9,6 @@ const mockWayFutureEvent = {
   status: 'not-started',
   round_length: 1,
   num_rounds: 1,
-  post_event_link: null,
   public_event: true,
   group_video_chat: true,
   banner_photo_url: false,

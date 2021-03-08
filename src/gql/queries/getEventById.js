@@ -13,7 +13,6 @@ const getEventById = gql`
       current_round
       round_length
       num_rounds
-      post_event_link
       public_event
       group_video_chat
       banner_photo_url

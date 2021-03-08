@@ -20,7 +20,6 @@ export const getAllPublicEventsMock = [
             updated_at: '2020-10-22T22:40:25.700082+00:00',
             round_length: 2,
             num_rounds: 3,
-            post_event_link: '',
             public_event: true,
             group_video_chat: false,
             banner_photo_url: null,
@@ -56,7 +55,6 @@ export const getAllPublicEventsMock = [
             updated_at: '2020-11-05T20:52:08.49309+00:00',
             round_length: 1,
             num_rounds: 1,
-            post_event_link: null,
             public_event: true,
             group_video_chat: true,
             banner_photo_url:
@@ -99,7 +97,6 @@ export const getAllPublicEventsMock = [
             updated_at: '2020-11-05T20:52:08.49309+00:00',
             round_length: 1,
             num_rounds: 1,
-            post_event_link: null,
             public_event: true,
             group_video_chat: true,
             banner_photo_url:

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
+// @ts-ignore
 import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
 import debounce from 'lodash.debounce'
@@ -8,19 +9,25 @@ import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
 import { DeleteEventButton, useEventStyles } from '.'
 import { CalendarIconIcs, Snack } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
-import { formatDate, rsvpForEvent } from '../../utils'
+import { EventObjectInterface, formatDate, rsvpForEvent, UserObjectInterface } from '../../utils'
 
-const EventTitleAndCTACard = React.memo(({ event, user }) => {
+interface EventTitleAndCTACardProps {
+  event: EventObjectInterface
+  user: UserObjectInterface
+}
+
+const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ event, user }) => {
   const classes = useEventStyles()
   const history = useHistory()
-  const [showCopyURLSnack, setCopyURLSnack] = useState(false)
-  const [showComeBackSnack, setShowComeBackSnack] = useState(false)
-  const [rsvpButtonLoading, setRsvpButtonLoading] = useState(false)
+  const [showCopyURLSnack, setCopyURLSnack] = useState<boolean>(false)
+  const [showComeBackSnack, setShowComeBackSnack] = useState<boolean>(false)
+  const [rsvpButtonLoading, setRsvpButtonLoading] = useState<boolean>(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
   const { event_name, event_users, host_id, id: eventId, start_at, status: event_status } = event
-  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users?.find((u) => u.user.id === user_id)
+
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
   const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
@@ -48,7 +55,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const handleRSVPClick = async () => {
     setRsvpButtonLoading(true)
     if (!user_id) {
-      localStorage.setItem('eventId', eventId)
+      localStorage.setItem('eventId', eventId.toString())
       history.push('/sign-up')
     } else {
       if (!userAlreadyRSVPed) {
@@ -105,13 +112,19 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
       direction="row"
       justify="space-between"
       alignItems="flex-end"
+      // @ts-ignore
       className={classes.eventTitleAndCTACardContainer}
     >
       <Grid container item xs={12} lg={8} direction="column">
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
           <CalendarIconIcs event={event} />
-          <Typography variant="body1" className={classes.eventDateTypography}>
+
+          <Typography
+            variant="body1"
+            // @ts-ignore
+            className={classes.eventDateTypography}
+          >
             {formatDate(startTime)}
           </Typography>
         </Grid>
@@ -126,11 +139,13 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
           direction="row"
           justify="flex-end"
           alignItems="flex-end"
+          // @ts-ignore
           className={classes.ctaCardButtonContainer}
         >
           <Button
             variant="outlined"
             size="large"
+            // @ts-ignore
             className={classes.shareEventButton}
             onClick={handleShareEventClick}
           >

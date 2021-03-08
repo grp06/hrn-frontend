@@ -37,7 +37,7 @@ const LobbyContent = React.memo(
                 <EventTitleAndCTACard event={event} user={user} />
                 <HostAndEventDescCard
                   event={event}
-                  showOnlineAttendees={onlineEventUsers.length}
+                  showOnlineAttendees={Boolean(onlineEventUsers.length)}
                   userIsHost={userIsHost}
                 />
                 <Grid container direction="row" justify="space-between">

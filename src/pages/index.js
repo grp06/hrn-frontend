@@ -1,7 +1,7 @@
 export { default as Checkout } from './Checkout/Checkout'
 export { default as CheckoutSuccess } from './CheckoutSuccess/CheckoutSuccess'
 export { default as CreateEvent } from './CreateEvent/CreateEvent'
-export { default as Event } from './Event/Event'
+export { default as Event } from './Event/Event.tsx'
 export { default as EventComplete } from './EventComplete/EventComplete'
 export { default as EventGroupVideoChat } from './EventGroupVideoChat/EventGroupVideoChat'
 export { default as EventsPublic } from './EventsPublic/EventsPublic'
