@@ -32,9 +32,11 @@ const Onboarding = () => {
   let eventIdInLocalStorage
   let eventData
   let event
+  let twoSidedSideInLocalStorage
 
   if (localStorage.getItem('eventId') && localStorage.getItem('event')) {
     eventIdInLocalStorage = localStorage.getItem('eventId')
+    twoSidedSideInLocalStorage = localStorage.getItem('twoSidedSide')
     eventData = JSON.parse(localStorage.getItem('event'))
     event = {
       description: eventData.description,
@@ -110,6 +112,7 @@ const Onboarding = () => {
         variables: {
           event_id: event.id,
           user_id,
+          side: twoSidedSideInLocalStorage,
         },
       })
       rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, usersName)

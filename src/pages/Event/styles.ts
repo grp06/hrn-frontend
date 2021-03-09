@@ -325,6 +325,17 @@ const useEventStyles = makeStyles((theme) => ({
     width: '25%',
   },
   // *****************************
+  //   TwoSidedEventRSVPButton
+  // *****************************
+  twoSidedModalHeader: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center',
+  },
+  twoSidedModalBody: {
+    marginBottom: theme.spacing(2.5),
+    textAlign: 'center',
+  },
+  // *****************************
   //   WhatToExpect
   // *****************************
   stepBodyText: {

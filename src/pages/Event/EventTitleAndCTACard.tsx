@@ -6,8 +6,8 @@ import copy from 'copy-to-clipboard'
 import debounce from 'lodash.debounce'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
-import { DeleteEventButton, useEventStyles } from '.'
-import { CalendarIconIcs, Snack, TransitionModal } from '../../common'
+import { DeleteEventButton, TwoSidedEventRSVPButton, useEventStyles } from '.'
+import { CalendarIconIcs, Snack } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { EventObjectInterface, formatDate, rsvpForEvent, UserObjectInterface } from '../../utils'
 
@@ -99,18 +99,8 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
     if (userIsOnLobbyPage && userAlreadyRSVPed) {
       return null
     }
-    if (matching_type === 'two-sided') {
-      return (
-        <TransitionModal
-          button={{
-            buttonText: 'RSVP',
-            buttonColor: 'primary',
-            buttonSize: 'large',
-          }}
-          modalBody={<Typography variant="h2">hi</Typography>}
-          onAcceptFunction={() => console.log('hey')}
-        ></TransitionModal>
-      )
+    if (matching_type === 'two-sided' && !userAlreadyRSVPed) {
+      return <TwoSidedEventRSVPButton event={event} user={user} />
     }
     return (
       <Button
@@ -139,7 +129,6 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
         <Typography variant="h1">{event_name}</Typography>
         <Grid item container direction="row" alignItems="center">
           <CalendarIconIcs event={event} />
-
           <Typography variant="body1" className={classes.eventDateTypography}>
             {formatDate(startTime)}
           </Typography>

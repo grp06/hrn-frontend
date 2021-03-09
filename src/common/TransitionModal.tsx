@@ -110,9 +110,8 @@ const TransitionModal: React.FC<TransitionModalInterface> = ({
                   className={classes.modalAcceptButton}
                   onClick={() => {
                     setAcceptFunctionInFlight(true)
-                    // acceptButtonRef.current.setAttribute('disabled', 'disabled')
                     onAcceptFunction()
-                    handleClose()
+                    closeModal()
                   }}
                 >
                   {onAcceptButtonText || 'Yes, I am Sure'}

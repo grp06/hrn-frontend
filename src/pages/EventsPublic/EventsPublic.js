@@ -17,6 +17,7 @@ const EventsPublic = () => {
   useEffect(() => {
     localStorage.setItem('eventId', '')
     localStorage.setItem('event', '')
+    localStorage.setItem('twoSidedSide', '')
     // TODO instead of setting eventId null, we should reset to initial state somewhere on a cleanup function
   }, [])
 

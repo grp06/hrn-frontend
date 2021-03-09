@@ -9,7 +9,10 @@ const rsvpForEvent = async (event, insertEventUserMutation, usersEmail, usersNam
       eventId: event_id,
       eventName: event_name,
     })
-
+  } catch (error) {
+    console.log('error = ', error)
+  }
+  try {
     calendarInviteResponse = await fetch(
       `${process.env.REACT_APP_API_URL}/api/email/send-calendar-invite`,
       {
