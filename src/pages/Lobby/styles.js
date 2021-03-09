@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles'
 import cameraBlocked from '../../assets/cameraBlocked.png'
-import confettiDoodles from '../../assets/confettiDoodles.svg'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { constants } from '../../utils'
 const { bottomNavBarHeight } = constants
 
@@ -40,7 +40,7 @@ const useLobbyStyles = makeStyles((theme) => ({
   //   CameraAndMicSetupScreen
   // *****************************
   cameraAndMicSetupScreenContainer: {
-    backgroundImage: `url(${confettiDoodles})`,
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
     backgroundRepeat: 'repeat',
     backgroundSize: 'auto',
     height: '100vh',

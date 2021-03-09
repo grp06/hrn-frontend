@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography'
 import { Redirect, Link, useHistory } from 'react-router-dom'
 import { Snack, FloatCardMedium } from '../../common'
 import { constants } from '../../utils'
-import confettiDoodles from '../../assets/confettiDoodles.svg'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 
 const { ROLE, TOKEN, USER_ID } = constants
 
@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   wrapper: {
     width: '100vw',
     height: '100vh',
-    backgroundImage: `url(${confettiDoodles})`,
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),
