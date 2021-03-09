@@ -101,7 +101,6 @@ const EventGroupVideoChat = () => {
       // since this func gets called after making divs, we already made the div
       // and just need to update arrayOfOnlineUserIds
       const userIds = onlineEventUsers.map((eventUser) => eventUser.user[0].id)
-      console.log('userIds ->', userIds)
       arrayOfOnlineUserIds.current = userIds
     } else if (onlineEventUsers.length < arrayOfOnlineUserIds.current.length) {
       const userIds = onlineEventUsers.map((eventUser) => eventUser.user[0].id)
