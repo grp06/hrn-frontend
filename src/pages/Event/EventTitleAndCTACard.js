@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
 import { DeleteEventButton, useEventStyles } from '.'
-import { CalendarIconIcs, Snack } from '../../common'
+import { CalendarIconIcs, EventForm, Snack, TransitionModal } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { formatDate, rsvpForEvent } from '../../utils'
 
@@ -24,11 +24,23 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
   const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
+  const editFormButtonColor = userIsOnLobbyPage ? 'default' : 'primary'
 
   const [insertEventUserMutation] = useMutation(insertEventUser, {
     variables: {
       event_id: eventId,
       user_id,
+    },
+  })
+
+  const editFormModal = TransitionModal({
+    modalBody: <EventForm eventData={event} />,
+    button: {
+      buttonColor: editFormButtonColor,
+      buttonVariant: 'contained',
+      buttonSize: 'large',
+      buttonStyle: { width: '100%' },
+      buttonText: 'Edit Event',
     },
   })
 
@@ -69,17 +81,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
 
   const renderRSVPOrEditButton = () => {
     if (userIsHost && event_status === 'not-started') {
-      return (
-        <Button
-          variant="contained"
-          size="large"
-          color="primary"
-          disableRipple
-          onClick={() => history.push(`/create-event?eventId=${eventId}`)}
-        >
-          Edit Event
-        </Button>
-      )
+      return <div>{editFormModal}</div>
     }
     if (userIsOnLobbyPage && userAlreadyRSVPed) {
       return null
@@ -146,7 +148,14 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setCopyURLSnack(false)}
         severity="info"
-        snackMessage="Event URL Copied 💾"
+        snackMessage={
+          <div>
+            Event URL Copied{' '}
+            <span role="img" aria-label="floppy disk">
+              💾
+            </span>
+          </div>
+        }
       />
       <Snack
         open={showComeBackSnack}
@@ -154,7 +163,14 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => setShowComeBackSnack(false)}
         severity="info"
-        snackMessage="To attend this event, come back to this page 5 minutes before the event starts ⏰"
+        snackMessage={
+          <div>
+            To attend this event, come back to this page 5 minutes before the event starts{' '}
+            <span role="img" aria-label="alarm clock">
+              ⏰
+            </span>
+          </div>
+        }
       />
     </Grid>
   )

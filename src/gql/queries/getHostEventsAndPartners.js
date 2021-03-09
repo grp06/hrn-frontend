@@ -32,9 +32,6 @@ const getHostEventsAndPartners = gql`
       round_length
       group_video_chat
       banner_photo_url
-      matching_type
-      side_a
-      side_b
     }
   }
 `

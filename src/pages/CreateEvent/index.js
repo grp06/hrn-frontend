@@ -1,5 +1,4 @@
 export { default as CreatEvent } from './CreateEvent'
-export { default as MatchingOptionCard } from './MatchingOptionCard'
 export { default as NewEventForm } from './NewEventForm'
 export { default as useCreateEventStyles } from './styles'
 export { default as SubscriptionEndedCard } from './SubscriptionEndedCard'
