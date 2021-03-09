@@ -1,3 +1,6 @@
+import relevantMatching from '../assets/relevantMatchingIcon.svg'
+import twoSidedMatching from '../assets/twoSidedMatchingIcon.svg'
+
 const constants = {
   // change me back to 20000?
   // george, stephen, max, lenny, zhen, sandra, ash, azul, jasper
@@ -30,6 +33,23 @@ const constants = {
     'Snail mail delivered 🐌',
     'Sent via pony express 🐴',
     "Hedwig's on her way 🦉",
+  ],
+  matchingOptionCardObjects: [
+    {
+      name: 'Relevant',
+      description: 'Attendees will be matched based on common interests.',
+      databaseValue: 'relevant',
+      imageURL: relevantMatching,
+      allowedRoles: ['host', 'host_starter', 'host_premium'],
+    },
+    {
+      name: 'Two-Sided',
+      description:
+        'Split the attendees into 2 subgroups. Members of one subgroup will only match with the other, whenever possible.',
+      databaseValue: 'two-sided',
+      imageURL: twoSidedMatching,
+      allowedRoles: ['host_premium'],
+    },
   ],
 }
 
