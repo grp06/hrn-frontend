@@ -136,6 +136,10 @@ const useLobbyStyles = makeStyles((theme) => ({
   // *****************************
   //   OnlineAttendeesCard
   // *****************************
+  onlineAttendeeAvatar: {
+    height: '100%',
+    width: '100%',
+  },
   onlineAttendeesCardContainer: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
