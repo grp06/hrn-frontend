@@ -111,7 +111,7 @@ const UserEventStatusCard = ({ userEventStatus }) => {
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
-        className={classes.sittingOutAndStatusCardContainer}
+        className={classes.eventAndLobbyContentCard}
       >
         {renderMessage()}
       </Grid>

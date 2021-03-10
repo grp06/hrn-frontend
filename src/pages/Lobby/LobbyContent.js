@@ -7,6 +7,7 @@ import {
   EventTitleAndCTACard,
   HostAndEventDescCard,
   PodcastCard,
+  TwoSidedEventDescriptionCard,
   WhatToExpect,
 } from '../Event'
 import { PreEvent } from '../PreEvent'
@@ -14,9 +15,20 @@ import { PreEvent } from '../PreEvent'
 const LobbyContent = React.memo(
   ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user, eventId }) => {
     const classes = useLobbyStyles()
-    const { banner_photo_url, host, host_id, status: eventStatus } = event
+    const {
+      banner_photo_url,
+      event_users,
+      host,
+      host_id,
+      id: event_id,
+      matching_type,
+      side_a,
+      side_b,
+      status: eventStatus,
+    } = event
     const { id: user_id } = user
     const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+    const isEventParticipant = event?.event_users?.find((u) => u.user.id === user_id)
 
     const renderLobbyContent = () => {
       switch (eventStatus) {
@@ -32,7 +44,7 @@ const LobbyContent = React.memo(
                 container
                 direction="column"
                 justify="flex-start"
-                className={classes.eventContentContainer}
+                className={classes.lobbyContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
                 <HostAndEventDescCard
@@ -41,20 +53,31 @@ const LobbyContent = React.memo(
                   userIsHost={userIsHost}
                 />
                 <Grid container direction="row" justify="space-between">
-                  <Grid className={classes.whatToExpectContainer}>
+                  <Grid
+                    container
+                    direction="column"
+                    className={classes.wideEventAndLobbyContentGrid}
+                  >
                     <WhatToExpect userIsHost={userIsHost} />
-                  </Grid>
-                  <Grid className={classes.podcastContainer}>
-                    <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
-                  </Grid>
-                </Grid>
-                <Grid container direction="row" justify="space-between">
-                  <div className={classes.whatToExpectContainer}>
                     <AboutTheHostCard host={host} userIsHost={userIsHost} />
-                  </div>
-                  <div className={classes.podcastContainer}>
+                  </Grid>
+                  <Grid
+                    container
+                    direction="column"
+                    className={classes.narrowEventAndLobbyContentGrid}
+                  >
+                    {matching_type === 'two-sided' ? (
+                      <TwoSidedEventDescriptionCard
+                        event_id={event_id}
+                        isEventParticipant={isEventParticipant}
+                        side_a={side_a}
+                        side_b={side_b}
+                        user_id={user_id}
+                      />
+                    ) : null}
+                    <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
                     <PodcastCard />
-                  </div>
+                  </Grid>
                 </Grid>
               </Grid>
             </>
@@ -77,16 +100,23 @@ const LobbyContent = React.memo(
                 className={classes.eventContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
-
                 <Grid container direction="row" justify="space-between">
-                  <Grid className={classes.whatToExpectContainer}>
+                  <Grid
+                    container
+                    direction="column"
+                    className={classes.wideEventAndLobbyContentGrid}
+                  >
                     {userEventStatus && userEventStatus === 'sitting out' ? (
                       <SittingOutCard setUserEventStatus={setUserEventStatus} />
                     ) : (
                       <UserEventStatusCard userEventStatus={userEventStatus} />
                     )}
                   </Grid>
-                  <Grid className={classes.podcastContainer}>
+                  <Grid
+                    container
+                    direction="column"
+                    className={classes.narrowEventAndLobbyContentGrid}
+                  >
                     <PodcastCard />
                   </Grid>
                 </Grid>

@@ -16,7 +16,7 @@ const createStyles = makeStyles((theme) => ({
   },
   chatContainer: {
     position: 'fixed',
-    bottom: bottomNavBarHeight + 75,
+    bottom: bottomNavBarHeight + 40,
     right: '1%',
     display: 'block',
     width: '25vw',
@@ -27,7 +27,7 @@ const createStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '30vw',
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       width: '85vw',
     },
   },
