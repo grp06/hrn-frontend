@@ -1,10 +1,17 @@
 import React from 'react'
+// @ts-ignore
 import FeatherIcon from 'feather-icons-react'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 import { useEventStyles } from '.'
+import { UserObjectInterface } from '../../utils'
 
-const AboutTheHostCard = React.memo(({ host, userIsHost }) => {
+interface AboutTheHostCardProps {
+  host: UserObjectInterface
+  userIsHost: boolean
+}
+
+const AboutTheHostCard: React.FC<AboutTheHostCardProps> = React.memo(({ host, userIsHost }) => {
   const classes = useEventStyles()
   const history = useHistory()
   const { short_bio: hostBio } = host

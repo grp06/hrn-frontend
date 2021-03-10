@@ -1,26 +1,41 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
+// @ts-ignore
 import FeatherIcon from 'feather-icons-react'
 import copy from 'copy-to-clipboard'
 import debounce from 'lodash.debounce'
 import { useHistory } from 'react-router-dom'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
-import { DeleteEventButton, useEventStyles } from '.'
+import { DeleteEventButton, TwoSidedEventRSVPButton, useEventStyles } from '.'
 import { CalendarIconIcs, Snack } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
-import { formatDate, rsvpForEvent } from '../../utils'
+import { EventObjectInterface, formatDate, rsvpForEvent, UserObjectInterface } from '../../utils'
 
-const EventTitleAndCTACard = React.memo(({ event, user }) => {
+interface EventTitleAndCTACardProps {
+  event: EventObjectInterface
+  user: UserObjectInterface
+}
+
+const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ event, user }) => {
   const classes = useEventStyles()
   const history = useHistory()
-  const [showCopyURLSnack, setCopyURLSnack] = useState(false)
-  const [showComeBackSnack, setShowComeBackSnack] = useState(false)
-  const [rsvpButtonLoading, setRsvpButtonLoading] = useState(false)
+  const [showCopyURLSnack, setCopyURLSnack] = useState<boolean>(false)
+  const [showComeBackSnack, setShowComeBackSnack] = useState<boolean>(false)
+  const [rsvpButtonLoading, setRsvpButtonLoading] = useState<boolean>(false)
   const { email: usersEmail, id: user_id, name: usersName } = user
-  const { event_name, event_users, host_id, id: eventId, start_at, status: event_status } = event
-  const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
+  const {
+    event_name,
+    event_users,
+    host_id,
+    id: eventId,
+    matching_type,
+    start_at,
+    status: event_status,
+  } = event
+  const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const startTime = new Date(start_at).getTime()
   const userAlreadyRSVPed = event_users?.find((u) => u.user.id === user_id)
+
   const { pathname } = window.location
   const userIsOnLobbyPage = Boolean(pathname.includes('lobby'))
   const userIsOnEventCompletePage = Boolean(pathname.includes('event-complete'))
@@ -48,7 +63,7 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
   const handleRSVPClick = async () => {
     setRsvpButtonLoading(true)
     if (!user_id) {
-      localStorage.setItem('eventId', eventId)
+      localStorage.setItem('eventId', eventId.toString())
       history.push('/sign-up')
     } else {
       if (!userAlreadyRSVPed) {
@@ -83,6 +98,9 @@ const EventTitleAndCTACard = React.memo(({ event, user }) => {
     }
     if (userIsOnLobbyPage && userAlreadyRSVPed) {
       return null
+    }
+    if (matching_type === 'two-sided' && !userAlreadyRSVPed) {
+      return <TwoSidedEventRSVPButton event={event} user={user} />
     }
     return (
       <Button

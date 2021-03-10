@@ -87,35 +87,37 @@ const ShareEventPromptModal = ({ event, renderHostMessage }) => {
     </div>
   )
 
-  const renderModalButton = TransitionModal({
-    modalBody: (
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Grid item>
-          <Typography variant="h3" className={classes.eventPromptHeader}>
-            We&apos;ve curated a message for you to easily share the event!
-          </Typography>
+  const renderModalButton = (
+    <TransitionModal
+      modalBody={
+        <Grid container direction="column" justify="center" alignItems="center">
+          <Grid item>
+            <Typography variant="h3" className={classes.eventPromptHeader}>
+              We&apos;ve curated a message for you to easily share the event!
+            </Typography>
+          </Grid>
+          <Divider variant="middle" className={classes.shareEventPromptModalDivider} />
+          <Grid container item direction="column" md={9}>
+            <div className={classes.eventPromptBody} id="eventPrompt">
+              {eventPromptBody}
+            </div>
+          </Grid>
         </Grid>
-        <Divider variant="middle" className={classes.shareEventPromptModalDivider} />
-        <Grid container item direction="column" md={9}>
-          <div className={classes.eventPromptBody} id="eventPrompt">
-            {eventPromptBody}
-          </div>
-        </Grid>
-      </Grid>
-    ),
-    button: {
-      buttonText: 'Invite Friends 🌏',
-      buttonColor: 'secondary',
-      buttonSize: 'large',
-    },
-    onAcceptFunction: () => {
-      const copyPrompt = document.getElementById('eventPrompt').innerText
-      window.analytics.track('Copied share event prompt')
-      copy(copyPrompt)
-      setShowSnack(true)
-    },
-    onAcceptButtonText: 'Copy this prompt!',
-  })
+      }
+      button={{
+        buttonText: 'Invite Friends 🌏',
+        buttonColor: 'secondary',
+        buttonSize: 'large',
+      }}
+      onAcceptFunction={() => {
+        const copyPrompt = document.getElementById('eventPrompt').innerText
+        window.analytics.track('Copied share event prompt')
+        copy(copyPrompt)
+        setShowSnack(true)
+      }}
+      onAcceptButtonText="Copy this prompt!"
+    />
+  )
 
   return (
     <div>

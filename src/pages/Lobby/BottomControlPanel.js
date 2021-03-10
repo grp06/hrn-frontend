@@ -22,26 +22,28 @@ const BottomControlPanel = ({
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
 
-  const renderResetEvent = TransitionModal({
-    button: {
-      buttonText: 'Reset Event',
-      buttonVariant: 'text',
-      buttonColor: 'link',
-    },
-    modalBody: (
-      <Typography variant="h3">
-        This will reset the event in its entirety. Are you 100% sure?
-      </Typography>
-    ),
-    onAcceptFunction: async () => {
-      window.analytics &&
-        window.analytics.track('Event reset', {
-          eventId,
-          hostId: host_id,
-        })
-      await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
-    },
-  })
+  const renderResetEvent = (
+    <TransitionModal
+      button={{
+        buttonText: 'Reset Event',
+        buttonVariant: 'text',
+        buttonColor: 'link',
+      }}
+      modalBody={
+        <Typography variant="h3">
+          This will reset the event in its entirety. Are you 100% sure?
+        </Typography>
+      }
+      onAcceptFunction={async () => {
+        window.analytics &&
+          window.analytics.track('Event reset', {
+            eventId,
+            hostId: host_id,
+          })
+        await startEvent({ eventId, num_rounds: null, round_length: null, reset: true })
+      }}
+    />
+  )
 
   return (
     <Grid

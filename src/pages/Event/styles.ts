@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { makeStyles } from '@material-ui/styles'
 import { constants } from '../../utils'
 
@@ -322,6 +323,17 @@ const useEventStyles = makeStyles((theme) => ({
     marginBottom: '20px',
     marginTop: '10px',
     width: '25%',
+  },
+  // *****************************
+  //   TwoSidedEventRSVPButton
+  // *****************************
+  twoSidedModalHeader: {
+    marginBottom: theme.spacing(3),
+    textAlign: 'center',
+  },
+  twoSidedModalBody: {
+    marginBottom: theme.spacing(2.5),
+    textAlign: 'center',
   },
   // *****************************
   //   WhatToExpect

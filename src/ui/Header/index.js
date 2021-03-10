@@ -1,6 +1,5 @@
 export { default as CreateEventSidebarButton } from './CreateEventSidebarButton'
 export { default as DrawerContent } from './DrawerContent'
-export { default as HavingIssuesButton } from './HavingIssuesButton'
 export { default as HeaderDrawer } from './HeaderDrawer'
 export { default as HostDrawerContent } from './HostDrawerContent'
 export { default as SettingsDrawerContent } from './SettingsDrawerContent'
