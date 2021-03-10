@@ -1,23 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid, Button, Typography } from '@material-ui/core'
 import { useMutation } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
+import { useVideoRoomStyles } from '..'
 import { useTwilioContext, useUserEventStatusContext } from '../../../context'
 import { updateLeftChat } from '../../../gql/mutations'
-import { useVideoRoomStyles } from '..'
+import { constants } from '../../../utils'
 
 const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
   const { event_id, id: row_id } = myRound
+  const { connectingYouToSomeoneMessagesArray } = constants
   const classes = useVideoRoomStyles()
   const history = useHistory()
   const { setUserEventStatus } = useUserEventStatusContext()
   const { setMyRound } = useTwilioContext()
+  const [connectingMessage, setConnectingMessage] = useState([])
   const [leftChatMutation] = useMutation(updateLeftChat, {
     variables: {
       row_id,
       reason: 'partner disconnected',
     },
   })
+
+  useEffect(() => {
+    const randomNumber = Math.floor(Math.random() * connectingYouToSomeoneMessagesArray.length)
+    setConnectingMessage(connectingYouToSomeoneMessagesArray[randomNumber])
+  }, [connectingYouToSomeoneMessagesArray])
 
   const handleReturnToLobby = async () => {
     window.analytics.track('left chat - partner took too long')
@@ -33,6 +41,7 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       console.log(err)
     }
   }
+
   return (
     <div className={classes.waitingRoom}>
       <Grid
@@ -46,16 +55,8 @@ const ConnectingToSomeone = React.memo(({ partnerNeverConnected, myRound }) => {
       >
         {!partnerNeverConnected ? (
           <>
-            <Typography className={classes.inEventScreenText}>
-              Connecting you to someone awesome!
-            </Typography>
-            <Typography className={classes.inEventScreenText}>
-              Give us a few seconds to roll out your red carpet{' '}
-              <span role="img" aria-label="woman dancing">
-                💃
-              </span>
-              .
-            </Typography>
+            <Typography className={classes.inEventScreenText}>{connectingMessage[0]}</Typography>
+            <Typography className={classes.inEventScreenText}>{connectingMessage[1]}</Typography>
           </>
         ) : (
           <>
