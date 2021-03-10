@@ -45,29 +45,17 @@ const LobbyContent = React.memo(
                     <WhatToExpect userIsHost={userIsHost} />
                   </Grid>
                   <Grid className={classes.podcastContainer}>
-                    {userIsHost ? (
-                      <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
-                    ) : (
-                      <PodcastCard />
-                    )}
+                    <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
                   </Grid>
                 </Grid>
-                {userIsHost ? (
-                  <Grid container direction="row" justify="space-between">
-                    <div className={classes.whatToExpectContainer}>
-                      <AboutTheHostCard host={host} userIsHost={userIsHost} />
-                    </div>
-                    <div className={classes.podcastContainer}>
-                      <PodcastCard />
-                    </div>
-                  </Grid>
-                ) : (
-                  <Grid container direction="row" justify="flex-start">
-                    <div className={classes.whatToExpectContainer}>
-                      <AboutTheHostCard host={host} userIsHost={userIsHost} />
-                    </div>
-                  </Grid>
-                )}
+                <Grid container direction="row" justify="space-between">
+                  <div className={classes.whatToExpectContainer}>
+                    <AboutTheHostCard host={host} userIsHost={userIsHost} />
+                  </div>
+                  <div className={classes.podcastContainer}>
+                    <PodcastCard />
+                  </div>
+                </Grid>
               </Grid>
             </>
           )

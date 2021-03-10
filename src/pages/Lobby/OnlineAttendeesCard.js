@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
-import PersonIcon from '@material-ui/icons/Person'
 import {
   Avatar,
   Button,
@@ -13,6 +12,7 @@ import {
   Typography,
 } from '@material-ui/core'
 import { useLobbyStyles } from '.'
+import logo from '../../assets/HRNlogoNoFrame.svg'
 
 const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
   const [seeMore, setSeeMore] = useState(false)
@@ -40,14 +40,13 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
                 return (
                   <ListItem key={user[0].id}>
                     <ListItemAvatar>
-                      {user[0].profile_pic_url ? (
-                        <Avatar
-                          src={user[0].profile_pic_url}
-                          className={classes.avatarBackground}
+                      <Avatar>
+                        <img
+                          alt="company-logo"
+                          className={classes.onlineAttendeeAvatar}
+                          src={user[0].profile_pic_url || logo}
                         />
-                      ) : (
-                        <PersonIcon />
-                      )}
+                      </Avatar>
                     </ListItemAvatar>
                     <ListItemText disableTypography>
                       <Grid container direction="row" alignItems="center" justify="flex-start">

@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { constants } from '../../utils'
 
 const { bottomNavBarHeight } = constants
@@ -28,7 +29,10 @@ const useVideoRoomStyles = makeStyles((theme) => ({
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    background: '#111',
+    // background: '#111',
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: 'auto',
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
@@ -161,10 +165,12 @@ const useVideoRoomStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 2),
   },
   pageContainer: {
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: 'auto',
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    background: '#111',
     height: '100vh',
     alignItems: 'center',
     flexDirection: 'column',
@@ -234,7 +240,9 @@ const useVideoRoomStyles = makeStyles((theme) => ({
   //   Video Room
   // *****************************
   videoWrapper: {
-    background: theme.palette.common.blackBody,
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: 'auto',
   },
   screenOverlay: {
     position: 'absolute',
@@ -252,26 +260,19 @@ const useVideoRoomStyles = makeStyles((theme) => ({
     '& video': {
       width: '100vw',
       height: '100vh',
-      objectFit: 'cover',
     },
   },
   myVideo: {
-    width: '200px',
+    width: '225px',
     position: 'absolute',
     top: '3%',
     right: '1%',
     left: 'auto',
     bottom: 'auto',
     zIndex: 99,
-    opacity: 0,
-    transition: '.6s',
-    '&.showControls, &:hover': {
-      transition: 'opacity 0.6s',
-      opacity: 1,
-    },
     '& video': {
       borderRadius: 4,
-      width: '200px',
+      width: '225px',
     },
   },
 

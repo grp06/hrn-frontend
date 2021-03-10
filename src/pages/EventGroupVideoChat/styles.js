@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import PersonIcon from '../../assets/greyPerson.svg'
 import MicOffIcon from '../../assets/micOff.svg'
 
@@ -72,6 +73,9 @@ const useEventGroupVideoChatStyles = makeStyles((theme) => ({
     overflowY: 'scroll',
     padding: theme.spacing(3),
     width: '95%',
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: 'auto',
   },
   // *****************************
   //   GroupVideoChatBottomPanel

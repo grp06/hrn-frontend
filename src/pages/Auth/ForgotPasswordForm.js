@@ -7,13 +7,13 @@ import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import { Link } from 'react-router-dom'
 import { FloatCardMedium, Snack } from '../../common'
-import confettiDoodles from '../../assets/confettiDoodles.svg'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     width: '100vw',
     height: '100vh',
-    backgroundImage: `url(${confettiDoodles})`,
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
   },
   formContainer: {
     margin: theme.spacing(0, 'auto'),

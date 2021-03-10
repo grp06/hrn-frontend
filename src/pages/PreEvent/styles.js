@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
+import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 
 const usePreEventStyles = makeStyles((theme) => ({
   // *****************************
@@ -37,10 +38,12 @@ const usePreEventStyles = makeStyles((theme) => ({
       width: '100%',
       // height: 'calc(100vh)',
       height: '100%',
-      objectFit: 'cover',
     },
   },
   preEventWrapper: {
+    backgroundImage: `url(${ConfettiDoodlesSmallerScale})`,
+    backgroundRepeat: 'repeat',
+    backgroundSize: 'auto',
     height: '94vh',
   },
   liveAndViewersContainer: {
