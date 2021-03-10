@@ -81,6 +81,53 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
       >
         {!switchSidesButtonLoading ? 'Switch Sides' : 'Loading'}
       </Button>
+    </>
+  ) : (
+    <Typography variant="body1" className={classes.suggestToRSVPTypography}>
+      Click the &apos;RSVP&apos; button above and choose your side!
+    </Typography>
+  )
+
+  return (
+    <>
+      <motion.div variants={cardVariants} animate="glow" style={{ marginBottom: '24px' }}>
+        <Grid
+          container
+          direction="column"
+          justify="flex-start"
+          className={classes.eventAndLobbyContentCard}
+          style={{ marginBottom: 0 }}
+        >
+          <Typography variant="h3" className={classes.eventAndLobbyContentCardTitle}>
+            This is a two-sided event{' '}
+            <span role="img" aria-label="cat surprised">
+              🙀
+            </span>
+          </Typography>
+          <Typography variant="body1">
+            Simply put, we split the attendees into two sides and have them match with the opposite
+            side. In this event we have:
+          </Typography>
+          <Grid
+            container
+            direction="column"
+            justify="center"
+            alignItems="center"
+            className={classes.sideBreakdownContainer}
+          >
+            <span role="img" aria-label="girls wrestling">
+              🤼‍♀️
+            </span>
+            <Typography variant="body1">
+              <span style={{ fontWeight: 'bold' }}>{side_a}</span> in one corner and
+            </Typography>
+            <Typography>
+              <span style={{ fontWeight: 'bold' }}>{side_b}</span> in the other!
+            </Typography>
+          </Grid>
+          {rsvpInfoContent}
+        </Grid>
+      </motion.div>
       <Snack
         open={showSuccessSnack}
         onClose={() => setShowSuccessSnack(false)}
@@ -96,51 +143,6 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
         snackMessage={errorSnackMessage}
       />
     </>
-  ) : (
-    <Typography variant="body1" className={classes.suggestToRSVPTypography}>
-      Click the &apos;RSVP&apos; button above and choose your side!
-    </Typography>
-  )
-
-  return (
-    <motion.div variants={cardVariants} animate="glow" style={{ marginBottom: '24px' }}>
-      <Grid
-        container
-        direction="column"
-        justify="flex-start"
-        className={classes.eventAndLobbyContentCard}
-        style={{ marginBottom: 0 }}
-      >
-        <Typography variant="h3" className={classes.eventAndLobbyContentCardTitle}>
-          This is a two-sided event{' '}
-          <span role="img" aria-label="cat surprised">
-            🙀
-          </span>
-        </Typography>
-        <Typography variant="body1">
-          Simply put, we split the attendees into two sides and have them match with the opposite
-          side. In this event we have:
-        </Typography>
-        <Grid
-          container
-          direction="column"
-          justify="center"
-          alignItems="center"
-          className={classes.sideBreakdownContainer}
-        >
-          <span role="img" aria-label="girls wrestling">
-            🤼‍♀️
-          </span>
-          <Typography variant="body1">
-            <span style={{ fontWeight: 'bold' }}>{side_a}</span> in one corner and
-          </Typography>
-          <Typography>
-            <span style={{ fontWeight: 'bold' }}>{side_b}</span> in the other!
-          </Typography>
-        </Grid>
-        {rsvpInfoContent}
-      </Grid>
-    </motion.div>
   )
 }
 
