@@ -11,6 +11,38 @@ const useCreateEventStyles = makeStyles((theme) => ({
     },
   },
   // *****************************
+  //   MatchingOptionCard
+  // *****************************
+  matchingIcon: {
+    height: '100%',
+    width: '100%',
+  },
+  matchingOptionCardContainer: {
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: theme.palette.common.greyButtonHover,
+    },
+    backgroundColor: theme.palette.common.grey10,
+    borderRadius: '4px',
+    padding: theme.spacing(3),
+    height: '150px',
+    width: '48%',
+    margin: theme.spacing(2, 1),
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      height: 'auto',
+    },
+  },
+  matchingOptionCardGrid: {
+    [theme.breakpoints.down('md')]: {
+      flexWrap: 'wrap',
+    },
+    marginBottom: theme.spacing(2),
+  },
+  selectedMatchingOption: {
+    border: '2px solid #FF99AD',
+  },
+  // *****************************
   //   NewEventForm
   // *****************************
   eventFormContainer: {

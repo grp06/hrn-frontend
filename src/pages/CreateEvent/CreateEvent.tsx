@@ -1,20 +1,24 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
-import { useQuery } from 'react-apollo'
+import { Redirect, useLocation } from 'react-router-dom'
+import { useLazyQuery, useQuery } from 'react-apollo'
 import { Grid } from '@material-ui/core'
 
 import { NewEventForm, SubscriptionEndedCard, UpgradePlanCard, useCreateEventStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
-import { getHostEventsAndPartners } from '../../gql/queries'
+import { getHostEventsAndPartners, getEventById } from '../../gql/queries'
 import { getIsSubPeriodOver } from '../../utils'
 
-const CreatEvent = () => {
+const CreatEvent: React.FC<{}> = () => {
   const classes = useCreateEventStyles()
-  const { user } = useUserContext()
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const eventIdFromURL = searchParams.get('eventId')
+  const { user, userContextLoading } = useUserContext()
   const { id: user_id, role, sub_period_end } = user
-  const [componentToShow, setComponentToShow] = useState('event-form')
-  const [timeSinceSubEnded, setTimeSinceSubEnded] = useState(null)
+  const [componentToShow, setComponentToShow] = useState<string>('event-form')
+  const [eventDetails, setEventDetails] = useState<object>({})
+  const [timeSinceSubEnded, setTimeSinceSubEnded] = useState<string>('')
   const userIsAPaidHost = role && (role.includes('starter') || role.includes('premium'))
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getHostEventsAndPartners, {
@@ -23,6 +27,20 @@ const CreatEvent = () => {
     },
     skip: !user_id,
   })
+
+  const [getEventByIdQuery] = useLazyQuery(getEventById, {
+    fetchPolicy: 'no-cache',
+    onCompleted: (data) => {
+      const [eventDetails] = data.events
+      setEventDetails(eventDetails)
+    },
+  })
+
+  useEffect(() => {
+    if (eventIdFromURL) {
+      getEventByIdQuery({ variables: { event_id: eventIdFromURL } })
+    }
+  }, [eventIdFromURL, getEventByIdQuery])
 
   useEffect(() => {
     if (role && role === 'host' && eventsData?.events.length) {
@@ -40,7 +58,7 @@ const CreatEvent = () => {
     }
   }, [sub_period_end, userIsAPaidHost])
 
-  if (eventsLoading) {
+  if (eventsLoading || userContextLoading) {
     return <Loading />
   }
 
@@ -61,11 +79,13 @@ const CreatEvent = () => {
         return <UpgradePlanCard />
       case 'event-form':
       default:
-        return <NewEventForm />
+        return <NewEventForm eventDetails={eventDetails} userId={user_id} />
     }
   }
 
-  return (
+  return eventIdFromURL && !Object.keys(eventDetails).length ? (
+    <Loading />
+  ) : (
     <Grid
       container
       direction="column"
