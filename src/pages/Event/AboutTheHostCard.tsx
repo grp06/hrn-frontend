@@ -19,7 +19,12 @@ const AboutTheHostCard: React.FC<AboutTheHostCardProps> = React.memo(({ host, us
   const handleEditBioClick = () => history.push('/my-profile')
 
   return (
-    <Grid container direction="column" className={classes.eventAndLobbyContentCard}>
+    <Grid
+      container
+      direction="column"
+      className={classes.eventAndLobbyContentCard}
+      style={{ position: 'relative' }}
+    >
       {userIsHost ? (
         <Button
           variant="text"

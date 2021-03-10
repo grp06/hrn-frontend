@@ -105,13 +105,14 @@ const UserEventStatusCard = ({ userEventStatus }) => {
   }
 
   return (
-    <motion.div variants={eventStatusVariants} animate="glow">
+    <motion.div variants={eventStatusVariants} animate="glow" style={{ marginBottom: '24px' }}>
       <Grid
         container
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
         className={classes.eventAndLobbyContentCard}
+        style={{ marginBottom: 0 }}
       >
         {renderMessage()}
       </Grid>

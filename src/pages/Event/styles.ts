@@ -312,6 +312,24 @@ const useEventStyles = makeStyles((theme) => ({
     width: '25%',
   },
   // *****************************
+  //   TwoSidedEventDescriptionCard
+  // *****************************
+  currentRSVPStatusTypography: {
+    color: theme.palette.common.basePink,
+    fontWeight: 'bold',
+    margin: theme.spacing(1.5, 0, 3, 0),
+    textAlign: 'center',
+  },
+  sideBreakdownContainer: {
+    marginTop: theme.spacing(1.5),
+  },
+  suggestToRSVPTypography: {
+    color: theme.palette.common.basePink,
+    fontWeight: 'bold',
+    marginTop: theme.spacing(1.5),
+    textAlign: 'center',
+  },
+  // *****************************
   //   TwoSidedEventRSVPButton
   // *****************************
   twoSidedModalHeader: {

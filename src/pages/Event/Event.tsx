@@ -71,13 +71,15 @@ const Event: React.FC<{}> = () => {
             <AboutTheHostCard host={host} userIsHost={userIsHost} />
           </Grid>
           <Grid container direction="column" className={classes.narrowEventAndLobbyContentGrid}>
-            <TwoSidedEventDescriptionCard
-              event_id={event_id}
-              isEventParticipant={isEventParticipant}
-              side_a={side_a}
-              side_b={side_b}
-              user_id={user_id}
-            />
+            {matching_type === 'two-sided' ? (
+              <TwoSidedEventDescriptionCard
+                event_id={event_id}
+                isEventParticipant={isEventParticipant}
+                side_a={side_a}
+                side_b={side_b}
+                user_id={user_id}
+              />
+            ) : null}
             {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : null}
             <PodcastCard />
           </Grid>
