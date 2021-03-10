@@ -65,45 +65,23 @@ const Event: React.FC<{}> = () => {
       >
         <EventTitleAndCTACard event={event} user={user} />
         <HostAndEventDescCard event={event} userIsHost={userIsHost} />
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          className={classes.whatToExpectAndPodcastContainer}
-        >
-          <Grid className={classes.whatToExpectContainer}>
+        <Grid container direction="row" justify="space-between">
+          <Grid container direction="column" className={classes.wideEventAndLobbyContentGrid}>
             <WhatToExpect userIsHost={userIsHost} />
+            <AboutTheHostCard host={host} userIsHost={userIsHost} />
           </Grid>
-          <Grid className={classes.podcastContainer}>
-            {userIsHost ? (
-              <EventRSVPsCard eventUsers={event_users} />
-            ) : (
-              <TwoSidedEventDescriptionCard
-                event_id={event_id}
-                isEventParticipant={isEventParticipant}
-                side_a={side_a}
-                side_b={side_b}
-                user_id={user_id}
-              />
-            )}
+          <Grid container direction="column" className={classes.narrowEventAndLobbyContentGrid}>
+            <TwoSidedEventDescriptionCard
+              event_id={event_id}
+              isEventParticipant={isEventParticipant}
+              side_a={side_a}
+              side_b={side_b}
+              user_id={user_id}
+            />
+            {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : null}
+            <PodcastCard />
           </Grid>
         </Grid>
-        {userIsHost ? (
-          <Grid container direction="row" justify="space-between">
-            <div className={classes.whatToExpectContainer}>
-              <AboutTheHostCard host={host} userIsHost={userIsHost} />
-            </div>
-            <div className={classes.podcastContainer}>
-              <PodcastCard />
-            </div>
-          </Grid>
-        ) : (
-          <Grid container direction="row" justify="flex-start">
-            <div className={classes.whatToExpectContainer}>
-              <AboutTheHostCard host={host} userIsHost={userIsHost} />
-            </div>
-          </Grid>
-        )}
       </Grid>
     </>
   )

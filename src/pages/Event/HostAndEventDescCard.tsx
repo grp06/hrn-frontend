@@ -17,7 +17,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
     const { name: hostName, profile_pic_url } = host
 
     return (
-      <Grid container direction="column" className={classes.hostAndEventDescCardContainer}>
+      <Grid container direction="column" className={classes.eventAndLobbyContentCard}>
         <Grid
           container
           direction="row"

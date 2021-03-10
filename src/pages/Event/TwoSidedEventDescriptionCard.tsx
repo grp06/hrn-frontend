@@ -98,9 +98,9 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
       container
       direction="column"
       justify="flex-start"
-      className={classes.podcastCardContainer}
+      className={classes.eventAndLobbyContentCard}
     >
-      <Typography variant="h3" className={classes.podcastCardTitle}>
+      <Typography variant="h3" className={classes.eventAndLobbyContentCardTitle}>
         This is a two-sided event{' '}
         <span role="img" aria-label="cat surprised">
           🙀
@@ -121,7 +121,6 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
           <span style={{ fontWeight: 'bold' }}>{side_b}</span> in the other!
         </Typography>
       </Grid>
-
       {rsvpInfoContent}
     </Grid>
   )
