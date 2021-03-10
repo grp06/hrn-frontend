@@ -10,6 +10,7 @@ import {
   HostAndEventDescCard,
   JoinEventBanner,
   PodcastCard,
+  TwoSidedEventDescriptionCard,
   WhatToExpect,
   useEventStyles,
 } from '.'
@@ -22,13 +23,23 @@ const Event: React.FC<{}> = () => {
   const { user, userContextLoading } = useUserContext()
   const { event, eventContextLoading } = useEventContext()
   const { id: user_id } = user
-  const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
+  const {
+    banner_photo_url,
+    event_users,
+    host,
+    host_id,
+    id: event_id,
+    matching_type,
+    side_a,
+    side_b,
+    status: event_status,
+  } = event
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
-  localStorage.setItem('eventId', eventId)
+  localStorage.setItem('eventId', event_id.toString())
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const isEventParticipant = event?.event_users?.find(
@@ -43,7 +54,7 @@ const Event: React.FC<{}> = () => {
       ) : null}
       <EventPhotoBanner
         bannerPhotoURL={banner_photo_url}
-        eventId={eventId}
+        eventId={event_id}
         userIsHost={userIsHost}
       />
       <Grid
@@ -64,7 +75,17 @@ const Event: React.FC<{}> = () => {
             <WhatToExpect userIsHost={userIsHost} />
           </Grid>
           <Grid className={classes.podcastContainer}>
-            {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : <PodcastCard />}
+            {userIsHost ? (
+              <EventRSVPsCard eventUsers={event_users} />
+            ) : (
+              <TwoSidedEventDescriptionCard
+                event_id={event_id}
+                isEventParticipant={isEventParticipant}
+                side_a={side_a}
+                side_b={side_b}
+                user_id={user_id}
+              />
+            )}
           </Grid>
         </Grid>
         {userIsHost ? (

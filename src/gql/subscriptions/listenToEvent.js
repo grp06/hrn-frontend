@@ -21,6 +21,7 @@ const listenToEvent = gql`
       side_a
       side_b
       event_users(order_by: { user: { name: asc } }) {
+        side
         user {
           email
           name

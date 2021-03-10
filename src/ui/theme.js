@@ -351,6 +351,10 @@ const theme = createMuiTheme({
       filledSuccess: {
         backgroundColor: basePurple,
       },
+      filledWarning: {
+        backgroundColor: basePink,
+        color: bodyBlack,
+      },
     },
     MuiStepLabel: {
       label: {
