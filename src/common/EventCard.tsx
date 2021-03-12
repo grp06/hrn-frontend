@@ -1,112 +1,14 @@
 import React from 'react'
-
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
-import { makeStyles } from '@material-ui/core/styles'
-
+// @ts-ignore
 import FeatherIcon from 'feather-icons-react'
 import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
-
+import { Avatar, Button, Grid, Typography } from '@material-ui/core'
+import CallSplitIcon from '@material-ui/icons/CallSplit'
+import { FloatCardMediumLarge, useCommonComponentStyles } from '.'
 import globeMask from '../assets/globeMask.png'
 import logo from '../assets/HRNlogoNoFrame.svg'
-import { formatDate, truncateText } from '../utils'
-
-import { FloatCardMediumLarge } from '.'
-
-const useStyles = makeStyles((theme) => ({
-  avatar: {
-    width: '100%',
-    height: '100%',
-  },
-  avatarContainer: {
-    width: '55px',
-    height: '55px',
-  },
-  eventContainer: {
-    width: '100%',
-    position: 'relative',
-    borderRadius: '4px',
-  },
-  eventEndedOverlay: {
-    position: 'absolute',
-    left: '0%',
-    right: '0%',
-    top: '0%',
-    bottom: '0%',
-    zIndex: 9,
-    width: '100%',
-    height: '100%',
-    backgroundImage: 'linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5))',
-  },
-  eventImage: {
-    cursor: 'pointer',
-    width: '100%',
-    height: 'auto',
-    borderRadius: '4px 0px 0px 4px',
-    backgroundPosition: '50% 50%',
-    backgroundSize: 'cover',
-    backgroundRepeat: 'no-repeat',
-    [theme.breakpoints.down('md')]: {
-      height: '200px',
-    },
-  },
-  eventContentContainer: {
-    cursor: 'pointer',
-    width: '100%',
-    height: 'auto',
-    padding: '20px',
-    [theme.breakpoints.down('sm')]: {
-      height: 'auto',
-    },
-    borderRadius: '4px',
-  },
-  icon: {
-    color: theme.palette.common.ghostWhiteBody,
-    margin: theme.spacing(0.5, 0),
-  },
-  hostNameAndTitleContainer: {
-    width: 'auto',
-    height: '100%',
-    marginLeft: theme.spacing(2),
-    padding: theme.spacing(0.5, 0),
-  },
-  hostName: {
-    margin: '0',
-  },
-  liveGlowContaner: {
-    borderRadius: '4px',
-  },
-  liveLogo: {
-    position: 'absolute',
-    top: '3%',
-    right: '2%',
-    bottom: 'auto',
-    left: 'auto',
-    width: '60px',
-    height: 'auto',
-    color: theme.palette.common.ghostWhite,
-    fontWeight: 'bold',
-    backgroundColor: theme.palette.common.basePurple,
-    borderRadius: '4px',
-    textAlign: 'center',
-  },
-  subtitle: {
-    margin: theme.spacing(1),
-    marginBottom: '10px',
-    width: '75%',
-    [theme.breakpoints.down('sm')]: {
-      width: '80%',
-    },
-  },
-  eventOverButton: {
-    marginTop: theme.spacing(2),
-    position: 'relative',
-    zIndex: 10,
-  },
-}))
+import { EventObjectInterface, formatDate, truncateText } from '../utils'
 
 const liveEventVariants = {
   glow: {
@@ -119,17 +21,22 @@ const liveEventVariants = {
   },
 }
 
-const EventCard = ({ event }) => {
-  const classes = useStyles()
+interface EventCardProps {
+  event: EventObjectInterface
+}
+
+const EventCard: React.FC<EventCardProps> = ({ event }) => {
+  const classes = useCommonComponentStyles()
   const history = useHistory()
   const {
     banner_photo_url,
     description,
+    ended_at,
     event_name,
     host,
     id,
+    matching_type,
     start_at,
-    ended_at,
     status: event_status,
   } = event
   const { name: hostName, profile_pic_url } = host
@@ -146,7 +53,7 @@ const EventCard = ({ event }) => {
         container
         justify="flex-start"
         wrap="wrap"
-        className={classes.eventContainer}
+        className={classes.eventCardContainer}
         onClick={() => {
           if (!ended_at) {
             history.push(`/events/${id}`)
@@ -158,7 +65,7 @@ const EventCard = ({ event }) => {
           item
           lg={4}
           md={12}
-          className={classes.eventImage}
+          className={classes.eventCardImage}
           style={{
             backgroundImage: banner_photo_url
               ? `url("${banner_photo_url}")`
@@ -175,7 +82,7 @@ const EventCard = ({ event }) => {
           direction="column"
           justify="flex-start"
           alignItems="flex-start"
-          className={classes.eventContentContainer}
+          className={classes.eventCardContentContainer}
         >
           <Grid container item direction="column" style={{ marginTop: '8px', marginBottom: '8px' }}>
             <Typography gutterBottom variant="h2" style={{ marginBottom: 0 }}>
@@ -183,10 +90,18 @@ const EventCard = ({ event }) => {
             </Typography>
             <Grid container direction="row" alignItems="center">
               <FeatherIcon icon="calendar" stroke="#FF99AD" size="24" />
-              <Typography variant="body1" className={classes.subtitle}>
+              <Typography variant="body1" className={classes.eventCardDateTypography}>
                 {formatDate(startTime)}
               </Typography>
             </Grid>
+            {matching_type === 'two-sided' ? (
+              <Grid container alignItems="center" className={classes.twoSidedLogo}>
+                <CallSplitIcon />
+                <Typography variant="subtitle1" style={{ color: '#000000', fontWeight: 'bold' }}>
+                  two-sided event
+                </Typography>
+              </Grid>
+            ) : null}
             <Grid
               container
               item
@@ -195,10 +110,10 @@ const EventCard = ({ event }) => {
             >
               <Typography variant="subtitle1">Hosted By /</Typography>
               <Grid container direction="row" alignItems="center" justify="flex-start">
-                <Avatar className={classes.avatarContainer}>
+                <Avatar className={classes.eventCardHostAvatarContainer}>
                   <img
                     alt="company-logo"
-                    className={classes.avatar}
+                    className={classes.eventCardHostAvatar}
                     src={profile_pic_url || logo}
                   />
                 </Avatar>
