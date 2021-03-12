@@ -1,6 +1,3 @@
-import { JsxElement } from 'typescript'
-import { StringSchema } from 'yup'
-
 export interface UserObjectInterface {
   id: number
   name: string
@@ -21,7 +18,7 @@ export interface EventObjectInterface {
   description: string
   ended_at: string | null
   event_name: string
-  event_users: { [user: string]: UserObjectInterface }[]
+  event_users: { user: UserObjectInterface; side: string }[]
   group_video_chat: boolean
   host: UserObjectInterface
   host_id: number
@@ -57,4 +54,9 @@ export interface TransitionModalInterface {
   onAcceptFunction: Function
   onCloseButtonText?: string
   onCloseFunction?: Function
+}
+
+export interface OnlineEventUsersInterface {
+  user: { [user: string]: UserObjectInterface }[]
+  side: string | null
 }

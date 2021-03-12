@@ -99,7 +99,7 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
           style={{ marginBottom: 0 }}
         >
           <Typography variant="h3" className={classes.eventAndLobbyContentCardTitle}>
-            This is a two-sided event{' '}
+            Oh gosh, it&apos;s a two-sided event{' '}
             <span role="img" aria-label="cat surprised">
               🙀
             </span>
@@ -115,7 +115,7 @@ const TwoSidedEventDescription: React.FC<TwoSidedEventDescriptionProps> = ({
             alignItems="center"
             className={classes.sideBreakdownContainer}
           >
-            <span role="img" aria-label="girls wrestling">
+            <span role="img" aria-label="girls wrestling" style={{ fontSize: '1.25rem' }}>
               🤼‍♀️
             </span>
             <Typography variant="body1">

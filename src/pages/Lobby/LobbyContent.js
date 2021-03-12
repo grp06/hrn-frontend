@@ -49,7 +49,7 @@ const LobbyContent = React.memo(
                 <EventTitleAndCTACard event={event} user={user} />
                 <HostAndEventDescCard
                   event={event}
-                  showOnlineAttendees={Boolean(onlineEventUsers.length)}
+                  numberOfOnlineEventUsers={onlineEventUsers.length}
                   userIsHost={userIsHost}
                 />
                 <Grid container direction="row" justify="space-between">
@@ -75,7 +75,13 @@ const LobbyContent = React.memo(
                         user_id={user_id}
                       />
                     ) : null}
-                    <OnlineAttendeesCard onlineEventUsers={onlineEventUsers} />
+                    <OnlineAttendeesCard
+                      eventStatus={eventStatus}
+                      matching_type={matching_type}
+                      onlineEventUsers={onlineEventUsers}
+                      side_aLabel={side_a}
+                      side_bLabel={side_b}
+                    />
                     <PodcastCard />
                   </Grid>
                 </Grid>
@@ -97,7 +103,7 @@ const LobbyContent = React.memo(
                 container
                 direction="column"
                 justify="flex-start"
-                className={classes.eventContentContainer}
+                className={classes.lobbyContentContainer}
               >
                 <EventTitleAndCTACard event={event} user={user} />
                 <Grid container direction="row" justify="space-between">
@@ -117,6 +123,13 @@ const LobbyContent = React.memo(
                     direction="column"
                     className={classes.narrowEventAndLobbyContentGrid}
                   >
+                    <OnlineAttendeesCard
+                      eventStatus={eventStatus}
+                      matching_type={matching_type}
+                      onlineEventUsers={onlineEventUsers}
+                      side_aLabel={side_a}
+                      side_bLabel={side_b}
+                    />
                     <PodcastCard />
                   </Grid>
                 </Grid>

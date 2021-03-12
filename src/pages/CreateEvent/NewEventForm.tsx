@@ -67,6 +67,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
             variables: {
               event_id,
               user_id: host_id,
+              side: matching_type === 'two-sided' ? 'a' : null,
             },
           })
         } catch (error) {
