@@ -7,6 +7,23 @@ const containerWidth = window.screen.width - drawerWidth
 
 const useEventStyles = makeStyles((theme) => ({
   // *****************************
+  //   COMMON
+  // *****************************
+  eventAndLobbyContentCard: {
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 3),
+    },
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    height: 'auto',
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(3, 5),
+    width: '100%',
+  },
+  eventAndLobbyContentCardTitle: {
+    marginBottom: theme.spacing(0.5),
+  },
+  // *****************************
   //   AboutTheHostCard
   // *****************************
   aboutTheHostCardContainer: {
@@ -102,23 +119,24 @@ const useEventStyles = makeStyles((theme) => ({
     maxWidth: '1560px',
     margin: theme.spacing(-20, 'auto', 0, 'auto'),
     paddingBottom: '40px',
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
+      width: '70vw',
+    },
+    [theme.breakpoints.down('xs')]: {
       width: '90vw',
     },
   },
-  podcastContainer: {
+  narrowEventAndLobbyContentGrid: {
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+    },
     width: '44%',
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('md')]: {
-      width: '100%',
-    },
   },
-  whatToExpectContainer: {
-    width: '54%',
+  wideEventAndLobbyContentGrid: {
     [theme.breakpoints.down('md')]: {
       width: '100%',
     },
-    marginBottom: theme.spacing(3),
+    width: '54%',
   },
   // *****************************
   //   EventPhotoBanner
@@ -148,15 +166,6 @@ const useEventStyles = makeStyles((theme) => ({
   eventRSVPAvatar: {
     height: '100%',
     width: '100%',
-  },
-  eventRSVPsCardContainer: {
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
   },
   seeAllRSVPsButton: {
     backgroundColor: 'transparent',
@@ -204,16 +213,6 @@ const useEventStyles = makeStyles((theme) => ({
   hostAvatarContainer: {
     width: '70px',
     height: '70px',
-  },
-  hostAndEventDescCardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
   },
   hostAndRSVPContainer: {
     marginBottom: theme.spacing(2),
@@ -283,18 +282,6 @@ const useEventStyles = makeStyles((theme) => ({
   // *****************************
   //   PodcastCard
   // *****************************
-  podcastCardContainer: {
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: '100%',
-    padding: theme.spacing(3, 5),
-  },
-  podcastCardTitle: {
-    margin: 0,
-  },
   podcastIframe: {
     marginTop: theme.spacing(1.5),
   },
@@ -325,6 +312,24 @@ const useEventStyles = makeStyles((theme) => ({
     width: '25%',
   },
   // *****************************
+  //   TwoSidedEventDescriptionCard
+  // *****************************
+  currentRSVPStatusTypography: {
+    color: theme.palette.common.basePink,
+    fontWeight: 'bold',
+    margin: theme.spacing(1.5, 0, 3, 0),
+    textAlign: 'center',
+  },
+  sideBreakdownContainer: {
+    marginTop: theme.spacing(1.5),
+  },
+  suggestToRSVPTypography: {
+    color: theme.palette.common.basePink,
+    fontWeight: 'bold',
+    marginTop: theme.spacing(1.5),
+    textAlign: 'center',
+  },
+  // *****************************
   //   TwoSidedEventRSVPButton
   // *****************************
   twoSidedModalHeader: {
@@ -352,15 +357,6 @@ const useEventStyles = makeStyles((theme) => ({
     height: '130px',
     margin: theme.spacing(2, 'auto', 0, 'auto'),
     width: '90%',
-  },
-  whatToExpectCardContainer: {
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(3, 3),
-    },
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
   },
 }))
 

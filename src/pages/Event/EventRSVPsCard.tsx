@@ -28,7 +28,7 @@ const EventRSVPsCard: React.FC<EventRSVPsCardProps> = React.memo(({ eventUsers }
       direction="column"
       justify="flex-start"
       alignItems="flex-start"
-      className={classes.eventRSVPsCardContainer}
+      className={classes.eventAndLobbyContentCard}
     >
       {eventUsers?.length ? (
         <>

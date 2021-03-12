@@ -19,7 +19,12 @@ const AboutTheHostCard: React.FC<AboutTheHostCardProps> = React.memo(({ host, us
   const handleEditBioClick = () => history.push('/my-profile')
 
   return (
-    <Grid container direction="column" className={classes.aboutTheHostCardContainer}>
+    <Grid
+      container
+      direction="column"
+      className={classes.eventAndLobbyContentCard}
+      style={{ position: 'relative' }}
+    >
       {userIsHost ? (
         <Button
           variant="text"
@@ -30,7 +35,9 @@ const AboutTheHostCard: React.FC<AboutTheHostCardProps> = React.memo(({ host, us
           <FeatherIcon icon="edit-2" size="20" />
         </Button>
       ) : null}
-      <Typography variant="h3">About The Host</Typography>
+      <Typography variant="h3" className={classes.eventAndLobbyContentCardTitle}>
+        About The Host
+      </Typography>
       <Typography variant="body1" style={{ width: '90%' }}>
         {hostBio ||
           "Your host has forgotten to write about themselves, but trust us, they're pretty awesome ✨"}

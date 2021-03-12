@@ -6,6 +6,23 @@ const { bottomNavBarHeight } = constants
 
 const useLobbyStyles = makeStyles((theme) => ({
   // *****************************
+  //   COMMON
+  // *****************************
+  eventAndLobbyContentCard: {
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(3, 3),
+    },
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    height: 'auto',
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(3, 5),
+    width: '100%',
+  },
+  eventAndLobbyContentCardTitle: {
+    marginBottom: theme.spacing(0.5),
+  },
+  // *****************************
   //   BottomControlPanel
   // *****************************
   activeBottomControlButton: {
@@ -95,25 +112,23 @@ const useLobbyStyles = makeStyles((theme) => ({
   // *****************************
   //   LobbyContent
   // *****************************
-  eventContentContainer: {
+  lobbyContentContainer: {
     margin: theme.spacing(-20, 'auto', 12, 'auto'),
     maxWidth: '1560px',
     position: 'relative',
     width: '85%',
     zIndex: '99',
   },
-  podcastContainer: {
+  narrowEventAndLobbyContentGrid: {
     [theme.breakpoints.down('md')]: {
       width: '100%',
     },
-    marginBottom: theme.spacing(3),
     width: '44%',
   },
-  whatToExpectContainer: {
+  wideEventAndLobbyContentGrid: {
     [theme.breakpoints.down('md')]: {
       width: '100%',
     },
-    marginBottom: theme.spacing(3),
     width: '54%',
   },
   // *****************************
@@ -139,12 +154,6 @@ const useLobbyStyles = makeStyles((theme) => ({
   onlineAttendeeAvatar: {
     height: '100%',
     width: '100%',
-  },
-  onlineAttendeesCardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
   },
   seeAllButton: {
     backgroundColor: 'transparent',
@@ -200,13 +209,6 @@ const useLobbyStyles = makeStyles((theme) => ({
   //   SittingOutCard
   //   UserEventStatusCard
   // *****************************
-  sittingOutAndStatusCardContainer: {
-    backgroundColor: theme.palette.common.greyCard,
-    borderRadius: '4px',
-    height: 'auto',
-    padding: theme.spacing(3, 5),
-    width: '100%',
-  },
   sittingOutAndStatusMessageGrid: {
     marginTop: theme.spacing(3),
   },

@@ -23,7 +23,7 @@ const OnlineAttendeesCard = React.memo(({ onlineEventUsers }) => {
       direction="column"
       justify="flex-start"
       alignItems="flex-start"
-      className={classes.onlineAttendeesCardContainer}
+      className={classes.eventAndLobbyContentCard}
     >
       {onlineEventUsers?.length ? (
         <>

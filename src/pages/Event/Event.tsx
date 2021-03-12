@@ -10,6 +10,7 @@ import {
   HostAndEventDescCard,
   JoinEventBanner,
   PodcastCard,
+  TwoSidedEventDescriptionCard,
   WhatToExpect,
   useEventStyles,
 } from '.'
@@ -22,13 +23,23 @@ const Event: React.FC<{}> = () => {
   const { user, userContextLoading } = useUserContext()
   const { event, eventContextLoading } = useEventContext()
   const { id: user_id } = user
-  const { banner_photo_url, event_users, host, host_id, status: event_status, id: eventId } = event
+  const {
+    banner_photo_url,
+    event_users,
+    host,
+    host_id,
+    id: event_id,
+    matching_type,
+    side_a,
+    side_b,
+    status: event_status,
+  } = event
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
-  localStorage.setItem('eventId', eventId)
+  localStorage.setItem('eventId', event_id.toString())
   localStorage.setItem('event', JSON.stringify(event))
   const userIsHost = Math.floor(host_id) === Math.floor(user_id)
   const isEventParticipant = event?.event_users?.find(
@@ -43,7 +54,7 @@ const Event: React.FC<{}> = () => {
       ) : null}
       <EventPhotoBanner
         bannerPhotoURL={banner_photo_url}
-        eventId={eventId}
+        eventId={event_id}
         userIsHost={userIsHost}
       />
       <Grid
@@ -54,35 +65,25 @@ const Event: React.FC<{}> = () => {
       >
         <EventTitleAndCTACard event={event} user={user} />
         <HostAndEventDescCard event={event} userIsHost={userIsHost} />
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-          className={classes.whatToExpectAndPodcastContainer}
-        >
-          <Grid className={classes.whatToExpectContainer}>
+        <Grid container direction="row" justify="space-between">
+          <Grid container direction="column" className={classes.wideEventAndLobbyContentGrid}>
             <WhatToExpect userIsHost={userIsHost} />
+            <AboutTheHostCard host={host} userIsHost={userIsHost} />
           </Grid>
-          <Grid className={classes.podcastContainer}>
-            {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : <PodcastCard />}
+          <Grid container direction="column" className={classes.narrowEventAndLobbyContentGrid}>
+            {matching_type === 'two-sided' ? (
+              <TwoSidedEventDescriptionCard
+                event_id={event_id}
+                isEventParticipant={isEventParticipant}
+                side_a={side_a}
+                side_b={side_b}
+                user_id={user_id}
+              />
+            ) : null}
+            {userIsHost ? <EventRSVPsCard eventUsers={event_users} /> : null}
+            <PodcastCard />
           </Grid>
         </Grid>
-        {userIsHost ? (
-          <Grid container direction="row" justify="space-between">
-            <div className={classes.whatToExpectContainer}>
-              <AboutTheHostCard host={host} userIsHost={userIsHost} />
-            </div>
-            <div className={classes.podcastContainer}>
-              <PodcastCard />
-            </div>
-          </Grid>
-        ) : (
-          <Grid container direction="row" justify="flex-start">
-            <div className={classes.whatToExpectContainer}>
-              <AboutTheHostCard host={host} userIsHost={userIsHost} />
-            </div>
-          </Grid>
-        )}
       </Grid>
     </>
   )

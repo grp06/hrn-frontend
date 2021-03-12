@@ -80,7 +80,7 @@ function WhatToExpect({ userIsHost }) {
       container
       direction="column"
       justify="flex-start"
-      className={classes.whatToExpectCardContainer}
+      className={classes.eventAndLobbyContentCard}
     >
       <Typography variant="h3">
         {userIsHost ? 'What to expect as a host' : 'What to expect from the event'}

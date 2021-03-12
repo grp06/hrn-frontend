@@ -28,7 +28,7 @@ const SittingOutCard = ({ setUserEventStatus }) => {
         direction="column"
         justify="flex-start"
         alignItems="flex-start"
-        className={classes.sittingOutAndStatusCardContainer}
+        className={classes.eventAndLobbyContentCard}
       >
         <Typography variant="h3">
           You are sitting out of the event{' '}
