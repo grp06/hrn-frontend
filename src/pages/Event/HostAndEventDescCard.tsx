@@ -6,12 +6,12 @@ import { EventObjectInterface } from '../../utils'
 
 interface HostAndEventDescCardProps {
   event: EventObjectInterface
-  showOnlineAttendees?: boolean
+  numberOfOnlineEventUsers?: number
   userIsHost: boolean
 }
 
 const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
-  ({ event, showOnlineAttendees, userIsHost }) => {
+  ({ event, numberOfOnlineEventUsers, userIsHost }) => {
     const classes = useEventStyles()
     const { description: eventDescription, event_users, host } = event
     const { name: hostName, profile_pic_url } = host
@@ -78,7 +78,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
                 <Typography className={classes.largeNumber}>{event_users.length}</Typography>
               </Grid>
             ) : null}
-            {showOnlineAttendees && userIsHost ? (
+            {numberOfOnlineEventUsers && userIsHost ? (
               <Grid
                 container
                 direction="column"
@@ -89,7 +89,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
                 <Typography variant="subtitle1" className={classes.onlineAndRSVPedTypography}>
                   Online Now /
                 </Typography>
-                <Typography className={classes.largeNumber}>{showOnlineAttendees}</Typography>
+                <Typography className={classes.largeNumber}>{numberOfOnlineEventUsers}</Typography>
               </Grid>
             ) : null}
           </Grid>

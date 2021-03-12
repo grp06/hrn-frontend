@@ -23,7 +23,7 @@ const UserEventStatusContext = createContext()
 const defaultState = {
   userEventStatus: 'waiting for match',
   onlineEventUsers: [],
-  userHasEnabledCameraAndMic: false,
+  userHasEnabledCameraAndMic: true,
   personalChatMessagesWithCurrentPartner: [],
   numberOfReadMessagesFromMyPartner: 0,
   numberOfUnreadMessagesFromMyPartner: 0,

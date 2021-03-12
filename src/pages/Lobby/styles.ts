@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { makeStyles } from '@material-ui/styles'
 import cameraBlocked from '../../assets/cameraBlocked.png'
 import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
@@ -159,6 +160,14 @@ const useLobbyStyles = makeStyles((theme) => ({
     backgroundColor: 'transparent',
     borderColor: 'transparent',
     textTransform: 'none',
+  },
+  side_aLabel: {
+    fontWeight: 700,
+    margin: theme.spacing(0.5, 0, 1, 0),
+  },
+  side_bLabel: {
+    fontWeight: 700,
+    margin: theme.spacing(2, 0, 1, 0),
   },
   // *****************************
   //   SetupMicAndCamera
