@@ -1,7 +1,7 @@
 const constants = {
   // change me back to 20000?
-  // george, stephen, max, jasper
-  adminUserIds: [8, 12, 115, 5218],
+  // george, stephen, max, jasper, yamila
+  adminUserIds: [8, 12, 115, 5218, 6069],
   // seibo, ash, parker, karl, nino
   hrnFriendsUserIds: [2926, 3974, 4888, 5895, 6246],
   lastSeenDuration: 5000,
@@ -33,10 +33,6 @@ const constants = {
   ],
   connectingYouToSomeoneMessagesArray: [
     ['Connecting you to someone awesome!', 'Give us a few seconds to roll out your red carpet 💃.'],
-    [
-      'We found someone great for you to chat with!',
-      'Give us a few seconds to butter them up for you 🧈.',
-    ],
     ['We think this next person is a gem!', 'Hang tight, connecting you two in a bit 💎.'],
     [
       'Got someone awesome on the other line for you!',
