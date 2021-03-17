@@ -7,7 +7,13 @@ import PanoramaIcon from '@material-ui/icons/Panorama'
 
 import { useEventStyles } from '.'
 import { Snack } from '../../common'
+import { getUnsplashImageURL } from '../../helpers'
 import { updateEventBannerPhoto } from '../../gql/mutations'
+
+interface ChangeEventPhotoBannerProps {
+  eventId: number
+  setBannerBackground: Function
+}
 
 const buttonVariants = {
   shake: {
@@ -37,33 +43,26 @@ const buttonVariants = {
   },
 }
 
-const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
+const ChangeEventPhotoBanner: React.FC<ChangeEventPhotoBannerProps> = ({
+  eventId,
+  setBannerBackground,
+}) => {
   const classes = useEventStyles()
-  const [bannerSearchTerm, setBannerSearchTerm] = useState('community')
-  const [searchedImageURL, setSearcedImageURL] = useState(null)
-  const [showBannerSearch, setShowBannerSearch] = useState(false)
-  const [showChangeBannerButton, setShowChangeBannerButton] = useState(true)
-  const [showSavedPhotoSnack, setShowSavedPhotoSnack] = useState(false)
+  const [bannerSearchTerm, setBannerSearchTerm] = useState<string>('community')
+  const [searchedImageURL, setSearchedImageURL] = useState<string>('')
+  const [showBannerSearch, setShowBannerSearch] = useState<boolean>(false)
+  const [showChangeBannerButton, setShowChangeBannerButton] = useState<boolean>(true)
+  const [showSavedPhotoSnack, setShowSavedPhotoSnack] = useState<boolean>(false)
 
   const [updateEventBannerPhotoMutation] = useMutation(updateEventBannerPhoto)
 
-  const searchUnsplash = async (keyword) => {
+  const searchUnsplash = async (keyword: string) => {
     try {
-      await fetch(`${process.env.REACT_APP_API_URL}/get-unsplash-image`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true,
-        },
-        body: JSON.stringify({ keyword }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setBannerBackground(`url("${data.image.urls.full}")`)
-          setSearcedImageURL(data.image.urls.full)
-        })
+      const unsplashRequest = await getUnsplashImageURL(keyword)
+      setBannerBackground(`url("${unsplashRequest.image.urls.full}")`)
+      setSearchedImageURL(unsplashRequest.image.urls.full)
     } catch (error) {
+      console.log('error ->', error)
       alert('error seraching for image')
     }
   }
@@ -71,7 +70,7 @@ const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
   const closeBannerSearchForm = () => {
     setBannerSearchTerm('community')
     setShowBannerSearch(false)
-    setSearcedImageURL(null)
+    setSearchedImageURL('')
     setShowChangeBannerButton(true)
   }
 
@@ -90,7 +89,7 @@ const ChangeEventPhotoBanner = ({ eventId, setBannerBackground }) => {
     }
   }
 
-  const handleSuggestedSearchTermClick = (term) => {
+  const handleSuggestedSearchTermClick = (term: string) => {
     setBannerSearchTerm(term)
     searchUnsplash(term)
   }

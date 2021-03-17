@@ -18,6 +18,7 @@ const upsertEvent = gql`
       objects: $event_details
     ) {
       returning {
+        banner_photo_url
         host_id
         id
         num_rounds
