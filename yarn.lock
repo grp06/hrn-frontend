@@ -1997,6 +1997,13 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-csv@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@types/react-csv/-/react-csv-1.1.1.tgz#003f6de5a46e4f64712f97e5509a4b3f2df9a8b1"
+  integrity sha512-sP8AxGrFJ/kb7ygFpGkssdD/vKSTqdZDJbw3pJKTCa1C0UoT+0+rdUWy2fZqvhvvdpHG+OCJ4G8O7OZqVIa+BA==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-dom@^17.0.1":
   version "17.0.1"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.1.tgz#d92d77d020bfb083e07cc8e0ac9f933599a4d56a"

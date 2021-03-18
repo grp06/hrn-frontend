@@ -24,8 +24,19 @@ const getHostEventsAndPartners = gql`
         rating
         user {
           name
+          id
           email
         }
+        partner {
+          name
+          id
+          email
+        }
+      }
+      host {
+        name
+        email
+        id
       }
       public_event
       num_rounds

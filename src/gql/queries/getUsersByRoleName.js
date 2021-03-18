@@ -13,6 +13,7 @@ const getUsersByRoleName = gql`
       sub_period_end
       role
       became_host_at
+      profile_pic_url
       linkedIn_url
     }
   }

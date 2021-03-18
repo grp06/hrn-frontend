@@ -96,7 +96,7 @@ const EventProvider = ({ children }) => {
   }, [dispatch, eventId, userOnEventPage])
 
   useEffect(() => {
-    if (!eventId && eventIdFromUrl) {
+    if (!eventId && eventIdFromUrl && userOnEventPage) {
       dispatch((draft) => {
         draft.eventId = parseInt(eventIdFromUrl, 10)
       })

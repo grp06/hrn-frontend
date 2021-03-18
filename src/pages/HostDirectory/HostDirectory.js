@@ -4,15 +4,15 @@ import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
-import { HostInfoTable, usePaidHostDashboardStyles } from '.'
+import { HostInfoTable, useHostDirec, useHostDirectoryStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'
 import { constants } from '../../utils'
 
 const PaidHostDashboard = () => {
-  const classes = usePaidHostDashboardStyles()
-  const user = useUserContext()
+  const classes = useHostDirectoryStyles()
+  const { user } = useUserContext()
   const { adminUserIds, hrnFriendsUserIds } = constants
   const { id: userId } = user
   const [numberOfDaysToCompare, setNumberOfDaysToCompare] = useState(1)
@@ -42,7 +42,7 @@ const PaidHostDashboard = () => {
     return <Redirect to="/" />
   }
 
-  if ((hostDataLoading, hostStarterDataLoading, hostPremiumDataLoading)) {
+  if (hostDataLoading || hostStarterDataLoading || hostPremiumDataLoading) {
     return <Loading />
   }
 
@@ -127,11 +127,11 @@ const PaidHostDashboard = () => {
 
     return (
       <Grid container direction="column">
+        {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
+        {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
         {unpaidHosts && unpaidHosts.length ? (
           <HostInfoTable arrayOfHosts={unpaidHosts} hideSubPeriodEnd />
         ) : null}
-        {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
-        {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
       </Grid>
     )
   }
@@ -140,7 +140,7 @@ const PaidHostDashboard = () => {
 
   return (
     <Grid container>
-      <Grid container direction="row" alignItem="center" justify="space-around">
+      <Grid container direction="row" alignItems="center" justify="space-around">
         <Typography variant="h1" className={classes.revenueNumber}>
           $ {revenueStats.totalRevenue} TR
         </Typography>
