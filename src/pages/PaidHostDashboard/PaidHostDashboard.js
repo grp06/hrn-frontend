@@ -12,7 +12,7 @@ import { constants } from '../../utils'
 
 const PaidHostDashboard = () => {
   const classes = usePaidHostDashboardStyles()
-  const user = useUserContext()
+  const { user } = useUserContext()
   const { adminUserIds, hrnFriendsUserIds } = constants
   const { id: userId } = user
   const [numberOfDaysToCompare, setNumberOfDaysToCompare] = useState(1)
@@ -38,11 +38,11 @@ const PaidHostDashboard = () => {
     },
   })
 
-  if (userId && !adminUserIds.includes(userId)) {
-    return <Redirect to="/" />
-  }
+  // if (userId && !adminUserIds.includes(userId)) {
+  //   return <Redirect to="/" />
+  // }
 
-  if ((hostDataLoading, hostStarterDataLoading, hostPremiumDataLoading)) {
+  if (hostDataLoading || hostStarterDataLoading || hostPremiumDataLoading) {
     return <Loading />
   }
 
@@ -140,7 +140,7 @@ const PaidHostDashboard = () => {
 
   return (
     <Grid container>
-      <Grid container direction="row" alignItem="center" justify="space-around">
+      <Grid container direction="row" alignItems="center" justify="space-around">
         <Typography variant="h1" className={classes.revenueNumber}>
           $ {revenueStats.totalRevenue} TR
         </Typography>

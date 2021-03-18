@@ -60,3 +60,7 @@ export interface OnlineEventUsersInterface {
   user: { [user: string]: UserObjectInterface }[]
   side: string | null
 }
+
+export interface EventUsersInterface {
+  event_users: { [event: string]: EventObjectInterface }[]
+}

@@ -1,6 +1,8 @@
 import React from 'react'
 import moment from 'moment-timezone'
+import { useHistory } from 'react-router-dom'
 import {
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -10,11 +12,17 @@ import {
   TableRow,
   Typography,
 } from '@material-ui/core'
+import PersonPinIcon from '@material-ui/icons/PersonPin'
 
 import { usePaidHostDashboardStyles } from '.'
 
 const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
   const classes = usePaidHostDashboardStyles()
+  const history = useHistory()
+
+  const handleMoreHostInfoClick = (host_id) => {
+    history.push(`/paid-host-dashboard/${host_id}`, { host_id })
+  }
 
   const renderLinkedInLink = (linkedInURL) => {
     if (linkedInURL) {
@@ -31,6 +39,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
     }
     return 'N/A'
   }
+
   return (
     <div className={classes.hostInfoContainer}>
       <Typography variant="h3" style={{ marginBottom: '16px' }}>
@@ -49,9 +58,15 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {arrayOfHosts.map((host) => (
+            {arrayOfHosts.map((host, idx) => (
               <TableRow key={host.name}>
                 <TableCell component="th" scope="row">
+                  <IconButton
+                    color={(idx + 1) % 2 === 0 ? 'secondary' : 'default'}
+                    onClick={() => handleMoreHostInfoClick(host.id)}
+                  >
+                    <PersonPinIcon />
+                  </IconButton>
                   {host.name}
                 </TableCell>
                 <TableCell align="right">{host.email}</TableCell>
