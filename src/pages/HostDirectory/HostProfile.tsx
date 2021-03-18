@@ -70,7 +70,6 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
 
   const renderEventPanels = () => {
     return usersEventsArray.map((event, idx) => {
-      console.log('event ->', event)
       return (
         <div key={idx} style={{ marginBottom: '8px' }}>
           <HostEventExpansionPanel event={event} />

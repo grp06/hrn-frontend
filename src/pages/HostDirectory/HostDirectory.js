@@ -38,9 +38,9 @@ const PaidHostDashboard = () => {
     },
   })
 
-  // if (userId && !adminUserIds.includes(userId)) {
-  //   return <Redirect to="/" />
-  // }
+  if (userId && !adminUserIds.includes(userId)) {
+    return <Redirect to="/" />
+  }
 
   if (hostDataLoading || hostStarterDataLoading || hostPremiumDataLoading) {
     return <Loading />

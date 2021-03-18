@@ -18,6 +18,7 @@ const getEventsByUserId = gql`
         public_event
         group_video_chat
         banner_photo_url
+        matching_type
         event_users {
           user {
             id
@@ -27,24 +28,6 @@ const getEventsByUserId = gql`
         host {
           name
           profile_pic_url
-        }
-      }
-      partners {
-        user_id
-        partner_id
-        i_shared_details
-        partner_shared_details
-        round
-        rating
-        user {
-          name
-          id
-          email
-        }
-        partner {
-          name
-          id
-          email
         }
       }
     }
