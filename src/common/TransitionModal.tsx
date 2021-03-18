@@ -15,7 +15,6 @@ const TransitionModal: React.FC<TransitionModalInterface> = ({
   onCloseFunction,
   onCloseButtonText,
 }) => {
-  console.log('hiii im the transiton Modal')
   const classes = useCommonComponentStyles()
   const { buttonText, buttonVariant, buttonColor, buttonSize, buttonStyle } = button || {}
   const { iconButtonColor, iconButtonSize, iconButtonIcon } = iconButton || {}

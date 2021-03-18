@@ -19,10 +19,8 @@ const BottomControlPanel = ({
 }) => {
   const classes = useLobbyStyles()
   const { start_at: eventStartTime, id: eventId, host_id, status: eventStatus } = event
-  console.log('🚀 ~ event', event)
   const timeUntilEvent = getTimeUntilEvent(eventStartTime)
   const userIsHost = host_id === userId
-  console.log('🚀 ~ userIsHost', userIsHost)
 
   const renderResetEvent = (
     <TransitionModal

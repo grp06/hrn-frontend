@@ -138,7 +138,6 @@ const Onboarding = () => {
                   placeholder="Type in your city"
                   onSuggestSelectCallback={(suggest) => {
                     if (suggest) {
-                      console.log(suggest.gmaps.name)
                       form.setFieldValue('city', suggest.gmaps.name)
                     }
                   }}

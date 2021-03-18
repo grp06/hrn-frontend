@@ -71,7 +71,6 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   }
 
   const handleTakeABreak = () => {
-    console.log('hello from handle take a break')
     setUserEventStatus('sitting out')
   }
 
