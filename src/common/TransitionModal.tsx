@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState } from 'react'
 import { Backdrop, Button, Fade, Grid, IconButton, Modal } from '@material-ui/core'
 import { useCommonComponentStyles } from '.'
@@ -40,7 +41,6 @@ const TransitionModal: React.FC<TransitionModalInterface> = ({
   const renderButton = () => {
     if (iconButton) {
       return (
-        // @ts-ignore
         <IconButton
           disableRipple
           size={iconButtonSize || 'medium'}
@@ -52,7 +52,6 @@ const TransitionModal: React.FC<TransitionModalInterface> = ({
       )
     }
     return (
-      // @ts-ignore
       <Button
         disableRipple
         size={buttonSize || 'large'}
