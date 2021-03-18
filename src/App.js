@@ -19,7 +19,7 @@ import {
   ForgotPassword,
   HostDashboard,
   HostDirectory,
-  HostEventProfile,
+  HostProfile,
   HostOnboarding,
   HRNAnalytics,
   Lobby,
@@ -89,7 +89,7 @@ const App = () => {
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
                     <Route exact path="/host-directory" component={HostDirectory} />
-                    <Route exact path="/host-directory/:id" component={HostEventProfile} />
+                    <Route exact path="/host-directory/:id" component={HostProfile} />
                     <Route exact path="/subscription" component={Subscription} />
                     <Route exact path="/my-events" component={MyEvents} />
                     <Route exact path="/events" component={EventsPublic} />

@@ -31,7 +31,7 @@ const useHostDirectoryStyles = makeStyles((theme) => ({
     margin: theme.spacing('100px', 'auto'),
   },
   // *****************************
-  //   HostEventProfile
+  //   HostProfile
   // *****************************
   downloadButton: {
     alignItems: 'center',

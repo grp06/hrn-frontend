@@ -9,7 +9,7 @@ import { Loading } from '../../common'
 import { getHostEventsAndPartners } from '../../gql/queries'
 import { getEventDataCSV, EventObjectInterface } from '../../utils/'
 
-interface HostEventProfileProps {
+interface HostProfileProps {
   location: any
 }
 
@@ -21,7 +21,7 @@ interface EventsDataVars {
   user_id: number
 }
 
-const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
+const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
   const classes = useHostDirectoryStyles()
   const history = useHistory()
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
@@ -92,4 +92,4 @@ const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
   )
 }
 
-export default HostEventProfile
+export default HostProfile
