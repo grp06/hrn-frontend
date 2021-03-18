@@ -3,8 +3,8 @@ import twoSidedMatching from '../assets/twoSidedMatchingIcon.svg'
 
 const constants = {
   // change me back to 20000?
-  // george, stephen, max, jasper
-  adminUserIds: [8, 12, 115, 5218],
+  // george, stephen, max, jasper, yamila
+  adminUserIds: [8, 12, 115, 5218, 6069],
   // seibo, ash, parker, karl, nino
   hrnFriendsUserIds: [2926, 3974, 4888, 5895, 6246],
   lastSeenDuration: 5000,
@@ -33,6 +33,19 @@ const constants = {
     'Snail mail delivered 🐌',
     'Sent via pony express 🐴',
     "Hedwig's on her way 🦉",
+  ],
+  connectingYouToSomeoneMessagesArray: [
+    ['Connecting you to someone awesome!', 'Give us a few seconds to roll out your red carpet 💃.'],
+    ['We think this next person is a gem!', 'Hang tight, connecting you two in a bit 💎.'],
+    [
+      'Got someone awesome on the other line for you!',
+      'Please hold for a few seconds while we connect all the wires 👷‍♀️.',
+    ],
+    ["Don't go anywhere!", "There's someone here that just can't wait to get to know you 🥺."],
+    [
+      "We're excited for you to meet this next person!",
+      'Just a few seconds more while we show them to the room 🦮.',
+    ],
   ],
   matchingOptionCardObjects: [
     {
