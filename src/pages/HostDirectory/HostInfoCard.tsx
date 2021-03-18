@@ -38,11 +38,11 @@ const HostInfoCard: React.FC<HostInfoCardProps> = ({ hostInfo }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        profile
+        LinkedIn Profile
       </a>
     ) : (
       <Typography variant="body1">
-        No linkedIn{' '}
+        No LinkedIn Profile{' '}
         <span role="img" aria-label="sad cry">
           😥
         </span>{' '}

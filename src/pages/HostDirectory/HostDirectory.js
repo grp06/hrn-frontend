@@ -127,11 +127,11 @@ const PaidHostDashboard = () => {
 
     return (
       <Grid container direction="column">
+        {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
+        {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
         {unpaidHosts && unpaidHosts.length ? (
           <HostInfoTable arrayOfHosts={unpaidHosts} hideSubPeriodEnd />
         ) : null}
-        {starterHosts && starterHosts.length ? <HostInfoTable arrayOfHosts={starterHosts} /> : null}
-        {premiumHosts && premiumHosts.length ? <HostInfoTable arrayOfHosts={premiumHosts} /> : null}
       </Grid>
     )
   }

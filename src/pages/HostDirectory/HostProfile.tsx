@@ -37,7 +37,16 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
       skip: !locationState,
       fetchPolicy: 'no-cache',
       onCompleted: (data) => {
-        setUsersEventsArray(data.events)
+        setUsersEventsArray(
+          data.events.sort((eventA, eventB) => {
+            if (eventA && eventB) {
+              if (Date.parse(eventA.start_at) < Date.parse(eventB.start_at)) {
+                return 1
+              }
+            }
+            return -1
+          })
+        )
       },
     }
   )

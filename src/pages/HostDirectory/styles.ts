@@ -41,11 +41,11 @@ const useHostDirectoryStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'nowrap',
     fontFamily: 'Muli',
-    margin: `0 8px 8px 8px`,
+    margin: theme.spacing(2, 'auto'),
     padding: '8px 20px',
     textAlign: 'center',
     textDecoration: 'none',
-    width: '200px',
+    width: '175px',
   },
   hostedEventsContainer: {
     width: '85%',
@@ -87,6 +87,7 @@ const useHostDirectoryStyles = makeStyles((theme) => ({
     '&:hover': {
       color: theme.palette.common.ghostWhite,
     },
+    fontFamily: 'Muli',
   },
   hostInfoContainer: {
     margin: theme.spacing(4, 'auto'),
