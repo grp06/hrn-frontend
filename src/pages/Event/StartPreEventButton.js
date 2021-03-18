@@ -4,6 +4,9 @@ import { TransitionModal } from '../../common'
 import { startPreEvent } from '../../helpers'
 
 const StartPreEventButton = ({ eventId, timeUntilEvent, disabled }) => {
+  console.log('🚀 ~ StartPreEventButton ~ disabled', disabled)
+  console.log('🚀 ~ StartPreEventButton ~ timeUntilEvent', timeUntilEvent)
+  console.log('🚀 ~ StartPreEventButton ~ eventId', eventId)
   return (
     <TransitionModal
       button={{
