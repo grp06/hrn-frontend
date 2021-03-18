@@ -10,8 +10,8 @@ import { useMutation } from 'react-apollo'
 import { Button, FormLabel, FormControlLabel, Grid, Radio, Typography } from '@material-ui/core'
 import { MatchingOptionCard, useCreateEventStyles } from '.'
 import { Snack } from '../../common'
-import { sleep } from '../../helpers'
-import { upsertEvent, insertEventUser } from '../../gql/mutations'
+import { getUnsplashImageURL, sleep } from '../../helpers'
+import { updateEventBannerPhoto, upsertEvent, insertEventUser } from '../../gql/mutations'
 import { constants } from '../../utils'
 import clsx from 'clsx'
 
@@ -42,6 +42,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
   const [showCreateEventSuccess, setShowCreateEventSuccess] = useState<boolean>(false)
   const [formValidationErrorMessage, setFormValidationErrorMessage] = useState<string>('')
   const [insertEventUserMutation] = useMutation(insertEventUser)
+  const [updateEventBannerPhotoMutation] = useMutation(updateEventBannerPhoto)
   const [upsertEventMutation] = useMutation(upsertEvent, {
     onCompleted: async (data) => {
       const [upsertEventResponse] = data?.insert_events.returning
@@ -60,8 +61,8 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
         matching_type,
       })
       // if we are getting passed eventDetails then the user is editing the event
-      // so dont re-insert them
-      if (!Object.keys(eventDetails).length)
+      // so dont re-insert them and dont change their banner photo
+      if (!Object.keys(eventDetails).length) {
         try {
           await insertEventUserMutation({
             variables: {
@@ -73,6 +74,20 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
         } catch (error) {
           console.log('error = ', error)
         }
+
+        // set the photo banner to a default community image
+        try {
+          const unsplashRequest = await getUnsplashImageURL('community')
+          await updateEventBannerPhotoMutation({
+            variables: {
+              event_id,
+              banner_photo_url: unsplashRequest.image.urls.full,
+            },
+          })
+        } catch (error) {
+          console.log('error =', error)
+        }
+      }
       setShowCreateEventSuccess(true)
       await sleep(800)
       history.push(`/events/${event_id}`)
@@ -80,6 +95,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
   })
 
   const {
+    banner_photo_url,
     event_name,
     description,
     id: eventId,
@@ -105,7 +121,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
 
   const renderMatchingOptionCards = (field: any, form: any) => {
     return matchingOptionCardObjects.map((matchingOption) => {
-      const { allowedRoles, description, databaseValue, imageURL, name } = matchingOption
+      const { description, databaseValue, imageURL, name } = matchingOption
       return (
         <div
           key={databaseValue}
@@ -137,7 +153,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
   return (
     <Grid container direction="column" alignItems="center" justify="center">
       <Typography variant="h2" style={{ fontWeight: 700, marginBottom: '10px' }}>
-        {eventDetails ? 'Edit Your Event' : 'Host An Event'}
+        {Object.keys(eventDetails).length ? 'Edit Your Event' : 'Host An Event'}
       </Typography>
       <Typography variant="h4">Tell us a little about your event</Typography>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -168,6 +184,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
             const start_at = getEventStartAt(values.event_date, values.event_time)
             const isPublicEvent = values.public_event === 'public'
             const event_details = {
+              banner_photo_url,
               description: values.description,
               event_name: values.event_name,
               id: eventId || null,
