@@ -29,6 +29,24 @@ const getEventsByUserId = gql`
           profile_pic_url
         }
       }
+      partners {
+        user_id
+        partner_id
+        i_shared_details
+        partner_shared_details
+        round
+        rating
+        user {
+          name
+          id
+          email
+        }
+        partner {
+          name
+          id
+          email
+        }
+      }
     }
   }
 `

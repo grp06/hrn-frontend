@@ -33,6 +33,11 @@ const getHostEventsAndPartners = gql`
           email
         }
       }
+      host {
+        name
+        email
+        id
+      }
       public_event
       num_rounds
       round_length

@@ -21,7 +21,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
   const history = useHistory()
 
   const handleMoreHostInfoClick = (host) => {
-    history.push(`/paid-host-dashboard/${host.host_id}`, { host })
+    history.push(`/paid-host-dashboard/${host.id}`, { host })
   }
 
   const renderLinkedInLink = (linkedInURL) => {

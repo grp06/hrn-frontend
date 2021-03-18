@@ -31,8 +31,8 @@ const HostEventExpansionPanel: React.FC<HostEventExpansionPanelProps> = ({ event
     const { event_users } = event
     const {
       attendanceRateForEvent,
-      // attendeesCSVofEvent,
-      // RSVPsCSVofEvent,
+      attendeesCSVofEvent,
+      RSVPsCSVofEvent,
       numberOfDropOffsInEvent,
       numberOfEventParticipants,
       numberOfMutualThumbsInEvent,
@@ -42,7 +42,7 @@ const HostEventExpansionPanel: React.FC<HostEventExpansionPanelProps> = ({ event
     } = getEventAnalytics(event)
     return (
       <Grid container direction="column" alignItems="center">
-        {/* <Grid item>
+        <Grid item>
           <CSVLink
             data={RSVPsCSVofEvent.data}
             headers={RSVPsCSVofEvent.headers}
@@ -59,7 +59,7 @@ const HostEventExpansionPanel: React.FC<HostEventExpansionPanelProps> = ({ event
             Dowload list of all attendees
             <FeatherIcon icon="download" stroke="#fff" size="20" />
           </CSVLink>
-        </Grid> */}
+        </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid container justify="flex-start">
             <Typography variant="h4" className={classes.expansionPanelSectionHeading}>
