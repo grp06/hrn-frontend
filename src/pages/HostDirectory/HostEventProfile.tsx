@@ -42,18 +42,18 @@ const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
     }
   )
 
-  const redirectUserBackToPaidHostDashboard = useCallback(() => {
+  const redirectUserBackToHostDirectory = useCallback(() => {
     if (!Object.keys(locationState).length) {
-      return history.push('/paid-host-dashboard')
+      return history.push('/host-directory')
     }
   }, [history, locationState])
 
   useEffect(() => {
-    redirectUserBackToPaidHostDashboard()
+    redirectUserBackToHostDirectory()
     return () => {
       window.history.replaceState({}, '')
     }
-  }, [redirectUserBackToPaidHostDashboard])
+  }, [redirectUserBackToHostDirectory])
 
   if (queryDataLoading) {
     return <Loading />

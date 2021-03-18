@@ -28,7 +28,6 @@ import {
   MyConnections,
   VideoRoom,
   Onboarding,
-  PaidHostDashboard,
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
@@ -89,8 +88,8 @@ const App = () => {
                     <Route exact path="/my-connections" component={MyConnections} />
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
-                    <Route exact path="/paid-host-dashboard" component={PaidHostDashboard} />
-                    <Route exact path="/paid-host-dashboard/:id" component={HostEventProfile} />
+                    <Route exact path="/host-directory" component={HostDirectory} />
+                    <Route exact path="/host-directory/:id" component={HostEventProfile} />
                     <Route exact path="/subscription" component={Subscription} />
                     <Route exact path="/my-events" component={MyEvents} />
                     <Route exact path="/events" component={EventsPublic} />

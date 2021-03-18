@@ -4,14 +4,14 @@ import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
-import { HostInfoTable, usePaidHostDashboardStyles } from '.'
+import { HostInfoTable, useHostDirec, useHostDirectoryStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'
 import { constants } from '../../utils'
 
 const PaidHostDashboard = () => {
-  const classes = usePaidHostDashboardStyles()
+  const classes = useHostDirectoryStyles()
   const { user } = useUserContext()
   const { adminUserIds, hrnFriendsUserIds } = constants
   const { id: userId } = user

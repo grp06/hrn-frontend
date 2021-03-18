@@ -14,14 +14,14 @@ import {
 } from '@material-ui/core'
 import PersonPinIcon from '@material-ui/icons/PersonPin'
 
-import { usePaidHostDashboardStyles } from '.'
+import { useHostD, useHostDirectoryStyles } from '.'
 
 const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
-  const classes = usePaidHostDashboardStyles()
+  const classes = useHostDirectoryStyles()
   const history = useHistory()
 
   const handleMoreHostInfoClick = (host) => {
-    history.push(`/paid-host-dashboard/${host.id}`, { host })
+    history.push(`/host-directory/${host.id}`, { host })
   }
 
   const renderLinkedInLink = (linkedInURL) => {
