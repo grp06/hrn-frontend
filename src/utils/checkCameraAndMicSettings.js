@@ -1,5 +1,4 @@
 const checkCameraAndMicSettings = async () => {
-  console.log('checkCameraAndMicSettings getting called')
   if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
     // Firefox 38+ seems having support of enumerateDevicesx
     navigator.enumerateDevices = function (callback) {
@@ -107,7 +106,6 @@ const checkCameraAndMicSettings = async () => {
         }
 
         if (device.kind === 'videoinput') {
-          console.log('are we checking for webcam or notyoooo')
           hasWebcam = true
         }
 
