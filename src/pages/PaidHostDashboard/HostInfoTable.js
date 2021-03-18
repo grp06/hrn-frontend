@@ -20,8 +20,8 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
   const classes = usePaidHostDashboardStyles()
   const history = useHistory()
 
-  const handleMoreHostInfoClick = (host_id) => {
-    history.push(`/paid-host-dashboard/${host_id}`, { host_id })
+  const handleMoreHostInfoClick = (host) => {
+    history.push(`/paid-host-dashboard/${host.host_id}`, { host })
   }
 
   const renderLinkedInLink = (linkedInURL) => {
@@ -63,7 +63,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
                 <TableCell component="th" scope="row">
                   <IconButton
                     color={(idx + 1) % 2 === 0 ? 'secondary' : 'default'}
-                    onClick={() => handleMoreHostInfoClick(host.id)}
+                    onClick={() => handleMoreHostInfoClick(host)}
                   >
                     <PersonPinIcon />
                   </IconButton>

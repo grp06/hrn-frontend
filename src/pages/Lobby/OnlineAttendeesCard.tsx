@@ -32,6 +32,7 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
 
     // returns an array with two arrays. First array is onlineEventUsers with side a
     // second array is onlineEventUsers with side b
+    console.log('🌈 ~ onlineEventUsers', onlineEventUsers)
     const twoSidedOnlineEventUsers = partition(onlineEventUsers, { side: 'a' })
 
     const populateList = (

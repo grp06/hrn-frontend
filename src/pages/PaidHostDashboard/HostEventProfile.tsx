@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useQuery } from 'react-apollo'
 import { useHistory } from 'react-router-dom'
+import { Grid } from '@material-ui/core'
 
+import { HostInfoCard, HostEventExpansionPanel } from '../HostDirectory'
 import { Loading } from '../../common'
-import { getEventsByUserId } from '../../gql/queries'
+import { getHostEventsAndPartners } from '../../gql/queries'
 import { EventObjectInterface } from '../../utils'
 
 interface HostEventProfileProps {
@@ -28,9 +30,9 @@ const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
   const { data: getEventsByUserIdData, loading: queryDataLoading } = useQuery<
     EventsData,
     EventsDataVars
-  >(getEventsByUserId, {
+  >(getHostEventsAndPartners, {
     variables: {
-      userId: locationState.host_id,
+      user_id: locationState.host.id,
     },
     skip: !locationState,
     fetchPolicy: 'no-cache',
@@ -38,8 +40,6 @@ const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
       setUsersEventsArray(data.event_users)
     },
   })
-  console.log('🌈 ~ getEventsByUserIdData', getEventsByUserIdData)
-  console.log('usersEventsArray ->', usersEventsArray)
 
   const redirectUserBackToPaidHostDashboard = useCallback(() => {
     if (!Object.keys(locationState).length) {
@@ -58,7 +58,24 @@ const HostEventProfile: React.FC<HostEventProfileProps> = ({ location }) => {
     return <Loading />
   }
 
-  return <div>Hello</div>
+  const renderEventPanels = () => {
+    return usersEventsArray.map((event) => {
+      return (
+        <div key={event.event.id} style={{ marginBottom: '8px' }}>
+          <HostEventExpansionPanel event={event.event} />
+        </div>
+      )
+    })
+  }
+
+  return (
+    <Grid container direction="column">
+      <HostInfoCard hostInfo={locationState.host} />
+      <Grid container style={{ width: '85%' }}>
+        {renderEventPanels()}
+      </Grid>
+    </Grid>
+  )
 }
 
 export default HostEventProfile

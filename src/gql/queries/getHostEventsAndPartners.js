@@ -24,6 +24,12 @@ const getHostEventsAndPartners = gql`
         rating
         user {
           name
+          id
+          email
+        }
+        partner {
+          name
+          id
           email
         }
       }
