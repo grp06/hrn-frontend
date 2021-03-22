@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion, useAnimation } from 'framer-motion'
 import HelpOutlineIcon from '@material-ui/icons/HelpOutline'
 import { useVideoRoomStyles } from '.'
 
-export interface MysteryBoxProps {}
+export interface MysteryQuestionBoxProps {
+  onBoxClick: Function
+}
 
 const jumpSpin = {
-  scale: [1, 2, 2, 1],
+  scale: [1, 1.5, 1.5, 1],
   rotate: [0, 0, 360, 360],
   backgroundColor: ['#FF99AD', '#fabb5b', '#FF99AD', '#fabb5b'],
   borderRadius: ['4px', '4px', '50%', '50%'],
@@ -16,16 +18,22 @@ const rotateAround = {
   rotate: 720,
   rotateY: 720,
 }
-const MysteryBox: React.FC<MysteryBoxProps> = () => {
+
+const MysteryQuestionBox: React.FC<MysteryQuestionBoxProps> = ({ onBoxClick }) => {
   const classes = useVideoRoomStyles()
+  const [userHasClicked, setUserHasClicked] = useState<boolean>(false)
   const anim = useAnimation()
   return (
     <motion.div
-      className={classes.mysteryBox}
+      className={classes.mysteryQuestionBox}
       animate={anim}
       onTap={async () => {
-        await anim.start(jumpSpin)
-        await anim.start(rotateAround)
+        if (!userHasClicked) {
+          await anim.start(jumpSpin)
+          await anim.start(rotateAround)
+          onBoxClick()
+          setUserHasClicked(true)
+        }
       }}
       transition={{
         duration: 2.5,
@@ -37,4 +45,4 @@ const MysteryBox: React.FC<MysteryBoxProps> = () => {
   )
 }
 
-export default MysteryBox
+export default MysteryQuestionBox

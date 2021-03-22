@@ -1,7 +1,6 @@
 import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { useCreateEventStyles } from '.'
-import clsx from 'clsx'
 
 interface MatchingOptionCardProps {
   description: string

@@ -21,12 +21,22 @@ const UserEventStatusContext = createContext()
 // waiting for match
 // reported
 const defaultState = {
-  userEventStatus: 'waiting for match',
-  onlineEventUsers: [],
-  userHasEnabledCameraAndMic: false,
-  personalChatMessagesWithCurrentPartner: [],
   numberOfReadMessagesFromMyPartner: 0,
   numberOfUnreadMessagesFromMyPartner: 0,
+  onlineEventUsers: [],
+  personalChatMessagesWithCurrentPartner: [],
+  userEventStatus: 'waiting for match',
+  userHasEnabledCameraAndMic: false,
+  icebreakerQuestions: [
+    { category: 'Profound 🙇‍♀️', question: 'What makes your heart glow?' },
+    { category: 'Profound 🙇‍♀️', question: 'What memory instantly makes you smile?' },
+    { category: 'Profound 🙇‍♀️', question: 'What would you like to attract more of in your life?' },
+    {
+      category: 'Workplace 💼',
+      question: 'Who is your favorite person to work with in the company?',
+    },
+    { category: 'Workplace 💼', question: 'What do you most like about your job and why? ' },
+  ],
 }
 
 const useUserEventStatusContext = () => {
@@ -34,6 +44,12 @@ const useUserEventStatusContext = () => {
 
   if (dispatch === undefined) {
     throw new Error('Must have dispatch defined')
+  }
+
+  const removeIcebreakerQuestion = (index) => {
+    dispatch((draft) => {
+      draft.icebreakerQuestions = draft.icebreakerQuestions.splice(index, 1)
+    })
   }
 
   const setNumberOfReadMessagesFromMyPartner = (readMessagesCount) => {
@@ -57,6 +73,7 @@ const useUserEventStatusContext = () => {
 
   return {
     ...state,
+    removeIcebreakerQuestion,
     setNumberOfReadMessagesFromMyPartner,
     setUserEventStatus,
     setUserHasEnabledCameraAndMic,

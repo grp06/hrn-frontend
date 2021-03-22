@@ -7,6 +7,7 @@ import {
   RoundAndPartnerCard,
   AddFriendButton,
   useVideoRoomStyles,
+  IcebreakerQuestionCard,
 } from '.'
 
 const VideoRoomSidebar = ({ event, myRound, myTagsArray, userId }) => {
@@ -21,6 +22,7 @@ const VideoRoomSidebar = ({ event, myRound, myTagsArray, userId }) => {
           myRound={myRound}
           addFriendButton={<AddFriendButton myRound={myRound} />}
         />
+        <IcebreakerQuestionCard />
         <PartnerTagsList myRound={myRound} myTagsArray={myTagsArray} />
       </Grid>
     </>

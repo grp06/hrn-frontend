@@ -104,20 +104,34 @@ const useVideoRoomStyles = makeStyles((theme) => ({
   icebreakerQuestionCard: {
     backgroundColor: theme.palette.common.greyCard,
     borderRadius: '4px',
-    width: '40%',
-    height: '250px',
-    margin: theme.spacing(3),
+    height: 'auto',
+    margin: theme.spacing(1, 0),
+    padding: theme.spacing(2),
+    width: '100%',
   },
-  mysteryBox: {
-    height: '50px',
-    width: '50px',
+  mysteryQuestionBox: {
+    alignItems: 'center',
     backgroundColor: theme.palette.common.basePink,
     border: '2px solid #000000',
     borderRadius: '4px',
     cursor: 'pointer',
     display: 'flex',
+    height: '40px',
     justifyContent: 'center',
-    alignItems: 'center',
+    width: '40px',
+  },
+  questionContainer: {
+    backgroundColor: theme.palette.common.greyHover,
+    borderRadius: '4px',
+    marginLeft: theme.spacing(0.5),
+    padding: theme.spacing(0.5, 1),
+    width: '75%',
+  },
+  questionDividerLine: {
+    backgroundColor: theme.palette.common.greySubtitle,
+    height: '1px',
+    margin: theme.spacing(0.25, 0, 0.75, 0),
+    width: '15%',
   },
   // *****************************
   //   In Video Bottom Control Panel
