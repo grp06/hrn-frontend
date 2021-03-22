@@ -39,6 +39,7 @@ import MarginLeftAppWrapper from './ui/MarginLeftAppWrapper'
 import GetTagsModal from './ui/Subheader/GetTagsModal'
 import ProfilePictureModal from './ui/Subheader/ProfilePictureModal'
 import theme from './ui/theme'
+import { IcebreakerQuestionCard } from './pages/VideoRoom'
 
 const App = () => {
   const [client, setClient] = useState(null)
@@ -72,6 +73,7 @@ const App = () => {
                 <Switch>
                   <MarginLeftAppWrapper>
                     <Route exact path="/" component={LoginForm} />
+                    <Route exact path="/sandbox" component={IcebreakerQuestionCard} />
                     <Route exact path="/sign-up" component={SignUp} />
                     <Route exact path="/forgot-password" component={ForgotPassword} />
                     <Route

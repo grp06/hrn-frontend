@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { makeStyles } from '@material-ui/styles'
 import ConfettiDoodlesSmallerScale from '../../assets/ConfettiDoodlesSmallerScale.svg'
 import { constants } from '../../utils'
@@ -97,7 +98,27 @@ const useVideoRoomStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: theme.spacing(1),
   },
-
+  // *****************************
+  //   IcebreakerQuestionCard
+  // *****************************
+  icebreakerQuestionCard: {
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    width: '40%',
+    height: '250px',
+    margin: theme.spacing(3),
+  },
+  mysteryBox: {
+    height: '50px',
+    width: '50px',
+    backgroundColor: theme.palette.common.basePink,
+    border: '2px solid #000000',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   // *****************************
   //   In Video Bottom Control Panel
   // *****************************
