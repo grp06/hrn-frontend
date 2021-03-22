@@ -10,7 +10,7 @@ import {
   IcebreakerQuestionCard,
 } from '.'
 
-const VideoRoomSidebar = ({ event, myRound, myTagsArray, userId }) => {
+const VideoRoomSidebar = ({ event, icebreakerQuestions, myRound, myTagsArray, userId }) => {
   const classes = useVideoRoomStyles()
   const { host_id } = event
   return (
@@ -22,7 +22,7 @@ const VideoRoomSidebar = ({ event, myRound, myTagsArray, userId }) => {
           myRound={myRound}
           addFriendButton={<AddFriendButton myRound={myRound} />}
         />
-        <IcebreakerQuestionCard />
+        <IcebreakerQuestionCard icebreakerQuestionsArray={icebreakerQuestions} />
         <PartnerTagsList myRound={myRound} myTagsArray={myTagsArray} />
       </Grid>
     </>

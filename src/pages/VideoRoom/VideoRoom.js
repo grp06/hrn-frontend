@@ -28,6 +28,7 @@ const VideoRoom = () => {
   const { user, userContextLoading } = useUserContext()
   const { event, eventContextLoading } = useEventContext()
   const {
+    icebreakerQuestions,
     personalChatMessagesWithCurrentPartner,
     numberOfUnreadMessagesFromMyPartner,
     setNumberOfReadMessagesFromMyPartner,
@@ -241,7 +242,13 @@ const VideoRoom = () => {
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
       />
-      <VideoRoomSidebar event={event} myRound={myRound} myTagsArray={myTagsArray} userId={userId} />
+      <VideoRoomSidebar
+        event={event}
+        icebreakerQuestions={icebreakerQuestions}
+        myRound={myRound}
+        myTagsArray={myTagsArray}
+        userId={userId}
+      />
       <div className={classes.videoWrapper}>
         <div id="local-video" className={`${clsx(classes.myVideo, { showControls })}`} />
         <div id="remote-video" className={classes.mainVid} />

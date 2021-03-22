@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, createContext, useContext } from 'react'
 
-import { useSubscription, useMutation } from '@apollo/react-hooks'
+import { useLazyQuery, useSubscription, useMutation } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
 import { useUserContext, useEventContext, useTwilioContext } from '.'
 import { updateEventUsersLastSeen } from '../gql/mutations'
 import { constants } from '../utils'
 import { listenToChatMessages, listenToOnlineEventUsers } from '../gql/subscriptions'
+import { getIcebreakerQuestions } from '../gql/queries'
 
 const { lastSeenDuration, bannedUserIds } = constants
 
@@ -27,16 +28,7 @@ const defaultState = {
   personalChatMessagesWithCurrentPartner: [],
   userEventStatus: 'waiting for match',
   userHasEnabledCameraAndMic: false,
-  icebreakerQuestions: [
-    { category: 'Profound 🙇‍♀️', question: 'What makes your heart glow?' },
-    { category: 'Profound 🙇‍♀️', question: 'What memory instantly makes you smile?' },
-    { category: 'Profound 🙇‍♀️', question: 'What would you like to attract more of in your life?' },
-    {
-      category: 'Workplace 💼',
-      question: 'Who is your favorite person to work with in the company?',
-    },
-    { category: 'Workplace 💼', question: 'What do you most like about your job and why? ' },
-  ],
+  icebreakerQuestions: [],
 }
 
 const useUserEventStatusContext = () => {
@@ -98,6 +90,15 @@ const UserEventStatusProvider = ({ children }) => {
     history.push(`/events/${event.id}/lobby`)
   }, [event.id, history])
 
+  const [getIcebreakerQuestionsQuery] = useLazyQuery(getIcebreakerQuestions, {
+    onCompleted: (data) => {
+      const questions = data.ice_breakers
+      dispatch((draft) => {
+        draft.icebreakerQuestions = questions
+      })
+    },
+  })
+
   const [updateEventUsersLastSeenMutation] = useMutation(updateEventUsersLastSeen, {
     variables: {
       now: new Date().toISOString(),
@@ -137,6 +138,13 @@ const UserEventStatusProvider = ({ children }) => {
       })
     }
   }, [onlineEventUsersData, dispatch])
+
+  // when we enter the event get the icebreaker questions from the DB
+  useEffect(() => {
+    if (userInEvent) {
+      getIcebreakerQuestionsQuery()
+    }
+  }, [userInEvent])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
