@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/react-hooks'
 import partition from 'lodash/partition'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
@@ -14,26 +15,49 @@ import {
 } from '@material-ui/core'
 import { useLobbyStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { OnlineEventUsersInterface } from '../../utils'
+import { insertPartnersByRequestToChat } from '../../gql/mutations'
+import { EventObjectInterface, OnlineEventUsersInterface, UserObjectInterface } from '../../utils'
 
 interface OnlineAttendeesCardProps {
-  eventStatus: string
-  matching_type: string
+  event: EventObjectInterface
   onlineEventUsers: OnlineEventUsersInterface[]
-  side_aLabel: string
-  side_bLabel: string
+  userId?: string
 }
 
 const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
-  ({ eventStatus, matching_type, onlineEventUsers, side_aLabel, side_bLabel }) => {
+  ({ event, onlineEventUsers, userId }) => {
     const classes = useLobbyStyles()
+    const {
+      current_round,
+      id: event_id,
+      matching_type,
+      side_a: side_aLabel,
+      side_b: side_bLabel,
+      status: eventStatus,
+    } = event
     const [seeMore, setSeeMore] = useState<boolean>(false)
     const maxIndexToShowTo = matching_type === 'two-sided' ? 2 : 4
 
     // returns an array with two arrays. First array is onlineEventUsers with side a
     // second array is onlineEventUsers with side b
-    console.log('🌈 ~ onlineEventUsers', onlineEventUsers)
     const twoSidedOnlineEventUsers = partition(onlineEventUsers, { side: 'a' })
+
+    const [insertPartnersByRequestToChatMutation] = useMutation(insertPartnersByRequestToChat)
+
+    const handleRequestToChat = async (partner_id: number | UserObjectInterface) => {
+      try {
+        await insertPartnersByRequestToChatMutation({
+          variables: {
+            event_id,
+            partner_id,
+            round: 1,
+            user_id: userId,
+          },
+        })
+      } catch (err) {
+        alert(err)
+      }
+    }
 
     const populateList = (
       eventUsersArray: OnlineEventUsersInterface[]
@@ -60,11 +84,23 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText disableTypography>
-                  <Grid container direction="row" alignItems="center" justify="flex-start">
-                    <Typography variant="body1" style={{ fontWeight: 500 }}>
-                      {user[0].name}
-                    </Typography>
-                    <Typography variant="subtitle1">, {user[0].city}</Typography>
+                  <Grid container direction="row" alignItems="center" justify="space-between">
+                    <Grid container direction="row" alignItems="center" style={{ width: 'auto' }}>
+                      <Typography variant="body1" style={{ fontWeight: 500 }}>
+                        {user[0].name}
+                      </Typography>
+                      <Typography variant="subtitle1">, {user[0].city}</Typography>
+                    </Grid>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      color="primary"
+                      disableRipple
+                      style={{ minWidth: 0 }}
+                      onClick={() => handleRequestToChat(user[0].id)}
+                    >
+                      Request to chat
+                    </Button>
                   </Grid>
                 </ListItemText>
               </ListItem>
@@ -94,7 +130,7 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
               ? `Online Attendees (${onlineEventUsers.length})`
               : `Attendees in the Lobby (${onlineEventUsers.length})`}
           </Typography>
-          <List dense>
+          <List style={{ width: '100%' }} dense>
             {matching_type === 'two-sided' ? (
               <>
                 <Typography variant="body1" className={classes.side_aLabel}>
