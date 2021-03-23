@@ -1,5 +1,6 @@
 export { default as BottomControlPanel } from './BottomControlPanel'
 export { default as CameraAndMicSetupScreen } from './CameraAndMicSetupScreen'
+export { default as ChatRequestedModal } from './ChatRequestedModal'
 export { default as EventCountdown } from './EventCountdown'
 export { default as LobbyContent } from './LobbyContent'
 export { default as Lobby } from './Lobby'

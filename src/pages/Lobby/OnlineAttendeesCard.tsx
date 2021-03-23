@@ -46,12 +46,23 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
 
     const handleRequestToChat = async (partner_id: number | UserObjectInterface) => {
       try {
+        // insert a row for yourself
         await insertPartnersByRequestToChatMutation({
           variables: {
             event_id,
             partner_id,
             round: 1,
             user_id: userId,
+          },
+        })
+
+        //insert a row for your partner so they can get the notification from the subscription
+        await insertPartnersByRequestToChatMutation({
+          variables: {
+            event_id,
+            partner_id: userId,
+            round: 1,
+            user_id: partner_id,
           },
         })
       } catch (err) {

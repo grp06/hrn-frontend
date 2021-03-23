@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import {
   BottomControlPanel,
+  ChatRequestedModal,
   CameraAndMicSetupScreen,
   EventCountdown,
   NextRoundIn,
@@ -24,7 +25,6 @@ const Lobby = () => {
     eventContextLoading,
   } = useEventContext()
   const { user, userContextLoading } = useUserContext()
-  const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
     setUserEventStatus,
@@ -43,23 +43,27 @@ const Lobby = () => {
     id: eventId,
   } = event
   const { id: user_id, name: usersName } = user
+  const [chatIsOpen, setChatIsOpen] = useState(true)
+  const [chatWasRequested, setChatWasRequested] = useState(false)
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
-  const skipListenToPartnersTableSub =
-    !user_id ||
-    !eventId ||
-    !round ||
-    eventStatus === 'not-started' ||
-    eventStatus === 'pre-event' ||
-    ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
-      eventStatus === 'room-in-progress')
+  // const skipListenToPartnersTableSub =
+  //   !user_id ||
+  //   !eventId ||
+  //   !round ||
+  //   eventStatus === 'not-started' ||
+  //   eventStatus === 'pre-event' ||
+  //   ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
+  //     eventStatus === 'room-in-progress')
+
+  const skipListenToPartnersTableSub = !user_id || !eventId
 
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
       event_id: eventId,
       user_id: user_id,
-      round,
+      round: 1,
     },
     skip: skipListenToPartnersTableSub,
   })
@@ -109,6 +113,8 @@ const Lobby = () => {
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
         myRoundData?.partners.length &&
+        myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== 'pending' &&
+        myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== 'declined' &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
@@ -123,6 +129,17 @@ const Lobby = () => {
     userEventStatus,
     userHasEnabledCameraAndMic,
   ])
+
+  useEffect(() => {
+    if (
+      myRoundData?.partners.length &&
+      myRoundData?.partners[myRoundData.partners.length - 1].chat_request === 'pending'
+    ) {
+      console.log('hey i got reuested')
+      console.log('💕 myRoundData ->', myRoundData)
+      setChatWasRequested(myRoundData.partners[myRoundData.partners.length - 1])
+    }
+  }, [myRoundData])
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
@@ -169,6 +186,7 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
+      {chatWasRequested ? <ChatRequestedModal /> : null}
     </div>
   )
 }
