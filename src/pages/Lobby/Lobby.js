@@ -186,7 +186,7 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
-      {chatWasRequested ? <ChatRequestedModal /> : null}
+      {chatWasRequested ? <ChatRequestedModal chatWasRequested={chatWasRequested} /> : null}
     </div>
   )
 }

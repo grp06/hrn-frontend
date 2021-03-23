@@ -82,6 +82,14 @@ const useLobbyStyles = makeStyles((theme) => ({
   // *****************************
   //   ChatRequestedModal
   // *****************************
+  chatRequestedPartnerAvatarContainer: {
+    height: '75px',
+    width: '75px',
+  },
+  chatRequestedPartnerAvatar: {
+    height: '100%',
+    width: '100%',
+  },
   modalAcceptButton: {
     margin: theme.spacing(1.5, 0),
   },

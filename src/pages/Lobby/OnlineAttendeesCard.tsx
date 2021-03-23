@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { useLobbyStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { insertPartnersByRequestToChat } from '../../gql/mutations'
+import { upsertPartnersRequestToChat } from '../../gql/mutations'
 import { EventObjectInterface, OnlineEventUsersInterface, UserObjectInterface } from '../../utils'
 
 interface OnlineAttendeesCardProps {
@@ -42,31 +42,35 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
     // second array is onlineEventUsers with side b
     const twoSidedOnlineEventUsers = partition(onlineEventUsers, { side: 'a' })
 
-    const [insertPartnersByRequestToChatMutation] = useMutation(insertPartnersByRequestToChat)
+    const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
 
     const handleRequestToChat = async (partner_id: number | UserObjectInterface) => {
       try {
-        // insert a row for yourself
-        await insertPartnersByRequestToChatMutation({
+        // insert a row for yourself and then a row for your partner so
+        // they can get the notification from the subscription in the Lobby
+        await upsertPartnersRequestToChatMutation({
           variables: {
-            event_id,
-            partner_id,
-            round: 1,
-            user_id: userId,
-          },
-        })
-
-        //insert a row for your partner so they can get the notification from the subscription
-        await insertPartnersByRequestToChatMutation({
-          variables: {
-            event_id,
-            partner_id: userId,
-            round: 1,
-            user_id: partner_id,
+            partner_row: [
+              {
+                chat_request: 'request_sent',
+                event_id,
+                partner_id,
+                round: 1,
+                user_id: userId,
+              },
+              {
+                chat_request: 'pending',
+                event_id,
+                partner_id: userId,
+                round: 1,
+                user_id: partner_id,
+              },
+            ],
           },
         })
       } catch (err) {
         alert(err)
+        console.log(err)
       }
     }
 

@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
-import { Backdrop, Button, Fade, Grid, Modal, Typography } from '@material-ui/core'
+import { Avatar, Backdrop, Button, Fade, Grid, Modal, Typography } from '@material-ui/core'
 import { useLobbyStyles } from '.'
+import logo from '../../assets/HRNlogoNoFrame.svg'
+import { PartnersObjectInterface } from '../../utils'
 
-export interface ChatRequestedModalProps {}
+export interface ChatRequestedModalProps {
+  chatWasRequested: PartnersObjectInterface
+}
 
-const ChatRequestedModal: React.FC<ChatRequestedModalProps> = () => {
+const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatWasRequested }) => {
   const classes = useLobbyStyles()
-  const [open, setOpen] = useState<boolean>(false)
+  const { partner } = chatWasRequested
+  const { city: partnersCity, name: partnersName, profile_pic_url: partnersPicURL } = partner
+  const [open, setOpen] = useState<boolean>(true)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState<boolean>(false)
 
   const closeModal = () => {
@@ -35,7 +41,37 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = () => {
           className={classes.modalPaper}
         >
           <Grid container justify="center" className={classes.modalBody}>
-            <Typography variant="h2">Im the modal bishhhh</Typography>
+            <Typography variant="h3">
+              Someone wants to chat with you{' '}
+              <span role="img" aria-label="man dancing">
+                🕺
+              </span>
+            </Typography>
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="center"
+              style={{ marginTop: '16px' }}
+            >
+              <Avatar className={classes.chatRequestedPartnerAvatarContainer}>
+                <img
+                  alt="partners-photo"
+                  src={partnersPicURL || logo}
+                  className={classes.chatRequestedPartnerAvatar}
+                />
+              </Avatar>
+              <Grid
+                container
+                direction="column"
+                alignItems="flex-start"
+                justify="flex-start"
+                style={{ width: 'auto', marginLeft: '12px' }}
+              >
+                <Typography variant="h4">{partnersName}</Typography>
+                <Typography variant="body1">{partnersCity}</Typography>
+              </Grid>
+            </Grid>
           </Grid>
           <Grid
             container
