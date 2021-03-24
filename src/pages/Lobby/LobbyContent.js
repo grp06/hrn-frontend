@@ -13,7 +13,15 @@ import {
 import { PreEvent } from '../PreEvent'
 
 const LobbyContent = React.memo(
-  ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user, eventId }) => {
+  ({
+    chatRequestedPartnerRowObject,
+    event,
+    onlineEventUsers,
+    setUserEventStatus,
+    userEventStatus,
+    user,
+    eventId,
+  }) => {
     const classes = useLobbyStyles()
     const {
       banner_photo_url,
@@ -75,6 +83,7 @@ const LobbyContent = React.memo(
                       />
                     ) : null}
                     <OnlineAttendeesCard
+                      chatRequestedPartnerRowObject={chatRequestedPartnerRowObject}
                       event={event}
                       onlineEventUsers={onlineEventUsers}
                       userId={user_id}

@@ -44,7 +44,7 @@ const Lobby = () => {
   } = event
   const { id: user_id, name: usersName } = user
   const [chatIsOpen, setChatIsOpen] = useState(true)
-  const [chatWasRequested, setChatWasRequested] = useState(false)
+  const [chatRequestedPartnerRowObject, setChatRequestedPartnerRowObject] = useState(null)
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -133,11 +133,11 @@ const Lobby = () => {
   useEffect(() => {
     if (
       myRoundData?.partners.length &&
-      myRoundData?.partners[myRoundData.partners.length - 1].chat_request === 'pending'
+      myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== null
     ) {
       console.log('hey i got reuested')
       console.log('💕 myRoundData ->', myRoundData)
-      setChatWasRequested(myRoundData.partners[myRoundData.partners.length - 1])
+      setChatRequestedPartnerRowObject(myRoundData.partners[myRoundData.partners.length - 1])
     }
   }, [myRoundData])
 
@@ -161,6 +161,7 @@ const Lobby = () => {
         />
       ) : null}
       <LobbyContent
+        chatRequestedPartnerRowObject={chatRequestedPartnerRowObject}
         event={event}
         onlineEventUsers={onlineEventUsers}
         setUserEventStatus={setUserEventStatus}
@@ -186,7 +187,9 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
-      {chatWasRequested ? <ChatRequestedModal chatWasRequested={chatWasRequested} /> : null}
+      {chatRequestedPartnerRowObject?.chat_request === 'pending' ? (
+        <ChatRequestedModal chatRequestedPartnerRowObject={chatRequestedPartnerRowObject} />
+      ) : null}
     </div>
   )
 }

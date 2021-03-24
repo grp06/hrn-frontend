@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useMutation } from '@apollo/react-hooks'
 import partition from 'lodash/partition'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
@@ -13,19 +12,23 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core'
-import { useLobbyStyles } from '.'
+import { RequestToChatButton, useLobbyStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { upsertPartnersRequestToChat } from '../../gql/mutations'
-import { EventObjectInterface, OnlineEventUsersInterface, UserObjectInterface } from '../../utils'
+import {
+  EventObjectInterface,
+  OnlineEventUsersInterface,
+  PartnersObjectInterface,
+} from '../../utils'
 
 interface OnlineAttendeesCardProps {
+  chatRequestedPartnerRowObject: PartnersObjectInterface | null
   event: EventObjectInterface
   onlineEventUsers: OnlineEventUsersInterface[]
-  userId?: string
+  userId: number
 }
 
 const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
-  ({ event, onlineEventUsers, userId }) => {
+  ({ chatRequestedPartnerRowObject, event, onlineEventUsers, userId }) => {
     const classes = useLobbyStyles()
     const {
       current_round,
@@ -41,38 +44,6 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
     // returns an array with two arrays. First array is onlineEventUsers with side a
     // second array is onlineEventUsers with side b
     const twoSidedOnlineEventUsers = partition(onlineEventUsers, { side: 'a' })
-
-    const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
-
-    const handleRequestToChat = async (partner_id: number | UserObjectInterface) => {
-      try {
-        // insert a row for yourself and then a row for your partner so
-        // they can get the notification from the subscription in the Lobby
-        await upsertPartnersRequestToChatMutation({
-          variables: {
-            partner_row: [
-              {
-                chat_request: 'request_sent',
-                event_id,
-                partner_id,
-                round: 1,
-                user_id: userId,
-              },
-              {
-                chat_request: 'pending',
-                event_id,
-                partner_id: userId,
-                round: 1,
-                user_id: partner_id,
-              },
-            ],
-          },
-        })
-      } catch (err) {
-        alert(err)
-        console.log(err)
-      }
-    }
 
     const populateList = (
       eventUsersArray: OnlineEventUsersInterface[]
@@ -106,16 +77,17 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                       </Typography>
                       <Typography variant="subtitle1">, {user[0].city}</Typography>
                     </Grid>
-                    <Button
-                      variant="contained"
-                      size="small"
-                      color="primary"
-                      disableRipple
-                      style={{ minWidth: 0 }}
-                      onClick={() => handleRequestToChat(user[0].id)}
-                    >
-                      Request to chat
-                    </Button>
+                    <RequestToChatButton
+                      chatRequestedPartnerRowObject={
+                        chatRequestedPartnerRowObject?.partner_id ===
+                        ((user[0].id as unknown) as number)
+                          ? chatRequestedPartnerRowObject
+                          : null
+                      }
+                      event={event}
+                      partnerId={(user[0].id as unknown) as number}
+                      userId={userId}
+                    />
                   </Grid>
                 </ListItemText>
               </ListItem>

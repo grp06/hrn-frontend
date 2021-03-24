@@ -5,12 +5,14 @@ import logo from '../../assets/HRNlogoNoFrame.svg'
 import { PartnersObjectInterface } from '../../utils'
 
 export interface ChatRequestedModalProps {
-  chatWasRequested: PartnersObjectInterface
+  chatRequestedPartnerRowObject: PartnersObjectInterface
 }
 
-const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatWasRequested }) => {
+const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({
+  chatRequestedPartnerRowObject,
+}) => {
   const classes = useLobbyStyles()
-  const { partner } = chatWasRequested
+  const { partner } = chatRequestedPartnerRowObject
   const { city: partnersCity, name: partnersName, profile_pic_url: partnersPicURL } = partner
   const [open, setOpen] = useState<boolean>(true)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState<boolean>(false)
@@ -94,7 +96,7 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatWasRequeste
                 closeModal()
               }}
             >
-              Yes, I am Sure
+              Sure, Let&apos;s chat
             </Button>
             <Button
               variant="contained"
@@ -102,7 +104,7 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatWasRequeste
               className={classes.modalCancelButton}
               onClick={closeModal}
             >
-              Whoops, No Way!
+              No thanks
             </Button>
           </Grid>
         </Grid>
