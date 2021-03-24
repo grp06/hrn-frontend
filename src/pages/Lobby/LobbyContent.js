@@ -83,7 +83,6 @@ const LobbyContent = React.memo(
                       />
                     ) : null}
                     <OnlineAttendeesCard
-                      chatRequests={chatRequests}
                       event={event}
                       onlineEventUsers={onlineEventUsers}
                       userId={user_id}
@@ -130,6 +129,7 @@ const LobbyContent = React.memo(
                     className={classes.narrowEventAndLobbyContentGrid}
                   >
                     <OnlineAttendeesCard
+                      chatRequests={chatRequests}
                       event={event}
                       onlineEventUsers={onlineEventUsers}
                       userId={user_id}

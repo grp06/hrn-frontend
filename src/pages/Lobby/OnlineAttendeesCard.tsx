@@ -21,7 +21,7 @@ import {
 } from '../../utils'
 
 interface OnlineAttendeesCardProps {
-  chatRequests: PartnersObjectInterface[] | undefined
+  chatRequests?: PartnersObjectInterface[]
   event: EventObjectInterface
   onlineEventUsers: OnlineEventUsersInterface[]
   userId: number
@@ -77,7 +77,8 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                       </Typography>
                       <Typography variant="subtitle1">, {user[0].city}</Typography>
                     </Grid>
-                    {((user[0].id as unknown) as number) !== userId ? (
+                    {((user[0].id as unknown) as number) !== userId &&
+                    eventStatus === 'room-in-progress' ? (
                       <RequestToChatButton
                         myPartnerRow={chatRequests?.find(
                           (chatRequest) =>

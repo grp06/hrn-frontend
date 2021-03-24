@@ -48,16 +48,14 @@ const Lobby = () => {
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
-  // const skipListenToPartnersTableSub =
-  //   !user_id ||
-  //   !eventId ||
-  //   !round ||
-  //   eventStatus === 'not-started' ||
-  //   eventStatus === 'pre-event' ||
-  //   ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
-  //     eventStatus === 'room-in-progress')
-
-  const skipListenToPartnersTableSub = !user_id || !eventId
+  const skipListenToPartnersTableSub =
+    !user_id ||
+    !eventId ||
+    !round ||
+    eventStatus === 'not-started' ||
+    eventStatus === 'pre-event' ||
+    ((userEventStatus === 'sitting out' || userEventStatus === 'reported') &&
+      eventStatus === 'room-in-progress')
 
   const { data: myRoundData } = useSubscription(listenToPartnersTable, {
     variables: {
@@ -109,12 +107,14 @@ const Lobby = () => {
   // videoRoom for round 1 even if you are the odd one out. That way userEventStatus
   // gets set properly and you get the correct broadcast screen
   useEffect(() => {
+    const acceptedChatRequest = myRoundData?.partners.find(
+      (chatRequest) => chatRequest.chat_request === 'accepted'
+    )
+
     if (
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
-        myRoundData?.partners.length &&
-        myRoundData?.partners[0].chat_request !== 'pending' &&
-        myRoundData?.partners[0].chat_request !== 'declined' &&
+        acceptedChatRequest &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
@@ -135,7 +135,6 @@ const Lobby = () => {
       const requestsThatAreNotNull = myRoundData.partners.filter(
         (partnerRow) => partnerRow.chat_request !== null
       )
-      console.log('💕 requestsThatAreNotNull ->', requestsThatAreNotNull)
       setChatRequests(requestsThatAreNotNull)
     }
   }, [myRoundData])
