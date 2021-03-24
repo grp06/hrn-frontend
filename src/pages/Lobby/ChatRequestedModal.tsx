@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Avatar, Backdrop, Button, Fade, Grid, Modal, Typography } from '@material-ui/core'
 import { useLobbyStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
+import { upsertPartnersRequestToChat } from '../../gql/mutations'
+import { getPartnersRowByPartnerAndUserId } from '../../gql/queries'
 import { PartnersObjectInterface } from '../../utils'
 
 export interface ChatRequestedModalProps {
@@ -9,12 +12,60 @@ export interface ChatRequestedModalProps {
 }
 
 const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) => {
-  console.log('🌈 ~ chatRequest', chatRequest)
   const classes = useLobbyStyles()
-  const { partner } = chatRequest
+  const { event_id, id: myPartnerRowId, partner, partner_id, round, user_id } = chatRequest
   const { city: partnersCity, name: partnersName, profile_pic_url: partnersPicURL } = partner
   const [open, setOpen] = useState<boolean>(true)
-  const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState<boolean>(false)
+  const [requestResponse, setRequestResponse] = useState<string>('')
+  const [requestResponseInFlight, setRequestResponseInFlight] = useState<boolean>(false)
+
+  const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
+  const [getPartnersRowId] = useLazyQuery(getPartnersRowByPartnerAndUserId, {
+    variables: {
+      event_id,
+      partner_id: user_id,
+      round: 1,
+      user_id: partner_id,
+    },
+    onCompleted: async (data) => {
+      try {
+        await upsertPartnersRequestToChatMutation({
+          variables: {
+            partner_row: [
+              {
+                id: myPartnerRowId,
+                event_id,
+                partner_id,
+                round: 1,
+                user_id,
+                chat_request: requestResponse,
+              },
+              { ...data.partners[0], chat_request: requestResponse },
+            ],
+          },
+        })
+      } catch (err) {
+        alert(err)
+        console.log(err)
+      }
+    },
+  })
+
+  useEffect(() => {
+    const sendResponse = async () => {
+      try {
+        await getPartnersRowId()
+        closeModal()
+      } catch (err) {
+        alert(err)
+        console.log(err)
+      }
+    }
+
+    if (requestResponse) {
+      sendResponse()
+    }
+  }, [requestResponse])
 
   const closeModal = () => {
     setOpen(false)
@@ -26,7 +77,6 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
       aria-describedby="transition-modal-description"
       className={classes.modalContainer}
       open={open}
-      onClose={closeModal}
       closeAfterTransition
       BackdropComponent={Backdrop}
       BackdropProps={{
@@ -85,14 +135,13 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
           >
             <Button
               variant="contained"
-              disabled={acceptFunctionInFlight}
+              disabled={requestResponseInFlight}
               size="large"
               color="primary"
               className={classes.modalAcceptButton}
               onClick={() => {
-                setAcceptFunctionInFlight(true)
-                // onAcceptFunction()
-                closeModal()
+                setRequestResponseInFlight(true)
+                setRequestResponse('accepted')
               }}
             >
               Sure, Let&apos;s chat
@@ -101,7 +150,10 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
               variant="contained"
               size="large"
               className={classes.modalCancelButton}
-              onClick={closeModal}
+              onClick={() => {
+                setRequestResponseInFlight(true)
+                setRequestResponse('denied')
+              }}
             >
               No thanks
             </Button>

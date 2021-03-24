@@ -21,41 +21,36 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
   const { current_round, id: event_id } = event
   const [chatRequestInFlight, setChatRequestInFlight] = useState<boolean>(false)
   const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
-  const [getPartnersRowId, { data: myPartnersPartnerRowData }] = useLazyQuery(
-    getPartnersRowByPartnerAndUserId,
-    {
-      variables: {
-        event_id,
-        partner_id: userId,
-        round: 1,
-        user_id: partnerId,
-      },
-      onCompleted: async (data) => {
-        console.log('🌈 ~ partnerId', partnerId)
-        console.log('🌈 ~ userId', userId)
-        try {
-          await upsertPartnersRequestToChatMutation({
-            variables: {
-              partner_row: [
-                {
-                  id: myPartnerRow?.id,
-                  event_id,
-                  partner_id: partnerId,
-                  round: 1,
-                  user_id: userId,
-                  chat_request: 'cancelled',
-                },
-                { ...data.partners[0], chat_request: 'cancelled' },
-              ],
-            },
-          })
-        } catch (err) {
-          alert(err)
-          console.log(err)
-        }
-      },
-    }
-  )
+  const [getPartnersRowId] = useLazyQuery(getPartnersRowByPartnerAndUserId, {
+    variables: {
+      event_id,
+      partner_id: userId,
+      round: 1,
+      user_id: partnerId,
+    },
+    onCompleted: async (data) => {
+      try {
+        await upsertPartnersRequestToChatMutation({
+          variables: {
+            partner_row: [
+              {
+                id: myPartnerRow?.id,
+                event_id,
+                partner_id: partnerId,
+                round: 1,
+                user_id: userId,
+                chat_request: 'cancelled',
+              },
+              { ...data.partners[0], chat_request: 'cancelled' },
+            ],
+          },
+        })
+      } catch (err) {
+        alert(err)
+        console.log(err)
+      }
+    },
+  })
 
   const handleCancelRequest = async () => {
     //lazy query to get myPartnersPartner row (since I dont have the ID of my partners row)
@@ -144,7 +139,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
             disabled
             style={{ minWidth: 0 }}
           >
-            Request to chat
+            Request {myPartnerRow.chat_request}
           </Button>
         )
       default:

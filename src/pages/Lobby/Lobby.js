@@ -135,7 +135,6 @@ const Lobby = () => {
       const requestsThatAreNotNull = myRoundData.partners.filter(
         (partnerRow) => partnerRow.chat_request !== null
       )
-      console.log('hey i got reuested')
       console.log('💕 requestsThatAreNotNull ->', requestsThatAreNotNull)
       setChatRequests(requestsThatAreNotNull)
     }
