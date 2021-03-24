@@ -14,7 +14,7 @@ import { PreEvent } from '../PreEvent'
 
 const LobbyContent = React.memo(
   ({
-    chatRequestedPartnerRowObject,
+    chatRequests,
     event,
     onlineEventUsers,
     setUserEventStatus,
@@ -83,7 +83,7 @@ const LobbyContent = React.memo(
                       />
                     ) : null}
                     <OnlineAttendeesCard
-                      chatRequestedPartnerRowObject={chatRequestedPartnerRowObject}
+                      chatRequests={chatRequests}
                       event={event}
                       onlineEventUsers={onlineEventUsers}
                       userId={user_id}

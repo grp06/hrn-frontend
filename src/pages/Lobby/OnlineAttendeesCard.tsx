@@ -21,14 +21,14 @@ import {
 } from '../../utils'
 
 interface OnlineAttendeesCardProps {
-  chatRequestedPartnerRowObject: PartnersObjectInterface | null
+  chatRequests: PartnersObjectInterface[] | undefined
   event: EventObjectInterface
   onlineEventUsers: OnlineEventUsersInterface[]
   userId: number
 }
 
 const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
-  ({ chatRequestedPartnerRowObject, event, onlineEventUsers, userId }) => {
+  ({ chatRequests, event, onlineEventUsers, userId }) => {
     const classes = useLobbyStyles()
     const {
       current_round,
@@ -77,17 +77,17 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                       </Typography>
                       <Typography variant="subtitle1">, {user[0].city}</Typography>
                     </Grid>
-                    <RequestToChatButton
-                      chatRequestedPartnerRowObject={
-                        chatRequestedPartnerRowObject?.partner_id ===
-                        ((user[0].id as unknown) as number)
-                          ? chatRequestedPartnerRowObject
-                          : null
-                      }
-                      event={event}
-                      partnerId={(user[0].id as unknown) as number}
-                      userId={userId}
-                    />
+                    {((user[0].id as unknown) as number) !== userId ? (
+                      <RequestToChatButton
+                        myPartnerRow={chatRequests?.find(
+                          (chatRequest) =>
+                            chatRequest.partner_id === ((user[0].id as unknown) as number)
+                        )}
+                        event={event}
+                        partnerId={(user[0].id as unknown) as number}
+                        userId={userId}
+                      />
+                    ) : null}
                   </Grid>
                 </ListItemText>
               </ListItem>

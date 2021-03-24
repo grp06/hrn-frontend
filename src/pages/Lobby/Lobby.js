@@ -44,7 +44,7 @@ const Lobby = () => {
   } = event
   const { id: user_id, name: usersName } = user
   const [chatIsOpen, setChatIsOpen] = useState(true)
-  const [chatRequestedPartnerRowObject, setChatRequestedPartnerRowObject] = useState(null)
+  const [chatRequests, setChatRequests] = useState([])
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -113,8 +113,8 @@ const Lobby = () => {
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
         myRoundData?.partners.length &&
-        myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== 'pending' &&
-        myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== 'declined' &&
+        myRoundData?.partners[0].chat_request !== 'pending' &&
+        myRoundData?.partners[0].chat_request !== 'declined' &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
@@ -131,13 +131,13 @@ const Lobby = () => {
   ])
 
   useEffect(() => {
-    if (
-      myRoundData?.partners.length &&
-      myRoundData?.partners[myRoundData.partners.length - 1].chat_request !== null
-    ) {
+    if (myRoundData?.partners.length) {
+      const requestsThatAreNotNull = myRoundData.partners.filter(
+        (partnerRow) => partnerRow.chat_request !== null
+      )
       console.log('hey i got reuested')
-      console.log('💕 myRoundData ->', myRoundData)
-      setChatRequestedPartnerRowObject(myRoundData.partners[myRoundData.partners.length - 1])
+      console.log('💕 requestsThatAreNotNull ->', requestsThatAreNotNull)
+      setChatRequests(requestsThatAreNotNull)
     }
   }, [myRoundData])
 
@@ -161,7 +161,7 @@ const Lobby = () => {
         />
       ) : null}
       <LobbyContent
-        chatRequestedPartnerRowObject={chatRequestedPartnerRowObject}
+        chatRequests={chatRequests}
         event={event}
         onlineEventUsers={onlineEventUsers}
         setUserEventStatus={setUserEventStatus}
@@ -187,8 +187,8 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
-      {chatRequestedPartnerRowObject?.chat_request === 'pending' ? (
-        <ChatRequestedModal chatRequestedPartnerRowObject={chatRequestedPartnerRowObject} />
+      {chatRequests?.length && chatRequests[0].chat_request === 'pending' ? (
+        <ChatRequestedModal chatRequest={chatRequests[0]} />
       ) : null}
     </div>
   )

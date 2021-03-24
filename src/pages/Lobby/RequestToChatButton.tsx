@@ -6,19 +6,18 @@ import { getPartnersRowByPartnerAndUserId } from '../../gql/queries'
 import { EventObjectInterface, PartnersObjectInterface } from '../../utils'
 
 export interface ChatToRequestButtonProps {
-  chatRequestedPartnerRowObject: PartnersObjectInterface | null
+  myPartnerRow: PartnersObjectInterface | undefined
   event: EventObjectInterface
   partnerId: number
   userId: number
 }
 
 const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
-  chatRequestedPartnerRowObject,
+  myPartnerRow,
   event,
   partnerId,
   userId,
 }) => {
-  console.log('🌈 ~ chatRequestedPartnerRowObject', chatRequestedPartnerRowObject)
   const { current_round, id: event_id } = event
   const [chatRequestInFlight, setChatRequestInFlight] = useState<boolean>(false)
   const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
@@ -32,12 +31,14 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
         user_id: partnerId,
       },
       onCompleted: async (data) => {
+        console.log('🌈 ~ partnerId', partnerId)
+        console.log('🌈 ~ userId', userId)
         try {
           await upsertPartnersRequestToChatMutation({
             variables: {
               partner_row: [
                 {
-                  id: chatRequestedPartnerRowObject?.id,
+                  id: myPartnerRow?.id,
                   event_id,
                   partner_id: partnerId,
                   round: 1,
@@ -101,7 +102,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
   }
 
   const renderButtonBasedOnRequestStatus = () => {
-    if (!chatRequestedPartnerRowObject) {
+    if (!myPartnerRow) {
       return (
         <Button
           variant="contained"
@@ -116,7 +117,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
         </Button>
       )
     }
-    switch (chatRequestedPartnerRowObject.chat_request) {
+    switch (myPartnerRow.chat_request) {
       case 'request-sent':
         return (
           <Button

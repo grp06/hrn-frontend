@@ -5,14 +5,13 @@ import logo from '../../assets/HRNlogoNoFrame.svg'
 import { PartnersObjectInterface } from '../../utils'
 
 export interface ChatRequestedModalProps {
-  chatRequestedPartnerRowObject: PartnersObjectInterface
+  chatRequest: PartnersObjectInterface
 }
 
-const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({
-  chatRequestedPartnerRowObject,
-}) => {
+const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) => {
+  console.log('🌈 ~ chatRequest', chatRequest)
   const classes = useLobbyStyles()
-  const { partner } = chatRequestedPartnerRowObject
+  const { partner } = chatRequest
   const { city: partnersCity, name: partnersName, profile_pic_url: partnersPicURL } = partner
   const [open, setOpen] = useState<boolean>(true)
   const [acceptFunctionInFlight, setAcceptFunctionInFlight] = useState<boolean>(false)
