@@ -3,18 +3,10 @@ import moment from 'moment-timezone'
 import { Avatar, Grid, Typography } from '@material-ui/core'
 import { useHostDirectoryStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
+import { UserObjectInterface } from '../../utils'
 
 interface HostInfoCardProps {
-  hostInfo: {
-    became_host_at: string
-    city: string
-    email: string
-    linkedIn_url: string | null
-    name: string
-    profile_pic_url: string | null
-    role: string
-    sub_period_end: string
-  }
+  hostInfo: UserObjectInterface
 }
 
 const HostInfoCard: React.FC<HostInfoCardProps> = ({ hostInfo }) => {

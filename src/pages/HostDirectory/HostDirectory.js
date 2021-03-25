@@ -4,7 +4,7 @@ import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
-import { HostInfoTable, useHostDirec, useHostDirectoryStyles } from '.'
+import { HostInfoTable, useHostDirectoryStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'

@@ -9,6 +9,7 @@ export interface UserObjectInterface {
   profile_pic_url: string | null
   stripe_customer_id: string | null
   sub_period_end: string | null
+  became_host_at: string | null
   tags_users: object[]
 }
 
