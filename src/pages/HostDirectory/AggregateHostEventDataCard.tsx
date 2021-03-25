@@ -29,7 +29,7 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
 
   const getFrequencyOfEvents = () => {
     const daysAsAHost = getDaysAsAHost()
-    return Math.round(daysAsAHost / events.length)
+    return (daysAsAHost / events.length).toFixed(2)
   }
 
   return (

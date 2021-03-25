@@ -5,10 +5,12 @@ import Grid from '@material-ui/core/Grid'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/styles'
 import { useUserContext } from '../../context'
+import { constants } from '../../utils'
 
 import {
   CreateEventSidebarButton,
   HostDrawerContent,
+  HRNEmployeeDrawerContent,
   UserDrawerContent,
   SettingsDrawerContent,
 } from '.'
@@ -67,7 +69,9 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { name, role, id: userId } = user
+  const { adminUserIds } = constants
   const userIsHost = role && role.includes('host')
+  const userIsHRNEmployee = adminUserIds.includes(userId)
 
   return (
     <>
@@ -84,6 +88,7 @@ const DrawerContent = () => {
           {userIsHost && <CreateEventSidebarButton />}
           <UserDrawerContent userId={userId} userName={name} role={role} />
           {userIsHost && <HostDrawerContent role={role} />}
+          {userIsHRNEmployee && <HRNEmployeeDrawerContent />}
         </Grid>
         <Grid
           container
