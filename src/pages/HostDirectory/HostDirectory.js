@@ -108,7 +108,7 @@ const PaidHostDashboard = () => {
   const getArrayOfHostsBetweenTimeFrame = (userArray) =>
     userArray.users && userArray.users.length
       ? userArray.users
-          .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
+          .filter((user) => !adminUserIds.includes(user.id))
           .filter((user) => {
             const compareDate = moment(new Date(user.became_host_at))
             const dateTo = moment().endOf('day').format('YYYY-MM-DD')
