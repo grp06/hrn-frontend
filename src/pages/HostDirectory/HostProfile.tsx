@@ -1,17 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useQuery } from 'react-apollo'
 import { CSVLink } from 'react-csv'
-import { useHistory } from 'react-router-dom'
 import { Grid, Typography } from '@material-ui/core'
 
-import { HostInfoCard, HostEventExpansionPanel, useHostDirectoryStyles } from '.'
+import {
+  AggregateHostEventDataCard,
+  HostInfoCard,
+  HostEventExpansionPanel,
+  useHostDirectoryStyles,
+} from '.'
 import { Loading } from '../../common'
-import { getHostEventsAndPartners } from '../../gql/queries'
+import { findUserById, getHostEventsAndPartners } from '../../gql/queries'
 import { getEventDataCSV, EventObjectInterface } from '../../utils/'
-
-interface HostProfileProps {
-  location: any
-}
 
 interface EventsData {
   events: EventObjectInterface[]
@@ -21,10 +21,11 @@ interface EventsDataVars {
   user_id: number
 }
 
-const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
+const HostProfile: React.FC<{}> = () => {
   const classes = useHostDirectoryStyles()
-  const history = useHistory()
-  const locationState = location.state && Object.keys(location.state).length ? location.state : {}
+  const { pathname } = window.location
+  const pathnameArray = pathname.split('/')
+  const hostIdFromURL = parseInt(pathnameArray[2], 10)
   const [usersEventsArray, setUsersEventsArray] = useState<EventObjectInterface[]>([])
   const eventDataCSV = usersEventsArray?.length ? getEventDataCSV(usersEventsArray) : {}
 
@@ -32,9 +33,9 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
     getHostEventsAndPartners,
     {
       variables: {
-        user_id: locationState.host.id,
+        user_id: hostIdFromURL,
       },
-      skip: !locationState,
+      skip: !hostIdFromURL,
       fetchPolicy: 'no-cache',
       onCompleted: (data) => {
         setUsersEventsArray(
@@ -51,20 +52,13 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
     }
   )
 
-  const redirectUserBackToHostDirectory = useCallback(() => {
-    if (!Object.keys(locationState).length) {
-      return history.push('/host-directory')
-    }
-  }, [history, locationState])
+  const { data: hostInfo, loading: hostInfoQueryDataLoading } = useQuery(findUserById, {
+    variables: {
+      id: hostIdFromURL,
+    },
+  })
 
-  useEffect(() => {
-    redirectUserBackToHostDirectory()
-    return () => {
-      window.history.replaceState({}, '')
-    }
-  }, [redirectUserBackToHostDirectory])
-
-  if (queryDataLoading) {
+  if (queryDataLoading || hostInfoQueryDataLoading) {
     return <Loading />
   }
 
@@ -80,7 +74,7 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
 
   return (
     <Grid container direction="column">
-      <HostInfoCard hostInfo={locationState.host} />
+      <HostInfoCard hostInfo={hostInfo.users[0]} />
       {Object.keys(eventDataCSV).length ? (
         <CSVLink
           data={eventDataCSV.data}
@@ -90,6 +84,15 @@ const HostProfile: React.FC<HostProfileProps> = ({ location }) => {
           Dowload all event data
         </CSVLink>
       ) : null}
+      <Grid container className={classes.hostedEventsContainer}>
+        <Typography variant="h4" style={{ marginBottom: '16px' }}>
+          Aggregate Event Data /
+        </Typography>
+        <AggregateHostEventDataCard
+          becameHostAt={hostInfo.users[0].became_host_at}
+          events={usersEventsArray}
+        />
+      </Grid>
       <Grid container className={classes.hostedEventsContainer}>
         <Typography variant="h4" style={{ marginBottom: '16px' }}>
           Events Hosted /

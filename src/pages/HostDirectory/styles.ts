@@ -3,6 +3,18 @@ import { makeStyles } from '@material-ui/styles'
 
 const useHostDirectoryStyles = makeStyles((theme) => ({
   // *****************************
+  //   AggregateHostEventDataCard
+  // *****************************
+  aggregateHostEventDataCard: {
+    backgroundColor: theme.palette.common.greyCard,
+    borderRadius: '4px',
+    width: '100%',
+  },
+  detailsHeading: {
+    padding: theme.spacing(1),
+    textAlign: 'center',
+  },
+  // *****************************
   //   HostDirectory
   // *****************************
   activeTimeframeButton: {

@@ -13,6 +13,7 @@ const findUserById = gql`
       profile_pic_url
       stripe_customer_id
       sub_period_end
+      became_host_at
       tags_users {
         tag {
           name
