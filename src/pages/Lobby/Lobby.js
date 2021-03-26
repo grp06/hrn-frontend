@@ -62,7 +62,7 @@ const Lobby = () => {
     variables: {
       event_id: eventId,
       user_id: user_id,
-      round: 1,
+      round,
     },
     skip: skipListenToPartnersTableSub,
   })

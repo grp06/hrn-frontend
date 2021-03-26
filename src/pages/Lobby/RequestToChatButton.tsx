@@ -32,9 +32,10 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
   const [queryPartnersBeforeRequest] = useLazyQuery(getPendingChatRequestsForPartner, {
     variables: {
       event_id,
-      round: 1,
+      round: current_round,
       user_id: partnerId,
     },
+    fetchPolicy: 'no-cache',
     onCompleted: async (data) => {
       if (!data.partners.length) {
         try {
@@ -47,14 +48,14 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
                   chat_request: 'request-sent',
                   event_id,
                   partner_id: partnerId,
-                  round: 1,
+                  round: current_round,
                   user_id: userId,
                 },
                 {
                   chat_request: 'pending',
                   event_id,
                   partner_id: userId,
-                  round: 1,
+                  round: current_round,
                   user_id: partnerId,
                 },
               ],
@@ -74,7 +75,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
     variables: {
       event_id,
       partner_id: userId,
-      round: 1,
+      round: current_round,
       user_id: partnerId,
     },
     onCompleted: async (data) => {
@@ -86,7 +87,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
                 id: myPartnerRow?.id,
                 event_id,
                 partner_id: partnerId,
-                round: 1,
+                round: current_round,
                 user_id: userId,
                 chat_request: 'cancelled',
               },
@@ -181,6 +182,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
       <Snack
         open={userHasAlreadyBeenRequestedSnack}
         onClose={() => setUserHasAlreadyBeenRequestedSnack(false)}
+        duration={4000}
         severity="warning"
         snackMessage="This person is responding to another request. Try again soon 🤞"
       />

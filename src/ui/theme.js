@@ -329,6 +329,12 @@ const theme = createMuiTheme({
         backgroundColor: basePurple,
       },
     },
+    MuiSnackbar: {
+      root: {
+        zIndex: 999999,
+        textAlign: 'center',
+      },
+    },
     MuiDropzoneArea: {
       root: {
         backgroundColor: grey10,

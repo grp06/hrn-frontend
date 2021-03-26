@@ -24,9 +24,10 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
     variables: {
       event_id,
       partner_id: user_id,
-      round: 1,
+      round,
       user_id: partner_id,
     },
+    fetchPolicy: 'no-cache',
     onCompleted: async (data) => {
       try {
         await upsertPartnersRequestToChatMutation({
@@ -36,7 +37,7 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
                 id: myPartnerRowId,
                 event_id,
                 partner_id,
-                round: 1,
+                round,
                 user_id,
                 chat_request: requestResponse,
               },

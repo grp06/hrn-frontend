@@ -31,7 +31,6 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
   ({ chatRequests, event, onlineEventUsers, userId }) => {
     const classes = useLobbyStyles()
     const {
-      current_round,
       id: event_id,
       matching_type,
       side_a: side_aLabel,
