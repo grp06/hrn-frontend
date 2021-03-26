@@ -45,6 +45,7 @@ const Lobby = () => {
   const { id: user_id, name: usersName } = user
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const [chatRequests, setChatRequests] = useState([])
+  const [chatRequestThatNeedsAResponse, setChatRequestThatNeedsAResponse] = useState(null)
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -135,7 +136,19 @@ const Lobby = () => {
       const requestsThatAreNotNull = myRoundData.partners.filter(
         (partnerRow) => partnerRow.chat_request !== null
       )
+      const requestsThatArePending = myRoundData.partners.filter(
+        (partnerRow) => partnerRow.chat_request === 'pending'
+      )
+
       setChatRequests(requestsThatAreNotNull)
+
+      // set the last request (which would be the first one made) just in case there are
+      // currently two requests that need to be responded to
+      if (requestsThatArePending?.length) {
+        setChatRequestThatNeedsAResponse(requestsThatArePending[0])
+      } else {
+        setChatRequestThatNeedsAResponse(null)
+      }
     }
   }, [myRoundData])
 
@@ -185,8 +198,8 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
-      {chatRequests?.length && chatRequests[0].chat_request === 'pending' ? (
-        <ChatRequestedModal chatRequest={chatRequests[0]} />
+      {chatRequestThatNeedsAResponse ? (
+        <ChatRequestedModal chatRequest={chatRequestThatNeedsAResponse} />
       ) : null}
     </div>
   )

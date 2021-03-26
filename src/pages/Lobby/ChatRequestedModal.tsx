@@ -62,7 +62,7 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
       }
     }
 
-    if (requestResponse) {
+    if (requestResponse === 'accepted' || requestResponse === 'denied') {
       sendResponse()
     }
   }, [requestResponse])

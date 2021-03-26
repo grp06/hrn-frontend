@@ -1,8 +1,13 @@
 import React, { useState } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Button, CircularProgress } from '@material-ui/core'
+
+import { Snack } from '../../common'
 import { upsertPartnersRequestToChat } from '../../gql/mutations'
-import { getPartnersRowByPartnerAndUserId } from '../../gql/queries'
+import {
+  getPartnersRowByPartnerAndUserId,
+  getPendingChatRequestsForPartner,
+} from '../../gql/queries'
 import { EventObjectInterface, PartnersObjectInterface } from '../../utils'
 
 export interface ChatToRequestButtonProps {
@@ -20,7 +25,51 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
 }) => {
   const { current_round, id: event_id } = event
   const [chatRequestInFlight, setChatRequestInFlight] = useState<boolean>(false)
+  const [userHasAlreadyBeenRequestedSnack, setUserHasAlreadyBeenRequestedSnack] = useState<boolean>(
+    false
+  )
   const [upsertPartnersRequestToChatMutation] = useMutation(upsertPartnersRequestToChat)
+  const [queryPartnersBeforeRequest] = useLazyQuery(getPendingChatRequestsForPartner, {
+    variables: {
+      event_id,
+      round: 1,
+      user_id: partnerId,
+    },
+    onCompleted: async (data) => {
+      if (!data.partners.length) {
+        try {
+          // insert a row for yourself and then a row for your partner so
+          // they can get the notification from the subscription in the Lobby
+          await upsertPartnersRequestToChatMutation({
+            variables: {
+              partner_row: [
+                {
+                  chat_request: 'request-sent',
+                  event_id,
+                  partner_id: partnerId,
+                  round: 1,
+                  user_id: userId,
+                },
+                {
+                  chat_request: 'pending',
+                  event_id,
+                  partner_id: userId,
+                  round: 1,
+                  user_id: partnerId,
+                },
+              ],
+            },
+          })
+        } catch (err) {
+          alert(err)
+          console.log(err)
+        }
+      } else {
+        setUserHasAlreadyBeenRequestedSnack(true)
+      }
+    },
+  })
+
   const [getPartnersRowId] = useLazyQuery(getPartnersRowByPartnerAndUserId, {
     variables: {
       event_id,
@@ -67,28 +116,7 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
   const handleRequestToChat = async () => {
     try {
       setChatRequestInFlight(true)
-      // insert a row for yourself and then a row for your partner so
-      // they can get the notification from the subscription in the Lobby
-      await upsertPartnersRequestToChatMutation({
-        variables: {
-          partner_row: [
-            {
-              chat_request: 'request-sent',
-              event_id,
-              partner_id: partnerId,
-              round: 1,
-              user_id: userId,
-            },
-            {
-              chat_request: 'pending',
-              event_id,
-              partner_id: userId,
-              round: 1,
-              user_id: partnerId,
-            },
-          ],
-        },
-      })
+      await queryPartnersBeforeRequest()
       setChatRequestInFlight(false)
     } catch (err) {
       alert(err)
@@ -147,7 +175,17 @@ const RequestToChatButton: React.FC<ChatToRequestButtonProps> = ({
     }
   }
 
-  return <>{renderButtonBasedOnRequestStatus()}</>
+  return (
+    <>
+      {renderButtonBasedOnRequestStatus()}
+      <Snack
+        open={userHasAlreadyBeenRequestedSnack}
+        onClose={() => setUserHasAlreadyBeenRequestedSnack(false)}
+        severity="warning"
+        snackMessage="This person is responding to another request. Try again soon 🤞"
+      />
+    </>
+  )
 }
 
 export default RequestToChatButton

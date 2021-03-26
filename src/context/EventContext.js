@@ -3,7 +3,7 @@ import React, { useEffect, createContext, useContext } from 'react'
 import { useSubscription } from '@apollo/react-hooks'
 import { useImmer } from 'use-immer'
 import { useHistory } from 'react-router-dom'
-import { useUserContext } from '.'
+import { useUserContext, useUserEventStatusContext } from '.'
 import { listenToEvent, listenToEventChatMessages } from '../gql/subscriptions'
 
 const EventContext = createContext()
@@ -55,6 +55,7 @@ const useEventContext = () => {
 const EventProvider = ({ children }) => {
   const [state, dispatch] = useImmer({ ...defaultState })
   const { user } = useUserContext()
+  // const { setUserEventStatus } = useUserEventStatusContext()
   const { id: userId } = user
   const { pathname } = window.location
 
@@ -135,6 +136,7 @@ const EventProvider = ({ children }) => {
         if (eventWasReset) {
           // MAX TOOK THIS OUT ON MARCH 3
           // window.location.reload()
+          // setUserEventStatus('waiting for match')
         }
         dispatch((draft) => {
           draft.event = eventObjectFromSub
