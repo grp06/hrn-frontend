@@ -1,3 +1,4 @@
+export { default as AggregateHostEventDataCard } from './AggregateHostEventDataCard'
 export { default as HostDirectory } from './HostDirectory'
 export { default as HostEventExpansionPanel } from './HostEventExpansionPanel'
 export { default as HostProfile } from './HostProfile'

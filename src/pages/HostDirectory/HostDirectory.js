@@ -4,7 +4,7 @@ import { useQuery } from 'react-apollo'
 import { Redirect } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
-import { HostInfoTable, useHostDirec, useHostDirectoryStyles } from '.'
+import { HostInfoTable, useHostDirectoryStyles } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 import { getUsersByRoleName } from '../../gql/queries'
@@ -55,16 +55,28 @@ const PaidHostDashboard = () => {
         .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
         .reduce(
           (total, user) => {
+            console.log(user.name)
+            const becameHostDate = moment(new Date(user.became_host_at))
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
             const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
+            const daysUserHasBeenHost = moment(new Date()).diff(becameHostDate, 'days')
             if (daysUntilSubEnds < 31 && daysUntilSubEnds >= 0) {
+              const monthsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 30)
+              total.numberOfTotalPaidMonthsOfStarterMonthlyPlans += monthsThatUserHasPaid
               total.starterMonthlyPlans++
               return total
             }
+            const yearsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 365)
+            total.numberOfTotalPaidYearsOfStarterYearlyPlans += yearsThatUserHasPaid
             total.starterYearlyPlans++
             return total
           },
-          { starterMonthlyPlans: 0, starterYearlyPlans: 0 }
+          {
+            starterMonthlyPlans: 0,
+            starterYearlyPlans: 0,
+            numberOfTotalPaidMonthsOfStarterMonthlyPlans: 0,
+            numberOfTotalPaidYearsOfStarterYearlyPlans: 0,
+          }
         )
     }
 
@@ -73,16 +85,27 @@ const PaidHostDashboard = () => {
         .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
         .reduce(
           (total, user) => {
+            const becameHostDate = moment(new Date(user.became_host_at))
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
             const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
+            const daysUserHasBeenHost = subPeriodEndDate.diff(becameHostDate, 'days')
             if (daysUntilSubEnds < 31 && daysUntilSubEnds > 0) {
+              const monthsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 30)
+              total.numberOfTotalPaidMonthsOfPremiumMonthlyPlans += monthsThatUserHasPaid
               total.premiumMonthlyPlans++
               return total
             }
+            const yearsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 365)
+            total.numberOfTotalPaidYearsOfPremiumYearlyPlans += yearsThatUserHasPaid
             total.premiumYearlyPlans++
             return total
           },
-          { premiumMonthlyPlans: 0, premiumYearlyPlans: 0 }
+          {
+            premiumMonthlyPlans: 0,
+            premiumYearlyPlans: 0,
+            numberOfTotalPaidMonthsOfPremiumMonthlyPlans: 0,
+            numberOfTotalPaidYearsOfPremiumYearlyPlans: 0,
+          }
         )
     }
 
@@ -96,10 +119,10 @@ const PaidHostDashboard = () => {
 
     const totalRevenue =
       paidStarterPlanNumbers && paidPremiumPlanNumbers
-        ? paidStarterPlanNumbers.starterMonthlyPlans * 59 +
-          paidStarterPlanNumbers.starterYearlyPlans * 588 +
-          paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
-          paidPremiumPlanNumbers.premiumYearlyPlans * 1788
+        ? paidStarterPlanNumbers.numberOfTotalPaidMonthsOfStarterMonthlyPlans * 59 +
+          paidStarterPlanNumbers.numberOfTotalPaidYearsOfStarterYearlyPlans * 588 +
+          paidPremiumPlanNumbers.numberOfTotalPaidMonthsOfPremiumMonthlyPlans * 169 +
+          paidPremiumPlanNumbers.numberOfTotalPaidYearsOfPremiumYearlyPlans * 1788
         : 0
 
     return { totalMRR, totalRevenue, paidStarterPlanNumbers, paidPremiumPlanNumbers }
@@ -108,7 +131,7 @@ const PaidHostDashboard = () => {
   const getArrayOfHostsBetweenTimeFrame = (userArray) =>
     userArray.users && userArray.users.length
       ? userArray.users
-          .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
+          .filter((user) => !adminUserIds.includes(user.id))
           .filter((user) => {
             const compareDate = moment(new Date(user.became_host_at))
             const dateTo = moment().endOf('day').format('YYYY-MM-DD')

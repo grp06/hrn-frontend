@@ -14,7 +14,7 @@ import {
 } from '@material-ui/core'
 import PersonPinIcon from '@material-ui/icons/PersonPin'
 
-import { useHostD, useHostDirectoryStyles } from '.'
+import { useHostDirectoryStyles } from '.'
 
 const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
   const classes = useHostDirectoryStyles()
