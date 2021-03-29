@@ -98,11 +98,11 @@ const EventComplete = () => {
               className={classes.eventCompleteButtonCard}
             >
               <Typography variant="h3" className={classes.eventCompleteCardTitle}>
-                Leave Us a Tip!
+                How Are We Doing?
               </Typography>
               <Button
                 variant="contained"
-                color="default"
+                color="primary"
                 size="large"
                 disableRipple
                 href={giveFeedbackTypeform}
@@ -110,7 +110,7 @@ const EventComplete = () => {
                 rel="noopener noreferrer"
                 style={{ width: '100%' }}
               >
-                Give Feedback
+                Give Us Some Feedback
               </Button>
             </Grid>
             {role && !role.includes('host') ? <BecomeAHostCard /> : null}
