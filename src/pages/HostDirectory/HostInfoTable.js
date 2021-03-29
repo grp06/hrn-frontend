@@ -1,5 +1,6 @@
 import React from 'react'
 import moment from 'moment-timezone'
+import clsx from 'clsx'
 import { useHistory } from 'react-router-dom'
 import {
   IconButton,
@@ -59,7 +60,13 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
           </TableHead>
           <TableBody>
             {arrayOfHosts.map((host, idx) => (
-              <TableRow key={host.name}>
+              <TableRow
+                key={host.name}
+                className={clsx({
+                  [classes.expiredHostRow]:
+                    host.role.includes('_') && new Date(host.sub_period_end) < new Date(),
+                })}
+              >
                 <TableCell component="th" scope="row">
                   <IconButton
                     color={(idx + 1) % 2 === 0 ? 'secondary' : 'default'}
