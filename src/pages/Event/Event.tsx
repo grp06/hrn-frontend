@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Helmet } from 'react-helmet'
 import { Grid } from '@material-ui/core'
 import {
   AboutTheHostCard,
@@ -25,6 +26,8 @@ const Event: React.FC<{}> = () => {
   const { id: user_id } = user
   const {
     banner_photo_url,
+    description: event_description,
+    event_name,
     event_users,
     host,
     host_id,
@@ -48,6 +51,10 @@ const Event: React.FC<{}> = () => {
 
   return (
     <>
+      <Helmet>
+        <title>{event_name}</title>
+        <meta name="description" content={event_description} />
+      </Helmet>
       <EventStatusRedirect isEventParticipant={isEventParticipant} event={event} />
       {!isEventParticipant && event_status !== 'not-started' && event_status !== 'complete' ? (
         <JoinEventBanner />
