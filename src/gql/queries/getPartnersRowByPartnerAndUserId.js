@@ -13,6 +13,7 @@ const getPartnersRowByPartnerAndUserId = gql`
         partner_id: { _eq: $partner_id }
         round: { _eq: $round }
         user_id: { _eq: $user_id }
+        chat_request: { _eq: "request-sent" }
       }
     ) {
       event_id
