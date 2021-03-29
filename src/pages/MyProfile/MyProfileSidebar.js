@@ -145,15 +145,16 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
               >
                 Edit Profile
               </Button>
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={!eventIdInLS}
-                className={classes.editProfileButton}
-                onClick={() => history.push(`/events/${eventIdInLS}`)}
-              >
-                Back to Event
-              </Button>
+              {eventIdInLS ? (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.editProfileButton}
+                  onClick={() => history.push(`/events/${eventIdInLS}`)}
+                >
+                  Back to Event
+                </Button>
+              ) : null}
             </Grid>
           </Grid>
         )
