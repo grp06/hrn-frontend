@@ -18,7 +18,7 @@ const LeaveEventButton = ({ event_id }) => {
         try {
           await window.room.disconnect()
           window.room = null
-          history.push(`/events/${event_id}/event-complete`)
+          history.push(`/events/${event_id}/event-complete`, { leftEventEarly: true })
         } catch (err) {
           console.log(err)
         }

@@ -13,13 +13,14 @@ import { constants } from '../../utils'
 
 const { giveFeedbackTypeform } = constants
 
-const EventComplete = () => {
+const EventComplete = ({ location }) => {
   const classes = useEventCompleteStyles()
   const { event, eventContextLoading } = useEventContext()
   const { user, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { id: userId, role } = user
   const { banner_photo_url, id: eventId } = event
+  const locationState = location.state && Object.keys(location.state).length ? location.state : {}
 
   const history = useHistory()
 
@@ -42,10 +43,10 @@ const EventComplete = () => {
 
   useEffect(() => {
     // just used for resetting
-    if (event?.id && event?.status !== 'complete') {
+    if (event?.id && event?.status !== 'complete' && !locationState.leftEventEarly) {
       history.push(`/events/${event.id}`)
     }
-  }, [event, history])
+  }, [event, history, locationState])
 
   if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
     return <Loading />
