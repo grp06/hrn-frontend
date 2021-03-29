@@ -101,6 +101,9 @@ const useHostDirectoryStyles = makeStyles((theme) => ({
     },
     fontFamily: 'Muli',
   },
+  expiredHostRow: {
+    backgroundColor: '#c0392b',
+  },
   hostInfoContainer: {
     margin: theme.spacing(4, 'auto'),
     width: '75vw',

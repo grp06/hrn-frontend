@@ -19,6 +19,8 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
     averageRSVPs,
     totalNumberOfConnections,
     averageNumberOfConnections,
+    totalNumberOfUniqueAttendees,
+    totalNumberOfUniqueRSVPs,
   } = getAggregateEventAnalytics(events)
 
   const getDaysAsAHost = () => {
@@ -51,12 +53,12 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
       </Grid>
       <Grid item md={6} xs={12}>
         <Typography variant="subtitle1" className={classes.detailsHeading}>
-          Average Attendance Rate: {averageAttendanceRate} %
+          Total Number of Unique RSVPs: {totalNumberOfUniqueRSVPs}
         </Typography>
       </Grid>
       <Grid item md={6} xs={12}>
         <Typography variant="subtitle1" className={classes.detailsHeading}>
-          Average Number of RSVPs: {averageRSVPs}
+          Total Number of Unique Attendees: {totalNumberOfUniqueAttendees}
         </Typography>
       </Grid>
       <Grid item md={6} xs={12}>
@@ -67,6 +69,16 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
       <Grid item md={6} xs={12}>
         <Typography variant="subtitle1" className={classes.detailsHeading}>
           Average Number of Connections: {averageNumberOfConnections}
+        </Typography>
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <Typography variant="subtitle1" className={classes.detailsHeading}>
+          Average Attendance Rate: {averageAttendanceRate} %
+        </Typography>
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <Typography variant="subtitle1" className={classes.detailsHeading}>
+          Average Number of RSVPs: {averageRSVPs}
         </Typography>
       </Grid>
     </Grid>

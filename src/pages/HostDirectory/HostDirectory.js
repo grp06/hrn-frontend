@@ -27,14 +27,12 @@ const PaidHostDashboard = () => {
   const { data: hostStarterData, loading: hostStarterDataLoading } = useQuery(getUsersByRoleName, {
     variables: {
       role: 'host_starter',
-      now: now.current,
     },
   })
 
   const { data: hostPremiumData, loading: hostPremiumDataLoading } = useQuery(getUsersByRoleName, {
     variables: {
       role: 'host_premium',
-      now: now.current,
     },
   })
 
@@ -59,21 +57,29 @@ const PaidHostDashboard = () => {
             const becameHostDate = moment(new Date(user.became_host_at))
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
             const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
-            const daysUserHasBeenHost = moment(new Date()).diff(becameHostDate, 'days')
-            if (daysUntilSubEnds < 31 && daysUntilSubEnds >= 0) {
-              const monthsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 30)
-              total.numberOfTotalPaidMonthsOfStarterMonthlyPlans += monthsThatUserHasPaid
-              total.starterMonthlyPlans++
+            const totalDaysUserWillBeAPayingHost = subPeriodEndDate.diff(becameHostDate, 'days')
+            // meaning the user had a yearly plan
+            if (totalDaysUserWillBeAPayingHost > 360) {
+              const yearsThatUserHasPaid = Math.ceil(totalDaysUserWillBeAPayingHost / 365)
+              total.numberOfTotalPaidYearsOfStarterYearlyPlans += yearsThatUserHasPaid
+              // meaning the plan is still active
+              if (daysUntilSubEnds > 0) {
+                total.activeStarterYearlyPlans++
+              }
               return total
             }
-            const yearsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 365)
-            total.numberOfTotalPaidYearsOfStarterYearlyPlans += yearsThatUserHasPaid
-            total.starterYearlyPlans++
+            // meaning the user had a monthly plan
+            const monthsThatUserHasPaid = Math.ceil(totalDaysUserWillBeAPayingHost / 30.5)
+            total.numberOfTotalPaidMonthsOfStarterMonthlyPlans += monthsThatUserHasPaid
+            // meaning the plan is still active
+            if (daysUntilSubEnds > 0) {
+              total.activeStarterMonthlyPlans++
+            }
             return total
           },
           {
-            starterMonthlyPlans: 0,
-            starterYearlyPlans: 0,
+            activeStarterMonthlyPlans: 0,
+            activeStarterYearlyPlans: 0,
             numberOfTotalPaidMonthsOfStarterMonthlyPlans: 0,
             numberOfTotalPaidYearsOfStarterYearlyPlans: 0,
           }
@@ -88,21 +94,29 @@ const PaidHostDashboard = () => {
             const becameHostDate = moment(new Date(user.became_host_at))
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
             const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')
-            const daysUserHasBeenHost = subPeriodEndDate.diff(becameHostDate, 'days')
-            if (daysUntilSubEnds < 31 && daysUntilSubEnds > 0) {
-              const monthsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 30)
-              total.numberOfTotalPaidMonthsOfPremiumMonthlyPlans += monthsThatUserHasPaid
-              total.premiumMonthlyPlans++
+            const totalDaysUserWillBeAPayingHost = subPeriodEndDate.diff(becameHostDate, 'days')
+            // meaning the user had a yearly plan
+            if (totalDaysUserWillBeAPayingHost > 360) {
+              const yearsThatUserHasPaid = Math.ceil(totalDaysUserWillBeAPayingHost / 365)
+              total.numberOfTotalPaidYearsOfPremiumYearlyPlans += yearsThatUserHasPaid
+              // meaning the plan is still active
+              if (totalDaysUserWillBeAPayingHost > 0) {
+                total.activePremiumYearlyPlans++
+              }
               return total
             }
-            const yearsThatUserHasPaid = Math.ceil(daysUserHasBeenHost / 365)
-            total.numberOfTotalPaidYearsOfPremiumYearlyPlans += yearsThatUserHasPaid
-            total.premiumYearlyPlans++
+            // meaning the user had a monthly plan
+            const monthsThatUserHasPaid = Math.ceil(totalDaysUserWillBeAPayingHost / 30.5)
+            total.numberOfTotalPaidMonthsOfPremiumMonthlyPlans += monthsThatUserHasPaid
+            // meaning the plan is still active
+            if (totalDaysUserWillBeAPayingHost > 0) {
+              total.activePremiumMonthlyPlans++
+            }
             return total
           },
           {
-            premiumMonthlyPlans: 0,
-            premiumYearlyPlans: 0,
+            activePremiumMonthlyPlans: 0,
+            activePremiumYearlyPlans: 0,
             numberOfTotalPaidMonthsOfPremiumMonthlyPlans: 0,
             numberOfTotalPaidYearsOfPremiumYearlyPlans: 0,
           }
@@ -111,10 +125,10 @@ const PaidHostDashboard = () => {
 
     const totalMRR =
       paidStarterPlanNumbers && paidPremiumPlanNumbers
-        ? paidStarterPlanNumbers.starterMonthlyPlans * 59 +
-          paidStarterPlanNumbers.starterYearlyPlans * 49 +
-          paidPremiumPlanNumbers.premiumMonthlyPlans * 169 +
-          paidPremiumPlanNumbers.premiumYearlyPlans * 149
+        ? paidStarterPlanNumbers.activeStarterMonthlyPlans * 59 +
+          paidStarterPlanNumbers.activeStarterYearlyPlans * 49 +
+          paidPremiumPlanNumbers.activePremiumMonthlyPlans * 169 +
+          paidPremiumPlanNumbers.activePremiumYearlyPlans * 149
         : 0
 
     const totalRevenue =
@@ -198,13 +212,15 @@ const PaidHostDashboard = () => {
           alignItems="center"
         >
           <Typography variant="h4" style={{ color: '#FF99AD' }}>
-            Starter Hosts
+            Active Starters
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#FF99AD' }}>
             {hostStarterData &&
-              hostStarterData.users.filter(
-                (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
-              ).length}
+              hostStarterData.users
+                .filter(
+                  (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
+                )
+                .filter((user) => new Date(user.sub_period_end) > new Date()).length}
           </Typography>
         </Grid>
         <Grid
@@ -217,13 +233,15 @@ const PaidHostDashboard = () => {
           alignItems="center"
         >
           <Typography variant="h4" style={{ color: '#fabb5b' }}>
-            Premium Hosts
+            Active Premiums
           </Typography>
           <Typography variant="h1" className={classes.largeNumber} style={{ color: '#fabb5b' }}>
             {hostPremiumData &&
-              hostPremiumData.users.filter(
-                (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
-              ).length}
+              hostPremiumData.users
+                .filter(
+                  (user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id)
+                )
+                .filter((user) => new Date(user.sub_period_end) > new Date()).length}
           </Typography>
         </Grid>
       </Grid>
