@@ -118,6 +118,8 @@ const Onboarding = () => {
       rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, usersName)
       history.push(`/events/${eventIdInLocalStorage}`)
     }
+
+    window.location.reload()
   }
 
   return (
