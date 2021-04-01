@@ -1,10 +1,10 @@
 // FIXME LIKE THIS: https://spin.atomicobject.com/2018/06/25/circular-dependencies-javascript/
 export { default as useTwilio } from './useTwilio'
-export { default as useGroupVideoChatTwilio } from './useGroupVideoChatTwilio'
+export { default as useGroupTwilio } from './useGroupTwilio'
 export { default as useParticipantConnected } from './useParticipantConnected'
-export { default as useParticipantConnectedToGroupVideoChat } from './useParticipantConnectedToGroupVideoChat'
+export { default as useParticipantConnectedToGroupTwilio } from './useParticipantConnectedToGroupTwilio'
 export { default as useRemoteTrackPublished } from './useRemoteTrackPublished'
-export { default as useRemoteTrackPublishedToGroupVideoChat } from './useRemoteTrackPublishedToGroupVideoChat'
+export { default as useRemoteTrackPublishedToGroupTwilio } from './useRemoteTrackPublishedToGroupTwilio'
 export { default as usePreEventTwilio } from './usePreEventTwilio'
 export { default as useSetupUserPreEvent } from './useSetupUserPreEvent'
 export { default as useIsUserActive } from './useIsUserActive'

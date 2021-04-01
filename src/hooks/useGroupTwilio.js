@@ -1,7 +1,7 @@
-import { useParticipantConnectedToGroupVideoChat } from '.'
+import { useParticipantConnectedToGroupTwilio } from '.'
 
-const useGroupVideoChatTwilio = () => {
-  const { participantConnectedToGroupVideoChat } = useParticipantConnectedToGroupVideoChat()
+const useGroupTwilio = () => {
+  const { participantConnectedToGroupTwilio } = useParticipantConnectedToGroupTwilio()
 
   const publishLocalParticipantsTracks = (localParticipant) => {
     console.log('im publishing local participant tracks')
@@ -30,12 +30,12 @@ const useGroupVideoChatTwilio = () => {
 
       // when we connect to a room, run 'participantConnected'
       // for each person who is already in the room when we arrive
-      participants.forEach(participantConnectedToGroupVideoChat)
+      participants.forEach(participantConnectedToGroupTwilio)
 
       // set up a listener to do some stuff when new people join the room
       room.on('participantConnected', (remoteParticipant) => {
         console.log('participantConnected', remoteParticipant)
-        participantConnectedToGroupVideoChat(remoteParticipant)
+        participantConnectedToGroupTwilio(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
@@ -95,4 +95,4 @@ const useGroupVideoChatTwilio = () => {
   return { publishLocalParticipantsTracks, startGroupVideoChatTwilio }
 }
 
-export default useGroupVideoChatTwilio
+export default useGroupTwilio

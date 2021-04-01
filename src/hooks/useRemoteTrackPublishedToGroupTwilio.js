@@ -1,4 +1,4 @@
-const useRemoteTrackPublishedToGroupVideoChat = () => {
+const useRemoteTrackPublishedToGroupTwilio = () => {
   const remoteTrackPublished = (publication, participantsId) => {
     if (publication.isSubscribed) {
       const videoGrid = document.getElementById('videoBox')
@@ -30,4 +30,4 @@ const useRemoteTrackPublishedToGroupVideoChat = () => {
   return { remoteTrackPublished }
 }
 
-export default useRemoteTrackPublishedToGroupVideoChat
+export default useRemoteTrackPublishedToGroupTwilio

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Loading } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
-import { useGroupVideoChatTwilio } from '../../hooks'
+import { useGroupTwilio } from '../../hooks'
 
 const { connect } = require('twilio-video')
 
@@ -16,7 +16,7 @@ const NewLobby: React.FC<{}> = () => {
   const { event, eventContextLoading } = useEventContext()
   const { user, userContextLoading } = useUserContext()
   const { userHasEnabledCameraAndMic } = useUserEventStatusContext()
-  const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
+  const { startGroupVideoChatTwilio } = useGroupTwilio()
   const { id: event_id } = event
   const { id: user_id } = user
   const [newLobbyToken, setNewLobbyToken] = useState<string>('')
