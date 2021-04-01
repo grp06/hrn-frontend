@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react'
+import Video from 'twilio-video'
+import { Button } from '@material-ui/core'
 import { UserVideoCard } from '.'
 import { Loading } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
@@ -9,30 +11,30 @@ const { connect } = require('twilio-video')
 
 declare global {
   interface Window {
-    lobbyTwilioRoom: any
+    room: any
   }
 }
 
 const NewLobby: React.FC<{}> = () => {
   const { event, eventContextLoading } = useEventContext()
   const { user, userContextLoading } = useUserContext()
-  const { userHasEnabledCameraAndMic } = useUserEventStatusContext()
+  const { onlineEventUsers, userHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupTwilio()
   const { host_id, id: event_id } = event
-  const { id: user_id } = user
-  const [arrayOfParticipantsIdsWithVideoOn, setArrayOfParticipantsIdsWithVideoOn] = useState<
+  const { id: user_id, name: users_name } = user
+
+  const [arrayOfParticipantsWithVideoDivs, setArrayOfParticipantsWithVideoDivs] = useState<
     string[]
   >([])
   const [newLobbyToken, setNewLobbyToken] = useState<string>('')
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
-  const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
-  const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId')
+  const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId') || undefined
+  const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId') || undefined
   const audioDevice =
     process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
 
   const getTwilioToken = async () => {
     const res = await getToken(`${event_id}-lobby`, user_id).then((response) => response.json())
-    console.log('res ->', res)
     return res.token
   }
 
@@ -44,19 +46,38 @@ const NewLobby: React.FC<{}> = () => {
       audio: userIsHost ? audioDevice : false,
     })
     console.log('setting room ')
-    window.lobbyTwilioRoom = room
+    window.room = room
     return room
   }
 
   const createAttendeeVideoCards = () => {
-    console.log(
-      '🌈 ~ arrayOfParticipantsIdsWithVideoOn.map ~ arrayOfParticipantsIdsWithVideoOn',
-      arrayOfParticipantsIdsWithVideoOn
-    )
-    if (arrayOfParticipantsIdsWithVideoOn.length) {
-      return arrayOfParticipantsIdsWithVideoOn.map((participantId) => {
-        return <UserVideoCard height={200} userId={participantId} width={200} />
+    if (arrayOfParticipantsWithVideoDivs.length) {
+      return arrayOfParticipantsWithVideoDivs.map((participantId) => {
+        return (
+          <div key={`${participantId}-video-card`}>
+            <UserVideoCard height={200} userId={participantId} width={200} />
+          </div>
+        )
       })
+    }
+  }
+
+  const enableVideo = () => {
+    if (window.room) {
+      const { localParticipant } = window.room
+      const localParticipantsVideoDiv = document.getElementById(user_id)
+      if (!localParticipant.videoTracks.size && localParticipantsVideoDiv) {
+        Video.createLocalVideoTrack({
+          deviceId: { exact: localStoragePreferredVideoId },
+        }).then((localVideoTrack: any) => {
+          localParticipant.publishTrack(localVideoTrack)
+          const attachedTrack = localVideoTrack.attach()
+          localParticipantsVideoDiv.style.display = 'inline-flex'
+          attachedTrack.style.transform = 'scale(-1, 1)'
+          attachedTrack?.setAttribute('id', `${localParticipant.identity}-video`)
+          localParticipantsVideoDiv?.appendChild(attachedTrack)
+        })
+      }
     }
   }
 
@@ -66,33 +87,51 @@ const NewLobby: React.FC<{}> = () => {
   // starting twilio will try to attach their video tracks to an existing div if the
   // remote participant has published their video track already.
   useEffect(() => {
-    if (event_id && user_id && userHasEnabledCameraAndMic && !newLobbyToken) {
+    if (
+      event_id &&
+      arrayOfParticipantsWithVideoDivs.length &&
+      user_id &&
+      userHasEnabledCameraAndMic &&
+      !newLobbyToken
+    ) {
       getTwilioToken()
         .then((token) => {
           setNewLobbyToken(token)
           return getLobbyTwilioRoom(token)
         })
         .then((room) => {
-          console.log('room.particpants ->', room.participants)
-          const arrayOfParticipants = []
-          room.participants.forEach((participant: any) =>
-            arrayOfParticipants.push(participant.identity)
-          )
-          if (userIsHost) arrayOfParticipants.push(user_id.toString())
-          setArrayOfParticipantsIdsWithVideoOn(arrayOfParticipants)
-          return room
-        })
-        .then((room) => {
           startGroupVideoChatTwilio(room)
         })
     }
-  }, [event_id, newLobbyToken, user_id, userHasEnabledCameraAndMic])
+  }, [
+    event_id,
+    newLobbyToken,
+    arrayOfParticipantsWithVideoDivs,
+    user_id,
+    userHasEnabledCameraAndMic,
+  ])
 
-  if (eventContextLoading || userContextLoading) {
+  useEffect(() => {
+    if (onlineEventUsers?.length && userHasEnabledCameraAndMic) {
+      if (onlineEventUsers.length !== arrayOfParticipantsWithVideoDivs.length) {
+        const userIds = onlineEventUsers.map((eventUser: any) => eventUser.user[0].id.toString())
+        setArrayOfParticipantsWithVideoDivs(userIds)
+      }
+    }
+  }, [onlineEventUsers, userHasEnabledCameraAndMic])
+
+  if (eventContextLoading || userContextLoading || !arrayOfParticipantsWithVideoDivs.length) {
     return <Loading />
   }
 
-  return <div id="videoBox">{createAttendeeVideoCards()}</div>
+  return (
+    <div id="videoBox" style={{ display: 'flex' }}>
+      {createAttendeeVideoCards()}
+      <Button variant="contained" color="primary" onClick={() => enableVideo()}>
+        Hi there
+      </Button>
+    </div>
+  )
 }
 
 export default NewLobby

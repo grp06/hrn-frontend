@@ -33,6 +33,7 @@ const useNewLobbyStyles = makeStyles((theme) => ({
     backgroundPosition: '50% 50%',
     backgroundRepeat: 'no-repeat',
     borderRadius: '4px',
+    display: 'none',
     margin: theme.spacing(0.5),
     position: 'relative',
   },

@@ -12,11 +12,8 @@ const useGroupTwilio = () => {
 
       localParticipant.tracks.forEach((publication) => {
         const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        console.log(
-          '🌈 ~ localParticipant.tracks.forEach ~ localParticipantsVideoDiv',
-          localParticipantsVideoDiv
-        )
         if (localParticipantsVideoDiv && publication.track.kind === 'video') {
+          localParticipantsVideoDiv.style.display = 'inline-flex'
           const attachedTrack = publication.track.attach()
           attachedTrack.style.transform = 'scale(-1, 1)'
           attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
@@ -35,8 +32,9 @@ const useGroupTwilio = () => {
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
+        window.room = room
         console.log('participantDisconnected', remoteParticipant)
-        const participantsVideoDiv = document.getElementById(`${remoteParticipant.identity}-video`)
+        const participantsVideoDiv = document.getElementById(remoteParticipant.identity)
         // instead of modifying the innerHTML, detatch instead
         if (participantsVideoDiv) {
           participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)

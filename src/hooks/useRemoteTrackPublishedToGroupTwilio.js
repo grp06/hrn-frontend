@@ -4,6 +4,7 @@ const useRemoteTrackPublishedToGroupTwilio = () => {
       const videoGrid = document.getElementById('videoBox')
       const participantsVideoDiv = document.getElementById(participantsId)
       if (publication.kind === 'video' && participantsVideoDiv) {
+        participantsVideoDiv.style.display = 'inline-flex'
         const attachedTrack = publication.track.attach()
         attachedTrack.setAttribute('id', `${participantsId}-video`)
         attachedTrack.muted = true
@@ -17,6 +18,7 @@ const useRemoteTrackPublishedToGroupTwilio = () => {
       const participantsVideoDiv = document.getElementById(participantsId)
       const videoGrid = document.getElementById('videoBox')
       if (publication.kind === 'video' && participantsVideoDiv) {
+        participantsVideoDiv.style.display = 'inline-flex'
         attachedTrack.muted = true
         attachedTrack.setAttribute('id', `${participantsId}-video`)
         console.log('subscribed, attaching track')
