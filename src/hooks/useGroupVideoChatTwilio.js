@@ -3,23 +3,30 @@ import { useParticipantConnectedToGroupVideoChat } from '.'
 const useGroupVideoChatTwilio = () => {
   const { participantConnectedToGroupVideoChat } = useParticipantConnectedToGroupVideoChat()
 
+  const publishLocalParticipantsTracks = (localParticipant) => {
+    console.log('im publishing local participant tracks')
+    localParticipant.tracks.forEach((publication) => {
+      const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
+      if (localParticipantsVideoDiv && publication.track.kind === 'video') {
+        const attachedTrack = publication.track.attach()
+        attachedTrack.style.transform = 'scale(-1, 1)'
+        attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
+        localParticipantsVideoDiv.appendChild(attachedTrack)
+      }
+    })
+  }
+
   const startGroupVideoChatTwilio = (room) => {
     let dominantSpeakerId
     window.room = room
     if (room) {
       console.log('room ->', room)
-      const { localParticipant, participants } = room
+      const { localParticipant, participants, name: roomName } = room
 
-      // publish our own tracks
-      localParticipant.tracks.forEach((publication) => {
-        const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        if (localParticipantsVideoDiv && publication.track.kind === 'video') {
-          const attachedTrack = publication.track.attach()
-          attachedTrack.style.transform = 'scale(-1, 1)'
-          attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
-          localParticipantsVideoDiv.appendChild(attachedTrack)
-        }
-      })
+      // publish our own tracks only if its group video chat
+      if (!roomName.includes('lobby')) {
+        publishLocalParticipantsTracks(localParticipant)
+      }
 
       // when we connect to a room, run 'participantConnected'
       // for each person who is already in the room when we arrive
@@ -85,7 +92,7 @@ const useGroupVideoChatTwilio = () => {
     }
   }
 
-  return { startGroupVideoChatTwilio }
+  return { publishLocalParticipantsTracks, startGroupVideoChatTwilio }
 }
 
 export default useGroupVideoChatTwilio

@@ -26,6 +26,7 @@ import {
   LoginForm,
   MyProfile,
   MyConnections,
+  NewLobby,
   VideoRoom,
   Onboarding,
   PrivacyPolicy,
@@ -103,6 +104,7 @@ const App = () => {
                       <TwilioProvider>
                         <UserEventStatusProvider>
                           <Route exact path="/events/:id/lobby" component={Lobby} />
+                          <Route exact path="/events/:id/new-lobby" component={NewLobby} />
                           <Route exact path="/events/:id/video-room" component={VideoRoom} />
                           <Route
                             exact
