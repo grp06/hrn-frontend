@@ -76,7 +76,11 @@ const UserEventStatusProvider = ({ children }) => {
   const { myRound } = useTwilioContext()
   const { id: eventId } = event
   const { id: userId } = user
+  const { pathname } = window.location
   const { partner_id } = (myRound && Object.keys(myRound).length && myRound) || {}
+  const userInVideoRoom = pathname.includes('video-room')
+  const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId')
+
   const pushUserToLobby = useCallback(() => {
     history.push(`/events/${event.id}/lobby`)
   }, [event.id, history])
@@ -120,6 +124,16 @@ const UserEventStatusProvider = ({ children }) => {
       })
     }
   }, [onlineEventUsersData, dispatch])
+
+  // if the user refreshes and they're in the video room
+  // this prevents them from getting the google meet screen
+  useEffect(() => {
+    if (userInVideoRoom && localStoragePreferredVideoId) {
+      dispatch((draft) => {
+        draft.userHasEnabledCameraAndMic = true
+      })
+    }
+  }, [dispatch, localStoragePreferredVideoId, userInVideoRoom])
 
   // update last_seen on the user object every X seconds so users show up as "online" for host
   useEffect(() => {
