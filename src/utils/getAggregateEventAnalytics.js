@@ -39,6 +39,39 @@ function getAggregateEventAnalytics(arrayOfEvents) {
     { arrOfUniqueRSVPs: [], arrOfUniqueAttendees: [] }
   )
 
+  // THE NEXT 3 FUNCS ARE FOR TOTAL REPEAT ATTENDEES
+  // create an array of arrays with attendees for each event
+  const arraysOfAttendeesForEachEvent = arrayOfEvents.reduce((all, event, idx) => {
+    if (event.status === 'complete') {
+      const arrayOfAttendeesForThisEvent = []
+      event.partners.forEach((pairing) => {
+        if (!arrayOfAttendeesForThisEvent.includes(pairing.user_id)) {
+          arrayOfAttendeesForThisEvent.push(pairing.user_id)
+        }
+      })
+      all.push(arrayOfAttendeesForThisEvent)
+    }
+    return all
+  }, [])
+
+  // create a map for each userId and count how many times they are in an event
+  const mapOfEachAttendeesEventFrequency = arraysOfAttendeesForEachEvent.reduce(
+    (all, eventAttendeeArray) => {
+      eventAttendeeArray.forEach((userId) => {
+        if (!all[userId]) {
+          all[userId] = 1
+        } else all[userId] += 1
+      })
+      return all
+    },
+    {}
+  )
+
+  // squash that object and just return the ones where frequency is greater than 1
+  const totalNumberOfRepeatAttendees = Object.values(mapOfEachAttendeesEventFrequency).filter(
+    (frequency) => frequency > 1
+  ).length
+
   return {
     averageAttendanceRate: Math.round(totalAttendanceRate / arrayOfEvents.length),
     averageRSVPs: Math.round(totalNumberOfRSVPs / arrayOfEvents.length),
@@ -46,6 +79,7 @@ function getAggregateEventAnalytics(arrayOfEvents) {
     averageNumberOfConnections: (totalNumberOfConnections / arrayOfEvents.length).toFixed(2),
     totalNumberOfUniqueRSVPs: uniqueRSVPsAndAttendees.arrOfUniqueRSVPs?.length,
     totalNumberOfUniqueAttendees: uniqueRSVPsAndAttendees.arrOfUniqueAttendees?.length,
+    totalNumberOfRepeatAttendees,
   }
 }
 
