@@ -14,6 +14,9 @@ const useRemoteTrackPublishedToGroupTwilio = () => {
     }
 
     publication.on('subscribed', async (track) => {
+      if (publication.kind === 'data') {
+        return
+      }
       const attachedTrack = track.attach()
       const participantsVideoDiv = document.getElementById(participantsId)
       const videoGrid = document.getElementById('videoBox')

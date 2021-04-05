@@ -78,6 +78,11 @@ const useGroupTwilio = () => {
         }
       })
 
+      room.on('trackMessage', (data, track) => {
+        console.log(data)
+        console.log(localParticipant.tracks)
+      })
+
       window.addEventListener('beforeunload', () => {
         room.disconnect()
         console.log('disconnecting from room')

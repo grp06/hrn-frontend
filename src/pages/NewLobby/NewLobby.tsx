@@ -7,7 +7,13 @@ import { useEventContext, useUserContext, useUserEventStatusContext } from '../.
 import { getToken } from '../../helpers'
 import { useGroupTwilio } from '../../hooks'
 
-const { connect } = require('twilio-video')
+const {
+  connect,
+  LocalDataTrack,
+  createLocalTracks,
+  LocalAudioTrack,
+  LocalVideoTrack,
+} = require('twilio-video')
 
 declare global {
   interface Window {
@@ -27,11 +33,12 @@ const NewLobby: React.FC<{}> = () => {
     string[]
   >([])
   const [newLobbyToken, setNewLobbyToken] = useState<string>('')
+  const [localDataTrack, setLocalDataTrack] = useState<any>(null)
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
   const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId') || undefined
   const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId') || undefined
   const audioDevice =
-    process.env.NODE_ENV === 'production' ? { deviceId: localStoragePreferredAudioId } : false
+    process.env.NODE_ENV === 'production' ? { exact: localStoragePreferredAudioId } : undefined
 
   const getTwilioToken = async () => {
     const res = await getToken(`${event_id}-lobby`, user_id).then((response) => response.json())
@@ -43,10 +50,16 @@ const NewLobby: React.FC<{}> = () => {
     const room = await connect(token, {
       maxAudioBitrate: 16000,
       video: userIsHost ? { deviceId: localStoragePreferredVideoId } : false,
-      audio: userIsHost ? audioDevice : false,
+      audio: audioDevice,
     })
     console.log('setting room ')
     window.room = room
+    if (userIsHost) {
+      const dataTrackPublication = await window.room.localParticipant.publishTrack(
+        new LocalDataTrack()
+      )
+      setLocalDataTrack(dataTrackPublication.track)
+    }
     return room
   }
 
@@ -78,6 +91,12 @@ const NewLobby: React.FC<{}> = () => {
           localParticipantsVideoDiv?.appendChild(attachedTrack)
         })
       }
+    }
+  }
+
+  const sendMessage = () => {
+    if (localDataTrack) {
+      localDataTrack.send('hi')
     }
   }
 
@@ -129,6 +148,9 @@ const NewLobby: React.FC<{}> = () => {
       {createAttendeeVideoCards()}
       <Button variant="contained" color="primary" onClick={() => enableVideo()}>
         Hi there
+      </Button>
+      <Button variant="contained" color="secondary" onClick={() => sendMessage()}>
+        Send message
       </Button>
     </div>
   )
