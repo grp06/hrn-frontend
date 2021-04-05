@@ -28,6 +28,13 @@ const useGroupTwilio = () => {
         }
       })
 
+      localParticipant.on('trackEnabled', (publication) => {
+        if (publication.kind === 'video') {
+          const participantsVideoDiv = document.getElementById(localParticipant.identity)
+          participantsVideoDiv.style.display = 'inline-flex'
+        }
+      })
+
       // when we connect to a room, run 'participantConnected'
       // for each person who is already in the room when we arrive
       participants.forEach(participantConnectedToGroupTwilio)

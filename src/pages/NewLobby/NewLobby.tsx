@@ -90,6 +90,12 @@ const NewLobby: React.FC<{}> = () => {
           attachedTrack?.setAttribute('id', `${localParticipant.identity}-video`)
           localParticipantsVideoDiv?.appendChild(attachedTrack)
         })
+      } else {
+        localParticipant.tracks.forEach((publication: any) => {
+          if (publication.kind === 'video') {
+            publication.track.enable()
+          }
+        })
       }
     }
   }
