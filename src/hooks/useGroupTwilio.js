@@ -93,13 +93,21 @@ const useGroupTwilio = () => {
       })
 
       room.on('trackMessage', (data, track) => {
-        const localParticipantTracks = localParticipant.tracks
+        const { identity: localParticipantId, tracks: localParticipantTracks } = localParticipant
         console.log(data)
         console.log(localParticipantTracks)
         if (data === 'sweep')
           localParticipantTracks.forEach((publication) => {
             console.log(publication)
-            publication.track.disable()
+            publication.unpublish()
+            const localParticipantsDiv = document.getElementById(localParticipantId)
+            const localParticipantsVideoElement = document.getElementById(
+              `${localParticipantId}-video`
+            )
+            if (publication.kind === 'video' && localParticipantsDiv) {
+              localParticipantsVideoElement.remove()
+              localParticipantsDiv.style.display = 'none'
+            }
           })
       })
 
