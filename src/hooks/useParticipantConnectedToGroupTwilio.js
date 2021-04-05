@@ -19,6 +19,7 @@ const useParticipantConnectedToGroupTwilio = () => {
       }
     })
 
+    // when participants unpublish their tracks either by leaving stage or getting swept
     participant.on('trackUnpublished', (publication) => {
       const participantsDiv = document.getElementById(participant.identity)
       const participantsVideoElement = document.getElementById(`${participant.identity}-video`)
@@ -28,11 +29,8 @@ const useParticipantConnectedToGroupTwilio = () => {
       }
     })
 
+    // we only disable audio tracks for muting
     participant.on('trackDisabled', (publication) => {
-      if (publication.kind === 'video') {
-        const participantsVideoDiv = document.getElementById(participant.identity)
-        participantsVideoDiv.style.display = 'none'
-      }
       const participantsMicOffIconDiv = document.getElementById(
         `${participant.identity}-mic-off-icon-div`
       )
@@ -41,11 +39,8 @@ const useParticipantConnectedToGroupTwilio = () => {
       }
     })
 
+    // we only enable audio tracks for muting
     participant.on('trackEnabled', (publication) => {
-      if (publication.kind === 'video') {
-        const participantsVideoDiv = document.getElementById(participant.identity)
-        participantsVideoDiv.style.display = 'inline-flex'
-      }
       const participantsMicOffIconDiv = document.getElementById(
         `${participant.identity}-mic-off-icon-div`
       )
@@ -53,14 +48,6 @@ const useParticipantConnectedToGroupTwilio = () => {
         participantsMicOffIconDiv.style.display = 'none'
       }
     })
-
-    // participant.on('trackSubscriptionFailed', (error, publication) => {
-
-    // })
-
-    // participant.on('disconnected', (participant) => {
-
-    // })
   }
   return { participantConnectedToGroupTwilio }
 }

@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Video from 'twilio-video'
 import { Button } from '@material-ui/core'
 import { UserVideoCard } from '.'
 import { Loading } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
 import { useGroupTwilio } from '../../hooks'
+import {
+  publishParticipantsAudioAndVideo,
+  unpublishParticipantsTracks,
+} from '../../utils/lobbyStageFunctions'
 
-const {
-  connect,
-  LocalDataTrack,
-  createLocalTracks,
-  LocalAudioTrack,
-  LocalVideoTrack,
-} = require('twilio-video')
+const { connect, LocalDataTrack } = require('twilio-video')
 
 declare global {
   interface Window {
@@ -75,22 +72,17 @@ const NewLobby: React.FC<{}> = () => {
     }
   }
 
-  const enableVideo = () => {
+  const joinStage = () => {
     if (window.room) {
       const { localParticipant } = window.room
-      const localParticipantsVideoDiv = document.getElementById(user_id)
-      if (!localParticipant.videoTracks.size && localParticipantsVideoDiv) {
-        Video.createLocalVideoTrack({
-          deviceId: { exact: localStoragePreferredVideoId },
-        }).then((localVideoTrack: any) => {
-          localParticipant.publishTrack(localVideoTrack)
-          const attachedTrack = localVideoTrack.attach()
-          localParticipantsVideoDiv.style.display = 'inline-flex'
-          attachedTrack.style.transform = 'scale(-1, 1)'
-          attachedTrack?.setAttribute('id', `${localParticipant.identity}-video`)
-          localParticipantsVideoDiv?.appendChild(attachedTrack)
-        })
-      }
+      publishParticipantsAudioAndVideo(localParticipant)
+    }
+  }
+
+  const leaveStage = () => {
+    if (window.room) {
+      const { localParticipant } = window.room
+      unpublishParticipantsTracks(localParticipant)
     }
   }
 
@@ -146,8 +138,11 @@ const NewLobby: React.FC<{}> = () => {
   return (
     <div id="videoBox" style={{ display: 'flex' }}>
       {createAttendeeVideoCards()}
-      <Button variant="contained" color="primary" onClick={() => enableVideo()}>
-        Hi there
+      <Button variant="contained" color="primary" onClick={() => joinStage()}>
+        Join Stage
+      </Button>
+      <Button variant="contained" color="default" onClick={() => leaveStage()}>
+        Leave Stage
       </Button>
       <Button variant="contained" color="secondary" onClick={() => sweepStage()}>
         Sweep
