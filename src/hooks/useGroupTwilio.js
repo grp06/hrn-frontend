@@ -21,6 +21,13 @@ const useGroupTwilio = () => {
         }
       })
 
+      localParticipant.on('trackDisabled', (publication) => {
+        if (publication.kind === 'video') {
+          const participantsVideoDiv = document.getElementById(localParticipant.identity)
+          participantsVideoDiv.style.display = 'none'
+        }
+      })
+
       // when we connect to a room, run 'participantConnected'
       // for each person who is already in the room when we arrive
       participants.forEach(participantConnectedToGroupTwilio)
@@ -79,8 +86,14 @@ const useGroupTwilio = () => {
       })
 
       room.on('trackMessage', (data, track) => {
+        const localParticipantTracks = localParticipant.tracks
         console.log(data)
-        console.log(localParticipant.tracks)
+        console.log(localParticipantTracks)
+        if (data === 'sweep')
+          localParticipantTracks.forEach((publication) => {
+            console.log(publication)
+            publication.track.disable()
+          })
       })
 
       window.addEventListener('beforeunload', () => {

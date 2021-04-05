@@ -94,9 +94,9 @@ const NewLobby: React.FC<{}> = () => {
     }
   }
 
-  const sendMessage = () => {
+  const sweepStage = () => {
     if (localDataTrack) {
-      localDataTrack.send('hi')
+      localDataTrack.send('sweep')
     }
   }
 
@@ -149,8 +149,8 @@ const NewLobby: React.FC<{}> = () => {
       <Button variant="contained" color="primary" onClick={() => enableVideo()}>
         Hi there
       </Button>
-      <Button variant="contained" color="secondary" onClick={() => sendMessage()}>
-        Send message
+      <Button variant="contained" color="secondary" onClick={() => sweepStage()}>
+        Sweep
       </Button>
     </div>
   )

@@ -29,8 +29,11 @@ const useParticipantConnectedToGroupTwilio = () => {
       }
     })
 
-    // we only disable and enable audio tracks
     participant.on('trackDisabled', (publication) => {
+      if (publication.kind === 'video') {
+        const participantsVideoDiv = document.getElementById(participant.identity)
+        participantsVideoDiv.style.display = 'none'
+      }
       const participantsMicOffIconDiv = document.getElementById(
         `${participant.identity}-mic-off-icon-div`
       )
