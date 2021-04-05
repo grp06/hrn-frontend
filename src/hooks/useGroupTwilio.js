@@ -1,5 +1,8 @@
 import { useParticipantConnectedToGroupTwilio } from '.'
-import { unpublishParticipantsTracks } from '../utils/lobbyStageFunctions'
+import {
+  appendVideoToParticipantsDivElement,
+  unpublishParticipantsTracks,
+} from '../utils/lobbyStageFunctions'
 
 const useGroupTwilio = () => {
   const { participantConnectedToGroupTwilio } = useParticipantConnectedToGroupTwilio()
@@ -12,13 +15,10 @@ const useGroupTwilio = () => {
       const { localParticipant, participants } = room
 
       localParticipant.tracks.forEach((publication) => {
-        const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        if (localParticipantsVideoDiv && publication.track.kind === 'video') {
-          localParticipantsVideoDiv.style.display = 'inline-flex'
-          const attachedTrack = publication.track.attach()
-          attachedTrack.style.transform = 'scale(-1, 1)'
-          attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
-          localParticipantsVideoDiv.appendChild(attachedTrack)
+        const { identity: localParticipantsId } = localParticipant
+        if (publication.track.kind === 'video') {
+          const attachedVideoTrack = publication.track.attach()
+          appendVideoToParticipantsDivElement(attachedVideoTrack, localParticipantsId)
         }
       })
 
