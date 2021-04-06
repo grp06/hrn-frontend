@@ -1,8 +1,5 @@
 import { useParticipantConnectedToGroupTwilio } from '.'
-import {
-  appendVideoToParticipantsDivElement,
-  unpublishParticipantsTracks,
-} from '../utils/lobbyStageFunctions'
+import { appendVideoToParticipantsDivElement, unpublishParticipantsTracks } from '../utils'
 
 const useGroupTwilio = () => {
   const { participantConnectedToGroupTwilio } = useParticipantConnectedToGroupTwilio()
@@ -19,13 +16,6 @@ const useGroupTwilio = () => {
         if (publication.track.kind === 'video') {
           const attachedVideoTrack = publication.track.attach()
           appendVideoToParticipantsDivElement(attachedVideoTrack, localParticipantsId)
-        }
-      })
-
-      localParticipant.on('trackDisabled', (publication) => {
-        if (publication.kind === 'video') {
-          const participantsVideoDiv = document.getElementById(localParticipant.identity)
-          participantsVideoDiv.style.display = 'none'
         }
       })
 

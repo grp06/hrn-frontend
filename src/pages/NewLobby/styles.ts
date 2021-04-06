@@ -1,11 +1,22 @@
 // @ts-nocheck
 import { makeStyles } from '@material-ui/styles'
 import PersonIcon from '../../assets/greyPerson.svg'
+import MicOffIcon from '../../assets/micOff.svg'
 
 const useNewLobbyStyles = makeStyles((theme) => ({
   // *****************************
-  //   LobbyContent
+  //   UserVideoCard
   // *****************************
+  micOffIconDiv: {
+    backgroundImage: `url(${MicOffIcon})`,
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    display: 'none',
+    height: '25px',
+    marginLeft: '4px',
+    marginRight: '-4px',
+    width: '25px',
+  },
   userNameAndMicDiv: {
     alignItems: 'center',
     backgroundColor: 'rgb(36,37,38,0.7)',

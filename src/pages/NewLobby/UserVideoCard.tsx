@@ -4,7 +4,7 @@ import { useNewLobbyStyles } from '.'
 
 export interface UserVideoCardProps {
   height: number
-  name?: string
+  name: string
   userId: string
   width: number
 }
@@ -14,7 +14,8 @@ const UserVideoCard: React.FC<UserVideoCardProps> = ({ height, name, userId, wid
   return (
     <div id={userId} className={classes.userVideoCard} style={{ height, width }}>
       <Grid container direction="row" className={classes.userNameAndMicDiv}>
-        <Typography variant="body1">{name || 'where the name would be'}</Typography>
+        <Typography variant="body1">{name}</Typography>
+        <div id={`${userId}-mic-off-icon-div`} className={classes.micOffIconDiv} />
       </Grid>
     </div>
   )

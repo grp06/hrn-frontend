@@ -5,10 +5,7 @@ import { Loading } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
 import { useGroupTwilio } from '../../hooks'
-import {
-  publishParticipantsAudioAndVideo,
-  unpublishParticipantsTracks,
-} from '../../utils/lobbyStageFunctions'
+import { publishParticipantsAudioAndVideo, unpublishParticipantsTracks } from '../../utils'
 
 const { connect, LocalDataTrack } = require('twilio-video')
 
@@ -24,7 +21,7 @@ const NewLobby: React.FC<{}> = () => {
   const { onlineEventUsers, userHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupTwilio()
   const { host_id, id: event_id } = event
-  const { id: user_id, name: users_name } = user
+  const { id: user_id } = user
 
   const [arrayOfParticipantsWithVideoDivs, setArrayOfParticipantsWithVideoDivs] = useState<
     string[]
@@ -63,9 +60,13 @@ const NewLobby: React.FC<{}> = () => {
   const createAttendeeVideoCards = () => {
     if (arrayOfParticipantsWithVideoDivs.length) {
       return arrayOfParticipantsWithVideoDivs.map((participantId) => {
+        const participantsUserObject = onlineEventUsers.find(
+          (eventUser: any) => eventUser.user[0].id === parseInt(participantId, 10)
+        )
+        const { name } = participantsUserObject.user[0]
         return (
           <div key={`${participantId}-video-card`}>
-            <UserVideoCard height={200} userId={participantId} width={200} />
+            <UserVideoCard height={200} name={name} userId={participantId} width={200} />
           </div>
         )
       })
