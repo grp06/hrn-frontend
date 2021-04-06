@@ -84,6 +84,7 @@ const UserProvider = ({ children }) => {
   const location = useLocation()
   const { userId } = state.user
   const { pathname } = location
+  const { _cio } = window
 
   const specificEventPageRegex = /\/events\/\d+?$/
   const eventsPageRegex = /\/events?$/
@@ -126,6 +127,29 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
+        const {
+          became_host_at,
+          city,
+          created_at,
+          email,
+          id,
+          role,
+          sub_period_end,
+        } = userData.users[0]
+        _cio.identify({
+          id,
+          email,
+          city,
+          role,
+          created_at: Math.round(new Date(created_at).getTime() / 1000),
+          became_host_at: became_host_at
+            ? Math.round(new Date(became_host_at).getTime() / 1000)
+            : null,
+          sub_period_end: sub_period_end
+            ? Math.round(new Date(sub_period_end).getTime() / 1000)
+            : null,
+        })
+
         dispatch((draft) => {
           draft.user = userData.users[0]
           draft.userContextLoading = false

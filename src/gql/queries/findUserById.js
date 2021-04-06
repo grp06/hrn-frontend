@@ -9,6 +9,7 @@ const findUserById = gql`
       email
       city
       short_bio
+      created_at
       linkedIn_url
       profile_pic_url
       stripe_customer_id
