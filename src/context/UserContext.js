@@ -150,7 +150,8 @@ const UserProvider = ({ children }) => {
         _cio.identify({
           id,
           email,
-          name,
+          first_name: name.split(' ')[0],
+          last_name: name.split(' ')[1],
           city,
           role,
           created_at: getEpochSecondsFromDate(created_at),
