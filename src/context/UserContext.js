@@ -3,7 +3,7 @@ import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
 import { findUserById } from '../gql/queries'
-import { getEpochSecondsFromDate } from '../utils'
+import { saveUserToCustomerIO } from '../utils'
 
 const UserContext = createContext()
 
@@ -85,8 +85,6 @@ const UserProvider = ({ children }) => {
   const location = useLocation()
   const { userId } = state.user
   const { pathname } = location
-  const { _cio } = window
-
   const specificEventPageRegex = /\/events\/\d+?$/
   const eventsPageRegex = /\/events?$/
   const setNewPasswordPageRegex = /set-new-password/
@@ -128,39 +126,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
-        const {
-          became_host_at,
-          city,
-          created_at,
-          email,
-          id,
-          name,
-          role,
-          event_users,
-          sub_period_end,
-        } = userData.users[0]
-
-        const num_events_hosted = role.includes('host')
-          ? event_users.reduce((total, eventUserObject) => {
-              if (eventUserObject.event.host_id === eventUserObject.user_id) total++
-              return total
-            }, 0)
-          : null
-
-        _cio.identify({
-          id,
-          email,
-          first_name: name.split(' ')[0],
-          last_name: name.split(' ')[1],
-          city,
-          role,
-          created_at: getEpochSecondsFromDate(created_at),
-          became_host_at: became_host_at ? getEpochSecondsFromDate(became_host_at) : null,
-          sub_period_end: sub_period_end ? getEpochSecondsFromDate(sub_period_end) : null,
-          num_events_hosted,
-          num_events_rsvped: event_users?.length,
-        })
-
+        saveUserToCustomerIO(userData.users[0])
         dispatch((draft) => {
           draft.user = userData.users[0]
           draft.userContextLoading = false
