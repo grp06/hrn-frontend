@@ -3,6 +3,7 @@ import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
 import { findUserById } from '../gql/queries'
+import { getEpochSecondsFromDate } from '../utils'
 
 const UserContext = createContext()
 
@@ -136,18 +137,15 @@ const UserProvider = ({ children }) => {
           role,
           sub_period_end,
         } = userData.users[0]
+
         _cio.identify({
           id,
           email,
           city,
           role,
-          created_at: Math.round(new Date(created_at).getTime() / 1000),
-          became_host_at: became_host_at
-            ? Math.round(new Date(became_host_at).getTime() / 1000)
-            : null,
-          sub_period_end: sub_period_end
-            ? Math.round(new Date(sub_period_end).getTime() / 1000)
-            : null,
+          created_at: getEpochSecondsFromDate(created_at),
+          became_host_at: became_host_at ? getEpochSecondsFromDate(became_host_at) : null,
+          sub_period_end: sub_period_end ? getEpochSecondsFromDate(sub_period_end) : null,
         })
 
         dispatch((draft) => {
