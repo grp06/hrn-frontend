@@ -1,4 +1,5 @@
 import useRemoteTrackPublishedToGroupTwilio from './useRemoteTrackPublishedToGroupTwilio'
+import { toggleParticipantsMicIcon } from '../utils'
 
 const useParticipantConnectedToGroupTwilio = () => {
   const { remoteTrackPublished } = useRemoteTrackPublishedToGroupTwilio()
@@ -11,11 +12,8 @@ const useParticipantConnectedToGroupTwilio = () => {
     // when other people join after we're already there
     participant.on('trackPublished', (publication) => {
       remoteTrackPublished(publication, participant.identity)
-      const participantsMicOffIconDiv = document.getElementById(
-        `${participant.identity}-mic-off-icon-div`
-      )
-      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
-        participantsMicOffIconDiv.style.display = 'none'
+      if (publication.kind === 'audio') {
+        toggleParticipantsMicIcon(participant.identity, 'none')
       }
     })
 
@@ -31,21 +29,15 @@ const useParticipantConnectedToGroupTwilio = () => {
 
     // we only disable audio tracks for muting
     participant.on('trackDisabled', (publication) => {
-      const participantsMicOffIconDiv = document.getElementById(
-        `${participant.identity}-mic-off-icon-div`
-      )
-      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
-        participantsMicOffIconDiv.style.display = 'inline'
+      if (publication.kind === 'audio') {
+        toggleParticipantsMicIcon(participant.identity, 'inline')
       }
     })
 
     // we only enable audio tracks for muting
     participant.on('trackEnabled', (publication) => {
-      const participantsMicOffIconDiv = document.getElementById(
-        `${participant.identity}-mic-off-icon-div`
-      )
-      if (publication.kind === 'audio' && participantsMicOffIconDiv) {
-        participantsMicOffIconDiv.style.display = 'none'
+      if (publication.kind === 'audio') {
+        toggleParticipantsMicIcon(participant.identity, 'none')
       }
     })
   }

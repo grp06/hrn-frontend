@@ -10,17 +10,45 @@ export const appendVideoToParticipantsDivElement = (attachedVideoTrack, particip
   }
 }
 
-export const publishParticipantsAudioAndVideo = (participant) => {
-  const { identity: participantsId, videoTracks: participantsVideoTracks } = participant
-  const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId') || undefined
-  if (!participantsVideoTracks.size) {
-    Video.createLocalVideoTrack({
-      deviceId: { exact: localStoragePreferredVideoId },
-    }).then((localVideoTrack) => {
-      participant.publishTrack(localVideoTrack)
-      const attachedVideoTrack = localVideoTrack.attach()
-      appendVideoToParticipantsDivElement(attachedVideoTrack, participantsId)
+export const disableParticipantsAudioTrack = (participant) => {
+  const { audioTracks: participantsAudioTracks, identity: participantsId } = participant
+  if (participantsAudioTracks.size) {
+    participantsAudioTracks.forEach((publication) => {
+      publication.track.disable()
+      console.log('about to toggle locally')
+      toggleParticipantsMicIcon(participantsId, 'inline')
     })
+  }
+}
+
+export const publishParticipantsAudioAndVideo = (participant) => {
+  const {
+    audioTracks: participantsAudioTracks,
+    identity: participantsId,
+    videoTracks: participantsVideoTracks,
+  } = participant
+  const localStoragePreferredVideoId = localStorage.getItem('preferredVideoId') || undefined
+  const localStoragePreferredAudioId = localStorage.getItem('preferredAudioId') || undefined
+  if (!participantsVideoTracks.size && !participantsAudioTracks.size) {
+    Video.createLocalTracks({
+      audio: { deviceId: localStoragePreferredAudioId },
+      video: { deviceId: localStoragePreferredVideoId },
+    }).then((localTracks) => {
+      localTracks.forEach((track) => {
+        participant.publishTrack(track)
+        if (track.kind === 'video') {
+          const attachedVideoTrack = track.attach()
+          appendVideoToParticipantsDivElement(attachedVideoTrack, participantsId)
+        }
+      })
+    })
+  }
+}
+
+export const toggleParticipantsMicIcon = (participantId, style) => {
+  const participantsMicOffIconDiv = document.getElementById(`${participantId}-mic-off-icon-div`)
+  if (participantsMicOffIconDiv) {
+    participantsMicOffIconDiv.style.display = style
   }
 }
 

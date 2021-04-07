@@ -1,5 +1,9 @@
 import { useParticipantConnectedToGroupTwilio } from '.'
-import { appendVideoToParticipantsDivElement, unpublishParticipantsTracks } from '../utils'
+import {
+  appendVideoToParticipantsDivElement,
+  disableParticipantsAudioTrack,
+  unpublishParticipantsTracks,
+} from '../utils'
 
 const useGroupTwilio = () => {
   const { participantConnectedToGroupTwilio } = useParticipantConnectedToGroupTwilio()
@@ -86,6 +90,9 @@ const useGroupTwilio = () => {
       room.on('trackMessage', (data, track) => {
         if (data === 'sweep') {
           unpublishParticipantsTracks(localParticipant)
+        }
+        if (data === 'silence') {
+          disableParticipantsAudioTrack(localParticipant)
         }
       })
 

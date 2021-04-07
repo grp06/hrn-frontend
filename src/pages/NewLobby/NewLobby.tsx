@@ -63,12 +63,14 @@ const NewLobby: React.FC<{}> = () => {
         const participantsUserObject = onlineEventUsers.find(
           (eventUser: any) => eventUser.user[0].id === parseInt(participantId, 10)
         )
-        const { name } = participantsUserObject.user[0]
-        return (
-          <div key={`${participantId}-video-card`}>
-            <UserVideoCard height={200} name={name} userId={participantId} width={200} />
-          </div>
-        )
+        if (participantsUserObject) {
+          const { name } = participantsUserObject.user[0]
+          return (
+            <div key={`${participantId}-video-card`}>
+              <UserVideoCard height={200} name={name} userId={participantId} width={200} />
+            </div>
+          )
+        }
       })
     }
   }
@@ -87,9 +89,9 @@ const NewLobby: React.FC<{}> = () => {
     }
   }
 
-  const sweepStage = () => {
+  const sendDataTrackMessage = (message: string) => {
     if (localDataTrack) {
-      localDataTrack.send('sweep')
+      localDataTrack.send(message)
     }
   }
 
@@ -137,18 +139,23 @@ const NewLobby: React.FC<{}> = () => {
   }
 
   return (
-    <div id="videoBox" style={{ display: 'flex' }}>
-      {createAttendeeVideoCards()}
+    <>
+      <div id="videoBox" style={{ display: 'flex' }}>
+        {createAttendeeVideoCards()}
+      </div>
       <Button variant="contained" color="primary" onClick={() => joinStage()}>
         Join Stage
       </Button>
       <Button variant="contained" color="default" onClick={() => leaveStage()}>
         Leave Stage
       </Button>
-      <Button variant="contained" color="secondary" onClick={() => sweepStage()}>
+      <Button variant="contained" color="secondary" onClick={() => sendDataTrackMessage('sweep')}>
         Sweep
       </Button>
-    </div>
+      <Button variant="contained" color="secondary" onClick={() => sendDataTrackMessage('silence')}>
+        Silence
+      </Button>
+    </>
   )
 }
 
