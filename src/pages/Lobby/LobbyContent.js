@@ -13,11 +13,18 @@ import {
 import { PreEvent } from '../PreEvent'
 
 const LobbyContent = React.memo(
-  ({ event, onlineEventUsers, setUserEventStatus, userEventStatus, user, eventId }) => {
+  ({
+    chatRequests,
+    event,
+    onlineEventUsers,
+    setUserEventStatus,
+    userEventStatus,
+    user,
+    eventId,
+  }) => {
     const classes = useLobbyStyles()
     const {
       banner_photo_url,
-      event_users,
       host,
       host_id,
       id: event_id,
@@ -76,11 +83,9 @@ const LobbyContent = React.memo(
                       />
                     ) : null}
                     <OnlineAttendeesCard
-                      eventStatus={eventStatus}
-                      matching_type={matching_type}
+                      event={event}
                       onlineEventUsers={onlineEventUsers}
-                      side_aLabel={side_a}
-                      side_bLabel={side_b}
+                      userId={user_id}
                     />
                     <PodcastCard />
                   </Grid>
@@ -124,11 +129,10 @@ const LobbyContent = React.memo(
                     className={classes.narrowEventAndLobbyContentGrid}
                   >
                     <OnlineAttendeesCard
-                      eventStatus={eventStatus}
-                      matching_type={matching_type}
+                      chatRequests={chatRequests}
+                      event={event}
                       onlineEventUsers={onlineEventUsers}
-                      side_aLabel={side_a}
-                      side_bLabel={side_b}
+                      userId={user_id}
                     />
                     <PodcastCard />
                   </Grid>
