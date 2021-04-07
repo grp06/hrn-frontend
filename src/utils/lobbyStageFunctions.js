@@ -15,7 +15,6 @@ export const disableParticipantsAudioTrack = (participant) => {
   if (participantsAudioTracks.size) {
     participantsAudioTracks.forEach((publication) => {
       publication.track.disable()
-      console.log('about to toggle locally')
       toggleParticipantsMicIcon(participantsId, 'inline')
     })
   }
@@ -61,6 +60,9 @@ export const unpublishParticipantsTracks = (participant) => {
     if (publication.kind === 'video' && participantsVideoElement && participantsDiv) {
       participantsVideoElement.remove()
       participantsDiv.style.display = 'none'
+    }
+    if (publication.kind === 'audio') {
+      toggleParticipantsMicIcon(participantsId, 'none')
     }
   })
 }

@@ -2,6 +2,7 @@ import { useParticipantConnectedToGroupTwilio } from '.'
 import {
   appendVideoToParticipantsDivElement,
   disableParticipantsAudioTrack,
+  toggleParticipantsMicIcon,
   unpublishParticipantsTracks,
 } from '../utils'
 
