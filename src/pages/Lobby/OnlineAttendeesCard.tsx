@@ -12,27 +12,36 @@ import {
   ListItemText,
   Typography,
 } from '@material-ui/core'
-import { useLobbyStyles } from '.'
+import { RequestToChatButton, useLobbyStyles } from '.'
 import logo from '../../assets/HRNlogoNoFrame.svg'
-import { OnlineEventUsersInterface } from '../../utils'
+import {
+  EventObjectInterface,
+  OnlineEventUsersInterface,
+  PartnersObjectInterface,
+} from '../../utils'
 
 interface OnlineAttendeesCardProps {
-  eventStatus: string
-  matching_type: string
+  chatRequests?: PartnersObjectInterface[]
+  event: EventObjectInterface
   onlineEventUsers: OnlineEventUsersInterface[]
-  side_aLabel: string
-  side_bLabel: string
+  userId: number
 }
 
 const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
-  ({ eventStatus, matching_type, onlineEventUsers, side_aLabel, side_bLabel }) => {
+  ({ chatRequests, event, onlineEventUsers, userId }) => {
     const classes = useLobbyStyles()
+    const {
+      id: event_id,
+      matching_type,
+      side_a: side_aLabel,
+      side_b: side_bLabel,
+      status: eventStatus,
+    } = event
     const [seeMore, setSeeMore] = useState<boolean>(false)
     const maxIndexToShowTo = matching_type === 'two-sided' ? 2 : 4
 
     // returns an array with two arrays. First array is onlineEventUsers with side a
     // second array is onlineEventUsers with side b
-    console.log('🌈 ~ onlineEventUsers', onlineEventUsers)
     const twoSidedOnlineEventUsers = partition(onlineEventUsers, { side: 'a' })
 
     const populateList = (
@@ -60,11 +69,25 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText disableTypography>
-                  <Grid container direction="row" alignItems="center" justify="flex-start">
-                    <Typography variant="body1" style={{ fontWeight: 500 }}>
-                      {user[0].name}
-                    </Typography>
-                    <Typography variant="subtitle1">, {user[0].city}</Typography>
+                  <Grid container direction="row" alignItems="center" justify="space-between">
+                    <Grid container direction="row" alignItems="center" style={{ width: 'auto' }}>
+                      <Typography variant="body1" style={{ fontWeight: 500 }}>
+                        {user[0].name}
+                      </Typography>
+                      <Typography variant="subtitle1">, {user[0].city}</Typography>
+                    </Grid>
+                    {((user[0].id as unknown) as number) !== userId &&
+                    eventStatus === 'room-in-progress' ? (
+                      <RequestToChatButton
+                        myPartnerRow={chatRequests?.find(
+                          (chatRequest) =>
+                            chatRequest.partner_id === ((user[0].id as unknown) as number)
+                        )}
+                        event={event}
+                        partnerId={(user[0].id as unknown) as number}
+                        userId={userId}
+                      />
+                    ) : null}
                   </Grid>
                 </ListItemText>
               </ListItem>
@@ -94,7 +117,7 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
               ? `Online Attendees (${onlineEventUsers.length})`
               : `Attendees in the Lobby (${onlineEventUsers.length})`}
           </Typography>
-          <List dense>
+          <List style={{ width: '100%' }} dense>
             {matching_type === 'two-sided' ? (
               <>
                 <Typography variant="body1" className={classes.side_aLabel}>

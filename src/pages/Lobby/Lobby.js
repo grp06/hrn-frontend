@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import {
   BottomControlPanel,
+  ChatRequestedModal,
   CameraAndMicSetupScreen,
   EventCountdown,
   NextRoundIn,
@@ -24,7 +25,6 @@ const Lobby = () => {
     eventContextLoading,
   } = useEventContext()
   const { user, userContextLoading } = useUserContext()
-  const [chatIsOpen, setChatIsOpen] = useState(true)
   const {
     onlineEventUsers,
     setUserEventStatus,
@@ -43,6 +43,9 @@ const Lobby = () => {
     id: eventId,
   } = event
   const { id: user_id, name: usersName } = user
+  const [chatIsOpen, setChatIsOpen] = useState(true)
+  const [chatRequests, setChatRequests] = useState([])
+  const [chatRequestThatNeedsAResponse, setChatRequestThatNeedsAResponse] = useState(null)
 
   // only do this subscription if you came late or left the chat
   // TODO optimize by not subscribing with less than two minutes
@@ -105,10 +108,14 @@ const Lobby = () => {
   // videoRoom for round 1 even if you are the odd one out. That way userEventStatus
   // gets set properly and you get the correct broadcast screen
   useEffect(() => {
+    const acceptedChatRequest = myRoundData?.partners.find(
+      (chatRequest) => chatRequest.chat_request === 'accepted'
+    )
+
     if (
       (eventStatus === 'room-in-progress' &&
         userEventStatus !== 'sitting out' &&
-        myRoundData?.partners.length &&
+        acceptedChatRequest &&
         userHasEnabledCameraAndMic) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
@@ -123,6 +130,27 @@ const Lobby = () => {
     userEventStatus,
     userHasEnabledCameraAndMic,
   ])
+
+  useEffect(() => {
+    if (myRoundData?.partners.length) {
+      const requestsThatAreNotNull = myRoundData.partners.filter(
+        (partnerRow) => partnerRow.chat_request !== null
+      )
+      const requestsThatArePending = myRoundData.partners.filter(
+        (partnerRow) => partnerRow.chat_request === 'pending'
+      )
+
+      setChatRequests(requestsThatAreNotNull)
+
+      // set the last request (which would be the first one made) just in case there are
+      // currently two requests that need to be responded to
+      if (requestsThatArePending?.length) {
+        setChatRequestThatNeedsAResponse(requestsThatArePending[0])
+      } else {
+        setChatRequestThatNeedsAResponse(null)
+      }
+    }
+  }, [myRoundData])
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />
@@ -144,6 +172,7 @@ const Lobby = () => {
         />
       ) : null}
       <LobbyContent
+        chatRequests={chatRequests}
         event={event}
         onlineEventUsers={onlineEventUsers}
         setUserEventStatus={setUserEventStatus}
@@ -169,6 +198,9 @@ const Lobby = () => {
         userId={user_id}
         userHasEnabledCameraAndMic={userHasEnabledCameraAndMic}
       />
+      {chatRequestThatNeedsAResponse ? (
+        <ChatRequestedModal chatRequest={chatRequestThatNeedsAResponse} />
+      ) : null}
     </div>
   )
 }
