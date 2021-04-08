@@ -23,7 +23,7 @@ const Subscription = () => {
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id, sub_period_end } = user
   const [billingPeriod, setBillingPeriod] = useState('monthly')
-  const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
+  const { starterPlan, proPlan } = getPricingPlanDetails(billingPeriod, role)
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
 
   const pushToCheckout = (billingPeriod, planType) => {
@@ -69,28 +69,28 @@ const Subscription = () => {
 
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <Grid container className={classes.subscriptionContainer}>
+      <Grid
+        container
+        alignContent="center"
+        justify="center"
+        className={classes.subscriptionContainer}
+      >
         <Typography variant="h2" className={classes.sectionHeading}>
-          Choose the right plan for your community!
+          Choose the right
+          <br /> plan for your community!
         </Typography>
-        <Grid container direction="row">
-          <Grid container item xs={12} sm={6} className={classes.subButtonGridContainer}>
-            <ToggleGroup
-              toggleValue={billingPeriod}
-              toggleValueA="monthly"
-              toggleValueB="yearly"
-              setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
-            />
-          </Grid>
+        <Typography variant="subtitle1">
+          Try Hi Right Now for free, or upgrade your plan to unlock more features.
+        </Typography>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignContent="center"
+          className={classes.toggleButtonContainer}
+        >
           {userIsPayingHost ? (
-            <Grid
-              container
-              item
-              xs={12}
-              sm={6}
-              justify="flex-end"
-              className={classes.subButtonGridContainer}
-            >
+            <>
               <Button
                 variant="text"
                 disableRipple
@@ -100,19 +100,21 @@ const Subscription = () => {
                 <FeatherIcon icon="edit-2" size="20" style={{ paddingRight: '12px' }} /> Manage
                 subscription
               </Button>
-            </Grid>
+            </>
           ) : null}
+          <ToggleGroup
+            toggleValue={billingPeriod}
+            toggleValueA="monthly"
+            toggleValueB="yearly (SAVE20%)"
+            setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
+          />
         </Grid>
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
-            <Grid container direction="row" justify="space-between">
-              <PricingPlanCard plan={freePlan} onSelect={() => handleUpgradeToHost()} />
+            <Grid container direction="row" justify="space-around">
+              <PricingPlanCard plan={starterPlan} onSelect={() => handleUpgradeToHost()} />
               <PricingPlanCard
-                plan={starterPlan}
-                onSelect={() => handlePlanSelect(billingPeriod, 'starter')}
-              />
-              <PricingPlanCard
-                plan={premiumPlan}
+                plan={proPlan}
                 onSelect={() => handlePlanSelect(billingPeriod, 'premium')}
               />
             </Grid>

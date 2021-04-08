@@ -1,47 +1,33 @@
-const getPricingPlanDetails = (billingPeriod, role) => {
-  const freePlan = {
-    name: 'Free',
-    subtitle: 'Best for individuals',
-    price: 'Free!',
-    maxAttendees: 'Unlimiited',
-    prevPlanHighlights: [],
-    highlights: ['Relevant Matching AI', 'Group Video Chat', '1 Event'],
-    isActivePlan: role === 'host',
-    disableButton: role ? role.includes('host') : false,
-  }
+import ProPlanIcon from '../../assets/proPlanIcon.svg'
+import StarterPlanIcon from '../../assets/starterPlanIcon.svg'
 
+const getPricingPlanDetails = (billingPeriod, role) => {
   const starterPlan = {
     name: 'Starter',
-    subtitle: 'Best for small communities',
-    price: billingPeriod === 'monthly' ? '$59 / month' : '$49 / month',
-    maxAttendees: 'Unlimited',
-    prevPlanHighlights: ['Relevant Matching AI', 'Group Video Chat'],
-    highlights: ['Unlimited Events', 'Event Branding', '1 Host Account'],
+    price: 'Free!',
+    icon: StarterPlanIcon,
+    highlights: ['• Up to 25 attendees per event', '• Unlimited Events', '• Random Matching'],
     isActivePlan: role === 'host_starter',
     disableButton: role === 'host_premium',
   }
 
-  const premiumPlan = {
-    name: 'Premium',
-    subtitle: 'Best for large communities',
-    price: billingPeriod === 'monthly' ? '$169 / month' : '$149 / month',
-    maxAttendees: 'Unlimited',
-    prevPlanHighlights: [
-      'Relevant Matching AI',
-      'Group Video Chat',
-      'Unlimited Events',
-      'Event Branding',
-    ],
+  const proPlan = {
+    name: 'Pro',
+    price: billingPeriod === 'monthly' ? '$99 / month' : '$79 / month',
+    icon: ProPlanIcon,
     highlights: [
-      '5 Host Accounts',
-      'Event Analytics',
-      'Priority Support',
-      'Advanced Matching Options',
+      '• Up to 75 attendees per event',
+      '• Advanced Matching',
+      '• Relevant Matching',
+      '• Two Sided',
+      '• Event Analytics',
+      '• Custom Tags (soon)',
+      '• Community / Team Page (soon)',
     ],
     isActivePlan: role === 'host_premium',
   }
 
-  return { freePlan, starterPlan, premiumPlan }
+  return { starterPlan, proPlan }
 }
 
 export default getPricingPlanDetails

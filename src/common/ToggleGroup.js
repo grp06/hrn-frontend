@@ -4,18 +4,14 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   toggleButtonActive: {
-    width: '100px',
+    width: '175px',
     '&.Mui-selected': {
-      color: 'rgba(0, 0, 0, 0.87)',
-      // borderRadius: 0,
+      color: theme.palette.common.ghostWhite,
       borderRadius: 4,
       border: 'none',
-
-      // borderBottom: `2px solid ${theme.palette.common.basePink}`,
-      // backgroundColor: 'transparent',
-      backgroundColor: theme.palette.common.basePink,
+      backgroundColor: theme.palette.common.basePurple,
       '&:hover': {
-        backgroundColor: 'rgb(178, 107, 121)',
+        backgroundColor: 'rgb(98, 60, 153)',
       },
     },
     [theme.breakpoints.down('sm')]: {
@@ -23,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   toggleButtonInactive: {
-    width: '100px',
+    width: '175px',
     color: theme.palette.common.ghostWhite,
     backgroundColor: theme.palette.common.greyButton,
     borderRadius: 4,
@@ -35,12 +31,6 @@ const useStyles = makeStyles((theme) => ({
       width: '100px',
     },
   },
-  toggleButtonGroup: {
-    margin: theme.spacing(0, 0, 6, 0),
-    [theme.breakpoints.down('sm')]: {
-      margin: theme.spacing(0, 0, 3, 0),
-    },
-  },
 }))
 
 const ToggleGroup = ({ toggleValueA, toggleValueB, toggleValue, setToggleValue }) => {
@@ -50,7 +40,6 @@ const ToggleGroup = ({ toggleValueA, toggleValueB, toggleValue, setToggleValue }
       value={toggleValue}
       exclusive
       onChange={(e) => setToggleValue(e.currentTarget.value)}
-      className={classes.toggleButtonGroup}
     >
       <ToggleButton
         value={toggleValueA}
