@@ -164,7 +164,7 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('md')]: {
       width: '90%',
       maxWidth: 'none',
-      margin: theme.spacing(2, 'auto'),
+      padding: 'none',
     },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
@@ -182,7 +182,7 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     width: '95%',
     margin: theme.spacing(3, 'auto'),
     [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(5, 'auto'),
+      margin: theme.spacing(2, 'auto'),
     },
   },
   manageSubButton: {
@@ -196,8 +196,8 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     },
   },
   sectionHeading: {
+    width: '100%',
     marginBottom: theme.spacing(2),
-    width: '50%',
     textAlign: 'center',
     [theme.breakpoints.down('md')]: {
       marginBottom: theme.spacing(3),

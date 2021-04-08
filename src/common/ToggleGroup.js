@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles((theme) => ({
   toggleButtonActive: {
-    width: '175px',
+    width: '160px',
     '&.Mui-selected': {
       color: theme.palette.common.ghostWhite,
       borderRadius: 4,
@@ -14,21 +14,15 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: 'rgb(98, 60, 153)',
       },
     },
-    [theme.breakpoints.down('sm')]: {
-      width: '100px',
-    },
   },
   toggleButtonInactive: {
-    width: '175px',
+    width: '160px',
     color: theme.palette.common.ghostWhite,
     backgroundColor: theme.palette.common.greyButton,
     borderRadius: 4,
     border: 'none',
     '&:hover': {
       backgroundColor: theme.palette.common.greyButtonHover,
-    },
-    [theme.breakpoints.down('sm')]: {
-      width: '100px',
     },
   },
 }))

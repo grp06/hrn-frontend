@@ -79,7 +79,7 @@ const Subscription = () => {
           Choose the right
           <br /> plan for your community!
         </Typography>
-        <Typography variant="subtitle1">
+        <Typography variant="subtitle1" style={{ textAlign: 'center' }}>
           Try Hi Right Now for free, or upgrade your plan to unlock more features.
         </Typography>
         <Grid
