@@ -59,8 +59,8 @@ const ChangeEventPhotoBanner: React.FC<ChangeEventPhotoBannerProps> = ({
   const searchUnsplash = async (keyword: string) => {
     try {
       const unsplashRequest = await getUnsplashImageURL(keyword)
-      setBannerBackground(`url("${unsplashRequest.image.urls.full}")`)
-      setSearchedImageURL(unsplashRequest.image.urls.full)
+      setBannerBackground(`url("${unsplashRequest.image.urls.regular}")`)
+      setSearchedImageURL(unsplashRequest.image.urls.regular)
     } catch (error) {
       console.log('error ->', error)
       alert('error seraching for image')
