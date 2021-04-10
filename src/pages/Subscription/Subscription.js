@@ -41,11 +41,20 @@ const Subscription = () => {
     window.open(portal.url)
   }
 
-  const handlePlanSelect = (billingPeriod, planType) => {
-    if (sub_period_end) {
-      return handleCreateCustomerPortal()
+  // const handlePlanSelect = (billingPeriod, planType) => {
+  //   if (sub_period_end) {
+  //     return handleCreateCustomerPortal()
+  //   }
+  //   return pushToCheckout(billingPeriod, planType)
+  // }
+
+  const handlePlanSelect = (planType, billingPeriod = 'forever') => {
+    const planObject = {
+      planType,
+      billingPeriod,
     }
-    return pushToCheckout(billingPeriod, planType)
+    localStorage.setItem('plan_type', JSON.stringify(planObject))
+    return history.push('/subscription-signup')
   }
 
   const handleUpgradeToHost = async () => {
@@ -112,10 +121,10 @@ const Subscription = () => {
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
             <Grid container direction="row" justify="space-around">
-              <PricingPlanCard plan={starterPlan} onSelect={() => handleUpgradeToHost()} />
+              <PricingPlanCard plan={starterPlan} onSelect={() => handlePlanSelect('starter')} />
               <PricingPlanCard
                 plan={proPlan}
-                onSelect={() => handlePlanSelect(billingPeriod, 'premium')}
+                onSelect={() => handlePlanSelect('premium', billingPeriod)}
               />
             </Grid>
           </motion.div>

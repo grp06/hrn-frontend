@@ -30,6 +30,7 @@ import {
   Onboarding,
   PrivacyPolicy,
   Subscription,
+  SubscriptionSignup,
   SetNewPassword,
   SignUp,
 } from './pages'
@@ -91,6 +92,7 @@ const App = () => {
                     <Route exact path="/host-directory" component={HostDirectory} />
                     <Route exact path="/host-directory/:id" component={HostProfile} />
                     <Route exact path="/subscription" component={Subscription} />
+                    <Route exact path="/subscription-signup" component={SubscriptionSignup} />
                     <Route exact path="/my-events" component={MyEvents} />
                     <Route exact path="/events" component={EventsPublic} />
                     <EventProvider>
