@@ -8,6 +8,10 @@ import { Snack } from '../../common'
 import { signup } from '../../helpers'
 import { constants } from '../../utils'
 
+interface NewSignupFormProps {
+  showOrgForm: Function
+}
+
 const { ROLE, TOKEN, USER_ID } = constants
 const validEmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 // 1 digit, 1 lowecase, 1 uppercase, at least 8 chars long, allows for special chars
@@ -25,7 +29,7 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 })
 
-const NewSignupForm: React.FC<{}> = () => {
+const NewSignupForm: React.FC<NewSignupFormProps> = ({ showOrgForm }) => {
   const classes = useSubscriptionSignupStyles()
   const [errorSnackMessage, setErrorSnackMessage] = useState<string>('')
 
@@ -55,6 +59,7 @@ const NewSignupForm: React.FC<{}> = () => {
             localStorage.setItem(ROLE, role)
             localStorage.setItem(TOKEN, token)
             localStorage.setItem(USER_ID, id)
+            showOrgForm()
           } catch (err) {
             console.log(err)
           }

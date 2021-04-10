@@ -14,8 +14,11 @@ const SubscriptionSignup: React.FC<{}> = () => {
 
   return (
     <div>
-      {' '}
-      <NewSignupForm />
+      {componentToShow === 'signup' ? (
+        <NewSignupForm showOrgForm={() => setComponentToShow('org')} />
+      ) : (
+        <div>Org form goes here</div>
+      )}
     </div>
   )
 }
