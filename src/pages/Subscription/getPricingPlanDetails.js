@@ -1,4 +1,4 @@
-import ProPlanIcon from '../../assets/proPlanIcon.svg'
+import PremiumPlanIcon from '../../assets/premiumPlanIcon.svg'
 import StarterPlanIcon from '../../assets/starterPlanIcon.svg'
 
 const getPricingPlanDetails = (billingPeriod, role) => {
@@ -11,10 +11,10 @@ const getPricingPlanDetails = (billingPeriod, role) => {
     disableButton: role === 'host_premium',
   }
 
-  const proPlan = {
-    name: 'Pro',
-    price: billingPeriod === 'monthly' ? '$99 / month' : '$79 / month',
-    icon: ProPlanIcon,
+  const premiumPlan = {
+    name: 'Premium',
+    price: billingPeriod === 'MONTHLY' ? '$99 / month' : '$79 / month',
+    icon: PremiumPlanIcon,
     highlights: [
       '• Up to 75 attendees per event',
       '• Advanced Matching',
@@ -27,7 +27,7 @@ const getPricingPlanDetails = (billingPeriod, role) => {
     isActivePlan: role === 'host_premium',
   }
 
-  return { starterPlan, proPlan }
+  return { starterPlan, premiumPlan }
 }
 
 export default getPricingPlanDetails

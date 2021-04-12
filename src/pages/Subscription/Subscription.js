@@ -15,15 +15,15 @@ import { useUserContext } from '../../context'
 import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
 import { constants } from '../../utils'
 
-const { ROLE, TOKEN } = constants
+const { PLAN_TYPE, ROLE, TOKEN } = constants
 
 const Subscription = () => {
   const classes = useSubscriptionStyles()
   const history = useHistory()
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id, sub_period_end } = user
-  const [billingPeriod, setBillingPeriod] = useState('monthly')
-  const { starterPlan, proPlan } = getPricingPlanDetails(billingPeriod, role)
+  const [billingPeriod, setBillingPeriod] = useState('MONTHLY')
+  const { starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
   const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
 
   const pushToCheckout = (billingPeriod, planType) => {
@@ -48,12 +48,9 @@ const Subscription = () => {
   //   return pushToCheckout(billingPeriod, planType)
   // }
 
-  const handlePlanSelect = (planType, billingPeriod = 'forever') => {
-    const planObject = {
-      planType,
-      billingPeriod,
-    }
-    localStorage.setItem('plan_type', JSON.stringify(planObject))
+  const handlePlanSelect = (planType) => {
+    console.log('🌈 ~ handlePlanSelect ~ planType', planType)
+    localStorage.setItem(PLAN_TYPE, planType)
     return history.push('/subscription-signup')
   }
 
@@ -113,18 +110,21 @@ const Subscription = () => {
           ) : null}
           <ToggleGroup
             toggleValue={billingPeriod}
-            toggleValueA="monthly"
-            toggleValueB="yearly (SAVE20%)"
+            toggleValueA="MONTHLY"
+            toggleValueB="YEARLY (SAVE20%)"
             setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
           />
         </Grid>
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
             <Grid container direction="row" justify="space-around">
-              <PricingPlanCard plan={starterPlan} onSelect={() => handlePlanSelect('starter')} />
               <PricingPlanCard
-                plan={proPlan}
-                onSelect={() => handlePlanSelect('premium', billingPeriod)}
+                plan={starterPlan}
+                onSelect={() => handlePlanSelect('STARTER_FREE')}
+              />
+              <PricingPlanCard
+                plan={premiumPlan}
+                onSelect={() => handlePlanSelect(`PREMIUM_${billingPeriod.split(' ')[0]}`)}
               />
             </Grid>
           </motion.div>

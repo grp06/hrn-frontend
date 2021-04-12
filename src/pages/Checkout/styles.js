@@ -4,50 +4,20 @@ const useCheckoutStyles = makeStyles((theme) => ({
   // *****************************
   //   CheckoutCard
   // *****************************
+  checkoutPageContainer: {
+    paddingTop: '100px',
+    paddingBottom: '100px',
+  },
+  // *****************************
+  //   CheckoutCard
+  // *****************************
   checkoutCardContainer: {
-    width: '70vw',
+    width: '50vw',
     margin: theme.spacing(0, 'auto'),
-    backgroundColor: theme.palette.common.grey10,
     borderRadius: '4px',
     [theme.breakpoints.down('sm')]: {
       width: '85vw',
     },
-  },
-  divider: {
-    margin: theme.spacing(3, 0),
-    width: '100%',
-    [theme.breakpoints.down('sm')]: {
-      width: '75%',
-      margin: theme.spacing(2, 'auto'),
-    },
-  },
-  pinkCostText: {
-    marginTop: theme.spacing(1),
-    color: theme.palette.common.basePink,
-    fontSize: '1.7rem',
-  },
-  planHighlightTypography: {
-    marginBottom: theme.spacing(0.5),
-  },
-  planNameContainer: {
-    width: '100%',
-    height: '25%',
-    padding: theme.spacing(4),
-    [theme.breakpoints.down('sm')]: {
-      alignItems: 'center',
-      borderRadius: '4px',
-      padding: theme.spacing(3),
-    },
-  },
-  showPlanDetailsButton: {
-    '&:hover': {
-      backgroundColor: 'transparent',
-    },
-  },
-  spanSubtitle: {
-    fontFamily: 'Muli',
-    color: theme.palette.common.greySubtitle,
-    fontWeight: '300',
   },
   // *****************************
   //   CheckoutForm
@@ -61,7 +31,6 @@ const useCheckoutStyles = makeStyles((theme) => ({
   },
   checkoutFormContainer: {
     height: 'auto',
-    backgroundColor: theme.palette.common.greyCard,
     padding: theme.spacing(3),
     width: '100%',
     [theme.breakpoints.down('sm')]: {
@@ -70,20 +39,27 @@ const useCheckoutStyles = makeStyles((theme) => ({
   },
   checkoutFormInputMargin: {
     margin: theme.spacing(2, 0),
-    padding: theme.spacing(0, 1),
   },
   checkoutFormSection: {
     margin: theme.spacing(4, 0),
-    padding: theme.spacing(0, 1),
+  },
+  divider: {
+    margin: theme.spacing(3, 0),
+    [theme.breakpoints.down('sm')]: {
+      margin: theme.spacing(2, 'auto'),
+    },
   },
   sectionContainer: {
     marginBottom: theme.spacing(3),
     width: '100%',
   },
-  subtitleHeading: {
-    color: theme.palette.common.ghostWhiteDark,
-    fontWeight: 600,
-    textTransform: 'uppercase',
+  sectionHeading: {
+    fontWeight: 700,
+    textAlign: 'center',
+    width: '100%',
+  },
+  submitButtonContainer: {
+    marginTop: theme.spacing(3),
   },
 }))
 

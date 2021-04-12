@@ -27,6 +27,7 @@ const constants = {
   USER_ID: 'userId',
   TOKEN: 'token',
   ROLE: 'role',
+  PLAN_TYPE: 'plan_type',
   postChatRatingSnackMessagesArray: [
     'Carrier pigeon sent 🕊',
     "We've put in the good word 🤗",

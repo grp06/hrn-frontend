@@ -3,16 +3,18 @@ import * as Yup from 'yup'
 import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import { Select, TextField } from 'formik-material-ui'
+import { useHistory } from 'react-router-dom'
 import { Button, Grid, MenuItem } from '@material-ui/core'
 import { useSubscriptionSignupStyles } from '.'
 import { Snack } from '../../common'
+import { sleep } from '../../helpers'
 import { insertOrganization } from '../../gql/mutations'
 import { findOrgByNameAndDepartment } from '../../gql/queries'
 import { constants } from '../../utils'
 
 const { USER_ID } = constants
 
-const SignupSchema = Yup.object().shape({
+const OrganizationSchema = Yup.object().shape({
   org_name: Yup.string().min(2, 'Too Short!').required('Required'),
   department: Yup.string(),
   team_size: Yup.string().min(2, 'Pick a team size').required('Required'),
@@ -20,19 +22,28 @@ const SignupSchema = Yup.object().shape({
 
 const OrganizationCreationForm: React.FC<{}> = () => {
   const classes = useSubscriptionSignupStyles()
+  const history = useHistory()
   const usersId = localStorage.getItem(USER_ID)
   const [department, setDepartment] = useState<string>('')
   const [orgName, setOrgName] = useState<string>('')
   const [teamSize, setTeamSize] = useState<string>('')
   const [errorSnackMessage, setErrorSnackMessage] = useState<string>('')
-  const [insertOrganizationMutation] = useMutation(insertOrganization)
+  const [successSnackMessage, setSuccessSnackMessage] = useState<string>('')
+  const [insertOrganizationMutation] = useMutation(insertOrganization, {
+    onCompleted: async () => {
+      setSuccessSnackMessage('Your organization looks great on our roster 👀')
+      await sleep(2000)
+      return history.push('/checkout')
+    },
+  })
+
   const [getOrginazation] = useLazyQuery(findOrgByNameAndDepartment, {
     fetchPolicy: 'no-cache',
     onCompleted: async (data) => {
       console.log(data)
       if (data.organizations.length === 0 && usersId) {
         try {
-          const insertOrgResponse = await insertOrganizationMutation({
+          await insertOrganizationMutation({
             variables: {
               org_object: {
                 creator_id: usersId,
@@ -42,7 +53,6 @@ const OrganizationCreationForm: React.FC<{}> = () => {
               },
             },
           })
-          console.log('🌈 ~ onCompleted: ~ insertOrgResponse', insertOrgResponse)
         } catch (err) {
           console.log(err)
         }
@@ -55,7 +65,7 @@ const OrganizationCreationForm: React.FC<{}> = () => {
   return (
     <>
       <Formik
-        validationSchema={SignupSchema}
+        validationSchema={OrganizationSchema}
         initialValues={{
           org_name: '',
           department: '',
@@ -149,6 +159,13 @@ const OrganizationCreationForm: React.FC<{}> = () => {
         severity="error"
         duration={4000}
         snackMessage={errorSnackMessage}
+      />
+      <Snack
+        open={Boolean(successSnackMessage)}
+        onClose={() => setSuccessSnackMessage('')}
+        severity="success"
+        duration={4000}
+        snackMessage={successSnackMessage}
       />
     </>
   )
