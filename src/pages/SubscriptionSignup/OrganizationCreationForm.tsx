@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import * as Yup from 'yup'
-import { Button, Grid, MenuItem } from '@material-ui/core'
+import { useLazyQuery, useMutation } from '@apollo/react-hooks'
 import { Formik, Form, Field } from 'formik'
 import { Select, TextField } from 'formik-material-ui'
+import { Button, Grid, MenuItem } from '@material-ui/core'
 import { useSubscriptionSignupStyles } from '.'
 import { Snack } from '../../common'
+import { insertOrganization } from '../../gql/mutations'
+import { findOrgByNameAndDepartment } from '../../gql/queries'
 import { constants } from '../../utils'
 
 const { USER_ID } = constants
@@ -12,16 +15,42 @@ const { USER_ID } = constants
 const SignupSchema = Yup.object().shape({
   org_name: Yup.string().min(2, 'Too Short!').required('Required'),
   department: Yup.string(),
-  team_size: Yup.string().required('Required'),
+  team_size: Yup.string().min(2, 'Pick a team size').required('Required'),
 })
 
 const OrganizationCreationForm: React.FC<{}> = () => {
   const classes = useSubscriptionSignupStyles()
+  const usersId = localStorage.getItem(USER_ID)
+  const [department, setDepartment] = useState<string>('')
+  const [orgName, setOrgName] = useState<string>('')
+  const [teamSize, setTeamSize] = useState<string>('')
   const [errorSnackMessage, setErrorSnackMessage] = useState<string>('')
-
-  // const Placeholder = ({ children: HTMLElement }) => {
-  //   return <div style={{ color: '#aaa' }}>{children}</div>
-  // }
+  const [insertOrganizationMutation] = useMutation(insertOrganization)
+  const [getOrginazation] = useLazyQuery(findOrgByNameAndDepartment, {
+    fetchPolicy: 'no-cache',
+    onCompleted: async (data) => {
+      console.log(data)
+      if (data.organizations.length === 0 && usersId) {
+        try {
+          const insertOrgResponse = await insertOrganizationMutation({
+            variables: {
+              org_object: {
+                creator_id: usersId,
+                department,
+                name: orgName,
+                team_size: teamSize,
+              },
+            },
+          })
+          console.log('🌈 ~ onCompleted: ~ insertOrgResponse', insertOrgResponse)
+        } catch (err) {
+          console.log(err)
+        }
+      } else {
+        return setErrorSnackMessage('An organization with that name and department already exists')
+      }
+    },
+  })
 
   return (
     <>
@@ -33,7 +62,18 @@ const OrganizationCreationForm: React.FC<{}> = () => {
           team_size: '',
         }}
         onSubmit={async (values, actions) => {
-          console.log(values)
+          const { department, org_name, team_size } = values
+          actions.setSubmitting(true)
+          setDepartment(department)
+          setOrgName(org_name)
+          setTeamSize(team_size)
+          await getOrginazation({
+            variables: {
+              department,
+              org_name,
+            },
+          })
+          actions.setSubmitting(false)
         }}
       >
         {({ submitForm, isSubmitting, values }) => (
@@ -76,6 +116,7 @@ const OrganizationCreationForm: React.FC<{}> = () => {
                     name="team_size"
                     fullWidth
                     displayEmpty
+                    required
                     renderValue={() => (
                       <div>{values.team_size !== '' ? values.team_size : 'Pick Team Size'}</div>
                     )}

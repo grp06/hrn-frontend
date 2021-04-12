@@ -48,11 +48,13 @@ const NewSignupForm: React.FC<NewSignupFormProps> = ({ showOrgForm }) => {
           const { confirm_password, email, first_name, last_name, password } = values
           actions.setSubmitting(true)
           if (confirm_password !== password) {
+            actions.setSubmitting(false)
             return setErrorSnackMessage('Passwords do not match')
           }
           try {
             const signupResponse = await signup({ email, first_name, last_name, password })
             if (signupResponse.error) {
+              actions.setSubmitting(false)
               return setErrorSnackMessage(signupResponse.error)
             }
             const { token, id, role } = signupResponse
@@ -63,6 +65,7 @@ const NewSignupForm: React.FC<NewSignupFormProps> = ({ showOrgForm }) => {
           } catch (err) {
             console.log(err)
           }
+          actions.setSubmitting(false)
         }}
       >
         {({ submitForm, isSubmitting }) => (

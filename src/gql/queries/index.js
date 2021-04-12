@@ -1,4 +1,5 @@
 export { default as didIShareDetailsInPrevEvent } from './didIShareDetailsInPrevEvent'
+export { default as findOrgByNameAndDepartment } from './findOrgByNameAndDepartment'
 export { default as findUserById } from './findUserById'
 export { default as findUsersCreatedBetweenTwoDates } from './findUsersCreatedBetweenTwoDates'
 export { default as getAllEvents } from './getAllEvents'
