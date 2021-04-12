@@ -24,6 +24,8 @@ const useUserContext = () => {
     dispatch((draft) => {
       draft.user = {
         name: '',
+        first_name: '',
+        last_name: '',
         userId: null,
         role: '',
         city: '',

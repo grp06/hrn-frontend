@@ -20,14 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ role, userId, userName }) => {
+const UserDrawerContent = ({ role, userId, usersFirstName }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
     window.location.pathname.includes('pre-event') ||
       window.location.pathname.includes('video-room')
   )
-  const usersFirstName = userName && userName.split(' ')[0]
 
   const loggedInRoutes = [
     {
