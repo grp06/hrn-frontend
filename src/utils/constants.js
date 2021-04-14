@@ -5,8 +5,8 @@ const constants = {
   // change me back to 20000?
   // george, stephen, max, jasper, yamila
   adminUserIds: [8, 12, 115, 5218, 6069],
-  // uncle t, brenden, seibo, ash, parker, karl, nino, julia kim, marcus (village voices)
-  hrnFriendsUserIds: [254, 1933, 2926, 3974, 4888, 5895, 6246, 6321, 6390],
+  // uncle t, brenden, seibo, ash, parker, karl, nino, julia kim, marcus (village voices), kata
+  hrnFriendsUserIds: [254, 1933, 2926, 3974, 4888, 5895, 6246, 6321, 6390, 6674],
   lastSeenDuration: 5000,
   roundLength: 300,
   betweenRoundsDelay: 20000,
