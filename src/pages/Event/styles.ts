@@ -293,6 +293,7 @@ const useEventStyles = makeStyles((theme) => ({
     height: 'auto',
     backgroundColor: 'black',
     borderRadius: '4px',
+    transform: 'rotateY(180deg)',
   },
   // *****************************
   //   ShareEventPromptModal
