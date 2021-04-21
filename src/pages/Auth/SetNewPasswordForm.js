@@ -44,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     marginBottom: '1em',
     marginTop: '1em',
+    color: theme.palette.common.red,
   },
 }))
 
@@ -56,8 +57,10 @@ const SetNewPasswordForm = ({ match }) => {
   const [error, setError] = useState()
   const handleFormSubmit = async (event) => {
     event.preventDefault()
+    setError('')
+
     if (newPassword !== repeatedPassword) {
-      return setError('Passwords must match')
+      return setError('Repeat passwords must match')
     }
 
     let newPasswordSetResponse
@@ -108,6 +111,11 @@ const SetNewPasswordForm = ({ match }) => {
                 </Typography>
               </Grid>
             </Grid>
+            <Grid>
+              <Typography className={classes.errorMessage} variant="body1">
+                {error}
+              </Typography>
+            </Grid>
             <Grid item container direction="column" className={classes.inputContainer}>
               <Grid item>
                 <TextField
@@ -138,11 +146,6 @@ const SetNewPasswordForm = ({ match }) => {
               <Button color="primary" type="submit" variant="contained">
                 Set New Password
               </Button>
-            </Grid>
-            <Grid>
-              <Typography className={classes.errorMessage} variant="body1">
-                {error}
-              </Typography>
             </Grid>
             <Grid className={classes.forgotPasswordWrapper}>
               <Link className={classes.forgotPasswordLink} to="/forgot-password">
