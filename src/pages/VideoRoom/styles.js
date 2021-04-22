@@ -348,6 +348,7 @@ const useVideoRoomStyles = makeStyles((theme) => ({
     height: 'auto',
     backgroundColor: 'black',
     borderRadius: '4px',
+    transform: 'rotateY(180deg)',
   },
 }))
 
