@@ -1,8 +1,6 @@
-export { default as didIShareDetailsInPrevEvent } from './didIShareDetailsInPrevEvent'
 export { default as findUserById } from './findUserById'
 export { default as findUsersCreatedBetweenTwoDates } from './findUsersCreatedBetweenTwoDates'
 export { default as getAllEvents } from './getAllEvents'
-export { default as getAllMyConnections } from './getAllMyConnections'
 export { default as getAllPartnersForRound } from './getAllPartnersForRound'
 export { default as getAllPublicEvents } from './getAllPublicEvents'
 export { default as getAllTags } from './getAllTags'
@@ -21,3 +19,4 @@ export { default as getPendingChatRequestsForPartner } from './getPendingChatReq
 export { default as getTagsByUserId } from './getTagsByUserId'
 export { default as getMyRoundPartner } from './getMyRoundPartner'
 export { default as getUsersByRoleName } from './getUsersByRoleName'
+export { default as getAllPartnersFromEvent } from './getAllPartnersFromEvent'
