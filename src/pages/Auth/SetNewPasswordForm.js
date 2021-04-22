@@ -60,7 +60,7 @@ const SetNewPasswordForm = ({ match }) => {
     setError('')
 
     if (newPassword !== repeatedPassword) {
-      return setError('Repeat passwords must match')
+      return setError('Passwords must match')
     }
 
     let newPasswordSetResponse
