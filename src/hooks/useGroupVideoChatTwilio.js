@@ -62,7 +62,7 @@ const useGroupVideoChatTwilio = () => {
             oldDominantSpeakersDiv.style.boxShadow = ''
           }
         }
-        if (newDominantSpeakerId !== dominantSpeakerId) {
+        if (dominantSpeaker && newDominantSpeakerId !== dominantSpeakerId) {
           const oldDominantSpeakersDiv =
             dominantSpeakerId && document.getElementById(dominantSpeakerId)
           const participantsDiv = document.getElementById(`${dominantSpeaker.identity}`)

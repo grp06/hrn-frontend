@@ -38,6 +38,7 @@ const ConnectionIssuesModal = ({ myRound, open, setOpen }) => {
       history.push(`/events/${event_id}/lobby`)
     } catch (err) {
       console.log(err)
+      window.location.reload()
     }
   }
 

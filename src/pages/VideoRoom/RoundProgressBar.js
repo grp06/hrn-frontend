@@ -89,8 +89,9 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
               setShowSecondsLeftSnack('30 seconds left!')
               setShowRoundStartedSnack(false)
             } else if (!showRoundStartedSnack && roundedMinutes % 60000 === 0) {
+              const minutesLeftResult = Math.floor((oneRoundInMs - timeRightNow) / 60000)
               setShowSecondsLeftSnack(
-                `${Math.floor((oneRoundInMs - timeRightNow) / 60000)} minutes left!`
+                `${minutesLeftResult} ${minutesLeftResult === 1 ? 'minute' : 'minutes'} left!`
               )
             }
           }
