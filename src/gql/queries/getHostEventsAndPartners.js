@@ -18,8 +18,6 @@ const getHostEventsAndPartners = gql`
       partners {
         user_id
         partner_id
-        i_shared_details
-        partner_shared_details
         round
         rating
         user {

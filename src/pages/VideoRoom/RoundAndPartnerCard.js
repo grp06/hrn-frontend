@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, Typography } from '@material-ui/core'
 import { useVideoRoomStyles } from '.'
 
-const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
+const RoundAndPartnerCard = ({ event, myRound }) => {
   const classes = useVideoRoomStyles()
   const { num_rounds, current_round } = event
 
@@ -39,9 +39,6 @@ const RoundAndPartnerCard = ({ addFriendButton, event, myRound }) => {
       {getCurrentRoundNumber()}
       {getPartnerName()}
       {getPartnerCity()}
-      <Grid container justify="center" alignItems="center">
-        {addFriendButton}
-      </Grid>
     </Grid>
   )
 }

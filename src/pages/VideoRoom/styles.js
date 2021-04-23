@@ -6,17 +6,6 @@ const { bottomNavBarHeight } = constants
 
 const useVideoRoomStyles = makeStyles((theme) => ({
   // *****************************
-  //   Add Friend Button
-  // *****************************
-  addFriendButton: {
-    margin: theme.spacing(1, 0),
-    backgroundColor: theme.palette.common.sunray,
-    '&:hover': {
-      backgroundColor: '#FCD08C',
-    },
-    color: 'black',
-  },
-  // *****************************
   //   Connecting to someone
   // *****************************
   CTAButton: {

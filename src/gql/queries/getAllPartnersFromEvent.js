@@ -1,16 +1,14 @@
 import gql from 'graphql-tag'
 
-const getMyConnectionAfterEvent = gql`
-  subscription getMyConnectionAfterEvent($user_id: Int!, $event_id: Int!) {
+const getAllPartnersFromEvent = gql`
+  query getAllPartnersFromEvent($event_id: Int!, $user_id: Int!) {
     partners(
       where: {
-        user_id: { _eq: $user_id }
         event_id: { _eq: $event_id }
-        partner_shared_details: { _eq: true }
+        user_id: { _eq: $user_id }
+        partner_id: { _is_null: false }
       }
     ) {
-      i_shared_details
-      partner_shared_details
       partner_id
       user_id
       partner {
@@ -33,4 +31,4 @@ const getMyConnectionAfterEvent = gql`
   }
 `
 
-export default getMyConnectionAfterEvent
+export default getAllPartnersFromEvent

@@ -1,12 +1,30 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { Grid, Badge, IconButton } from '@material-ui/core'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
+import { Mic, MicOff } from '@material-ui/icons'
 
 import { MoreActionsButton, useVideoRoomStyles } from '.'
 
 const InVideoBottomControlPanel = React.memo(
-  ({ chatIsOpen, myRound, numberOfUnreadMessagesFromMyPartner, toggleChat }) => {
+  ({ chatIsOpen, myRound, room, numberOfUnreadMessagesFromMyPartner, toggleChat }) => {
     const classes = useVideoRoomStyles()
+    const [isMuted, setIsMuted] = useState(false)
+
+    const toggleMute = useCallback(() => {
+      if (room?.localParticipant.audioTracks) {
+        const { audioTracks } = room.localParticipant
+        audioTracks.forEach((audioTrack) => {
+          if (isMuted) {
+            audioTrack.track.enable()
+            setIsMuted(false)
+          } else {
+            audioTrack.track.disable()
+            setIsMuted(true)
+          }
+        })
+      }
+    }, [room, isMuted])
+
     return (
       <Grid
         container
@@ -17,6 +35,20 @@ const InVideoBottomControlPanel = React.memo(
         className={classes.inVideoBottomControlPanelContainer}
       >
         <Grid item>
+          <IconButton
+            disableRipple
+            className={
+              chatIsOpen ? ` ${classes.activeButton} ${classes.iconButton}` : classes.iconButton
+            }
+            onClick={toggleMute}
+          >
+            {isMuted ? (
+              <MicOff titleAccess="Unmute" style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            ) : (
+              <Mic titleAccess="Mute" style={{ color: 'ghostWhite', fontSize: '2rem' }} />
+            )}
+          </IconButton>
+
           <IconButton
             disableRipple
             className={
