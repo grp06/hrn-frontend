@@ -240,6 +240,7 @@ const VideoRoom = () => {
     <div>
       <VideoRouter
         eventId={eventId}
+        event={event}
         myRound={myRound}
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
