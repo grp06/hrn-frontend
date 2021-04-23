@@ -261,6 +261,7 @@ const VideoRoom = () => {
           chatIsOpen={chatIsOpen}
           numberOfUnreadMessagesFromMyPartner={numberOfUnreadMessagesFromMyPartner}
           myRound={myRound}
+          room={room}
           toggleChat={toggleChat}
         />
       </div>
