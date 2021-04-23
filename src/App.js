@@ -24,7 +24,6 @@ import {
   Lobby,
   LoginForm,
   MyProfile,
-  MyConnections,
   VideoRoom,
   Onboarding,
   PrivacyPolicy,
@@ -84,7 +83,6 @@ const App = () => {
                     <Route exact path="/host-dashboard" component={HostDashboard} />
                     <Route exact path="/host-onboarding" component={HostOnboarding} />
                     <Route exact path="/hrn-analytics" component={HRNAnalytics} />
-                    <Route exact path="/my-connections" component={MyConnections} />
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
                     <Route exact path="/host-directory" component={HostDirectory} />

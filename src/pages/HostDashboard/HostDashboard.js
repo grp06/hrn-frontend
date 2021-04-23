@@ -13,8 +13,6 @@ const HostDashboard = () => {
   const { user, userContextLoading } = useUserContext()
   const { id: userId, role } = user
   const [allTimeRSVPed, setAllTimeRSVPed] = useState(0)
-  const [allTimeMutualThumbs, setAllTimeMutualThumbs] = useState(0)
-  const [avgThumbsPerEvent, setAvgThumbsPerEvent] = useState(0)
 
   const { data: eventsAndRoundsData } = useQuery(getHostEventsAndRounds, {
     variables: {
@@ -49,28 +47,7 @@ const HostDashboard = () => {
         return total
       }, 0)
 
-      // calcuate all the Mutual Thumbs in all your events
-      const totalThumbs = eventsAndPartnersData.events.reduce((total, event) => {
-        var partnerPairs = new Set()
-        const mutualThumbsInEvent = event.partners.reduce((thumbTotal, userRow) => {
-          if (!partnerPairs.has(`${userRow.user_id},${userRow.partner_id}`)) {
-            if (userRow.i_shared_details && userRow.partner_shared_details) {
-              thumbTotal += 1
-            }
-            partnerPairs.add(`${userRow.partner_id},${userRow.user_id}`)
-          }
-          return thumbTotal
-        }, 0)
-        total += mutualThumbsInEvent
-        return total
-      }, 0)
-
-      // calculate average connections per event
-      const averageThumbs = (totalThumbs / eventsAndPartnersData.events.length).toFixed(1)
-
       setAllTimeRSVPed(totalRSVP)
-      setAllTimeMutualThumbs(totalThumbs)
-      setAvgThumbsPerEvent(averageThumbs)
     }
   }, [eventsAndPartnersData])
 
@@ -102,7 +79,7 @@ const HostDashboard = () => {
     )
   }
 
-  const totalMetrics = [{ allTimeRSVPed, allTimeMutualThumbs, avgThumbsPerEvent }]
+  const totalMetrics = [{ allTimeRSVPed }]
 
   return (
     <div className={classes.hostDashboardPageContainer}>

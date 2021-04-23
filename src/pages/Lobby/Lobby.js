@@ -120,7 +120,11 @@ const Lobby = () => {
     )
 
     const hasValidPartner =
-      myRoundData && myRoundData.partners[0] && myRoundData.partners[0].left_chat === null
+      myRoundData && myRoundData.partners[0] && myRoundData.partners[0].chat_request === null
+
+    console.log('🚀 ~ useEffect ~ myRoundData', myRoundData)
+    console.log('🚀 ~ useEffect ~ eligibleForVideoRoom', eligibleForVideoRoom)
+    console.log('🚀 ~ useEffect ~ hasValidPartner', hasValidPartner)
 
     if (
       (eligibleForVideoRoom && acceptedChatRequest) ||

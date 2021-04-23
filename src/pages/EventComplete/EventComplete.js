@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useSubscription } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
@@ -7,9 +7,9 @@ import { BecomeAHostCard, useEventCompleteStyles } from '.'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { Loading } from '../../common'
 import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
-import { listenToMyConnectionsAfterEvent } from '../../gql/subscriptions'
-import { ConnectionCard } from '../MyConnections'
 import { constants } from '../../utils'
+import { getAllPartnersFromEvent } from '../../gql/queries'
+import { ConnectionCard } from '../MyConnections'
 
 const { giveFeedbackTypeform } = constants
 
@@ -24,10 +24,7 @@ const EventComplete = ({ location }) => {
 
   const history = useHistory()
 
-  const {
-    data: myConnectionAfterEventData,
-    loading: myConnectionAfterEventLoading,
-  } = useSubscription(listenToMyConnectionsAfterEvent, {
+  const { data: myConnectionAfterEventData } = useQuery(getAllPartnersFromEvent, {
     variables: {
       user_id: userId,
       event_id: eventId,
@@ -48,7 +45,7 @@ const EventComplete = ({ location }) => {
     }
   }, [event, history, locationState])
 
-  if (userContextLoading || eventContextLoading || myConnectionAfterEventLoading) {
+  if (userContextLoading || eventContextLoading) {
     return <Loading />
   }
 
@@ -63,7 +60,6 @@ const EventComplete = ({ location }) => {
             <ConnectionCard
               connection={partner.partner}
               eventId={partner.event_id}
-              i_shared_details={partner.i_shared_details}
               partnerId={partner.partner_id}
               smallSize
               userId={partner.user_id}

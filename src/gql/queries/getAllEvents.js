@@ -17,8 +17,6 @@ const getAllEvents = gql`
       num_rounds
       description
       partners {
-        i_shared_details
-        partner_shared_details
         round
         user {
           name
