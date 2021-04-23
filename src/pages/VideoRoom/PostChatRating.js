@@ -14,7 +14,7 @@ const PostChatRating = ({ myRound, setUserEventStatus }) => {
   const { current_round, group_video_chat, num_rounds, id: eventId } = event
   const { partner_id, user_id } = myRound
   const { postChatRatingSnackMessagesArray } = constants
-  const [showRatingForm, setShowRatingForm] = useState(true)
+  const [showRatingForm, setShowRatingForm] = useState(false)
   const [showRatingSnack, setShowRatingSnack] = useState(false)
   const [ratingSnackMessage, setRatingSnackMessage] = useState('')
   const [updatePartnerRatingMutation] = useMutation(updatePartnerRating)
