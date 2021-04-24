@@ -4,6 +4,7 @@ import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import makeApolloClient from './apollo'
+import Crisp from './Crisp'
 
 import { ErrorBoundary } from './common'
 import {
@@ -121,6 +122,7 @@ const App = () => {
                 <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                 <GetTagsModal />
                 <ProfilePictureModal />
+                <Crisp />
               </UserProvider>
             </ErrorBoundary>
           </Router>

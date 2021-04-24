@@ -3,7 +3,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements } from '@stripe/react-stripe-js'
-import { constants } from './utils'
 
 import App from './App'
 import * as serviceWorker from './serviceWorker'
