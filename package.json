@@ -6,7 +6,7 @@
     "resetMocks": true
   },
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.5",
+    "@apollo/react-hooks": "^4.0.0",
     "@apollo/react-testing": "^3.1.4",
     "@date-io/date-fns": "2.x",
     "@emotion/core": "^10.0.28",
