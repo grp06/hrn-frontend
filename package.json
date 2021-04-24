@@ -46,7 +46,7 @@
     "env-cmd": "^10.1.0",
     "feather-icons-react": "^0.4.1",
     "formik": "^2.2.1",
-    "formik-material-ui": "^2.0.1",
+    "formik-material-ui": "^3.0.1",
     "formik-material-ui-pickers": "^0.0.11",
     "framer-motion": "^2.9.4",
     "graphql": "^15.0.0",
