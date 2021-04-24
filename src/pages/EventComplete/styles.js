@@ -2,29 +2,6 @@ import { makeStyles } from '@material-ui/styles'
 
 const useEventCompleteStyles = makeStyles((theme) => ({
   // *****************************
-  //   BecomeAHostCard
-  // *****************************
-  backgroundLottie: {
-    height: '100%',
-    position: 'absolute',
-    width: '100%',
-    zIndex: -99,
-  },
-  becomeAHostButton: {
-    margin: theme.spacing(3, 0, 1, 0),
-    width: '100%',
-  },
-  becomeAHostCardContainer: {
-    border: '2px solid #FF99AD',
-    borderRadius: '4px',
-    boxShadow: '4px 4px 0 #FF99AD',
-    marginBottom: theme.spacing(3),
-    position: 'relative',
-  },
-  becomeAHostHeroContent: {
-    padding: theme.spacing(3, 5),
-  },
-  // *****************************
   //   EventComplete
   // *****************************
   connectionsContainer: {

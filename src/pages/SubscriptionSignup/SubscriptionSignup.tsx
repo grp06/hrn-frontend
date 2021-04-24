@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NewSignupForm, OrganizationCreationForm } from '.'
+import { NewSignupForm } from '.'
 import { Loading } from '../../common'
 import { useUserContext } from '../../context'
 
@@ -13,7 +13,7 @@ const SubscriptionSignup: React.FC<{}> = () => {
   }
 
   return (
-    <OrganizationCreationForm />
+    <div>this used to be the org form</div>
     // <div>
     //   {componentToShow === 'signup' ? (
     //     <NewSignupForm showOrgForm={() => setComponentToShow('org')} />

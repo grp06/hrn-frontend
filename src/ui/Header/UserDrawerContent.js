@@ -50,7 +50,7 @@ const UserDrawerContent = ({ role, userId, usersFirstName }) => {
       icon: 'globe',
     },
     {
-      label: role && role.includes('host') ? 'Subscription' : 'Become a Host',
+      label: role && role.includes('host') ? 'Subscription' : 'change me',
       url: '/subscription',
       icon: role && role.includes('host') ? 'credit-card' : 'award',
     },
@@ -61,11 +61,6 @@ const UserDrawerContent = ({ role, userId, usersFirstName }) => {
       label: 'All Events',
       url: '/events',
       icon: 'globe',
-    },
-    {
-      label: 'Become a Host',
-      url: '/subscription',
-      icon: 'award',
     },
   ]
 
