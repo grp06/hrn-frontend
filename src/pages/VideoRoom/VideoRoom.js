@@ -142,6 +142,9 @@ const VideoRoom = () => {
         history.push(`/events/${eventId}/lobby`)
       }
 
+      // when we hit video-room we query for partner data
+      // if that partner data is anything other than null, we set userEventStatus to "left chat" and push
+      // we should account here for if they have more than 1 partner in a given round
       if (myRoundPartnerData.partners.length && myRoundPartnerData.partners[0].left_chat !== null) {
         setUserEventStatus('left chat')
         setMyRound(null)
@@ -237,6 +240,7 @@ const VideoRoom = () => {
     <div>
       <VideoRouter
         eventId={eventId}
+        event={event}
         myRound={myRound}
         eventStatus={eventStatus}
         setUserEventStatus={setUserEventStatus}
@@ -258,6 +262,7 @@ const VideoRoom = () => {
           chatIsOpen={chatIsOpen}
           numberOfUnreadMessagesFromMyPartner={numberOfUnreadMessagesFromMyPartner}
           myRound={myRound}
+          room={room}
           toggleChat={toggleChat}
         />
       </div>

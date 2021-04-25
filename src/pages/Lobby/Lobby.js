@@ -43,7 +43,7 @@ const Lobby = () => {
     id: eventId,
   } = event
   const { id: user_id, name: usersName } = user
-  const [chatIsOpen, setChatIsOpen] = useState(true)
+  const [chatIsOpen, setChatIsOpen] = useState(false)
   const [chatRequests, setChatRequests] = useState([])
   const [chatRequestThatNeedsAResponse, setChatRequestThatNeedsAResponse] = useState(null)
 
@@ -79,7 +79,9 @@ const Lobby = () => {
   const appLoading = userContextLoading || eventContextLoading
 
   useEffect(() => {
-    if (getTimeUntilEvent(eventStartTime) > 900000) {
+    // if user is on the lobby and its >15 mins til the event, push them to the event route
+    const fifteenMinutes = 900000
+    if (getTimeUntilEvent(eventStartTime) > fifteenMinutes) {
       history.push(`/events/${eventId}`)
     }
   }, [eventId, eventStartTime, history])
@@ -104,19 +106,25 @@ const Lobby = () => {
   }, [eventId, event_users, eventStatus, history, user_id, appLoading])
 
   // redirect you when you have a partner
-  // the round ===1 and waiting for match is to make sure that you get pushed into
+  // the round === 1 and waiting for match is to make sure that you get pushed into
   // videoRoom for round 1 even if you are the odd one out. That way userEventStatus
   // gets set properly and you get the correct broadcast screen
   useEffect(() => {
+    const eligibleForVideoRoom =
+      eventStatus === 'room-in-progress' &&
+      userEventStatus !== 'sitting out' &&
+      userHasEnabledCameraAndMic
+
     const acceptedChatRequest = myRoundData?.partners.find(
       (chatRequest) => chatRequest.chat_request === 'accepted'
     )
 
+    const hasValidPartner =
+      myRoundData && myRoundData.partners[0] && myRoundData.partners[0].chat_request === null
+
     if (
-      (eventStatus === 'room-in-progress' &&
-        userEventStatus !== 'sitting out' &&
-        acceptedChatRequest &&
-        userHasEnabledCameraAndMic) ||
+      (eligibleForVideoRoom && acceptedChatRequest) ||
+      (eligibleForVideoRoom && hasValidPartner) ||
       (round === 1 && userEventStatus === 'waiting for match')
     ) {
       history.push(`/events/${eventId}/video-room`)

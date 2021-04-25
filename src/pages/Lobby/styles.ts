@@ -70,6 +70,7 @@ const useLobbyStyles = makeStyles((theme) => ({
     borderRadius: '4px',
     height: 'auto',
     width: '100%',
+    transform: 'rotateY(180deg)',
   },
   videoAndMicSelectionContainer: {
     backgroundColor: theme.palette.common.greyCard,

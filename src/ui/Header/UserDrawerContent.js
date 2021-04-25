@@ -35,11 +35,6 @@ const UserDrawerContent = ({ role, userId, usersFirstName }) => {
       icon: 'user',
     },
     {
-      label: 'Connections',
-      url: '/my-connections',
-      icon: 'users',
-    },
-    {
       label: 'My Events',
       url: '/my-events',
       icon: 'calendar',

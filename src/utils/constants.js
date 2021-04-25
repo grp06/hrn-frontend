@@ -4,9 +4,9 @@ import twoSidedMatching from '../assets/twoSidedMatchingIcon.svg'
 const constants = {
   // change me back to 20000?
   // george, stephen, max, jasper, yamila
-  adminUserIds: [8, 12, 115, 5218, 6069],
-  // uncle t, brenden, seibo, ash, parker, karl, nino, marcus (village voices)
-  hrnFriendsUserIds: [254, 1933, 2926, 3974, 4888, 5895, 6246, 6390],
+  adminUserIds: [8, 12, 5218, 6069],
+  // uncle t, brenden, seibo, ash, parker, karl, nino, julia kim, marcus (village voices), kata
+  hrnFriendsUserIds: [254, 1933, 2926, 3974, 4888, 5895, 6246, 6321, 6390, 6674],
   lastSeenDuration: 5000,
   roundLength: 300,
   betweenRoundsDelay: 20000,
@@ -15,7 +15,7 @@ const constants = {
   maxNumUsersPerRoom: 40,
   drawerWidth: 175,
   bottomNavBarHeight: 80,
-  intercomAppId: 'jpmq80un',
+  crispWebsiteId: '1b6b1463-9594-48be-a161-db20a94bbe2b',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',

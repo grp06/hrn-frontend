@@ -13,13 +13,14 @@ const { lastSeenDuration, bannedUserIds } = constants
 const UserEventStatusContext = createContext()
 
 // status could be
+
 // no partner
 // came late
 // sitting out
 // left chat
 // in chat
 // waiting for match
-// reported
+
 const defaultState = {
   userEventStatus: 'waiting for match',
   onlineEventUsers: [],

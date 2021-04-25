@@ -1,8 +1,6 @@
-export { default as listenToAllMyConnections } from './listenToAllMyConnections'
 export { default as listenToEvent } from './listenToEvent'
 export { default as listenToPartnersTable } from './listenToPartnersTable'
 export { default as listenToRounds } from './listenToRounds'
 export { default as listenToOnlineEventUsers } from './listenToOnlineEventUsers'
-export { default as listenToMyConnectionsAfterEvent } from './listenToMyConnectionsAfterEvent'
 export { default as listenToChatMessages } from './listenToChatMessages'
 export { default as listenToEventChatMessages } from './listenToEventChatMessages'

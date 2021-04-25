@@ -82,7 +82,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
           await updateEventBannerPhotoMutation({
             variables: {
               event_id,
-              banner_photo_url: unsplashRequest.image.urls.full,
+              banner_photo_url: unsplashRequest.image.urls.regular,
             },
           })
         } catch (error) {

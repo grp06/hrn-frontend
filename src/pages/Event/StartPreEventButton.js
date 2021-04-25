@@ -14,8 +14,7 @@ const StartPreEventButton = ({ eventId, timeUntilEvent, disabled }) => {
       disabled={timeUntilEvent !== 0 || disabled}
       modalBody={
         <Typography variant="h3">
-          You are about to start addressing your community! Clear your throat a few times, do some
-          jumping jacks, and get ready to bring the energy to the people!{' '}
+          You are about to start your welcome remarks! Are you ready?{' '}
           <span role="img" aria-label="cartwheel">
             🤸
           </span>
