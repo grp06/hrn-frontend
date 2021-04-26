@@ -6,7 +6,8 @@ const getUsersByRoleName = gql`
       id
       city
       email
-      name
+      first_name
+      last_name
       sub_period_end
       role
       became_host_at

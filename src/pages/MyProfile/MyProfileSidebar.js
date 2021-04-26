@@ -16,7 +16,8 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
 
   const {
     id: userId,
-    name,
+    first_name,
+    last_name,
     city,
     tags_users: usersTags,
     short_bio,
@@ -119,7 +120,7 @@ const MyProfileSidebar = ({ user, databaseTags }) => {
       default:
         return (
           <Grid container direction="column" alignItems="center" justify="center">
-            <Typography variant="h3">{name}</Typography>
+            <Typography variant="h3">{`${first_name} ${last_name}`}</Typography>
             <Typography variant="subtitle1">{city}</Typography>
             {linkedIn_url && (
               <Button href={linkedIn_url} target="_blank" rel="noopener noreferrer">

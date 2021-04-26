@@ -16,7 +16,8 @@ const getAllPublicEvents = gql`
       banner_photo_url
       matching_type
       host {
-        name
+        first_name
+        last_name
         profile_pic_url
       }
     }

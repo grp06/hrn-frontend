@@ -16,7 +16,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const {
     id: userId,
     tags_users: usersTags,
-    name: usersName,
+    first_name,
+    last_name,
     city: usersCity,
     short_bio: usersShortBio,
     linkedIn_url: usersLinkedIn,
@@ -44,7 +45,13 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
   const handleFormSubmit = async (values) => {
     let updateUserMutationResponse
     let insertTagMutationResponse
-    if (!values.name || !values.city || !values.selectedTags || values.selectedTags.length < 3) {
+    if (
+      !values.first_name ||
+      !values.last_name ||
+      !values.city ||
+      !values.selectedTags ||
+      values.selectedTags.length < 3
+    ) {
       setSubmitErrorSnackMessage('something seems to be empty or not enough tags  🧐')
       return setShowSubmitErrorSnack(true)
     }
@@ -55,18 +62,26 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
         return setShowSubmitErrorSnack(true)
       }
     }
-    const userChangedName = !(values.name === usersName)
+    const userChangedFirstName = !(values.first_name === first_name)
+    const userChangedLastName = !(values.last_name === last_name)
     const userChangedCity = !(values.city === usersCity)
     const userChangedShortBio = !(values.short_bio === usersShortBio)
     const userChangedLinkedIn = !(values.linkedIn_url === usersLinkedIn)
 
     // Update User City, Name, ShortBio, LinkedIn
-    if (userChangedName || userChangedCity || userChangedShortBio || userChangedLinkedIn) {
+    if (
+      userChangedFirstName ||
+      userChangedLastName ||
+      userChangedCity ||
+      userChangedShortBio ||
+      userChangedLinkedIn
+    ) {
       try {
         updateUserMutationResponse = await updateUserMutation({
           variables: {
             id: userId,
-            name: values.name,
+            first_name: values.first_name,
+            last_name: values.last_name,
             city: values.city,
             short_bio: values.short_bio,
             linkedIn_url: values.linkedIn_url,
@@ -74,7 +89,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
         })
         // add email to segment call once we eventually enable users to update their email address
         window.analytics.identify(userId, {
-          name: values.name,
+          name: values.first_name + values.last_name,
           city: values.city,
         })
       } catch (err) {
@@ -134,7 +149,8 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
       <Formik
         onSubmit={handleFormSubmit}
         initialValues={{
-          name: usersName,
+          first_name,
+          last_name,
           city: usersCity,
           selectedTags: usersTags,
           short_bio: usersShortBio || '',
@@ -145,12 +161,22 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
           <Form autoComplete="off" className={classes.myProfileSidebarFormContainer}>
             <div>
               <Field
-                name="name"
+                name="first_name"
                 component={TextField}
                 fullWidth
-                value={values.name}
-                id="name"
-                label="name"
+                value={values.first_name}
+                id="first_name"
+                label="First Name"
+              />
+            </div>
+            <div>
+              <Field
+                name="last_name"
+                component={TextField}
+                fullWidth
+                value={values.last_name}
+                id="last_name"
+                label="Last Name"
               />
             </div>
             <Field name="city">

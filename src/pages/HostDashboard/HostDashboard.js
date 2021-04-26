@@ -18,13 +18,13 @@ const HostDashboard = () => {
     variables: {
       userId: userId,
     },
-    skip: !userId || (role && !role.includes('host')),
+    skip: !userId || (role && !role.includes('premium')),
   })
   const { data: eventsAndPartnersData } = useQuery(getHostEventsAndPartners, {
     variables: {
       user_id: userId,
     },
-    skip: !userId || (role && !role.includes('host')),
+    skip: !userId || (role && !role.includes('premium')),
   })
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const HostDashboard = () => {
     }
   }, [eventsAndPartnersData])
 
-  if (role && !role.includes('host')) {
+  if (role && !role.includes('premium')) {
     return <Redirect to="/events" />
   }
 

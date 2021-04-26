@@ -1,4 +1,4 @@
-const rsvpForEvent = async (event, insertEventUserMutation, usersEmail, usersName) => {
+const rsvpForEvent = async (event, insertEventUserMutation, usersEmail, first_name, last_name) => {
   const { description, event_name, host, id: event_id, start_at: event_start_time } = event
   const { name: host_name } = host
   let calendarInviteResponse
@@ -23,7 +23,8 @@ const rsvpForEvent = async (event, insertEventUserMutation, usersEmail, usersNam
           'Access-Control-Allow-Credentials': true,
         },
         body: JSON.stringify({
-          name: usersName,
+          first_name,
+          last_name,
           email: usersEmail,
           event_name,
           event_id,

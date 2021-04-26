@@ -18,7 +18,8 @@ const getMyRoundPartner = gql`
       left_chat
       partner {
         city
-        name
+        first_name
+        last_name
         tags_users {
           tag {
             name

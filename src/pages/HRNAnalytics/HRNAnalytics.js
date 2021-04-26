@@ -86,7 +86,7 @@ const HRNAnalytics = () => {
       if (!dateAlreadySet) {
         all.push({
           [dateString]: {
-            attendees: [item.user && item.user.name, item.partner && item.partner.name],
+            attendees: [item.user && item.user.first_name, item.partner && item.partner.first_name],
             repeatAttendees: [],
           },
         })
@@ -94,10 +94,10 @@ const HRNAnalytics = () => {
         const currentWeeksObj = all.find((item) => item[dateString])
         if (item.user) {
           // if partnerX is not in attendees
-          if (currentWeeksObj[dateString].attendees.indexOf(item.user.name) === -1) {
+          if (currentWeeksObj[dateString].attendees.indexOf(item.user.first_name) === -1) {
             // push him into it
 
-            currentWeeksObj[dateString].attendees.push(item.user.name)
+            currentWeeksObj[dateString].attendees.push(item.user.first_name)
             // look through all everything we've accumulated so far
             all.forEach((currentItem) => {
               // check to see that we arent looking at the week we just pushed our name to
@@ -108,11 +108,13 @@ const HRNAnalytics = () => {
 
                 if (
                   currentItem[Object.keys(currentItem)[0]].attendees.find(
-                    (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.user.name
+                    (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.user.first_name
                   )
                 ) {
-                  if (currentWeeksObj[dateString].repeatAttendees.indexOf(item.user.name) === -1) {
-                    currentWeeksObj[dateString].repeatAttendees.push(item.user.name)
+                  if (
+                    currentWeeksObj[dateString].repeatAttendees.indexOf(item.user.first_name) === -1
+                  ) {
+                    currentWeeksObj[dateString].repeatAttendees.push(item.user.first_name)
                   }
                 }
               }
@@ -121,19 +123,20 @@ const HRNAnalytics = () => {
         }
 
         if (item.partner) {
-          if (currentWeeksObj[dateString].attendees.indexOf(item.partner.name) === -1) {
-            currentWeeksObj[dateString].attendees.push(item.partner.name)
+          if (currentWeeksObj[dateString].attendees.indexOf(item.partner.first_name) === -1) {
+            currentWeeksObj[dateString].attendees.push(item.partner.first_name)
             all.forEach((currentItem) => {
               if (Object.keys(currentItem)[0] !== dateString) {
                 if (
                   currentItem[Object.keys(currentItem)[0]].attendees.find(
-                    (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.partner.name
+                    (nameFoundInOtherEvent) => nameFoundInOtherEvent === item.partner.first_name
                   )
                 ) {
                   if (
-                    currentWeeksObj[dateString].repeatAttendees.indexOf(item.partner.name) === -1
+                    currentWeeksObj[dateString].repeatAttendees.indexOf(item.partner.first_name) ===
+                    -1
                   ) {
-                    currentWeeksObj[dateString].repeatAttendees.push(item.partner.name)
+                    currentWeeksObj[dateString].repeatAttendees.push(item.partner.first_name)
                   }
                 }
               }

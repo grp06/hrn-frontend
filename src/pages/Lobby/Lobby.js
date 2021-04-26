@@ -42,7 +42,7 @@ const Lobby = () => {
     updated_at: eventUpdatedAt,
     id: eventId,
   } = event
-  const { id: user_id, name: usersName } = user
+  const { id: user_id, first_name } = user
   const [chatIsOpen, setChatIsOpen] = useState(false)
   const [chatRequests, setChatRequests] = useState([])
   const [chatRequestThatNeedsAResponse, setChatRequestThatNeedsAResponse] = useState(null)
@@ -165,7 +165,7 @@ const Lobby = () => {
   }
 
   if (!userHasEnabledCameraAndMic) {
-    return <CameraAndMicSetupScreen usersName={usersName} />
+    return <CameraAndMicSetupScreen usersName={first_name} />
   }
 
   return (

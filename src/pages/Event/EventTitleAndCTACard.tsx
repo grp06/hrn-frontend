@@ -22,7 +22,7 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
   const [showCopyURLSnack, setCopyURLSnack] = useState<boolean>(false)
   const [showComeBackSnack, setShowComeBackSnack] = useState<boolean>(false)
   const [rsvpButtonLoading, setRsvpButtonLoading] = useState<boolean>(false)
-  const { email: usersEmail, id: user_id, name: usersName } = user
+  const { email: usersEmail, id: user_id, first_name, last_name } = user
   const {
     event_name,
     event_users,
@@ -49,14 +49,14 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
 
   const getUserCTAButtonText = () => {
     if (userAlreadyRSVPed && event_status === 'not-started') return "You're all set!"
-    else if (
+    if (
       !rsvpButtonLoading &&
       !userAlreadyRSVPed &&
       event_status !== 'not-started' &&
       event_status !== 'complete'
     )
       return 'Join Event'
-    else if (rsvpButtonLoading) return 'Loading'
+    if (rsvpButtonLoading) return 'Loading'
     return 'RSVP'
   }
 
@@ -65,10 +65,8 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
     if (!user_id) {
       localStorage.setItem('eventId', eventId.toString())
       history.push('/sign-up')
-    } else {
-      if (!userAlreadyRSVPed) {
-        await rsvpForEvent(event, insertEventUserMutation, usersEmail, usersName)
-      }
+    } else if (!userAlreadyRSVPed) {
+      await rsvpForEvent(event, insertEventUserMutation, usersEmail, first_name, last_name)
     }
     setRsvpButtonLoading(false)
   }

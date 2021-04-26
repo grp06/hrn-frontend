@@ -17,12 +17,14 @@ const listenToChatMessages = gql`
       read
       recipient {
         id
-        name
+        first_name
+        last_name
       }
       sender_id
       recipient_id
       user {
-        name
+        first_name
+        last_name
         id
       }
     }

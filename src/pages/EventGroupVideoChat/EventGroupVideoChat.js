@@ -33,7 +33,7 @@ const EventGroupVideoChat = () => {
   const [groupChatToken, setGroupChatToken] = useState(null)
   const [groupChatRoom, setGroupChatRoom] = useState(null)
   const { host_id, status: event_status, id: eventId } = event
-  const { id: user_id, name: usersName } = user
+  const { id: user_id, first_name } = user
   const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
 
   const getNumRowsAndCols = (numberOfVideos) => {
@@ -52,7 +52,7 @@ const EventGroupVideoChat = () => {
     onlineEventUsers.forEach((eventUser) => {
       const usersId = eventUser.user[0].id
       const thisIsHostDiv = parseInt(host_id, 10) === parseInt(usersId, 10)
-      const usersFirstName = eventUser.user[0].name.split(' ')[0]
+      const usersFirstName = eventUser.user[0].first_name
       const divElementWithUsersId = arrayOfDivElementsInVideoGrid.filter(
         (divElement) => parseInt(divElement.id, 10) === usersId
       )
@@ -205,7 +205,7 @@ const EventGroupVideoChat = () => {
   }
 
   if (!userHasEnabledCameraAndMic) {
-    return <CameraAndMicSetupScreen usersName={usersName} />
+    return <CameraAndMicSetupScreen usersName={first_name} />
   }
 
   return (

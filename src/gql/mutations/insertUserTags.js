@@ -6,7 +6,8 @@ const insertUserTags = gql`
       returning {
         user {
           id
-          name
+          first_name
+          last_name
           role
           email
           city

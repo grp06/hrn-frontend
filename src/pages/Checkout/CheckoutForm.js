@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
 
 import { useCheckoutStyles } from '.'
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
@@ -48,7 +48,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = async (result, stripeCustomerId) => {
-    const role = result.plan.includes('STARTER') ? 'host_starter' : 'host_premium'
+    const role = result.plan.includes('FREE') ? 'free' : 'premium'
     localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, result.token)
     // means that we had to retry the invoice so lets clear our local storage
@@ -165,7 +165,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
           <Form>
             <div className={classes.sectionContainer}>
               <Grid container direction="column" className={classes.checkoutFormSection}>
-                <Typography variant="subtitle2" className={classes.subtitleHeading}>
+                <Typography variant="h4" className={classes.sectionHeading}>
                   Payment Details
                 </Typography>
                 <Grid container className={classes.checkoutFormInputMargin}>
@@ -182,7 +182,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 </div>
               </Grid>
               <Grid container className={classes.checkoutFormSection}>
-                <Typography variant="subtitle2" className={classes.subtitleHeading}>
+                <Typography variant="h4" className={classes.sectionHeading}>
                   Billing Address
                 </Typography>
                 <Grid container className={classes.checkoutFormInputMargin}>
@@ -223,7 +223,19 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 </Grid>
               </Grid>
             </div>
-            <Grid container justify="center" alignItems="center">
+            <Divider className={classes.divider} />
+            <Grid container justify="space-between" alignItems="center">
+              <Typography variant="body1" style={{ fontWeight: 700 }}>
+                Total:
+              </Typography>
+              <Typography variant="h3">{plan.includes('YEARLY') ? '$948.00' : '$99.00'}</Typography>
+            </Grid>
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              className={classes.submitButtonContainer}
+            >
               <Button
                 variant="contained"
                 color="primary"

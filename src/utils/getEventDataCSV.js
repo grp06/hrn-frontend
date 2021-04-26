@@ -29,7 +29,8 @@ const getEventDataCSV = (events) => {
       event_date: item.start_at,
       host_email: item.host.email,
       host_id: item.host.id,
-      host_name: item.host.name,
+      // TODO probably need last name here
+      host_name: item.host.first_name,
       matching_type: item.matching_type,
       side_a: item.side_a,
       side_b: item.side_b,

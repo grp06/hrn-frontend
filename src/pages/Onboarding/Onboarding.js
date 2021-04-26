@@ -20,7 +20,8 @@ const Onboarding = () => {
     id: user_id,
     city: usersCityInContext,
     tags_users: usersTagsInContext,
-    name: usersName,
+    first_name,
+    last_name,
     email: usersEmail,
     role,
   } = user
@@ -65,7 +66,8 @@ const Onboarding = () => {
       updateUserMutationResponse = await updateUserMutation({
         variables: {
           id: user_id,
-          name: usersName,
+          first_name,
+          last_name,
           city: values.city,
           short_bio: values.short_bio,
         },
@@ -81,7 +83,7 @@ const Onboarding = () => {
         },
       })
       window.analytics.identify(user_id, {
-        name: usersName,
+        name: `${first_name} ${last_name}`,
         email: usersEmail,
         role,
         city: values.city,
@@ -115,7 +117,7 @@ const Onboarding = () => {
           side: twoSidedSideInLocalStorage,
         },
       })
-      rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, usersName)
+      rsvpForEvent(event, insertEventUserMutationFunc, usersEmail, first_name, last_name)
       history.push(`/events/${eventIdInLocalStorage}`)
     }
 

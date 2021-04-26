@@ -39,7 +39,7 @@ const EventCard: React.FC<EventCardProps> = ({ event }) => {
     start_at,
     status: event_status,
   } = event
-  const { name: hostName, profile_pic_url } = host
+  const { first_name: hostName, profile_pic_url } = host
   const startTime = new Date(start_at).getTime()
   const eventIsLive = event_status !== 'not-started' && event_status !== 'complete'
 

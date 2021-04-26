@@ -128,7 +128,6 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
         {messages && messages.length ? (
           messages.map((message) => {
             const { content: messageContent, created_at, sender_id, user } = message
-            const sendersFirstName = user.name && user.name.split(' ')[0]
             const senderIsHost = parseInt(hostId, 10) === parseInt(sender_id, 10)
             const messageSentAt = formatChatMessagesDate(created_at)
             return (
@@ -136,7 +135,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
                 <ListItemText
                   primary={
                     <Grid container alignItems="flex-end">
-                      <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
+                      <span className={classes.sendersName}>{user.first_name}</span>{' '}
                       {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
                       <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
                     </Grid>

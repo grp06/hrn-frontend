@@ -1,3 +1,4 @@
+// TODO Fix this after we update pricing
 import React, { useRef, useState } from 'react'
 import moment from 'moment'
 import { useQuery } from 'react-apollo'
@@ -53,7 +54,6 @@ const PaidHostDashboard = () => {
         .filter((user) => !adminUserIds.includes(user.id) && !hrnFriendsUserIds.includes(user.id))
         .reduce(
           (total, user) => {
-            console.log(user.name)
             const becameHostDate = moment(new Date(user.became_host_at))
             const subPeriodEndDate = moment(new Date(user.sub_period_end))
             const daysUntilSubEnds = subPeriodEndDate.diff(now.current, 'days')

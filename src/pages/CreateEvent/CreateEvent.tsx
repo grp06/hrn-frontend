@@ -10,6 +10,8 @@ import { getHostEventsAndPartners, getEventById } from '../../gql/queries'
 import { getIsSubPeriodOver } from '../../utils'
 
 const CreatEvent: React.FC<{}> = () => {
+  console.log('create event')
+
   const classes = useCreateEventStyles()
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
@@ -19,7 +21,7 @@ const CreatEvent: React.FC<{}> = () => {
   const [componentToShow, setComponentToShow] = useState<string>('event-form')
   const [eventDetails, setEventDetails] = useState<object>({})
   const [timeSinceSubEnded, setTimeSinceSubEnded] = useState<string>('')
-  const userIsAPaidHost = role && (role.includes('starter') || role.includes('premium'))
+  const userIsAPaidHost = role && role.includes('premium')
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getHostEventsAndPartners, {
     variables: {
@@ -66,11 +68,8 @@ const CreatEvent: React.FC<{}> = () => {
 
   // REDIRECTS
   if (!user_id) {
+    console.log('🚀 ~ user_id', user_id)
     return <Redirect to="/" />
-  }
-
-  if (user_id && !role.includes('host')) {
-    return <Redirect to="/events" />
   }
 
   const renderComponentToShow = () => {

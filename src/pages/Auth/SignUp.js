@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
-import { SignUpForm } from '.'
+import { NewSignupForm } from '../SubscriptionSignup'
 import { getSubscriptionCheckoutObject } from '../Subscription'
+import { SignUpForm } from '.'
 
 const SignUp = () => {
   const location = useLocation()
@@ -23,17 +24,17 @@ const SignUp = () => {
   // check to see if a user is already logged in, if so redirect
   if (checkedSCOInLS && localStorage.getItem('userId')) {
     const subCheckoutObjectFromLS = JSON.parse(localStorage.getItem('subscriptionCheckoutObject'))
+    // TODO get rid of this includes crap
     const userClickedFreePlan =
       subCheckoutObjectFromLS && subCheckoutObjectFromLS.plan.includes('FREE')
     const usersRole = localStorage.getItem('role')
-    if (usersRole && usersRole.includes('host') && userClickedFreePlan) {
+    if (usersRole && usersRole.includes('premium') && userClickedFreePlan) {
       // redirect to create event because they clicked host an event from webflow
       return <Redirect to={{ pathname: '/create-event' }} />
     }
     return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
   }
-
-  return <SignUpForm />
+  return <NewSignupForm />
 }
 
 export default SignUp

@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { useHistory } from 'react-router-dom'
 import { Button, Grid, Typography } from '@material-ui/core'
 
-import { BecomeAHostCard, useEventCompleteStyles } from '.'
+import { useEventCompleteStyles } from '.'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { Loading } from '../../common'
 import { EventPhotoBanner, EventTitleAndCTACard } from '../Event'
@@ -18,7 +18,7 @@ const EventComplete = ({ location }) => {
   const { event, eventContextLoading } = useEventContext()
   const { user, userContextLoading } = useUserContext()
   const { setUserHasEnabledCameraAndMic } = useUserEventStatusContext()
-  const { id: userId, role } = user
+  const { id: userId } = user
   const { banner_photo_url, id: eventId } = event
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
 
@@ -53,7 +53,9 @@ const EventComplete = ({ location }) => {
     if (myConnectionAfterEventData?.partners.length > 0) {
       return myConnectionAfterEventData.partners
         .sort((partnerA, partnerB) =>
-          partnerA.partner.name.toLowerCase().localeCompare(partnerB.partner.name.toLowerCase())
+          partnerA.partner.first_name
+            .toLowerCase()
+            .localeCompare(partnerB.partner.first_name.toLowerCase())
         )
         .map((partner) => (
           <div key={partner.id}>
@@ -110,7 +112,6 @@ const EventComplete = ({ location }) => {
                 Give Us Some Feedback
               </Button>
             </Grid>
-            {role && !role.includes('host') ? <BecomeAHostCard /> : null}
           </Grid>
         </Grid>
       </Grid>

@@ -68,9 +68,9 @@ const EventsPublic = () => {
           </div>
         ))
       }
-      return renderNullDataText('No upcoming events 😢')
+      return renderNullDataText('No upcoming events. You should create one! 🙂')
     }
-    return renderNullDataText('No upcoming events 😢')
+    return renderNullDataText('No upcoming events. You should create one! 🙂')
   }
 
   return (

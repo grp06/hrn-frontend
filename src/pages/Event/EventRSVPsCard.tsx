@@ -50,7 +50,7 @@ const EventRSVPsCard: React.FC<EventRSVPsCardProps> = React.memo(({ eventUsers }
                   <ListItemText disableTypography>
                     <Grid container direction="row" alignItems="center" justify="flex-start">
                       <Typography variant="body1" style={{ fontWeight: 500 }}>
-                        {user.name}
+                        {user.first_name}
                       </Typography>
                       <Typography variant="subtitle1">, {user.city}</Typography>
                     </Grid>

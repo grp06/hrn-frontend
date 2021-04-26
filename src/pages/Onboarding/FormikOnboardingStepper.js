@@ -60,9 +60,7 @@ const FormikOnboardingStepper = ({ children, ...props }) => {
         <Form
           autoComplete="off"
           className={classes.formContainer}
-          onChange={
-            props.isHostOnboarding ? toggleHostDisableButton(values) : toggleDisableButton(values)
-          }
+          onChange={toggleDisableButton(values)}
         >
           <Stepper alternativeLabel activeStep={step}>
             {stepArray.map((child, index) => (

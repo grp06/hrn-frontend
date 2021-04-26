@@ -68,9 +68,8 @@ const useStyles = makeStyles((theme) => ({
 const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
-  const { name, role, id: userId } = user
+  const { first_name, role, id: userId } = user
   const { adminUserIds } = constants
-  const userIsHost = role && role.includes('host')
   const userIsHRNEmployee = adminUserIds.includes(userId)
 
   return (
@@ -85,9 +84,9 @@ const DrawerContent = () => {
             </Grid>
           </div>
           <Divider />
-          {userIsHost && <CreateEventSidebarButton />}
-          <UserDrawerContent userId={userId} userName={name} role={role} />
-          {userIsHost && <HostDrawerContent role={role} />}
+          <CreateEventSidebarButton />
+          <UserDrawerContent userId={userId} usersFirstName={first_name} role={role} />
+          {user.role && <HostDrawerContent role={role} />}
           {userIsHRNEmployee && <HRNEmployeeDrawerContent />}
         </Grid>
         <Grid

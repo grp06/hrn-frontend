@@ -161,14 +161,13 @@ const ChatBox = ({ chatIsOpen, messages, myRound, toggleChat }) => {
           messages.length &&
           messages.map((message) => {
             const { content: messageContent, created_at, user } = message
-            const sendersFirstName = user.name && user.name.split(' ')[0]
             const messageSentAt = formatChatMessagesDate(created_at)
             return (
               <ListItem dense>
                 <ListItemText
                   primary={
                     <Grid container alignItems="flex-end">
-                      <span className={classes.sendersName}>{sendersFirstName}</span>{' '}
+                      <span className={classes.sendersName}>{user.first_name}</span>{' '}
                       <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
                     </Grid>
                   }
