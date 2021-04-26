@@ -9,6 +9,8 @@ const SignUp = () => {
   const planType = searchParams.get('planType')
   const billingPeriod = searchParams.get('billingPeriod')
   const [checkedSCOInLS, setCheckedSCOInLS] = useState(false)
+  console.log('🚀 ~ useEffect ~ billingPeriod', billingPeriod)
+  console.log('🚀 ~ useEffect ~ planType', planType)
 
   // if we are coming from webflow, or passing query string to sign up (when you dont have an
   // an account and you click a sub on our app)
@@ -23,6 +25,7 @@ const SignUp = () => {
   // check to see if a user is already logged in, if so redirect
   if (checkedSCOInLS && localStorage.getItem('userId')) {
     const subCheckoutObjectFromLS = JSON.parse(localStorage.getItem('subscriptionCheckoutObject'))
+    // TODO get rid of this includes crap
     const userClickedFreePlan =
       subCheckoutObjectFromLS && subCheckoutObjectFromLS.plan.includes('FREE')
     const usersRole = localStorage.getItem('role')
@@ -32,7 +35,7 @@ const SignUp = () => {
     }
     return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
   }
-
+  console.log('rending normal sign up')
   return <SignUpForm />
 }
 

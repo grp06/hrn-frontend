@@ -48,7 +48,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
 
   const onSubscriptionComplete = async (result, stripeCustomerId) => {
-    const role = result.plan.includes('STARTER') ? 'host_starter' : 'host_premium'
+    const role = result.plan.includes('FREE') ? 'free' : 'premium'
     localStorage.setItem(ROLE, role)
     localStorage.setItem(TOKEN, result.token)
     // means that we had to retry the invoice so lets clear our local storage

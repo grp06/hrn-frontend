@@ -12,16 +12,7 @@ const SubscriptionSignup: React.FC<{}> = () => {
     return <Loading />
   }
 
-  return (
-    <div>this used to be the org form</div>
-    // <div>
-    //   {componentToShow === 'signup' ? (
-    //     <NewSignupForm showOrgForm={() => setComponentToShow('org')} />
-    //   ) : (
-    //     <OrganizationCreationForm />
-    //   )}
-    // </div>
-  )
+  return <NewSignupForm />
 }
 
 export default SubscriptionSignup

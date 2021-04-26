@@ -3,6 +3,7 @@ import { Grid, Button, Typography, Divider } from '@material-ui/core'
 import { useSubscriptionStyles } from '.'
 
 const PricingPlanCard = ({ plan, onSelect }) => {
+  console.log('🚀 ~ PricingPlanCard ~ plan', plan)
   const classes = useSubscriptionStyles()
   const { name, icon, price, highlights, isActivePlan, disableButton } = plan
   const renderHighlights = () =>

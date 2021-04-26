@@ -30,7 +30,7 @@ const constants = {
   PLAN_TYPE: 'plan_type',
   postChatRatingSnackMessagesArray: [
     'Carrier pigeon sent 🕊',
-    "We've put in the good word 🤗",
+    "We've put in a good word 🤗",
     'Snail mail delivered 🐌',
     'Sent via pony express 🐴',
     "Hedwig's on her way 🦉",
@@ -54,7 +54,7 @@ const constants = {
       description: 'Attendees will be matched based on common interests.',
       databaseValue: 'relevant',
       imageURL: relevantMatching,
-      allowedRoles: ['host', 'host_starter', 'host_premium'],
+      allowedRoles: ['free', 'premium'],
     },
     {
       name: 'Two-Sided',
@@ -62,7 +62,7 @@ const constants = {
         'Split the attendees into 2 subgroups. Members of one subgroup will only match with the other, whenever possible.',
       databaseValue: 'two-sided',
       imageURL: twoSidedMatching,
-      allowedRoles: ['host_premium'],
+      allowedRoles: ['premium'],
     },
   ],
 }

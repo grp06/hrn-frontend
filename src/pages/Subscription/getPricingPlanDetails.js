@@ -2,13 +2,14 @@ import PremiumPlanIcon from '../../assets/premiumPlanIcon.svg'
 import StarterPlanIcon from '../../assets/starterPlanIcon.svg'
 
 const getPricingPlanDetails = (billingPeriod, role) => {
-  const starterPlan = {
-    name: 'Starter',
-    price: 'Free!',
+  const freePlan = {
+    name: 'Free',
+    price: '$0 / month',
     icon: StarterPlanIcon,
     highlights: ['• Up to 25 attendees per event', '• Unlimited Events', '• Random Matching'],
-    isActivePlan: role === 'host_starter',
-    disableButton: role === 'host_premium',
+    // TODO change to 'free'
+    isActivePlan: role === 'free',
+    disableButton: role === 'premium',
   }
 
   const premiumPlan = {
@@ -19,15 +20,15 @@ const getPricingPlanDetails = (billingPeriod, role) => {
       '• Up to 75 attendees per event',
       '• Advanced Matching',
       '• Relevant Matching',
-      '• Two Sided',
+      '• Two Sided Events',
       '• Event Analytics',
       '• Custom Tags (soon)',
-      '• Community / Team Page (soon)',
+      '• Team Page (soon)',
     ],
-    isActivePlan: role === 'host_premium',
+    isActivePlan: role === 'premium',
   }
 
-  return { starterPlan, premiumPlan }
+  return { freePlan, premiumPlan }
 }
 
 export default getPricingPlanDetails

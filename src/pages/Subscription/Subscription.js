@@ -23,8 +23,8 @@ const Subscription = () => {
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id, sub_period_end } = user
   const [billingPeriod, setBillingPeriod] = useState('MONTHLY')
-  const { starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
-  const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
+  const { freePlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
+  const userIsPayingHost = role === 'premium'
 
   const pushToCheckout = (billingPeriod, planType) => {
     window.analytics.track(`click ${planType} ${billingPeriod}`)
@@ -83,7 +83,7 @@ const Subscription = () => {
       >
         <Typography variant="h2" className={classes.sectionHeading}>
           Choose the right
-          <br /> plan for your community!
+          <br /> plan for your team!
         </Typography>
         <Typography variant="subtitle1" style={{ textAlign: 'center' }}>
           Try Hi Right Now for free, or upgrade your plan to unlock more features.
@@ -118,10 +118,7 @@ const Subscription = () => {
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
             <Grid container direction="row" justify="space-around">
-              <PricingPlanCard
-                plan={starterPlan}
-                onSelect={() => handlePlanSelect('STARTER_FREE')}
-              />
+              <PricingPlanCard plan={freePlan} onSelect={() => handlePlanSelect('FREE')} />
               <PricingPlanCard
                 plan={premiumPlan}
                 onSelect={() => handlePlanSelect(`PREMIUM_${billingPeriod.split(' ')[0]}`)}
