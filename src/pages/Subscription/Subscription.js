@@ -28,9 +28,8 @@ const Subscription = () => {
   }
 
   const handlePlanSelect = (planType) => {
-    console.log('🌈 ~ handlePlanSelect ~ planType', planType)
     localStorage.setItem(PLAN_TYPE, planType)
-    return history.push('/subscription-signup')
+    return history.push('/checkout')
   }
 
   return (

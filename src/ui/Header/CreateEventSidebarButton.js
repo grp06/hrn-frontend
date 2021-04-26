@@ -44,7 +44,7 @@ const CreateEventSidebarButton = () => {
           <ListItemIcon style={{ paddingLeft: '8px' }}>
             <FeatherIcon icon="plus-circle" stroke="#f4f6fa" size="24" />
           </ListItemIcon>
-          <ListItemText primary="Host an event" className={classes.listItemText} />
+          <ListItemText primary="Host an Event" className={classes.listItemText} />
         </Grid>
       </ListItem>
     </List>

@@ -11,6 +11,11 @@ const PaymentConfirmationCard = ({
   stripeCustomerId,
   subscriptionEnds,
 }) => {
+  console.log('🚀 ~ subscriptionEnds', subscriptionEnds)
+  console.log('🚀 ~ stripeCustomerId', stripeCustomerId)
+  console.log('🚀 ~ subscriptionStarts', subscriptionStarts)
+  console.log('🚀 ~ planPrice', planPrice)
+  console.log('🚀 ~ planItem', planItem)
   const classes = useCheckoutSuccessStyles()
 
   const handleCreateCustomerPortal = async () => {

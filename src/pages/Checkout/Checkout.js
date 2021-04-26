@@ -22,12 +22,35 @@ const Checkout = () => {
     }
   }, [history, planTypeFromLS])
 
+  const prepareStripeId = useCallback(async () => {
+    if (!userContextLoading) {
+      const { email, id: userId, first_name, last_name, stripe_customer_id } = user
+      console.log('🚀 ~ prepareStripeId ~ user', user)
+      if (!stripe_customer_id) {
+        const stripeCustomer = await createStripeCustomer({ email, first_name, last_name, userId })
+        return setStripeCustomerId(stripeCustomer.customer.id)
+      }
+      return setStripeCustomerId(stripe_customer_id)
+    }
+  }, [user, userContextLoading])
+
   useEffect(() => {
     redirectUserBackToSubscription()
     return () => {
       localStorage.setItem('PLAN_TYPE', '')
     }
   }, [redirectUserBackToSubscription])
+
+  useEffect(() => {
+    if (planTypeFromLS) {
+      prepareStripeId()
+    }
+    // if (planTypeFromLS && planTypeFromLS.billingPeriod === 'FREE_FOREVER') {
+    //   makeUserFreeHost()
+    // } else {
+    //   prepareStripeId()
+    // }
+  }, [planTypeFromLS, prepareStripeId])
 
   if (!stripeCustomerId || planTypeFromLS.includes('FREE')) {
     return <Loading />
