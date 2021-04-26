@@ -5,14 +5,17 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Hi Right Now" />
+    <meta
+      name="description"
+      content="Enabling remote teams to build company culture through 1-1 video chats"
+    />
     <meta property="og:image" name="image" content="%PUBLIC_URL%/get-high.png" />
-    <meta property="og:title" content="Hi Right Now" />
+    <meta property="og:title" content="Hi Right Now - Build Remote Company Culture" />
     <meta property="og:url" content="https://launch.hirightnow.co/events" />
     <meta property="og:type" content="website" />
     <meta
       property="og:description"
-      content="Meaningful connections made easy. Expand your professional connections via quick 1 on 1 video conversations."
+      content="Enabling remote teams to build company culture through 1-1 video chats"
     />
     <link rel="alternate" type="application/json+oembed" href="%PUBLIC_URL%/get-high.png" />
     <link rel="alternate" type="text/xml+oembed" href="%PUBLIC_URL%/get-high.png" />
@@ -46,9 +49,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
 
     <title>Hi Right Now</title>
-    <script>
-      // change me when we go off launch.hirightnow.co
 
+    <script>
       !(function () {
         var analytics = (window.analytics = window.analytics || [])
         if (!analytics.initialize)
@@ -87,32 +89,28 @@
               }
             }
             for (var e = 0; e < analytics.methods.length; e++) {
-              var t = analytics.methods[e]
-              analytics[t] = analytics.factory(t)
+              var key = analytics.methods[e]
+              analytics[key] = analytics.factory(key)
             }
-            analytics.load = function (e, t) {
-              var n = document.createElement('script')
-              n.type = 'text/javascript'
-              n.async = !0
-              n.src = 'https://cdn.segment.com/analytics.js/v1/' + e + '/analytics.min.js'
-              var a = document.getElementsByTagName('script')[0]
-              a.parentNode.insertBefore(n, a)
-              analytics._loadOptions = t
+            analytics.load = function (key, e) {
+              var t = document.createElement('script')
+              t.type = 'text/javascript'
+              t.async = !0
+              t.src = 'https://cdn.segment.com/analytics.js/v1/' + key + '/analytics.min.js'
+              var n = document.getElementsByTagName('script')[0]
+              n.parentNode.insertBefore(t, n)
+              analytics._loadOptions = e
             }
-            analytics.SNIPPET_VERSION = '4.1.0'
-            analytics.load(
-              window.location.href.indexOf('launch') > -1
-                ? 'o6nsfOoEqpG3c31TR5OH3QaOufnjvyR1'
-                : 'zTD9KVSELzg0plqWbpqud0BFioK9MDh3'
-            )
-
+            analytics._writeKey = 'vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9'
+            analytics.SNIPPET_VERSION = '4.13.2'
+            analytics.load('vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9')
             analytics.page()
           }
       })()
     </script>
   </head>
 
-  <body style="margin: 0; overflow-x: hidden; background-color: #000000">
+  <body style="margin: 0; overflow-x: hidden; background-color: #000000;">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--

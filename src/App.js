@@ -4,7 +4,7 @@ import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import makeApolloClient from './apollo'
-import IntercomMessenger from './IntercomMessenger'
+import Crisp from './Crisp'
 
 import { ErrorBoundary } from './common'
 import {
@@ -25,13 +25,12 @@ import {
   Lobby,
   LoginForm,
   MyProfile,
-  MyConnections,
-  NewLobby,
   VideoRoom,
   Onboarding,
   PrivacyPolicy,
   Subscription,
   SetNewPassword,
+  NewLobby,
   SignUp,
 } from './pages'
 import { EventProvider, TwilioProvider, UserProvider, UserEventStatusProvider } from './context'
@@ -86,7 +85,6 @@ const App = () => {
                     <Route exact path="/host-dashboard" component={HostDashboard} />
                     <Route exact path="/host-onboarding" component={HostOnboarding} />
                     <Route exact path="/hrn-analytics" component={HRNAnalytics} />
-                    <Route exact path="/my-connections" component={MyConnections} />
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
                     <Route exact path="/host-directory" component={HostDirectory} />
@@ -126,7 +124,7 @@ const App = () => {
                 <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                 <GetTagsModal />
                 <ProfilePictureModal />
-                <IntercomMessenger />
+                <Crisp />
               </UserProvider>
             </ErrorBoundary>
           </Router>

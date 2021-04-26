@@ -42,11 +42,13 @@ const CreatEvent: React.FC<{}> = () => {
     }
   }, [eventIdFromURL, getEventByIdQuery])
 
+  // we have the eventIdFromURL because if they have an event id then they are
+  // editing, which we should let happen
   useEffect(() => {
-    if (role && role === 'host' && eventsData?.events.length) {
+    if (role && role === 'host' && eventsData?.events.length && !eventIdFromURL) {
       setComponentToShow('upgrade-plan')
     }
-  }, [eventsData, role])
+  }, [eventsData, eventIdFromURL, role])
 
   useEffect(() => {
     if (userIsAPaidHost && sub_period_end) {

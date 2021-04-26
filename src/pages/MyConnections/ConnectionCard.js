@@ -7,7 +7,6 @@ import LinkedInIcon from '@material-ui/icons/LinkedIn'
 import logo from '../../assets/HRNlogoNoFrame.svg'
 import { useMyConnectionsStyles } from '.'
 import { Snack } from '../../common'
-import { AddFriendButton } from '../VideoRoom'
 
 const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, userId }) => {
   const classes = useMyConnectionsStyles()
@@ -45,7 +44,7 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
   }
 
   const renderContactButtons = () => {
-    return i_shared_details ? (
+    return (
       <div className={classes.connectionCardButtonContainer}>
         <Fab
           color="inherit"
@@ -70,10 +69,6 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
             <LinkedInIcon style={{ color: '#FF99AD' }} fontSize="small" />
           </Fab>
         )}
-      </div>
-    ) : (
-      <div className={classes.addFriendButtonContainer}>
-        <AddFriendButton myRound={myRoundInfo} />
       </div>
     )
   }

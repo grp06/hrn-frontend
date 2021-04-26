@@ -23,10 +23,12 @@ const listenToPartnersTable = gql`
             name
           }
         }
+        profile_pic_url
       }
       user_id
       round
       partner_id
+      chat_request
     }
   }
 `

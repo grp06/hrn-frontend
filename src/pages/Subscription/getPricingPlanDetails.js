@@ -3,7 +3,7 @@ const getPricingPlanDetails = (billingPeriod, role) => {
     name: 'Free',
     subtitle: 'Best for individuals',
     price: 'Free!',
-    maxAttendees: 'Unlimiited',
+    maxAttendees: 'Unlimited',
     prevPlanHighlights: [],
     highlights: ['Relevant Matching AI', 'Group Video Chat', '1 Event'],
     isActivePlan: role === 'host',

@@ -3,7 +3,12 @@ import gql from 'graphql-tag'
 const getMyRoundPartner = gql`
   query getMyRoundPartner($round: Int!, $event_id: Int!, $user_id: Int!) {
     partners(
-      where: { round: { _eq: $round }, event_id: { _eq: $event_id }, user_id: { _eq: $user_id } }
+      where: {
+        round: { _eq: $round }
+        event_id: { _eq: $event_id }
+        user_id: { _eq: $user_id }
+        _or: [{ chat_request: { _is_null: true } }, { chat_request: { _eq: "accepted" } }]
+      }
       order_by: { created_at: desc }
     ) {
       event_id
@@ -11,7 +16,6 @@ const getMyRoundPartner = gql`
       id
       created_at
       left_chat
-      i_shared_details
       partner {
         city
         name
@@ -24,6 +28,7 @@ const getMyRoundPartner = gql`
         }
       }
       user_id
+      chat_request
     }
   }
 `

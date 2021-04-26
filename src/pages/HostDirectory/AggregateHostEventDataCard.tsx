@@ -21,6 +21,7 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
     averageNumberOfConnections,
     totalNumberOfUniqueAttendees,
     totalNumberOfUniqueRSVPs,
+    totalNumberOfRepeatAttendees,
   } = getAggregateEventAnalytics(events)
 
   const getDaysAsAHost = () => {
@@ -59,6 +60,11 @@ const AggregateHostEventDataCard: React.FC<AggregateHostEventDataCardProps> = ({
       <Grid item md={6} xs={12}>
         <Typography variant="subtitle1" className={classes.detailsHeading}>
           Total Number of Unique Attendees: {totalNumberOfUniqueAttendees}
+        </Typography>
+      </Grid>
+      <Grid item md={6} xs={12}>
+        <Typography variant="subtitle1" className={classes.detailsHeading}>
+          Total Number of Repeat Attendees: {totalNumberOfRepeatAttendees}
         </Typography>
       </Grid>
       <Grid item md={6} xs={12}>

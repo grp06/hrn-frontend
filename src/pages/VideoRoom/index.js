@@ -1,4 +1,3 @@
-export { default as AddFriendButton } from './AddFriendButton'
 export { default as ConnectionIssuesModal } from './ConnectionIssuesModal'
 export { default as HostEventControlsCard } from './HostEventControlsCard'
 export { default as InVideoBottomControlPanel } from './InVideoBottomControlPanel'

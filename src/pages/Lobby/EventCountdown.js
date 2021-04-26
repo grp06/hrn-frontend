@@ -35,7 +35,9 @@ const EventCountdown = ({ eventStartTime }) => {
 
   const displayTime =
     seconds && seconds >= 0
-      ? `${Math.floor(seconds / 60)} : ${seconds - Math.floor(seconds / 60) * 60}`
+      ? `${String(Math.floor(seconds / 60)).padStart(2, '0')} : ${String(
+          seconds - Math.floor(seconds / 60) * 60
+        ).padStart(2, '0')}`
       : '-- : --'
 
   return (

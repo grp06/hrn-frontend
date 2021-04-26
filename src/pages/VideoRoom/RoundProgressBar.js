@@ -14,7 +14,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   const { round_length, status: eventStatus, updated_at: eventUpdatedAt } = event
   const [progressBarValue, setProgressBarValue] = useState(null)
   const [showRoundStartedSnack, setShowRoundStartedSnack] = useState(false)
-  const [show20SecondsLeftSnack, setShow20SecondsLeftSnack] = useState(false)
+  const [showSecondsLeftSnack, setShowSecondsLeftSnack] = useState(null)
   const [countdown321, setCountdown321] = useState(null)
   const [animateBackdrop, setAnimateBackdrop] = useState(false)
   const oneRoundInMs = round_length * 60000
@@ -44,7 +44,7 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
   }
 
   useEffect(() => {
-    setShow20SecondsLeftSnack(false)
+    setShowSecondsLeftSnack(null)
     setAnimateBackdrop(false)
     setCountdown321(null)
     setProgressBarValue(0)
@@ -74,19 +74,26 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
     const interval = setInterval(() => {
       setProgressBarValue((oldVal) => {
         const newPct = oldVal + getOneSecondInPct()
-        if (!show20SecondsLeftSnack && eventStatus !== 'in-between-rounds') {
+        if (!showSecondsLeftSnack && eventStatus !== 'in-between-rounds') {
           const timeRightNow = (newPct / 100) * oneRoundInMs
-          const isLast15Seconds = oneRoundInMs - timeRightNow < 15000
           const isLast3Seconds = oneRoundInMs - timeRightNow < 3000
           if (isLast3Seconds) {
             setCountdown321(Math.ceil((oneRoundInMs - timeRightNow) / 1000))
             if (!animateBackdrop) {
               setAnimateBackdrop(true)
             }
-          }
-          if (isLast15Seconds) {
-            setShow20SecondsLeftSnack(true)
-            setShowRoundStartedSnack(false)
+          } else {
+            const roundedMinutes = Math.floor((oneRoundInMs - timeRightNow) / 1000) * 1000
+
+            if (oneRoundInMs - timeRightNow < 60000 && roundedMinutes % 30000 === 0) {
+              setShowSecondsLeftSnack('30 seconds left!')
+              setShowRoundStartedSnack(false)
+            } else if (!showRoundStartedSnack && roundedMinutes % 60000 === 0) {
+              const minutesLeftResult = Math.floor((oneRoundInMs - timeRightNow) / 60000)
+              setShowSecondsLeftSnack(
+                `${minutesLeftResult} ${minutesLeftResult === 1 ? 'minute' : 'minutes'} left!`
+              )
+            }
           }
         }
         return newPct
@@ -137,12 +144,12 @@ const RoundProgressBar = React.memo(({ event, userUpdatedAt }) => {
         snackMessage={`${event.round_length} minutes left`}
       />
       <Snack
-        open={show20SecondsLeftSnack}
-        onClose={() => setShow20SecondsLeftSnack(false)}
+        open={!!showSecondsLeftSnack}
+        onClose={() => setShowSecondsLeftSnack(null)}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
         duration={15000}
         severity="error"
-        snackMessage="15 seconds left!"
+        snackMessage={showSecondsLeftSnack}
       />
     </>
   )
