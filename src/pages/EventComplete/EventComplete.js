@@ -53,7 +53,9 @@ const EventComplete = ({ location }) => {
     if (myConnectionAfterEventData?.partners.length > 0) {
       return myConnectionAfterEventData.partners
         .sort((partnerA, partnerB) =>
-          partnerA.partner.name.toLowerCase().localeCompare(partnerB.partner.name.toLowerCase())
+          partnerA.partner.first_name
+            .toLowerCase()
+            .localeCompare(partnerB.partner.first_name.toLowerCase())
         )
         .map((partner) => (
           <div key={partner.id}>

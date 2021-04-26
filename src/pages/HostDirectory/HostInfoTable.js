@@ -61,7 +61,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
           <TableBody>
             {arrayOfHosts.map((host, idx) => (
               <TableRow
-                key={host.name}
+                key={host.first_name}
                 className={clsx({
                   [classes.expiredHostRow]:
                     host.role.includes('_') && new Date(host.sub_period_end) < new Date(),
@@ -74,7 +74,7 @@ const HostInfoTable = ({ arrayOfHosts, hideSubPeriodEnd }) => {
                   >
                     <PersonPinIcon />
                   </IconButton>
-                  {host.name}
+                  {host.first_name}
                 </TableCell>
                 <TableCell align="right">{host.email}</TableCell>
                 <TableCell align="right">{host.city}</TableCell>

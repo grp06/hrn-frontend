@@ -19,7 +19,7 @@ const CreatEvent: React.FC<{}> = () => {
   const [componentToShow, setComponentToShow] = useState<string>('event-form')
   const [eventDetails, setEventDetails] = useState<object>({})
   const [timeSinceSubEnded, setTimeSinceSubEnded] = useState<string>('')
-  const userIsAPaidHost = role && (role.includes('starter') || role.includes('premium'))
+  const userIsAPaidHost = role && role.includes('premium')
 
   const { data: eventsData, loading: eventsLoading } = useQuery(getHostEventsAndPartners, {
     variables: {

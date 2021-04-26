@@ -7,6 +7,7 @@ import { useSubscriptionSignupStyles } from '.'
 import { Snack } from '../../common'
 import { signup } from '../../helpers'
 import { constants } from '../../utils'
+import { useHistory } from 'react-router-dom'
 
 const { ROLE, TOKEN, USER_ID } = constants
 const validEmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -26,7 +27,8 @@ const SignupSchema = Yup.object().shape({
 })
 
 const NewSignupForm: React.FC<{}> = () => {
-  console.log('hey')
+  const history = useHistory()
+
   const classes = useSubscriptionSignupStyles()
   const [errorSnackMessage, setErrorSnackMessage] = useState<string>('')
   return (
@@ -61,6 +63,8 @@ const NewSignupForm: React.FC<{}> = () => {
             console.log(err)
           }
           actions.setSubmitting(false)
+          history.push('/onboarding')
+          window.location.reload()
         }}
       >
         {({ submitForm, isSubmitting }) => (

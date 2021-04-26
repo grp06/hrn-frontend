@@ -1,3 +1,19 @@
+export interface UserObjectInterface {
+  id: number
+  first_name: string
+  last_name: string
+  role: string
+  email: string
+  city: string
+  short_bio: string | null
+  linkedIn_url: string | null
+  profile_pic_url: string | null
+  stripe_customer_id: string | null
+  sub_period_end: string | null
+  became_host_at: string | null
+  tags_users: object[]
+}
+
 export interface EventObjectInterface {
   banner_photo_url: string | null
   current_round: number
@@ -60,19 +76,4 @@ export interface TransitionModalInterface {
   onAcceptFunction: Function
   onCloseButtonText?: string
   onCloseFunction?: Function
-}
-
-export interface UserObjectInterface {
-  id: number
-  name: string
-  role: string
-  email: string
-  city: string
-  short_bio: string | null
-  linkedIn_url: string | null
-  profile_pic_url: string | null
-  stripe_customer_id: string | null
-  sub_period_end: string | null
-  became_host_at: string | null
-  tags_users: object[]
 }

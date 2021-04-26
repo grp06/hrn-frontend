@@ -14,7 +14,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
   ({ event, numberOfOnlineEventUsers, userIsHost }) => {
     const classes = useEventStyles()
     const { description: eventDescription, event_users, host } = event
-    const { name: hostName, profile_pic_url } = host
+    const { first_name, last_name, profile_pic_url } = host
 
     return (
       <Grid container direction="column" className={classes.eventAndLobbyContentCard}>
@@ -50,7 +50,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
                 className={classes.hostNameAndTitleContainer}
               >
                 <Typography variant="h3" className={classes.hostName}>
-                  {hostName}
+                  {`${first_name} ${last_name}`}
                 </Typography>
               </Grid>
             </Grid>

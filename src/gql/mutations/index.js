@@ -1,5 +1,4 @@
 export { default as bulkUpsertReadPersonalChatMessage } from './bulkUpsertReadPersonalChatMessage'
-export { default as createUser } from './createUser'
 export { default as deleteEvent } from './deleteEvent'
 export { default as deleteEventUser } from './deleteEventUser'
 export { default as deleteRounds } from './deleteRounds'

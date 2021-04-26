@@ -25,7 +25,7 @@ const getRsvpsCSVData = (event) => {
   }
   const csvData = event.event_users.reduce((all, item, index) => {
     all.data.push({
-      name: item.user.name,
+      name: item.user.first_name,
       email: item.user.email,
     })
     return all
@@ -44,7 +44,8 @@ const attendeesCSVofEventData = (event) => {
   const arrayOfParticipantsIds = new Set()
   const attendeeCSVData = event.partners.reduce((csvData, partner) => {
     if (!arrayOfParticipantsIds.has(partner.user_id)) {
-      csvData.data.push({ name: partner.user.name, email: partner.user.email })
+      // TODO probably need last name here
+      csvData.data.push({ name: partner.user.first_name, email: partner.user.email })
       arrayOfParticipantsIds.add(partner.user_id)
     }
     return csvData

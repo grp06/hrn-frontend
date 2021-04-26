@@ -6,7 +6,7 @@ const signup = async ({ email, first_name, last_name, password }) => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
-    body: JSON.stringify({ email, first_name, last_name, password, role: 'user' }),
+    body: JSON.stringify({ email, first_name, last_name, password, role: 'free' }),
   }).then((res) => res.json())
 }
 

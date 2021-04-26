@@ -50,10 +50,10 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
       return eventUsersArray?.length ? (
         eventUsersArray
           .sort((userA, userB) => {
-            return userA.user[0].name
+            return userA.user[0].first_name
               .toString()
               .toLowerCase()
-              .localeCompare(userB.user[0].name.toString().toLowerCase())
+              .localeCompare(userB.user[0].first_name.toString().toLowerCase())
           })
           .map(({ user }, idx) => {
             if (idx >= maxIndexToShowTo && !seeMore) return null

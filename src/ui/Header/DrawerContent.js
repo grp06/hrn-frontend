@@ -69,8 +69,8 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { first_name, role, id: userId } = user
+  console.log('🚀 ~ DrawerContent ~ user', user)
   const { adminUserIds } = constants
-  const userIsHost = role && role.includes('host')
   const userIsHRNEmployee = adminUserIds.includes(userId)
 
   return (
@@ -85,9 +85,9 @@ const DrawerContent = () => {
             </Grid>
           </div>
           <Divider />
-          {userIsHost && <CreateEventSidebarButton />}
+          <CreateEventSidebarButton />
           <UserDrawerContent userId={userId} usersFirstName={first_name} role={role} />
-          {userIsHost && <HostDrawerContent role={role} />}
+          {user.role && <HostDrawerContent role={role} />}
           {userIsHRNEmployee && <HRNEmployeeDrawerContent />}
         </Grid>
         <Grid

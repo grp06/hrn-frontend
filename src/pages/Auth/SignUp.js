@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
-import { SignUpForm } from '.'
+import { NewSignupForm } from '../SubscriptionSignup'
 import { getSubscriptionCheckoutObject } from '../Subscription'
+import { SignUpForm } from '.'
 
 const SignUp = () => {
   const location = useLocation()
@@ -35,8 +36,7 @@ const SignUp = () => {
     }
     return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
   }
-  console.log('rending normal sign up')
-  return <SignUpForm />
+  return <NewSignupForm />
 }
 
 export default SignUp
