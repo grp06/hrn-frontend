@@ -21,12 +21,11 @@ const PreEvent = ({ onlineEventUsers }) => {
   const { event } = useEventContext()
   const { id: userId, role } = user
   const { host, id: eventId } = event
-  const { first_name: hostName } = host
+  const { first_name: hostsFirstName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)
   const { startPreEventTwilio } = usePreEventTwilio()
-  const hostsFirstName = hostName && hostName.split(' ')[0]
   const userIsHost = event.host_id === userId
 
   useEffect(() => {
