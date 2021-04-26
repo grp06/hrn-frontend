@@ -4,15 +4,10 @@ import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 import { Grid, Button, Typography } from '@material-ui/core'
 
-import {
-  getPricingPlanDetails,
-  getSubscriptionCheckoutObject,
-  PricingPlanCard,
-  useSubscriptionStyles,
-} from '.'
+import { getPricingPlanDetails, PricingPlanCard, useSubscriptionStyles } from '.'
 import { ToggleGroup } from '../../common'
 import { useUserContext } from '../../context'
-import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
+import { createStripeCustomerPortal } from '../../helpers'
 import { constants } from '../../utils'
 
 const { PLAN_TYPE, ROLE, TOKEN } = constants
@@ -26,51 +21,16 @@ const Subscription = () => {
   const { freePlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
   const userIsPayingHost = role === 'premium'
 
-  const pushToCheckout = (billingPeriod, planType) => {
-    window.analytics.track(`click ${planType} ${billingPeriod}`)
-    if (!userId) {
-      return history.push(`/sign-up?planType=${planType}&billingPeriod=${billingPeriod}`)
-    }
-    const checkoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
-    return history.push('/checkout', checkoutObject)
-  }
-
   const handleCreateCustomerPortal = async () => {
     window.analytics.track('click stripe customer portal')
     const portal = await createStripeCustomerPortal(stripe_customer_id)
     window.open(portal.url)
   }
 
-  // const handlePlanSelect = (billingPeriod, planType) => {
-  //   if (sub_period_end) {
-  //     return handleCreateCustomerPortal()
-  //   }
-  //   return pushToCheckout(billingPeriod, planType)
-  // }
-
   const handlePlanSelect = (planType) => {
     console.log('🌈 ~ handlePlanSelect ~ planType', planType)
     localStorage.setItem(PLAN_TYPE, planType)
     return history.push('/subscription-signup')
-  }
-
-  const handleUpgradeToHost = async () => {
-    if (userId) {
-      try {
-        const upgradeToHostResponse = await upgradeToHost(userId)
-        localStorage.setItem(ROLE, 'host')
-        localStorage.setItem(TOKEN, upgradeToHostResponse.token)
-        window.analytics.track('upgrade to free host')
-        await sleep(500)
-        history.push('/checkout-success', { freeHost: true })
-        return window.location.reload()
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    // no userId means that this person clicking doesn't have an account yet
-    window.analytics.track('upgrade to free host')
-    history.push('/sign-up?planType=free&billingPeriod=forever')
   }
 
   return (

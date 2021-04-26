@@ -10,8 +10,6 @@ const SignUp = () => {
   const planType = searchParams.get('planType')
   const billingPeriod = searchParams.get('billingPeriod')
   const [checkedSCOInLS, setCheckedSCOInLS] = useState(false)
-  console.log('🚀 ~ useEffect ~ billingPeriod', billingPeriod)
-  console.log('🚀 ~ useEffect ~ planType', planType)
 
   // if we are coming from webflow, or passing query string to sign up (when you dont have an
   // an account and you click a sub on our app)
@@ -30,7 +28,7 @@ const SignUp = () => {
     const userClickedFreePlan =
       subCheckoutObjectFromLS && subCheckoutObjectFromLS.plan.includes('FREE')
     const usersRole = localStorage.getItem('role')
-    if (usersRole && usersRole.includes('host') && userClickedFreePlan) {
+    if (usersRole && usersRole.includes('premium') && userClickedFreePlan) {
       // redirect to create event because they clicked host an event from webflow
       return <Redirect to={{ pathname: '/create-event' }} />
     }

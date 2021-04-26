@@ -33,7 +33,6 @@ const LobbyContent = React.memo(
       side_b,
       status: eventStatus,
     } = event
-    console.log('🚀 ~ event', event)
     const { id: user_id } = user
     const userIsHost = parseInt(host_id, 10) === parseInt(user_id, 10)
     const isEventParticipant = event?.event_users?.find((u) => u.user.id === user_id)

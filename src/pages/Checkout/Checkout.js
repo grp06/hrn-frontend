@@ -22,47 +22,12 @@ const Checkout = () => {
     }
   }, [history, planTypeFromLS])
 
-  const makeUserFreeHost = useCallback(async () => {
-    if (userId) {
-      try {
-        const upgradeToHostResponse = await upgradeToHost(userId)
-        localStorage.setItem(ROLE, 'host')
-        localStorage.setItem(TOKEN, upgradeToHostResponse.token)
-        await sleep(400)
-        history.push('/checkout-success', { freeHost: true })
-        return window.location.reload()
-      } catch (err) {
-        console.log(err)
-      }
-    }
-  }, [history, userId])
-
-  const prepareStripeId = useCallback(async () => {
-    if (!userContextLoading) {
-      const { email, id: userId, name, stripe_customer_id } = user
-      if (!stripe_customer_id) {
-        const stripeCustomer = await createStripeCustomer(email, name, userId)
-        return setStripeCustomerId(stripeCustomer.customer.id)
-      }
-      return setStripeCustomerId(stripe_customer_id)
-    }
-  }, [user, userContextLoading])
-
   useEffect(() => {
     redirectUserBackToSubscription()
     return () => {
       localStorage.setItem('PLAN_TYPE', '')
     }
   }, [redirectUserBackToSubscription])
-
-  useEffect(() => {
-    if (planTypeFromLS) prepareStripeId()
-    // if (planTypeFromLS && planTypeFromLS.billingPeriod === 'FREE_FOREVER') {
-    //   makeUserFreeHost()
-    // } else {
-    //   prepareStripeId()
-    // }
-  }, [makeUserFreeHost, planTypeFromLS, prepareStripeId])
 
   if (!stripeCustomerId || planTypeFromLS.includes('FREE')) {
     return <Loading />

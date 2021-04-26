@@ -166,7 +166,7 @@ const EditProfileSidebarForm = ({ databaseTags, onClose }) => {
                 fullWidth
                 value={values.first_name}
                 id="first_name"
-                label="Last Name"
+                label="First Name"
               />
             </div>
             <div>

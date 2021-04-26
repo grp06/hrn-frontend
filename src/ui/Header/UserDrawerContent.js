@@ -45,7 +45,7 @@ const UserDrawerContent = ({ role, userId, usersFirstName }) => {
       icon: 'globe',
     },
     {
-      label: role && role.includes('premium') ? 'Subscription' : 'Pricing',
+      label: role && role.includes('premium') ? 'Subscription' : 'Upgrade',
       url: '/subscription',
       icon: role && role.includes('premium') ? 'credit-card' : 'award',
     },

@@ -34,7 +34,6 @@ const Event: React.FC<{}> = () => {
     side_b,
     status: event_status,
   } = event
-  console.log('🚀 ~ event', event)
 
   if (userContextLoading || eventContextLoading) {
     return <Loading />

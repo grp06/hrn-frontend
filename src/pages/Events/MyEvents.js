@@ -36,10 +36,6 @@ const MyEvents = () => {
     return <Redirect to="/" />
   }
 
-  const handleGoToPublicEventsClick = () => {
-    return history.push('/events')
-  }
-
   const renderNullDataText = () => {
     if (!eventsData || !eventsData.event_users.length) {
       return (
@@ -53,25 +49,11 @@ const MyEvents = () => {
               className={classes.nullDataContainer}
             >
               <Typography variant="h3" className={classes.nullDataHeader}>
-                Sorry, we are currently mostly hosting invite-only events{' '}
+                No events to see. You should create one!
                 <span role="img" aria-label="neutral face">
-                  😐
+                  🙂
                 </span>
               </Typography>
-              <Typography variant="body1" className={classes.nullDataSub}>
-                If you know someone who is hosting an event they can give you their shareable link!
-              </Typography>
-              <Typography variant="body1" className={classes.nullDataSub}>
-                Or take a gander through our limited public events.
-              </Typography>
-              <Button
-                onClick={handleGoToPublicEventsClick}
-                color="primary"
-                variant="contained"
-                style={{ marginTop: '20px' }}
-              >
-                Take Me There!
-              </Button>
             </Grid>
           </FloatCardLarge>
         </>

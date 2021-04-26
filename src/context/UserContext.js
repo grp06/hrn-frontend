@@ -107,7 +107,6 @@ const UserProvider = ({ children }) => {
       pathname.includes('forgot-password') ||
       pathname.includes('set-new-password') ||
       pathname.includes('onboarding') ||
-      pathname.includes('host-onboarding') ||
       pathname.includes('checkout-success')
   )
   const isUserAllowedToBeAnonymousOnPage = Boolean(

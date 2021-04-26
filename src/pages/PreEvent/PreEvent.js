@@ -21,7 +21,7 @@ const PreEvent = ({ onlineEventUsers }) => {
   const { event } = useEventContext()
   const { id: userId, role } = user
   const { host, id: eventId } = event
-  const { name: hostName } = host
+  const { first_name: hostName } = host
   const [roomTokens, setRoomTokens] = useState([])
   const [myRoomNumber, setMyRoomNumber] = useState(null)
   const [numRooms, setNumRooms] = useState(null)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTwilioContext } from '../../context'
-import { PostChatRating, useVideoRoomStyles } from '.'
+import { useVideoRoomStyles } from '.'
 import { ConnectingToSomeone, PartnerDisconnected } from './waitingRoomScreens'
 import { Button, Typography, Grid } from '@material-ui/core'
 
@@ -58,7 +58,6 @@ const VideoRouter = ({ eventStatus, myRound, setUserEventStatus, event }) => {
   const displayVideoMessage = () => {
     const hasRoundsData = myRound !== 'no-assignment'
     const hasPartner = !hasRoundsData ? false : myRound.partner_id
-    console.log('🚀 ~ displayVideoMessage ~ eventStatus', eventStatus)
     switch (eventStatus) {
       case 'in-between-rounds':
         return (

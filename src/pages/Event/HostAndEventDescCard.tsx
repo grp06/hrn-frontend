@@ -15,7 +15,6 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
     const classes = useEventStyles()
     const { description: eventDescription, event_users, host } = event
     const { first_name, last_name, profile_pic_url } = host
-    console.log('🚀 ~ host', host)
 
     return (
       <Grid container direction="column" className={classes.eventAndLobbyContentCard}>

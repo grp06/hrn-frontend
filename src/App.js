@@ -20,7 +20,6 @@ import {
   HostDashboard,
   HostDirectory,
   HostProfile,
-  HostOnboarding,
   HRNAnalytics,
   Lobby,
   LoginForm,
@@ -83,7 +82,6 @@ const App = () => {
                     <Route exact path="/checkout-success" component={CheckoutSuccess} />
                     <Route exact path="/create-event" component={CreateEvent} />
                     <Route exact path="/host-dashboard" component={HostDashboard} />
-                    <Route exact path="/host-onboarding" component={HostOnboarding} />
                     <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
