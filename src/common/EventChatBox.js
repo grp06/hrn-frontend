@@ -77,8 +77,17 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
-  const classes = createStyles()
+const EventChatBox = ({
+  eventId,
+  hostId,
+  messages,
+  toggleChat = () => {},
+  userId,
+  customClasses = null,
+  customHeader = null,
+  showTimeStamps = true,
+}) => {
+  const classes = customClasses ? customClasses : createStyles()
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
 
@@ -114,16 +123,21 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
 
   return (
     <Grid container direction="column" className={classes.chatContainer}>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        className={classes.chatBoxTitle}
-      >
-        Chat with Everyone
-        <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
-      </Grid>
+      {customHeader ? (
+        customHeader
+      ) : (
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          className={classes.chatBoxTitle}
+        >
+          Chat with Everyone
+          <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
+        </Grid>
+      )}
+
       <List dense className={classes.chatList} id="chat-list">
         {messages && messages.length ? (
           messages.map((message) => {
@@ -137,10 +151,12 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
                     <Grid container alignItems="flex-end">
                       <span className={classes.sendersName}>{user.first_name}</span>{' '}
                       {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
-                      <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                      {showTimeStamps && (
+                        <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                      )}
                     </Grid>
                   }
-                  secondary={<span className={classes.messageContent}>{messageContent}</span>}
+                  secondary={<div className={classes.messageContent}>{messageContent}</div>}
                   secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
                 />
               </ListItem>
@@ -184,7 +200,7 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
           multiline
           rows={getNumberOfRows()}
           onKeyDown={sendMessage}
-          InputProps={{ style: { marginTop: 0, padding: 0 } }}
+          InputProps={{ disableUnderline: true, style: { marginTop: 0, padding: 0 } }}
           onChange={(e) => setMessage(e.target.value)}
         />
       </Grid>

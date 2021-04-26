@@ -63,6 +63,7 @@ const CreatEvent: React.FC<{}> = () => {
   }, [sub_period_end, userIsAPaidHost])
 
   if (eventsLoading || userContextLoading) {
+    console.log("Quan's log ", eventsLoading, userContextLoading)
     return <Loading />
   }
 

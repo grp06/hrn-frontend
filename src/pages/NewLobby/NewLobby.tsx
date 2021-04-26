@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Button } from '@material-ui/core'
 import { UserVideoCard } from '.'
-import { Loading } from '../../common'
+import { Loading, EventChatBox } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
 import { useGroupTwilio } from '../../hooks'
 import { publishParticipantsAudioAndVideo, unpublishParticipantsTracks } from '../../utils'
+import { useNewLobbyStyles, createChatBoxStyles } from '.'
 
 const { connect, LocalDataTrack } = require('twilio-video')
 
@@ -16,12 +17,23 @@ declare global {
 }
 
 const NewLobby: React.FC<{}> = () => {
-  const { event, eventContextLoading } = useEventContext()
+  const { event, eventChatMessages, eventContextLoading } = useEventContext()
   const { user, userContextLoading } = useUserContext()
   const { onlineEventUsers, userHasEnabledCameraAndMic } = useUserEventStatusContext()
   const { startGroupVideoChatTwilio } = useGroupTwilio()
   const { host_id, id: event_id } = event
   const { id: user_id } = user
+
+  /**
+   * Styles for lobby
+   */
+  const classes = useNewLobbyStyles()
+  const customChatboxClasses = createChatBoxStyles()
+
+  /**
+   * Event details
+   */
+  const { host_id: hostId, id: eventId } = event
 
   const [arrayOfParticipantsWithVideoDivs, setArrayOfParticipantsWithVideoDivs] = useState<
     string[]
@@ -139,23 +151,38 @@ const NewLobby: React.FC<{}> = () => {
   }
 
   return (
-    <>
+    <div className={classes.lobby}>
+      <EventChatBox
+        eventId={eventId}
+        hostId={hostId}
+        messages={eventChatMessages}
+        userId={user.id}
+        customClasses={customChatboxClasses}
+        customHeader={<></>}
+        showTimeStamps={false}
+      />
       <div id="videoBox" style={{ display: 'flex' }}>
         {createAttendeeVideoCards()}
       </div>
-      <Button variant="contained" color="primary" onClick={() => joinStage()}>
-        Join Stage
-      </Button>
-      <Button variant="contained" color="default" onClick={() => leaveStage()}>
-        Leave Stage
-      </Button>
-      <Button variant="contained" color="secondary" onClick={() => sendDataTrackMessage('sweep')}>
-        Sweep
-      </Button>
-      <Button variant="contained" color="secondary" onClick={() => sendDataTrackMessage('silence')}>
-        Silence
-      </Button>
-    </>
+      <div>
+        <Button variant="contained" color="primary" onClick={() => joinStage()}>
+          Join Stage
+        </Button>
+        <Button variant="contained" color="default" onClick={() => leaveStage()}>
+          Leave Stage
+        </Button>
+        <Button variant="contained" color="secondary" onClick={() => sendDataTrackMessage('sweep')}>
+          Sweep
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => sendDataTrackMessage('silence')}
+        >
+          Silence
+        </Button>
+      </div>
+    </div>
   )
 }
 

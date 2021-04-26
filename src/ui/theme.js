@@ -20,8 +20,9 @@ const greyButton = '#323232'
 const greyButtonHover = '#1c1c1c'
 const black2dp = '#212121'
 const red = '#ff3333'
+const greenCampfire = 'linear-gradient(218.55deg, #C0F2C2 19.7%, #DCF4C5 71.14%)'
 
-const theme = createMuiTheme({
+export const themeOptions = {
   palette: {
     common: {
       basePurple,
@@ -43,6 +44,7 @@ const theme = createMuiTheme({
       red,
       grey10,
       grey15,
+      greenCampfire,
     },
     primary: {
       main: basePurple,
@@ -452,6 +454,8 @@ const theme = createMuiTheme({
       },
     },
   },
-})
+}
+
+const theme = createMuiTheme(themeOptions)
 
 export default theme
