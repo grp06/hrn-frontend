@@ -10,7 +10,8 @@ const listenToEventChatMessages = gql`
       created_at
       sender_id
       user {
-        name
+        first_name
+        last_name
       }
     }
   }

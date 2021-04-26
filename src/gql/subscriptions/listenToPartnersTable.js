@@ -16,7 +16,8 @@ const listenToPartnersTable = gql`
       created_at
       partner {
         city
-        name
+        first_name
+        last_name
         tags_users {
           tag {
             tag_id

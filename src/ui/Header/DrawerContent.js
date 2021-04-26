@@ -69,7 +69,6 @@ const DrawerContent = () => {
   const classes = useStyles()
   const { user, resetUser } = useUserContext()
   const { first_name, role, id: userId } = user
-  console.log('🚀 ~ DrawerContent ~ user', user)
   const { adminUserIds } = constants
   const userIsHRNEmployee = adminUserIds.includes(userId)
 

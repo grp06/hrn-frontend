@@ -8,7 +8,8 @@ const getHostEventsAndPartners = gql`
       event_users {
         user {
           id
-          name
+          first_name
+          last_name
           email
         }
       }
@@ -21,18 +22,21 @@ const getHostEventsAndPartners = gql`
         round
         rating
         user {
-          name
+          first_name
+          last_name
           id
           email
         }
         partner {
-          name
+          first_name
+          last_name
           id
           email
         }
       }
       host {
-        name
+        first_name
+        last_name
         email
         id
       }

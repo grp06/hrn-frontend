@@ -8,7 +8,8 @@ const getHostEventsAndRounds = gql`
       event_users {
         user {
           id
-          name
+          first_name
+          last_name
           email
         }
       }
@@ -25,12 +26,14 @@ const getHostEventsAndRounds = gql`
         partnerY_thumb
         round_number
         partnerX {
-          name
+          first_name
+          last_name
           email
         }
         partnerY {
           email
-          name
+          first_name
+          last_name
         }
       }
     }

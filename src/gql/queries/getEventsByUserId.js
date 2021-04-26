@@ -22,11 +22,13 @@ const getEventsByUserId = gql`
         event_users {
           user {
             id
-            name
+            first_name
+            last_name
           }
         }
         host {
-          name
+          first_name
+          last_name
           profile_pic_url
         }
       }

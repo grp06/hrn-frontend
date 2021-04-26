@@ -15,7 +15,8 @@ const getAllPartnersFromEvent = gql`
         city
         email
         linkedIn_url
-        name
+        first_name
+        last_name
         short_bio
         profile_pic_url
         tags_users {
