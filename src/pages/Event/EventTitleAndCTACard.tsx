@@ -136,24 +136,6 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
     return url.toString()
   }, [event])
 
-  const outlookCalendar = useMemo(() => {
-    const url = new URL('https://outlook.live.com/owa')
-    url.searchParams.append('path', '/calendar/view/Month')
-    url.searchParams.append('rru', 'addevent')
-    url.searchParams.append('subject', event.event_name)
-    url.searchParams.append('dtstart', moment(event.start_at).format('YYYYMMDDTHHmmssZ'))
-    url.searchParams.append(
-      'dtend',
-      moment(event.start_at).clone().add(1, 'hour').format('YYYYMMDDTHHmmssZ')
-    )
-    url.searchParams.append('body', event.description)
-    url.searchParams.append('location', `https://launch.hirightnow.co/events/${event.id}`)
-    url.searchParams.append('allday', 'false')
-    url.searchParams.append('uid', '')
-
-    return url.toString()
-  }, [event])
-
   return (
     <Grid
       container
@@ -179,16 +161,6 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
           className={classes.eventDateTypography}
         >
           Add to Google Calendar
-        </Typography>
-
-        <Typography
-          variant="body1"
-          component="a"
-          href={outlookCalendar}
-          target="_blank"
-          className={classes.eventDateTypography}
-        >
-          Add to Outlook Calendar
         </Typography>
       </Grid>
       {(userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete') ||
