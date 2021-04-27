@@ -62,11 +62,24 @@ const NewSignupForm: React.FC<{}> = () => {
                 localStorage.setItem(ROLE, role)
                 localStorage.setItem(TOKEN, token)
                 localStorage.setItem(USER_ID, id)
+                window.analytics.identify(id, {
+                  name: `${first_name} ${last_name}`,
+                  email,
+                  role,
+                })
+                window.analytics.track('Sign up')
                 setShowSignupSuccessSnack(true)
               } catch (err) {
                 console.log(err)
               }
               actions.setSubmitting(false)
+              // check to see if you have plan_type_billingPeriod in LS
+              // if so, push to checkout
+              if (localStorage.getItem('PLAN_TYPE')) {
+                history.push('/checkout')
+                // test to see if we need to keep reloading here
+                return window.location.reload()
+              }
               history.push('/onboarding')
               window.location.reload()
             }}

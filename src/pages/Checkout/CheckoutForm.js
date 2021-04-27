@@ -46,10 +46,10 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
+  console.log('stripeCustomerId = ', stripeCustomerId)
 
   const onSubscriptionComplete = async (result, stripeCustomerId) => {
-    const role = result.plan.includes('FREE') ? 'free' : 'premium'
-    localStorage.setItem(ROLE, role)
+    localStorage.setItem(ROLE, 'premium')
     localStorage.setItem(TOKEN, result.token)
     // means that we had to retry the invoice so lets clear our local storage
     // and set the subscription to the invoice
@@ -60,7 +60,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
     window.analytics.track(`successfully paid for ${result.plan}`)
-    console.log('stripeCustomerId = ', stripeCustomerId)
 
     setTimeout(() => {
       console.log('after tracking before push')
