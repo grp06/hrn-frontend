@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
 import { NewSignupForm } from '../SubscriptionSignup'
 import { getSubscriptionCheckoutObject } from '../Subscription'
-import { SignUpForm } from '.'
 
 const SignUp = () => {
   const location = useLocation()
