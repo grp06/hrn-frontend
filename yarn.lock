@@ -10629,10 +10629,10 @@ react-fast-compare@^2.0.1:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
-react-geosuggest@^2.13.1:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/react-geosuggest/-/react-geosuggest-2.13.1.tgz#755a811394a5742676aa9cdd86e8355a5f0a80d7"
-  integrity sha512-7lCwcayqnmKJxvoQJ9v76DqEw720K2p+lE0d+GaNByk+57aX8iFbK1Z8Xm1Yuo5yAiwxtvwvMwmkYi6TbSkWYg==
+react-geosuggest@^2.14.1:
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/react-geosuggest/-/react-geosuggest-2.14.1.tgz#1e127b24d3c8b4ffb353bb0b74370ddc6806e8b8"
+  integrity sha512-gaAEZfDEHHWEMn9y8UNH+nJzu5Kc3LvK8CAFD6dFZmn69TJ/4GgoXLCLzUunbPK/Nqs08mpDsryK5ceFFmVhVg==
   dependencies:
     classnames "^2.2.6"
     lodash.debounce "^4.0.6"
