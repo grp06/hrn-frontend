@@ -61,6 +61,7 @@ const NewSignupForm: React.FC<{}> = () => {
             localStorage.setItem(USER_ID, id)
             window.analytics.identify(id, {
               name: `${first_name} ${last_name}`,
+              first_name,
               email,
               role,
               created_at: signupResponse.created_at,
