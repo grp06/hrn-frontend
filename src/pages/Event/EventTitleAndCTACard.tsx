@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useMutation } from '@apollo/react-hooks'
 // @ts-ignore
 import FeatherIcon from 'feather-icons-react'
@@ -10,6 +10,7 @@ import { DeleteEventButton, TwoSidedEventRSVPButton, useEventStyles } from '.'
 import { CalendarIconIcs, Snack } from '../../common'
 import { insertEventUser } from '../../gql/mutations'
 import { EventObjectInterface, formatDate, rsvpForEvent, UserObjectInterface } from '../../utils'
+import moment from 'moment'
 
 interface EventTitleAndCTACardProps {
   event: EventObjectInterface
@@ -115,6 +116,26 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
     )
   }
 
+  const ggCalendar = useMemo(() => {
+    const url = new URL('https://www.google.com/calendar/render')
+    url.searchParams.append('action', 'TEMPLATE')
+    url.searchParams.append('text', event.event_name)
+    url.searchParams.append(
+      'dates',
+      `${moment(event.start_at).format('YYYYMMDDTHHmmssZ')}/${moment(event.start_at)
+        .clone()
+        .add(1, 'hour')
+        .format('YYYYMMDDTHHmmssZ')}`
+    )
+    url.searchParams.append('details', event.description)
+    url.searchParams.append('location', `https://launch.hirightnow.co/events/${event.id}`)
+    url.searchParams.append('trp', 'false')
+    url.searchParams.append('sprop', '')
+    url.searchParams.append('sprop', 'name:')
+
+    return url.toString()
+  }, [event])
+
   return (
     <Grid
       container
@@ -131,6 +152,16 @@ const EventTitleAndCTACard: React.FC<EventTitleAndCTACardProps> = React.memo(({ 
             {formatDate(startTime)}
           </Typography>
         </Grid>
+
+        <Typography
+          variant="body1"
+          component="a"
+          href={ggCalendar}
+          target="_blank"
+          className={classes.eventDateTypography}
+        >
+          Add to Google Calendar
+        </Typography>
       </Grid>
       {(userAlreadyRSVPed && event_status !== 'not-started' && event_status !== 'complete') ||
       userIsOnEventCompletePage ? null : (
