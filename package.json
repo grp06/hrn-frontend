@@ -50,7 +50,7 @@
     "formik-material-ui-pickers": "^0.0.11",
     "framer-motion": "^2.9.4",
     "graphql": "^15.0.0",
-    "graphql-tag": "^2.10.3",
+    "graphql-tag": "^2.11.0",
     "jstz": "^2.1.1",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
