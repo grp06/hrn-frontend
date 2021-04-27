@@ -33,11 +33,11 @@ const useSubscriptionStyles = makeStyles((theme) => ({
   },
   planNameTypography: {
     fontWeight: 700,
-    marginBottom: theme.spacing(0.25),
+    margin: theme.spacing(1, 0),
   },
   priceTypography: {
     fontWeight: 400,
-    margin: theme.spacing(2, 0, 4, 0),
+    marginBottom: theme.spacing(4),
     [theme.breakpoints.down('md')]: {
       margin: theme.spacing(0, 0, 1, 0),
       fontSize: '1.25rem',
@@ -120,19 +120,19 @@ const useSubscriptionStyles = makeStyles((theme) => ({
   },
   planHighlightsList: {
     marginTop: theme.spacing(1),
-    padding: theme.spacing(0, 0, 0, 3),
-    [theme.breakpoints.down('sm')]: {
-      padding: theme.spacing(0, 1),
-    },
   },
   planHighlightsSection: {
-    padding: theme.spacing(0, 3),
+    paddingLeft: theme.spacing(3),
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(0, 1),
     },
   },
   planHighlightTypography: {
-    marginBottom: theme.spacing(0.5),
+    marginBottom: theme.spacing(1),
+  },
+  planIcon: {
+    height: '50px',
+    width: '50px',
   },
   planNameContainer: {
     [theme.breakpoints.down('md')]: {
@@ -157,15 +157,18 @@ const useSubscriptionStyles = makeStyles((theme) => ({
   pricingCardContainer: {
     borderRadius: '4px',
     backgroundColor: theme.palette.common.greyCard,
-    width: '32%',
+    width: '45%',
     margin: theme.spacing(2, 0),
     padding: theme.spacing(3, 2),
+    maxWidth: '350px',
     [theme.breakpoints.down('md')]: {
       width: '90%',
-      margin: theme.spacing(2, 'auto'),
+      maxWidth: 'none',
+      padding: 'none',
     },
     [theme.breakpoints.down('sm')]: {
       width: '100%',
+      maxWidth: 'none',
       margin: theme.spacing(2, 'auto'),
       padding: theme.spacing(2, 1.5),
     },
@@ -176,10 +179,10 @@ const useSubscriptionStyles = makeStyles((theme) => ({
   // *****************************
 
   divider: {
-    width: '80%',
-    margin: theme.spacing(6, 'auto'),
+    width: '95%',
+    margin: theme.spacing(3, 'auto'),
     [theme.breakpoints.down('md')]: {
-      margin: theme.spacing(5, 'auto'),
+      margin: theme.spacing(2, 'auto'),
     },
   },
   manageSubButton: {
@@ -193,10 +196,11 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     },
   },
   sectionHeading: {
-    marginBottom: theme.spacing(4),
+    width: '100%',
+    marginBottom: theme.spacing(2),
+    textAlign: 'center',
     [theme.breakpoints.down('md')]: {
       marginBottom: theme.spacing(3),
-      textAlign: 'center',
     },
   },
   subButtonGridContainer: {
@@ -213,10 +217,11 @@ const useSubscriptionStyles = makeStyles((theme) => ({
     },
   },
   pageContainer: {
-    backgroundImage: `url(${confettiDoodles})`,
-    backgroundSize: 'auto',
     backgroundRepeat: 'repeat',
     position: 'relative',
+  },
+  toggleButtonContainer: {
+    margin: theme.spacing(6, 0),
   },
 }))
 

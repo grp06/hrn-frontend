@@ -36,7 +36,7 @@ const MyEventConnectionsList = ({ mutualThumbsData, userId }) => {
                 <PersonIcon />
               )}
             </ListItemAvatar>
-            <ListItemText primary={partner[0].name} />
+            <ListItemText primary={partner[0].first_name} />
             <ListItemSecondaryAction>
               <IconButton
                 edge="end"

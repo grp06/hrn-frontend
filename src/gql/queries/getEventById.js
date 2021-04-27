@@ -22,12 +22,14 @@ const getEventById = gql`
       event_users {
         user {
           id
-          name
+          first_name
+          last_name
           updated_at
         }
       }
       host {
-        name
+        first_name
+        last_name
         profile_pic_url
         short_bio
       }

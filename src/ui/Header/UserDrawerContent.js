@@ -20,14 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-const UserDrawerContent = ({ role, userId, userName }) => {
+const UserDrawerContent = ({ role, userId, usersFirstName }) => {
   const classes = useStyles()
   const history = useHistory()
   const eventRunning = Boolean(
     window.location.pathname.includes('pre-event') ||
       window.location.pathname.includes('video-room')
   )
-  const usersFirstName = userName && userName.split(' ')[0]
 
   const loggedInRoutes = [
     {
@@ -46,9 +45,9 @@ const UserDrawerContent = ({ role, userId, userName }) => {
       icon: 'globe',
     },
     {
-      label: role && role.includes('host') ? 'Subscription' : 'Become a Host',
+      label: role && role.includes('premium') ? 'Subscription' : 'Upgrade',
       url: '/subscription',
-      icon: role && role.includes('host') ? 'credit-card' : 'award',
+      icon: role && role.includes('premium') ? 'credit-card' : 'award',
     },
   ]
 
@@ -57,11 +56,6 @@ const UserDrawerContent = ({ role, userId, userName }) => {
       label: 'All Events',
       url: '/events',
       icon: 'globe',
-    },
-    {
-      label: 'Become a Host',
-      url: '/subscription',
-      icon: 'award',
     },
   ]
 

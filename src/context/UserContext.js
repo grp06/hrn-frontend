@@ -24,6 +24,8 @@ const useUserContext = () => {
     dispatch((draft) => {
       draft.user = {
         name: '',
+        first_name: '',
+        last_name: '',
         userId: null,
         role: '',
         city: '',
@@ -60,7 +62,7 @@ const useUserContext = () => {
 
   const updateUserObject = (userObject) => {
     dispatch((draft) => {
-      draft.user.name = userObject.name
+      draft.user.first_name = userObject.first_name
       draft.user.city = userObject.city
       draft.user.short_bio = userObject.short_bio
       draft.user.linkedIn_url = userObject.linkedIn_url
@@ -105,7 +107,6 @@ const UserProvider = ({ children }) => {
       pathname.includes('forgot-password') ||
       pathname.includes('set-new-password') ||
       pathname.includes('onboarding') ||
-      pathname.includes('host-onboarding') ||
       pathname.includes('checkout-success')
   )
   const isUserAllowedToBeAnonymousOnPage = Boolean(

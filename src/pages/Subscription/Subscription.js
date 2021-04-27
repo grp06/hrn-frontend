@@ -4,36 +4,22 @@ import { motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 import { Grid, Button, Typography } from '@material-ui/core'
 
-import {
-  getPricingPlanDetails,
-  getSubscriptionCheckoutObject,
-  PricingPlanCard,
-  useSubscriptionStyles,
-} from '.'
+import { getPricingPlanDetails, PricingPlanCard, useSubscriptionStyles } from '.'
 import { ToggleGroup } from '../../common'
 import { useUserContext } from '../../context'
-import { upgradeToHost, sleep, createStripeCustomerPortal } from '../../helpers'
+import { createStripeCustomerPortal } from '../../helpers'
 import { constants } from '../../utils'
 
-const { ROLE, TOKEN } = constants
+const { PLAN_TYPE, ROLE, TOKEN } = constants
 
 const Subscription = () => {
   const classes = useSubscriptionStyles()
   const history = useHistory()
   const { user } = useUserContext()
   const { id: userId, role, stripe_customer_id, sub_period_end } = user
-  const [billingPeriod, setBillingPeriod] = useState('monthly')
-  const { freePlan, starterPlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
-  const userIsPayingHost = role === 'host_premium' || role === 'host_starter'
-
-  const pushToCheckout = (billingPeriod, planType) => {
-    window.analytics.track(`click ${planType} ${billingPeriod}`)
-    if (!userId) {
-      return history.push(`/sign-up?planType=${planType}&billingPeriod=${billingPeriod}`)
-    }
-    const checkoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
-    return history.push('/checkout', checkoutObject)
-  }
+  const [billingPeriod, setBillingPeriod] = useState('MONTHLY')
+  const { freePlan, premiumPlan } = getPricingPlanDetails(billingPeriod, role)
+  const userIsPayingHost = role === 'premium'
 
   const handleCreateCustomerPortal = async () => {
     window.analytics.track('click stripe customer portal')
@@ -41,56 +27,35 @@ const Subscription = () => {
     window.open(portal.url)
   }
 
-  const handlePlanSelect = (billingPeriod, planType) => {
-    if (sub_period_end) {
-      return handleCreateCustomerPortal()
-    }
-    return pushToCheckout(billingPeriod, planType)
-  }
-
-  const handleUpgradeToHost = async () => {
-    if (userId) {
-      try {
-        const upgradeToHostResponse = await upgradeToHost(userId)
-        localStorage.setItem(ROLE, 'host')
-        localStorage.setItem(TOKEN, upgradeToHostResponse.token)
-        window.analytics.track('upgrade to free host')
-        await sleep(500)
-        history.push('/checkout-success', { freeHost: true })
-        return window.location.reload()
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    // no userId means that this person clicking doesn't have an account yet
-    window.analytics.track('upgrade to free host')
-    history.push('/sign-up?planType=free&billingPeriod=forever')
+  const handlePlanSelect = (planType) => {
+    localStorage.setItem(PLAN_TYPE, planType)
+    return history.push('/checkout')
   }
 
   return (
     <Grid container direction="column" className={classes.pageContainer}>
-      <Grid container className={classes.subscriptionContainer}>
+      <Grid
+        container
+        alignContent="center"
+        justify="center"
+        className={classes.subscriptionContainer}
+      >
         <Typography variant="h2" className={classes.sectionHeading}>
-          Choose the right plan for your community!
+          Choose the right
+          <br /> plan for your team!
         </Typography>
-        <Grid container direction="row">
-          <Grid container item xs={12} sm={6} className={classes.subButtonGridContainer}>
-            <ToggleGroup
-              toggleValue={billingPeriod}
-              toggleValueA="monthly"
-              toggleValueB="yearly"
-              setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
-            />
-          </Grid>
+        <Typography variant="subtitle1" style={{ textAlign: 'center' }}>
+          Try Hi Right Now for free, or upgrade your plan to unlock more features.
+        </Typography>
+        <Grid
+          container
+          direction="column"
+          justify="center"
+          alignContent="center"
+          className={classes.toggleButtonContainer}
+        >
           {userIsPayingHost ? (
-            <Grid
-              container
-              item
-              xs={12}
-              sm={6}
-              justify="flex-end"
-              className={classes.subButtonGridContainer}
-            >
+            <>
               <Button
                 variant="text"
                 disableRipple
@@ -100,20 +65,22 @@ const Subscription = () => {
                 <FeatherIcon icon="edit-2" size="20" style={{ paddingRight: '12px' }} /> Manage
                 subscription
               </Button>
-            </Grid>
+            </>
           ) : null}
+          <ToggleGroup
+            toggleValue={billingPeriod}
+            toggleValueA="MONTHLY"
+            toggleValueB="YEARLY (SAVE20%)"
+            setToggleValue={(toggleValue) => setBillingPeriod(toggleValue)}
+          />
         </Grid>
         <Grid container direction="row" justify="space-between">
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ width: '100%' }}>
-            <Grid container direction="row" justify="space-between">
-              <PricingPlanCard plan={freePlan} onSelect={() => handleUpgradeToHost()} />
-              <PricingPlanCard
-                plan={starterPlan}
-                onSelect={() => handlePlanSelect(billingPeriod, 'starter')}
-              />
+            <Grid container direction="row" justify="space-around">
+              <PricingPlanCard plan={freePlan} onSelect={() => handlePlanSelect('FREE')} />
               <PricingPlanCard
                 plan={premiumPlan}
-                onSelect={() => handlePlanSelect(billingPeriod, 'premium')}
+                onSelect={() => handlePlanSelect(`PREMIUM_${billingPeriod.split(' ')[0]}`)}
               />
             </Grid>
           </motion.div>

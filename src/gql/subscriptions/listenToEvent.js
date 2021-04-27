@@ -24,14 +24,16 @@ const listenToEvent = gql`
         side
         user {
           email
-          name
+          first_name
+          last_name
           city
           id
           profile_pic_url
         }
       }
       host {
-        name
+        first_name
+        last_name
         profile_pic_url
         short_bio
       }

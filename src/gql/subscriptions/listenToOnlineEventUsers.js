@@ -7,7 +7,8 @@ const listenToOnlineEventUsers = gql`
       user {
         id
         city
-        name
+        first_name
+        last_name
         profile_pic_url
       }
     }

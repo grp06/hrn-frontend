@@ -22,9 +22,9 @@ const RoundAndPartnerCard = ({ event, myRound }) => {
 
   const getPartnerName = () =>
     myRound.partner &&
-    myRound.partner.name && (
+    myRound.partner.first_name && (
       <Typography variant="h3" className={classes.partnerName}>
-        {myRound.partner.name}
+        {myRound.partner.first_name}
       </Typography>
     )
 

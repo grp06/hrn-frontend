@@ -78,6 +78,7 @@ const NewEventForm: React.FC<NewEventFormProps> = ({ eventDetails, userId }) => 
         // set the photo banner to a default community image
         try {
           const unsplashRequest = await getUnsplashImageURL('community')
+          console.log('🌈 ~ onCompleted: ~ unsplashRequest', unsplashRequest)
           await updateEventBannerPhotoMutation({
             variables: {
               event_id,

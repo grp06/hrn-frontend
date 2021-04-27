@@ -139,7 +139,7 @@ const EventExpansionPanelAdmin = ({ eventsAndRoundsData }) => {
           </Grid>
           <Grid item md={6} xs={12}>
             <Typography variant="subtitle1" className={classes.expansionPanelDetailsHeading}>
-              Name: {hostObject.name}
+              Name: {hostObject.first_name}
             </Typography>
           </Grid>
           <Grid item md={6} xs={12}>

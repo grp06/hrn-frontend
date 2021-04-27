@@ -50,10 +50,10 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
       return eventUsersArray?.length ? (
         eventUsersArray
           .sort((userA, userB) => {
-            return userA.user[0].name
+            return userA.user[0].first_name
               .toString()
               .toLowerCase()
-              .localeCompare(userB.user[0].name.toString().toLowerCase())
+              .localeCompare(userB.user[0].first_name.toString().toLowerCase())
           })
           .map(({ user }, idx) => {
             if (idx >= maxIndexToShowTo && !seeMore) return null
@@ -72,7 +72,7 @@ const OnlineAttendeesCard: React.FC<OnlineAttendeesCardProps> = React.memo(
                   <Grid container direction="row" alignItems="center" justify="space-between">
                     <Grid container direction="row" alignItems="center" style={{ width: 'auto' }}>
                       <Typography variant="body1" style={{ fontWeight: 500 }}>
-                        {user[0].name}
+                        {user[0].first_name}
                       </Typography>
                       <Typography variant="subtitle1">, {user[0].city}</Typography>
                     </Grid>

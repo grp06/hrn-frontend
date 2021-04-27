@@ -5,7 +5,8 @@ const getAllEvents = gql`
     events {
       event_users {
         user {
-          name
+          first_name
+          last_name
           id
           email
           city
@@ -19,12 +20,14 @@ const getAllEvents = gql`
       partners {
         round
         user {
-          name
+          first_name
+          last_name
           id
           email
         }
         partner {
-          name
+          first_name
+          last_name
           id
           email
         }
@@ -45,7 +48,8 @@ const getAllEvents = gql`
         city
         email
         id
-        name
+        first_name
+        last_name
         linkedIn_url
       }
     }

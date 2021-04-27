@@ -15,6 +15,7 @@ const constants = {
   maxNumUsersPerRoom: 40,
   drawerWidth: 175,
   bottomNavBarHeight: 80,
+  crispWebsiteId: '1b6b1463-9594-48be-a161-db20a94bbe2b',
   giveFeedbackTypeform: 'https://stephen687387.typeform.com/to/pMRsCo',
   firefoxCameraPermissionHowTo:
     'https://support.mozilla.org/en-US/kb/how-manage-your-camera-and-microphone-permissions#w_using-the-firefox-2optionssf3preferencessf-menu-to-change-camera-and-microphone-permissions',
@@ -26,12 +27,12 @@ const constants = {
   USER_ID: 'userId',
   TOKEN: 'token',
   ROLE: 'role',
+  PLAN_TYPE: 'plan_type',
   postChatRatingSnackMessagesArray: [
     'Carrier pigeon sent 🕊',
-    "We've put in the good word 🤗",
+    "We've put in a good word 🤗",
     'Snail mail delivered 🐌',
     'Sent via pony express 🐴',
-    "Hedwig's on her way 🦉",
   ],
   connectingYouToSomeoneMessagesArray: [
     ['Connecting you to someone awesome!', 'Give us a few seconds to roll out your red carpet 💃.'],
@@ -52,7 +53,7 @@ const constants = {
       description: 'Attendees will be matched based on common interests.',
       databaseValue: 'relevant',
       imageURL: relevantMatching,
-      allowedRoles: ['host', 'host_starter', 'host_premium'],
+      allowedRoles: ['free', 'premium'],
     },
     {
       name: 'Two-Sided',
@@ -60,7 +61,7 @@ const constants = {
         'Split the attendees into 2 subgroups. Members of one subgroup will only match with the other, whenever possible.',
       databaseValue: 'two-sided',
       imageURL: twoSidedMatching,
-      allowedRoles: ['host_premium'],
+      allowedRoles: ['premium'],
     },
   ],
 }

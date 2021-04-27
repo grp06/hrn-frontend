@@ -4,6 +4,7 @@ import { StylesProvider, ThemeProvider } from '@material-ui/core/styles'
 import { ApolloProvider } from 'react-apollo'
 import { Route, BrowserRouter as Router, Switch, Redirect } from 'react-router-dom'
 import makeApolloClient from './apollo'
+import Crisp from './Crisp'
 
 import { ErrorBoundary } from './common'
 import {
@@ -19,7 +20,6 @@ import {
   HostDashboard,
   HostDirectory,
   HostProfile,
-  HostOnboarding,
   HRNAnalytics,
   Lobby,
   LoginForm,
@@ -28,6 +28,7 @@ import {
   Onboarding,
   PrivacyPolicy,
   Subscription,
+  SubscriptionSignup,
   SetNewPassword,
   SignUp,
 } from './pages'
@@ -81,13 +82,13 @@ const App = () => {
                     <Route exact path="/checkout-success" component={CheckoutSuccess} />
                     <Route exact path="/create-event" component={CreateEvent} />
                     <Route exact path="/host-dashboard" component={HostDashboard} />
-                    <Route exact path="/host-onboarding" component={HostOnboarding} />
                     <Route exact path="/hrn-analytics" component={HRNAnalytics} />
                     <Route exact path="/my-profile" component={MyProfile} />
                     <Route exact path="/onboarding" component={Onboarding} />
                     <Route exact path="/host-directory" component={HostDirectory} />
                     <Route exact path="/host-directory/:id" component={HostProfile} />
                     <Route exact path="/subscription" component={Subscription} />
+                    <Route exact path="/subscription-signup" component={SubscriptionSignup} />
                     <Route exact path="/my-events" component={MyEvents} />
                     <Route exact path="/events" component={EventsPublic} />
                     <EventProvider>
@@ -121,6 +122,7 @@ const App = () => {
                 <HeaderDrawer activeTab={activeTab} setActiveTab={setActiveTab} />
                 <GetTagsModal />
                 <ProfilePictureModal />
+                <Crisp />
               </UserProvider>
             </ErrorBoundary>
           </Router>

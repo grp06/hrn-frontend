@@ -16,7 +16,7 @@ const TwoSidedEventRSPButton: React.FC<TwoSidedEventRSPButtonProps> = ({ event, 
   const classes = useEventStyles()
   const history = useHistory()
   const { id: event_id, side_a, side_b } = event
-  const { email: usersEmail, id: user_id, name: usersName } = user
+  const { email: usersEmail, id: user_id, first_name, last_name } = user
   const [selectedSide, setSelectedSide] = useState<string>('')
 
   const [insertTwoSidedEventUserMutation] = useMutation(insertEventUser, {
@@ -28,7 +28,7 @@ const TwoSidedEventRSPButton: React.FC<TwoSidedEventRSPButtonProps> = ({ event, 
   })
 
   const insertTwoSidedEventUser = async () => {
-    await rsvpForEvent(event, insertTwoSidedEventUserMutation, usersEmail, usersName)
+    await rsvpForEvent(event, insertTwoSidedEventUserMutation, usersEmail, first_name, last_name)
   }
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useLocation, Redirect } from 'react-router-dom'
-import { SignUpForm } from '.'
-import { getSubscriptionCheckoutObject } from '../Subscription'
+import { NewSignupForm } from '../SubscriptionSignup'
 
 const SignUp = () => {
   const location = useLocation()
@@ -14,26 +13,20 @@ const SignUp = () => {
   // an account and you click a sub on our app)
   useEffect(() => {
     if (billingPeriod && planType) {
-      const subscriptionCheckoutObject = getSubscriptionCheckoutObject(billingPeriod, planType)
-      localStorage.setItem('subscriptionCheckoutObject', JSON.stringify(subscriptionCheckoutObject))
+      localStorage.setItem('PLAN_TYPE', `${planType}_${billingPeriod}`)
     }
     setCheckedSCOInLS(true)
   }, [billingPeriod, planType])
 
   // check to see if a user is already logged in, if so redirect
   if (checkedSCOInLS && localStorage.getItem('userId')) {
-    const subCheckoutObjectFromLS = JSON.parse(localStorage.getItem('subscriptionCheckoutObject'))
-    const userClickedFreePlan =
-      subCheckoutObjectFromLS && subCheckoutObjectFromLS.plan.includes('FREE')
     const usersRole = localStorage.getItem('role')
-    if (usersRole && usersRole.includes('host') && userClickedFreePlan) {
+    if (usersRole) {
       // redirect to create event because they clicked host an event from webflow
       return <Redirect to={{ pathname: '/create-event' }} />
     }
-    return <Redirect to={{ pathname: '/checkout', state: subCheckoutObjectFromLS }} />
   }
-
-  return <SignUpForm />
+  return <NewSignupForm />
 }
 
 export default SignUp

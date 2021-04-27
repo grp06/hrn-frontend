@@ -4,7 +4,8 @@ const getAllUsers = gql`
   query getAllUsers {
     users {
       id
-      name
+      first_name
+      last_name
       role
       created_at
     }

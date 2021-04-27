@@ -1,3 +1,4 @@
+// TODO make sure we've taken everything important from here and put it in the new signup form
 import React, { useState } from 'react'
 
 import { Button, Grid, TextField, Typography } from '@material-ui/core'

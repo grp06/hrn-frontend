@@ -5,6 +5,8 @@ const findUserById = gql`
     users(where: { id: { _eq: $id } }) {
       id
       name
+      first_name
+      last_name
       role
       email
       city

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 import * as Yup from 'yup'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
-import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Divider, Grid, Typography } from '@material-ui/core'
 
 import { useCheckoutStyles } from '.'
 import { createSubscription, retryInvoiceWithNewPaymentMethod } from './stripeUtils'
@@ -46,10 +46,10 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
   const history = useHistory()
   const [formSubmitting, setFormSubmitting] = useState(false)
   const [paymentErrorMessage, setPaymentErrorMessage] = useState('')
+  console.log('stripeCustomerId = ', stripeCustomerId)
 
   const onSubscriptionComplete = async (result, stripeCustomerId) => {
-    const role = result.plan.includes('STARTER') ? 'host_starter' : 'host_premium'
-    localStorage.setItem(ROLE, role)
+    localStorage.setItem(ROLE, 'premium')
     localStorage.setItem(TOKEN, result.token)
     // means that we had to retry the invoice so lets clear our local storage
     // and set the subscription to the invoice
@@ -60,7 +60,6 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
     window.analytics.track(`successfully paid for ${result.plan}`)
-    console.log('stripeCustomerId = ', stripeCustomerId)
 
     setTimeout(() => {
       console.log('after tracking before push')
@@ -96,6 +95,8 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       card: cardElement,
       billing_details: billingDetails,
     })
+    console.log('🚀 ~ handleFormSubmit ~ paymentMethod', paymentMethod)
+    console.log('🚀 ~ handleFormSubmit ~ error', error)
     if (error) {
       setFormSubmitting(false)
       setPaymentErrorMessage(error.message)
@@ -107,6 +108,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     if (latestInvoicePaymentIntentStatus === 'requires_payment_method') {
       // Update the payment method and retry invoice payment
       const invoiceId = localStorage.getItem('latestInvoiceId')
+      console.log('🚀 ~ handleFormSubmit ~ invoiceId', invoiceId)
       try {
         const retrySubResult = retryInvoiceWithNewPaymentMethod({
           invoiceId,
@@ -116,6 +118,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
           userId,
           userEmail,
         })
+        console.log('🚀 ~ handleFormSubmit ~ retrySubResult', retrySubResult)
         onSubscriptionComplete(retrySubResult, stripeCustomerId)
         setFormSubmitting(false)
         return
@@ -136,6 +139,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         userId,
         userEmail,
       })
+      console.log('🚀 ~ handleFormSubmit ~ subResult', subResult)
 
       onSubscriptionComplete(subResult, stripeCustomerId)
     } catch (err) {
@@ -165,7 +169,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
           <Form>
             <div className={classes.sectionContainer}>
               <Grid container direction="column" className={classes.checkoutFormSection}>
-                <Typography variant="subtitle2" className={classes.subtitleHeading}>
+                <Typography variant="h4" className={classes.sectionHeading}>
                   Payment Details
                 </Typography>
                 <Grid container className={classes.checkoutFormInputMargin}>
@@ -182,7 +186,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 </div>
               </Grid>
               <Grid container className={classes.checkoutFormSection}>
-                <Typography variant="subtitle2" className={classes.subtitleHeading}>
+                <Typography variant="h4" className={classes.sectionHeading}>
                   Billing Address
                 </Typography>
                 <Grid container className={classes.checkoutFormInputMargin}>
@@ -223,7 +227,19 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
                 </Grid>
               </Grid>
             </div>
-            <Grid container justify="center" alignItems="center">
+            <Divider className={classes.divider} />
+            <Grid container justify="space-between" alignItems="center">
+              <Typography variant="body1" style={{ fontWeight: 700 }}>
+                Total:
+              </Typography>
+              <Typography variant="h3">{plan.includes('YEARLY') ? '$948.00' : '$99.00'}</Typography>
+            </Grid>
+            <Grid
+              container
+              justify="center"
+              alignItems="center"
+              className={classes.submitButtonContainer}
+            >
               <Button
                 variant="contained"
                 color="primary"

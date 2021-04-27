@@ -14,7 +14,7 @@ export interface ChatRequestedModalProps {
 const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) => {
   const classes = useLobbyStyles()
   const { event_id, id: myPartnerRowId, partner, partner_id, round, user_id } = chatRequest
-  const { city: partnersCity, name: partnersName, profile_pic_url: partnersPicURL } = partner
+  const { city: partnersCity, first_name, last_name, profile_pic_url: partnersPicURL } = partner
   const [open, setOpen] = useState<boolean>(true)
   const [requestResponse, setRequestResponse] = useState<string>('')
   const [requestResponseInFlight, setRequestResponseInFlight] = useState<boolean>(false)
@@ -120,7 +120,7 @@ const ChatRequestedModal: React.FC<ChatRequestedModalProps> = ({ chatRequest }) 
                 justify="flex-start"
                 style={{ width: 'auto', marginLeft: '12px' }}
               >
-                <Typography variant="h4">{partnersName}</Typography>
+                <Typography variant="h4">{`${first_name} ${last_name}`}</Typography>
                 <Typography variant="body1">{partnersCity}</Typography>
               </Grid>
             </Grid>

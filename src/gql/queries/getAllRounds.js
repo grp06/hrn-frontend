@@ -4,10 +4,12 @@ const getAllRounds = gql`
   query getAllRounds {
     partners {
       user {
-        name
+        first_name
+        last_name
       }
       partner {
-        name
+        first_name
+        last_name
       }
       event {
         start_at

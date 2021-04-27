@@ -8,7 +8,8 @@ const getRsvpsByDateRange = gql`
     ) {
       id
       user {
-        name
+        first_name
+        last_name
         email
       }
       event {
