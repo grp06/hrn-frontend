@@ -63,6 +63,7 @@ const NewSignupForm: React.FC<{}> = () => {
               name: `${first_name} ${last_name}`,
               email,
               role,
+              created_at: signupResponse.created_at,
             })
             window.analytics.track('Sign up')
           } catch (err) {
