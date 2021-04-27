@@ -1,14 +1,18 @@
 const useRemoteTrackPublishedToGroupTwilio = () => {
   const remoteTrackPublished = (publication, participantsId) => {
+    console.log('🚀 ~ remoteTrackPublished ~ publication', publication)
+    console.log('🚀 ~ remoteTrackPublished ~ participantsId', participantsId)
     if (publication.isSubscribed) {
       const videoGrid = document.getElementById('videoBox')
       const participantsVideoDiv = document.getElementById(participantsId)
       if (publication.kind === 'video' && participantsVideoDiv) {
+        console.log('🚀 ~ remoteTrackPublished ~ publication', publication)
         participantsVideoDiv.style.display = 'inline-flex'
         const attachedTrack = publication.track.attach()
         attachedTrack.setAttribute('id', `${participantsId}-video`)
         attachedTrack.muted = true
         participantsVideoDiv.appendChild(attachedTrack)
+        console.log('insert before')
         videoGrid.insertBefore(participantsVideoDiv, videoGrid.firstChild.nextSibling)
       }
     }
