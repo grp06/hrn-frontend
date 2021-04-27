@@ -87,6 +87,7 @@ const Onboarding = () => {
         email: usersEmail,
         role,
         city: values.city,
+        plan_name: 'free',
       })
       window.analytics.track('Onboarding complete', {
         registeredViaEventId: eventIdInLocalStorage || 'none',
