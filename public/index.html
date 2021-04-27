@@ -51,6 +51,9 @@
     <title>Hi Right Now</title>
 
     <script>
+      const isDevelopment =
+        window.location.href.includes('localhost') || window.location.href.includes('staging')
+
       !(function () {
         var analytics = (window.analytics = window.analytics || [])
         if (!analytics.initialize)
@@ -101,9 +104,15 @@
               n.parentNode.insertBefore(t, n)
               analytics._loadOptions = e
             }
-            analytics._writeKey = 'vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9'
+            analytics._writeKey = isDevelopment
+              ? '0FeCbe7ua5zzIrfjA6XMIHhCfqMwKKQr'
+              : 'vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9'
             analytics.SNIPPET_VERSION = '4.13.2'
-            analytics.load('vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9')
+            analytics.load(
+              isDevelopment
+                ? '0FeCbe7ua5zzIrfjA6XMIHhCfqMwKKQr'
+                : 'vO2SzfTXysB8mIgBLkFcOBTEqm6H5TT9'
+            )
             analytics.page()
           }
       })()

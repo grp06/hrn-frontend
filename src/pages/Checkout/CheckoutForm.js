@@ -60,7 +60,9 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       localStorage.setItem('latestInvoiceId', '')
     }
     window.analytics.track(`successfully paid for ${result.plan}`)
-
+    window.analytics.identify(userId, {
+      role: 'premium',
+    })
     setTimeout(() => {
       console.log('after tracking before push')
       history.push('/checkout-success', { subscription: result.subscription, plan: result.plan })
