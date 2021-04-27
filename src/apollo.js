@@ -29,8 +29,6 @@ const makeApolloClient = async () => {
     if (token) {
       authHeaders = {
         authorization: `Bearer ${token}`,
-        // TO DO: Remove this when push commits
-        'x-hasura-admin-secret': 'HiRightNow1!',
       }
     }
 
@@ -47,8 +45,6 @@ const makeApolloClient = async () => {
       return {
         headers: {
           authorization: `Bearer ${token}`,
-          // TO DO: Remove this when push commits
-          'x-hasura-admin-secret': 'HiRightNow1!',
         },
       }
     }

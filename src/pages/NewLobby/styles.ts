@@ -104,6 +104,7 @@ export const createChatBoxStyles = makeStyles(
       marginLeft: theme.spacing(0.5),
       color: theme.palette.common.basePink,
       fontWeight: 700,
+      fontSize: '.6rem',
     },
     inputContainer: {
       background: 'transparent',
@@ -127,7 +128,12 @@ export const createChatBoxStyles = makeStyles(
         marginTop: '0',
       },
     },
+    chatAvatar: {
+      position: 'relative',
+      top: '0',
+    },
     messageContent: {
+      display: 'flex',
       width: 'fit-content',
       maxWidth: '90%',
       fontWeight: 400,
@@ -136,7 +142,16 @@ export const createChatBoxStyles = makeStyles(
       background: '#FFFFFF',
       backdropFilter: 'blur(4px)',
       borderRadius: '32px',
-      padding: '.6rem 1rem .6rem 2rem',
+      padding: '.3rem 1.6rem .3rem .3rem',
+      '& span': {
+        width: '85%',
+        alignSelf: 'center',
+        marginLeft: '.6rem',
+      },
+      '& .MuiAvatar-root': {
+        width: '1.7rem',
+        height: '1.7rem',
+      },
     },
     messageTimeStamp: {
       color: '#666666',
@@ -158,7 +173,7 @@ export const createChatBoxStyles = makeStyles(
       color: '#666666',
       fontWeight: 600,
       fontSize: '9px',
-      paddingLeft: '1rem',
+      paddingLeft: '.46rem',
     },
   })
 )

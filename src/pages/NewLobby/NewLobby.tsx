@@ -6,7 +6,7 @@ import { useEventContext, useUserContext, useUserEventStatusContext } from '../.
 import { getToken } from '../../helpers'
 import { useGroupTwilio } from '../../hooks'
 import { publishParticipantsAudioAndVideo, unpublishParticipantsTracks } from '../../utils'
-import { useNewLobbyStyles, createChatBoxStyles } from '.'
+import { useNewLobbyStyles, createChatBoxStyles, LobbyActions } from '.'
 
 const { connect, LocalDataTrack } = require('twilio-video')
 
@@ -33,7 +33,7 @@ const NewLobby: React.FC<{}> = () => {
   /**
    * Event details
    */
-  const { host_id: hostId, id: eventId } = event
+  const { host_id: hostId, id: eventId, event_name: eventTitle } = event
 
   const [arrayOfParticipantsWithVideoDivs, setArrayOfParticipantsWithVideoDivs] = useState<
     string[]
@@ -158,13 +158,15 @@ const NewLobby: React.FC<{}> = () => {
         messages={eventChatMessages}
         userId={user.id}
         customClasses={customChatboxClasses}
-        customHeader={<></>}
+        customHeader={<LobbyActions eventTitle={eventTitle} />}
         showTimeStamps={false}
+        showAvatar
+        inputPlaceholder="🙂 Type a message"
       />
       <div id="videoBox" style={{ display: 'flex' }}>
         {createAttendeeVideoCards()}
       </div>
-      <div>
+      {/* <div>
         <Button variant="contained" color="primary" onClick={() => joinStage()}>
           Join Stage
         </Button>
@@ -181,7 +183,7 @@ const NewLobby: React.FC<{}> = () => {
         >
           Silence
         </Button>
-      </div>
+      </div> */}
     </div>
   )
 }
