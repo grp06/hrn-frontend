@@ -96,6 +96,8 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
       card: cardElement,
       billing_details: billingDetails,
     })
+    console.log('🚀 ~ handleFormSubmit ~ paymentMethod', paymentMethod)
+    console.log('🚀 ~ handleFormSubmit ~ error', error)
     if (error) {
       setFormSubmitting(false)
       setPaymentErrorMessage(error.message)
@@ -107,6 +109,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
     if (latestInvoicePaymentIntentStatus === 'requires_payment_method') {
       // Update the payment method and retry invoice payment
       const invoiceId = localStorage.getItem('latestInvoiceId')
+      console.log('🚀 ~ handleFormSubmit ~ invoiceId', invoiceId)
       try {
         const retrySubResult = retryInvoiceWithNewPaymentMethod({
           invoiceId,
@@ -116,6 +119,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
           userId,
           userEmail,
         })
+        console.log('🚀 ~ handleFormSubmit ~ retrySubResult', retrySubResult)
         onSubscriptionComplete(retrySubResult, stripeCustomerId)
         setFormSubmitting(false)
         return
@@ -136,6 +140,7 @@ const CheckoutForm = ({ plan, stripeCustomerId, userId, userEmail }) => {
         userId,
         userEmail,
       })
+      console.log('🚀 ~ handleFormSubmit ~ subResult', subResult)
 
       onSubscriptionComplete(subResult, stripeCustomerId)
     } catch (err) {

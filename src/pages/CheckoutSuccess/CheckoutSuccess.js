@@ -13,7 +13,6 @@ const CheckoutSuccess = ({ location }) => {
   const locationState = location.state && Object.keys(location.state).length ? location.state : {}
   // if the user is a paid host locationState should be an object with
   // keys paymentMethodId, plan, and subscription
-  // If the user is a free host locationState will have {freeHost: true}
 
   const redirectUserBackToSubscription = useCallback(() => {
     if (!Object.keys(locationState).length) {

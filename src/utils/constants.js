@@ -33,7 +33,6 @@ const constants = {
     "We've put in a good word 🤗",
     'Snail mail delivered 🐌',
     'Sent via pony express 🐴',
-    "Hedwig's on her way 🦉",
   ],
   connectingYouToSomeoneMessagesArray: [
     ['Connecting you to someone awesome!', 'Give us a few seconds to roll out your red carpet 💃.'],
