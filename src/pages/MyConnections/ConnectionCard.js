@@ -8,10 +8,11 @@ import logo from '../../assets/HRNlogoNoFrame.svg'
 import { useMyConnectionsStyles } from '.'
 import { Snack } from '../../common'
 
-const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, userId }) => {
+const ConnectionCard = ({ connection }) => {
   const classes = useMyConnectionsStyles()
   const {
-    name,
+    first_name,
+    last_name,
     city,
     tags_users: connectionsTags,
     short_bio,
@@ -20,7 +21,6 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
     profile_pic_url,
   } = connection
   const [showCopyEmailSnack, setShowCopyEmailSnack] = useState(false)
-  const myRoundInfo = { event_id: eventId, partner_id: partnerId, user_id: userId }
 
   const handleCopyEmailClick = () => {
     window.analytics.track('Copied email')
@@ -97,7 +97,7 @@ const ConnectionCard = ({ connection, eventId, i_shared_details, partnerId, user
             </Avatar>
           )}
           <Grid container direction="column" className={classes.cityNameEmailGrid}>
-            <Typography variant="h3">{name}</Typography>
+            <Typography variant="h3">{`${first_name} ${last_name || ''}`}</Typography>
             <Typography variant="subtitle1">{city || 'Bikini Bottom 🍍'}</Typography>
             {renderContactButtons()}
           </Grid>
