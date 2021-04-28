@@ -58,7 +58,7 @@ const HostInfoCard: React.FC<HostInfoCardProps> = ({ hostInfo }) => {
         justify="center"
         className={classes.hostInfoContentContainer}
       >
-        <Typography variant="h2">{`${first_name} ${last_name}`}</Typography>
+        <Typography variant="h2">{`${first_name} ${last_name || ''}`}</Typography>
         <Typography variant="body1">{city}</Typography>
         <Typography variant="body1">{email}</Typography>
         {renderLinkedInLink()}

@@ -50,7 +50,7 @@ const HostAndEventDescCard: React.FC<HostAndEventDescCardProps> = React.memo(
                 className={classes.hostNameAndTitleContainer}
               >
                 <Typography variant="h3" className={classes.hostName}>
-                  {`${first_name} ${last_name}`}
+                  {`${first_name} ${last_name || ''}`}
                 </Typography>
               </Grid>
             </Grid>
