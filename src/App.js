@@ -30,6 +30,7 @@ import {
   Subscription,
   SubscriptionSignup,
   SetNewPassword,
+  NewLobby,
   SignUp,
 } from './pages'
 import { EventProvider, TwilioProvider, UserProvider, UserEventStatusProvider } from './context'
@@ -101,6 +102,7 @@ const App = () => {
                       <TwilioProvider>
                         <UserEventStatusProvider>
                           <Route exact path="/events/:id/lobby" component={Lobby} />
+                          <Route exact path="/events/:id/new-lobby" component={NewLobby} />
                           <Route exact path="/events/:id/video-room" component={VideoRoom} />
                           <Route
                             exact

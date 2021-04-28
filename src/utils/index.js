@@ -10,6 +10,7 @@ export { default as getEventStartedOver24HoursAgo } from './getEventStartedOver2
 export { default as getTimeUntilEvent } from './getTimeUntilEvent'
 export { default as GUMErrorMessage } from './GUMErrorMessage'
 export { default as isEventInFuture } from './isEventInFuture'
+export * from './lobbyStageFunctions'
 export { default as rsvpForEvent } from './rsvpForEvent'
 export { default as truncateText } from './truncateText'
 export * from './typescriptInterfaces'

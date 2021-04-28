@@ -5,6 +5,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown'
 import { makeStyles } from '@material-ui/styles'
 import { insertEventChatMessage } from '../gql/mutations'
 import { constants, formatChatMessagesDate } from '../utils'
+import Avatar from '@material-ui/core/Avatar'
 const { bottomNavBarHeight } = constants
 
 const createStyles = makeStyles((theme) => ({
@@ -77,8 +78,23 @@ const createStyles = makeStyles((theme) => ({
   },
 }))
 
-const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
-  const classes = createStyles()
+const EventChatBox = ({
+  eventId,
+  hostId,
+  messages,
+  toggleChat = () => {},
+  userId,
+  customClasses = null,
+  /** Remove the default toggle header with your own custom one */
+  customHeader = null,
+  /** Show timestamps for each chat messages */
+  showTimeStamps = true,
+  /** Show profile pictures of users in the chat */
+  showAvatar = false,
+  /** Manually add a placeholder in the input field */
+  inputPlaceholder = '',
+}) => {
+  const classes = customClasses ? customClasses : createStyles()
   const [message, setMessage] = useState('')
   const [list, setList] = useState(null)
 
@@ -92,9 +108,9 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
     }
   }, [messages, list])
 
-  const getNumberOfRows = () => {
+  const getNumberOfRows = (msg) => {
     const charsPerLine = 40
-    const numRows = Math.ceil(message.length / charsPerLine)
+    const numRows = Math.ceil(msg.length / charsPerLine)
     return numRows === 0 ? 1 : numRows
   }
 
@@ -114,16 +130,21 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
 
   return (
     <Grid container direction="column" className={classes.chatContainer}>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="center"
-        className={classes.chatBoxTitle}
-      >
-        Chat with Everyone
-        <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
-      </Grid>
+      {customHeader ? (
+        customHeader
+      ) : (
+        <Grid
+          container
+          direction="row"
+          justify="center"
+          alignItems="center"
+          className={classes.chatBoxTitle}
+        >
+          Chat with Everyone
+          <KeyboardArrowDownIcon className={classes.minimizeChatIcon} onClick={toggleChat} />
+        </Grid>
+      )}
+
       <List dense className={classes.chatList} id="chat-list">
         {messages && messages.length ? (
           messages.map((message) => {
@@ -137,10 +158,33 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
                     <Grid container alignItems="flex-end">
                       <span className={classes.sendersName}>{user.first_name}</span>{' '}
                       {senderIsHost ? <span className={classes.hostTag}> • Host</span> : null}{' '}
-                      <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                      {showTimeStamps && (
+                        <span className={classes.messageTimeStamp}>at {messageSentAt}</span>
+                      )}
                     </Grid>
                   }
-                  secondary={<span className={classes.messageContent}>{messageContent}</span>}
+                  secondary={
+                    <span className={classes.messageContent}>
+                      {showAvatar && (
+                        <Avatar
+                          className={classes.chatAvatar}
+                          component="b"
+                          alt=""
+                          style={Object.assign(
+                            { top: 0 },
+                            getNumberOfRows(messageContent) > 1
+                              ? {
+                                  top: '.9rem',
+                                  left: '.2rem',
+                                }
+                              : {}
+                          )}
+                          src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&ixlib=rb-1.2.1&w=1000&q=80"
+                        />
+                      )}
+                      <span>{messageContent}</span>
+                    </span>
+                  }
                   secondaryTypographyProps={{ style: { whiteSpace: 'normal' } }}
                 />
               </ListItem>
@@ -178,13 +222,13 @@ const EventChatBox = ({ eventId, hostId, messages, toggleChat, userId }) => {
           id="message"
           required
           fullWidth
-          placeholder="Jump in and say hello 👋 "
+          placeholder={inputPlaceholder || 'Jump in and say hello 👋 '}
           className={classes.input}
           value={message}
           multiline
-          rows={getNumberOfRows()}
+          rows={getNumberOfRows(message)}
           onKeyDown={sendMessage}
-          InputProps={{ style: { marginTop: 0, padding: 0 } }}
+          InputProps={{ disableUnderline: true, style: { marginTop: 0, padding: 0 } }}
           onChange={(e) => setMessage(e.target.value)}
         />
       </Grid>

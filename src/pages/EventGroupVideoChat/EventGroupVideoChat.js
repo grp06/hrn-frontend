@@ -6,7 +6,7 @@ import { GroupVideoChatBottomPanel, useEventGroupVideoChatStyles } from '.'
 import { EventChatBox, Loading } from '../../common'
 import { useEventContext, useUserContext, useUserEventStatusContext } from '../../context'
 import { getToken } from '../../helpers'
-import { useGroupVideoChatTwilio } from '../../hooks'
+import { useGroupTwilio } from '../../hooks'
 import { CameraAndMicSetupScreen } from '../Lobby'
 
 const { connect } = require('twilio-video')
@@ -27,7 +27,7 @@ const EventGroupVideoChat = () => {
     setUserHasEnabledCameraAndMic,
     userHasEnabledCameraAndMic,
   } = useUserEventStatusContext()
-  const { startGroupVideoChatTwilio } = useGroupVideoChatTwilio()
+  const { startGroupVideoChatTwilio } = useGroupTwilio()
   const arrayOfOnlineUserIds = useRef([])
   const [chatIsOpen, setChatIsOpen] = useState(true)
   const [groupChatToken, setGroupChatToken] = useState(null)

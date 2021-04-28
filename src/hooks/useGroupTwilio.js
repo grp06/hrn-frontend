@@ -1,7 +1,13 @@
-import { useParticipantConnectedToGroupVideoChat } from '.'
+import { useParticipantConnectedToGroupTwilio } from '.'
+import {
+  appendVideoToParticipantsDivElement,
+  disableParticipantsAudioTrack,
+  toggleParticipantsMicIcon,
+  unpublishParticipantsTracks,
+} from '../utils'
 
-const useGroupVideoChatTwilio = () => {
-  const { participantConnectedToGroupVideoChat } = useParticipantConnectedToGroupVideoChat()
+const useGroupTwilio = () => {
+  const { participantConnectedToGroupTwilio } = useParticipantConnectedToGroupTwilio()
 
   const startGroupVideoChatTwilio = (room) => {
     let dominantSpeakerId
@@ -10,30 +16,35 @@ const useGroupVideoChatTwilio = () => {
       console.log('room ->', room)
       const { localParticipant, participants } = room
 
-      // publish our own tracks
       localParticipant.tracks.forEach((publication) => {
-        const localParticipantsVideoDiv = document.getElementById(localParticipant.identity)
-        if (localParticipantsVideoDiv && publication.track.kind === 'video') {
-          const attachedTrack = publication.track.attach()
-          attachedTrack.style.transform = 'scale(-1, 1)'
-          attachedTrack.setAttribute('id', `${localParticipant.identity}-video`)
-          localParticipantsVideoDiv.appendChild(attachedTrack)
+        const { identity: localParticipantsId } = localParticipant
+        if (publication.track.kind === 'video') {
+          const attachedVideoTrack = publication.track.attach()
+          appendVideoToParticipantsDivElement(attachedVideoTrack, localParticipantsId)
+        }
+      })
+
+      localParticipant.on('trackEnabled', (publication) => {
+        if (publication.kind === 'video') {
+          const participantsVideoDiv = document.getElementById(localParticipant.identity)
+          participantsVideoDiv.style.display = 'inline-flex'
         }
       })
 
       // when we connect to a room, run 'participantConnected'
       // for each person who is already in the room when we arrive
-      participants.forEach(participantConnectedToGroupVideoChat)
+      participants.forEach(participantConnectedToGroupTwilio)
 
       // set up a listener to do some stuff when new people join the room
       room.on('participantConnected', (remoteParticipant) => {
         console.log('participantConnected', remoteParticipant)
-        participantConnectedToGroupVideoChat(remoteParticipant)
+        participantConnectedToGroupTwilio(remoteParticipant)
       })
 
       room.on('participantDisconnected', (remoteParticipant) => {
+        window.room = room
         console.log('participantDisconnected', remoteParticipant)
-        const participantsVideoDiv = document.getElementById(`${remoteParticipant.identity}-video`)
+        const participantsVideoDiv = document.getElementById(remoteParticipant.identity)
         // instead of modifying the innerHTML, detatch instead
         if (participantsVideoDiv) {
           participantsVideoDiv.parentNode.removeChild(participantsVideoDiv)
@@ -77,6 +88,15 @@ const useGroupVideoChatTwilio = () => {
         }
       })
 
+      room.on('trackMessage', (data, track) => {
+        if (data === 'sweep') {
+          unpublishParticipantsTracks(localParticipant)
+        }
+        if (data === 'silence') {
+          disableParticipantsAudioTrack(localParticipant)
+        }
+      })
+
       window.addEventListener('beforeunload', () => {
         room.disconnect()
         console.log('disconnecting from room')
@@ -88,4 +108,4 @@ const useGroupVideoChatTwilio = () => {
   return { startGroupVideoChatTwilio }
 }
 
-export default useGroupVideoChatTwilio
+export default useGroupTwilio
