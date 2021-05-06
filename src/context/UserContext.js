@@ -3,6 +3,7 @@ import { useImmer } from 'use-immer'
 import { useQuery } from '@apollo/react-hooks'
 import { useHistory, useLocation } from 'react-router-dom'
 import { findUserById } from '../gql/queries'
+import { saveUserToCustomerIO } from '../utils'
 
 const UserContext = createContext()
 
@@ -86,7 +87,6 @@ const UserProvider = ({ children }) => {
   const location = useLocation()
   const { userId } = state.user
   const { pathname } = location
-
   const specificEventPageRegex = /\/events\/\d+?$/
   const eventsPageRegex = /\/events?$/
   const setNewPasswordPageRegex = /set-new-password/
@@ -126,6 +126,7 @@ const UserProvider = ({ children }) => {
   useEffect(() => {
     if (userData) {
       if (userData.users.length) {
+        saveUserToCustomerIO(userData.users[0])
         dispatch((draft) => {
           draft.user = userData.users[0]
           draft.userContextLoading = false
