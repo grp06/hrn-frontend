@@ -20,6 +20,9 @@ const makeApolloClient = async () => {
 
   if (!token) {
     // user must not be logged in
+    // we need to somehow add useQuery here and use the new query to get the token instead
+    // however, we can't use useQuery as is - the way its written now
+    // might not be an issue when we move to next.js
     const anonTokenResponse = await getAnonymousToken().then((res) => res.json())
     token = anonTokenResponse.token
   }

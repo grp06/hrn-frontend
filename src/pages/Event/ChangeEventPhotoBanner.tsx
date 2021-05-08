@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 
 import { motion } from 'framer-motion'
-import { useMutation } from 'react-apollo'
+import { useMutation, useQuery } from 'react-apollo'
 import { Button, Grid, TextField, Typography } from '@material-ui/core'
 import PanoramaIcon from '@material-ui/icons/Panorama'
 
 import { useEventStyles } from '.'
 import { Snack } from '../../common'
-import { getUnsplashImageURL } from '../../helpers'
 import { updateEventBannerPhoto } from '../../gql/mutations'
+import { getUnsplashImageUrl } from '../../gql/queries'
 
 interface ChangeEventPhotoBannerProps {
   eventId: number
@@ -55,16 +55,28 @@ const ChangeEventPhotoBanner: React.FC<ChangeEventPhotoBannerProps> = ({
   const [showSavedPhotoSnack, setShowSavedPhotoSnack] = useState<boolean>(false)
 
   const [updateEventBannerPhotoMutation] = useMutation(updateEventBannerPhoto)
+  const { data } = useQuery(getUnsplashImageUrl, {
+    variables: {
+      keyword: 'community',
+    },
+  })
+
+  if (!data) {
+    return null
+  }
+  console.log('🚀 ~ data', data)
 
   const searchUnsplash = async (keyword: string) => {
-    try {
-      const unsplashRequest = await getUnsplashImageURL(keyword)
-      setBannerBackground(`url("${unsplashRequest.image.urls.regular}")`)
-      setSearchedImageURL(unsplashRequest.image.urls.regular)
-    } catch (error) {
-      console.log('error ->', error)
-      alert('error seraching for image')
-    }
+    // try {
+    //   // replace this bit with a query
+    //   const unsplashRequest = await getUnsplashImageUrl(keyword)
+    //   console.log('🚀 ~ searchUnsplash ~ unsplashRequest', unsplashRequest)
+    //   setBannerBackground(`url("${unsplashRequest.image.urls.regular}")`)
+    //   setSearchedImageURL(unsplashRequest.image.urls.regular)
+    // } catch (error) {
+    //   console.log('error ->', error)
+    //   alert('error seraching for image')
+    // }
   }
 
   const closeBannerSearchForm = () => {

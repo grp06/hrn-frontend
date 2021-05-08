@@ -67,7 +67,8 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault()
-    const loginResponse = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/login`, {
+    // TODO replace this with graphQL `getLoginDetails`
+    const loginResponse = await fetch(`${process.env.REACT_APP_API_URL} `, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

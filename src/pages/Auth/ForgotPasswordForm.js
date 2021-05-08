@@ -52,7 +52,7 @@ const ForgotPasswordForm = () => {
     event.preventDefault()
     try {
       console.log('underline')
-      await fetch(`${process.env.REACT_APP_API_URL}/api/email/reset_password/user/${email}`, {
+      await fetch(`${process.env.REACT_APP_API_URL}/api/email/reset-password/${email}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
