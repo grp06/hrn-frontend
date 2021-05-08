@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-const getEventById = gql`
+const getAnonymousToken = gql`
   query getAnonymousToken {
     getAnonymousToken {
       token
@@ -8,4 +8,4 @@ const getEventById = gql`
   }
 `
 
-export default getEventById
+export default getAnonymousToken
