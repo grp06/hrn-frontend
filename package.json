@@ -55,7 +55,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "material-ui-dropzone": "^3.5.0",
-    "mathjs": "^7.0.0",
+    "mathjs": "^7.5.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
     "pathfinding": "^0.4.18",
